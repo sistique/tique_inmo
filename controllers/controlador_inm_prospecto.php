@@ -574,12 +574,10 @@ class controlador_inm_prospecto extends _ctl_formato
         $columns["inm_prospecto_id"]["titulo"] = "Id";
         $columns["inm_prospecto_razon_social"]["titulo"] = "Nombre";
         $columns["inm_prospecto_nss"]["titulo"] = "NSS";
-        $columns["inm_prospecto_rfc"]["titulo"] = "RFC";
-        $columns["inm_prospecto_curp"]["titulo"] = "CURP";
+        $columns["inm_prospecto_monto_credito_solicitado_dh"]["titulo"] = "Precalificacion";
         $columns["inm_prospecto_fecha_alta"]["titulo"] = "Fecha Alta";
-        $columns["com_agente_id"]["titulo"] = "Agente Id";
         $columns["com_agente_descripcion"]["titulo"] = "Agente";
-        $columns["pr_etapa_descripcion"]["titulo"] = "Etapa";
+        $columns["pr_etapa_descripcion"]["titulo"] = "Status";
 
 
         $filtro = array("inm_prospecto.id", "inm_prospecto.razon_social", 'inm_prospecto.nss', 'inm_prospecto.rfc',

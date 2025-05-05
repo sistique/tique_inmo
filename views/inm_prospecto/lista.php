@@ -105,28 +105,28 @@ echo "<style>
                 <label for="nss">NSS</label>
                 <input type="text" id="nss" data-ajax="filtro" data-filtro_campo="inm_prospecto.nss"
                        placeholder="Ej: 9999999999">
-            </div>
 
-            <div class="filtro-grupo">
-                <label for="fecha_inicio">Fecha Inicio</label>
-                <input type="date" id="fecha_inicio" data-ajax="rango-fechas" data-filtro_campo="inm_prospecto.fecha_alta"
-                       data-filtro_key="campo1">
-
-                <label for="fecha_fin">Fecha Fin</label>
-                <input type="date" id="fecha_fin" data-ajax="rango-fechas" data-filtro_campo="inm_prospecto.fecha_alta"
-                       data-filtro_key="campo2">
-            </div>
-            <div class="filtro-grupo">
                 <label for="agente">Agente</label>
                 <input type="text" id="agente" data-ajax="filtro" data-filtro_campo="com_agente.descripcion"
                        placeholder="Ej: JUAN PEREZ">
             </div>
-            <button id="filtrar">Filtrar</button>
-            <button id="limpiar">Limpiar</button>
-            <form method="post" action="<?php echo $controlador->link_exportar_xls; ?>" enctype="multipart/form-data">
-                <button id="descargar_excel">Descargar Excel</button>
-            </form>
 
+            <div class="filtro-grupo">
+                <label for="fecha_inicio">Fecha Alta Inicio</label>
+                <input type="date" id="fecha_inicio" data-ajax="rango-fechas" data-filtro_campo="inm_prospecto.fecha_alta"
+                       data-filtro_key="campo1">
+
+                <label for="fecha_fin">Fecha Alta Fin</label>
+                <input type="date" id="fecha_fin" data-ajax="rango-fechas" data-filtro_campo="inm_prospecto.fecha_alta"
+                       data-filtro_key="campo2">
+            </div>
+            <div class="filtro-grupo col-md-12">
+                <button id="filtrar">Filtrar</button>
+                <button id="limpiar">Limpiar</button>
+                <form method="post" action="<?php echo $controlador->link_exportar_xls; ?>" enctype="multipart/form-data">
+                    <button id="descargar_excel">Descargar Excel</button>
+                </form>
+            </div>
         </div>
 
         <table class="datatable table table-striped"></table>
