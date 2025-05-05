@@ -29,6 +29,7 @@ echo "<style>
     padding: 6px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    width: 100%;
 }
 
 #filtrar {
