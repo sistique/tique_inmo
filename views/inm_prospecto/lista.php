@@ -7,7 +7,6 @@ echo "<style>
 .filtros-avanzados {
     display: flex;
     flex-wrap: wrap;
-    gap: 15px;
     padding: 15px;
     background: #f8f9fa;
     border-radius: 8px;
@@ -17,8 +16,8 @@ echo "<style>
 .filtro-grupo {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
     align-items: center;
+    margin-top: 15px;
 }
 
 .filtro-grupo label {
@@ -55,6 +54,7 @@ echo "<style>
     cursor: pointer;
     font-weight: bold;
     transition: background 0.3s;
+    margin-left: 10px;
 }
 
 #limpiar:hover {
@@ -96,40 +96,46 @@ echo "<style>
         <?php //include (new views())->ruta_templates . 'etiquetas/_titulo_lista.php'; ?>
 
         <div class="filtros-avanzados">
-            <div class="filtro-grupo col-md-3">
-                <div class="col-md-12">
-                    <label>Selección múltiple </label>
-                    <select class="form-control basic-multiple" name="select" multiple
-                            data-placeholder="Selecciona una Opcion">
-                        <option value="1">Opción 1</option>
-                        <option value="2">Opción 2</option>
-                        <option value="3">Opción 3</option>
-                    </select>
+            <div class="filtro-grupo col-md-12">
+                <label>Status Prospecto</label>
+                <select class="form-control basic-multiple" name="select" multiple
+                        data-placeholder="Selecciona una Opcion">
+                    <option value="1">Opción 1</option>
+                    <option value="2">Opción 2</option>
+                    <option value="3">Opción 3</option>
+                </select>
+            </div>
+
+            <div class="filtro-grupo col-md-12">
+                <div class="col-md-4">
+                    <label for="Nombre Prospecto">Nombre Prospecto</label>
+                    <input type="text" id="nombre_prospecto" data-ajax="filtro" data-filtro_campo="inm_prospecto.razon_social"
+                           placeholder="Ej: JUAN PEREZ">
+                </div>
+
+                <div class="col-md-4">
+                    <label for="nss">NSS</label>
+                    <input type="text" id="nss" data-ajax="filtro" data-filtro_campo="inm_prospecto.nss"
+                           placeholder="Ej: 9999999999">
+                </div>
+                <div class="col-md-4">
+                    <label for="agente">Agente</label>
+                    <input type="text" id="agente" data-ajax="filtro" data-filtro_campo="com_agente.descripcion"
+                           placeholder="Ej: JUAN PEREZ">
                 </div>
             </div>
 
-            <div class="filtro-grupo col-md-5">
-                <label for="Nombre Prospecto">Nombre Prospecto</label>
-                <input type="text" id="nombre_prospecto" data-ajax="filtro" data-filtro_campo="inm_prospecto.razon_social"
-                       placeholder="Ej: JUAN PEREZ">
-
-                <label for="nss">NSS</label>
-                <input type="text" id="nss" data-ajax="filtro" data-filtro_campo="inm_prospecto.nss"
-                       placeholder="Ej: 9999999999">
-
-                <label for="agente">Agente</label>
-                <input type="text" id="agente" data-ajax="filtro" data-filtro_campo="com_agente.descripcion"
-                       placeholder="Ej: JUAN PEREZ">
-            </div>
-
-            <div class="filtro-grupo col-md-4">
-                <label for="fecha_inicio">Fecha Alta Inicio</label>
-                <input type="date" id="fecha_inicio" data-ajax="rango-fechas" data-filtro_campo="inm_prospecto.fecha_alta"
-                       data-filtro_key="campo1">
-
-                <label for="fecha_fin">Fecha Alta Fin</label>
-                <input type="date" id="fecha_fin" data-ajax="rango-fechas" data-filtro_campo="inm_prospecto.fecha_alta"
-                       data-filtro_key="campo2">
+            <div class="filtro-grupo col-md-12">
+                <div class="col-md-3">
+                    <label for="fecha_inicio">Fecha Alta Inicio</label>
+                    <input type="date" id="fecha_inicio" data-ajax="rango-fechas" data-filtro_campo="inm_prospecto.fecha_alta"
+                           data-filtro_key="campo1">
+                </div>
+                <div class="col-md-3">
+                    <label for="fecha_fin">Fecha Alta Fin</label>
+                    <input type="date" id="fecha_fin" data-ajax="rango-fechas" data-filtro_campo="inm_prospecto.fecha_alta"
+                           data-filtro_key="campo2">
+                </div>
             </div>
             <div class="filtro-grupo col-md-12">
                 <button id="filtrar">Filtrar</button>
