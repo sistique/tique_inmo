@@ -17,6 +17,8 @@ use gamboamartin\comercial\models\com_direccion;
 use gamboamartin\comercial\models\com_direccion_prospecto;
 use gamboamartin\comercial\models\com_prospecto;
 use gamboamartin\comercial\models\com_prospecto_etapa;
+use gamboamartin\controllers\_controlador_adm_reporte\_filtros;
+use gamboamartin\controllers\_controlador_adm_reporte\_table;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_prospecto_html;
 use gamboamartin\inmuebles\models\_base_paquete;
@@ -30,6 +32,7 @@ use gamboamartin\inmuebles\models\inm_doc_prospecto;
 use gamboamartin\inmuebles\models\inm_prospecto;
 use gamboamartin\inmuebles\models\inm_referencia_prospecto;
 use gamboamartin\inmuebles\models\inm_tipo_beneficiario;
+use gamboamartin\plugins\exportador;
 use gamboamartin\proceso\html\pr_etapa_proceso_html;
 use gamboamartin\system\actions;
 use gamboamartin\system\links_menu;
@@ -60,6 +63,8 @@ class controlador_inm_prospecto extends _ctl_formato
     public string $link_agrupa_documentos = '';
     public string $link_verifica_documentos = '';
     public string $link_envia_documentos = '';
+    public string $link_exportar_xls ='';
+
 
     public array $inm_conf_docs_prospecto = array();
 
@@ -99,6 +104,16 @@ class controlador_inm_prospecto extends _ctl_formato
             print_r($error);
             die('Error');
         }
+
+        $link_exportar_xls = $this->obj_link->link_con_id(accion: 'exportar_xls',link: $this->link,
+            registro_id:  $this->registro_id,seccion:  $this->tabla);
+        if (errores::$error) {
+            $error = $this->errores->error(mensaje: 'Error al generar link', data: $link_exportar_xls);
+            print_r($error);
+            die('Error');
+        }
+
+        $this->link_exportar_xls = $link_exportar_xls;
     }
 
     /**
@@ -462,6 +477,74 @@ class controlador_inm_prospecto extends _ctl_formato
         $this->etapas = $etapas;
 
         return $template;
+    }
+
+    public function exportar_xls(bool $header, bool $ws = false)
+    {
+        $nombre_hojas = array('Prospectos');
+        $keys_hojas = array();
+
+        $registros = $this->result_inm_prosp();
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener inm_prospecto', data: $registros, header: $header,
+                ws: $ws);
+        }
+
+        $ths = (new _table())->ths_array(adm_reporte_descripcion: 'Prospectos');
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al obtener ths', data: $ths);
+        }
+
+        $keys = array();
+        foreach ($ths as $data_th) {
+            $keys[] = $data_th['campo'];
+        }
+
+        $keys_hojas['Prospectos'] = new stdClass();
+        $keys_hojas['Prospectos']->keys = $keys;
+        $keys_hojas['Prospectos']->registros = $registros->registros;
+
+
+        $moneda = array();
+        $totales_hoja = new stdClass();
+        //$totales_hoja->Prospectos = (array)$registros->totales;
+        $xls = (new exportador())->genera_xls(header: $header, name: 'Prospectos', nombre_hojas: $nombre_hojas,
+            keys_hojas: $keys_hojas, path_base: $this->path_base, moneda: $moneda/*, totales_hoja: $totales_hoja*/);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener xls', data: $xls, header: $header, ws: $ws);
+        }
+
+    }
+
+    private function result_inm_prosp(): array|stdClass
+    {
+        $result = new stdClass();
+        $result->registros = array();
+        $result->totales = array();
+
+        $table = 'inm_prospecto';
+
+        $filtro_rango = (new _filtros())->filtro_rango(table: $table);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al obtener filtro_rango', data: $filtro_rango);
+        }
+
+        $filtro_text = (new _filtros())->filtro_texto(table: $table);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al obtener filtro_texto', data: $filtro_text);
+        }
+
+        /*$columnas_totales[] = 'inm_prospecto_sub_total_base';
+        $columnas_totales[] = 'inm_prospecto_total_descuento';
+        $columnas_totales[] = 'inm_prospecto_total_traslados';
+        $columnas_totales[] = 'inm_prospecto_total_retenciones';
+        $columnas_totales[] = 'inm_prospecto_total';*/
+        $result = (new inm_prospecto(link: $this->link))->filtro_and(filtro: $filtro_text, filtro_rango: $filtro_rango);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al obtener fc_facturas', data: $result);
+        }
+
+        return $result;
     }
 
     private function init_selects(array $keys_selects, string $key, string $label, int|null $id_selected = -1, int $cols = 6,

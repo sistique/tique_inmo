@@ -119,9 +119,9 @@ echo "<style>
 
             <button id="filtrar">Filtrar</button>
             <button id="limpiar">Limpiar</button>
-            <!--<form method="post" action="<?php //echo $controlador->link_exportar_xls; ?>" enctype="multipart/form-data">
+            <form method="post" action="<?php echo $controlador->link_exportar_xls; ?>" enctype="multipart/form-data">
                 <button id="descargar_excel">Descargar Excel</button>
-            </form>-->
+            </form>
 
         </div>
 
