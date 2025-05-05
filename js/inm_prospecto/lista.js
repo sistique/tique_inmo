@@ -1,32 +1,42 @@
-let url = get_url("inm_prospecto", "data_ajax", {});
-
 $(document).ready(function () {
-    $.fn.dataTable.ext.search.push(
-        function (settings, data, dataIndex) { //'data' contiene los datos de la fila
-            //En la columna 1 estamos mostrando el tipo de usuario
-            let userTypeColumnData = data[1] || 0;
+    var table_fc_factura = $('.datatable').DataTable();
+    var filtro_aplicado = false;
 
-            if (!filterByUserType(userTypeColumnData)) {
+    $('#limpiar').prop('disabled', true);
+
+    function verificar_filtros() {
+        var tiene_valor = false;
+
+        $('.filtros-avanzados input').each(function () {
+            if ($(this).val().trim() !== '') {
+                tiene_valor = true;
                 return false;
             }
+        });
 
-            return true;
-        }
-    );
-});
-
-function filterByUserType(userTypeColumnData) {
-    let userTypeSelected = $('#userTypeFilter').val();
-
-    //Si la opción seleccionada es 'TODOS', devolvemos 'true' para que pinte la fila
-    if (userTypeSelected === "TODOS") {
-        return true;
+        $('#limpiar').prop('disabled', !tiene_valor);
     }
 
-    //La fila sólo se va a pintar si el valor de la columna coincide con el del filtro seleccionado
-    return userTypeColumnData === userTypeSelected;
-}
+    $('.filtros-avanzados input').on('input', function () {
+        verificar_filtros();
+    });
 
-function filterTable() {
-    $('#myTable').DataTable().draw();
-}
+    $('#filtrar').on('click', function () {
+        $('#filtrar').prop('disabled', true);
+        table_fc_factura.ajax.reload(function () {
+            $('#filtrar').prop('disabled', false);
+            $('#limpiar').prop('disabled', false);
+            filtro_aplicado = true;
+        });
+    });
+
+    $('#limpiar').on('click', function () {
+        $('.filtros-avanzados input').val('');
+        $('#limpiar').prop('disabled', true);
+
+        if (filtro_aplicado) {
+            table_fc_factura.ajax.reload();
+            filtro_aplicado = false;
+        }
+    });
+});
