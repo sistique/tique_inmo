@@ -98,6 +98,8 @@ echo "<style>
         <div class="filtros-avanzados">
 
             <div class="filtro-grupo">
+                <label for="status_cliente">Status Prospecto</label>
+
                 <label for="Nombre Prospecto">Nombre Prospecto</label>
                 <input type="text" id="nombre_prospecto" data-ajax="filtro" data-filtro_campo="inm_prospecto.razon_social"
                        placeholder="Ej: JUAN PEREZ">
