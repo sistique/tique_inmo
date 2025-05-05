@@ -489,6 +489,7 @@ class controlador_inm_prospecto extends _ctl_formato
             return $this->retorno_error(mensaje: 'Error al obtener inm_prospecto', data: $registros, header: $header,
                 ws: $ws);
         }
+        print_r($registros);exit;
 
         $ths = (new _table())->ths_array(adm_reporte_descripcion: 'Prospectos');
         if (errores::$error) {
