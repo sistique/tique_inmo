@@ -1,0 +1,49 @@
+.tab-headers {
+    display: flex;
+    justify-content: space-between;
+}
+
+.tab-header {
+    cursor: pointer;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 0;
+    background-color: transparent;
+    flex: 1;
+    text-align: center;
+    transition: background-color 0.3s ease;
+    color: #1a1b1f;
+    font-weight: 600;
+}
+
+.tab-header:hover {
+    background-color: rgba(224, 224, 224, 0.42);
+}
+
+.tab-header.active {
+    border-bottom: 2px solid blue;
+}
+
+.tab-content {
+    display: none;
+    /*border: 1px solid #ccc; */
+    padding: 20px;
+    border-radius: 0 0 5px 5px;
+    background-color: #fff;
+
+
+}
+
+.tab-content:first-child {
+    display: block;
+    gap: 20px;
+}
+
+.tab-contents {
+    display: grid;
+}
+
+.tab-content .control-group {
+    margin: 10px 0;
+}
+

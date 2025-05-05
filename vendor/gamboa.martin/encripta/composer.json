@@ -1,0 +1,32 @@
+{
+  "name": "gamboa.martin/encripta",
+  "description": "Encriptador y desencriptador",
+  "type": "library",
+  "license": "GPL-3.0-or-later",
+  "authors": [
+    {
+      "name": "Martin Gamboa",
+      "email": "gamboa.martin@gmail.com"
+    }],
+
+    "autoload": {
+        "psr-4": {
+          "gamboamartin\\encripta\\": "src/",
+            "config\\": "config/",
+            "tests\\": "tests/",
+            "src\\": "src/"
+
+        }
+    },
+    "require": {
+      "php": "^8.3",
+      "gamboa.martin/errores": "^6.0.0",
+      "gamboa.martin/test": "^5.0.0",
+      "gamboa.martin/validacion": "^5.0.0",
+      "ext-openssl": "*",
+      "phpunit/phpunit": "^10.0.0"
+    },
+    "require-dev": {
+
+    }
+}

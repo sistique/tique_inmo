@@ -1,0 +1,31 @@
+{
+  "name": "gamboa.martin/js_base",
+  "description": "Java Base",
+  "type": "library",
+  "license": "GPL-3.0-or-later",
+  "authors": [
+    {
+      "name": "Martin Gamboa",
+      "email": "gamboa.martin@gmail.com"
+    }
+  ],
+
+    "autoload": {
+        "psr-4": {
+          "config\\": "config/",
+          "gamboamartin\\js_base\\tests\\": "tests",
+          "gamboamartin\\js_base\\": "src",
+          "gamboamartin\\js_base\\eventos\\": "src/eventos"
+        }
+    },
+    "require": {
+      "php": "^8.3",
+      "gamboa.martin/errores": "^6.0.0",
+      "gamboa.martin/test": "^5.0.0",
+      "gamboa.martin/validacion": "^5.0.0",
+      "phpunit/phpunit": "^10.0.0"
+    },
+    "require-dev": {
+
+    }
+}

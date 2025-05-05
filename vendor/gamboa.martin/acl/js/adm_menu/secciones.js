@@ -1,0 +1,6 @@
+$('#adm_seccion').DataTable();
+
+
+
+
+

@@ -1,0 +1,26 @@
+{
+    "name": "gamboa.martin/test",
+    "description": "Unit Test",
+    "type": "library",
+    "license": "GPL-3.0-or-later",
+    "autoload": {
+        "psr-4": {
+            "gamboamartin\\test\\": "src/",
+            "controllers\\": "src/controllers/",
+            "models\\": "src/models/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Martin Gamboa",
+            "email": "gamboa.martin@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^8.3",
+        "ext-pdo": "*",
+        "ext-mysqli": "*",
+        "gamboa.martin/errores": "^6.0.0",
+        "phpunit/phpunit": "^10.0"
+    }
+}

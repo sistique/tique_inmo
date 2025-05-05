@@ -1,0 +1,90 @@
+.container {
+    margin-bottom: 1rem;
+}
+
+.card {
+    position: relative;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    min-width: 0;
+    color: #212529;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 0 solid #e9ebec;
+    border-radius: 0.25rem;
+    margin-bottom: 1.5rem;
+    -webkit-box-shadow: 0 1px 2px rgba(56,65,74,.15);
+    box-shadow: 0 1px 2px rgba(56,65,74,.15);
+}
+
+.card-body {
+    -webkit-box-flex: 1;
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+    padding: 1rem;
+}
+
+.d-flex {
+    display: flex !important;
+}
+
+.align-items-center {
+    -webkit-box-align: center !important;
+    align-items: center !important;
+}
+
+.text-muted {
+    color: #3e3f44 !important;
+}
+
+.fw-medium {
+    font-weight: 500 !important;
+}
+
+.text-uppercase {
+    text-transform: uppercase !important;
+}
+
+.text-truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.mb-0 {
+    margin-bottom: 0 !important;
+}
+
+.fs-22 {
+    font-size: 22px !important;
+}
+
+.fw-semibold {
+    font-weight: 600 !important;
+}
+
+.mb-4 {
+    margin-bottom: 1.5rem !important;
+}
+
+
+
+.badge {
+    padding: 0.3em 0.5em;
+}
+
+.badge-primary {
+    color: #fff;
+    background-color: #007bff;
+}
+
+.badge-success {
+    color: #fff;
+    background-color: #28a745;
+}

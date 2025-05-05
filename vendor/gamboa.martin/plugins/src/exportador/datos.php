@@ -1,0 +1,263 @@
+<?php
+namespace gamboamartin\plugins\exportador;
+use gamboamartin\errores\errores;
+use JetBrains\PhpStorm\Pure;
+use JsonException;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+use Throwable;
+
+class datos{
+    private errores $error;
+    #[Pure] public function __construct(){
+        $this->error = new errores();
+    }
+
+    /**
+     * PROBADO PARAMS ORDER INTERNALS
+     * @param Spreadsheet $libro
+     * @param string $dato
+     * @return array|Spreadsheet
+     */
+    final public function genera_datos_libro(string $dato, Spreadsheet $libro):array|Spreadsheet{ //FIN PROT
+        if(trim($dato) === ''){
+            return $this->error->error('Error el dato esta vacio',$dato);
+        }
+        try {
+            $libro->getProperties()->setCreator("Sistema")
+                ->setLastModifiedBy("Sistema")
+                ->setTitle($dato)
+                ->setSubject($dato)
+                ->setDescription($dato)
+                ->setKeywords($dato)
+                ->setCategory($dato);
+        }
+        catch (Throwable $e){
+            return $this->error->error('Error en dato libro xls', $e);
+        }
+
+        return $libro;
+    }
+
+    /**
+     * PROBADO PARAMS ORDER INTERNALS
+     * @param array $columnas
+     * @param int $index
+     * @param array $keys
+     * @param Spreadsheet $libro
+     * @return array|bool
+     */
+    public function genera_encabezados(array $columnas, int $index, array $keys, Spreadsheet $libro,
+                                       array $keys_sum = array(), string $color_contenido = 'FFFFFF',
+                                       int $inicio_fila = 1,string $color_texto = '000000'): array|bool
+    {
+        if (!empty($keys_sum)){
+            $fila = 2;
+            $i = 0; //columna
+            foreach ($keys_sum as $key){
+
+                $key = trim($key);
+                if($key === ''){
+                    return $this->error->error('Error key esta vacio', $key);
+                }
+                if(!isset($columnas[$i])){
+                    return $this->error->error("Error no existe columnas[$i]", $columnas);
+                }
+                if(trim($columnas[$i]) === ''){
+                    return $this->error->error("Error esta vacia la coordenada columnas[$i]", $columnas);
+                }
+                try {
+                    $libro->setActiveSheetIndex($index)->setCellValue($columnas[$i] . $fila, $key);
+                    $fila++;
+                }
+                catch (Throwable $e){
+                    return $this->error->error('Error al aplicar key en xls', $e);
+                }
+            }
+        }
+
+        $fila = $inicio_fila;
+        $i = 0; //columna
+
+        foreach($keys as $key){
+
+            $key = trim($key);
+            if($key === ''){
+                return $this->error->error('Error key esta vacio', $key);
+            }
+            if(!isset($columnas[$i])){
+                return $this->error->error("Error no existe columnas[$i]", $columnas);
+            }
+            if(trim($columnas[$i]) === ''){
+                return $this->error->error("Error esta vacia la coordenada columnas[$i]", $columnas);
+            }
+            try {
+                $libro->setActiveSheetIndex($index)->setCellValue($columnas[$i] . $fila, $key);
+                $libro->getActiveSheet()->getStyle($columnas[$i] . $fila)->getFont()->getColor()
+                    ->setRGB($color_texto);
+                $libro->getActiveSheet()->getStyle($columnas[$i] . $fila)->getFill()
+                    ->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB($color_contenido);
+                $i++;
+            }
+            catch (Throwable $e){
+                return $this->error->error('Error al aplicar key en xls', $e);
+            }
+        }
+        return true;
+    }
+
+
+    /**
+     * PARAMS ORDER INTERNALS
+     * @param string $campo
+     * @param array $columnas
+     * @param array $estilo_contenido
+     * @param array $estilos
+     * @param int $fila
+     * @param int $index
+     * @param Spreadsheet $libro
+     * @param int $numero_columna
+     * @param string $path_base
+     * @param array $registro
+     * @param string $color_contenido
+     * @return array
+     */
+    private function llena_datos_xls(string $campo, array $columnas, array $estilo_contenido, array $estilos,
+                                     int $fila, int $index, Spreadsheet $libro, int $numero_columna,
+                                     string $path_base, array $registro, string $color_contenido = 'FFFFFF'): array
+    {
+
+        if($numero_columna<0){
+            return $this->error->error('Error $numero_columna debe ser mayor o igual a 0', $numero_columna);
+        }
+        if($fila<0){
+            return $this->error->error('Error $fila debe ser mayor o igual a 0',$fila);
+        }
+        if(!isset($columnas[$numero_columna])){
+            return $this->error->error('Error la columna en la posicion '.$numero_columna.' no existe',
+                $numero_columna);
+        }
+
+        if( isset($registro[$campo]) ) {
+            if(is_array($registro[$campo])){
+                return $this->error->error('Error $registro['.$campo.'] debe ser un string', $registro);
+            }
+            $valor = trim($registro[$campo]);
+            $celda = $columnas[$numero_columna] . $fila;
+
+            $estilo = (new estilos())->estilos_format(path_base: $path_base,valor:  $valor);
+            if(errores::$error){
+                return $this->error->error('Error al obtener estilo', $estilo);
+            }
+            if($estilo === 'fecha'){
+                $valor  = strtotime($valor);
+                $valor =($valor/86400)+25569+(-5/24);
+            }
+            try {
+                $libro->setActiveSheetIndex($index)->setCellValue($celda, $valor);
+                $libro->getActiveSheet()->getStyle($celda)->applyFromArray($estilo_contenido);
+                $libro->getActiveSheet()->getStyle($celda)->getFill()
+                    ->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB($color_contenido);
+                $libro->getActiveSheet()->getStyle($celda)->getBorders()->getOutline()
+                    ->setBorderStyle(Border::BORDER_THIN);
+                if($estilo) {
+                    $libro->getActiveSheet()->getStyle($celda)->getNumberFormat()->setFormatCode(
+                        $estilos[$estilo]);
+                }
+            }
+            catch (Throwable $e){
+                return $this->error->error('Error al asignar dato', $e);
+            }
+        }
+        return $registro;
+    }
+
+    /**
+     * PARAMS ORDER INTERNALS
+     * @param array $columnas
+     * @param array $estilo_contenido
+     * @param array $estilos
+     * @param int $index
+     * @param array $keys
+     * @param Spreadsheet $libro
+     * @param string $path_base
+     * @param array $registros
+     * @param array $totales
+     * @return array
+     */
+    public function llena_libro_xls(array $columnas, array $estilo_contenido, array $estilos, int $index, array $keys,
+                                     Spreadsheet $libro, string $path_base, array $registros, array $totales,
+                                    string $color_contenido = 'FFFFFF', int $inicio_fila = 2 ): array
+    {
+        $fila = $inicio_fila;
+        foreach($registros as $registro) {
+            if(!is_array($registro)){
+                return $this->error->error('Error registro debe ser un array',$registro);
+            }
+            $llenado = $this->llena_registro_xls(columnas:$columnas, estilo_contenido:$estilo_contenido,
+                estilos: $estilos, fila: $fila, index: $index, keys: $keys, libro: $libro, path_base: $path_base,
+                registro: $registro, color_contenido: $color_contenido);
+
+            if(errores::$error){
+                return $this->error->error('Error al aplicar $llenado', $llenado);
+            }
+
+            $fila++;
+        }
+
+        $fila++;
+
+        foreach($totales as $key =>$total){
+            try {
+                $libro->setActiveSheetIndex($index)->setCellValue('A' . $fila, $key);
+                $libro->setActiveSheetIndex($index)->setCellValue('B' . $fila, $total);
+                $libro->getActiveSheet()->getStyle('A' . $fila)->applyFromArray($estilo_contenido);
+                $libro->getActiveSheet()->getStyle('B' . $fila)->applyFromArray($estilo_contenido);
+            }
+            catch (Throwable $e){
+                return $this->error->error('Error al asignar valores', $e);
+            }
+
+            $fila ++;
+        }
+
+
+        return $registros;
+    }
+
+    /**
+     * PARAMS-ORDER INTERNALS
+     * @param array $columnas
+     * @param array $estilo_contenido
+     * @param array $estilos
+     * @param int $fila
+     * @param int $index
+     * @param array $keys
+     * @param Spreadsheet $libro
+     * @param string $path_base
+     * @param array $registro
+     * @return array
+     */
+    private function llena_registro_xls(array $columnas, array $estilo_contenido, array $estilos, int $fila,
+                                        int $index, array $keys, Spreadsheet$libro, string $path_base,
+                                        array $registro, string $color_contenido = 'FFFFFF'):array{
+        $i=0;
+        $data=array();
+        foreach($keys as $campo){
+            $llenado = $this->llena_datos_xls(campo: $campo, columnas: $columnas,estilo_contenido: $estilo_contenido,
+                estilos: $estilos, fila: $fila, index:  $index, libro: $libro, numero_columna:$i,
+                path_base: $path_base, registro: $registro, color_contenido: $color_contenido);
+            if(errores::$error){
+                return $this->error->error('Error al aplicar $llenado',$llenado);
+            }
+            $data[]=$llenado;
+            $i++;
+        }
+        return $data;
+    }
+
+
+
+
+}

@@ -93,7 +93,7 @@ echo "<style>
     } ?>
     <?php include (new views())->ruta_templates . "mensajes.php"; ?>
     <div class="widget widget-box box-container widget-mylistings">
-        <?php include (new views())->ruta_templates . 'etiquetas/_titulo_lista.php'; ?>
+        <?php //include (new views())->ruta_templates . 'etiquetas/_titulo_lista.php'; ?>
 
         <div class="filtros-avanzados">
             <div class="filtro-grupo">
