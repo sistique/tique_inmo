@@ -96,8 +96,8 @@ echo "<style>
         <?php //include (new views())->ruta_templates . 'etiquetas/_titulo_lista.php'; ?>
 
         <div class="filtros-avanzados">
-            <div class="filtro-grupo">
-                <div class="p-5">
+            <div class="filtro-grupo col-md-3">
+                <div class="col-md-12">
                     <label>Selección múltiple </label>
                     <select class="form-control basic-multiple" name="select" multiple
                             data-placeholder="Selecciona una Opcion">
@@ -106,7 +106,9 @@ echo "<style>
                         <option value="3">Opción 3</option>
                     </select>
                 </div>
+            </div>
 
+            <div class="filtro-grupo col-md-5">
                 <label for="Nombre Prospecto">Nombre Prospecto</label>
                 <input type="text" id="nombre_prospecto" data-ajax="filtro" data-filtro_campo="inm_prospecto.razon_social"
                        placeholder="Ej: JUAN PEREZ">
@@ -120,7 +122,7 @@ echo "<style>
                        placeholder="Ej: JUAN PEREZ">
             </div>
 
-            <div class="filtro-grupo">
+            <div class="filtro-grupo col-md-4">
                 <label for="fecha_inicio">Fecha Alta Inicio</label>
                 <input type="date" id="fecha_inicio" data-ajax="rango-fechas" data-filtro_campo="inm_prospecto.fecha_alta"
                        data-filtro_key="campo1">
