@@ -19,7 +19,7 @@ $links_menu = (new links_menu(link:$controlador->link, registro_id: -1))->links;
     <meta http-equiv="x-ua-compatible" content="ie=edge" />
     <?php include $path_base_template.'css.php'; ?>
     <?php echo $data->css_custom->css; ?>
-
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 </head>
 
 <body class="">

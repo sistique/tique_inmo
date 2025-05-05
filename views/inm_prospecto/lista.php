@@ -96,9 +96,16 @@ echo "<style>
         <?php //include (new views())->ruta_templates . 'etiquetas/_titulo_lista.php'; ?>
 
         <div class="filtros-avanzados">
-
             <div class="filtro-grupo">
-                <label for="status_cliente">Status Prospecto</label>
+                <div class="p-5">
+                    <label>Selección múltiple </label>
+                    <select class="form-control basic-multiple" name="select" multiple
+                            data-placeholder="Selecciona una Opcion">
+                        <option value="1">Opción 1</option>
+                        <option value="2">Opción 2</option>
+                        <option value="3">Opción 3</option>
+                    </select>
+                </div>
 
                 <label for="Nombre Prospecto">Nombre Prospecto</label>
                 <input type="text" id="nombre_prospecto" data-ajax="filtro" data-filtro_campo="inm_prospecto.razon_social"

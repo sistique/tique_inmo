@@ -39,4 +39,6 @@ $(document).ready(function () {
             filtro_aplicado = false;
         }
     });
+
+    $('.basic-multiple').select2();
 });
