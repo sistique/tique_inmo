@@ -25,3 +25,5 @@ config/generales.php
 config/database.php
 config/views.php
 archivos
+.idea/
+composer.lock
