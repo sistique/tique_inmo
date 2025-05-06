@@ -75,7 +75,7 @@ filtros_avanzados = function () {
 
     $(".filtros-avanzados input").each(function () {
         let $input = $(this);
-        let grupo = $input.data("ajax");
+        let grupo = $input.data("tipo");
         let filtro = $input.data("filtro_campo");
         let key = $input.data("filtro_key");
         let value = $.trim($input.val());
@@ -95,6 +95,25 @@ filtros_avanzados = function () {
         }
     });
 
+    $(".filtros-avanzados select").each(function () {
+        let $input = $(this);
+        let grupo = $input.data("tipo");
+        let filtro = $input.data("filtro_campo");
+        let values = $input.val(); // Esto puede ser null o un array
+
+        if (Array.isArray(values)) {
+            values.forEach(function (val) {
+                if (grupo && filtro && val) {
+                    if (!filtros[grupo]) {
+                        filtros[grupo] = {};
+                    }
+
+                    filtros[grupo][filtro] = val
+                }
+            });
+        }
+    });
+console.log(filtros);
     return filtros;
 };
 

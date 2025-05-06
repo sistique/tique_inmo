@@ -99,11 +99,12 @@ echo "<style>
         <div class="filtros-avanzados">
             <div class="filtro-grupo col-md-12">
                 <label>Status Prospecto</label>
-                <select class="form-control basic-multiple" name="inm_status_contrato[]" multiple
+                <select class="form-control basic-multiple" id="inm_status_prospecto" name="inm_status_prospecto[]"
+                        data-tipo="filtro" data-filtro_campo="inm_status_prospecto.descripcion" multiple
                         data-placeholder="Selecciona una Opcion">
                     <?php
                         foreach ($controlador->status_prospecto AS $status){
-                            echo '<option value="'.$status['inm_status_prospecto_id'].'">'.$status['inm_status_prospecto_descripcion'].'</option>';
+                            echo '<option value="'.$status['inm_status_prospecto_descripcion'].'">'.$status['inm_status_prospecto_descripcion'].'</option>';
                         }
                     ?>
                 </select>
@@ -112,18 +113,18 @@ echo "<style>
             <div class="filtro-grupo col-md-12">
                 <div class="col-md-4">
                     <label for="Nombre Prospecto">Nombre Prospecto</label>
-                    <input type="text" id="nombre_prospecto" data-ajax="filtro" data-filtro_campo="inm_prospecto.razon_social"
+                    <input type="text" id="nombre_prospecto" data-tipo="filtro" data-filtro_campo="inm_prospecto.razon_social"
                            placeholder="Ej: JUAN PEREZ">
                 </div>
 
                 <div class="col-md-4">
                     <label for="nss">NSS</label>
-                    <input type="text" id="nss" data-ajax="filtro" data-filtro_campo="inm_prospecto.nss"
+                    <input type="text" id="nss" data-tipo="filtro" data-filtro_campo="inm_prospecto.nss"
                            placeholder="Ej: 9999999999">
                 </div>
                 <div class="col-md-4">
                     <label for="agente">Agente</label>
-                    <input type="text" id="agente" data-ajax="filtro" data-filtro_campo="com_agente.descripcion"
+                    <input type="text" id="agente" data-tipo="filtro" data-filtro_campo="com_agente.descripcion"
                            placeholder="Ej: JUAN PEREZ">
                 </div>
             </div>
@@ -131,12 +132,12 @@ echo "<style>
             <div class="filtro-grupo col-md-12">
                 <div class="col-md-3">
                     <label for="fecha_inicio">Fecha Alta Inicio</label>
-                    <input type="date" id="fecha_inicio" data-ajax="rango-fechas" data-filtro_campo="inm_prospecto.fecha_alta"
+                    <input type="date" id="fecha_inicio" data-tipo="rango-fechas" data-filtro_campo="inm_prospecto.fecha_alta"
                            data-filtro_key="campo1">
                 </div>
                 <div class="col-md-3">
                     <label for="fecha_fin">Fecha Alta Fin</label>
-                    <input type="date" id="fecha_fin" data-ajax="rango-fechas" data-filtro_campo="inm_prospecto.fecha_alta"
+                    <input type="date" id="fecha_fin" data-tipo="rango-fechas" data-filtro_campo="inm_prospecto.fecha_alta"
                            data-filtro_key="campo2">
                 </div>
             </div>
