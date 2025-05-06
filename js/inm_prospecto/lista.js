@@ -37,7 +37,6 @@ $(document).ready(function () {
     });
 
     $('.filtros-avanzados select').on('change', function () {
-        console.log($(this).val());
         $('.filtros-avanzados select').each(function () {
             if ($(this).val() !== '') {
                 $('#hidden_' + $(this).attr('id')).val($(this).val());

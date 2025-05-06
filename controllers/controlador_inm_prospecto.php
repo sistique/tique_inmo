@@ -17,6 +17,7 @@ use gamboamartin\comercial\models\com_direccion;
 use gamboamartin\comercial\models\com_direccion_prospecto;
 use gamboamartin\comercial\models\com_prospecto;
 use gamboamartin\comercial\models\com_prospecto_etapa;
+use gamboamartin\controllers\_controlador_adm_reporte\_fechas;
 use gamboamartin\controllers\_controlador_adm_reporte\_filtros;
 use gamboamartin\controllers\_controlador_adm_reporte\_table;
 use gamboamartin\errores\errores;
@@ -486,7 +487,7 @@ class controlador_inm_prospecto extends _ctl_formato
     {
         $nombre_hojas = array('Prospectos');
         $keys_hojas = array();
-print_r($_POST);exit;
+
         $registros = $this->result_inm_prosp();
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al obtener inm_prospecto', data: $registros, header: $header,
@@ -530,14 +531,33 @@ print_r($_POST);exit;
 
         $table = 'inm_prospecto';
 
-        $filtro_rango = (new _filtros())->filtro_rango(table: $table);
-        if (errores::$error) {
-            return $this->errores->error(mensaje: 'Error al obtener filtro_rango', data: $filtro_rango);
+        $filtro_rango = array();
+        if(!empty($_POST['fecha_inicial'])){
+            $filtro_rango[$table.'.fecha_alta']['valor1'] = $_POST['fecha_inicial'];
+        }
+        if(!empty($_POST['fecha_final'])) {
+            $filtro_rango[$table . '.fecha_alta']['valor2'] = $_POST['fecha_final'];
         }
 
-        $filtro_text = (new _filtros())->filtro_texto(table: $table);
-        if (errores::$error) {
-            return $this->errores->error(mensaje: 'Error al obtener filtro_texto', data: $filtro_text);
+        $filtro_text = array();
+
+        if(!empty($_POST['nombre_prospecto'])){
+            $filtro_text[$table.'.nombre_prospecto'] = $_POST['nombre_prospecto'];
+        }
+
+        if(!empty($_POST['nss'])){
+            $filtro_text[$table.'.nss'] = $_POST['nss'];
+        }
+
+        if(!empty($_POST['agente'])){
+            $filtro_text['com_agente.descripcion'] = $_POST['agente'];
+        }
+
+        $in = array();
+        if(!empty($_POST['inm_status_prospecto'])){
+            $array = explode(",", $_POST['inm_status_prospecto']);
+            $in['llave'] = 'inm_status_prospecto.descripcion';
+            $in['values'] = $array;
         }
 
         /*$columnas_totales[] = 'inm_prospecto_sub_total_base';
@@ -545,9 +565,11 @@ print_r($_POST);exit;
         $columnas_totales[] = 'inm_prospecto_total_traslados';
         $columnas_totales[] = 'inm_prospecto_total_retenciones';
         $columnas_totales[] = 'inm_prospecto_total';*/
-        $result = (new inm_prospecto(link: $this->link))->filtro_and(filtro: $filtro_text, filtro_rango: $filtro_rango);
+
+        $result = (new inm_prospecto(link: $this->link))->filtro_and(filtro: $filtro_text, filtro_rango: $filtro_rango,
+            in: $in);
         if (errores::$error) {
-            return $this->errores->error(mensaje: 'Error al obtener fc_facturas', data: $result);
+            return $this->errores->error(mensaje: 'Error al obtener prospectos', data: $result);
         }
 
         return $result;

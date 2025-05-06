@@ -151,8 +151,8 @@ echo "<style>
                     <input type="hidden" name="nombre_prospecto" id="hidden_nombre_prospecto">
                     <input type="hidden" name="nss" id="hidden_nss">
                     <input type="hidden" name="agente" id="hidden_agente">
-                    <input type="hidden" name="fecha_inicio" id="hidden_fecha_inicio">
-                    <input type="hidden" name="fecha_fin" id="hidden_fecha_fin">
+                    <input type="hidden" name="fecha_inicial" id="hidden_fecha_inicio">
+                    <input type="hidden" name="fecha_final" id="hidden_fecha_fin">
                     <button id="descargar_excel">Descargar Excel</button>
                 </form>
             </div>
