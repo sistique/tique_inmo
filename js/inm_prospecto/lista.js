@@ -14,6 +14,13 @@ $(document).ready(function () {
             }
         });
 
+        $(".filtros-avanzados select").each(function () {
+            if ($(this).val().trim() !== '') {
+                tiene_valor = true;
+                return false;
+            }
+        });
+
         $('#limpiar').prop('disabled', !tiene_valor);
     }
 
@@ -32,6 +39,8 @@ $(document).ready(function () {
 
     $('#limpiar').on('click', function () {
         $('.filtros-avanzados input').val('');
+        $('.filtros-avanzados select').val('').trigger('change');;
+        $('.filtros-avanzados li').remove();
         $('#limpiar').prop('disabled', true);
 
         if (filtro_aplicado) {
