@@ -421,7 +421,7 @@ class controlador_inm_prospecto extends _ctl_formato
         $columns_ds[] = 'inm_status_prospecto_descripcion';
 
         $inm_status_prospecto_id = (new inm_status_prospecto_html(html: $this->html_base))->select_inm_status_prospecto_id(
-            cols: 12, con_registros: true, id_selected: -1, link: $this->link, columns_ds: $columns_ds,
+            cols: 6, con_registros: true, id_selected: -1, link: $this->link, columns_ds: $columns_ds,
             label: 'Status Prospecto');
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al obtener selector de etapa', data: $inm_status_prospecto_id, header: $header, ws: $ws);
@@ -440,7 +440,7 @@ class controlador_inm_prospecto extends _ctl_formato
         $this->inputs->inm_status_prospecto_id = $inm_status_prospecto_id;
 
         $hoy = date('Y-m-d\TH:i:s');
-        $fecha = $this->html->input_fecha(cols: 12, row_upd: new stdClass(), value_vacio: false, disabled: $disabled,
+        $fecha = $this->html->input_fecha(cols: 6, row_upd: new stdClass(), value_vacio: false, disabled: $disabled,
             name: 'fecha_status', value: $hoy, value_hora: true);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al generar input fecha', data: $fecha, header: $header, ws: $ws);

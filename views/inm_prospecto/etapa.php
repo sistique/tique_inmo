@@ -1,7 +1,6 @@
 <?php /** @var gamboamartin\comercial\controllers\controlador_com_prospecto $controlador  controlador en ejecucion */ ?>
 <?php use config\views; ?>
 <main class="main section-color-primary">
-    <div class="container">
         <div class="row">
             <div class="col-lg-12">
                 <?php include (new views())->ruta_templates."head/title.php"; ?>
@@ -26,14 +25,10 @@
 
             </div>
         </div>
-
-    </div>
-
 </main>
 
 <main class="main section-color-primary">
-    <div class="container">
-        <div class="row">
+    <div class="row">
             <div class="col-md-12">
                 <div class="widget widget-box box-container widget-mylistings">
                     <table class="table table-striped">
@@ -50,10 +45,10 @@
                         foreach ($controlador->etapas as $etapa){
                         ?>
                         <tr>
-                            <td><?php echo $etapa['com_prospecto_etapa_id'] ?></td>
-                            <td><?php echo $etapa['pr_etapa_descripcion'] ?></td>
-                            <td><?php echo $etapa['com_prospecto_etapa_fecha'] ?></td>
-                            <td><?php echo $etapa['com_prospecto_etapa_observaciones'] ?></td>
+                            <td><?php echo $etapa['inm_bitacora_status_prospecto_id'] ?></td>
+                            <td><?php echo $etapa['inm_status_prospecto_descripcion'] ?></td>
+                            <td><?php echo $etapa['inm_bitacora_status_prospecto_fecha_status'] ?></td>
+                            <td><?php echo $etapa['inm_bitacora_status_prospecto_observaciones'] ?></td>
                         </tr>
                         <?php } ?>
                         </tbody>
@@ -61,7 +56,5 @@
                 </div> <!-- /. widget-table-->
             </div><!-- /.center-content -->
         </div>
-
-    </div>
 </main>
 
