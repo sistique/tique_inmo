@@ -4,7 +4,7 @@
 
 <?php
 echo "<style>
-.filtros-avanzados {
+.contenedor_completo{
     display: flex;
     flex-wrap: wrap;
     padding: 15px;
@@ -96,60 +96,67 @@ echo "<style>
     <div class="widget widget-box box-container widget-mylistings">
         <?php //include (new views())->ruta_templates . 'etiquetas/_titulo_lista.php'; ?>
 
-        <div class="filtros-avanzados">
-            <div class="filtro-grupo col-md-12">
-                <label>Status Prospecto</label>
-                <select class="form-control basic-multiple" id="inm_status_prospecto" name="inm_status_prospecto[]"
-                        data-tipo="in" data-filtro_campo="inm_status_prospecto.descripcion" multiple
-                        data-placeholder="Selecciona una Opcion">
-                    <?php
-                        foreach ($controlador->status_prospecto AS $status){
-                            echo '<option value="'.$status['inm_status_prospecto_descripcion'].'">'.$status['inm_status_prospecto_descripcion'].'</option>';
-                        }
-                    ?>
-                </select>
-            </div>
-
-            <div class="filtro-grupo col-md-12">
-                <div class="col-md-4">
-                    <label for="Nombre Prospecto">Nombre Prospecto</label>
-                    <input type="text" id="nombre_prospecto" data-tipo="filtro" data-filtro_campo="inm_prospecto.razon_social"
-                           placeholder="Ej: JUAN PEREZ">
+        <div class="contenedor_completo">
+            <div class="filtros-avanzados">
+                <div class="filtro-grupo col-md-12">
+                    <label>Status Prospecto</label>
+                    <select class="form-control basic-multiple" id="inm_status_prospecto" name="inm_status_prospecto[]"
+                            data-tipo="in" data-filtro_campo="inm_status_prospecto.descripcion" multiple
+                            data-placeholder="Selecciona una Opcion">
+                        <?php
+                            foreach ($controlador->status_prospecto AS $status){
+                                echo '<option value="'.$status['inm_status_prospecto_descripcion'].'">'.$status['inm_status_prospecto_descripcion'].'</option>';
+                            }
+                        ?>
+                    </select>
                 </div>
 
-                <div class="col-md-4">
-                    <label for="nss">NSS</label>
-                    <input type="text" id="nss" data-tipo="filtro" data-filtro_campo="inm_prospecto.nss"
-                           placeholder="Ej: 9999999999">
-                </div>
-                <div class="col-md-4">
-                    <label for="agente">Agente</label>
-                    <input type="text" id="agente" data-tipo="filtro" data-filtro_campo="com_agente.descripcion"
-                           placeholder="Ej: JUAN PEREZ">
-                </div>
-            </div>
+                <div class="filtro-grupo col-md-12">
+                    <div class="col-md-4">
+                        <label for="Nombre Prospecto">Nombre Prospecto</label>
+                        <input type="text" id="nombre_prospecto" data-tipo="filtro" data-filtro_campo="inm_prospecto.razon_social"
+                               placeholder="Ej: JUAN PEREZ">
+                    </div>
 
-            <div class="filtro-grupo col-md-12">
-                <div class="col-md-3">
-                    <label for="fecha_inicio">Fecha Alta Inicio</label>
-                    <input type="date" id="fecha_inicio" data-tipo="rango-fechas" data-filtro_campo="inm_prospecto.fecha_alta"
-                           data-filtro_key="campo1">
+                    <div class="col-md-4">
+                        <label for="nss">NSS</label>
+                        <input type="text" id="nss" data-tipo="filtro" data-filtro_campo="inm_prospecto.nss"
+                               placeholder="Ej: 9999999999">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="agente">Agente</label>
+                        <input type="text" id="agente" data-tipo="filtro" data-filtro_campo="com_agente.descripcion"
+                               placeholder="Ej: JUAN PEREZ">
+                    </div>
                 </div>
-                <div class="col-md-3">
-                    <label for="fecha_fin">Fecha Alta Fin</label>
-                    <input type="date" id="fecha_fin" data-tipo="rango-fechas" data-filtro_campo="inm_prospecto.fecha_alta"
-                           data-filtro_key="campo2">
+
+                <div class="filtro-grupo col-md-12">
+                    <div class="col-md-3">
+                        <label for="fecha_inicio">Fecha Alta Inicio</label>
+                        <input type="date" id="fecha_inicio" data-tipo="rango-fechas" data-filtro_campo="inm_prospecto.fecha_alta"
+                               data-filtro_key="campo1">
+                    </div>
+                    <div class="col-md-3">
+                        <label for="fecha_fin">Fecha Alta Fin</label>
+                        <input type="date" id="fecha_fin" data-tipo="rango-fechas" data-filtro_campo="inm_prospecto.fecha_alta"
+                               data-filtro_key="campo2">
+                    </div>
                 </div>
             </div>
             <div class="filtro-grupo col-md-12">
                 <button id="filtrar">Filtrar</button>
                 <button id="limpiar">Limpiar</button>
                 <form method="post" action="<?php echo $controlador->link_exportar_xls; ?>" enctype="multipart/form-data">
+                    <input type="hidden" name="inm_status_prospecto" id="hidden_inm_status_prospecto">
+                    <input type="hidden" name="nombre_prospecto" id="hidden_nombre_prospecto">
+                    <input type="hidden" name="nss" id="hidden_nss">
+                    <input type="hidden" name="agente" id="hidden_agente">
+                    <input type="hidden" name="fecha_inicio" id="hidden_fecha_inicio">
+                    <input type="hidden" name="fecha_fin" id="hidden_fecha_fin">
                     <button id="descargar_excel">Descargar Excel</button>
                 </form>
             </div>
         </div>
-
         <table class="datatable table table-striped"></table>
     </div><!-- /. widget-table-->
 </div><!-- /.center-content -->

@@ -486,18 +486,20 @@ class controlador_inm_prospecto extends _ctl_formato
     {
         $nombre_hojas = array('Prospectos');
         $keys_hojas = array();
-
+print_r($_POST);exit;
         $registros = $this->result_inm_prosp();
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al obtener inm_prospecto', data: $registros, header: $header,
                 ws: $ws);
         }
-        print_r($registros);exit;
 
-        $ths = (new _table())->ths_array(adm_reporte_descripcion: 'Prospectos');
-        if (errores::$error) {
-            return $this->errores->error(mensaje: 'Error al obtener ths', data: $ths);
-        }
+        $ths[] = array('etiqueta'=>'ID', 'campo'=>'inm_prospecto_id');
+        $ths[] = array('etiqueta'=>'Nombre Prospecto', 'campo'=>'inm_prospecto_razon_social');
+        $ths[] = array('etiqueta'=>'NSS', 'campo'=>'inm_prospecto_nss');
+        $ths[] = array('etiqueta'=>'Precalificacion', 'campo'=>'inm_prospecto_monto_credito_solicitado_dh');
+        $ths[] = array('etiqueta'=>'Fecha Alta', 'campo'=>'inm_prospecto_fecha_alta');
+        $ths[] = array('etiqueta'=>'Agente', 'campo'=>'com_agente_descripcion');
+        $ths[] = array('etiqueta'=>'Status Prospecto', 'campo'=>'inm_status_prospecto_descripcion');
 
         $keys = array();
         foreach ($ths as $data_th) {

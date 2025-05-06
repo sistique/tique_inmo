@@ -26,6 +26,13 @@ $(document).ready(function () {
 
     $('.filtros-avanzados input').on('input', function () {
         verificar_filtros();
+
+        $('.filtros-avanzados input').each(function () {
+            if ($(this).val().trim() !== '') {
+                console.log($(this));
+            }
+        });
+
     });
 
     $('#filtrar').on('click', function () {
@@ -50,4 +57,6 @@ $(document).ready(function () {
     });
 
     $('.basic-multiple').select2();
+
+
 });
