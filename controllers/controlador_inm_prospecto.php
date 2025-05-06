@@ -456,7 +456,14 @@ class controlador_inm_prospecto extends _ctl_formato
 
         $this->inputs->observaciones = $observaciones;
 
-        $link_alta_bitacora= $this->obj_link->link_alta(link: $this->link, seccion:  'inm_bitacora_status_prospecto');
+        $inm_prospecto_id = $this->html->hidden(name:'inm_prospecto_id',value: $this->registro_id);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $inm_prospecto_id,  header: $header, ws: $ws);
+        }
+
+        $this->inputs->inm_prospecto_id = $inm_prospecto_id;
+
+        $link_alta_bitacora= $this->obj_link->link_alta_bd(link: $this->link, seccion:  'inm_bitacora_status_prospecto');
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al generar link', data: $link_alta_bitacora, header: $header, ws: $ws);
         }

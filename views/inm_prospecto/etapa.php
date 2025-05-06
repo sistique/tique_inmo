@@ -12,6 +12,7 @@
                     <form method="post" action="<?php echo $controlador->link_alta_bitacora; ?>" class="form-additional">
                         <?php include (new views())->ruta_templates."head/subtitulo.php"; ?>
 
+                        <?php echo $controlador->inputs->inm_prospecto_id; ?>
                         <?php echo $controlador->inputs->inm_status_prospecto_id; ?>
                         <?php echo $controlador->inputs->fecha; ?>
                         <?php echo $controlador->inputs->observaciones; ?>
