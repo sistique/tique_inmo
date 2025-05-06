@@ -550,17 +550,17 @@ class controlador_inm_prospecto extends _ctl_formato
         }
 
         if(!empty($_POST['nss'])){
-            $filtro_especial[1][$table.'.razon_social']['operador'] = 'LIKE';
-            $filtro_especial[1][$table.'.razon_social']['valor'] = '%'.$_POST['nss'].'%';
-            $filtro_especial[1][$table.'.razon_social']['comparacion'] = 'AND';
+            $filtro_especial[1][$table.'.nss']['operador'] = 'LIKE';
+            $filtro_especial[1][$table.'.nss']['valor'] = '%'.$_POST['nss'].'%';
+            $filtro_especial[1][$table.'.nss']['comparacion'] = 'AND';
 
             $filtro_text[$table.'.nss'] = $_POST['nss'];
         }
 
         if(!empty($_POST['agente'])){
-            $filtro_especial[2][$table.'.razon_social']['operador'] = 'LIKE';
-            $filtro_especial[2][$table.'.razon_social']['valor'] = '%'.$_POST['agente'].'%';
-            $filtro_especial[2][$table.'.razon_social']['comparacion'] = 'AND';
+            $filtro_especial[2][$table.'.agente']['operador'] = 'LIKE';
+            $filtro_especial[2][$table.'.agente']['valor'] = '%'.$_POST['agente'].'%';
+            $filtro_especial[2][$table.'.agente']['comparacion'] = 'AND';
 
             $filtro_text['com_agente.descripcion'] = $_POST['agente'];
         }
