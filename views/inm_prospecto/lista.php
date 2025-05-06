@@ -101,9 +101,11 @@ echo "<style>
                 <label>Status Prospecto</label>
                 <select class="form-control basic-multiple" name="select" multiple
                         data-placeholder="Selecciona una Opcion">
-                    <option value="1">Opción 1</option>
-                    <option value="2">Opción 2</option>
-                    <option value="3">Opción 3</option>
+                    <?php
+                        foreach ($controlador->status_prospecto AS $status){
+                            echo '<option value="'.$status['inm_status_prospecto_id'].'">'.$status['inm_status_prospecto_descripcion'].'</option>';
+                        }
+                    ?>
                 </select>
             </div>
 
