@@ -15,7 +15,7 @@ $(document).ready(function () {
         });
 
         $(".filtros-avanzados select").each(function () {
-            if ($(this).val().trim() !== '') {
+            if ($(this).val() !== '') {
                 tiene_valor = true;
                 return false;
             }
@@ -26,13 +26,23 @@ $(document).ready(function () {
 
     $('.filtros-avanzados input').on('input', function () {
         verificar_filtros();
+    });
 
+    $('.filtros-avanzados input').on('change', function () {
         $('.filtros-avanzados input').each(function () {
             if ($(this).val().trim() !== '') {
-                console.log($(this));
+                $('#hidden_' + $(this).attr('id')).val($(this).val());
             }
         });
+    });
 
+    $('.filtros-avanzados select').on('change', function () {
+        console.log($(this).val());
+        $('.filtros-avanzados select').each(function () {
+            if ($(this).val() !== '') {
+                $('#hidden_' + $(this).attr('id')).val($(this).val());
+            }
+        });
     });
 
     $('#filtrar').on('click', function () {
