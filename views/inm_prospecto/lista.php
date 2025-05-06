@@ -99,7 +99,7 @@ echo "<style>
         <div class="filtros-avanzados">
             <div class="filtro-grupo col-md-12">
                 <label>Status Prospecto</label>
-                <select class="form-control basic-multiple" name="select" multiple
+                <select class="form-control basic-multiple" name="inm_status_contrato[]" multiple
                         data-placeholder="Selecciona una Opcion">
                     <?php
                         foreach ($controlador->status_prospecto AS $status){
