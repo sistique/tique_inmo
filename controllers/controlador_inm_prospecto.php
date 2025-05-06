@@ -21,6 +21,7 @@ use gamboamartin\controllers\_controlador_adm_reporte\_filtros;
 use gamboamartin\controllers\_controlador_adm_reporte\_table;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_prospecto_html;
+use gamboamartin\inmuebles\html\inm_status_prospecto_html;
 use gamboamartin\inmuebles\models\_base_paquete;
 use gamboamartin\inmuebles\models\_email;
 use gamboamartin\inmuebles\models\_inm_prospecto;
@@ -56,7 +57,7 @@ class controlador_inm_prospecto extends _ctl_formato
     public stdClass $header_frontend;
     public inm_prospecto_html $html_entidad;
 
-    public string $link_alta_etapa = '';
+    public string $link_alta_bitacora = '';
     public array $etapas = array();
     public string $link_inm_doc_prospecto_alta_bd = '';
     public string $link_modifica_direccion = '';
@@ -417,15 +418,13 @@ class controlador_inm_prospecto extends _ctl_formato
             $this->retorno_error(mensaje: 'Error al generar template', data: $template, header: $header, ws: $ws);
         }
 
-        $filtro = array();
-        $filtro['pr_proceso.descripcion'] = 'PROSPECCION';
-        $columns_ds[] = 'pr_etapa_descripcion';
+        $columns_ds[] = 'inm_status_prospecto_descripcion';
 
-        $pr_etapa_proceso_id = (new pr_etapa_proceso_html(html: $this->html_base))->select_pr_etapa_proceso_id(
+        $inm_status_prospecto_id = (new inm_status_prospecto_html(html: $this->html_base))->select_inm_status_prospecto_id(
             cols: 12, con_registros: true, id_selected: -1, link: $this->link, columns_ds: $columns_ds,
-            filtro: $filtro, label: 'Etapa');
+            label: 'Status Prospecto');
         if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al obtener selector de etapa', data: $pr_etapa_proceso_id, header: $header, ws: $ws);
+            return $this->retorno_error(mensaje: 'Error al obtener selector de etapa', data: $inm_status_prospecto_id, header: $header, ws: $ws);
         }
 
         $com_agentes = (new com_agente(link: $this->link))->com_agentes_session();
@@ -438,10 +437,11 @@ class controlador_inm_prospecto extends _ctl_formato
             $disabled = true;
         }
 
-        $this->inputs->pr_etapa_proceso_id = $pr_etapa_proceso_id;
+        $this->inputs->inm_status_prospecto_id = $inm_status_prospecto_id;
+
         $hoy = date('Y-m-d\TH:i:s');
         $fecha = $this->html->input_fecha(cols: 12, row_upd: new stdClass(), value_vacio: false, disabled: $disabled,
-            value: $hoy, value_hora: true);
+            name: 'fecha_status', value: $hoy, value_hora: true);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al generar input fecha', data: $fecha, header: $header, ws: $ws);
         }
@@ -456,20 +456,14 @@ class controlador_inm_prospecto extends _ctl_formato
 
         $this->inputs->observaciones = $observaciones;
 
-        $registro = (new inm_prospecto(link: $this->link))->registro($this->registro_id);
+        $link_alta_bitacora= $this->obj_link->link_alta(link: $this->link, seccion:  'inm_bitacora_status_prospecto');
         if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al generar link', data: $registro, header: $header, ws: $ws);
+            return $this->retorno_error(mensaje: 'Error al generar link', data: $link_alta_bitacora, header: $header, ws: $ws);
         }
 
-        $link_alta_etapa = $this->obj_link->link_con_id(
-            accion: 'etapa_bd', link: $this->link, registro_id: $registro['com_prospecto_id'], seccion: 'com_prospecto');
-        if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al generar link', data: $link_alta_etapa, header: $header, ws: $ws);
-        }
+        $this->link_alta_bitacora = $link_alta_bitacora;
 
-        $this->link_alta_etapa = $link_alta_etapa;
-
-        $etapas = (new com_prospecto(link: $this->link))->etapas(com_prospecto_id: $registro['com_prospecto_id']);
+        $etapas = (new inm_prospecto(link: $this->link))->status_prospecto(inm_prospecto_id: $this->registro_id);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al obtener etapas', data: $etapas, header: $header, ws: $ws);
         }

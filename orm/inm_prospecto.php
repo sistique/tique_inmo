@@ -409,6 +409,17 @@ class inm_prospecto extends _modelo_parent{
         return $r_elimina;
     }
 
+    public function status_prospecto(int $inm_prospecto_id,
+                           array $order = array('inm_bitacora_status_prospecto.fecha_status'=>'DESC')){
+        $filtro['inm_prospecto.id'] = $inm_prospecto_id;
+        $r_inm_bitacora_prospecto = (new inm_bitacora_status_prospecto(link: $this->link))->filtro_and(filtro: $filtro,order: $order);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener etapas', data: $r_inm_bitacora_prospecto);
+        }
+
+        return $r_inm_bitacora_prospecto->registros;
+    }
+
     /**
      * Valida si existe o no un conyuge ligado al prospecto
      * @param int $inm_prospecto_id Identificador de prospecto
@@ -457,7 +468,7 @@ class inm_prospecto extends _modelo_parent{
 
     final public function inm_beneficiarios(int $inm_prospecto_id){
         $filtro['inm_prospecto.id'] = $inm_prospecto_id;
-        $r_inm_beneficiario = (new inm_beneficiario(link: $this->link))->filtro_and(filtro: $filtro,);
+        $r_inm_beneficiario = (new inm_beneficiario(link: $this->link))->filtro_and(filtro: $filtro);
         if(errores::$error){
             return$this->error->error(mensaje: 'Error al obtener beneficiarios', data: $r_inm_beneficiario);
         }
