@@ -24,7 +24,7 @@ datatable = function (identificador, columns, columnDefs, data, filtro_in) {
             "url": url_data_table,
             'data': function (d) {
                 d.data = data;
-                d.in = filtro_in;
+                d.in = filtros_in();
                 d.filtros_avanzados = filtros_avanzados();
             },
 
@@ -95,6 +95,12 @@ filtros_avanzados = function () {
         }
     });
 
+    return filtros;
+};
+
+filtros_in = function () {
+    let filtros = {};
+
     $(".filtros-avanzados select").each(function () {
         let $input = $(this);
         let grupo = $input.data("tipo");
@@ -103,17 +109,20 @@ filtros_avanzados = function () {
 
         if (Array.isArray(values)) {
             values.forEach(function (val) {
-                if (grupo && filtro && val) {
-                    if (!filtros[grupo]) {
-                        filtros[grupo] = {};
+                if (filtro && val) {
+                    if (!filtros['llave']) {
+                        filtros['llave'] = filtro;
+                    }
+                    if (!filtros['values']) {
+                        filtros['values'] = [];
                     }
 
-                    filtros[grupo][filtro] = val
+                    filtros['values'].push(val);
                 }
             });
         }
     });
-console.log(filtros);
+
     return filtros;
 };
 

@@ -100,7 +100,7 @@ echo "<style>
             <div class="filtro-grupo col-md-12">
                 <label>Status Prospecto</label>
                 <select class="form-control basic-multiple" id="inm_status_prospecto" name="inm_status_prospecto[]"
-                        data-tipo="filtro" data-filtro_campo="inm_status_prospecto.descripcion" multiple
+                        data-tipo="in" data-filtro_campo="inm_status_prospecto.descripcion" multiple
                         data-placeholder="Selecciona una Opcion">
                     <?php
                         foreach ($controlador->status_prospecto AS $status){
