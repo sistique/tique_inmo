@@ -539,17 +539,29 @@ class controlador_inm_prospecto extends _ctl_formato
             $filtro_rango[$table . '.fecha_alta']['valor2'] = $_POST['fecha_final'];
         }
 
-        $filtro_text = array();
+        $filtro_especial = array();
 
         if(!empty($_POST['nombre_prospecto'])){
-            $filtro_text[$table.'.nombre_prospecto'] = $_POST['nombre_prospecto'];
+            $filtro_especial[0][$table.'.razon_social']['operador'] = 'LIKE';
+            $filtro_especial[0][$table.'.razon_social']['valor'] = '%'.$_POST['nombre_prospecto'].'%';
+            $filtro_especial[0][$table.'.razon_social']['comparacion'] = 'AND';
+
+            //$filtro_text[$table.'.razon_social'] = $_POST['nombre_prospecto'];
         }
 
         if(!empty($_POST['nss'])){
+            $filtro_especial[1][$table.'.razon_social']['operador'] = 'LIKE';
+            $filtro_especial[1][$table.'.razon_social']['valor'] = '%'.$_POST['nss'].'%';
+            $filtro_especial[1][$table.'.razon_social']['comparacion'] = 'AND';
+
             $filtro_text[$table.'.nss'] = $_POST['nss'];
         }
 
         if(!empty($_POST['agente'])){
+            $filtro_especial[2][$table.'.razon_social']['operador'] = 'LIKE';
+            $filtro_especial[2][$table.'.razon_social']['valor'] = '%'.$_POST['agente'].'%';
+            $filtro_especial[2][$table.'.razon_social']['comparacion'] = 'AND';
+
             $filtro_text['com_agente.descripcion'] = $_POST['agente'];
         }
 
@@ -566,8 +578,8 @@ class controlador_inm_prospecto extends _ctl_formato
         $columnas_totales[] = 'inm_prospecto_total_retenciones';
         $columnas_totales[] = 'inm_prospecto_total';*/
 
-        $result = (new inm_prospecto(link: $this->link))->filtro_and(filtro: $filtro_text, filtro_rango: $filtro_rango,
-            in: $in);
+        $result = (new inm_prospecto(link: $this->link))->filtro_and(filtro_especial: $filtro_especial,
+            filtro_rango: $filtro_rango, in: $in);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al obtener prospectos', data: $result);
         }
