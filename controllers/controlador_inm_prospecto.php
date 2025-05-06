@@ -578,11 +578,12 @@ class controlador_inm_prospecto extends _ctl_formato
         $columns["inm_prospecto_monto_credito_solicitado_dh"]["titulo"] = "Precalificacion";
         $columns["inm_prospecto_fecha_alta"]["titulo"] = "Fecha Alta";
         $columns["com_agente_descripcion"]["titulo"] = "Agente";
-        $columns["pr_etapa_descripcion"]["titulo"] = "Status";
+        $columns["inm_status_prospecto_descripcion"]["titulo"] = "Status Prospecto";
 
 
-        $filtro = array("inm_prospecto.id", "inm_prospecto.razon_social", 'inm_prospecto.nss', 'inm_prospecto.rfc',
-            'inm_prospecto.curp', 'inm_prospecto.fecha_alta', 'com_agente.id', 'com_agente.descripcion');
+        $filtro = array("inm_prospecto.id", "inm_prospecto.razon_social", 'inm_prospecto.nss',
+            'inm_prospecto.monto_credito_solicitado_dh','inm_prospecto.fecha_alta', 'com_agente.descripcion',
+            'inm_status_prospecto.descripcion');
 
         $datatables = new stdClass();
         $datatables->columns = $columns;

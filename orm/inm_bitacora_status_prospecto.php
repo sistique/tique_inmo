@@ -45,6 +45,13 @@ class inm_bitacora_status_prospecto extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al insertar prospecto',data:  $r_alta_bd);
         }
 
+        $regitros_mod['inm_status_prospecto_id'] = $this->registro['inm_status_prospecto_id'];
+        $r_modifica_bd = (new inm_prospecto(link: $this->link))->modifica_bd(registro: $regitros_mod,
+            id: $this->registro['inm_prospecto_id']);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al ajustar status de prospecto',data:  $r_modifica_bd);
+        }
+
         return $r_alta_bd;
     }
 
