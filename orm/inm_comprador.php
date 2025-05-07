@@ -32,7 +32,6 @@ class inm_comprador extends _modelo_parent{
             'fecha_nacimiento','monto_final','sub_cuenta','descuento','puntos','inm_nacionalidad_id',
             'inm_ocupacion_id','telefono_casa','correo_empresa');
 
-        $columnas_extra= array();
         $renombres['dp_calle_pertenece_empresa']['nombre_original']= 'dp_calle_pertenece';
         $renombres['dp_calle_pertenece_empresa']['enlace']= 'org_empresa';
         $renombres['dp_calle_pertenece_empresa']['key']= 'id';
@@ -86,6 +85,10 @@ class inm_comprador extends _modelo_parent{
         $tipo_campos['correo_com'] = 'correo';
         $tipo_campos['correo_empresa'] = 'correo';
 
+        $columnas_extra= array();
+        $sql = "(CONCAT_WS(' ', inm_comprador.nombre, inm_comprador.apellido_paterno, inm_comprador.apellido_materno))";
+
+        $columnas_extra['inm_comprador_razon_social'] = $sql;
 
         parent::__construct(link: $link, tabla: $tabla, campos_obligatorios: $campos_obligatorios,
             columnas: $columnas, columnas_extra: $columnas_extra, renombres: $renombres,
