@@ -1014,6 +1014,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         $datatables = new stdClass();
         $datatables->columns = $columns;
         $datatables->filtro = $filtro;
+        $datatables->menu_active = true;
 
         return $datatables;
     }
