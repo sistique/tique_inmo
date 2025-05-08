@@ -119,14 +119,21 @@ echo "<style>
                     </div>
 
                     <div class="col-md-4">
-                        <label for="nss">NSS</label>
-                        <input type="text" id="nss" data-tipo="filtro" data-filtro_campo="inm_comprador.nss"
-                               placeholder="Ej: 9999999999">
+                        <label for="Ubicacion">Ubicacion</label>
+                        <input type="text" id="ubicacion" data-tipo="filtro" data-filtro_campo="inm_ubicacion_completa"
+                               placeholder="Ej: AV. VALLARTA 220 ">
                     </div>
+
                     <div class="col-md-4">
                         <label for="agente">Agente</label>
                         <input type="text" id="agente" data-tipo="filtro" data-filtro_campo="com_agente.descripcion"
                                placeholder="Ej: JUAN PEREZ">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label for="nss">NSS</label>
+                        <input type="text" id="nss" data-tipo="filtro" data-filtro_campo="inm_comprador.nss"
+                               placeholder="Ej: 9999999999">
                     </div>
 
                     <div class="col-md-4">
@@ -142,8 +149,10 @@ echo "<style>
                 <form method="post" action="<?php echo $controlador->link_exportar_xls; ?>" enctype="multipart/form-data">
                     <input type="hidden" name="inm_status_comprador" id="hidden_inm_status_comprador">
                     <input type="hidden" name="nombre_comprador" id="hidden_nombre_comprador">
-                    <input type="hidden" name="nss" id="hidden_nss">
+                    <input type="hidden" name="ubicacion" id="hidden_ubicacion">
                     <input type="hidden" name="agente" id="hidden_agente">
+                    <input type="hidden" name="nss" id="hidden_nss">
+                    <input type="hidden" name="numero_credito" id="hidden_numero_credito">
                     <button id="descargar_excel">Descargar Excel</button>
                 </form>
             </div>
