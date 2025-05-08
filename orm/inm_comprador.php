@@ -90,12 +90,19 @@ class inm_comprador extends _modelo_parent{
 
         $columnas_extra['inm_comprador_razon_social'] = $sql;
 
-        $sql = "( IFNULL ((SELECT
-                    pr_etapa_actual.descripcion 
-                    FROM pr_etapa AS pr_etapa_actual 
-                    LEFT JOIN com_prospecto_etapa AS com_prospecto_etapa_sel ON  com_prospecto_etapa_sel.com_prospecto_id = com_prospecto.id
-                    LEFT JOIN pr_etapa_proceso AS pr_etapa_proceso_sel ON  com_prospecto_etapa_sel.pr_etapa_proceso_id = pr_etapa_proceso_sel.id
-                     WHERE  pr_etapa_actual.id = pr_etapa_proceso_sel.pr_etapa_id ORDER BY com_prospecto_etapa_sel.fecha DESC LIMIT 1), -1) )";
+        $sql = "( IFNULL((SELECT
+                    CONCAT(inm_ubicacion.calle, ' ', inm_ubicacion.numero_exterior, ' ', inm_ubicacion.numero_interior, ' ', dp_colonia.descripcion, ' ', dp_municipio.descripcion)
+                    FROM inm_rel_ubi_comp 
+                        LEFT JOIN inm_ubicacion ON inm_ubicacion.id = inm_rel_ubi_comp.inm_ubicacion_id
+                        LEFT JOIN dp_colonia_postal ON dp_colonia_postal.id = inm_ubicacion.dp_colonia_postal_id
+                        LEFT JOIN dp_colonia ON dp_colonia.id = dp_colonia_postal.dp_colonia_id
+                        LEFT JOIN dp_cp ON dp_cp.id = dp_colonia_postal.dp_cp_id
+                        LEFT JOIN dp_municipio ON dp_municipio.id = dp_cp.dp_municipio_id
+                        LEFT JOIN dp_estado ON dp_estado.id = dp_municipio.dp_estado_id
+                        LEFT JOIN dp_pais ON dp_pais.id = dp_estado.dp_pais_id
+                        WHERE
+                        inm_rel_ubi_comp.inm_comprador_id = 22
+                         LIMIT 1), ''))";
 
         $columnas_extra['inm_ubicacion_completa'] = $sql;
 

@@ -941,14 +941,15 @@ class controlador_inm_comprador extends _ctl_base {
     {
         $columns["inm_comprador_id"]["titulo"] = "Id";
         $columns["inm_comprador_razon_social"]["titulo"] = "Nombre";
+        $columns["inm_ubicacion_completa"]["titulo"] = "Ubicacion";
         $columns["inm_comprador_nss"]["titulo"] = "NSS";
         $columns["inm_comprador_curp"]["titulo"] = "CURP";
         $columns["inm_comprador_etapa"]["titulo"] = "Etapa";
         $columns["inm_comprador_proceso"]["titulo"] = "Proceso Actual";
         $columns["inm_institucion_hipotecaria_descripcion"]["titulo"] = "Institucion Hip";
 
-        $filtro = array("inm_comprador.id",'inm_comprador_razon_social','inm_comprador.nss','inm_comprador.curp',
-            'inm_comprador.proceso', 'inm_institucion_hipotecaria.descripcion');
+        $filtro = array("inm_comprador.id", 'inm_ubicacion_completa', 'inm_comprador_razon_social','inm_comprador.nss',
+            'inm_comprador.curp', 'inm_comprador.proceso', 'inm_institucion_hipotecaria.descripcion');
 
         $datatables = new stdClass();
         $datatables->columns = $columns;
