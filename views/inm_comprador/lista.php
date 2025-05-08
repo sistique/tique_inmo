@@ -114,7 +114,7 @@ echo "<style>
                 <div class="filtro-grupo col-md-12">
                     <div class="col-md-4">
                         <label for="Nombre comprador">Nombre comprador</label>
-                        <input type="text" id="nombre_comprador" data-tipo="filtro" data-filtro_campo="inm_comprador.razon_social"
+                        <input type="text" id="nombre_comprador" data-tipo="filtro" data-filtro_campo="inm_comprador_razon_social"
                                placeholder="Ej: JUAN PEREZ">
                     </div>
 
@@ -128,18 +128,11 @@ echo "<style>
                         <input type="text" id="agente" data-tipo="filtro" data-filtro_campo="com_agente.descripcion"
                                placeholder="Ej: JUAN PEREZ">
                     </div>
-                </div>
 
-                <div class="filtro-grupo col-md-12">
-                    <div class="col-md-3">
-                        <label for="fecha_inicio">Fecha Alta Inicio</label>
-                        <input type="date" id="fecha_inicio" data-tipo="rango-fechas" data-filtro_campo="inm_comprador.fecha_alta"
-                               data-filtro_key="campo1">
-                    </div>
-                    <div class="col-md-3">
-                        <label for="fecha_fin">Fecha Alta Fin</label>
-                        <input type="date" id="fecha_fin" data-tipo="rango-fechas" data-filtro_campo="inm_comprador.fecha_alta"
-                               data-filtro_key="campo2">
+                    <div class="col-md-4">
+                        <label for="numero_credito">Numero de Credito</label>
+                        <input type="text" id="numero_credito" data-tipo="filtro" data-filtro_campo="inm_comprador.numero_credito"
+                               placeholder="Ej: 02102">
                     </div>
                 </div>
             </div>
@@ -151,8 +144,6 @@ echo "<style>
                     <input type="hidden" name="nombre_comprador" id="hidden_nombre_comprador">
                     <input type="hidden" name="nss" id="hidden_nss">
                     <input type="hidden" name="agente" id="hidden_agente">
-                    <input type="hidden" name="fecha_inicial" id="hidden_fecha_inicio">
-                    <input type="hidden" name="fecha_final" id="hidden_fecha_fin">
                     <button id="descargar_excel">Descargar Excel</button>
                 </form>
             </div>

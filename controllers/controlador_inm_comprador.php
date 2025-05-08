@@ -942,6 +942,7 @@ class controlador_inm_comprador extends _ctl_base {
         $columns["inm_comprador_id"]["titulo"] = "Id";
         $columns["inm_comprador_razon_social"]["titulo"] = "Nombre";
         $columns["inm_ubicacion_completa"]["titulo"] = "Ubicacion";
+        $columns["com_agente_descripcion"]["titulo"] = "Agente";
         $columns["inm_comprador_comentarios"]["titulo"] = "Comentarios";
         $columns["inm_comprador_nss"]["titulo"] = "NSS";
         $columns["inm_comprador_password_mi_cuenta_infonavit"]["titulo"] = "Cuenta Infonavit";
@@ -949,8 +950,8 @@ class controlador_inm_comprador extends _ctl_base {
         $columns["inm_comprador_numero_credito"]["titulo"] = "Numero de Credito";
         $columns["inm_status_comprador_descripcion"]["titulo"] = "Proceso Actual";
 
-        $filtro = array("inm_comprador.id", 'inm_ubicacion_completa', 'inm_comprador_razon_social','inm_comprador.nss',
-            'inm_status_comprador.descripcion');
+        $filtro = array("inm_comprador.id", 'inm_comprador_razon_social', 'inm_ubicacion_completa',
+            'com_agente.descripcion', 'inm_comprador.nss', 'inm_comprador.numero_credito', 'inm_status_comprador.descripcion');
 
         $datatables = new stdClass();
         $datatables->columns = $columns;
