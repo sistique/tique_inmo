@@ -114,13 +114,13 @@ echo "<style>
                 <div class="filtro-grupo col-md-12">
                     <div class="col-md-4">
                         <label for="Nombre comprador">Nombre comprador</label>
-                        <input type="text" id="nombre_comprador" data-tipo="filtro" data-filtro_campo="inm_comprador_razon_social"
+                        <input type="text" id="nombre_comprador" data-tipo="filtro" data-filtro_campo="<?php echo $controlador->modelo->columnas_extra['inm_comprador_razon_social']?>"
                                placeholder="Ej: JUAN PEREZ">
                     </div>
 
                     <div class="col-md-4">
                         <label for="Ubicacion">Ubicacion</label>
-                        <input type="text" id="ubicacion" data-tipo="filtro" data-filtro_campo="inm_ubicacion_completa"
+                        <input type="text" id="ubicacion" data-tipo="filtro" data-filtro_campo="<?php echo $controlador->modelo->columnas_extra['inm_ubicacion_completa']?>"
                                placeholder="Ej: AV. VALLARTA 220 ">
                     </div>
 
