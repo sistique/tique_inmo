@@ -997,16 +997,17 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
     private function init_datatable(): stdClass
     {
         $columns["inm_prospecto_ubicacion_id"]["titulo"] = "Id";
-        $columns["com_prospecto_razon_social"]["titulo"] = "Nombre";
+        $columns["inm_prospecto_ubicacion_ubicacion"]["titulo"] = "Ubicacion";
         $columns["com_prospecto_razon_social"]["titulo"] = "Nombre";
         $columns["inm_prospecto_ubicacion_nss"]["titulo"] = "NSS";
         $columns["inm_prospecto_ubicacion_fecha_alta"]["titulo"] = "Fecha Alta";
         $columns["com_agente_descripcion"]["titulo"] = "Agente";
-        $columns["pr_etapa_descripcion"]["titulo"] = "Etapa Actual";
+        $columns["inm_status_prospecto_ubicacion_descripcion"]["titulo"] = "Status Prospecto Ubicacion";
 
 
-        $filtro = array("inm_prospecto_ubicacion.id", "com_prospecto.razon_social",
-            'inm_prospecto_ubicacion.nss', 'inm_prospecto_ubicacion.fecha_alta', 'com_agente.descripcion');
+        $filtro = array("inm_prospecto_ubicacion.id", "inm_prospecto_ubicacion_ubicacion","com_prospecto.razon_social",
+            'inm_prospecto_ubicacion.nss', 'inm_prospecto_ubicacion.fecha_alta', 'com_agente.descripcion',
+            'inm_status_prospecto_ubicacion.descripcion');
 
         $datatables = new stdClass();
         $datatables->columns = $columns;
