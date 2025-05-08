@@ -113,16 +113,17 @@ echo "<style>
 
                 <div class="filtro-grupo col-md-12">
                     <div class="col-md-4">
-                        <label for="Nombre prospecto_ubicacion">Nombre prospecto_ubicacion</label>
-                        <input type="text" id="nombre_prospecto_ubicacion" data-tipo="filtro" data-filtro_campo="<?php echo $controlador->modelo->columnas_extra['inm_prospecto_ubicacion_razon_social']?>"
-                               placeholder="Ej: JUAN PEREZ">
+                        <label for="Ubicacion">Ubicacion</label>
+                        <input type="text" id="ubicacion" data-tipo="filtro" data-filtro_campo="<?php echo $controlador->modelo->columnas_extra['inm_prospecto_ubicacion_ubicacion']?>"
+                               placeholder="Ej: AV. VALLARTA 220 ">
                     </div>
 
                     <div class="col-md-4">
-                        <label for="Ubicacion">Ubicacion</label>
-                        <input type="text" id="ubicacion" data-tipo="filtro" data-filtro_campo="<?php echo $controlador->modelo->columnas_extra['inm_ubicacion_completa']?>"
-                               placeholder="Ej: AV. VALLARTA 220 ">
+                        <label for="Nombre prospecto_ubicacion">Nombre Prospecto</label>
+                        <input type="text" id="nombre_prospecto_ubicacion" data-tipo="filtro" data-filtro_campo="inm_prospecto_ubicacion.razon_social"
+                               placeholder="Ej: JUAN PEREZ">
                     </div>
+
 
                     <div class="col-md-4">
                         <label for="agente">Agente</label>
@@ -135,12 +136,6 @@ echo "<style>
                         <input type="text" id="nss" data-tipo="filtro" data-filtro_campo="inm_prospecto_ubicacion.nss"
                                placeholder="Ej: 9999999999">
                     </div>
-
-                    <div class="col-md-4">
-                        <label for="numero_credito">Numero de Credito</label>
-                        <input type="text" id="numero_credito" data-tipo="filtro" data-filtro_campo="inm_prospecto_ubicacion.numero_credito"
-                               placeholder="Ej: 02102">
-                    </div>
                 </div>
             </div>
             <div class="filtro-grupo col-md-12">
@@ -152,7 +147,6 @@ echo "<style>
                     <input type="hidden" name="ubicacion" id="hidden_ubicacion">
                     <input type="hidden" name="agente" id="hidden_agente">
                     <input type="hidden" name="nss" id="hidden_nss">
-                    <input type="hidden" name="numero_credito" id="hidden_numero_credito">
                     <button id="descargar_excel">Descargar Excel</button>
                 </form>
             </div>
