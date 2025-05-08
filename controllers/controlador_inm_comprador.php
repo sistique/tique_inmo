@@ -942,14 +942,15 @@ class controlador_inm_comprador extends _ctl_base {
         $columns["inm_comprador_id"]["titulo"] = "Id";
         $columns["inm_comprador_razon_social"]["titulo"] = "Nombre";
         $columns["inm_ubicacion_completa"]["titulo"] = "Ubicacion";
+        $columns["inm_comprador_comentarios"]["titulo"] = "Comentarios";
         $columns["inm_comprador_nss"]["titulo"] = "NSS";
-        $columns["inm_comprador_curp"]["titulo"] = "CURP";
-        $columns["inm_comprador_etapa"]["titulo"] = "Etapa";
-        $columns["inm_comprador_proceso"]["titulo"] = "Proceso Actual";
-        $columns["inm_institucion_hipotecaria_descripcion"]["titulo"] = "Institucion Hip";
+        $columns["inm_comprador_password_mi_cuenta_infonavit"]["titulo"] = "Cuenta Infonavit";
+        $columns["inm_comprador_monto_credito_solicitado_dh"]["titulo"] = "Precalificacion";
+        $columns["inm_comprador_numero_credito"]["titulo"] = "Numero de Credito";
+        $columns["inm_status_comprador_descripcion"]["titulo"] = "Proceso Actual";
 
         $filtro = array("inm_comprador.id", 'inm_ubicacion_completa', 'inm_comprador_razon_social','inm_comprador.nss',
-            'inm_comprador.curp', 'inm_comprador.proceso', 'inm_institucion_hipotecaria.descripcion');
+            'inm_status_comprador.descripcion');
 
         $datatables = new stdClass();
         $datatables->columns = $columns;

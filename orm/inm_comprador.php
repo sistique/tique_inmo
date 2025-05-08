@@ -19,7 +19,8 @@ class inm_comprador extends _modelo_parent{
             'inm_tipo_discapacidad'=>$tabla,'inm_persona_discapacidad'=>$tabla,'inm_estado_civil'=>$tabla,
             'bn_cuenta'=>$tabla,'org_sucursal'=>'bn_cuenta','org_empresa'=>'org_sucursal',
             'inm_institucion_hipotecaria'=>$tabla,'inm_sindicato'=>$tabla,'inm_nacionalidad'=>$tabla,
-            'inm_ocupacion'=>$tabla, 'com_agente'=>$tabla,'dp_calle_pertenece'=>$tabla,'dp_calle'=>'dp_calle_pertenece',
+            'inm_ocupacion'=>$tabla, 'com_agente'=>$tabla,'inm_status_comprador' => $tabla,
+            'dp_calle_pertenece'=>$tabla,'dp_calle'=>'dp_calle_pertenece',
             'dp_colonia_postal'=>'dp_calle_pertenece','dp_colonia'=>'dp_colonia_postal','dp_cp'=>'dp_colonia_postal',
             'dp_municipio'=>'dp_cp','dp_estado'=>'dp_municipio','dp_pais'=>'dp_estado');
 
