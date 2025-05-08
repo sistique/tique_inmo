@@ -119,13 +119,6 @@ echo "<style>
                     </div>
 
                     <div class="col-md-4">
-                        <label for="Nombre Ubicacion">Nombre Prospecto</label>
-                        <input type="text" id="nombre_ubicacion" data-tipo="filtro" data-filtro_campo="inm_ubicacion.razon_social"
-                               placeholder="Ej: JUAN PEREZ">
-                    </div>
-
-
-                    <div class="col-md-4">
                         <label for="agente">Agente</label>
                         <input type="text" id="agente" data-tipo="filtro" data-filtro_campo="com_agente.descripcion"
                                placeholder="Ej: JUAN PEREZ">
