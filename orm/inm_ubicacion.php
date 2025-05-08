@@ -16,14 +16,19 @@ class inm_ubicacion extends _inm_ubicaciones {
     public function __construct(PDO $link)
     {
         $tabla = 'inm_ubicacion';
-        $columnas = array($tabla=>false,'dp_calle_pertenece'=>$tabla,'dp_colonia_postal'=>'dp_calle_pertenece',
+        $columnas = array($tabla=>false,'dp_colonia_postal'=>$tabla,
             'dp_cp'=>'dp_colonia_postal','dp_colonia'=>'dp_colonia_postal','dp_municipio'=>'dp_cp',
             'dp_estado'=>'dp_municipio','dp_pais'=>'dp_estado','dp_calle'=>'dp_calle_pertenece',
-            'inm_tipo_ubicacion'=>$tabla);
+            'inm_tipo_ubicacion'=>$tabla,'inm_status_ubicacion'=>$tabla);
 
         $campos_obligatorios = array('dp_calle_pertenece_id','cuenta_predial','inm_tipo_ubicacion_id');
 
         $columnas_extra= array();
+        $sql = "(CONCAT_WS(' ', inm_ubicacion.calle, inm_ubicacion.numero_exterior, 
+        inm_ubicacion.numero_interior, dp_colonia.descripcion, dp_municipio.descripcion))";
+
+        $columnas_extra['inm_ubicacion_ubicacion'] = $sql;
+
         $renombres= array();
 
         $atributos_criticos = array('manzana','lote','dp_calle_pertenece_id','etapa','cuenta_predial',

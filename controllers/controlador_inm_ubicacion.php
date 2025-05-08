@@ -411,27 +411,19 @@ class controlador_inm_ubicacion extends _ctl_base {
     {
         // Definir los títulos de las columnas para el datatable
         $columns["inm_ubicacion_id"]["titulo"] = "Id";
-        $columns["inm_ubicacion_codigo"]["titulo"] = "Cod";
         $columns["inm_tipo_ubicacion_descripcion"]["titulo"] = "Tipo de Ubicacion";
-        $columns["dp_municipio_descripcion"]["titulo"] = "Municipio";
+        $columns["inm_ubicacion_ubicacion"]["titulo"] = "Ubicacion";
         $columns["dp_cp_descripcion"]["titulo"] = "CP";
-        $columns["dp_colonia_descripcion"]["titulo"] = "Colonia";
-        $columns["dp_calle_descripcion"]["titulo"] = "Calle";
-        $columns["inm_ubicacion_numero_exterior"]["titulo"] = "Ext";
-        $columns["inm_ubicacion_numero_interior"]["titulo"] = "Int";
         $columns["inm_ubicacion_manzana"]["titulo"] = "Manzana";
         $columns["inm_ubicacion_lote"]["titulo"] = "Lote";
         $columns["inm_ubicacion_etapa"]["titulo"] = "Etapa";
         $columns["inm_ubicacion_cuenta_predial"]["titulo"] = "Predial";
-        $columns["inm_ubicacion_n_opiniones_valor"]["titulo"] = "Op Valor";
-        $columns["inm_ubicacion_monto_opinion_promedio"]["titulo"] = "Valor Est";
-        $columns["inm_ubicacion_costo"]["titulo"] = "Costo";
+        $columns["inm_status_ubicacion_descripcion"]["titulo"] = "Status Ubicacion";
 
         // Definir los filtros para el datatable
-        $filtro = array("inm_ubicacion.id","dp_municipio.descripcion",'dp_cp.descripcion','dp_colonia.descripcion',
-            'dp_calle.descripcion','inm_ubicacion.numero_exterior','inm_ubicacion.numero_interior',
+        $filtro = array("inm_ubicacion.id","inm_ubicacion_ubicacion",'dp_cp.descripcion',
             'inm_ubicacion.manzana','inm_ubicacion.lote','inm_ubicacion.cuenta_predial',
-            'inm_tipo_ubicacion.descripcion');
+            'inm_tipo_ubicacion.descripcion','inm_status_ubicacion.descripcion');
 
         // Crear el objeto Datatables y asignarle las columnas y filtros definidos
         $datatables = new stdClass();
