@@ -90,6 +90,15 @@ class inm_comprador extends _modelo_parent{
 
         $columnas_extra['inm_comprador_razon_social'] = $sql;
 
+        $sql = "( IFNULL ((SELECT
+                    pr_etapa_actual.descripcion 
+                    FROM pr_etapa AS pr_etapa_actual 
+                    LEFT JOIN com_prospecto_etapa AS com_prospecto_etapa_sel ON  com_prospecto_etapa_sel.com_prospecto_id = com_prospecto.id
+                    LEFT JOIN pr_etapa_proceso AS pr_etapa_proceso_sel ON  com_prospecto_etapa_sel.pr_etapa_proceso_id = pr_etapa_proceso_sel.id
+                     WHERE  pr_etapa_actual.id = pr_etapa_proceso_sel.pr_etapa_id ORDER BY com_prospecto_etapa_sel.fecha DESC LIMIT 1), -1) )";
+
+        $columnas_extra['inm_ubicacion_completa'] = $sql;
+
         parent::__construct(link: $link, tabla: $tabla, campos_obligatorios: $campos_obligatorios,
             columnas: $columnas, columnas_extra: $columnas_extra, renombres: $renombres,
             tipo_campos: $tipo_campos, atributos_criticos: $atributos_criticos,
