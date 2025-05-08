@@ -91,7 +91,7 @@ class inm_prospecto extends _modelo_parent{
             renombres: $renombres, tipo_campos: $tipo_campos, atributos_criticos: $atributos_criticos);
 
         $this->NAMESPACE = __NAMESPACE__;
-        $this->etiqueta = 'Prospecto de Vivienda';
+        $this->etiqueta = 'Prospecto Cliente';
     }
 
     /**

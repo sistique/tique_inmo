@@ -113,7 +113,7 @@ class inm_comprador extends _modelo_parent{
             valida_atributos_criticos: $valida_atributos_criticos);
 
         $this->NAMESPACE = __NAMESPACE__;
-        $this->etiqueta = 'Comprador de Vivienda';
+        $this->etiqueta = 'Comprador';
     }
 
     /**
