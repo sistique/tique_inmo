@@ -998,18 +998,15 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
     {
         $columns["inm_prospecto_ubicacion_id"]["titulo"] = "Id";
         $columns["com_prospecto_razon_social"]["titulo"] = "Nombre";
+        $columns["com_prospecto_razon_social"]["titulo"] = "Nombre";
         $columns["inm_prospecto_ubicacion_nss"]["titulo"] = "NSS";
-        $columns["com_prospecto_rfc"]["titulo"] = "RFC";
-        $columns["inm_prospecto_ubicacion_curp"]["titulo"] = "CURP";
         $columns["inm_prospecto_ubicacion_fecha_alta"]["titulo"] = "Fecha Alta";
-        $columns["com_agente_id"]["titulo"] = "Agente Id";
         $columns["com_agente_descripcion"]["titulo"] = "Agente";
         $columns["pr_etapa_descripcion"]["titulo"] = "Etapa Actual";
 
 
         $filtro = array("inm_prospecto_ubicacion.id", "com_prospecto.razon_social",
-            'inm_prospecto_ubicacion.nss', 'com_prospecto.rfc',
-            'inm_prospecto_ubicacion.curp', 'inm_prospecto_ubicacion.fecha_alta', 'com_agente.id', 'com_agente.descripcion');
+            'inm_prospecto_ubicacion.nss', 'inm_prospecto_ubicacion.fecha_alta', 'com_agente.descripcion');
 
         $datatables = new stdClass();
         $datatables->columns = $columns;

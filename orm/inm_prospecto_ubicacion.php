@@ -18,9 +18,10 @@ class inm_prospecto_ubicacion extends _modelo_parent{
     {
         $tabla = 'inm_prospecto_ubicacion';
         $columnas = array($tabla=>false,'com_prospecto'=>$tabla, 'inm_prototipo' => $tabla,'inm_complemento'=>$tabla,
-            'inm_estado_vivienda'=>$tabla,
+            'inm_estado_vivienda'=>$tabla,'inm_status_prospecto_ubicacion'=>$tabla,
             'com_agente'=>'com_prospecto','com_tipo_prospecto'=>'com_prospecto',
-            'com_medio_prospeccion'=>'com_prospecto', 'adm_usuario'=>'com_agente', 'dp_municipio'=>$tabla,
+            'com_medio_prospeccion'=>'com_prospecto', 'adm_usuario'=>'com_agente', 'dp_colonia_postal' => $tabla,
+            'dp_cp'=>'dp_colonia_postal','dp_colonia'=>'dp_colonia_postal','dp_municipio'=>'dp_cp',
             'dp_estado'=>'dp_municipio','dp_pais'=>'dp_estado');
 
         $campos_obligatorios = array();
@@ -35,6 +36,11 @@ class inm_prospecto_ubicacion extends _modelo_parent{
                      WHERE  pr_etapa_actual.id = pr_etapa_proceso_sel.pr_etapa_id ORDER BY com_prospecto_etapa_sel.fecha DESC LIMIT 1), -1) )";
 
         $columnas_extra['pr_etapa_descripcion'] = $sql;
+
+        $sql = "(CONCAT_WS(' ', inm_prospecto_ubicacion.calle, inm_prospecto_ubicacion.numero_exterior, 
+        inm_prospecto_ubicacion.numero_interior, dp_colonia.descripcion, dp_municipio.descripcion))";
+
+        $columnas_extra['inm_prospecto_ubicacion_ubicacion'] = $sql;
 
         if(!isset($_SESSION['usuario_id'])){
             $error = (new errores())->error(mensaje: 'Error $_SESSION[usuario_id] no existe',data:  $_SESSION);
