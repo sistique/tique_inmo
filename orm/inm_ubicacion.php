@@ -19,7 +19,7 @@ class inm_ubicacion extends _inm_ubicaciones {
         $columnas = array($tabla=>false,'dp_colonia_postal'=>$tabla,
             'dp_cp'=>'dp_colonia_postal','dp_colonia'=>'dp_colonia_postal','dp_municipio'=>'dp_cp',
             'dp_estado'=>'dp_municipio','dp_pais'=>'dp_estado', 'inm_tipo_ubicacion'=>$tabla,
-            'inm_status_ubicacion'=>$tabla);
+            'inm_status_ubicacion'=>$tabla,'com_agente'=>$tabla);
 
         $campos_obligatorios = array('dp_calle_pertenece_id','cuenta_predial','inm_tipo_ubicacion_id');
 

@@ -420,12 +420,13 @@ class controlador_inm_ubicacion extends _ctl_base {
         $columns["inm_ubicacion_lote"]["titulo"] = "Lote";
         $columns["inm_ubicacion_etapa"]["titulo"] = "Etapa";
         $columns["inm_ubicacion_cuenta_predial"]["titulo"] = "Predial";
+        $columns["com_agente_descripcion"]["titulo"] = "Agente";
         $columns["inm_status_ubicacion_descripcion"]["titulo"] = "Status Ubicacion";
 
         // Definir los filtros para el datatable
         $filtro = array("inm_ubicacion.id","inm_ubicacion_ubicacion",'dp_cp.descripcion',
             'inm_ubicacion.manzana','inm_ubicacion.lote','inm_ubicacion.cuenta_predial',
-            'inm_tipo_ubicacion.descripcion','inm_status_ubicacion.descripcion');
+            'inm_tipo_ubicacion.descripcion','com_agente.descripcion','inm_status_ubicacion.descripcion');
 
         // Crear el objeto Datatables y asignarle las columnas y filtros definidos
         $datatables = new stdClass();
