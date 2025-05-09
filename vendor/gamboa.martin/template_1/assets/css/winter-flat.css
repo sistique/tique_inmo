@@ -4912,6 +4912,11 @@ body .container-side-version .properties > .row {
     /*padding-top: 80px;*/
 }
 
+.top-title-titulo {
+    padding: 60px 0;
+    padding-top: 80px;
+}
+
 .main-container {
     padding: 80px 0;
     padding-bottom: 0;
