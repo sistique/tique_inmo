@@ -5,6 +5,7 @@ use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\controllers\controlador_inm_comprador;
 use gamboamartin\inmuebles\controllers\controlador_inm_prospecto;
 use gamboamartin\inmuebles\controllers\controlador_inm_prospecto_ubicacion;
+use gamboamartin\inmuebles\controllers\controlador_inm_ubicacion;
 use gamboamartin\inmuebles\models\_inm_comprador;
 use gamboamartin\system\html_controler;
 use html\dp_calle_pertenece_html;
@@ -289,7 +290,8 @@ class _base extends html_controler{
      * @param array $headers Conjunto de datos para ser mostrados en Frontend
      * @return array
      */
-    final public function genera_headers(controlador_inm_comprador|controlador_inm_prospecto|controlador_inm_prospecto_ubicacion $controler,
+    final public function genera_headers(controlador_inm_comprador|controlador_inm_prospecto|
+                                         controlador_inm_prospecto_ubicacion|controlador_inm_ubicacion $controler,
                                          array $headers, array $acciones_headers = array()): array
     {
         $data = array();
@@ -313,7 +315,8 @@ class _base extends html_controler{
      * @return array|stdClass
      * @version 2.313.2
      */
-    private function header_frontend(controlador_inm_comprador|controlador_inm_prospecto|controlador_inm_prospecto_ubicacion $controler,
+    private function header_frontend(controlador_inm_comprador|controlador_inm_prospecto|
+                                     controlador_inm_prospecto_ubicacion|controlador_inm_ubicacion $controler,
                                      int $n_apartado, string $tag_header, array $acciones_headers = array()): array|stdClass
     {
         $id_css_button = "collapse_a$n_apartado";

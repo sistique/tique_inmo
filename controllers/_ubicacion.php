@@ -205,6 +205,33 @@ class _ubicacion{
         return $data;
     }
 
+    final public function headers_front(controlador_inm_ubicacion $controlador): array
+    {
+        $headers = $this->headers_ubicacion();
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al generar headers',data:  $headers);
+        }
+
+        $headers = (new \gamboamartin\inmuebles\html\_base(html: $controlador->html_base))->genera_headers(
+            controler: $controlador,headers:  $headers, acciones_headers: $controlador->acciones_headers);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al generar headers',data:  $headers);
+        }
+        return $headers;
+    }
+
+    private function headers_ubicacion(): array
+    {
+        $headers = array();
+        $headers['1'] = '1. DATOS PERSONALES';
+        $headers['2'] = '2. DATOS DE CONTACTO';
+        $headers['3'] = '3. VIVIENDA';
+        $headers['4'] = '4. ADEUDO';
+        $headers['5'] = '5. CONYUGE';
+
+        return $headers;
+    }
+
     /**
      * Inicializa los elementos para un alta
      * @param controlador_inm_ubicacion $controler Controlador en ejecucion

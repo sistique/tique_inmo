@@ -21,7 +21,8 @@ use PDO;
 use stdClass;
 
 class controlador_inm_ubicacion extends _ctl_base {
-
+    public stdClass $header_frontend;
+    public inm_ubicacion_html $html_entidad;
     public string $link_rel_ubi_comp_alta_bd = '';
     public string $link_opinion_valor_alta_bd = '';
     public string $link_costo_alta_bd = '';
@@ -34,6 +35,7 @@ class controlador_inm_ubicacion extends _ctl_base {
 
     public array $inm_costos = array();
     public array $status_ubicacion = array();
+    public array $acciones_headers = array();
 
     public string $costo = '0.0';
     public function __construct(PDO      $link, html $html = new \gamboamartin\template_1\html(),
@@ -52,7 +54,9 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         parent::__construct(html:$html_, link: $link,modelo:  $modelo, obj_link: $obj_link, datatables: $datatables,
             paths_conf: $paths_conf);
+        $this->html_entidad = $html_;
 
+        $this->header_frontend = new stdClass();
         $this->lista_get_data = true;
     }
 
@@ -444,6 +448,11 @@ class controlador_inm_ubicacion extends _ctl_base {
         if(errores::$error){
             return $this->retorno_error(
                 mensaje: 'Error al generar salida de template',data:  $r_modifica,header: $header,ws: $ws);
+        }
+
+        $headers = (new _ubicacion())->headers_front(controlador: $this);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al generar headers', data: $headers, header: $header, ws: $ws);
         }
 
         $data_row = $this->modelo->registro(registro_id: $this->registro_id,retorno_obj: true);
