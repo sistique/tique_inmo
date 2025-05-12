@@ -188,14 +188,6 @@ class inm_ubicacion_html extends html_controler {
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $columns_ds = array('dp_calle_descripcion');
-        $keys_selects = $controler->key_select(cols:12, con_registros: true,filtro:  $filtro,
-            key: 'dp_calle_pertenece_id', keys_selects: $keys_selects, id_selected: $registro->dp_calle_pertenece_id,
-            label: 'Calle', columns_ds: $columns_ds, disabled: true);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-
         return $keys_selects;
     }
 
@@ -297,7 +289,7 @@ class inm_ubicacion_html extends html_controler {
      */
     private function form_ubicacion(controlador_inm_ubicacion $controlador): string|array
     {
-        $keys = array('dp_estado_id','dp_municipio_id','dp_cp_id','dp_colonia_postal_id',
+        $keys = array('dp_estado_id','dp_municipio_id','dp_cp_id','dp_colonia_postal_id','calle',
             'numero_exterior','numero_interior','manzana','lote','inm_ubicacion_id','seccion_retorno',
             'btn_action_next','id_retorno');
 
