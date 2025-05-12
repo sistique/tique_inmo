@@ -469,6 +469,7 @@ class _ubicacion{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
+        $keys_selects['com_agente_id']->required = false;
 
         $columns_ds = array('inm_estado_vivienda_descripcion');
         $keys_selects = $controler->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_estado_vivienda_id',
@@ -476,6 +477,7 @@ class _ubicacion{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
+        $keys_selects['inm_estado_vivienda_id']->required = false;
 
         $columns_ds = array('inm_prototipo_descripcion');
         $keys_selects = $controler->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_prototipo_id',
@@ -483,6 +485,7 @@ class _ubicacion{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
+        $keys_selects['inm_prototipo_id']->required = false;
 
         $columns_ds = array('inm_complemento_descripcion');
         $keys_selects = $controler->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_complemento_id',
@@ -490,6 +493,7 @@ class _ubicacion{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
+        $keys_selects['inm_complemento_id']->required = false;
 
         foreach ($disableds as $campo_id){
             $keys_selects[$campo_id]->disabled = true;

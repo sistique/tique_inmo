@@ -486,7 +486,7 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $fecha_otorgamiento_credito = $this->html->input_fecha(cols: 12, row_upd: $this->row_upd, value_vacio: false,
             name: 'fecha_otorgamiento_credito', place_holder: 'Fecha Otorgamiento Credito',
-            value: $this->row_upd->fecha_otorgamiento_credito);
+            required: false, value: $this->row_upd->fecha_otorgamiento_credito);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener input',data:  $fecha_otorgamiento_credito,header: $header,
                 ws: $ws);
@@ -531,13 +531,13 @@ class controlador_inm_ubicacion extends _ctl_base {
         }
 
         $keys_selects = (new init())->key_select_txt(cols: 12, key: 'nombre',
-            keys_selects: $keys_selects, place_holder: 'Nombre');
+            keys_selects: $keys_selects, place_holder: 'Nombre',required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
         $keys_selects = (new init())->key_select_txt(cols: 6, key: 'apellido_paterno',
-            keys_selects: $keys_selects, place_holder: 'Apellido Paterno');
+            keys_selects: $keys_selects, place_holder: 'Apellido Paterno',required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
@@ -598,7 +598,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         $keys_selects['correo_com']->regex = $this->validacion->patterns['correo_html5'];
 
         $keys_selects = (new init())->key_select_txt(cols: 12, key: 'razon_social',
-            keys_selects: $keys_selects, place_holder: 'Razon Social');
+            keys_selects: $keys_selects, place_holder: 'Razon Social',required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
@@ -645,13 +645,13 @@ class controlador_inm_ubicacion extends _ctl_base {
         }
 
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'costo_directo', keys_selects:$keys_selects,
-            place_holder: 'Costo Directo');
+            place_holder: 'Costo Directo', required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
         $keys_selects['value'] = 0.0;
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'cuenta_predial', keys_selects:$keys_selects,
-            place_holder: 'Cuenta Predial');
+            place_holder: 'Cuenta Predial', required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
@@ -687,7 +687,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         }
 
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'numero_exterior', keys_selects:$keys_selects,
-            place_holder: 'Exterior');
+            place_holder: 'Exterior',required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
