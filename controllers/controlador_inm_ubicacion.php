@@ -355,7 +355,8 @@ class controlador_inm_ubicacion extends _ctl_base {
         $keys->inputs = array('descripcion', 'manzana', 'lote','costo_directo','numero_exterior','numero_interior',
             'calle', 'cuenta_predial','codigo','nombre_beneficiario','numero_cheque','monto','numero_escritura_poder',
             'nombre','apellido_paterno','apellido_materno','nss','curp','rfc', 'lada_com', 'numero_com', 'cel_com',
-            'correo_com', 'razon_social');
+            'correo_com', 'razon_social','nivel','recamaras','metros_terreno','metros_construccion','adeudo_hipoteca',
+            'adeudo_predial','cuenta_agua','adeudo_agua','adeudo_luz','monto_devolucion');
         $keys->selects = array();
 
 
@@ -612,6 +613,37 @@ class controlador_inm_ubicacion extends _ctl_base {
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'nivel',
+            keys_selects: $keys_selects, place_holder: 'Nivel', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'recamaras',
+            keys_selects: $keys_selects, place_holder: 'Recamaras', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'metros_terreno',
+            keys_selects: $keys_selects, place_holder: 'Metros Terreno', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'metros_construccion',
+            keys_selects: $keys_selects, place_holder: 'Metros Construccion', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 12, key: 'adeudo_hipoteca',
+            keys_selects: $keys_selects, place_holder: 'Adeudo Hipoteca', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'costo_directo', keys_selects:$keys_selects,
             place_holder: 'Costo Directo');
         if(errores::$error){
@@ -623,6 +655,37 @@ class controlador_inm_ubicacion extends _ctl_base {
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'adeudo_predial',
+            keys_selects: $keys_selects, place_holder: 'Adeudo Predial', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'cuenta_agua',
+            keys_selects: $keys_selects, place_holder: 'Cuenta Agua', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'adeudo_agua',
+            keys_selects: $keys_selects, place_holder: 'Adeudo Agua', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'adeudo_luz',
+            keys_selects: $keys_selects, place_holder: 'Adeudo Luz', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 12, key: 'monto_devolucion',
+            keys_selects: $keys_selects, place_holder: 'Monto Devolucion', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'numero_exterior', keys_selects:$keys_selects,
             place_holder: 'Exterior');
         if(errores::$error){
