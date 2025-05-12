@@ -284,6 +284,25 @@ class inm_prospecto_ubicacion extends _modelo_parent{
                 data:  $alta_inm_prospecto_proceso);
         }
 */
+        $filtro_status_prospecto_ubicacion['inm_status_prospecto_ubicacion.descripcion'] = 'ALTA';
+        $r_status_prospecto_ubicacion = (new inm_status_prospecto_ubicacion(link: $this->link))->filtro_and(
+            filtro: $filtro_status_prospecto_ubicacion);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener status prospecto_ubicacion',
+                data: $r_status_prospecto_ubicacion);
+        }
+
+        $modelo_inm_bitacora = new inm_bitacora_status_prospecto_ubicacion(link: $this->link);
+        $modelo_inm_bitacora->registro['inm_status_prospecto_ubicacion_id'] =
+            $r_status_prospecto_ubicacion->registros[0]['inm_status_prospecto_ubicacion_id'];
+        $modelo_inm_bitacora->registro['inm_prospecto_ubicacion_id'] = $r_alta_bd->registro_id;
+        $modelo_inm_bitacora->registro['fecha_status'] =  date('Y-m-d\TH:i:s');
+        $modelo_inm_bitacora->registro['observaciones'] =  'Status Inicial';
+        $r_alta_status = $modelo_inm_bitacora->alta_bd();
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al registrar elemnto de bitacora prospecto_ubicacion',
+                data: $r_alta_status);
+        }
 
         return $r_alta_bd;
     }

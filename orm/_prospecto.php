@@ -65,10 +65,10 @@ class _prospecto{
             return $this->error->error(mensaje: 'Error al asignar descripcion',data:  $registro);
         }
 
-        $registro = $this->asigna_dp_calle_pertenece_id(modelo: $modelo,registro:  $registro);
+        /*$registro = $this->asigna_dp_calle_pertenece_id(modelo: $modelo,registro:  $registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al asignar dp_calle_pertenece_id',data:  $registro);
-        }
+        }*/
 
         $registro = $this->asigna_com_medio_prospeccion_id(modelo: $modelo,registro:  $registro);
         if(errores::$error){
