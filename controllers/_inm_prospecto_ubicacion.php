@@ -650,7 +650,7 @@ class _inm_prospecto_ubicacion{
     public function integra_keys_selects_comercial(controlador_inm_prospecto|controlador_inm_prospecto_ubicacion $controlador, array $keys_selects): array
     {
         $keys = array('com_agente_id','com_tipo_prospecto_id','com_medio_prospeccion_id', 'com_prospecto_id',
-            'inm_prototipo_id','inm_complemento_id','inm_estado_vivienda_id','dp_pais_id','dp_estado_id','dp_municipio_id');
+            'inm_prototipo_id','inm_complemento_id','inm_estado_vivienda_id');
         $valida = $this->validacion->valida_ids(keys: $keys,registro:  $controlador->registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al valida controlador registro',data:  $valida);
@@ -680,7 +680,7 @@ class _inm_prospecto_ubicacion{
                                            array $keys_selects): array
     {
         $keys = array('com_agente_id','com_tipo_prospecto_id','com_medio_prospeccion_id', 'com_prospecto_id',
-            'inm_prototipo_id','inm_complemento_id','inm_estado_vivienda_id','dp_pais_id','dp_estado_id','dp_municipio_id');
+            'inm_prototipo_id','inm_complemento_id','inm_estado_vivienda_id');
         $valida = $this->validacion->valida_ids(keys: $keys,registro:  $controlador->registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al valida controlador registro',data:  $valida);
