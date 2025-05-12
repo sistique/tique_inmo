@@ -15,15 +15,13 @@
                         <?php echo $controlador->header_frontend->apartado_1; ?>
                         <div id="apartado_1">
                             <?php echo $controlador->inputs->com_agente_id; ?>
-                            <?php echo $controlador->inputs->com_medio_prospeccion_id; ?>
-                            <?php echo $controlador->inputs->liga_red_social; ?>
                             <?php echo $controlador->inputs->nombre; ?>
                             <?php echo $controlador->inputs->apellido_paterno; ?>
                             <?php echo $controlador->inputs->apellido_materno; ?>
                             <?php echo $controlador->inputs->nss; ?>
                             <?php echo $controlador->inputs->curp; ?>
                             <?php echo $controlador->inputs->rfc; ?>
-                            <?php echo $controlador->inputs->observaciones; ?>
+                            <?php //cho $controlador->inputs->observaciones; ?>
                             <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
 
                         </div>
