@@ -291,6 +291,21 @@ class inm_ubicacion extends _inm_ubicaciones {
         return $r_elimina_bd;
     }
 
+    final public function existe_conyuge(int $inm_prospecto_id): bool|array
+    {
+        if($inm_prospecto_id <=0){
+            return $this->error->error(mensaje: 'Error inm_ubicacion_id es menor a 0',data:  $inm_prospecto_id);
+        }
+        $filtro = array();
+        $filtro['inm_ubicacion_ubicacion.id'] = $inm_prospecto_id;
+
+        $existe_conyuge = (new inm_rel_conyuge_ubicacion(link: $this->link))->existe(filtro: $filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar si existe conyuge',data:  $existe_conyuge);
+        }
+        return $existe_conyuge;
+    }
+
     /**
      * Obtiene el costo origen
      * @param int $inm_ubicacion_id Ubicacion id

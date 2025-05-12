@@ -17,7 +17,8 @@ class _conyuge{
     public function __construct(){
         $this->error = new errores();
     }
-    final public function inputs_conyuge(controlador_inm_prospecto|controlador_inm_prospecto_ubicacion $controler,
+    final public function inputs_conyuge(controlador_inm_prospecto|controlador_inm_comprador|
+                                         controlador_inm_prospecto_ubicacion|controlador_inm_ubicacion $controler,
                                          string $class_upd){
 
         $conyuge = new stdClass();

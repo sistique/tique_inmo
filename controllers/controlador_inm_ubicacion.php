@@ -467,6 +467,15 @@ class controlador_inm_ubicacion extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al obtener keys_selects', data:  $keys_selects, header: $header,ws:  $ws);
         }
 
+        $class_upd = '_upd_ubicacion';
+        $conyuge = (new _conyuge())->inputs_conyuge(controler: $this,class_upd: $class_upd);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener conyuge', data: $conyuge,
+                header: $header, ws: $ws);
+        }
+
+        $this->inputs->conyuge = $conyuge;
+
 
         $base = $this->base_upd(keys_selects: $keys_selects, params: array(),params_ajustados: array());
         if(errores::$error){
