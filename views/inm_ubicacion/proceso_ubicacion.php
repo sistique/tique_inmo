@@ -2,7 +2,7 @@
 <?php use config\views; ?>
 
 <main class="main section-color-primary">
-    <div class="container">
+    <div>
 
         <div class="row">
 
