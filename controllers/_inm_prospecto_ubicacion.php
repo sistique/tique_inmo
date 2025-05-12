@@ -171,9 +171,16 @@ class _inm_prospecto_ubicacion{
             if(isset($data['cols'])){
                 $cols = $data['cols'];
             }
+
+            $con_registros = true;
+            if(isset($data['con_registros'])){
+                $con_registros = $data['con_registros'];
+            }
+
             $id_selected = -1;
             if(isset($controlador->registro[$identificador])){
                 $id_selected = $controlador->registro[$identificador];
+                $con_registros =  true;
             }
             $title = $identificador;
             if(isset($data['title'])){
@@ -182,10 +189,6 @@ class _inm_prospecto_ubicacion{
             $disabled = false;
             if(isset($data['disabled'])){
                 $disabled = $data['disabled'];
-            }
-            $con_registros = true;
-            if(isset($data['con_registros'])){
-                $con_registros = $data['con_registros'];
             }
             $columns_ds = array();
             if(isset($data['columns_ds'])){
