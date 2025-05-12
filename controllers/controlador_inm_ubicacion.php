@@ -519,10 +519,11 @@ class controlador_inm_ubicacion extends _ctl_base {
             }
             $this->link->commit();
 
+            $_SESSION[$r_modifica->salida][]['mensaje'] = $r_modifica->mensaje . ' del id ' . $this->registro_id;
+            $this->header_out(result: $r_modifica, header: $header, ws: $ws);
+
             return $r_modifica;
-
-
-        }
+    }
 
     public function lista(bool $header, bool $ws = false): array
     {

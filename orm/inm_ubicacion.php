@@ -600,9 +600,13 @@ class inm_ubicacion extends _inm_ubicaciones {
             return $this->error->error(mensaje: 'Error id debe ser mayor a 0',data: $registro);
         }
 
-        $result_conyuge = $this->modelo->transacciona_conyuge(inm_ubicacion_id: $id,link: $this->link);
+        $result_conyuge = $this->transacciona_conyuge(inm_ubicacion_id: $id,link: $this->link);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al modificar inm_ubicacion', data: $result_conyuge);
+        }
+
+        if(isset($registro['conyuge'])){
+            unset($registro['conyuge']);
         }
 
         $r_modifica_bd =  parent::modifica_bd(registro: $registro,id:  $id,
@@ -831,7 +835,6 @@ class inm_ubicacion extends _inm_ubicaciones {
         $data = new stdClass();
         $data->regenera_op = $regenera_op;
         $data->regenera_costo = $regenera_costo;
-
         return $data;
 
     }
