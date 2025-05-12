@@ -15,7 +15,6 @@
                         <?php echo $controlador->header_frontend->apartado_1; ?>
                         <div id="apartado_1">
                             <?php echo $controlador->inputs->com_agente_id; ?>
-                            <?php echo $controlador->inputs->com_tipo_prospecto_id; ?>
                             <?php echo $controlador->inputs->com_medio_prospeccion_id; ?>
                             <?php echo $controlador->inputs->liga_red_social; ?>
                             <?php echo $controlador->inputs->nombre; ?>
@@ -45,8 +44,8 @@
                             <?php echo $controlador->inputs->dp_pais_id; ?>
                             <?php echo $controlador->inputs->dp_estado_id; ?>
                             <?php echo $controlador->inputs->dp_municipio_id; ?>
-                            <?php echo $controlador->inputs->cp; ?>
-                            <?php echo $controlador->inputs->colonia; ?>
+                            <?php echo $controlador->inputs->dp_cp_id; ?>
+                            <?php echo $controlador->inputs->dp_colonia_postal_id; ?>
                             <?php echo $controlador->inputs->calle; ?>
                             <?php echo $controlador->inputs->numero_exterior; ?>
                             <?php echo $controlador->inputs->numero_interior; ?>

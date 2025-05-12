@@ -183,12 +183,16 @@ class _inm_prospecto_ubicacion{
             if(isset($data['disabled'])){
                 $disabled = $data['disabled'];
             }
+            $con_registros = true;
+            if(isset($data['con_registros'])){
+                $con_registros = $data['con_registros'];
+            }
             $columns_ds = array();
             if(isset($data['columns_ds'])){
                 $columns_ds = $data['columns_ds'];
             }
 
-            $keys_selects = $controlador->key_select(cols: $cols, con_registros: true, filtro: $filtro,
+            $keys_selects = $controlador->key_select(cols: $cols, con_registros: $con_registros, filtro: $filtro,
                 key: $identificador, keys_selects: $keys_selects, id_selected: $id_selected, label: $title,
                 columns_ds: $columns_ds, disabled: $disabled);
             if(errores::$error){
@@ -283,15 +287,31 @@ class _inm_prospecto_ubicacion{
         $identificadores['inm_estado_vivienda_id']['disabled'] = false;
         $identificadores['inm_estado_vivienda_id']['columns_ds'] = array('inm_estado_vivienda_descripcion');
 
+        $identificadores['dp_colonia_postal_id']['title'] = 'Colonia';
+        $identificadores['dp_colonia_postal_id']['cols'] = 12;
+        $identificadores['dp_colonia_postal_id']['disabled'] = false;
+        $identificadores['dp_colonia_postal_id']['columns_ds'] = array('dp_colonia_descripcion');
+        $identificadores['dp_colonia_postal_id']['con_registros'] = false;
+
+        $identificadores['dp_cp_id']['title'] = 'Cp';
+        $identificadores['dp_cp_id']['cols'] = 6;
+        $identificadores['dp_cp_id']['disabled'] = false;
+        $identificadores['dp_cp_id']['columns_ds'] = array('dp_cp_descripcion');
+        $identificadores['dp_cp_id']['con_registros'] = false;
+
+
         $identificadores['dp_municipio_id']['title'] = 'Municipio';
         $identificadores['dp_municipio_id']['cols'] = 6;
         $identificadores['dp_municipio_id']['disabled'] = false;
         $identificadores['dp_municipio_id']['columns_ds'] = array('dp_municipio_descripcion');
+        $identificadores['dp_municipio_id']['con_registros'] = false;
+
 
         $identificadores['dp_estado_id']['title'] = 'Estado';
         $identificadores['dp_estado_id']['cols'] = 6;
         $identificadores['dp_estado_id']['disabled'] = false;
         $identificadores['dp_estado_id']['columns_ds'] = array('dp_estado_descripcion');
+        $identificadores['dp_estado_id']['con_registros'] = false;
 
         $identificadores['dp_pais_id']['title'] = 'Pais';
         $identificadores['dp_pais_id']['cols'] = 6;
