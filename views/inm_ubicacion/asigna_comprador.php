@@ -3,7 +3,7 @@
 
 <?php echo $controlador->inputs->registro_id; ?>
 <main class="main section-color-primary">
-    <div class="container">
+    <div>
 
         <div class="row">
 
@@ -25,7 +25,7 @@
                     <?php echo $controlador->inputs->dp_municipio_id; ?>
                     <?php echo $controlador->inputs->dp_cp_id; ?>
                     <?php echo $controlador->inputs->dp_colonia_postal_id; ?>
-                    <?php echo $controlador->inputs->dp_calle_pertenece_id; ?>
+                    <?php echo $controlador->inputs->calle; ?>
                     <?php echo $controlador->inputs->numero_exterior; ?>
                     <?php echo $controlador->inputs->numero_interior; ?>
                     <?php echo $controlador->inputs->manzana; ?>
@@ -39,7 +39,7 @@
                 </div>
             </div>
 
-            <div class="container">
+            <div>
                 <div class="row">
                     <div class="col-md-12">
 

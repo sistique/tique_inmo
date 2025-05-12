@@ -102,8 +102,7 @@ class controlador_inm_ubicacion extends _ctl_base {
     final public function asigna_comprador(bool $header, bool $ws = false): array|stdClass
     {
         $this->inputs = new stdClass();
-        $disableds = array('dp_pais_id','dp_estado_id','dp_municipio_id','dp_cp_id','dp_colonia_postal_id',
-            'dp_calle_pertenece_id');
+        $disableds = array('dp_pais_id','dp_estado_id','dp_municipio_id','dp_cp_id','dp_colonia_postal_id');
         $base_data = (new _ubicacion())->base_view_accion_data(controler: $this, disableds: $disableds,
             funcion: __FUNCTION__);
         if(errores::$error){

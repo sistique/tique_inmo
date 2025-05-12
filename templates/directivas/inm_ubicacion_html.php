@@ -512,6 +512,9 @@ class inm_ubicacion_html extends html_controler {
      */
     final public function keys_select_dom(array $keys_selects): array
     {
+        $keys_selects['calle'] = new stdClass();
+        $keys_selects['calle']->disabled = true;
+
         $keys_selects['numero_exterior'] = new stdClass();
         $keys_selects['numero_exterior']->disabled = true;
 
