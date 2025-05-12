@@ -80,11 +80,27 @@ class inm_ubicacion extends _inm_ubicaciones {
             return $this->error->error(mensaje: 'Error al insertar etapa', data: $r_alta_etapa);
         }*/
 
+        $filtro_status_ubicacion['inm_status_ubicacion.descripcion'] = 'ALTA';
+        $r_status_ubicacion = (new inm_status_ubicacion(link: $this->link))->filtro_and(
+            filtro: $filtro_status_ubicacion);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener status ubicacion', data: $r_status_ubicacion);
+        }
+
+        $modelo_inm_bitacora = new inm_bitacora_status_ubicacion(link: $this->link);
+        $modelo_inm_bitacora->registro['inm_status_ubicacion_id'] = $r_status_ubicacion->registros[0]['inm_status_ubicacion_id'];
+        $modelo_inm_bitacora->registro['inm_ubicacion_id'] = $r_alta_bd->registro_id;
+        $modelo_inm_bitacora->registro['fecha_status'] =  date('Y-m-d\TH:i:s');
+        $modelo_inm_bitacora->registro['observaciones'] =  'Status Inicial';
+        $r_alta_status = $modelo_inm_bitacora->alta_bd();
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al registrar elemnto de bitacora ubicacion', data: $r_alta_status);
+        }
+
         $regenera = $this->regenera_datas(inm_ubicacion_id: $r_alta_bd->registro_puro->id);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al regenerar opinion de valor', data: $regenera);
         }
-
 
         return $r_alta_bd;
     }
