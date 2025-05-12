@@ -10,16 +10,14 @@
 namespace gamboamartin\inmuebles\controllers;
 
 use base\controller\init;
-use gamboamartin\administrador\models\adm_campo;
 use gamboamartin\calculo\calculo;
 use gamboamartin\comercial\models\com_agente;
 use gamboamartin\comercial\models\com_direccion;
-use gamboamartin\comercial\models\com_direccion_prospecto;
 use gamboamartin\comercial\models\com_prospecto;
 use gamboamartin\comercial\models\com_rel_agente;
 use gamboamartin\errores\errores;
-use gamboamartin\inmuebles\html\inm_prospecto_html;
 use gamboamartin\inmuebles\html\inm_prospecto_ubicacion_html;
+use gamboamartin\inmuebles\html\inm_status_prospecto_ubicacion_html;
 use gamboamartin\inmuebles\models\_base_paquete;
 use gamboamartin\inmuebles\models\_email;
 use gamboamartin\inmuebles\models\_inm_prospecto;
@@ -28,7 +26,6 @@ use gamboamartin\inmuebles\models\inm_beneficiario;
 use gamboamartin\inmuebles\models\inm_conf_docs_prospecto;
 use gamboamartin\inmuebles\models\_inm_prospecto_ubicacion;
 use gamboamartin\inmuebles\models\inm_conf_docs_prospecto_ubicacion;
-use gamboamartin\inmuebles\models\inm_conf_institucion_campo;
 use gamboamartin\inmuebles\models\inm_doc_prospecto;
 use gamboamartin\inmuebles\models\inm_doc_prospecto_ubicacion;
 use gamboamartin\inmuebles\models\inm_prospecto;
@@ -68,6 +65,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
     public string $link_envia_documentos = '';
 
     public string $link_fotografia_bd = '';
+    public string $link_alta_bitacora = '';
 
     public string $link_alta_integra_relacion_bd = '';
 
@@ -490,20 +488,19 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
             $this->retorno_error(mensaje: 'Error al generar template', data: $template, header: $header, ws: $ws);
         }
 
-        $filtro = array();
-        $filtro['pr_proceso.descripcion'] = 'PROSPECTO UBICACION';
-        $columns_ds[] = 'pr_etapa_descripcion';
+        $columns_ds[] = 'inm_status_prospecto_ubicacion_descripcion';
 
-        $pr_etapa_proceso_id = (new pr_etapa_proceso_html(html: $this->html_base))->select_pr_etapa_proceso_id(
-            cols: 12, con_registros: true, id_selected: -1, link: $this->link, columns_ds: $columns_ds,
-            filtro: $filtro, label: 'Etapa');
+        $inm_status_prospecto_ubicacion_id = (new inm_status_prospecto_ubicacion_html(html: $this->html_base))->select_inm_status_prospecto_ubicacion_id(
+            cols: 6, con_registros: true, id_selected: -1, link: $this->link, columns_ds: $columns_ds,
+            label: 'Status Prospecto Ubicacion');
         if (errores::$error) {
-            $this->retorno_error(mensaje: 'Error al obtener selector de etapa', data: $pr_etapa_proceso_id, header: $header, ws: $ws);
+            return $this->retorno_error(mensaje: 'Error al obtener selector de etapa', data: $inm_status_prospecto_ubicacion_id, header: $header, ws: $ws);
         }
+        $this->inputs->inm_status_prospecto_ubicacion_id = $inm_status_prospecto_ubicacion_id;
 
-        $this->inputs->pr_etapa_proceso_id = $pr_etapa_proceso_id;
-        $hoy = date('Y-m-d');
-        $fecha = $this->html->input_fecha(cols: 12, row_upd: new stdClass(), value_vacio: false, value: $hoy);
+        $hoy = date('Y-m-d\TH:i:s');
+        $fecha = $this->html->input_fecha(cols: 6, row_upd: new stdClass(), value_vacio: false, name: 'fecha_status',
+            value: $hoy, value_hora: true);
         if (errores::$error) {
             $this->retorno_error(mensaje: 'Error al generar input fecha', data: $fecha, header: $header, ws: $ws);
         }
@@ -518,22 +515,24 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
 
         $this->inputs->observaciones = $observaciones;
 
-        $registro = (new inm_prospecto_ubicacion(link: $this->link))->registro($this->registro_id);
-        if (errores::$error) {
-            $this->retorno_error(mensaje: 'Error al generar link', data: $registro, header: $header, ws: $ws);
+        $inm_prospecto_ubicacion_id = $this->html->hidden(name:'inm_prospecto_ubicacion_id',value: $this->registro_id);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $inm_prospecto_ubicacion_id,  header: $header, ws: $ws);
         }
 
-        $link_alta_etapa = $this->obj_link->link_con_id(
-            accion: 'etapa_bd', link: $this->link, registro_id: $registro['com_prospecto_id'], seccion: 'com_prospecto');
+        $this->inputs->inm_prospecto_ubicacion_id = $inm_prospecto_ubicacion_id;
+
+
+        $link_alta_bitacora= $this->obj_link->link_alta_bd(link: $this->link, seccion:  'inm_bitacora_status_prospecto_ubicacion');
         if (errores::$error) {
-            $this->retorno_error(mensaje: 'Error al generar link', data: $link_alta_etapa, header: $header, ws: $ws);
+            return $this->retorno_error(mensaje: 'Error al generar link', data: $link_alta_bitacora, header: $header, ws: $ws);
         }
 
-        $this->link_alta_etapa = $link_alta_etapa;
+        $this->link_alta_bitacora = $link_alta_bitacora;
 
-        $etapas = (new com_prospecto(link: $this->link))->etapas(com_prospecto_id: $registro['com_prospecto_id']);
+        $etapas = (new inm_prospecto_ubicacion(link: $this->link))->status_prospecto_ubicacion(inm_prospecto_id: $this->registro_id);
         if (errores::$error) {
-            $this->retorno_error(mensaje: 'Error al obtener etapas', data: $etapas, header: $header, ws: $ws);
+            return $this->retorno_error(mensaje: 'Error al obtener etapas', data: $etapas, header: $header, ws: $ws);
         }
 
         $this->etapas = $etapas;
@@ -614,6 +613,8 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
             header('Location:' . $link_integra_relacion_bd);
             exit;
         }
+
+        return $result;
     }
 
     private function init_selects(array $keys_selects, string $key, string $label, int|null $id_selected = -1, int $cols = 6,

@@ -9,15 +9,20 @@
                 <?php include (new views())->ruta_templates."mensajes.php"; ?>
 
                 <div class="widget  widget-box box-container form-main widget-form-cart" id="form">
-                    <form method="post" action="<?php echo $controlador->link_alta_etapa; ?>" class="form-additional">
+                    <form method="post" action="<?php echo $controlador->link_alta_bitacora; ?>" class="form-additional">
                         <?php include (new views())->ruta_templates."head/subtitulo.php"; ?>
 
-                        <?php echo $controlador->inputs->pr_etapa_proceso_id; ?>
+                        <?php echo $controlador->inputs->inm_prospecto_ubicacion_id; ?>
+                        <?php echo $controlador->inputs->inm_status_prospecto_ubicacion_id; ?>
                         <?php echo $controlador->inputs->fecha; ?>
                         <?php echo $controlador->inputs->observaciones; ?>
 
+                        <input type='hidden' name='seccion_retorno' value='inm_prospecto_ubicacion'>
+                        <input type='hidden' name='btn_action_next' value='etapa'>
+                        <input type='hidden' name='id_retorno' value='<?php echo $controlador->registro_id; ?>'>
+
                         <div class="controls">
-                            <button type="submit" class="btn btn-success" value="correo" name="btn_action_next">Alta</button><br>
+                            <button type="submit" class="btn btn-success" value="etapa" name="btn_action_next">Alta</button><br>
                         </div>
                     </form>
 
@@ -49,10 +54,10 @@
                         foreach ($controlador->etapas as $etapa){
                         ?>
                         <tr>
-                            <td><?php echo $etapa['com_prospecto_etapa_id'] ?></td>
-                            <td><?php echo $etapa['pr_etapa_descripcion'] ?></td>
-                            <td><?php echo $etapa['com_prospecto_etapa_fecha'] ?></td>
-                            <td><?php echo $etapa['com_prospecto_etapa_observaciones'] ?></td>
+                            <td><?php echo $etapa['inm_bitacora_status_prospecto_ubicacion_id'] ?></td>
+                            <td><?php echo $etapa['inm_status_prospecto_ubicacion_descripcion'] ?></td>
+                            <td><?php echo $etapa['inm_bitacora_status_prospecto_ubicacion_fecha_status'] ?></td>
+                            <td><?php echo $etapa['inm_bitacora_status_prospecto_ubicacion_observaciones'] ?></td>
                         </tr>
                         <?php } ?>
                         </tbody>

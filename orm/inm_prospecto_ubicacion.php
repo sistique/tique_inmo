@@ -746,6 +746,16 @@ class inm_prospecto_ubicacion extends _modelo_parent{
 
     }
 
+    public function status_prospecto_ubicacion(int $inm_prospecto_id,
+                                     array $order = array('inm_bitacora_status_prospecto_ubicacion.fecha_status'=>'DESC')){
+        $filtro['inm_prospecto_ubicacion.id'] = $inm_prospecto_id;
+        $r_inm_bitacora_prospecto = (new inm_bitacora_status_prospecto_ubicacion(link: $this->link))->filtro_and(filtro: $filtro,order: $order);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener etapas', data: $r_inm_bitacora_prospecto);
+        }
+
+        return $r_inm_bitacora_prospecto->registros;
+    }
 
 
     final public function transacciones_upd(int $inm_prospecto_ubicacion_id){
