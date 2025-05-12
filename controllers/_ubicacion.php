@@ -175,7 +175,7 @@ class _ubicacion{
      */
     private function entidades_dp(): array
     {
-        return array('dp_pais','dp_estado','dp_municipio','dp_cp','dp_colonia_postal','dp_calle_pertenece');
+        return array('dp_pais','dp_estado','dp_municipio','dp_cp','dp_colonia_postal');
     }
 
     /**
@@ -419,16 +419,6 @@ class _ubicacion{
         $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  $filtro,
             key: 'dp_colonia_postal_id', keys_selects: $keys_selects, id_selected: $data_row->dp_colonia_postal_id,
             label: 'Colonia', columns_ds: $columns_ds);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-
-        $columns_ds = array('dp_calle_descripcion');
-        $filtro = array();
-        $filtro['dp_colonia_postal.id'] = $data_row->dp_colonia_postal_id;
-        $keys_selects = $controler->key_select(cols:12, con_registros: true,filtro:  $filtro,
-            key: 'dp_calle_pertenece_id', keys_selects: $keys_selects, id_selected: $data_row->dp_calle_pertenece_id,
-            label: 'Calle', columns_ds: $columns_ds);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }

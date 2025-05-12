@@ -21,7 +21,7 @@ class inm_ubicacion extends _inm_ubicaciones {
             'dp_estado'=>'dp_municipio','dp_pais'=>'dp_estado', 'inm_tipo_ubicacion'=>$tabla,
             'inm_status_ubicacion'=>$tabla,'com_agente'=>$tabla);
 
-        $campos_obligatorios = array('dp_calle_pertenece_id','cuenta_predial','inm_tipo_ubicacion_id');
+        $campos_obligatorios = array('cuenta_predial','inm_tipo_ubicacion_id');
 
         $columnas_extra= array();
         $sql = "(CONCAT_WS(' ', inm_ubicacion.calle, inm_ubicacion.numero_exterior, 
@@ -31,7 +31,7 @@ class inm_ubicacion extends _inm_ubicaciones {
 
         $renombres= array();
 
-        $atributos_criticos = array('manzana','lote','dp_calle_pertenece_id','etapa','cuenta_predial',
+        $atributos_criticos = array('manzana','lote','etapa','cuenta_predial',
             'inm_tipo_ubicacion_id','n_opiniones_valor','monto_opinion_promedio','costo');
 
         parent::__construct(link: $link, tabla: $tabla, campos_obligatorios: $campos_obligatorios,

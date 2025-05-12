@@ -349,7 +349,7 @@ class controlador_inm_ubicacion extends _ctl_base {
     {
         $keys = new stdClass();
         $keys->inputs = array('descripcion', 'manzana', 'lote','costo_directo','numero_exterior','numero_interior',
-            'cuenta_predial','codigo','nombre_beneficiario','numero_cheque','monto','numero_escritura_poder');
+            'calle', 'cuenta_predial','codigo','nombre_beneficiario','numero_cheque','monto','numero_escritura_poder');
         $keys->selects = array();
 
 
@@ -525,8 +525,8 @@ class controlador_inm_ubicacion extends _ctl_base {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'codigo', keys_selects: $keys_selects,
-            place_holder: 'Codigo',required: false);
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'calle', keys_selects: $keys_selects,
+            place_holder: 'Calle',required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
