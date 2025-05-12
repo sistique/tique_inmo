@@ -131,6 +131,10 @@ class inicializacion{
     private function ajusta_registro_upd(string $campo, modelo $modelo, stdClass $registro_previo,
                                         string|null $value_upd): array
     {
+        if (is_null($value_upd)) {
+            $value_upd = "";
+        }
+
         $value_upd = trim($value_upd);
         $campo = trim($campo);
 

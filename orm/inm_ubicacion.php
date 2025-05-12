@@ -596,14 +596,13 @@ class inm_ubicacion extends _inm_ubicaciones {
     public function modifica_bd(array $registro, int $id, bool $reactiva = false,
                                 array $keys_integra_ds = array('codigo', 'descripcion')): array|stdClass
     {
-
         if($id<=0){
             return $this->error->error(mensaje: 'Error id debe ser mayor a 0',data: $registro);
         }
 
-        $result_conyuge = $this->transacciona_conyuge(inm_ubicacion_id: $id,link: $this->link);
+        $result_conyuge = $this->modelo->transacciona_conyuge(inm_ubicacion_id: $id,link: $this->link);
         if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al insertar conyuge', data: $result_conyuge);
+            return $this->error->error(mensaje: 'Error al modificar inm_ubicacion', data: $result_conyuge);
         }
 
         $r_modifica_bd =  parent::modifica_bd(registro: $registro,id:  $id,
@@ -837,7 +836,7 @@ class inm_ubicacion extends _inm_ubicaciones {
 
     }
 
-    final public function transacciona_conyuge(int $inm_ubicacion_id, PDO $link){
+     public function transacciona_conyuge(int $inm_ubicacion_id, PDO $link){
         $datos = $this->datos_conyuge(link: $link,inm_ubicacion_id: $inm_ubicacion_id);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener dato conyuge',data:  $datos);
@@ -851,7 +850,6 @@ class inm_ubicacion extends _inm_ubicaciones {
             $datos->result_conyuge = $result_conyuge;
         }
         return $datos;
-
     }
 
     private function tiene_dato(array $row): bool
