@@ -463,6 +463,13 @@ class _ubicacion{
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
+        $columns_ds = array('com_agente_descripcion');
+        $keys_selects = $controler->key_select(cols:12, con_registros: true,filtro:  array(), key: 'com_agente_id',
+            keys_selects: array(), id_selected: $data_row->com_agente_id, label: 'Agente', columns_ds : $columns_ds);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
         foreach ($disableds as $campo_id){
             $keys_selects[$campo_id]->disabled = true;
         }
