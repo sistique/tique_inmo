@@ -59,7 +59,7 @@ class _inm_ubicaciones extends _modelo_base_paquete {
      */
     final protected function valida_row(array $registro): bool|array
     {
-        $keys = array('dp_calle_pertenece_id');
+        $keys = array('dp_colonia_postal_id');
         $valida = $this->validacion->valida_ids(keys: $keys,registro:  $registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al valida $registro',data:  $valida);

@@ -1,6 +1,7 @@
 <?php
 namespace gamboamartin\inmuebles\controllers;
 
+use gamboamartin\direccion_postal\models\dp_pais;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_concepto_html;
 use gamboamartin\inmuebles\html\inm_ubicacion_html;
@@ -219,6 +220,18 @@ class _ubicacion{
         $data_row = $this->data_row_alta(modelo_preferido: $modelo_preferido);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener ids', data:  $data_row);
+        }
+
+        if($data_row->dp_pais_id === -1){
+            $filtro_pais_default['dp_pais.descripcion'] = 'Mexico';
+            $dp_pais = (new dp_pais(link: $controler->link))->filtro_and(filtro: $filtro_pais_default);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al obtener datos de filtro default', data:  $data_row);
+            }
+
+            if($dp_pais->n_registros > 0){
+                $data_row->dp_pais_id = $dp_pais->registros[0]['dp_pais_id'];
+            }
         }
 
         $keys_selects = $this->keys_selects_base(controler: $controler,data_row:  $data_row, disableds: $disableds);

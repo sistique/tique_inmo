@@ -4,6 +4,7 @@ namespace gamboamartin\inmuebles\models;
 
 use base\orm\_modelo_parent;
 use gamboamartin\direccion_postal\models\dp_calle_pertenece;
+use gamboamartin\direccion_postal\models\dp_colonia_postal;
 use gamboamartin\errores\errores;
 use gamboamartin\proceso\models\pr_proceso;
 use PDO;
@@ -212,7 +213,7 @@ class inm_ubicacion extends _inm_ubicaciones {
             return $this->error->error(mensaje: 'Error al valida dp_calle_pertenece',data:  $valida);
         }
 
-        $keys = array('manzana','lote','numero_exterior','numero_interior');
+        $keys = array('calle','manzana','lote','numero_exterior','numero_interior');
 
         foreach ($keys as $key){
             if(!isset($registro[$key])){
@@ -224,6 +225,7 @@ class inm_ubicacion extends _inm_ubicaciones {
         $descripcion .= ' '.$dp_calle_pertenece->dp_municipio_descripcion;
         $descripcion .= ' '.$dp_calle_pertenece->dp_colonia_descripcion;
         $descripcion .= ' '.$dp_calle_pertenece->dp_cp_descripcion;
+        $descripcion .= ' '.$registro['calle'];
         $descripcion .= ' '.$registro['manzana'].' '.$registro['lote'];
         $descripcion .= ' '.$registro['numero_exterior'].' '.$registro['numero_interior'];
         return trim($descripcion);
@@ -321,16 +323,16 @@ class inm_ubicacion extends _inm_ubicaciones {
         }
 
 
-        $dp_calle_pertenece = (new dp_calle_pertenece(link: $this->link))->registro(
-            registro_id: $registro['dp_calle_pertenece_id'],retorno_obj: true);
+        $dp_colonia_postal = (new dp_colonia_postal(link: $this->link))->registro(
+            registro_id: $registro['dp_colonia_postal_id'],retorno_obj: true);
         if(errores::$error){
-            return $this->error->error(mensaje: 'Error al obtener dp_calle_pertenece',data:  $dp_calle_pertenece);
+            return $this->error->error(mensaje: 'Error al obtener dp_colonia_postal',data:  $dp_colonia_postal);
         }
 
 
         if(!isset($registro['descripcion'])){
 
-            $registro = $this->integra_descripcion(dp_calle_pertenece: $dp_calle_pertenece,registro:  $registro);
+            $registro = $this->integra_descripcion(dp_colonia_postal: $dp_colonia_postal,registro:  $registro);
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error al integrar descripcion',data:  $registro);
             }
@@ -371,16 +373,16 @@ class inm_ubicacion extends _inm_ubicaciones {
 
     /**
      * Integra una descripcion al dar de alta registro
-     * @param stdClass $dp_calle_pertenece Registro de domicilio
+     * @param stdClass $dp_colonia_postal Registro de domicilio
      * @param array $registro registro en proceso
      * @return array
      * @version 2.106.0
      */
-    private function integra_descripcion(stdClass $dp_calle_pertenece, array $registro): array
+    private function integra_descripcion(stdClass $dp_colonia_postal, array $registro): array
     {
         $keys = array('dp_pais_descripcion','dp_estado_descripcion','dp_municipio_descripcion',
             'dp_colonia_descripcion','dp_cp_descripcion');
-        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $dp_calle_pertenece);
+        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $dp_colonia_postal);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al valida dp_calle_pertenece',data:  $valida);
         }
@@ -390,7 +392,7 @@ class inm_ubicacion extends _inm_ubicaciones {
         }
 
         $descripcion = $this->descripcion(key_entidad_base_id: $this->key_id, key_entidad_id: '',
-            registro: $registro, dp_calle_pertenece: $dp_calle_pertenece);
+            registro: $registro, dp_calle_pertenece: $dp_colonia_postal);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener descripcion',data:  $descripcion);
         }
