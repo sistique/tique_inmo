@@ -297,7 +297,7 @@ class inm_ubicacion extends _inm_ubicaciones {
             return $this->error->error(mensaje: 'Error inm_ubicacion_id es menor a 0',data:  $inm_prospecto_id);
         }
         $filtro = array();
-        $filtro['inm_ubicacion_ubicacion.id'] = $inm_prospecto_id;
+        $filtro['inm_ubicacion.id'] = $inm_prospecto_id;
 
         $existe_conyuge = (new inm_rel_conyuge_ubicacion(link: $this->link))->existe(filtro: $filtro);
         if(errores::$error){
