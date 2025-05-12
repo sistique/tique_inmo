@@ -9,9 +9,13 @@
 namespace gamboamartin\inmuebles\controllers;
 
 use base\controller\init;
+use gamboamartin\direccion_postal\models\dp_estado;
+use gamboamartin\direccion_postal\models\dp_municipio;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_ubicacion_html;
 use gamboamartin\inmuebles\html\inm_valuador_html;
+use gamboamartin\inmuebles\models\inm_nacionalidad;
+use gamboamartin\inmuebles\models\inm_ocupacion;
 use gamboamartin\inmuebles\models\inm_status_ubicacion;
 use gamboamartin\inmuebles\models\inm_ubicacion;
 use gamboamartin\system\_ctl_base;
@@ -478,11 +482,8 @@ class controlador_inm_ubicacion extends _ctl_base {
         $row_upd->inm_nacionalidad_id = -1;
         $row_upd->inm_ocupacion_id = -1;
         if($existe_conyuge){
-            $rename = "gamboamartin\\inmuebles\\models\\".$class_upd;
-            $class = new $rename();
-
-            $row_upd = $class->inm_conyuge(columnas_en_bruto: true,
-                inm_prospecto_id: $controler->registro_id, link: $controler->link, retorno_obj: true);
+            $row_upd = $controler->modelo->inm_conyuge(columnas_en_bruto: true,
+                inm_ubicacion_id: $controler->registro_id, link: $controler->link, retorno_obj: true);
 
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error al obtener datos de conyuge',data:  $row_upd);
