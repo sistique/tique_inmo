@@ -354,7 +354,8 @@ class controlador_inm_ubicacion extends _ctl_base {
         $keys = new stdClass();
         $keys->inputs = array('descripcion', 'manzana', 'lote','costo_directo','numero_exterior','numero_interior',
             'calle', 'cuenta_predial','codigo','nombre_beneficiario','numero_cheque','monto','numero_escritura_poder',
-            'nombre','apellido_paterno','apellido_materno','nss','curp','rfc');
+            'nombre','apellido_paterno','apellido_materno','nss','curp','rfc', 'lada_com', 'numero_com', 'cel_com',
+            'correo_com', 'razon_social');
         $keys->selects = array();
 
 
@@ -369,6 +370,9 @@ class controlador_inm_ubicacion extends _ctl_base {
         $init_data['inm_tipo_ubicacion'] = "gamboamartin\\inmuebles";
         $init_data['inm_notaria'] = "gamboamartin\\inmuebles";
         $init_data['com_agente'] = "gamboamartin\\comercial";
+        $init_data['inm_estado_vivienda'] = "gamboamartin\\inmuebles";
+        $init_data['inm_prototipo'] = "gamboamartin\\inmuebles";
+        $init_data['inm_complemento'] = "gamboamartin\\inmuebles";
 
         $campos_view = $this->campos_view_base(init_data: $init_data,keys:  $keys);
 
@@ -479,6 +483,16 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $this->inputs->conyuge = $conyuge;
 
+        $fecha_otorgamiento_credito = $this->html->input_fecha(cols: 12, row_upd: $this->row_upd, value_vacio: false,
+            name: 'fecha_otorgamiento_credito', place_holder: 'Fecha Otorgamiento Credito',
+            value: $this->row_upd->fecha_otorgamiento_credito);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $fecha_otorgamiento_credito,header: $header,
+                ws: $ws);
+        }
+
+        $this->inputs->fecha_otorgamiento_credito = $fecha_otorgamiento_credito;
+
 
         $base = $this->base_upd(keys_selects: $keys_selects, params: array(),params_ajustados: array());
         if(errores::$error){
@@ -547,6 +561,43 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $keys_selects = (new init())->key_select_txt(cols: 12, key: 'rfc',
             keys_selects: $keys_selects, place_holder: 'RFC', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'lada_com',
+            keys_selects: $keys_selects, place_holder: 'Lada', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+        $keys_selects['lada_com']->regex = $this->validacion->patterns['lada_html'];
+
+        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'numero_com',
+            keys_selects: $keys_selects, place_holder: 'Numero', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+
+        $keys_selects['numero_com']->regex = $this->validacion->patterns['tel_sin_lada_html'];
+
+        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'cel_com',
+            keys_selects: $keys_selects, place_holder: 'Cel', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+
+        $keys_selects['cel_com']->regex = $this->validacion->patterns['telefono_mx_html'];
+
+        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'correo_com',
+            keys_selects: $keys_selects, place_holder: 'Correo', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+
+        $keys_selects['correo_com']->regex = $this->validacion->patterns['correo_html5'];
+
+        $keys_selects = (new init())->key_select_txt(cols: 12, key: 'razon_social',
+            keys_selects: $keys_selects, place_holder: 'Razon Social');
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }

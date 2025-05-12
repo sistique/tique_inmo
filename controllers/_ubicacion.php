@@ -465,7 +465,28 @@ class _ubicacion{
 
         $columns_ds = array('com_agente_descripcion');
         $keys_selects = $controler->key_select(cols:12, con_registros: true,filtro:  array(), key: 'com_agente_id',
-            keys_selects: array(), id_selected: $data_row->com_agente_id, label: 'Agente', columns_ds : $columns_ds);
+            keys_selects: $keys_selects, id_selected: $data_row->com_agente_id, label: 'Agente', columns_ds : $columns_ds);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $columns_ds = array('inm_estado_vivienda_descripcion');
+        $keys_selects = $controler->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_estado_vivienda_id',
+            keys_selects: $keys_selects, id_selected: $data_row->inm_estado_vivienda_id, label: 'Estado Vivienda', columns_ds : $columns_ds);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $columns_ds = array('inm_prototipo_descripcion');
+        $keys_selects = $controler->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_prototipo_id',
+            keys_selects: $keys_selects, id_selected: $data_row->inm_prototipo_id, label: 'Prototipo', columns_ds : $columns_ds);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $columns_ds = array('inm_complemento_descripcion');
+        $keys_selects = $controler->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_complemento_id',
+            keys_selects: $keys_selects, id_selected: $data_row->inm_complemento_id, label: 'Complemento', columns_ds : $columns_ds);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
