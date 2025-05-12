@@ -20,6 +20,12 @@ let manzana = $("#manzana");
 let lote = $("#lote");
 let cuenta_predial = $("#cuenta_predial");
 
+let sl_conyuge_dp_estado_id = $("#conyuge_dp_estado_id");
+sl_conyuge_dp_estado_id.change(function () {
+    conyuge_dp_estado_id = $(this).val();
+    dp_asigna_municipios_conyuge(conyuge_dp_estado_id, '', '#conyuge_dp_municipio_id');
+});
+
 
 numero_exterior.change(function(){
     let value = $(this).val().trim().toUpperCase();
@@ -188,6 +194,32 @@ function dp_asigna_municipios(dp_estado_id = '',dp_municipio_id = ''){
 
 }
 
+function dp_asigna_municipios_conyuge(dp_estado_id = '', dp_municipio_id = '', selector = "#dp_municipio_id") {
+
+    let sl_dp_municipio_id = $(selector);
+
+    let url = "index.php?seccion=dp_municipio&ws=1&accion=get_municipio&dp_estado_id=" + dp_estado_id + "&session_id=" + session_id;
+
+    $.ajax({
+        type: 'GET',
+        url: url,
+    }).done(function (data) {  // Función que se ejecuta si todo ha ido bien
+        console.log(data);
+        sl_dp_municipio_id.empty();
+
+        integra_new_option(selector, 'Seleccione un municipio', '-1');
+
+        $.each(data.registros, function (index, dp_municipio) {
+            integra_new_option(selector, dp_municipio.dp_municipio_descripcion, dp_municipio.dp_municipio_id);
+        });
+        sl_dp_municipio_id.val(dp_municipio_id);
+        sl_dp_municipio_id.selectpicker('refresh');
+    }).fail(function (jqXHR, textStatus, errorThrown) { // Función que se ejecuta si algo ha ido mal
+        alert('Error al ejecutar');
+        console.log("The following error occured: " + textStatus + " " + errorThrown);
+    });
+
+}
 
 
 
