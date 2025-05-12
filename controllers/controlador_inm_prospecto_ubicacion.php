@@ -1282,7 +1282,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         }
 
         $keys_selects = (new init())->key_select_txt(cols: 12, key: 'observaciones',
-            keys_selects: $keys_selects, place_holder: 'Observaciones');
+            keys_selects: $keys_selects, place_holder: 'Observaciones',required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
