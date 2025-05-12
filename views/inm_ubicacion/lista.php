@@ -4,6 +4,10 @@
 
 <?php
 echo "<style>
+.filtros-avanzados{
+    width: 100%;
+}
+
 .contenedor_completo{
     display: flex;
     flex-wrap: wrap;

@@ -74,11 +74,11 @@ class inm_ubicacion extends _inm_ubicaciones {
             return $this->error->error(mensaje: 'Error al insertar ubicacion',data:  $r_alta_bd);
         }
 
-        $r_alta_etapa = (new pr_proceso(link: $this->link))->inserta_etapa(adm_accion: __FUNCTION__, fecha: '',
+        /*$r_alta_etapa = (new pr_proceso(link: $this->link))->inserta_etapa(adm_accion: __FUNCTION__, fecha: '',
             modelo: $this, modelo_etapa: $this->modelo_etapa, registro_id: $r_alta_bd->registro_id);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al insertar etapa', data: $r_alta_etapa);
-        }
+        }*/
 
         $regenera = $this->regenera_datas(inm_ubicacion_id: $r_alta_bd->registro_puro->id);
         if(errores::$error){
