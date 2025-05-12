@@ -106,6 +106,28 @@ class inm_ubicacion extends _inm_ubicaciones {
         return $r_alta_bd;
     }
 
+    private function ajusta_conyuge(stdClass $datos, int $inm_prospecto_ubicacion_id, PDO $link): array|stdClass
+    {
+        if(!$datos->existe) {
+            $r_inm_rel_conyuge_prospecto_bd = $this->inserta_conyuge(conyuge: $datos->row,
+                inm_prospecto_ubicacion_id: $inm_prospecto_ubicacion_id,link: $link);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al insertar conyuge', data: $r_inm_rel_conyuge_prospecto_bd);
+            }
+            $data = $r_inm_rel_conyuge_prospecto_bd;
+        }
+        else{
+            $r_modifica_conyuge = $this->modifica_conyuge(
+                conyuge: $datos->row,inm_prospecto_ubicacion_id:  $inm_prospecto_ubicacion_id,link: $link);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al modificar conyuge', data: $r_modifica_conyuge);
+            }
+            $data = $r_modifica_conyuge;
+        }
+
+        return $data;
+    }
+
     /**
      * Asigna un precio de venta a un registro de ubicacion
      * @param int $indice Indice de arreglo de ubicaciones
@@ -209,6 +231,46 @@ class inm_ubicacion extends _inm_ubicaciones {
         $data->inm_comprador = $inm_comprador;
         $data->r_inm_ubicacion = $r_inm_ubicacion;
         return $data;
+    }
+
+    final public function dato(bool $existe, string $key_data): array|stdClass
+    {
+        $key_data = trim($key_data);
+        if($key_data === ''){
+            return $this->error->error(mensaje: 'Error key_data esta vacio',data:  $key_data);
+        }
+
+        $row = $this->init_post(key_data: $key_data);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al inicializar row',data:  $row);
+        }
+
+        $tiene_dato = $this->tiene_dato(row: $row);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar si tiene dato tiene_dato',data:  $tiene_dato);
+        }
+        $datos = new stdClass();
+        $datos->existe = $existe;
+        $datos->row = $row;
+        $datos->tiene_dato = $tiene_dato;
+        return $datos;
+    }
+
+    final public function datos_conyuge(PDO $link, int $inm_ubicacion_id): array|stdClass{
+        $existe_conyuge = false;
+        if($inm_ubicacion_id > 0) {
+            $existe_conyuge = (new inm_ubicacion(link: $link))->existe_conyuge(inm_prospecto_id: $inm_ubicacion_id);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al validar si existe conyuge', data: $existe_conyuge);
+            }
+        }
+
+        $datos = $this->dato(existe: $existe_conyuge,key_data:  'conyuge');
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al inicializar datos',data:  $datos);
+        }
+
+        return $datos;
     }
 
     /**
@@ -331,6 +393,67 @@ class inm_ubicacion extends _inm_ubicaciones {
 
     }
 
+    private function inserta_conyuge(array $conyuge, int $inm_prospecto_ubicacion_id, PDO $link): array|stdClass
+    {
+        $keys = array('nombre','apellido_paterno','curp','rfc','dp_municipio_id','inm_nacionalidad_id',
+            'inm_ocupacion_id','telefono_casa','telefono_celular','fecha_nacimiento');
+        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $conyuge);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar conyuge',data:  $valida);
+        }
+        $keys = array('dp_municipio_id','inm_nacionalidad_id', 'inm_ocupacion_id');
+        $valida = $this->validacion->valida_ids(keys: $keys,registro:  $conyuge);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar conyuge',data:  $valida);
+        }
+        if($inm_prospecto_ubicacion_id <= 0){
+            return $this->error->error(mensaje: 'Error inm_prospecto_id debe ser mayor a 0',data:  $inm_prospecto_ubicacion_id);
+        }
+
+        $alta_conyuge = (new inm_conyuge(link: $link))->alta_registro(registro: $conyuge);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al insertar conyuge', data: $alta_conyuge);
+        }
+
+        $inm_rel_conyuge_prospecto_ins = (new _inm_prospecto_ubicacion())->inm_rel_conyuge_prospecto_ins(
+            inm_conyuge_id: $alta_conyuge->registro_id, inm_prospecto_ubicacion_id: $inm_prospecto_ubicacion_id);
+
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al maquetar conyuge relacion',
+                data: $inm_rel_conyuge_prospecto_ins);
+        }
+
+        $r_inm_rel_conyuge_prospecto_bd = (new inm_rel_conyuge_prospecto_ubicacion(link: $link))->alta_registro(
+            registro: $inm_rel_conyuge_prospecto_ins);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al insertar conyuge', data: $r_inm_rel_conyuge_prospecto_bd);
+        }
+
+        $data = new stdClass();
+        $data->alta_conyuge = $alta_conyuge;
+        $data->inm_rel_conyuge_prospecto_ins = $inm_rel_conyuge_prospecto_ins;
+        $data->r_inm_rel_conyuge_prospecto_bd = $r_inm_rel_conyuge_prospecto_bd;
+
+        return $data;
+    }
+
+    private function init_post(string $key_data): array
+    {
+        $key_data = trim($key_data);
+        if($key_data === ''){
+            return $this->error->error(mensaje: 'Error key_data esta vacio',data:  $key_data);
+        }
+        $data = array();
+        if(isset($_POST[$key_data])){
+            $data = $_POST[$key_data];
+            if(is_string($data)){
+                return $this->error->error(mensaje: 'Error POST '.$key_data.' debe ser un array',data:  $data);
+            }
+            unset($_POST[$key_data]);
+        }
+        return $data;
+    }
+
 
     /**
      * Inicializa un registro para su alta
@@ -451,6 +574,11 @@ class inm_ubicacion extends _inm_ubicaciones {
             return $this->error->error(mensaje: 'Error id debe ser mayor a 0',data: $registro);
         }
 
+        $result_conyuge = (new _upd_prospecto_ubicacion())->transacciona_conyuge(inm_prospecto_ubicacion_id: $inm_prospecto_ubicacion_id,link: $this->link);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al insertar conyuge', data: $result_conyuge);
+        }
+
         $r_modifica_bd =  parent::modifica_bd(registro: $registro,id:  $id,
             reactiva:  $reactiva,keys_integra_ds:  $keys_integra_ds); // TODO: Change the autogenerated stub
         if(errores::$error){
@@ -463,6 +591,31 @@ class inm_ubicacion extends _inm_ubicaciones {
         }
 
         return $r_modifica_bd;
+    }
+
+    private function modifica_conyuge(array $conyuge, int $inm_prospecto_ubicacion_id, PDO $link): array|stdClass
+    {
+        if($inm_prospecto_ubicacion_id<=0){
+            return $this->error->error(mensaje: 'Error inm_prospecto_id debe ser mayor a 0', data:  $inm_prospecto_ubicacion_id);
+        }
+        $inm_conyuge_previo = $this->inm_conyuge(columnas_en_bruto: true, inm_prospecto_id: $inm_prospecto_ubicacion_id,
+            link: $link, retorno_obj: true);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener conyuge', data: $inm_conyuge_previo);
+        }
+
+        $inm_conyuge_id = $inm_conyuge_previo->id;
+
+        $r_modifica_conyuge = (new inm_conyuge(link: $link))->modifica_bd(registro: $conyuge,id: $inm_conyuge_id);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al modificar conyuge', data: $r_modifica_conyuge);
+        }
+
+        $data = new stdClass();
+        $data->inm_conyuge_previo = $inm_conyuge_previo;
+        $data->r_modifica_conyuge = $r_modifica_conyuge;
+
+        return $data;
     }
 
     /**
@@ -655,6 +808,39 @@ class inm_ubicacion extends _inm_ubicaciones {
 
         return $data;
 
+    }
+
+    final public function transacciona_conyuge(int $inm_prospecto_ubicacion_id, PDO $link){
+        $datos = $this->datos_conyuge(link: $link,inm_prospecto_id: $inm_prospecto_ubicacion_id);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener dato conyuge',data:  $datos);
+        }
+
+        if($datos->tiene_dato){
+            $result_conyuge = $this->ajusta_conyuge(datos: $datos,inm_prospecto_ubicacion_id: $inm_prospecto_ubicacion_id,link: $link);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al insertar conyuge', data: $result_conyuge);
+            }
+            $datos->result_conyuge = $result_conyuge;
+        }
+        return $datos;
+
+    }
+
+    private function tiene_dato(array $row): bool
+    {
+        $tiene_dato = false;
+        foreach ($row as $value){
+            if($value === null){
+                $value = '';
+            }
+            $value = trim($value);
+            if($value!==''){
+                $tiene_dato = true;
+                break;
+            }
+        }
+        return $tiene_dato;
     }
 
     /**
