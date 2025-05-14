@@ -264,21 +264,16 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
                 header: true, ws: false);
         }
 
-        $retorno = (new _base())->init_retorno();
-        if (errores::$error) {
-            $this->link->rollBack();
-            return $this->retorno_error(mensaje: 'Error al obtener datos de retorno', data: $retorno,
-                header: true, ws: false, class: __CLASS__, file: __FILE__, function: __FILE__, line: __LINE__);
-        }
-
         $filtro['inm_prospecto_ubicacion.id'] = $this->registro_id;
-        $existe = (new inm_rel_ubicacion_prospecto_ubicacion(link: $this->link))->existe(filtro: $filtro);
+        $existe = (new inm_rel_ubicacion_prospecto_ubicacion(link: $this->link))->filtro_and(filtro: $filtro);
         if (errores::$error) {
             $this->link->rollBack();
             return $this->retorno_error(mensaje: 'Error al convertir en cliente', data: $existe,
                 header: true, ws: false, class: __CLASS__, file: __FILE__, function: __FILE__, line: __LINE__);
         }
-        if(!$existe) {
+
+        $conversion = new stdClass();
+        if($existe->n_registros <= 0) {
             $conversion = (new inm_prospecto_ubicacion(link: $this->link))->convierte_ubicacion(
                 inm_prospecto_ubicacion_id: $this->registro_id);
             if (errores::$error) {
@@ -290,17 +285,24 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
 
         $this->link->commit();
 
-        $out = (new _base())->out(controlador: $this, header: $header, result: $conversion,
-            retorno: $retorno, ws: $ws);
-        if (errores::$error) {
-            $this->link->rollBack();
-            return $this->retorno_error(mensaje: 'Error al dar salida', data: $out,
-                header: true, ws: false, class: __CLASS__, file: __FILE__, function: __FILE__, line: __LINE__);
+        $retorno = new stdClass();
+
+        if($existe->n_registros <= 0) {
+            $retorno->id_retorno = $conversion->r_alta_ubicacion['registro_id'];
+            $retorno->siguiente_view = 'modifica';
+        }else{
+            $retorno->id_retorno = $existe->registros[0]['inm_ubicacion_id'];
+            $retorno->siguiente_view = 'modifica';
         }
 
-        $conversion->r_alta_rel->siguiente_view = $retorno->siguiente_view;
+        $controlador_ubicacion =  new controlador_inm_ubicacion(link: $this->link);
+        if($header){
+            $controlador_ubicacion->retorno_base(registro_id:$retorno->id_retorno, result: $conversion,
+                siguiente_view: $retorno->siguiente_view, ws:  $ws, seccion_retorno: 'inm_ubicacion',
+                valida_permiso: true);
+        }
 
-        return $conversion->r_alta_rel;
+        return $conversion;
 
 
     }

@@ -78,7 +78,8 @@ class _base{
      * @return mixed|void
      * @version 2.253.1
      */
-    final public function out(controlador_inm_prospecto|controlador_inm_comprador|controlador_inm_prospecto_ubicacion $controlador, bool $header,
+    final public function out(controlador_inm_prospecto|controlador_inm_comprador|controlador_inm_prospecto_ubicacion|
+                              controlador_inm_ubicacion $controlador, bool $header,
                               mixed $result, stdClass $retorno, bool $ws){
         if($header){
             if($retorno->id_retorno === -1) {
