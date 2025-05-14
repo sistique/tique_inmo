@@ -20,6 +20,34 @@ let manzana = $("#manzana");
 let lote = $("#lote");
 let cuenta_predial = $("#cuenta_predial");
 
+let nombre_ct = $("#nombre");
+let apellido_paterno_ct = $("#apellido_paterno");
+let apellido_materno_ct = $("#apellido_materno");
+let razon_social_ct = $("#razon_social");
+
+let nombre = '';
+let apellido_paterno = '';
+let apellido_materno = '';
+let razon_social = '';
+nombre_ct.change(function() {
+    limpia_txt($(this));
+    nombre = $(this).val().trim();
+    razon_social = nombre+' '+apellido_paterno+' '+apellido_materno;
+    razon_social_ct.val(razon_social.trim());
+
+});
+apellido_paterno_ct.change(function() {
+    limpia_txt($(this));
+    apellido_paterno = $(this).val().trim();
+    razon_social = nombre+' '+apellido_paterno+' '+apellido_materno;
+    razon_social_ct.val(razon_social.trim());
+});
+apellido_materno_ct.change(function() {
+    limpia_txt($(this));
+    apellido_materno = $(this).val().trim();
+    razon_social = nombre+' '+apellido_paterno+' '+apellido_materno;
+    razon_social_ct.val(razon_social.trim());
+});
 
 numero_exterior.change(function(){
     let value = $(this).val().trim().toUpperCase();
@@ -187,7 +215,15 @@ function dp_asigna_municipios(dp_estado_id = '',dp_municipio_id = ''){
 
 }
 
-
+function limpia_txt(container){
+    let value = container.val().trim();
+    value = value.toUpperCase();
+    value = value.replace('  ',' ');
+    value = value.replace('  ',' ');
+    value = value.replace('  ',' ');
+    value = value.replace('  ',' ');
+    container.val(value);
+}
 
 
 
