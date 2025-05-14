@@ -619,12 +619,21 @@ class inm_ubicacion extends _inm_ubicaciones {
 
         if(isset($registro['com_agente_id'])) {
             $modelo_inm_rel_prospecto = new inm_rel_agente_ubicacion(link: $this->link);
-            $modelo_inm_rel_prospecto->registro['com_agente_id'] = $registro['com_agente_id'];
-            $modelo_inm_rel_prospecto->registro['inm_ubicacion_id'] = $id;
-            $modelo_inm_rel_prospecto->registro['fecha_asignacion'] = date('Y-m-d');
-            $r_alta_rel = $modelo_inm_rel_prospecto->alta_bd();
+
+            $filtro_rel_prosp['com_agente.id'] = $registro['com_agente_id'];
+            $existe = $modelo_inm_rel_prospecto->existe(filtro: $filtro_rel_prosp);
             if (errores::$error) {
-                return $this->error->error(mensaje: 'Error al registrar elemento de relacion agente', data: $r_alta_rel);
+                return $this->error->error(mensaje: 'Error al registrar agente', data: $existe);
+            }
+
+            if(!$existe) {
+                $modelo_inm_rel_prospecto->registro['com_agente_id'] = $registro['com_agente_id'];
+                $modelo_inm_rel_prospecto->registro['inm_ubicacion_id'] = $id;
+                $modelo_inm_rel_prospecto->registro['fecha_asignacion'] = date('Y-m-d');
+                $r_alta_rel = $modelo_inm_rel_prospecto->alta_bd();
+                if (errores::$error) {
+                    return $this->error->error(mensaje: 'Error al registrar elemento de relacion agente', data: $r_alta_rel);
+                }
             }
         }
 
