@@ -87,10 +87,6 @@ class _conversion_ubicacion{
         if(!is_object($data->inm_prospecto_ubicacion_completo)){
             return $this->error->error(mensaje: 'Error $data->inm_prospecto_completo debe ser un objeto', data: $data);
         }
-        if(!isset($data->inm_prospecto_completo->com_prospecto_rfc)){
-            return $this->error->error(mensaje: 'Error $data->inm_prospecto_completo->com_prospecto_rfc no existe',
-                data: $data);
-        }
 
         $keys = $this->keys_data_prospecto_ubicacion();
         if(errores::$error){
@@ -543,7 +539,7 @@ class _conversion_ubicacion{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar key', data: $valida);
         }
-        if(!isset($data->inm_prospecto_ubicacion->$key)){
+        if(!property_exists($data->inm_prospecto_ubicacion, $key)){
             return $this->error->error(mensaje: 'Error no existe atributo', data: $key);
         }
 

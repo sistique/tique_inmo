@@ -14,6 +14,8 @@ use stdClass;
 class inm_ubicacion extends _inm_ubicaciones {
 
     private _modelo_parent $modelo_etapa;
+    public bool $desde_prospecto = false;
+
     public function __construct(PDO $link)
     {
         $tabla = 'inm_ubicacion';
