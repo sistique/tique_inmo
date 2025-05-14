@@ -318,32 +318,28 @@ class inm_prospecto_ubicacion extends _modelo_parent{
         return $r_alta_bd;
     }
 
-    /**
-     * Convierte un prospecto en cliente generado una relacion con inm_rel_prospecto_cliente y inm_comprador
-     * @param int $inm_prospecto_id Identificador de prospecto
-     * @return array|stdClass
-     */
-    final public function convierte_ubicacion(int $inm_prospecto_id): array|stdClass
+    final public function convierte_ubicacion(int $inm_prospecto_ubicacion_id): array|stdClass
     {
-        if($inm_prospecto_id<=0){
-            return $this->error->error(mensaje: 'Error inm_prospecto_id es menor a 0', data: $inm_prospecto_id);
+        if($inm_prospecto_ubicacion_id<=0){
+            return $this->error->error(mensaje: 'Error inm_prospecto_id es menor a 0', data: $inm_prospecto_ubicacion_id);
         }
-        $r_alta_comprador = (new _conversion_ubicacion())->inserta_inm_ubicacion(inm_prospecto_id: $inm_prospecto_id,
-            modelo: $this);
 
+        $r_alta_ubicacion = (new _conversion_ubicacion())->inserta_inm_ubicacion(
+            inm_prospecto_ubicacion_id: $inm_prospecto_ubicacion_id, modelo: $this);
         if(errores::$error){
-            return $this->error->error(mensaje: 'Error al insertar cliente', data: $r_alta_comprador);
+            return $this->error->error(mensaje: 'Error al insertar cliente', data: $r_alta_ubicacion);
         }
 
         $r_alta_rel = (new _conversion_ubicacion())->inserta_rel_prospecto_cliente(
-            inm_comprador_id: $r_alta_comprador->registro_id,inm_prospecto_id:  $inm_prospecto_id,link: $this->link);
+            inm_ubicacion_id: $r_alta_ubicacion->registro_id, inm_prospecto_ubicacion_id:  $inm_prospecto_ubicacion_id,
+            link: $this->link);
 
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al insertar inm_rel_prospecto_cliente_ins', data: $r_alta_rel);
         }
 
         $data = new stdClass();
-        $data->r_alta_comprador = $r_alta_comprador;
+        $data->r_alta_ubicacion = $r_alta_ubicacion;
         $data->r_alta_rel = $r_alta_rel;
 
         return $data;

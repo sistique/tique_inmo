@@ -17,19 +17,19 @@ class _conversion_ubicacion{
         $this->error = new errores();
     }
 
-    private function data_comprador(int $inm_comprador_id, inm_comprador $modelo): array|stdClass
+    private function data_ubicacion(int $inm_ubicacion_id, inm_ubicacion $modelo): array|stdClass
     {
-        if($inm_comprador_id<=0){
-            return $this->error->error(mensaje: 'Error inm_comprador_id es menor a 0', data: $inm_comprador_id);
+        if($inm_ubicacion_id<=0){
+            return $this->error->error(mensaje: 'Error inm_ubicacion_id es menor a 0', data: $inm_ubicacion_id);
         }
 
-        $inm_comprador = $modelo->registro(registro_id: $inm_comprador_id, columnas_en_bruto: true, retorno_obj: true);
+        $inm_ubicacion = $modelo->registro(registro_id: $inm_ubicacion_id, columnas_en_bruto: true, retorno_obj: true);
         if(errores::$error){
-            return $this->error->error(mensaje: 'Error al obtener comprador', data: $inm_comprador);
+            return $this->error->error(mensaje: 'Error al obtener ubicacion', data: $inm_ubicacion);
         }
 
         $data = new stdClass();
-        $data->inm_comprador = $inm_comprador;
+        $data->inm_ubicacion = $inm_ubicacion;
 
         return $data;
     }
@@ -58,58 +58,58 @@ class _conversion_ubicacion{
     }
     /**
      * Campos de inicializacion
-     * @param array $inm_comprador_ins comprador registro
+     * @param array $inm_ubicacion_ins ubicacion registro
      * @return array
      */
-    private function defaults_alta_comprador(array $inm_comprador_ins): array
+    private function defaults_alta_ubicacion(array $inm_ubicacion_ins): array
     {
-        if(!isset($inm_comprador_ins['nss'])){
-            $inm_comprador_ins['nss'] = '99999999999';
+        if(!isset($inm_ubicacion_ins['nss'])){
+            $inm_ubicacion_ins['nss'] = '99999999999';
         }
-        if(!isset($inm_comprador_ins['curp'] )){
-            $inm_comprador_ins['curp'] = 'XEXX010101MNEXXXA8';
+        if(!isset($inm_ubicacion_ins['curp'] )){
+            $inm_ubicacion_ins['curp'] = 'XEXX010101MNEXXXA8';
         }
-        if(!isset($inm_comprador_ins['lada_nep'] )){
-            $inm_comprador_ins['lada_nep'] = '33';
+        if(!isset($inm_ubicacion_ins['lada_nep'] )){
+            $inm_ubicacion_ins['lada_nep'] = '33';
         }
-        if(!isset($inm_comprador_ins['numero_nep'] )){
-            $inm_comprador_ins['numero_nep'] = '33333333';
+        if(!isset($inm_ubicacion_ins['numero_nep'] )){
+            $inm_ubicacion_ins['numero_nep'] = '33333333';
         }
-        if(!isset($inm_comprador_ins['nombre_empresa_patron'] )){
-            $inm_comprador_ins['nombre_empresa_patron'] = 'POR DEFINIR';
+        if(!isset($inm_ubicacion_ins['nombre_empresa_patron'] )){
+            $inm_ubicacion_ins['nombre_empresa_patron'] = 'POR DEFINIR';
         }
-        if(!isset($inm_comprador_ins['nrp_nep'] )){
-            $inm_comprador_ins['nrp_nep'] = 'POR DEFINIR';
+        if(!isset($inm_ubicacion_ins['nrp_nep'] )){
+            $inm_ubicacion_ins['nrp_nep'] = 'POR DEFINIR';
         }
 
-        if($inm_comprador_ins['nss'] === ''){
-            $inm_comprador_ins['nss'] = '99999999999';
+        if($inm_ubicacion_ins['nss'] === ''){
+            $inm_ubicacion_ins['nss'] = '99999999999';
         }
-        if($inm_comprador_ins['curp'] === ''){
-            $inm_comprador_ins['curp'] = 'XEXX010101MNEXXXA8';
+        if($inm_ubicacion_ins['curp'] === ''){
+            $inm_ubicacion_ins['curp'] = 'XEXX010101MNEXXXA8';
         }
-        if($inm_comprador_ins['lada_nep'] === ''){
-            $inm_comprador_ins['lada_nep'] = '33';
+        if($inm_ubicacion_ins['lada_nep'] === ''){
+            $inm_ubicacion_ins['lada_nep'] = '33';
         }
-        if($inm_comprador_ins['numero_nep'] === ''){
-            $inm_comprador_ins['numero_nep'] = '33333333';
+        if($inm_ubicacion_ins['numero_nep'] === ''){
+            $inm_ubicacion_ins['numero_nep'] = '33333333';
         }
-        if($inm_comprador_ins['nombre_empresa_patron'] === ''){
-            $inm_comprador_ins['nombre_empresa_patron'] = 'POR DEFINIR';
+        if($inm_ubicacion_ins['nombre_empresa_patron'] === ''){
+            $inm_ubicacion_ins['nombre_empresa_patron'] = 'POR DEFINIR';
         }
-        if($inm_comprador_ins['nrp_nep'] === ''){
-            $inm_comprador_ins['nrp_nep'] = 'POR DEFINIR';
+        if($inm_ubicacion_ins['nrp_nep'] === ''){
+            $inm_ubicacion_ins['nrp_nep'] = 'POR DEFINIR';
         }
-        return $inm_comprador_ins;
+        return $inm_ubicacion_ins;
     }
 
     /**
-     * Integra los campos de un comprador para la insersion
+     * Integra los campos de un ubicacion para la insersion
      * @param stdClass $data Datos de prospecto
      * @param PDO $link Conexion a la base de datos
      * @return array
      */
-    private function inm_comprador_ins(stdClass $data, PDO $link): array
+    private function inm_ubicacion_ins(stdClass $data, PDO $link): array
     {
         if(!isset($data->inm_prospecto)){
             return $this->error->error(mensaje: 'Error $data->inm_prospecto no existe', data: $data);
@@ -133,20 +133,20 @@ class _conversion_ubicacion{
             return $this->error->error(mensaje: 'Error al obtener keys', data: $keys);
         }
 
-        $inm_comprador_ins = $this->inm_comprador_ins_init(data: $data,keys:  $keys);
+        $inm_ubicacion_ins = $this->inm_ubicacion_ins_init(data: $data,keys:  $keys);
         if(errores::$error){
-            return $this->error->error(mensaje: 'Error al inicializar inm_comprador', data: $inm_comprador_ins);
+            return $this->error->error(mensaje: 'Error al inicializar inm_ubicacion', data: $inm_ubicacion_ins);
         }
 
 
-        $inm_comprador_ins = $this->defaults_alta_comprador(inm_comprador_ins: $inm_comprador_ins);
+        $inm_ubicacion_ins = $this->defaults_alta_ubicacion(inm_ubicacion_ins: $inm_ubicacion_ins);
         if(errores::$error){
-            return $this->error->error(mensaje: 'Error al obtener inm_comprador_ins', data: $inm_comprador_ins);
+            return $this->error->error(mensaje: 'Error al obtener inm_ubicacion_ins', data: $inm_ubicacion_ins);
         }
 
-        $inm_comprador_ins = $this->integra_ids_prefs(inm_comprador_ins: $inm_comprador_ins,link: $link);
+        $inm_ubicacion_ins = $this->integra_ids_prefs(inm_ubicacion_ins: $inm_ubicacion_ins,link: $link);
         if(errores::$error){
-            return $this->error->error(mensaje: 'Error al obtener id_pref', data: $inm_comprador_ins);
+            return $this->error->error(mensaje: 'Error al obtener id_pref', data: $inm_ubicacion_ins);
         }
         if(!isset($data->inm_prospecto_completo->dp_cp_codigo)){
             $data->inm_prospecto_completo->dp_cp_codigo = '99999';
@@ -161,23 +161,23 @@ class _conversion_ubicacion{
             $cp = 99999;
         }
 
-        $inm_comprador_ins['rfc'] = $data->inm_prospecto_completo->com_prospecto_rfc;
-        $inm_comprador_ins['numero_exterior'] = 'POR ASIGNAR';
-        $inm_comprador_ins['dp_municipio_id'] = $data->inm_prospecto_completo->dp_municipio_id;;
-        $inm_comprador_ins['cp'] = $cp;
+        $inm_ubicacion_ins['rfc'] = $data->inm_prospecto_completo->com_prospecto_rfc;
+        $inm_ubicacion_ins['numero_exterior'] = 'POR ASIGNAR';
+        $inm_ubicacion_ins['dp_municipio_id'] = $data->inm_prospecto_completo->dp_municipio_id;;
+        $inm_ubicacion_ins['cp'] = $cp;
 
 
-        return $inm_comprador_ins;
+        return $inm_ubicacion_ins;
     }
 
 
     /**
-     * Inicializa inm_comprador en vacio
+     * Inicializa inm_ubicacion en vacio
      * @param stdClass $data datos para asignacion
      * @param array $keys Keys para inicializar
      * @return array
      */
-    private function inm_comprador_ins_init(stdClass $data, array $keys): array
+    private function inm_ubicacion_ins_init(stdClass $data, array $keys): array
     {
         if(!isset($data->inm_prospecto)){
             return $this->error->error(mensaje: 'Error $data->inm_prospecto no existe', data: $data);
@@ -185,25 +185,25 @@ class _conversion_ubicacion{
         if(!is_object($data->inm_prospecto)){
             return $this->error->error(mensaje: 'Error $data->inm_prospecto debe ser un objeto', data: $data);
         }
-        $inm_comprador_ins = array();
+        $inm_ubicacion_ins = array();
 
         foreach ($keys as $key){
-            $inm_comprador_ins = $this->integra_key(data: $data,inm_comprador_ins:  $inm_comprador_ins,key:  $key);
+            $inm_ubicacion_ins = $this->integra_key(data: $data,inm_ubicacion_ins:  $inm_ubicacion_ins,key:  $key);
             if(errores::$error){
-                return $this->error->error(mensaje: 'Error al integrar key', data: $inm_comprador_ins);
+                return $this->error->error(mensaje: 'Error al integrar key', data: $inm_ubicacion_ins);
             }
         }
 
-        return $inm_comprador_ins;
+        return $inm_ubicacion_ins;
     }
 
-    private function inm_referencia(int $inm_comprador_id, stdClass $inm_referencia_prospecto): array
+    private function inm_referencia(int $inm_ubicacion_id, stdClass $inm_referencia_prospecto): array
     {
-        if($inm_comprador_id <= 0){
-            return $this->error->error(mensaje: 'Error inm_comprador_id debe ser mayor a 0', data: $inm_comprador_id);
+        if($inm_ubicacion_id <= 0){
+            return $this->error->error(mensaje: 'Error inm_ubicacion_id debe ser mayor a 0', data: $inm_ubicacion_id);
         }
 
-        $inm_referencia_ins['inm_comprador_id'] = $inm_comprador_id;
+        $inm_referencia_ins['inm_ubicacion_id'] = $inm_ubicacion_id;
         $inm_referencia_ins['apellido_paterno'] = $inm_referencia_prospecto->inm_referencia_prospecto_apellido_paterno;
         $inm_referencia_ins['apellido_materno'] = $inm_referencia_prospecto->inm_referencia_prospecto_apellido_materno;
         $inm_referencia_ins['nombre'] = $inm_referencia_prospecto->inm_referencia_prospecto_nombre;
@@ -216,35 +216,22 @@ class _conversion_ubicacion{
 
         return $inm_referencia_ins;
     }
-
-    /**
-     * Genera un registro de relacion de prospecto
-     * @param int $inm_comprador_id Comprador id
-     * @param int $inm_prospecto_id Prospecto id
-     * @return array
-     * @version 2.219.1
-     */
-    private function inm_rel_prospecto_cliente_ins(int $inm_comprador_id, int $inm_prospecto_id): array
+    
+    private function inm_rel_prospecto_cliente_ins(int $inm_ubicacion_id, int $inm_prospecto_ubicacion_id): array
     {
-        if($inm_prospecto_id <= 0){
-            return $this->error->error(mensaje: 'Error inm_prospecto_id debe ser mayor a 0', data: $inm_prospecto_id);
+        if($inm_prospecto_ubicacion_id <= 0){
+            return $this->error->error(mensaje: 'Error inm_prospecto_id debe ser mayor a 0', data: $inm_prospecto_ubicacion_id);
         }
-        if($inm_comprador_id <= 0){
-            return $this->error->error(mensaje: 'Error inm_comprador_id debe ser mayor a 0', data: $inm_comprador_id);
+        if($inm_ubicacion_id <= 0){
+            return $this->error->error(mensaje: 'Error inm_ubicacion_id debe ser mayor a 0', data: $inm_ubicacion_id);
         }
-        $inm_rel_prospecto_cliente_ins['inm_prospecto_id'] = $inm_prospecto_id;
-        $inm_rel_prospecto_cliente_ins['inm_comprador_id'] = $inm_comprador_id;
+        $inm_rel_prospecto_cliente_ins['inm_prospecto_id'] = $inm_prospecto_ubicacion_id;
+        $inm_rel_prospecto_cliente_ins['inm_ubicacion_id'] = $inm_ubicacion_id;
 
         return $inm_rel_prospecto_cliente_ins;
     }
 
-
-    /**
-     * Inserta un comprador
-     * @param int $inm_prospecto_id Identificador de prospecto
-     * @param inm_prospecto $modelo Modelo inm_prospecto
-     * @return array|stdClass
-     */
+    
     final public function inserta_inm_ubicacion(int $inm_prospecto_ubicacion_id, inm_prospecto_ubicacion $modelo): array|stdClass
     {
         if($inm_prospecto_ubicacion_id<=0){
@@ -257,28 +244,28 @@ class _conversion_ubicacion{
             return $this->error->error(mensaje: 'Error al obtener prospecto', data: $data);
         }
 
-        $inm_comprador_ins = $this->inm_comprador_ins(data: $data,link: $modelo->link);
+        $inm_ubicacion_ins = $this->inm_ubicacion_ins(data: $data,link: $modelo->link);
         if(errores::$error){
-            return $this->error->error(mensaje: 'Error al obtener id_pref', data: $inm_comprador_ins);
+            return $this->error->error(mensaje: 'Error al obtener id_pref', data: $inm_ubicacion_ins);
         }
 
-        $inm_comprador_modelo = new inm_comprador(link: $modelo->link);
-        $inm_comprador_modelo->desde_prospecto = true;
-        $r_alta_comprador = $inm_comprador_modelo->alta_registro(registro: $inm_comprador_ins);
+        $inm_ubicacion_modelo = new inm_ubicacion(link: $modelo->link);
+        $inm_ubicacion_modelo->desde_prospecto = true;
+        $r_alta_ubicacion = $inm_ubicacion_modelo->alta_registro(registro: $inm_ubicacion_ins);
         if(errores::$error){
-            return $this->error->error(mensaje: 'Error al insertar cliente', data: $r_alta_comprador);
+            return $this->error->error(mensaje: 'Error al insertar cliente', data: $r_alta_ubicacion);
         }
 
-        return $r_alta_comprador;
+        return $r_alta_ubicacion;
     }
 
-    public function inserta_inm_prospecto(int $inm_comprador_id, inm_comprador $modelo): array|stdClass
+    public function inserta_inm_prospecto(int $inm_ubicacion_id, inm_ubicacion $modelo): array|stdClass
     {
-        if($inm_comprador_id<=0){
-            return $this->error->error(mensaje: 'Error inm_prospecto_id es menor a 0', data: $inm_comprador_id);
+        if($inm_ubicacion_id<=0){
+            return $this->error->error(mensaje: 'Error inm_prospecto_id es menor a 0', data: $inm_ubicacion_id);
         }
 
-        $data = $this->data_comprador(inm_comprador_id: $inm_comprador_id,modelo: $modelo);
+        $data = $this->data_ubicacion(inm_ubicacion_id: $inm_ubicacion_id,modelo: $modelo);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener prospecto', data: $data);
         }
@@ -298,14 +285,14 @@ class _conversion_ubicacion{
 
     private function inm_prospecto_ins(stdClass $data, PDO $link): array
     {
-        if(!isset($data->inm_comprador)){
+        if(!isset($data->inm_ubicacion)){
             return $this->error->error(mensaje: 'Error $data->inm_prospecto no existe', data: $data);
         }
-        if(!is_object($data->inm_comprador)){
+        if(!is_object($data->inm_ubicacion)){
             return $this->error->error(mensaje: 'Error $data->inm_prospecto debe ser un objeto', data: $data);
         }
 
-        $keys = $this->keys_data_comprador();
+        $keys = $this->keys_data_ubicacion();
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener keys', data: $keys);
         }
@@ -315,10 +302,10 @@ class _conversion_ubicacion{
             return $this->error->error(mensaje: 'Error al inicializar inm_prospecto', data: $inm_prospecto_ins);
         }
 
-        $inm_prospecto_ins['razon_social'] = $data->inm_comprador->nombre." ".$data->inm_comprador->apellido_paterno." ".
-            $data->inm_comprador->apellido_materno;
+        $inm_prospecto_ins['razon_social'] = $data->inm_ubicacion->nombre." ".$data->inm_ubicacion->apellido_paterno." ".
+            $data->inm_ubicacion->apellido_materno;
 
-        if(!isset($data->inm_comprador->com_agente_id)) {
+        if(!isset($data->inm_ubicacion->com_agente_id)) {
             $filtro['com_agente.predeterminado'] = 'activo';
             $r_com_agente = (new com_agente($link))->filtro_and(filtro: $filtro);
             if (errores::$error) {
@@ -380,7 +367,7 @@ class _conversion_ubicacion{
             $inm_prospecto_ins['com_agente_id'] = $com_agente_id;
         }
 
-        if(!isset($data->inm_comprador->com_tipo_prospecto_id)) {
+        if(!isset($data->inm_ubicacion->com_tipo_prospecto_id)) {
             $filtro_tipo['com_tipo_prospecto.predeterminado'] = 'activo';
             $r_com_tipo_prospecto = (new com_tipo_prospecto($link))->filtro_and(filtro: $filtro_tipo);
             if (errores::$error) {
@@ -405,7 +392,7 @@ class _conversion_ubicacion{
             $inm_prospecto_ins['com_tipo_prospecto_id'] = $com_tipo_prospecto_id;
         }
 
-        if(!isset($data->inm_comprador->com_medio_prospeccion_id)) {
+        if(!isset($data->inm_ubicacion->com_medio_prospeccion_id)) {
             $filtro_medio['com_medio_prospeccion.predeterminado'] = 'activo';
             $r_com_medio_prospeccion = (new com_medio_prospeccion($link))->filtro_and(filtro: $filtro_medio);
             if (errores::$error) {
@@ -435,10 +422,10 @@ class _conversion_ubicacion{
 
     private function inm_prospecto_ins_init(stdClass $data, array $keys): array
     {
-        if(!isset($data->inm_comprador)){
+        if(!isset($data->inm_ubicacion)){
             return $this->error->error(mensaje: 'Error $data->inm_prospecto no existe', data: $data);
         }
-        if(!is_object($data->inm_comprador)){
+        if(!is_object($data->inm_ubicacion)){
             return $this->error->error(mensaje: 'Error $data->inm_prospecto debe ser un objeto', data: $data);
         }
 
@@ -451,25 +438,25 @@ class _conversion_ubicacion{
             if(is_numeric($key)){
                 return $this->error->error(mensaje: 'Error key debe ser un texto', data: $key);
             }
-            if(is_null($data->inm_comprador->$key)){
-                $data->inm_comprador->$key = '';
+            if(is_null($data->inm_ubicacion->$key)){
+                $data->inm_ubicacion->$key = '';
             }
-            if(!isset($data->inm_comprador->$key)){
-                return $this->error->error(mensaje: 'Error no existe atributo '.$key, data: $data->inm_comprador);
+            if(!isset($data->inm_ubicacion->$key)){
+                return $this->error->error(mensaje: 'Error no existe atributo '.$key, data: $data->inm_ubicacion);
             }
 
-            $inm_prospecto_ins[$key] = $data->inm_comprador->$key;
+            $inm_prospecto_ins[$key] = $data->inm_ubicacion->$key;
         }
         return $inm_prospecto_ins;
     }
 
-    public function inserta_referencia(int $inm_comprador_id, int $inm_prospecto_id, PDO $link): array|stdClass
+    public function inserta_referencia(int $inm_ubicacion_id, int $inm_prospecto_id, PDO $link): array|stdClass
     {
         if ($inm_prospecto_id <= 0) {
             return $this->error->error(mensaje: 'Error inm_prospecto_id debe ser mayor a 0', data: $inm_prospecto_id);
         }
-        if ($inm_comprador_id <= 0) {
-            return $this->error->error(mensaje: 'Error inm_comprador_id debe ser mayor a 0', data: $inm_comprador_id);
+        if ($inm_ubicacion_id <= 0) {
+            return $this->error->error(mensaje: 'Error inm_ubicacion_id debe ser mayor a 0', data: $inm_ubicacion_id);
         }
 
         $filtro['inm_prospecto.id'] = $inm_prospecto_id;
@@ -482,7 +469,7 @@ class _conversion_ubicacion{
         if($inm_referencia_prospecto->n_registros > 0){
             foreach ($inm_referencia_prospecto->registros_obj as $registro){
                 $inm_referencia_ins = $this->inm_referencia(
-                    inm_comprador_id: $inm_comprador_id, inm_referencia_prospecto: $registro);
+                    inm_ubicacion_id: $inm_ubicacion_id, inm_referencia_prospecto: $registro);
                 if (errores::$error) {
                     return $this->error->error(mensaje: 'Error al insertar relacion', data: $inm_referencia_ins);
                 }
@@ -497,31 +484,23 @@ class _conversion_ubicacion{
         return $r_alta_rels;
     }
 
-    /**
-     * Inserta una relacion entre prospecto y cliente
-     * @param int $inm_comprador_id Identificador de comprador
-     * @param int $inm_prospecto_id Identificador de prospecto
-     * @param PDO $link Conexion a la base de datos
-     * @return array|stdClass
-     */
     final public function inserta_rel_prospecto_cliente(
-        int $inm_comprador_id, int $inm_prospecto_id, PDO $link): array|stdClass
+        int $inm_ubicacion_id, int $inm_prospecto_ubicacion_id, PDO $link): array|stdClass
     {
-        if($inm_prospecto_id <= 0){
-            return $this->error->error(mensaje: 'Error inm_prospecto_id debe ser mayor a 0', data: $inm_prospecto_id);
+        if($inm_prospecto_ubicacion_id <= 0){
+            return $this->error->error(mensaje: 'Error inm_prospecto_id debe ser mayor a 0', data: $inm_prospecto_ubicacion_id);
         }
-        if($inm_comprador_id <= 0){
-            return $this->error->error(mensaje: 'Error inm_comprador_id debe ser mayor a 0', data: $inm_comprador_id);
+        if($inm_ubicacion_id <= 0){
+            return $this->error->error(mensaje: 'Error inm_ubicacion_id debe ser mayor a 0', data: $inm_ubicacion_id);
         }
 
         $inm_rel_prospecto_cliente_ins = $this->inm_rel_prospecto_cliente_ins(
-            inm_comprador_id: $inm_comprador_id,inm_prospecto_id:  $inm_prospecto_id);
+            inm_ubicacion_id: $inm_ubicacion_id,inm_prospecto_ubicacion_id:  $inm_prospecto_ubicacion_id);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al insertar relacion', data: $inm_rel_prospecto_cliente_ins);
         }
 
-
-        $r_alta_rel = (new inm_rel_comprador_prospecto_(link: $link))->alta_registro(
+        $r_alta_rel = (new inm_rel_ubicacion_prospecto_ubicacion(link: $link))->alta_registro(
             registro: $inm_rel_prospecto_cliente_ins);
 
         if(errores::$error){
@@ -533,12 +512,12 @@ class _conversion_ubicacion{
     /**
      * Integra un identificador de uso comun
      * @param string $entidad Entidad para obtener identificador
-     * @param array $inm_comprador_ins Registro de comprador
-     * @param inm_comprador|com_cliente $modelo Modelo de integracion
+     * @param array $inm_ubicacion_ins Registro de ubicacion
+     * @param inm_ubicacion|com_cliente $modelo Modelo de integracion
      * @return array
      */
-    private function integra_id_pref(string $entidad, array $inm_comprador_ins,
-                                     inm_comprador|com_cliente $modelo): array
+    private function integra_id_pref(string $entidad, array $inm_ubicacion_ins,
+                                     inm_ubicacion|com_cliente $modelo): array
     {
         $entidad = trim($entidad);
         if($entidad === ''){
@@ -549,27 +528,27 @@ class _conversion_ubicacion{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener id_pref', data: $id_pref);
         }
-        $inm_comprador_ins[$key_id] = $id_pref;
-        return $inm_comprador_ins;
+        $inm_ubicacion_ins[$key_id] = $id_pref;
+        return $inm_ubicacion_ins;
     }
 
     /**
      * Integra los identificadores mas usados
-     * @param array $inm_comprador_ins Registro de comprador
+     * @param array $inm_ubicacion_ins Registro de ubicacion
      * @param PDO $link Conexion a la base de datos
      * @return array
      */
-    private function integra_ids_prefs(array $inm_comprador_ins, PDO $link): array
+    private function integra_ids_prefs(array $inm_ubicacion_ins, PDO $link): array
     {
         $entidades_pref = array('bn_cuenta');
 
-        $modelo_inm_comprador = new inm_comprador(link: $link);
+        $modelo_inm_ubicacion = new inm_ubicacion(link: $link);
 
         foreach ($entidades_pref as $entidad){
-            $inm_comprador_ins = $this->integra_id_pref(entidad: $entidad, inm_comprador_ins:  $inm_comprador_ins,
-                modelo: $modelo_inm_comprador);
+            $inm_ubicacion_ins = $this->integra_id_pref(entidad: $entidad, inm_ubicacion_ins:  $inm_ubicacion_ins,
+                modelo: $modelo_inm_ubicacion);
             if(errores::$error){
-                return $this->error->error(mensaje: 'Error al obtener id_pref', data: $inm_comprador_ins);
+                return $this->error->error(mensaje: 'Error al obtener id_pref', data: $inm_ubicacion_ins);
             }
         }
 
@@ -578,23 +557,23 @@ class _conversion_ubicacion{
 
         $modelo_com_cliente = new com_cliente(link: $link);
         foreach ($entidades_pref as $entidad){
-            $inm_comprador_ins = $this->integra_id_pref(entidad: $entidad, inm_comprador_ins:  $inm_comprador_ins,
+            $inm_ubicacion_ins = $this->integra_id_pref(entidad: $entidad, inm_ubicacion_ins:  $inm_ubicacion_ins,
                 modelo: $modelo_com_cliente);
             if(errores::$error){
-                return $this->error->error(mensaje: 'Error al obtener id_pref', data: $inm_comprador_ins);
+                return $this->error->error(mensaje: 'Error al obtener id_pref', data: $inm_ubicacion_ins);
             }
         }
-        return $inm_comprador_ins;
+        return $inm_ubicacion_ins;
     }
 
 
     /**
      * @param stdClass $data
-     * @param array $inm_comprador_ins
+     * @param array $inm_ubicacion_ins
      * @param string $key
      * @return array
      */
-    private function integra_key(stdClass $data, array $inm_comprador_ins, string $key): array
+    private function integra_key(stdClass $data, array $inm_ubicacion_ins, string $key): array
     {
         $key = trim($key);
         $valida = $this->valida_key(key: $key);
@@ -605,15 +584,15 @@ class _conversion_ubicacion{
             return $this->error->error(mensaje: 'Error no existe atributo', data: $key);
         }
 
-        $inm_comprador_ins[$key] = $data->inm_prospecto->$key;
-        return $inm_comprador_ins;
+        $inm_ubicacion_ins[$key] = $data->inm_prospecto->$key;
+        return $inm_ubicacion_ins;
     }
 
 
     /**
      * @return string[]
      */
-    private function keys_data_comprador(): array
+    private function keys_data_ubicacion(): array
     {
         return array('inm_producto_infonavit_id','inm_attr_tipo_credito_id','inm_destino_credito_id',
             'es_segundo_credito','inm_plazo_credito_sc_id','descuento_pension_alimenticia_dh',
