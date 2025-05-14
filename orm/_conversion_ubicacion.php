@@ -264,7 +264,7 @@ class _conversion_ubicacion{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al inicializar inm_prospecto', data: $inm_prospecto_ins);
         }
-        
+
         return $inm_prospecto_ins;
     }
 
@@ -283,14 +283,17 @@ class _conversion_ubicacion{
             if($key === ''){
                 return $this->error->error(mensaje: 'Error key esta vacio', data: $key);
             }
+
+            if(property_exists($data->inm_ubicacion, $key)){
+                return $this->error->error(mensaje: 'Error no existe atributo '.$key, data: $data->inm_ubicacion);
+            }
+
             if(is_numeric($key)){
                 return $this->error->error(mensaje: 'Error key debe ser un texto', data: $key);
             }
+
             if(is_null($data->inm_ubicacion->$key)){
                 $data->inm_ubicacion->$key = '';
-            }
-            if(!isset($data->inm_ubicacion->$key)){
-                return $this->error->error(mensaje: 'Error no existe atributo '.$key, data: $data->inm_ubicacion);
             }
 
             $inm_prospecto_ins[$key] = $data->inm_ubicacion->$key;
