@@ -12,14 +12,14 @@ class inm_rel_ubicacion_prospecto_ubicacion extends _modelo_parent{
     public function __construct(PDO $link)
     {
         $tabla = 'inm_rel_ubicacion_prospecto_ubicacion';
-        $columnas = array($tabla=>false,'inm_prospecto'=>$tabla, 'inm_comprador'=>$tabla);
+        $columnas = array($tabla=>false,'inm_prospecto_ubicacion'=>$tabla, 'inm_ubicacion'=>$tabla);
 
-        $campos_obligatorios = array('inm_prospecto_id','inm_comprador_id');
+        $campos_obligatorios = array('inm_prospecto_ubicacion_id','inm_ubicacion_id');
 
         $columnas_extra= array();
         $renombres= array();
 
-        $atributos_criticos = array('inm_prospecto_id','inm_comprador_id');
+        $atributos_criticos = array('inm_prospecto_ubicacion_id','inm_ubicacion_id');
 
 
         parent::__construct(link: $link, tabla: $tabla, campos_obligatorios: $campos_obligatorios,
@@ -64,14 +64,14 @@ class inm_rel_ubicacion_prospecto_ubicacion extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al validar $registro',data: $valida);
         }
 
-        $descripcion = $registro['inm_comprador_id'];
-        $descripcion .= ' '.$registro['inm_prospecto_id'];
+        $descripcion = $registro['inm_ubicacion_id'];
+        $descripcion .= ' '.$registro['inm_prospecto_ubicacion_id'];
         return $descripcion;
     }
 
     private function valida_alta_relacion(array $registro){
 
-        $keys = array('inm_comprador_id','inm_prospecto_id');
+        $keys = array('inm_ubicacion_id','inm_prospecto_ubicacion_id');
         $valida = $this->validacion->valida_ids(keys: $keys,registro:  $registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar $registro',data: $valida);

@@ -125,6 +125,9 @@ class _conversion_ubicacion{
         $inm_ubicacion_ins['dp_municipio_id'] = $data->inm_prospecto_completo->dp_municipio_id;;
         $inm_ubicacion_ins['cp'] = $cp;*/
 
+        if(!isset($inm_ubicacion_ins['inm_tipo_ubicacion_id'])){
+            $inm_ubicacion_ins['inm_tipo_ubicacion_id'] = '1';
+        }
 
         return $inm_ubicacion_ins;
     }
@@ -543,6 +546,10 @@ class _conversion_ubicacion{
             return $this->error->error(mensaje: 'Error no existe atributo', data: $key);
         }
 
+        if(is_null($data->inm_prospecto_ubicacion->$key)){
+            $data->inm_prospecto_ubicacion->$key = '';
+        }
+
         $inm_ubicacion_ins[$key] = $data->inm_prospecto_ubicacion->$key;
         return $inm_ubicacion_ins;
     }
@@ -553,7 +560,7 @@ class _conversion_ubicacion{
      */
     private function keys_data_ubicacion(): array
     {
-        return array('calle', 'dp_cp_id', 'dp_colonia_postal_id', 'lote', 'manzana', 'costo_directo', 'numero_exterior',
+        return array('calle', 'dp_colonia_postal_id', 'lote', 'manzana', 'costo_directo', 'numero_exterior',
             'numero_interior', 'etapa', 'cuenta_predial', 'inm_tipo_ubicacion_id', 'n_opiniones_valor',
             'monto_opinion_promedio', 'costo', 'inm_status_ubicacion_id', 'com_agente_id', 'nss', 'curp', 'nombre',
             'apellido_paterno', 'apellido_materno', 'nombre_completo_valida', 'adeudo_hipoteca', 'adeudo_predial',
@@ -576,7 +583,7 @@ class _conversion_ubicacion{
             'monto_devolucion', 'cuenta_agua', 'nivel', 'recamaras', 'metros_terreno', 'metros_construccion',
             'razon_social', 'rfc', 'observaciones', 'fecha_otorgamiento_credito', 'inm_prototipo_id',
             'inm_complemento_id', 'inm_estado_vivienda_id', 'lada_com', 'numero_com', 'cel_com', 'correo_com',
-            'inm_status_prospecto_ubicacion_id', 'calle', 'dp_colonia_postal_id', 'dp_cp_id');
+            'inm_status_prospecto_ubicacion_id', 'calle', 'dp_colonia_postal_id');
     }
 
     /**
