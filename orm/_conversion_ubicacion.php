@@ -221,7 +221,7 @@ class _conversion_ubicacion{
         return $r_alta_ubicacion;
     }
 
-    public function inserta_inm_prospecto(int $inm_ubicacion_id, inm_ubicacion $modelo): array|stdClass
+    public function inserta_inm_prospecto_ubicacion(int $inm_ubicacion_id, inm_ubicacion $modelo): array|stdClass
     {
         if($inm_ubicacion_id<=0){
             return $this->error->error(mensaje: 'Error inm_prospecto_id es menor a 0', data: $inm_ubicacion_id);

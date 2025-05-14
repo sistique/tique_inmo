@@ -77,11 +77,30 @@ class inm_ubicacion extends _inm_ubicaciones {
             return $this->error->error(mensaje: 'Error al insertar ubicacion',data:  $r_alta_bd);
         }
 
-        /*$r_alta_etapa = (new pr_proceso(link: $this->link))->inserta_etapa(adm_accion: __FUNCTION__, fecha: '',
-            modelo: $this, modelo_etapa: $this->modelo_etapa, registro_id: $r_alta_bd->registro_id);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al insertar etapa', data: $r_alta_etapa);
-        }*/
+        if(!$this->desde_prospecto) {
+            $tiene_prospecto = $this->tiene_prospecto_ubicacion(inm_ubicacion_id: $r_alta_bd->registro_id);
+            if (errores::$error) {
+                $this->link->rollBack();
+                return $this->error->error(mensaje: 'Error al validar inm_prospecto', data: $tiene_prospecto);
+            }
+
+            if (!$tiene_prospecto) {
+                $r_alta_prospecto_ubicacion = (new _conversion_ubicacion())->inserta_inm_prospecto_ubicacion(
+                    inm_ubicacion_id: $r_alta_bd->registro_id, modelo: $this);
+                if (errores::$error) {
+                    return $this->error->error(mensaje: 'Error al insertar cliente', data: $r_alta_prospecto_ubicacion);
+                }
+
+                $r_alta_rel = (new _conversion_ubicacion())->inserta_rel_ubicacion_prospecto_ubicacion(
+                    inm_ubicacion_id: $r_alta_bd->registro_id,
+                    inm_prospecto_ubicacion_id:  $r_alta_prospecto_ubicacion->registro_id, link: $this->link);
+                if(errores::$error){
+                    return $this->error->error(mensaje: 'Error al insertar inm_rel_prospecto_cliente_ins',
+                        data: $r_alta_rel);
+                }
+
+            }
+        }
 
         $filtro_status_ubicacion['inm_status_ubicacion.descripcion'] = 'ALTA';
         $r_status_ubicacion = (new inm_status_ubicacion(link: $this->link))->filtro_and(
@@ -893,6 +912,16 @@ class inm_ubicacion extends _inm_ubicaciones {
             }
         }
         return $tiene_dato;
+    }
+
+    final public function tiene_prospecto_ubicacion(int $inm_ubicacion_id){
+        $filtro['inm_ubicacion.id'] = $inm_ubicacion_id;
+        $existe = (new inm_rel_ubicacion_prospecto_ubicacion(link: $this->link))->existe(filtro: $filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar si existe prospecto',data:  $existe);
+        }
+
+        return $existe;
     }
 
     /**
