@@ -111,16 +111,16 @@ class _conversion_ubicacion{
      */
     private function inm_ubicacion_ins(stdClass $data, PDO $link): array
     {
-        if(!isset($data->inm_prospecto)){
+        if(!isset($data->inm_prospecto_ubicacion)){
             return $this->error->error(mensaje: 'Error $data->inm_prospecto no existe', data: $data);
         }
-        if(!is_object($data->inm_prospecto)){
+        if(!is_object($data->inm_prospecto_ubicacion)){
             return $this->error->error(mensaje: 'Error $data->inm_prospecto debe ser un objeto', data: $data);
         }
-        if(!isset($data->inm_prospecto_completo)){
+        if(!isset($data->inm_prospecto_ubicacion_completo)){
             return $this->error->error(mensaje: 'Error $data->inm_prospecto_completo no existe', data: $data);
         }
-        if(!is_object($data->inm_prospecto_completo)){
+        if(!is_object($data->inm_prospecto_ubicacion_completo)){
             return $this->error->error(mensaje: 'Error $data->inm_prospecto_completo debe ser un objeto', data: $data);
         }
         if(!isset($data->inm_prospecto_completo->com_prospecto_rfc)){
@@ -137,7 +137,6 @@ class _conversion_ubicacion{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al inicializar inm_ubicacion', data: $inm_ubicacion_ins);
         }
-
 
         $inm_ubicacion_ins = $this->defaults_alta_ubicacion(inm_ubicacion_ins: $inm_ubicacion_ins);
         if(errores::$error){
@@ -179,10 +178,10 @@ class _conversion_ubicacion{
      */
     private function inm_ubicacion_ins_init(stdClass $data, array $keys): array
     {
-        if(!isset($data->inm_prospecto)){
+        if(!isset($data->inm_prospecto_ubicacion)){
             return $this->error->error(mensaje: 'Error $data->inm_prospecto no existe', data: $data);
         }
-        if(!is_object($data->inm_prospecto)){
+        if(!is_object($data->inm_prospecto_ubicacion)){
             return $this->error->error(mensaje: 'Error $data->inm_prospecto debe ser un objeto', data: $data);
         }
         $inm_ubicacion_ins = array();
@@ -580,11 +579,11 @@ class _conversion_ubicacion{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar key', data: $valida);
         }
-        if(!isset($data->inm_prospecto->$key)){
+        if(!isset($data->inm_prospecto_ubicacion->$key)){
             return $this->error->error(mensaje: 'Error no existe atributo', data: $key);
         }
 
-        $inm_ubicacion_ins[$key] = $data->inm_prospecto->$key;
+        $inm_ubicacion_ins[$key] = $data->inm_prospecto_ubicacion->$key;
         return $inm_ubicacion_ins;
     }
 
