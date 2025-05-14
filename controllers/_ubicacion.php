@@ -176,7 +176,8 @@ class _ubicacion{
      */
     private function entidades_dp(): array
     {
-        return array('dp_pais','dp_estado','dp_municipio','dp_cp','dp_colonia_postal');
+        return array('dp_pais','dp_estado','dp_municipio','dp_cp','dp_colonia_postal','com_agente',
+            'inm_estado_vivienda','inm_prototipo','inm_complemento');
     }
 
     /**

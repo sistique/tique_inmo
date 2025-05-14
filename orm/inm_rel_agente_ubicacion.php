@@ -11,7 +11,7 @@ use stdClass;
 class inm_rel_agente_ubicacion extends _modelo_parent{
     public function __construct(PDO $link)
     {
-        $tabla = 'inm_rel_prospecto_cliente';
+        $tabla = 'inm_rel_agente_ubicacion';
         $columnas = array($tabla=>false,'inm_ubicacion'=>$tabla, 'com_agente'=>$tabla);
 
         $campos_obligatorios = array('inm_ubicacion_id','com_agente_id');
@@ -39,7 +39,7 @@ class inm_rel_agente_ubicacion extends _modelo_parent{
         }
 
         if(!isset($this->registro['descripcion'])){
-            $descripcion = $this->descripcion(registro: $this->registro );
+            $descripcion = $this->descripcion(registro: $this->registro);
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error al obtener descripcion',data:  $descripcion);
             }

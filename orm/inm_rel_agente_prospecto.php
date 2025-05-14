@@ -11,7 +11,7 @@ use stdClass;
 class inm_rel_agente_prospecto extends _modelo_parent{
     public function __construct(PDO $link)
     {
-        $tabla = 'inm_rel_prospecto_cliente';
+        $tabla = 'inm_rel_agente_prospecto';
         $columnas = array($tabla=>false,'inm_prospecto'=>$tabla, 'com_agente'=>$tabla);
 
         $campos_obligatorios = array('inm_prospecto_id','com_agente_id');
