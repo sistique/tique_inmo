@@ -284,7 +284,7 @@ class _conversion_ubicacion{
                 return $this->error->error(mensaje: 'Error key esta vacio', data: $key);
             }
 
-            if(property_exists($data->inm_ubicacion, $key)){
+            if(!property_exists($data->inm_ubicacion, $key)){
                 return $this->error->error(mensaje: 'Error no existe atributo '.$key, data: $data->inm_ubicacion);
             }
 
