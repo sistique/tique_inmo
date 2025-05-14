@@ -557,15 +557,14 @@ class _conversion_ubicacion{
      */
     private function keys_data_ubicacion(): array
     {
-        return array('inm_producto_infonavit_id','inm_attr_tipo_credito_id','inm_destino_credito_id',
-            'es_segundo_credito','inm_plazo_credito_sc_id','descuento_pension_alimenticia_dh',
-            'descuento_pension_alimenticia_fc','monto_credito_solicitado_dh','monto_ahorro_voluntario','nss','curp',
-            'nombre','apellido_paterno','apellido_materno','con_discapacidad','nombre_empresa_patron','nrp_nep',
-            'lada_nep','numero_nep','extension_nep','lada_com','numero_com','cel_com','genero','correo_com',
-            'inm_tipo_discapacidad_id','inm_persona_discapacidad_id','inm_estado_civil_id',
-            'inm_institucion_hipotecaria_id','inm_sindicato_id','dp_municipio_nacimiento_id','fecha_nacimiento',
-            'sub_cuenta','monto_final','descuento','puntos','inm_nacionalidad_id','inm_ocupacion_id','telefono_casa',
-            'correo_empresa');
+        return array('calle', 'dp_cp_id', 'dp_colonia_postal_id', 'lote', 'manzana', 'costo_directo', 'numero_exterior',
+            'numero_interior', 'etapa', 'cuenta_predial', 'inm_tipo_ubicacion_id', 'n_opiniones_valor',
+            'monto_opinion_promedio', 'costo', 'inm_status_ubicacion_id', 'com_agente_id', 'nss', 'curp', 'nombre',
+            'apellido_paterno', 'apellido_materno', 'nombre_completo_valida', 'adeudo_hipoteca', 'adeudo_predial',
+            'adeudo_agua', 'adeudo_luz', 'monto_devolucion', 'cuenta_agua', 'nivel', 'recamaras', 'metros_terreno',
+            'metros_construccion', 'razon_social', 'rfc', 'observaciones', 'fecha_otorgamiento_credito',
+            'inm_prototipo_id', 'inm_complemento_id', 'inm_estado_vivienda_id', 'lada_com', 'numero_com', 'cel_com',
+            'correo_com');
     }
 
     /**
