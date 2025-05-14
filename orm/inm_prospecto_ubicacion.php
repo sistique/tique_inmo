@@ -330,7 +330,7 @@ class inm_prospecto_ubicacion extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al insertar cliente', data: $r_alta_ubicacion);
         }
 
-        $r_alta_rel = (new _conversion_ubicacion())->inserta_rel_prospecto_cliente(
+        $r_alta_rel = (new _conversion_ubicacion())->inserta_rel_ubicacion_prospecto_ubicacion(
             inm_ubicacion_id: $r_alta_ubicacion->registro_id, inm_prospecto_ubicacion_id:  $inm_prospecto_ubicacion_id,
             link: $this->link);
 

@@ -63,43 +63,7 @@ class _conversion_ubicacion{
      */
     private function defaults_alta_ubicacion(array $inm_ubicacion_ins): array
     {
-        if(!isset($inm_ubicacion_ins['nss'])){
-            $inm_ubicacion_ins['nss'] = '99999999999';
-        }
-        if(!isset($inm_ubicacion_ins['curp'] )){
-            $inm_ubicacion_ins['curp'] = 'XEXX010101MNEXXXA8';
-        }
-        if(!isset($inm_ubicacion_ins['lada_nep'] )){
-            $inm_ubicacion_ins['lada_nep'] = '33';
-        }
-        if(!isset($inm_ubicacion_ins['numero_nep'] )){
-            $inm_ubicacion_ins['numero_nep'] = '33333333';
-        }
-        if(!isset($inm_ubicacion_ins['nombre_empresa_patron'] )){
-            $inm_ubicacion_ins['nombre_empresa_patron'] = 'POR DEFINIR';
-        }
-        if(!isset($inm_ubicacion_ins['nrp_nep'] )){
-            $inm_ubicacion_ins['nrp_nep'] = 'POR DEFINIR';
-        }
 
-        if($inm_ubicacion_ins['nss'] === ''){
-            $inm_ubicacion_ins['nss'] = '99999999999';
-        }
-        if($inm_ubicacion_ins['curp'] === ''){
-            $inm_ubicacion_ins['curp'] = 'XEXX010101MNEXXXA8';
-        }
-        if($inm_ubicacion_ins['lada_nep'] === ''){
-            $inm_ubicacion_ins['lada_nep'] = '33';
-        }
-        if($inm_ubicacion_ins['numero_nep'] === ''){
-            $inm_ubicacion_ins['numero_nep'] = '33333333';
-        }
-        if($inm_ubicacion_ins['nombre_empresa_patron'] === ''){
-            $inm_ubicacion_ins['nombre_empresa_patron'] = 'POR DEFINIR';
-        }
-        if($inm_ubicacion_ins['nrp_nep'] === ''){
-            $inm_ubicacion_ins['nrp_nep'] = 'POR DEFINIR';
-        }
         return $inm_ubicacion_ins;
     }
 
@@ -128,7 +92,7 @@ class _conversion_ubicacion{
                 data: $data);
         }
 
-        $keys = $this->keys_data_prospecto();
+        $keys = $this->keys_data_prospecto_ubicacion();
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener keys', data: $keys);
         }
@@ -143,7 +107,7 @@ class _conversion_ubicacion{
             return $this->error->error(mensaje: 'Error al obtener inm_ubicacion_ins', data: $inm_ubicacion_ins);
         }
 
-        $inm_ubicacion_ins = $this->integra_ids_prefs(inm_ubicacion_ins: $inm_ubicacion_ins,link: $link);
+        /*$inm_ubicacion_ins = $this->integra_ids_prefs(inm_ubicacion_ins: $inm_ubicacion_ins,link: $link);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener id_pref', data: $inm_ubicacion_ins);
         }
@@ -163,7 +127,7 @@ class _conversion_ubicacion{
         $inm_ubicacion_ins['rfc'] = $data->inm_prospecto_completo->com_prospecto_rfc;
         $inm_ubicacion_ins['numero_exterior'] = 'POR ASIGNAR';
         $inm_ubicacion_ins['dp_municipio_id'] = $data->inm_prospecto_completo->dp_municipio_id;;
-        $inm_ubicacion_ins['cp'] = $cp;
+        $inm_ubicacion_ins['cp'] = $cp;*/
 
 
         return $inm_ubicacion_ins;
@@ -216,7 +180,7 @@ class _conversion_ubicacion{
         return $inm_referencia_ins;
     }
     
-    private function inm_rel_prospecto_cliente_ins(int $inm_ubicacion_id, int $inm_prospecto_ubicacion_id): array
+    private function inm_rel_ubicacion_prospecto_ubicacion_ins(int $inm_ubicacion_id, int $inm_prospecto_ubicacion_id): array
     {
         if($inm_prospecto_ubicacion_id <= 0){
             return $this->error->error(mensaje: 'Error inm_prospecto_id debe ser mayor a 0', data: $inm_prospecto_ubicacion_id);
@@ -224,7 +188,7 @@ class _conversion_ubicacion{
         if($inm_ubicacion_id <= 0){
             return $this->error->error(mensaje: 'Error inm_ubicacion_id debe ser mayor a 0', data: $inm_ubicacion_id);
         }
-        $inm_rel_prospecto_cliente_ins['inm_prospecto_id'] = $inm_prospecto_ubicacion_id;
+        $inm_rel_prospecto_cliente_ins['inm_prospecto_ubicacion_id'] = $inm_prospecto_ubicacion_id;
         $inm_rel_prospecto_cliente_ins['inm_ubicacion_id'] = $inm_ubicacion_id;
 
         return $inm_rel_prospecto_cliente_ins;
@@ -483,7 +447,7 @@ class _conversion_ubicacion{
         return $r_alta_rels;
     }
 
-    final public function inserta_rel_prospecto_cliente(
+    final public function inserta_rel_ubicacion_prospecto_ubicacion(
         int $inm_ubicacion_id, int $inm_prospecto_ubicacion_id, PDO $link): array|stdClass
     {
         if($inm_prospecto_ubicacion_id <= 0){
@@ -493,18 +457,18 @@ class _conversion_ubicacion{
             return $this->error->error(mensaje: 'Error inm_ubicacion_id debe ser mayor a 0', data: $inm_ubicacion_id);
         }
 
-        $inm_rel_prospecto_cliente_ins = $this->inm_rel_prospecto_cliente_ins(
+        $inm_rel_ubicacion_prospecto_ubicacione_ins = $this->inm_rel_ubicacion_prospecto_ubicacion_ins(
             inm_ubicacion_id: $inm_ubicacion_id,inm_prospecto_ubicacion_id:  $inm_prospecto_ubicacion_id);
         if(errores::$error){
-            return $this->error->error(mensaje: 'Error al insertar relacion', data: $inm_rel_prospecto_cliente_ins);
+            return $this->error->error(mensaje: 'Error al insertar relacion', data: $inm_rel_ubicacion_prospecto_ubicacione_ins);
         }
 
         $r_alta_rel = (new inm_rel_ubicacion_prospecto_ubicacion(link: $link))->alta_registro(
-            registro: $inm_rel_prospecto_cliente_ins);
-
+            registro: $inm_rel_ubicacion_prospecto_ubicacione_ins);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al insertar inm_rel_prospecto_cliente_ins', data: $r_alta_rel);
         }
+
         return $r_alta_rel;
     }
 
@@ -608,17 +572,16 @@ class _conversion_ubicacion{
      * Obtiene los keys de un prospecto para integrarlos con un cliente
      * @return string[]
      */
-    private function keys_data_prospecto(): array
+    private function keys_data_prospecto_ubicacion(): array
     {
-        return array('inm_producto_infonavit_id','inm_attr_tipo_credito_id','inm_destino_credito_id',
-            'es_segundo_credito','inm_plazo_credito_sc_id','descuento_pension_alimenticia_dh',
-            'descuento_pension_alimenticia_fc','monto_credito_solicitado_dh','monto_ahorro_voluntario','nss','curp',
-            'nombre','apellido_paterno','apellido_materno','con_discapacidad','nombre_empresa_patron','nrp_nep',
-            'lada_nep','numero_nep','extension_nep','lada_com','numero_com','cel_com','genero','correo_com',
-            'inm_tipo_discapacidad_id','inm_persona_discapacidad_id','inm_estado_civil_id',
-            'inm_institucion_hipotecaria_id','inm_sindicato_id','dp_municipio_nacimiento_id','fecha_nacimiento',
-            'sub_cuenta','monto_final','descuento','puntos','inm_nacionalidad_id','inm_ocupacion_id','telefono_casa',
-            'correo_empresa','dp_calle_pertenece_id');
+        return array('lote', 'manzana', 'costo_directo', 'numero_exterior', 'numero_interior', 'etapa',
+            'cuenta_predial', 'n_opiniones_valor', 'monto_opinion_promedio', 'costo', 'com_tipo_prospecto_id',
+            'com_prospecto_id', 'com_direccion_id', 'nss', 'curp', 'nombre', 'apellido_paterno', 'apellido_materno',
+            'nombre_completo_valida', 'adeudo_hipoteca', 'adeudo_predial', 'adeudo_agua', 'adeudo_luz',
+            'monto_devolucion', 'cuenta_agua', 'nivel', 'recamaras', 'metros_terreno', 'metros_construccion',
+            'razon_social', 'rfc', 'observaciones', 'fecha_otorgamiento_credito', 'inm_prototipo_id',
+            'inm_complemento_id', 'inm_estado_vivienda_id', 'lada_com', 'numero_com', 'cel_com', 'correo_com',
+            'inm_status_prospecto_ubicacion_id', 'calle', 'dp_colonia_postal_id', 'dp_cp_id');
     }
 
     /**
