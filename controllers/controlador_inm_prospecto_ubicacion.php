@@ -31,6 +31,7 @@ use gamboamartin\inmuebles\models\inm_doc_prospecto_ubicacion;
 use gamboamartin\inmuebles\models\inm_prospecto;
 use gamboamartin\inmuebles\models\inm_prospecto_ubicacion;
 use gamboamartin\inmuebles\models\inm_referencia_prospecto;
+use gamboamartin\inmuebles\models\inm_rel_ubicacion_prospecto_ubicacion;
 use gamboamartin\inmuebles\models\inm_status_prospecto_ubicacion;
 use gamboamartin\inmuebles\models\inm_tipo_beneficiario;
 use gamboamartin\proceso\html\pr_etapa_proceso_html;
@@ -270,12 +271,21 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
                 header: true, ws: false, class: __CLASS__, file: __FILE__, function: __FILE__, line: __LINE__);
         }
 
-        $conversion = (new inm_prospecto_ubicacion(link: $this->link))->convierte_ubicacion(
-            inm_prospecto_ubicacion_id: $this->registro_id);
+        $filtro['inm_prospecto_ubicacion.id'] = $this->registro_id;
+        $existe = (new inm_rel_ubicacion_prospecto_ubicacion(link: $this->link))->existe(filtro: $filtro);
         if (errores::$error) {
             $this->link->rollBack();
-            return $this->retorno_error(mensaje: 'Error al convertir en cliente', data: $conversion,
+            return $this->retorno_error(mensaje: 'Error al convertir en cliente', data: $existe,
                 header: true, ws: false, class: __CLASS__, file: __FILE__, function: __FILE__, line: __LINE__);
+        }
+        if(!$existe) {
+            $conversion = (new inm_prospecto_ubicacion(link: $this->link))->convierte_ubicacion(
+                inm_prospecto_ubicacion_id: $this->registro_id);
+            if (errores::$error) {
+                $this->link->rollBack();
+                return $this->retorno_error(mensaje: 'Error al convertir en cliente', data: $conversion,
+                    header: true, ws: false, class: __CLASS__, file: __FILE__, function: __FILE__, line: __LINE__);
+            }
         }
 
         $this->link->commit();
