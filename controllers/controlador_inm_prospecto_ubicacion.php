@@ -253,13 +253,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         return $campos_view;
     }
 
-    /**
-     * Convierte un prospecto en cliente
-     * @param bool $header Muestra resultado en web
-     * @param bool $ws Muestra resultado a nivel ws
-     * @return array|string
-     */
-    public function convierte_cliente(bool $header, bool $ws = false): array|string
+    public function convierte_ubicacion(bool $header, bool $ws = false): array|string
     {
         $this->link->beginTransaction();
 
@@ -277,7 +271,6 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         }
 
         $conversion = (new inm_prospecto_ubicacion(link: $this->link))->convierte_ubicacion(inm_prospecto_id: $this->registro_id);
-
         if (errores::$error) {
             $this->link->rollBack();
             return $this->retorno_error(mensaje: 'Error al convertir en cliente', data: $conversion,

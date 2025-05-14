@@ -34,31 +34,25 @@ class _conversion_ubicacion{
         return $data;
     }
 
-
-    /**
-     * Obtiene los datos de un prospecto
-     * @param int $inm_prospecto_id Identificador de prospecto
-     * @param inm_prospecto $modelo Modelo en ejecucion
-     * @return array|stdClass
-     */
-    private function data_prospecto(int $inm_prospecto_id, inm_prospecto $modelo): array|stdClass
+    private function data_prospecto_ubicacion(int $inm_prospecto_ubicacion_id, inm_prospecto_ubicacion $modelo): array|stdClass
     {
-        if($inm_prospecto_id<=0){
-            return $this->error->error(mensaje: 'Error inm_prospecto_id es menor a 0', data: $inm_prospecto_id);
+        if($inm_prospecto_ubicacion_id<=0){
+            return $this->error->error(mensaje: 'Error inm_prospecto_id es menor a 0', data: $inm_prospecto_ubicacion_id);
         }
 
-        $inm_prospecto = $modelo->registro(registro_id: $inm_prospecto_id, columnas_en_bruto: true, retorno_obj: true);
+        $inm_prospecto_ubicacion = $modelo->registro(registro_id: $inm_prospecto_ubicacion_id, columnas_en_bruto: true,
+            retorno_obj: true);
         if(errores::$error){
-            return $this->error->error(mensaje: 'Error al obtener prospecto', data: $inm_prospecto);
+            return $this->error->error(mensaje: 'Error al obtener prospecto_ubicacion', data: $inm_prospecto_ubicacion);
         }
 
-        $inm_prospecto_completo = $modelo->registro(registro_id: $inm_prospecto_id, retorno_obj: true);
+        $inm_prospecto_ubicacion_completo = $modelo->registro(registro_id: $inm_prospecto_ubicacion_id, retorno_obj: true);
         if(errores::$error){
-            return $this->error->error(mensaje: 'Error al obtener prospecto', data: $inm_prospecto);
+            return $this->error->error(mensaje: 'Error al obtener prospecto_ubicacion', data: $inm_prospecto_ubicacion);
         }
         $data = new stdClass();
-        $data->inm_prospecto = $inm_prospecto;
-        $data->inm_prospecto_completo = $inm_prospecto_completo;
+        $data->inm_prospecto_ubicacion = $inm_prospecto_ubicacion;
+        $data->inm_prospecto_ubicacion_completo = $inm_prospecto_ubicacion_completo;
 
         return $data;
     }
@@ -251,32 +245,30 @@ class _conversion_ubicacion{
      * @param inm_prospecto $modelo Modelo inm_prospecto
      * @return array|stdClass
      */
-    final public function inserta_inm_comprador(int $inm_prospecto_id, inm_prospecto $modelo): array|stdClass
+    final public function inserta_inm_ubicacion(int $inm_prospecto_ubicacion_id, inm_prospecto_ubicacion $modelo): array|stdClass
     {
-        if($inm_prospecto_id<=0){
-            return $this->error->error(mensaje: 'Error inm_prospecto_id es menor a 0', data: $inm_prospecto_id);
+        if($inm_prospecto_ubicacion_id<=0){
+            return $this->error->error(mensaje: 'Error inm_prospecto_id es menor a 0', data: $inm_prospecto_ubicacion_id);
         }
 
-        $data = $this->data_prospecto(inm_prospecto_id: $inm_prospecto_id,modelo: $modelo);
+        $data = $this->data_prospecto_ubicacion(inm_prospecto_ubicacion_id: $inm_prospecto_ubicacion_id,
+            modelo: $modelo);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener prospecto', data: $data);
         }
-
 
         $inm_comprador_ins = $this->inm_comprador_ins(data: $data,link: $modelo->link);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener id_pref', data: $inm_comprador_ins);
         }
-        //print_r($inm_comprador_ins);exit;
+
         $inm_comprador_modelo = new inm_comprador(link: $modelo->link);
-
         $inm_comprador_modelo->desde_prospecto = true;
-
         $r_alta_comprador = $inm_comprador_modelo->alta_registro(registro: $inm_comprador_ins);
-
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al insertar cliente', data: $r_alta_comprador);
         }
+
         return $r_alta_comprador;
     }
 
