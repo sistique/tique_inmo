@@ -1179,7 +1179,7 @@ class base_test{
 
     public function del_inm_rel_prospecto_cliente(PDO $link): array
     {
-        $del = $this->del($link, 'gamboamartin\\inmuebles\\models\\inm_rel_prospecto_cliente');
+        $del = $this->del($link, 'gamboamartin\\inmuebles\\models\\inm_rel_comprador_prospecto_');
         if(errores::$error){
             return (new errores())->error('Error al eliminar', $del);
         }

@@ -8,7 +8,7 @@ use gamboamartin\inmuebles\controllers\controlador_inm_comprador;
 use gamboamartin\inmuebles\controllers\controlador_inm_producto_infonavit;
 use gamboamartin\inmuebles\controllers\controlador_inm_prospecto;
 use gamboamartin\inmuebles\models\inm_prospecto;
-use gamboamartin\inmuebles\models\inm_rel_prospecto_cliente;
+use gamboamartin\inmuebles\models\inm_rel_comprador_prospecto_;
 use gamboamartin\inmuebles\tests\base_test;
 use gamboamartin\test\liberator;
 use gamboamartin\test\test;
@@ -232,7 +232,7 @@ class controlador_inm_prospectoTest extends test {
         //print_r($data);exit;
         $this->assertEmpty($data);
 
-        $inm_rel_prospecto_cliente = (new inm_rel_prospecto_cliente(link: $this->link))->filtro_and(filtro: array('inm_prospecto.id'=>1));
+        $inm_rel_prospecto_cliente = (new inm_rel_comprador_prospecto_(link: $this->link))->filtro_and(filtro: array('inm_prospecto.id'=>1));
         if(errores::$error){
             $error = (new errores())->error(mensaje: 'Error al obtener inm_rel_prospecto_cliente',data:  $inm_rel_prospecto_cliente);
             print_r($error);;

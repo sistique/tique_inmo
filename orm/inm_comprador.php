@@ -343,7 +343,7 @@ class inm_comprador extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al eliminar inm_comprador_proceso',
                 data:  $del);
         }
-        $del = (new inm_rel_prospecto_cliente(link: $this->link))->elimina_con_filtro_and(filtro:$filtro);
+        $del = (new inm_rel_comprador_prospecto_(link: $this->link))->elimina_con_filtro_and(filtro:$filtro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al eliminar inm_rel_prospecto_cliente',
                 data:  $del);
@@ -439,7 +439,7 @@ class inm_comprador extends _modelo_parent{
     final public function inm_prospecto(int $inm_comprador_id){
 
         $filtro['inm_comprador.id'] = $inm_comprador_id;
-        $r_inm_rel_prospecto_cliente = (new inm_rel_prospecto_cliente(link: $this->link))->filtro_and(filtro: $filtro);
+        $r_inm_rel_prospecto_cliente = (new inm_rel_comprador_prospecto_(link: $this->link))->filtro_and(filtro: $filtro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener r_inm_rel_prospecto_cliente',
                 data:  $r_inm_rel_prospecto_cliente);
@@ -562,7 +562,7 @@ class inm_comprador extends _modelo_parent{
 
     final public function tiene_prospecto(int $inm_comprador_id){
         $filtro['inm_comprador.id'] = $inm_comprador_id;
-        $existe = (new inm_rel_prospecto_cliente(link: $this->link))->existe(filtro: $filtro);
+        $existe = (new inm_rel_comprador_prospecto_(link: $this->link))->existe(filtro: $filtro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar si existe prospecto',data:  $existe);
         }

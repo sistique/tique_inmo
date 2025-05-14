@@ -8,10 +8,10 @@ use PDO;
 use stdClass;
 
 
-class inm_rel_prospecto_cliente extends _modelo_parent{
+class inm_rel_ubicacion_prospecto_ubicacion extends _modelo_parent{
     public function __construct(PDO $link)
     {
-        $tabla = 'inm_rel_prospecto_cliente';
+        $tabla = 'inm_rel_ubicacion_prospecto_ubicacion';
         $columnas = array($tabla=>false,'inm_prospecto'=>$tabla, 'inm_comprador'=>$tabla);
 
         $campos_obligatorios = array('inm_prospecto_id','inm_comprador_id');

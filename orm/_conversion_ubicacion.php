@@ -10,7 +10,7 @@ use gamboamartin\errores\errores;
 use PDO;
 use stdClass;
 
-class _conversion{
+class _conversion_ubicacion{
 
     private errores $error;
     public function __construct(){

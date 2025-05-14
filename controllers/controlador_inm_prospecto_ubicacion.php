@@ -276,7 +276,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
                 header: true, ws: false, class: __CLASS__, file: __FILE__, function: __FILE__, line: __LINE__);
         }
 
-        $conversion = (new inm_prospecto(link: $this->link))->convierte_cliente(inm_prospecto_id: $this->registro_id);
+        $conversion = (new inm_prospecto_ubicacion(link: $this->link))->convierte_ubicacion(inm_prospecto_id: $this->registro_id);
 
         if (errores::$error) {
             $this->link->rollBack();

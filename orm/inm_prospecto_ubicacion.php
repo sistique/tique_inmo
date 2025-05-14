@@ -323,19 +323,19 @@ class inm_prospecto_ubicacion extends _modelo_parent{
      * @param int $inm_prospecto_id Identificador de prospecto
      * @return array|stdClass
      */
-    final public function convierte_cliente(int $inm_prospecto_id): array|stdClass
+    final public function convierte_ubicacion(int $inm_prospecto_id): array|stdClass
     {
         if($inm_prospecto_id<=0){
             return $this->error->error(mensaje: 'Error inm_prospecto_id es menor a 0', data: $inm_prospecto_id);
         }
-        $r_alta_comprador = (new _conversion())->inserta_inm_comprador(inm_prospecto_id: $inm_prospecto_id,
+        $r_alta_comprador = (new _conversion_ubicacion())->inserta_inm_ubicacion(inm_prospecto_id: $inm_prospecto_id,
             modelo: $this);
 
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al insertar cliente', data: $r_alta_comprador);
         }
 
-        $r_alta_rel = (new _conversion())->inserta_rel_prospecto_cliente(
+        $r_alta_rel = (new _conversion_ubicacion())->inserta_rel_prospecto_cliente(
             inm_comprador_id: $r_alta_comprador->registro_id,inm_prospecto_id:  $inm_prospecto_id,link: $this->link);
 
         if(errores::$error){
@@ -401,7 +401,7 @@ class inm_prospecto_ubicacion extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al eliminar inm_comprador_etapa',
                 data:  $del);
         }
-        $del = (new inm_rel_prospecto_cliente(link: $this->link))->elimina_con_filtro_and(filtro:$filtro);
+        $del = (new inm_rel_comprador_prospecto_(link: $this->link))->elimina_con_filtro_and(filtro:$filtro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al eliminar inm_rel_prospecto_cliente',
                 data:  $del);
