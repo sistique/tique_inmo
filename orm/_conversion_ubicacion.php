@@ -237,8 +237,9 @@ class _conversion_ubicacion{
             return $this->error->error(mensaje: 'Error al obtener id_pref', data: $inm_prospecto_ubicacion_ins);
         }
 
-        $r_alta_prospecto = (new inm_prospecto_ubicacion(link: $modelo->link))->alta_registro(
-            registro: $inm_prospecto_ubicacion_ins);
+        $modelo_inm_prospecto_ubicacion = new inm_prospecto_ubicacion(link: $modelo->link);
+        $modelo_inm_prospecto_ubicacion->viene_ubicacion = true;
+        $r_alta_prospecto = $modelo_inm_prospecto_ubicacion->alta_registro(registro: $inm_prospecto_ubicacion_ins);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al insertar cliente', data: $r_alta_prospecto);
         }

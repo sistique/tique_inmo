@@ -15,6 +15,8 @@ use PDO;
 use stdClass;
 
 class inm_prospecto_ubicacion extends _modelo_parent{
+
+    public bool $viene_ubicacion = false;
     public function __construct(PDO $link)
     {
         $tabla = 'inm_prospecto_ubicacion';
@@ -223,12 +225,15 @@ class inm_prospecto_ubicacion extends _modelo_parent{
                 $registro[$key] = $valores[$key];
             }
         }
-
         $res = true;
         foreach ($keys_contacto as $key){
             if (!isset($temp[$key])){
                 $res = false;
             }
+        }
+
+        if($this->viene_ubicacion){
+            $res = false;
         }
 
         $resultado = array();
