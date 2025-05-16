@@ -913,6 +913,7 @@ class inm_prospecto_ubicacion extends _modelo_parent{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
         }
+        
         $keys = array('com_prospecto_id');
         $valida = $this->validacion->valida_ids(keys: $keys,registro:  $registro);
         if(errores::$error){
@@ -921,14 +922,12 @@ class inm_prospecto_ubicacion extends _modelo_parent{
 
         $r_modifica_descripcion =  $this->actualiza_descripcion(id: $id, keys_integra_ds: $keys_integra_ds,
             reactiva: $reactiva, registro: $registro);
-
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al modificar descripcion',data:  $r_modifica_descripcion);
         }
 
         $r_modifica_nombre_completo_valida =  $this->actualiza_nombre_completo_valida(id: $id,
             keys_integra_ds: $keys_integra_ds, reactiva: $reactiva, registro: $registro);
-
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al modificar nombre_completo_valida',
                 data:  $r_modifica_nombre_completo_valida);
