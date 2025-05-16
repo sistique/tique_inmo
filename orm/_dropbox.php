@@ -17,6 +17,7 @@ class _dropbox
 {
     public const string UPLOAD = "https://content.dropboxapi.com/2/files/upload";
     public const string DOWNLOAD = "https://content.dropboxapi.com/2/files/download";
+    public const string PREVIEW = "https://api.dropboxapi.com/2/files/get_temporary_link";
 
 
     public function upload(string $archivo_drop, string $archivo_local, string $mode = 'add', bool $autorename = false): bool|string
@@ -50,10 +51,14 @@ class _dropbox
         curl_setopt($ch, CURLOPT_INFILESIZE, $fileSize);
         curl_setopt($ch, CURLOPT_UPLOAD, true);
 
-        return curl_exec($ch);
+        $response = curl_exec($ch);
+
+        curl_close($ch);
+
+        return $response;
     }
 
-    public function download(string $dropbox_id): bool|string
+    public function download(string $dropbox_id, string $archivo_local): bool|string
     {
         $token = (new generales())->token;
 
@@ -73,7 +78,65 @@ class _dropbox
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-        return curl_exec($ch);
+        $response = curl_exec($ch);
+
+        if (curl_errno($ch)) {
+            echo 'Error de cURL: ' . curl_error($ch);
+        } else {
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            if ($httpCode === 200) {
+                file_put_contents($archivo_local, $response);
+                echo "✅ Archivo descargado correctamente a: $archivo_local\n";
+            } else {
+                echo "❌ Error al descargar. Código HTTP: $httpCode\n";
+                echo "Respuesta: $response\n";
+            }
+        }
+
+
+        curl_close($ch);
+
+        return $response;
+    }
+
+    public function preview(string $dropbox_id): bool|string
+    {
+        $token = (new generales())->token;
+
+        $data = [
+            'path' => $dropbox_id,
+        ];
+
+        $headers = [
+            'Authorization: Bearer ' . $token,
+            'Content-Type: application/octet-stream',
+        ];
+
+        $ch = curl_init(self::PREVIEW);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+
+        $response = curl_exec($ch);
+
+        curl_close($ch);
+
+        if ($response) {
+            $decoded = json_decode($response, true);
+            $link = $decoded['link'] ?? null;
+
+            if ($link) {
+                echo "✅ Link temporal obtenido:\n$link\n";
+                echo "<iframe src=\"$link\" width=\"100%\" height=\"600px\"></iframe>";
+            } else {
+                echo "❌ Error: no se pudo obtener el enlace\n$response";
+            }
+        } else {
+            echo "❌ Error de conexión con la API de Dropbox.";
+        }
+
+        return $reponse;
     }
 
 }
