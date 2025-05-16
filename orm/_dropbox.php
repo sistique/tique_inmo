@@ -18,6 +18,7 @@ class _dropbox
     public const string UPLOAD = "https://content.dropboxapi.com/2/files/upload";
     public const string DOWNLOAD = "https://content.dropboxapi.com/2/files/download";
     public const string PREVIEW = "https://api.dropboxapi.com/2/files/get_temporary_link";
+    public const string DELETE = "https://api.dropboxapi.com/2/files/delete_v2";
 
 
     public function upload(string $archivo_drop, string $archivo_local, string $mode = 'add', bool $autorename = false): bool|string
@@ -136,7 +137,41 @@ class _dropbox
             echo "❌ Error de conexión con la API de Dropbox.";
         }
 
-        return $reponse;
+        return $response;
     }
 
+    public function delete(string $dropbox_id): bool{
+        $token = (new generales())->token;
+
+        $headers = [
+            'Authorization: Bearer ' . $token,
+            'Content-Type: application/json'
+        ];
+
+        $data = json_encode([
+            'path' => $dropbox_id
+        ]);
+
+        $ch = curl_init(self::DELETE);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+        if ($response) {
+            $decoded = json_decode($response, true);
+            if (isset($decoded['metadata'])) {
+                echo "✅ Archivo eliminado correctamente: " . $decoded['metadata']['name'];
+            } else {
+                echo "❌ Error: $response";
+            }
+        } else {
+            echo "❌ Error al conectar con Dropbox.";
+        }
+
+        return $response;
+    }
 }
