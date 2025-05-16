@@ -31,6 +31,7 @@ class _dropbox
             'path' => $ruta_base.$archivo_drop,
             'mode' => $mode,
             'autorename' => $autorename,
+            'mute' => true,
         ];
 
         $headers = [
@@ -165,6 +166,49 @@ class _dropbox
             $decoded = json_decode($response, true);
             if (isset($decoded['metadata'])) {
                 echo "✅ Archivo eliminado correctamente: " . $decoded['metadata']['name'];
+            } else {
+                echo "❌ Error: $response";
+            }
+        } else {
+            echo "❌ Error al conectar con Dropbox.";
+        }
+
+        return $response;
+    }
+
+    public function overwrite(string $dropbox_id, string $archivo_local)
+    {
+        $token = (new generales())->token;
+
+        $file = fopen($archivo_local, 'rb');
+        $fileSize = filesize($archivo_local);
+
+        $headers = [
+            'Authorization: Bearer ' . $token,
+            'Content-Type: application/octet-stream',
+            'Dropbox-API-Arg: ' . json_encode([
+                'path' => $dropbox_id,
+                'mode' => 'overwrite',     // ⚠️ Esto indica que se sobrescriba
+                'autorename' => false,
+                'mute' => false
+            ])
+        ];
+
+        $ch = curl_init(self::UPLOAD);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_INFILE, $file);
+        curl_setopt($ch, CURLOPT_INFILESIZE, $fileSize);
+
+        $response = curl_exec($ch);
+        curl_close($ch);
+        fclose($file);
+
+        if ($response) {
+            $decoded = json_decode($response, true);
+            if (isset($decoded['name'])) {
+                echo "✅ Archivo sobrescrito correctamente: " . $decoded['name'];
             } else {
                 echo "❌ Error: $response";
             }
