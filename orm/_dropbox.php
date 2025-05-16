@@ -53,4 +53,27 @@ class _dropbox
         return curl_exec($ch);
     }
 
+    public function download(string $dropbox_id): bool|string
+    {
+        $token = (new generales())->token;
+
+        $arguments = [
+            'path' => $dropbox_id,
+        ];
+
+        $headers = [
+            'Authorization: Bearer ' . $token,
+            'Content-Type: application/octet-stream',
+            'Dropbox-API-Arg: ' . json_encode(
+                $arguments
+            )
+        ];
+
+        $ch = curl_init(self::DOWNLOAD);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        return curl_exec($ch);
+    }
+
 }
