@@ -30,9 +30,15 @@ class _dropbox
 
     public function upload(string $archivo_drop, string $archivo_local, string $mode = 'add', bool $autorename = false): bool|string
     {
+        $token = $this->obten_token();
+        if (errores::$error) {
+            $error = (new errores())->error(mensaje: 'Error al obtener registro token', data: $token);
+            print_r($error);
+            exit;
+        }
+
         $ruta_base = (new generales())->ruta_base_dropbox;
         $path_base = (new generales())->path_base;
-        $token = (new generales())->token;
 
         $arguments = [
             'path' => $ruta_base.$archivo_drop,
@@ -69,7 +75,12 @@ class _dropbox
 
     public function download(string $dropbox_id, string $archivo_local): bool|string
     {
-        $token = (new generales())->token;
+        $token = $this->obten_token();
+        if (errores::$error) {
+            $error = (new errores())->error(mensaje: 'Error al obtener registro token', data: $token);
+            print_r($error);
+            exit;
+        }
 
         $arguments = [
             'path' => $dropbox_id,
@@ -110,7 +121,12 @@ class _dropbox
 
     public function preview(string $dropbox_id): bool|string
     {
-        $token = (new generales())->token;
+        $token = $this->obten_token();
+        if (errores::$error) {
+            $error = (new errores())->error(mensaje: 'Error al obtener registro token', data: $token);
+            print_r($error);
+            exit;
+        }
 
         $data = [
             'path' => $dropbox_id,
@@ -149,7 +165,12 @@ class _dropbox
     }
 
     public function delete(string $dropbox_id): bool{
-        $token = (new generales())->token;
+        $token = $this->obten_token();
+        if (errores::$error) {
+            $error = (new errores())->error(mensaje: 'Error al obtener registro token', data: $token);
+            print_r($error);
+            exit;
+        }
 
         $headers = [
             'Authorization: Bearer ' . $token,
@@ -185,7 +206,12 @@ class _dropbox
 
     public function overwrite(string $dropbox_id, string $archivo_local)
     {
-        $token = (new generales())->token;
+        $token = $this->obten_token();
+        if (errores::$error) {
+            $error = (new errores())->error(mensaje: 'Error al obtener registro token', data: $token);
+            print_r($error);
+            exit;
+        }
 
         $file = fopen($archivo_local, 'rb');
         $fileSize = filesize($archivo_local);
@@ -326,5 +352,24 @@ class _dropbox
 
         echo "Respuesta: " . $response;
 
+    }
+
+    public function obten_token(){
+        $modelo_token_dropbox = new inm_token_dropbox(link: $this->link);
+        $filtro_token['inm_token_dropbox.status'] = 'activo';
+        $r_token_dropbox = $modelo_token_dropbox->filtro_and(filtro: $filtro_token);
+        if (errores::$error) {
+            $error = (new errores())->error(mensaje: 'Error al obtener registro token', data: $r_token_dropbox);
+            print_r($error);
+            exit;
+        }
+
+        if($r_token_dropbox->n_registros <= 0){
+            $token = (new generales())->token;
+        }else{
+            $token = $r_token_dropbox->registros[0]['inm_token_dropbox_token'];
+        }
+
+        return $token;
     }
 }
