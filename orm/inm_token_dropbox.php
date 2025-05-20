@@ -26,6 +26,4 @@ class inm_token_dropbox extends _modelo_parent{
         $this->NAMESPACE = __NAMESPACE__;
         $this->etiqueta = 'Token DropBox';
     }
-
-
 }

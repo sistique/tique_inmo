@@ -10,6 +10,7 @@ use gamboamartin\notificaciones\models\not_emisor;
 use gamboamartin\notificaciones\models\not_mensaje;
 use gamboamartin\notificaciones\models\not_receptor;
 use gamboamartin\notificaciones\models\not_rel_mensaje;
+use gamboamartin\validacion\validacion;
 use PDO;
 use stdClass;
 
@@ -21,6 +22,11 @@ class _dropbox
     public const string DELETE = "https://api.dropboxapi.com/2/files/delete_v2";
     public const string REFRESH = "https://api.dropboxapi.com/oauth2/token";
 
+    public PDO $link;
+
+    public function __construct(PDO $link){
+        $this->link = $link;
+    }
 
     public function upload(string $archivo_drop, string $archivo_local, string $mode = 'add', bool $autorename = false): bool|string
     {
@@ -222,6 +228,8 @@ class _dropbox
 
     public function refresh(): bool|string
     {
+        $newAccessToken = '';
+
         $appKey = (new generales())->app_key;
         $appSecret = (new generales())->app_secret;
         $refreshToken = (new generales())->refresh_token;
@@ -247,7 +255,7 @@ class _dropbox
             if ($httpCode === 200) {
                 $json = json_decode($response, true);
                 $newAccessToken = $json['access_token'];
-                echo "✅ Nuevo access token: " . $newAccessToken;
+                echo $newAccessToken;
             } else {
                 echo "❌ Error. Código HTTP: $httpCode\n";
                 echo "Respuesta: $response";
@@ -255,6 +263,38 @@ class _dropbox
         }
 
         curl_close($ch);
+
+        if($newAccessToken !== '') {
+            $modelo_token_dropbox = new inm_token_dropbox(link: $this->link);
+            $filtro_token['inm_token_dropbox.status'] = 'activo';
+            $r_token_dropbox = $modelo_token_dropbox->filtro_and(filtro: $filtro_token);
+            if (errores::$error) {
+                $error = (new errores())->error(mensaje: 'Error al obtener registro token', data: $r_token_dropbox);
+                print_r($error);
+                exit;
+            }
+
+            $registro['codigo'] = $newAccessToken;
+            $registro['descripcion'] = $newAccessToken;
+            $registro['token'] = $newAccessToken;
+            $registro['status'] = 'activo';
+            if ($r_token_dropbox->n_registros <= 0) {
+                $r_token = $modelo_token_dropbox->alta_registro(registro: $registro);
+                if (errores::$error) {
+                    $error = (new errores())->error(mensaje: 'Error al obtener registro token', data: $r_token);
+                    print_r($error);
+                    exit;
+                }
+            } else {
+                $id = $r_token_dropbox->registros[0]['inm_token_dropbox_id'];
+                $r_token = $modelo_token_dropbox->modifica_bd(registro: $registro, id: $id);
+                if (errores::$error) {
+                    $error = (new errores())->error(mensaje: 'Error al obtener registro token', data: $r_token);
+                    print_r($error);
+                    exit;
+                }
+            }
+        }
 
         return $response;
     }
