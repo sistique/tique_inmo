@@ -60,7 +60,7 @@ class _dropbox
             ], JSON_UNESCAPED_SLASHES)
         ];
 
-        $ch = curl_init('https://content.dropboxapi.com/2/files/upload');
+        $ch = curl_init(self::UPLOAD);
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $fileContent);
