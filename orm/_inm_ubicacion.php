@@ -285,12 +285,12 @@ class _inm_ubicacion{
             return $this->error->error(mensaje: 'Error al obtener inm_docs_ubicacion',data:  $inm_docs_ubicacion);
         }
 
-        $inm_docs_ubicacion = $this->inm_conf_docs_ubicacion(controler: $controler,inm_docs_ubicacion:  $inm_docs_ubicacion,
+        /*$inm_docs_ubicacion = $this->inm_conf_docs_ubicacion(controler: $controler,inm_docs_ubicacion:  $inm_docs_ubicacion,
             tipos_documentos: $doc_ids);
 
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar buttons',data:  $inm_docs_ubicacion);
-        }
+        }*/
 
         return $inm_docs_ubicacion;
     }
