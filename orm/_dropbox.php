@@ -18,9 +18,7 @@ class _dropbox
 {
     public const string UPLOAD = "https://content.dropboxapi.com/2/files/upload";
     public const string DOWNLOAD = "https://content.dropboxapi.com/2/files/download";
-    //public const string PREVIEW = "https://api.dropboxapi.com/2/files/get_temporary_link";
-    public const string PREVIEW = "https://api.dropboxapi.com/2/sharing/list_shared_links";
-    public const string GET_PREVIEW = "https://api.dropboxapi.com/2/sharing/create_shared_link_with_settings";
+    public const string PREVIEW = "https://api.dropboxapi.com/2/files/get_temporary_link";
     public const string DELETE = "https://api.dropboxapi.com/2/files/delete_v2";
     public const string REFRESH = "https://api.dropboxapi.com/oauth2/token";
 
@@ -144,7 +142,55 @@ class _dropbox
 
     public function preview(string $dropbox_id): bool|string
     {
+        $generales = new generales();
+        $path_base = $generales->path_base;
+
+        $archivo_local = $path_base.'archivos/temporales/'.$dropbox_id.'.pdf';
+
         $token = $this->obten_token();
+        if (errores::$error) {
+            $error = (new errores())->error(mensaje: 'Error al obtener registro token', data: $token);
+            print_r($error);
+            exit;
+        }
+
+        $arguments = [
+            'path' => $dropbox_id,
+        ];
+
+        $headers = [
+            'Authorization: Bearer ' . $token,
+            'Content-Type: application/octet-stream',
+            'Dropbox-API-Arg: ' . json_encode(
+                $arguments
+            )
+        ];
+
+        $ch = curl_init(self::DOWNLOAD);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        $response = curl_exec($ch);
+
+        if (curl_errno($ch)) {
+            echo 'Error de cURL: ' . curl_error($ch);
+        } else {
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            if ($httpCode === 200) {
+                file_put_contents($archivo_local, $response);
+                $ruta_mostrar = $generales->url_base.'archivos/temporales/'.$dropbox_id.'.pdf';
+                echo "<iframe src=\"$ruta_mostrar\" width=\"100%\" height=\"600px\"></iframe>";
+            } else {
+                echo "❌ Error al descargar. Código HTTP: $httpCode\n";
+                echo "Respuesta: $response\n";
+            }
+        }
+
+        curl_close($ch);
+
+        return $response;
+
+        /*$token = $this->obten_token();
         if (errores::$error) {
             $error = (new errores())->error(mensaje: 'Error al obtener registro token', data: $token);
             print_r($error);
@@ -153,11 +199,6 @@ class _dropbox
 
         $data = [
             'path' => $dropbox_id
-        ];
-
-        $data = [
-            'path' => $dropbox_id,
-            'direct_only' => true
         ];
 
         $headers = [
@@ -177,12 +218,11 @@ class _dropbox
 
         if ($response) {
             $decoded = json_decode($response, true);
-            $link = $decoded['url'] ?? null;
+            $link = $decoded['link'] ?? null;
 
             if ($link) {
-                $preview_url = str_replace('?dl=0', '?raw=1', $decoded['url']);
-                echo "✅ Link temporal obtenido:\n$preview_url\n";
-                echo "<iframe src=\"$preview_url\" width=\"100%\" height=\"600px\"></iframe>";
+                echo "✅ Link temporal obtenido:\n$link\n";
+                echo "<iframe src=\"$link\" width=\"100%\" height=\"600px\"></iframe>";
             } else {
                 echo "❌ Error: no se pudo obtener el enlace\n$response";
             }
@@ -190,7 +230,7 @@ class _dropbox
             echo "❌ Error de conexión con la API de Dropbox.";
         }
 
-        return $response;
+        return $response;*/
     }
 
     public function delete(string $dropbox_id): bool{
