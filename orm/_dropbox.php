@@ -18,7 +18,9 @@ class _dropbox
 {
     public const string UPLOAD = "https://content.dropboxapi.com/2/files/upload";
     public const string DOWNLOAD = "https://content.dropboxapi.com/2/files/download";
-    public const string PREVIEW = "https://api.dropboxapi.com/2/files/get_temporary_link";
+    //public const string PREVIEW = "https://api.dropboxapi.com/2/files/get_temporary_link";
+    public const string PREVIEW = "https://api.dropboxapi.com/2/sharing/list_shared_links";
+    public const string GET_PREVIEW = "https://api.dropboxapi.com/2/sharing/create_shared_link_with_settings";
     public const string DELETE = "https://api.dropboxapi.com/2/files/delete_v2";
     public const string REFRESH = "https://api.dropboxapi.com/oauth2/token";
 
@@ -150,19 +152,24 @@ class _dropbox
         }
 
         $data = [
+            'path' => $dropbox_id
+        ];
+
+        $data = [
             'path' => $dropbox_id,
+            'direct_only' => true
         ];
 
         $headers = [
             'Authorization: Bearer ' . $token,
-            'Content-Type: application/octet-stream',
+            'Content-Type: application/json',
         ];
 
         $ch = curl_init(self::PREVIEW);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
 
         $response = curl_exec($ch);
 
@@ -170,11 +177,12 @@ class _dropbox
 
         if ($response) {
             $decoded = json_decode($response, true);
-            $link = $decoded['link'] ?? null;
+            $link = $decoded['url'] ?? null;
 
             if ($link) {
-                echo "✅ Link temporal obtenido:\n$link\n";
-                echo "<iframe src=\"$link\" width=\"100%\" height=\"600px\"></iframe>";
+                $preview_url = str_replace('?dl=0', '?raw=1', $decoded['url']);
+                echo "✅ Link temporal obtenido:\n$preview_url\n";
+                echo "<iframe src=\"$preview_url\" width=\"100%\" height=\"600px\"></iframe>";
             } else {
                 echo "❌ Error: no se pudo obtener el enlace\n$response";
             }

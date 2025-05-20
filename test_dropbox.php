@@ -25,6 +25,11 @@ $guarda = (new _dropbox(link: $link))->download(dropbox_id: 'id:zQQGljOYR2oAAAAA
 if (errores::$error) {
     return $this->error->error('Error al guardar archivo', $guarda);
 }*/
+
+$guarda = (new _dropbox(link: $link))->preview(dropbox_id: 'id:zQQGljOYR2oAAAAAAAAHZQ');
+if (errores::$error) {
+    return $this->error->error('Error al guardar archivo', $guarda);
+}
 exit;
 
 
