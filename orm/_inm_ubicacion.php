@@ -5,8 +5,6 @@ use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\controllers\_doctos;
 use gamboamartin\inmuebles\controllers\controlador_inm_comprador;
 use gamboamartin\inmuebles\controllers\controlador_inm_ubicacion;
-use gamboamartin\inmuebles\controllers\controlador_inm_ubicacion;
-use gamboamartin\inmuebles\controllers\controlador_inm_ubicacion;
 use gamboamartin\validacion\validacion;
 use stdClass;
 
