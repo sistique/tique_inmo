@@ -19,6 +19,7 @@ class _dropbox
     public const string DOWNLOAD = "https://content.dropboxapi.com/2/files/download";
     public const string PREVIEW = "https://api.dropboxapi.com/2/files/get_temporary_link";
     public const string DELETE = "https://api.dropboxapi.com/2/files/delete_v2";
+    public const string REFRESH = "https://api.dropboxapi.com/oauth2/token";
 
 
     public function upload(string $archivo_drop, string $archivo_local, string $mode = 'add', bool $autorename = false): bool|string
@@ -217,5 +218,73 @@ class _dropbox
         }
 
         return $response;
+    }
+
+    public function refresh()
+    {
+        $appKey = (new generales())->app_key;
+        $appSecret = (new generales())->app_secret;
+        $refreshToken = (new generales())->refresh_token;
+
+        $ch = curl_init(self::REFRESH);
+
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+
+        curl_setopt($ch, CURLOPT_USERPWD, $appKey . ':' . $appSecret); // Autenticación básica
+
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query([
+            'grant_type' => 'refresh_token',
+            'refresh_token' => $refreshToken
+        ]));
+
+        $response = curl_exec($ch);
+
+        if (curl_errno($ch)) {
+            echo 'Error de cURL: ' . curl_error($ch);
+        } else {
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            if ($httpCode === 200) {
+                $json = json_decode($response, true);
+                $newAccessToken = $json['access_token'];
+                echo "✅ Nuevo access token: " . $newAccessToken;
+            } else {
+                echo "❌ Error. Código HTTP: $httpCode\n";
+                echo "Respuesta: $response";
+            }
+        }
+
+        curl_close($ch);
+
+        return $response;
+    }
+
+    public function obten_refresh_token(){
+        $client_id = (new generales())->app_key;
+        $client_secret = (new generales())->app_secret;
+        $authorization_code = (new generales())->code_dropbox;
+        $redirect_uri = 'http://localhost/callback.php';
+
+        $postData = http_build_query([
+            'code' => $authorization_code,
+            'grant_type' => 'authorization_code',
+            'redirect_uri' => $redirect_uri,
+        ]);
+
+        $headers = [
+            'Authorization: Basic ' . base64_encode("$client_id:$client_secret"),
+            'Content-Type: application/x-www-form-urlencoded',
+        ];
+
+        $ch = curl_init(self::REFRESH);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+        echo "Respuesta: " . $response;
+
     }
 }
