@@ -14,6 +14,7 @@ use gamboamartin\direccion_postal\models\dp_municipio;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_ubicacion_html;
 use gamboamartin\inmuebles\html\inm_valuador_html;
+use gamboamartin\inmuebles\models\_inm_ubicacion;
 use gamboamartin\inmuebles\models\inm_nacionalidad;
 use gamboamartin\inmuebles\models\inm_ocupacion;
 use gamboamartin\inmuebles\models\inm_status_ubicacion;
@@ -40,6 +41,7 @@ class controlador_inm_ubicacion extends _ctl_base {
     public array $inm_costos = array();
     public array $status_ubicacion = array();
     public array $acciones_headers = array();
+    public array $inm_conf_docs_ubicacion = array();
 
     public string $costo = '0.0';
     public function __construct(PDO      $link, html $html = new \gamboamartin\template_1\html(),
