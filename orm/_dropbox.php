@@ -37,36 +37,44 @@ class _dropbox
             exit;
         }
 
-        $ruta_base = (new generales())->ruta_base_dropbox;
-        $path_base = (new generales())->path_base;
+        $generales = new generales();
+        $ruta_base = $generales->ruta_base_dropbox;
+        $path_base = $generales->path_base;
 
-        $arguments = [
-            'path' => $ruta_base.$archivo_drop,
-            'mode' => $mode,
-            'autorename' => $autorename,
-            'mute' => true,
-        ];
+        $dropboxPath = $ruta_base.$archivo_drop;
+        $localFilePath = $path_base.$archivo_local;
+
+        if (!file_exists($localFilePath)) {
+            die("❌ Archivo no encontrado: $localFilePath\n");
+        }
+
+        $fileContent = file_get_contents($localFilePath);
 
         $headers = [
             'Authorization: Bearer ' . $token,
             'Content-Type: application/octet-stream',
-            'Dropbox-API-Arg: ' . json_encode(
-                $arguments
-            )
+            'Dropbox-API-Arg: ' . json_encode([
+                'path' => $dropboxPath,
+                'mode' => 'add',
+                'autorename' => true
+            ], JSON_UNESCAPED_SLASHES)
         ];
 
-        $file = fopen($path_base.$archivo_local, 'rb');
-        $fileSize = filesize($path_base.$archivo_local);
-
-        $ch = curl_init(self::UPLOAD);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $ch = curl_init('https://content.dropboxapi.com/2/files/upload');
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_INFILE, $file);
-        curl_setopt($ch, CURLOPT_INFILESIZE, $fileSize);
-        curl_setopt($ch, CURLOPT_UPLOAD, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $fileContent);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
         $response = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+        if (curl_errno($ch)) {
+            echo "❌ Error cURL: " . curl_error($ch);
+        } else {
+            echo "✅ Código HTTP: $httpCode\n";
+            echo "📥 Respuesta: $response\n";
+        }
 
         curl_close($ch);
 
