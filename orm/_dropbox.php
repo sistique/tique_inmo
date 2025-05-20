@@ -220,7 +220,7 @@ class _dropbox
         return $response;
     }
 
-    public function refresh()
+    public function refresh(): bool|string
     {
         $appKey = (new generales())->app_key;
         $appSecret = (new generales())->app_secret;
