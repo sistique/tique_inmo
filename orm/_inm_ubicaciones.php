@@ -49,6 +49,42 @@ class _inm_ubicaciones extends _modelo_base_paquete {
         return $registro;
     }
 
+    final public function integra_inm_documentos(controlador_inm_ubicacion $controler){
+        $inm_prospecto = (new inm_prospecto_ubicacion(link: $controler->link))->registro(registro_id: $controler->registro_id);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener inm_prospecto',data:  $inm_prospecto);
+        }
+
+        $filtro['inm_conf_docs_prospecto_ubicacion.es_foto'] = 'inactivo';
+        $inm_conf_docs_prospecto = (new inm_conf_docs_ubicacion(link: $controler->link))->filtro_and(
+            columnas: ['doc_tipo_documento_id'],
+            filtro: $filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener inm_conf_docs_prospecto',data:  $inm_conf_docs_prospecto);
+        }
+
+        $doc_ids = array_map(function($registro) {
+            return $registro['doc_tipo_documento_id'];
+        }, $inm_conf_docs_prospecto->registros);
+
+        if (count($doc_ids) <= 0) {
+            return array();
+        }
+
+        $inm_docs_prospecto = (new inm_doc_ubicacion(link: $controler->link))->inm_docs_prospecto_ubicacion(
+            inm_prospecto_ubicacion: $controler->registro_id, tipos_documentos: $doc_ids);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener inm_docs_prospecto',data:  $inm_docs_prospecto);
+        }
+
+        $inm_docs_prospecto = $this->inm_conf_docs_prospecto(controler: $controler,inm_docs_prospecto:  $inm_docs_prospecto,
+            tipos_documentos: $doc_ids);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al integrar buttons',data:  $inm_docs_prospecto);
+        }
+
+        return $inm_docs_prospecto;
+    }
 
 
     /**

@@ -423,6 +423,35 @@ class controlador_inm_ubicacion extends _ctl_base {
         return $base->base->r_modifica;
     }
 
+    final public function documentos(bool $header, bool $ws = false): array
+    {
+        $template = $this->modifica(header: false);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al integrar base', data: $template, header: $header, ws: $ws);
+        }
+
+        $inm_conf_docs_ubicacion = (new _inm_ubicacion())->integra_inm_documentos(controler: $this);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al integrar buttons', data: $inm_conf_docs_ubicacion, header: $header, ws: $ws);
+        }
+        $keys_selects = array();
+
+        //$keys_selects['com_tipo_ubicacion_id']->id_selected = $this->registro['com_tipo_ubicacion_id'];
+
+        $base = $this->base_upd(keys_selects: $keys_selects, params: array(), params_ajustados: array());
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al integrar base', data: $base, header: $header, ws: $ws);
+        }
+
+        $this->row_upd->asunto = "TU MENSAJE";
+        $this->row_upd->mensaje = "TU MENSAJE";
+        $this->inm_conf_docs_ubicacion = $inm_conf_docs_ubicacion;
+
+        //print_r($this->row_upd);
+
+        return $inm_conf_docs_ubicacion;
+    }
+
     /**
      * Inicializa el objeto Datatables con las columnas y filtros necesarios para visualizar la ubicación de los inmuebles.
      * La funcion consigue los datos para un tabla que debe mostrar la información sobre el id, código,
