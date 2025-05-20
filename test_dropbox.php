@@ -12,13 +12,19 @@ use gamboamartin\inmuebles\models\_dropbox;
 $con = new conexion();
 $link = conexion::$link;
 
-$nombre_doc = 'hola.pdf';
-$name = 'archivos/doc_documento/9.713642539828.pdf';
+/*$nombre_doc = 'hola.pdf';
+$name = 'archivos/doc_documento/9.858556784382.pdf';
 
 $guarda = (new _dropbox(link: $link))->upload(archivo_drop: $nombre_doc, archivo_local: $name);
 if (errores::$error) {
     return $this->error->error('Error al guardar archivo', $guarda);
 }
+
+$nombre_local = 'descarga.pdf';
+$guarda = (new _dropbox(link: $link))->download(dropbox_id: 'id:zQQGljOYR2oAAAAAAAAHZQ',archivo_local: $nombre_local);
+if (errores::$error) {
+    return $this->error->error('Error al guardar archivo', $guarda);
+}*/
 exit;
 
 

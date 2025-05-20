@@ -55,8 +55,8 @@ class _dropbox
             'Content-Type: application/octet-stream',
             'Dropbox-API-Arg: ' . json_encode([
                 'path' => $dropboxPath,
-                'mode' => 'add',
-                'autorename' => true
+                'mode' => $mode,
+                'autorename' => $autorename
             ], JSON_UNESCAPED_SLASHES)
         ];
 
@@ -113,8 +113,21 @@ class _dropbox
         } else {
             $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             if ($httpCode === 200) {
-                file_put_contents($archivo_local, $response);
+                //file_put_contents($archivo_local, $response);
                 echo "✅ Archivo descargado correctamente a: $archivo_local\n";
+
+                if (ob_get_level() > 0) {
+                    ob_end_clean();
+                }
+
+                header("Cache-Control: public");
+                header("Content-Description: File Transfer");
+                header("Content-Disposition: attachment; filename=\"$archivo_local\"");
+                header("Content-Type: application/octet-stream");
+                header("Content-Transfer-Encoding: binary");
+
+                echo $response;
+                exit;
             } else {
                 echo "❌ Error al descargar. Código HTTP: $httpCode\n";
                 echo "Respuesta: $response\n";
