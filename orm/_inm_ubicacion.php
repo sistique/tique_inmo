@@ -1,9 +1,11 @@
 <?php
 namespace gamboamartin\inmuebles\models;
 
+use gamboamartin\documento\models\doc_tipo_documento;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\controllers\_doctos;
 use gamboamartin\inmuebles\controllers\controlador_inm_comprador;
+use gamboamartin\inmuebles\controllers\controlador_inm_prospecto_ubicacion;
 use gamboamartin\inmuebles\controllers\controlador_inm_ubicacion;
 use gamboamartin\validacion\validacion;
 use stdClass;
@@ -153,12 +155,18 @@ class _inm_ubicacion{
 
 
     private function inm_conf_docs_ubicacion(controlador_inm_ubicacion $controler, array $inm_docs_ubicacion, array $tipos_documentos){
-        $inm_conf_docs_ubicacion = (new _doctos())->documentos_de_ubicacion(inm_ubicacion_id: $controler->registro_id,
-            link:  $controler->link, todos: true, tipos_documentos: $tipos_documentos);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al obtener configuraciones de documentos',
-                data:  $inm_conf_docs_ubicacion);
+        $in = array();
+        if (count($tipos_documentos) > 0) {
+            $in['llave'] = 'doc_tipo_documento.id';
+            $in['values'] = $tipos_documentos;
         }
+
+        $r_doc_tipo_documento = (new doc_tipo_documento(link: $controler->link))->filtro_and(in: $in);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al Obtener tipos de documento',data:  $r_doc_tipo_documento);
+        }
+
+        $inm_conf_docs_ubicacion = $r_doc_tipo_documento->registros;
 
         foreach ($inm_conf_docs_ubicacion as $indice=>$doc_tipo_documento){
             $inm_conf_docs_ubicacion = $this->inm_docs_ubicacion(controler: $controler,
@@ -285,16 +293,49 @@ class _inm_ubicacion{
             return $this->error->error(mensaje: 'Error al obtener inm_docs_ubicacion',data:  $inm_docs_ubicacion);
         }
 
-        /*$inm_docs_ubicacion = $this->inm_conf_docs_ubicacion(controler: $controler,inm_docs_ubicacion:  $inm_docs_ubicacion,
+        $inm_docs_ubicacion = $this->inm_conf_docs_ubicacion(controler: $controler,inm_docs_ubicacion:  $inm_docs_ubicacion,
             tipos_documentos: $doc_ids);
-
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar buttons',data:  $inm_docs_ubicacion);
-        }*/
+        }
 
         return $inm_docs_ubicacion;
     }
 
+    final public function integra_inm_documentos_ubicacion(controlador_inm_ubicacion $controler){
+        $inm_prospecto = (new inm_ubicacion(link: $controler->link))->registro(registro_id: $controler->registro_id);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener inm_ubicacion',data:  $inm_prospecto);
+        }
 
+        $filtro['inm_conf_docs_ubicacion.es_foto'] = 'inactivo';
+        $inm_conf_docs_prospecto = (new inm_conf_docs_ubicacion(link: $controler->link))->filtro_and(
+            columnas: ['doc_tipo_documento_id'],filtro: $filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener inm_conf_docs_prospecto',data:  $inm_conf_docs_prospecto);
+        }
+
+        $doc_ids = array_map(function($registro) {
+            return $registro['doc_tipo_documento_id'];
+        }, $inm_conf_docs_prospecto->registros);
+
+        if (count($doc_ids) <= 0) {
+            return array();
+        }
+
+        $inm_docs_prospecto = (new inm_doc_ubicacion(link: $controler->link))->inm_docs_ubicacion(
+            inm_ubicacion: $controler->registro_id, tipos_documentos: $doc_ids);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener inm_docs_prospecto',data:  $inm_docs_prospecto);
+        }
+
+        $inm_docs_prospecto = $this->inm_conf_docs_ubicacion(controler: $controler,
+            inm_docs_ubicacion:  $inm_docs_prospecto,tipos_documentos: $doc_ids);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al integrar buttons',data:  $inm_docs_prospecto);
+        }
+
+        return $inm_docs_prospecto;
+    }
 
 }

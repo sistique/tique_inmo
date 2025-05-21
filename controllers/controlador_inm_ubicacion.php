@@ -1043,5 +1043,20 @@ class controlador_inm_ubicacion extends _ctl_base {
         return $r_modifica;
     }
 
+    public function tipos_documentos(bool $header, bool $ws = false): array
+    {
+        $inm_conf_docs_prospecto = (new _inm_ubicacion())->integra_inm_documentos_ubicacion(controler: $this);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al integrar buttons', data: $inm_conf_docs_prospecto, header: $header, ws: $ws);
+        }
 
+        $salida['draw'] = count($inm_conf_docs_prospecto);
+        $salida['recordsTotal'] = count($inm_conf_docs_prospecto);
+        $salida['recordsFiltered'] = count($inm_conf_docs_prospecto);
+        $salida['data'] = $inm_conf_docs_prospecto;
+
+        header('Content-Type: application/json');
+        echo json_encode($salida);
+        exit;
+    }
 }
