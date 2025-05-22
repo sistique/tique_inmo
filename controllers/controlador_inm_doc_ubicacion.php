@@ -29,7 +29,7 @@ class controlador_inm_doc_ubicacion extends _ctl_formato {
     public bool $es_imagen = false;
     public bool $es_pdf = false;
 
-    public string $button_inm_doc_prospecto_descarga = '';
+    public string $button_inm_doc_ubicacion_descarga = '';
     public function __construct(PDO      $link, html $html = new \gamboamartin\template_1\html(),
                                 stdClass $paths_conf = new stdClass())
     {
@@ -269,17 +269,18 @@ class controlador_inm_doc_ubicacion extends _ctl_formato {
                 ws:  $ws);
         }
 
-        $com_prospecto = (new inm_ubicacion(link: $this->link))->get_com_prospecto(
-            inm_prospecto_id: $registro->inm_ubicacion_id, retorno_obj: true);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener prospecto',data:  $com_prospecto,header:  $header,
+        $ruta_doc = $this->url_base."$registro->doc_documento_ruta_relativa";
+
+        $guarda = (new _dropbox(link: $this->link))->preview(dropbox_id: $registro->inm_dropbox_ruta_id_dropbox);
+        if (errores::$error) {
+            return $this->retorno_error('Error al guardar archivo', $guarda,header:  $header,
                 ws:  $ws);
         }
 
-        $ruta_doc = $this->url_base."$registro->doc_documento_ruta_relativa";
-
+        $ruta_doc = $guarda;
 
         $this->ruta_doc = $ruta_doc;
+
         if($registro->doc_extension_es_imagen === 'activo') {
             $this->es_imagen = true;
         }
@@ -289,9 +290,7 @@ class controlador_inm_doc_ubicacion extends _ctl_formato {
 
         $row_upd = new stdClass();
         $row_upd->nss = $registro->inm_ubicacion_nss;
-        $row_upd->com_tipo_cliente_descripcion = $com_prospecto->com_tipo_prospecto_descripcion;
         $row_upd->curp = $registro->inm_ubicacion_curp;
-        $row_upd->rfc = $com_prospecto->com_prospecto_rfc;
         $row_upd->apellido_paterno = $registro->inm_ubicacion_apellido_paterno;
         $row_upd->apellido_materno = $registro->inm_ubicacion_apellido_materno;
         $row_upd->nombre = $registro->inm_ubicacion_nombre;
@@ -359,7 +358,7 @@ class controlador_inm_doc_ubicacion extends _ctl_formato {
         }
 
 
-        $this->button_inm_doc_prospecto_descarga = $button_inm_doc_prospecto_descarga;
+        $this->button_inm_doc_ubicacion_descarga = $button_inm_doc_prospecto_descarga;
 
         return $registro;
 

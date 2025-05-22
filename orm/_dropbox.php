@@ -190,6 +190,7 @@ class _dropbox
 
         $response = curl_exec($ch);
 
+        $ruta_mostrar = '';
         if (curl_errno($ch)) {
             echo 'Error de cURL: ' . curl_error($ch);
         } else {
@@ -197,7 +198,7 @@ class _dropbox
             if ($httpCode === 200) {
                 file_put_contents($archivo_local, $response);
                 $ruta_mostrar = $generales->url_base.'archivos/temporales/'.$dropbox_id.'.pdf';
-                echo "<iframe src=\"$ruta_mostrar\" width=\"100%\" height=\"600px\"></iframe>";
+                //echo "<iframe src=\"$ruta_mostrar\" width=\"100%\" height=\"600px\"></iframe>";
             } else {
                 echo "❌ Error al descargar. Código HTTP: $httpCode\n";
                 echo "Respuesta: $response\n";
@@ -206,7 +207,7 @@ class _dropbox
 
         curl_close($ch);
 
-        return $response;
+        return $ruta_mostrar;
 
         /*$token = $this->obten_token();
         if (errores::$error) {
