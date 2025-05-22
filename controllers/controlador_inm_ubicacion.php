@@ -11,6 +11,7 @@ namespace gamboamartin\inmuebles\controllers;
 use base\controller\init;
 use gamboamartin\direccion_postal\models\dp_estado;
 use gamboamartin\direccion_postal\models\dp_municipio;
+use gamboamartin\documento\models\doc_tipo_documento;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_ubicacion_html;
 use gamboamartin\inmuebles\html\inm_valuador_html;
@@ -23,6 +24,7 @@ use gamboamartin\inmuebles\models\inm_ubicacion;
 use gamboamartin\system\_ctl_base;
 use gamboamartin\system\links_menu;
 use gamboamartin\template\html;
+use html\doc_tipo_documento_html;
 use PDO;
 use stdClass;
 
@@ -33,6 +35,7 @@ class controlador_inm_ubicacion extends _ctl_base {
     public string $link_opinion_valor_alta_bd = '';
     public string $link_costo_alta_bd = '';
     public string $link_asigna_validacion_bd = '';
+    public string $link_inm_doc_ubicacion_alta_bd = '';
     public array $imp_compradores = array();
 
     public array $inm_opiniones_valor = array();
@@ -1077,12 +1080,18 @@ class controlador_inm_ubicacion extends _ctl_base {
         $doc_tipos_documentos = array();
 
         if (count($doc_ids) > 0) {
-            $doc_tipos_documentos = (new _doctos())->documentos_de_ubicacion(inm_ubicacion_id: $this->registro_id,
-                link: $this->link, todos: false, tipos_documentos: $doc_ids);
-            if (errores::$error) {
-                return $this->retorno_error(mensaje: 'Error al obtener tipos de documento', data: $doc_tipos_documentos,
+            $in = array();
+            if (count($doc_ids) > 0) {
+                $in['llave'] = 'doc_tipo_documento.id';
+                $in['values'] = $doc_ids;
+            }
+
+            $r_doc_tipo_documento = (new doc_tipo_documento(link: $this->link))->filtro_and(in: $in);
+            if(errores::$error){
+                return $this->retorno_error(mensaje: 'Error al Obtener tipos de documento',data:  $r_doc_tipo_documento,
                     header: $header, ws: $ws);
             }
+            $doc_tipos_documentos = $r_doc_tipo_documento->registros;
         }
 
         $_doc_tipo_documento_id = -1;
@@ -1114,7 +1123,7 @@ class controlador_inm_ubicacion extends _ctl_base {
                 mensaje: 'Error al generar link', data: $link_alta_doc, header: $header, ws: $ws);
         }
 
-        $this->link_inm_doc_prospecto_alta_bd = $link_alta_doc;
+        $this->link_inm_doc_ubicacion_alta_bd = $link_alta_doc;
 
         $btn_action_next = $this->html->hidden('btn_action_next', value: 'documentos');
         if (errores::$error) {
