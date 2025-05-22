@@ -275,9 +275,31 @@ class doc_documento extends modelo{
                 return $this->error->error(mensaje: 'Error al eliminar versiones', data: $elimina_version);
             }
         }
+        if((new generales())->guarda_archivo_dropbox) {
+            $modelo_inm_dropbox_ruta = new inm_dropbox_ruta(link: $this->link);
+            $filtro_drop['doc_documento.id'] = $id;
+            $r_elimina_dropbox = $modelo_inm_dropbox_ruta->filtro_and(filtro: $filtro_drop);
+            if (errores::$error) {
+                return $this->error->error('Error al guardar archivo', $r_elimina_dropbox);
+            }
 
-        if(file_exists($documento['doc_documento_ruta_absoluta'])){
-            unlink($documento['doc_documento_ruta_absoluta']);
+            if($r_elimina_dropbox->n_registros > 0) {
+                $inm_dropbox_ruta_id = $r_elimina_dropbox->registros[0]['inm_dropbox_ruta_id'];
+                $dropbox_id = $r_elimina_dropbox->registros[0]['inm_dropbox_ruta_id_dropbox'];
+                $guarda = (new _dropbox(link: $this->link))->delete(dropbox_id: $dropbox_id);
+                if (errores::$error) {
+                    return $this->error->error('Error al guardar archivo', $guarda);
+                }
+
+                $documento = $modelo_inm_dropbox_ruta->elimina_bd(id: $inm_dropbox_ruta_id);
+                if (errores::$error) {
+                    return $this->error->error(mensaje: 'Error al eliminar documento', data: $documento);
+                }
+            }
+        }else {
+            if (file_exists($documento['doc_documento_ruta_absoluta'])) {
+                unlink($documento['doc_documento_ruta_absoluta']);
+            }
         }
 
         $r_elimina_doc = parent::elimina_bd(id: $id);
