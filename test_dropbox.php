@@ -11,8 +11,8 @@ use gamboamartin\inmuebles\models\_dropbox;
 
 $con = new conexion();
 $link = conexion::$link;
-
-/*$nombre_doc = 'hola.pdf';
+/*
+$nombre_doc = 'inm_ubicacion/hola.pdf';
 $name = 'archivos/doc_documento/9.858556784382.pdf';
 
 $guarda = (new _dropbox(link: $link))->upload(archivo_drop: $nombre_doc, archivo_local: $name);
