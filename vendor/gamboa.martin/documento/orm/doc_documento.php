@@ -4,6 +4,7 @@ use base\orm\modelo;
 use config\generales;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\models\_dropbox;
+use gamboamartin\inmuebles\models\inm_dropbox_ruta;
 use gamboamartin\plugins\files;
 use PDO;
 use stdClass;
@@ -157,12 +158,22 @@ class doc_documento extends modelo{
                 return $this->error->error('Error al guardar archivo', $guarda);
             }
         }else{
-            $nombre_doc = $this->registro['ruta_relativa'];
+            $nombre_dropbox = $this->registro['ruta_relativa'];
 
-            $guarda = (new _dropbox(link: $this->link))->upload(archivo_drop: $nombre_doc, archivo_file: $file['tmp_name']);
+            $guarda = (new _dropbox(link: $this->link))->upload(archivo_drop: $nombre_dropbox, archivo_file: $file['tmp_name']);
             if (errores::$error) {
                 return $this->error->error('Error al guardar archivo', $guarda);
             }
+
+            $registro_dbox['doc_documento_id'] = $r_alta_doc->registro_id;
+            $registro_dbox['id_dropbox'] = $guarda;
+            $registro_dbox['nombre'] = $nombre_doc;
+            $registro_dbox['ruta_carpeta'] = $nombre_dropbox;
+            $r_dropbox_ruta = (new inm_dropbox_ruta(link: $this->link))->alta_registro(registro: $registro_dbox);
+            if (errores::$error) {
+                return $this->error->error('Error al guardar archivo', $guarda);
+            }
+
         }
 
         return $r_alta_doc;

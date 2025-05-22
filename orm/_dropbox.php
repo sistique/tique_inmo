@@ -72,6 +72,7 @@ class _dropbox
         $response = curl_exec($ch);
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
+        $id_dropbox = '';
         if (curl_errno($ch)) {
             echo "❌ Error cURL: " . curl_error($ch);
         } else {
@@ -80,13 +81,16 @@ class _dropbox
                 print_r($error);
                 exit;
             }
+            $json = json_decode($response, true);
+            $id_dropbox = $json['id'];
+
             echo "✅ Código HTTP: $httpCode\n";
             echo "📥 Respuesta: $response\n";
         }
 
         curl_close($ch);
 
-        return $response;
+        return $id_dropbox;
     }
 
     public function download(string $dropbox_id, string $archivo_local): bool|string
