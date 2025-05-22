@@ -146,13 +146,13 @@ class doc_documento extends modelo{
             return $this->error->error('Error al guardar registro', $r_alta_doc);
         }
 
-        //if(!(new generales())->guarda_archivo_dropbox){
+        if(!(new generales())->guarda_archivo_dropbox){
             $guarda = (new files())->guarda_archivo_fisico(contenido_file: file_get_contents($file['tmp_name']),
                 ruta_file: $this->registro['ruta_absoluta']);
             if (errores::$error) {
                 return $this->error->error('Error al guardar archivo', $guarda);
             }
-        //}
+        }
 
         return $r_alta_doc;
     }

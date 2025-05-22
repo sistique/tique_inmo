@@ -3,6 +3,7 @@
 namespace gamboamartin\inmuebles\models;
 
 use base\orm\_modelo_parent;
+use config\generales;
 use gamboamartin\documento\models\doc_documento;
 use gamboamartin\documento\models\doc_documento_etapa;
 use gamboamartin\errores\errores;
@@ -43,6 +44,16 @@ class inm_doc_ubicacion extends _modelo_parent
         $r_alta_doc = (new doc_documento(link: $this->link))->alta_documento(registro: $registro_doc, file: $file);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al insertar doc', data: $r_alta_doc);
+        }
+
+        if((new generales())->guarda_archivo_dropbox) {
+            $nombre_doc = 'hola.pdf';
+            $name = 'archivos/doc_documento/9.858556784382.pdf';
+
+            $guarda = (new _dropbox(link: $this->link))->upload(archivo_drop: $nombre_doc, archivo_local: $file['tmp_name']);
+            if (errores::$error) {
+                return $this->error->error('Error al guardar archivo', $guarda);
+            }
         }
 
         $this->registro['doc_documento_id'] = $r_alta_doc->registro_id;
