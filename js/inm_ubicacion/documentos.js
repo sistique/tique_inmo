@@ -47,7 +47,6 @@ $(document).on("click", "#table-inm_ubicacion a[title='Vista Previa']", function
         url: url,
         type: 'GET',
         success: function (data) {
-            console.log(data);
             var tempDiv = $("<div>").html(data);
             var viewContent = tempDiv.find(".view");
 
