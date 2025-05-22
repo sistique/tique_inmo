@@ -43,7 +43,7 @@ class _dropbox
 
         $dropboxPath = $ruta_base.$archivo_drop;
         $localFilePath = $archivo_file;
-        if($archivo_file === ''){
+        if($archivo_file === '' || $archivo_local !== ''){
             $localFilePath = $path_base.$archivo_local;
 
             if (!file_exists($localFilePath)) {
