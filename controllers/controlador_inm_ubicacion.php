@@ -17,6 +17,7 @@ use gamboamartin\inmuebles\html\inm_ubicacion_html;
 use gamboamartin\inmuebles\html\inm_valuador_html;
 use gamboamartin\inmuebles\models\_inm_ubicacion;
 use gamboamartin\inmuebles\models\inm_conf_docs_ubicacion;
+use gamboamartin\inmuebles\models\inm_doc_ubicacion;
 use gamboamartin\inmuebles\models\inm_nacionalidad;
 use gamboamartin\inmuebles\models\inm_ocupacion;
 use gamboamartin\inmuebles\models\inm_status_ubicacion;
@@ -36,7 +37,9 @@ class controlador_inm_ubicacion extends _ctl_base {
     public string $link_costo_alta_bd = '';
     public string $link_asigna_validacion_bd = '';
     public string $link_inm_doc_ubicacion_alta_bd = '';
+    public string $link_fotografia_bd = '';
     public array $imp_compradores = array();
+    public array $fotos = array();
 
     public array $inm_opiniones_valor = array();
     public int $n_opiniones_valor = 0;
@@ -458,6 +461,134 @@ class controlador_inm_ubicacion extends _ctl_base {
         return $inm_conf_docs_ubicacion;
     }
 
+    final public function fotografias(bool $header, bool $ws = false): array|stdClass
+    {
+        $template = $this->modifica(header: false);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al integrar base', data: $template, header: $header, ws: $ws);
+        }
+
+        $filtro['inm_conf_docs_ubicacion.es_foto'] = 'activo';
+        $inm_conf_docs_ubicacion = (new inm_conf_docs_ubicacion(link: $this->link))->filtro_and(
+            columnas: ['doc_tipo_documento_id','doc_tipo_documento_descripcion'], filtro: $filtro);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener inm_conf_docs_prospecto',
+                data:  $inm_conf_docs_ubicacion,header: $header, ws: $ws);
+        }
+
+        $inputs_fotos = array();
+        foreach ($inm_conf_docs_ubicacion->registros as $registro){
+            $filtro_foto['inm_doc_ubicacion.es_foto'] = 'activo';
+            $filtro_foto['doc_tipo_documento.id'] = $registro['doc_tipo_documento_id'];
+            $filtro_foto['inm_ubicacion.id'] = $this->registro_id;
+            $inm_doc_ubicacion = (new inm_doc_ubicacion(link: $this->link))->filtro_and(
+                filtro: $filtro_foto);
+            if(errores::$error){
+                return $this->retorno_error(mensaje: 'Error al obtener inm_conf_docs_prospecto',
+                    data:  $inm_doc_ubicacion,header: $header, ws: $ws);
+            }
+
+            $fotos = array();
+            foreach ($inm_doc_ubicacion->registros as $reg){
+                $foto = $this->img_btn_modal(src: $reg['doc_documento_ruta_relativa'],
+                    css_id: $registro['doc_tipo_documento_id'],class_css: ['imagen']);
+                if(errores::$error){
+                    return $this->retorno_error(mensaje: 'Error al obtener inm_conf_docs_prospecto',
+                        data:  $foto,header: $header, ws: $ws);
+                }
+
+                $link_elimina_foto_bd = $this->obj_link->link_con_id(
+                    accion: 'elimina_bd', link: $this->link, registro_id: $reg['inm_doc_ubicacion_id'],
+                    seccion: 'inm_doc_ubicacion');
+                if (errores::$error) {
+                    $this->retorno_error(mensaje: 'Error al generar link', data: $link_elimina_foto_bd, header: $header, ws: $ws);
+                }
+
+                $contenedor = array();
+                $contenedor['doc_documento_id'] = $reg['doc_documento_id'];
+                $contenedor['input'] = $foto;
+                $contenedor['inm_doc_ubicacion_id'] = $reg['inm_doc_ubicacion_id'];
+                $fotos[$registro['doc_tipo_documento_id']][] = $contenedor;
+            }
+
+            $documento = $this->html->input_file(cols: 12, name: "fotos[$registro[doc_tipo_documento_id]][]",
+                row_upd: new stdClass(), value_vacio: false, place_holder: $registro['doc_tipo_documento_descripcion'],
+                required: false, multiple: true);
+            if (errores::$error) {
+                return $this->retorno_error(
+                    mensaje: 'Error al obtener inputs', data: $documento, header: $header, ws: $ws);
+            }
+
+            $inputs_fotos[$registro['doc_tipo_documento_id']]['doc_tipo_documento_id'] = $registro['doc_tipo_documento_id'];
+            $inputs_fotos[$registro['doc_tipo_documento_id']]['input'] = $documento;
+            $inputs_fotos[$registro['doc_tipo_documento_id']]['fotos'] = $fotos;
+        }
+
+        $this->fotos = $inputs_fotos;
+
+        $link_fotografia_bd = $this->obj_link->link_con_id(
+            accion: 'fotografias_bd', link: $this->link, registro_id: $this->registro_id, seccion: 'inm_ubicacion');
+        if (errores::$error) {
+            $this->retorno_error(mensaje: 'Error al generar link', data: $link_fotografia_bd, header: $header, ws: $ws);
+        }
+
+        $this->link_fotografia_bd = $link_fotografia_bd;
+
+        return $template;
+    }
+
+    public function fotografias_bd(bool $header, bool $ws = false): array|stdClass{
+        $this->link->beginTransaction();
+
+        $inm_doc_ubicacion =  new inm_doc_ubicacion(link: $this->link);
+
+        $names = array();
+        foreach ($_FILES['fotos']['name'] as $key => $foto){
+            $names[$key]['name'] = $foto;
+        }
+
+        foreach ($_FILES['fotos']['tmp_name'] as $key => $foto){
+            $names[$key]['tmp_name'] = $foto;
+        }
+
+        $result = array();
+        foreach ($names as $key => $name){
+            $valor = array();
+            foreach ($name['name'] as $item => $value){
+
+                $valor['name'] = $name['name'][$item];
+                $valor['tmp_name'] = $name['tmp_name'][$item];
+
+                if($name['name'][$item] !== '' && $name['tmp_name'][$item] !== '') {
+                    $registro['doc_tipo_documento_id'] = $key;
+                    $registro['inm_ubicacion_id'] = $this->registro_id;
+                    $registro['es_foto'] = 'activo';
+                    $_FILES['documento'] = $valor;
+                    $result = $inm_doc_ubicacion->alta_registro(registro: $registro);
+                    if (errores::$error) {
+                        $this->link->rollBack();
+                        return $this->retorno_error(mensaje: 'Error al insertar datos', data: $result, header: $header, ws: $ws);
+                    }
+                }
+            }
+        }
+
+        $this->link->commit();
+
+        $link_fotografia_bd = $this->obj_link->link_con_id(
+            accion: 'fotografias', link: $this->link, registro_id: $this->registro_id, seccion: 'inm_ubicacion');
+        if (errores::$error) {
+            $this->retorno_error(mensaje: 'Error al generar link', data: $link_fotografia_bd, header: $header, ws: $ws);
+        }
+
+        if($header) {
+            header('Location:' . $link_fotografia_bd);
+            exit;
+        }
+
+        return $result;
+    }
+
     /**
      * Inicializa el objeto Datatables con las columnas y filtros necesarios para visualizar la ubicación de los inmuebles.
      * La funcion consigue los datos para un tabla que debe mostrar la información sobre el id, código,
@@ -647,6 +778,23 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         return $conyuge;
     }
+
+    public function img_btn_modal(string $src, int $css_id, array $class_css = array()): string|array
+    {
+        if($css_id<=0){
+            return $this->errores->error('Error $css_id debe ser mayor a 0',$css_id);
+        }
+
+        $class_html = '';
+        foreach ($class_css as $class){
+            $class_html.=' '.$class;
+        }
+
+        $img = '<img class="img-thumbnail '.$class_html.'" src="'.$src.'" ';
+        $img.= ' role="button" data-toggle="modal" data-target="#img_'.$css_id.'">';
+        return $img;
+    }
+
 
     public function modifica(bool $header, bool $ws = false): array|stdClass
     {
