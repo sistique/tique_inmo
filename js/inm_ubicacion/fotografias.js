@@ -22,7 +22,6 @@ $(window).on("click", function(event) {
 
 let doc_documento_id = -1;
 let doc_tipo_documento_id = -1;
-let doc_tipo_documento_id = -1;
 let alto = 0;
 
 $(".elimina_img").on("click", function() {
