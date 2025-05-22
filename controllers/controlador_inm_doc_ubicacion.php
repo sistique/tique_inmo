@@ -8,10 +8,12 @@
  */
 namespace gamboamartin\inmuebles\controllers;
 
+use config\generales;
 use gamboamartin\compresor\compresor;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_doc_prospecto_html;
 use gamboamartin\inmuebles\html\inm_doc_ubicacion_html;
+use gamboamartin\inmuebles\models\_dropbox;
 use gamboamartin\inmuebles\models\inm_doc_prospecto;
 use gamboamartin\inmuebles\models\inm_doc_ubicacion;
 use gamboamartin\inmuebles\models\inm_prospecto;
@@ -119,15 +121,25 @@ class controlador_inm_doc_ubicacion extends _ctl_formato {
             return $this->retorno_error(mensaje: 'Error al obtener documento',data:  $registro,header:  $header,
                 ws:  $ws);
         }
-        $ruta_doc = $this->path_base."$registro->doc_documento_ruta_relativa";
-
-        $content = file_get_contents($ruta_doc);
 
         $name_file = $this->name_file(registro: $registro);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener name_file',data:  $name_file,header:  $header,
                 ws:  $ws);
         }
+
+        if((new generales())->guarda_archivo_dropbox){
+            $guarda = (new _dropbox(link: $this->link))->download(dropbox_id: $registro->inm_dropbox_ruta_id_dropbox,
+                archivo_local: $name_file);
+            if (errores::$error) {
+                return $this->retorno_error('Error al guardar archivo', $guarda,header:  $header,
+                ws:  $ws);
+            }
+        }
+
+        $ruta_doc = $this->path_base."$registro->doc_documento_ruta_relativa";
+
+        $content = file_get_contents($ruta_doc);
 
         if($header) {
             if (ob_get_level() > 0) {
@@ -207,9 +219,10 @@ class controlador_inm_doc_ubicacion extends _ctl_formato {
 
     private function name_doc(stdClass $registro): string
     {
-        $name = $registro->inm_ubicacion_id.".".$registro->inm_ubicacion_nombre;
+        $name = $registro->inm_ubicacion_id.".".$registro->inm_ubicacion_ubicacion;
+        /*$name = $registro->inm_ubicacion_id.".".$registro->inm_ubicacion_nombre;
         $name .= ".".$registro->inm_ubicacion_apellido_paterno;
-        $name .= ".".$registro->inm_ubicacion_apellido_materno;
+        $name .= ".".$registro->inm_ubicacion_apellido_materno;*/
         return $name;
     }
 

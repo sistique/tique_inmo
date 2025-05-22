@@ -122,6 +122,11 @@ class _dropbox
 
         if (curl_errno($ch)) {
             echo 'Error de cURL: ' . curl_error($ch);
+
+            curl_close($ch);
+            $error = (new errores())->error(mensaje: 'Error al obtener registro token', data: $token);
+            print_r($error);
+            exit;
         } else {
             $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             if ($httpCode === 200) {
@@ -137,15 +142,16 @@ class _dropbox
                 header("Content-Disposition: attachment; filename=\"$archivo_local\"");
                 header("Content-Type: application/octet-stream");
                 header("Content-Transfer-Encoding: binary");
-
                 echo $response;
-                exit;
             } else {
                 echo "❌ Error al descargar. Código HTTP: $httpCode\n";
                 echo "Respuesta: $response\n";
+                curl_close($ch);
+                $error = (new errores())->error(mensaje: 'Error al descargar archivo', data: $token);
+                print_r($error);
+                exit;
             }
         }
-
 
         curl_close($ch);
 

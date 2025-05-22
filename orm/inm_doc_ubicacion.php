@@ -18,12 +18,23 @@ class inm_doc_ubicacion extends _modelo_parent
     public function __construct(PDO $link)
     {
         $tabla = 'inm_doc_ubicacion';
-        $columnas = array($tabla => false, 'inm_ubicacion' => $tabla, 'doc_documento' => $tabla,
+        $columnas = array($tabla => false, 'inm_ubicacion' => $tabla, 'dp_colonia_postal'=>'inm_ubicacion',
+            'dp_cp'=>'dp_colonia_postal','dp_colonia'=>'dp_colonia_postal','dp_municipio'=>'dp_cp',
+            'dp_estado'=>'dp_municipio','dp_pais'=>'dp_estado','doc_documento' => $tabla,
             'doc_tipo_documento' => 'doc_documento', 'doc_extension' => 'doc_documento');
 
         $campos_obligatorios = array('inm_ubicacion_id', 'doc_documento_id');
 
         $columnas_extra = array();
+        $sql = "(SELECT inm_dropbox_ruta.id_dropbox FROM inm_dropbox_ruta WHERE inm_dropbox_ruta.doc_documento_id = doc_documento.id)";
+
+        $columnas_extra['inm_dropbox_ruta_id_dropbox'] = $sql;
+
+        $sql = "(CONCAT_WS(' ', inm_ubicacion.calle, inm_ubicacion.numero_exterior, 
+        inm_ubicacion.numero_interior, dp_colonia.descripcion, dp_municipio.descripcion))";
+
+        $columnas_extra['inm_ubicacion_ubicacion'] = $sql;
+
         $renombres = array();
 
         $atributos_criticos = array('inm_ubicacion_id', 'doc_documento_id');
