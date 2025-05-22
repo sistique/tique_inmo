@@ -75,6 +75,11 @@ class _dropbox
         if (curl_errno($ch)) {
             echo "❌ Error cURL: " . curl_error($ch);
         } else {
+            if($httpCode !== 200){
+                $error = (new errores())->error(mensaje: 'Error de resultado dropbox', data: $response);
+                print_r($error);
+                exit;
+            }
             echo "✅ Código HTTP: $httpCode\n";
             echo "📥 Respuesta: $response\n";
         }

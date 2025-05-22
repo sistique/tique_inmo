@@ -130,10 +130,14 @@ class doc_documento extends modelo{
             $this->registro['codigo'] .= mt_rand(10,99);
         }
 
-
         $this->registro['status'] = 'activo';
         $this->registro['nombre'] = $nombre_doc;
-        $this->registro['ruta_relativa'] = $ruta_relativa.$nombre_doc;
+        if(!isset($this->registro['ruta_relativa'])) {
+            $this->registro['ruta_relativa'] = $ruta_relativa.$nombre_doc;
+        }else{
+            $this->registro['ruta_relativa'] .= $nombre_doc;
+        }
+
         $this->registro['ruta_absoluta'] = $ruta_absoluta_directorio.$nombre_doc;
         $this->registro['doc_extension_id'] = $extension_id;
         
@@ -149,6 +153,13 @@ class doc_documento extends modelo{
         if(!(new generales())->guarda_archivo_dropbox){
             $guarda = (new files())->guarda_archivo_fisico(contenido_file: file_get_contents($file['tmp_name']),
                 ruta_file: $this->registro['ruta_absoluta']);
+            if (errores::$error) {
+                return $this->error->error('Error al guardar archivo', $guarda);
+            }
+        }else{
+            $nombre_doc = $this->registro['ruta_relativa'];
+
+            $guarda = (new _dropbox(link: $this->link))->upload(archivo_drop: $nombre_doc, archivo_file: $file['tmp_name']);
             if (errores::$error) {
                 return $this->error->error('Error al guardar archivo', $guarda);
             }

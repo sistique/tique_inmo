@@ -40,27 +40,15 @@ class inm_doc_ubicacion extends _modelo_parent
     {
         $registro_doc['doc_tipo_documento_id'] = $this->registro['doc_tipo_documento_id'];
         $file = $_FILES['documento'];
-
+        if((new generales())->guarda_archivo_dropbox) {
+            $registro_doc['ruta_relativa'] = 'inm_ubicacion/';
+        }
         $r_alta_doc = (new doc_documento(link: $this->link))->alta_documento(registro: $registro_doc, file: $file);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al insertar doc', data: $r_alta_doc);
         }
 
         $this->registro['doc_documento_id'] = $r_alta_doc->registro_id;
-
-        if((new generales())->guarda_archivo_dropbox) {
-            $r_documento = (new doc_documento(link: $this->link))->registro(registro_id: $r_alta_doc->registro_id);
-            if (errores::$error) {
-                return $this->error->error(mensaje: 'Error al insertar doc', data: $r_documento);
-            }
-
-            $nombre_doc = 'inm_ubicacion/'.$r_documento['doc_documento_nombre'];
-            //$name = 'archivos/doc_documento/9.858556784382.pdf';
-            $guarda = (new _dropbox(link: $this->link))->upload(archivo_drop: $nombre_doc, archivo_file: $file['tmp_name']);
-            if (errores::$error) {
-                return $this->error->error('Error al guardar archivo', $guarda);
-            }
-        }
 
         if (!isset($this->registro['descripcion'])) {
             $descripcion = $this->descripcion(r_alta_doc: $r_alta_doc, registro: $this->registro);
