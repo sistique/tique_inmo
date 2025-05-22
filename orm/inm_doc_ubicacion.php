@@ -54,10 +54,9 @@ class inm_doc_ubicacion extends _modelo_parent
                 return $this->error->error(mensaje: 'Error al insertar doc', data: $r_documento);
             }
 
-            $nombre_doc = $r_documento['doc_documento_nombre'];
+            $nombre_doc = 'inm_ubicacion/'.$r_documento['doc_documento_nombre'];
             //$name = 'archivos/doc_documento/9.858556784382.pdf';
-
-            $guarda = (new _dropbox(link: $this->link))->upload(archivo_drop: $nombre_doc, archivo_local: $file['tmp_name']);
+            $guarda = (new _dropbox(link: $this->link))->upload(archivo_drop: $nombre_doc, archivo_file: $file['tmp_name']);
             if (errores::$error) {
                 return $this->error->error('Error al guardar archivo', $guarda);
             }

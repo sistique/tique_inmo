@@ -28,7 +28,7 @@ class _dropbox
         $this->link = $link;
     }
 
-    public function upload(string $archivo_drop, string $archivo_local, string $mode = 'add', bool $autorename = false): bool|string
+    public function upload(string $archivo_drop, string $archivo_local = '', string $archivo_file = '', string $mode = 'add', bool $autorename = false): bool|string
     {
         $token = $this->obten_token();
         if (errores::$error) {
@@ -42,10 +42,13 @@ class _dropbox
         $path_base = $generales->path_base;
 
         $dropboxPath = $ruta_base.$archivo_drop;
-        $localFilePath = $path_base.$archivo_local;
+        $localFilePath = $archivo_file;
+        if($archivo_file === ''){
+            $localFilePath = $path_base.$archivo_local;
 
-        if (!file_exists($localFilePath)) {
-            die("❌ Archivo no encontrado: $localFilePath\n");
+            if (!file_exists($localFilePath)) {
+                die("❌ Archivo no encontrado: $localFilePath\n");
+            }
         }
 
         $fileContent = file_get_contents($localFilePath);
