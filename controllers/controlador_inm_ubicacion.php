@@ -15,6 +15,7 @@ use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_ubicacion_html;
 use gamboamartin\inmuebles\html\inm_valuador_html;
 use gamboamartin\inmuebles\models\_inm_ubicacion;
+use gamboamartin\inmuebles\models\inm_conf_docs_ubicacion;
 use gamboamartin\inmuebles\models\inm_nacionalidad;
 use gamboamartin\inmuebles\models\inm_ocupacion;
 use gamboamartin\inmuebles\models\inm_status_ubicacion;
@@ -1041,6 +1042,101 @@ class controlador_inm_ubicacion extends _ctl_base {
         }
 
         return $r_modifica;
+    }
+
+    final public function subir_documento(bool $header, bool $ws = false)
+    {
+        $inm_prospecto = (new inm_ubicacion(link: $this->link))->registro(registro_id: $this->registro_id);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener inm_prospecto', data: $inm_prospecto,
+                header: $header, ws: $ws);
+        }
+
+        $inm_conf_docs_prospecto = (new inm_conf_docs_ubicacion(link: $this->link))->filtro_and(
+            columnas: ['doc_tipo_documento_id'],
+            filtro: array());
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener inm_conf_docs_prospecto', data: $inm_conf_docs_prospecto,
+                header: $header, ws: $ws);
+        }
+
+        $this->inputs = new stdClass();
+
+        $filtro['inm_ubicacion.id'] = $this->registro_id;
+        $inm_prospecto_id = (new inm_ubicacion_html(html: $this->html_base))->select_inm_ubicacion_id(
+            cols: 12, con_registros: true, id_selected: $this->registro_id, link: $this->link, filtro: $filtro);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al generar input', data: $inm_prospecto_id, header: $header, ws: $ws);
+        }
+        $this->inputs->inm_ubicacion_id  = $inm_prospecto_id;
+
+        $doc_ids = array_map(function ($registro) {
+            return $registro['doc_tipo_documento_id'];
+        }, $inm_conf_docs_prospecto->registros);
+
+        $doc_tipos_documentos = array();
+
+        if (count($doc_ids) > 0) {
+            $doc_tipos_documentos = (new _doctos())->documentos_de_ubicacion(inm_ubicacion_id: $this->registro_id,
+                link: $this->link, todos: false, tipos_documentos: $doc_ids);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al obtener tipos de documento', data: $doc_tipos_documentos,
+                    header: $header, ws: $ws);
+            }
+        }
+
+        $_doc_tipo_documento_id = -1;
+        $filtro = array();
+        if (isset($_GET['doc_tipo_documento_id'])) {
+            $_doc_tipo_documento_id = $_GET['doc_tipo_documento_id'];
+            $filtro['doc_tipo_documento.id'] = $_GET['doc_tipo_documento_id'];
+        }
+
+        $doc_tipo_documento_id = (new doc_tipo_documento_html(html: $this->html_base))->select_doc_tipo_documento_id(
+            cols: 12, con_registros: true, id_selected: $_doc_tipo_documento_id, link: $this->link, filtro: $filtro,
+            registros: $doc_tipos_documentos);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al generar input', data: $inm_prospecto_id, header: $header, ws: $ws);
+        }
+        $this->inputs->doc_tipo_documento_id = $doc_tipo_documento_id;
+
+        $documento = $this->html->input_file(cols: 12, name: 'documento', row_upd: new stdClass(), value_vacio: false);
+        if (errores::$error) {
+            return $this->retorno_error(
+                mensaje: 'Error al obtener inputs', data: $documento, header: $header, ws: $ws);
+        }
+
+        $this->inputs->documento = $documento;
+
+        $link_alta_doc = $this->obj_link->link_alta_bd(link: $this->link, seccion: 'inm_doc_ubicacion');
+        if (errores::$error) {
+            return $this->retorno_error(
+                mensaje: 'Error al generar link', data: $link_alta_doc, header: $header, ws: $ws);
+        }
+
+        $this->link_inm_doc_prospecto_alta_bd = $link_alta_doc;
+
+        $btn_action_next = $this->html->hidden('btn_action_next', value: 'documentos');
+        if (errores::$error) {
+            return $this->retorno_error(
+                mensaje: 'Error al generar btn_action_next', data: $btn_action_next, header: $header, ws: $ws);
+        }
+
+        $id_retorno = $this->html->hidden('id_retorno', value: $this->registro_id);
+        if (errores::$error) {
+            return $this->retorno_error(
+                mensaje: 'Error al generar btn_action_next', data: $btn_action_next, header: $header, ws: $ws);
+        }
+
+        $seccion_retorno = $this->html->hidden('seccion_retorno', value: $this->seccion);
+        if (errores::$error) {
+            return $this->retorno_error(
+                mensaje: 'Error al generar btn_action_next', data: $btn_action_next, header: $header, ws: $ws);
+        }
+
+        $this->inputs->btn_action_next = $btn_action_next;
+        $this->inputs->id_retorno = $id_retorno;
+        $this->inputs->seccion_retorno = $seccion_retorno;
     }
 
     public function tipos_documentos(bool $header, bool $ws = false): array
