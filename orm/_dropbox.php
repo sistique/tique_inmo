@@ -204,7 +204,7 @@ class _dropbox
                 echo "Respuesta: $response\n";
             }
         }
-
+        //unlink($archivo_local);
         curl_close($ch);
 
         return $ruta_mostrar;

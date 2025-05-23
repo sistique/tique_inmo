@@ -361,8 +361,6 @@ class controlador_inm_doc_ubicacion extends _ctl_formato {
         $this->button_inm_doc_ubicacion_descarga = $button_inm_doc_prospecto_descarga;
 
         return $registro;
-
-
     }
 
 

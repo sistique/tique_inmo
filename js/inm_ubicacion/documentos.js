@@ -76,6 +76,8 @@ modal.addEventListener('click', function (event) {
     if (event.target === modal) {
         $("#myModal .content").empty();
         modal.close();
+
+
     }
 });
 
