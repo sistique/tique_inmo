@@ -197,6 +197,10 @@ class controlador_inm_doc_ubicacion extends _ctl_formato {
 
     }
 
+    public function elimina_temporal(){
+
+    }
+
     public function modifica(bool $header, bool $ws = false): array|stdClass
     {
 

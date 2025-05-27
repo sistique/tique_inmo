@@ -1,4 +1,5 @@
 const registro_id = getParameterByName('registro_id');
+let session_id = getParameterByName('session_id');
 
 const columns_tipos_documentos = [
     {
@@ -77,7 +78,20 @@ modal.addEventListener('click', function (event) {
         $("#myModal .content").empty();
         modal.close();
 
+        let inm_doc_ubicacion_id = $('[name="inm_doc_ubicacion_id"]');
 
+        console.log(inm_doc_ubicacion_id.val());
+        $.ajax({
+            type: "POST",
+            data: {id:inm_doc_ubicacion_id.val()},
+            url: 'index.php?seccion=inm_doc_ubicacion&accion=elimina_temporal&ws=1&session_id='+session_id,
+            success: function(data_r) {
+                console.log(data_r);
+            },
+            error: function() {
+                alert("No se ha podido obtener la información");
+            }
+        });
     }
 });
 
@@ -128,8 +142,6 @@ $("#table-inm_ubicacion").on('click', 'tr:first-child', function (e) {
         documentos_seleccionados = [];
 
         selectedData.each(function (value, index, data) {
-            console.log(value);
-
             const url = $(value.vista_previa).attr('href')
             const params = new URLSearchParams(url);
             const accion = params.get('accion');
