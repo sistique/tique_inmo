@@ -167,12 +167,12 @@ class _dropbox
         return $response;
     }
 
-    public function preview(string $dropbox_id): stdClass
+    public function preview(string $dropbox_id, string $extencion): stdClass
     {
         $generales = new generales();
         $path_base = $generales->path_base;
 
-        $archivo_local = $path_base.'archivos/temporales/'.$dropbox_id.'.pdf';
+        $archivo_local = $path_base.'archivos/temporales/'.$dropbox_id.'.'.$extencion;
 
         $token = $this->obten_token();
         if (errores::$error) {
@@ -206,8 +206,8 @@ class _dropbox
             $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             if ($httpCode === 200) {
                 file_put_contents($archivo_local, $response);
-                $ruta_mostrar->ruta_mostrar = $generales->url_base.'archivos/temporales/'.$dropbox_id.'.pdf';
-                $ruta_mostrar->ruta_archivo = 'archivos/temporales/'.$dropbox_id.'.pdf';
+                $ruta_mostrar->ruta_mostrar = $generales->url_base.'archivos/temporales/'.$dropbox_id.'.'.$extencion;
+                $ruta_mostrar->ruta_archivo = 'archivos/temporales/'.$dropbox_id.'.'.$extencion;
                 //echo "<iframe src=\"$ruta_mostrar\" width=\"100%\" height=\"600px\"></iframe>";
             } else {
                 echo "❌ Error al descargar. Código HTTP: $httpCode\n";

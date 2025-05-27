@@ -171,7 +171,8 @@ class controlador_inm_doc_ubicacion extends _ctl_formato {
         $ruta_doc = $this->path_base."$registro->doc_documento_ruta_relativa";
 
         if((new generales())->guarda_archivo_dropbox) {
-            $guarda = (new _dropbox(link: $this->link))->preview(dropbox_id: $registro->inm_dropbox_ruta_id_dropbox);
+            $guarda = (new _dropbox(link: $this->link))->preview(dropbox_id: $registro->inm_dropbox_ruta_id_dropbox,
+                extencion: $registro->doc_extension_descripcion);
             if (errores::$error) {
                 return $this->retorno_error('Error al guardar archivo', $guarda, header: $header,
                     ws: $ws);
@@ -216,7 +217,8 @@ class controlador_inm_doc_ubicacion extends _ctl_formato {
 
         $generales = new generales();
         $path_base = $generales->path_base;
-        $archivo_local = $path_base.'archivos/temporales/'.$registro['inm_dropbox_ruta_id_dropbox'].'.pdf';
+        $archivo_local = $path_base.'archivos/temporales/'.$registro['inm_dropbox_ruta_id_dropbox'].'.'.
+            $registro['doc_extension_descripcion'];
 
         if(file_exists($archivo_local)){
             unlink($archivo_local);
@@ -300,7 +302,8 @@ class controlador_inm_doc_ubicacion extends _ctl_formato {
         $ruta_doc = $this->url_base."$registro->doc_documento_ruta_relativa";
 
         if((new generales())->guarda_archivo_dropbox) {
-            $guarda = (new _dropbox(link: $this->link))->preview(dropbox_id: $registro->inm_dropbox_ruta_id_dropbox);
+            $guarda = (new _dropbox(link: $this->link))->preview(dropbox_id: $registro->inm_dropbox_ruta_id_dropbox,
+                extencion: $registro->doc_extension_descripcion);
             if (errores::$error) {
                 return $this->retorno_error('Error al guardar archivo', $guarda, header: $header,
                     ws: $ws);
