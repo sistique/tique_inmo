@@ -398,6 +398,13 @@ class controlador_inm_doc_prospecto_ubicacion extends _ctl_formato {
 
         $this->button_inm_doc_prospecto_descarga = $button_inm_doc_prospecto_descarga;
 
+        $inm_doc_prospecto_ubicacion_id = $this->html->hidden(name:'inm_doc_prospecto_ubicacion_id',value: $this->registro_id);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al in_registro_id',data:  $inm_doc_prospecto_ubicacion_id,
+                header: $header,ws:  $ws);
+        }
+        $this->inputs->inm_doc_prospecto_ubicacion_id = $inm_doc_prospecto_ubicacion_id;
+
         return $registro;
 
 

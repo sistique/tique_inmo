@@ -50,7 +50,7 @@ $(document).on("click", "#table-inm_prospecto_ubicacion a[title='Vista Previa']"
         type: 'GET',
         success: function (data) {
             var tempDiv = $("<div>").html(data);
-            var inputdoc = tempDiv.find('[name="inm_doc_ubicacion_id"]');
+            var inputdoc = tempDiv.find('[name="inm_doc_prospecto_ubicacion_id"]');
             var viewContent = tempDiv.find(".view");
             inm_doc_prospecto_ubicacion_id = inputdoc.val();
 
