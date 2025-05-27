@@ -3,6 +3,7 @@
 namespace gamboamartin\inmuebles\models;
 
 use base\orm\_modelo_parent;
+use config\generales;
 use gamboamartin\documento\models\doc_documento;
 use gamboamartin\documento\models\doc_documento_etapa;
 use gamboamartin\errores\errores;
@@ -23,6 +24,9 @@ class inm_doc_prospecto extends _modelo_parent
         $campos_obligatorios = array('inm_prospecto_id', 'doc_documento_id');
 
         $columnas_extra = array();
+        $sql = "(SELECT inm_dropbox_ruta.id_dropbox FROM inm_dropbox_ruta WHERE inm_dropbox_ruta.doc_documento_id = doc_documento.id)";
+        $columnas_extra['inm_dropbox_ruta_id_dropbox'] = $sql;
+
         $renombres = array();
 
         $atributos_criticos = array('inm_prospecto_id', 'doc_documento_id');
@@ -40,7 +44,9 @@ class inm_doc_prospecto extends _modelo_parent
         $registro_doc['doc_tipo_documento_id'] = $this->registro['doc_tipo_documento_id'];
         $file = $_FILES['documento'];
 
-
+        if((new generales())->guarda_archivo_dropbox) {
+            $registro_doc['ruta_relativa'] = 'inm_prospecto/'.$this->registro['inm_prospecto_id'].'/';
+        }
         $r_alta_doc = (new doc_documento(link: $this->link))->alta_documento(registro: $registro_doc, file: $file);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al insertar doc', data: $r_alta_doc);
