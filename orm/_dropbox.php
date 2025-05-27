@@ -291,17 +291,17 @@ class _dropbox
         if ($response) {
             $decoded = json_decode($response, true);
             if (isset($decoded['metadata'])) {
-                echo "✅ Archivo eliminado correctamente: " . $decoded['metadata']['name'];
+                //echo "Archivo eliminado correctamente: " . $decoded['metadata']['name'];
             }else if(isset($decoded['error']['path_lookup']['.tag']) && $decoded['error']['path_lookup']['.tag'] === 'not_found'){
                 echo "Documento no encontrado";
             } else {
-                echo "❌ Error: $response";
+                echo "Error: $response";
                 $error = (new errores())->error(mensaje: 'Error al eliminar archivo', data: $token);
                 print_r($error);
                 exit;
             }
         } else {
-            echo "❌ Error al conectar con Dropbox.";
+            echo "Error al conectar con Dropbox.";
             $error = (new errores())->error(mensaje: 'Error al eliminar archivo', data: $token);
             print_r($error);
             exit;

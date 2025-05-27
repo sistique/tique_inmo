@@ -34,8 +34,16 @@ $(".elimina_img").on("click", function() {
         success: function(data_r) {
             console.log(data_r);
         },
-        error: function() {
-            alert("No se ha podido obtener la información");
+        error: function(jqXHR, textStatus, errorThrown) {
+            //alert("No se ha podido obtener la información");
+
+            console.error("❌ Error en AJAX");
+            console.error("Estado: " + textStatus); // timeout, error, abort, etc.
+            console.error("Código HTTP: " + jqXHR.status); // 404, 500, etc.
+            console.error("Texto del error: " + errorThrown); // Internal Server Error, Not Found, etc.
+            console.error("Respuesta del servidor: " + jqXHR.responseText); // HTML o JSON de respuesta de error
+
+            alert("Ocurrió un error: " + errorThrown);
         }
     });
     $(this).closest(".contenedor_img").remove();
