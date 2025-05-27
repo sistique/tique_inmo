@@ -28,6 +28,7 @@
                 <div class="row">
                     <br>
                     <div class="col-md-12">
+                        <?php echo $controlador->inputs->inm_doc_ubicacion_id; ?>
                         <iframe class="col-md-12 view" height="600px" src="<?php echo $controlador->ruta_doc; ?>"></iframe>
                     </div>
                 </div>

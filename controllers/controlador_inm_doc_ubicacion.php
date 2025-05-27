@@ -197,8 +197,16 @@ class controlador_inm_doc_ubicacion extends _ctl_formato {
 
     }
 
-    public function elimina_temporal(){
+    public function elimina_temporal(bool $header, bool $ws = false){
 
+        $modelo_inm_doc_ubicacion = new inm_doc_ubicacion(link: $this->link);
+        $registro = $modelo_inm_doc_ubicacion->registro(registro_id: $_POST['id']);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al comprimir file',data:  $registro,header:  $header,
+                ws:  $ws);
+        }
+
+        print_r($registro);exit;
     }
 
     public function modifica(bool $header, bool $ws = false): array|stdClass
@@ -361,8 +369,14 @@ class controlador_inm_doc_ubicacion extends _ctl_formato {
                 header: $header,ws:  $ws);
         }
 
-
         $this->button_inm_doc_ubicacion_descarga = $button_inm_doc_prospecto_descarga;
+
+        $inm_doc_ubicacion_id = $this->html->hidden(name:'inm_doc_ubicacion_id',value: $this->registro_id);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al in_registro_id',data:  $inm_doc_ubicacion_id,
+                header: $header,ws:  $ws);
+        }
+        $this->inputs->inm_doc_ubicacion_id = $inm_doc_ubicacion_id;
 
         return $registro;
     }

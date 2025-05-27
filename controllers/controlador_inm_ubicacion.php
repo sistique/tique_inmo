@@ -444,13 +444,6 @@ class controlador_inm_ubicacion extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al integrar buttons', data: $inm_conf_docs_ubicacion, header: $header, ws: $ws);
         }
 
-        $inm_doc_ubicacion_id = $this->html->hidden(name:'inm_doc_ubicacion_id',value: $this->registro_id);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al in_registro_id',data:  $inm_doc_ubicacion_id,
-                header: $header,ws:  $ws);
-        }
-        $this->inputs->inm_doc_ubicacion_id = $inm_doc_ubicacion_id;
-
         $keys_selects = array();
 
         //$keys_selects['com_tipo_ubicacion_id']->id_selected = $this->registro['com_tipo_ubicacion_id'];

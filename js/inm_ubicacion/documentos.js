@@ -49,9 +49,14 @@ $(document).on("click", "#table-inm_ubicacion a[title='Vista Previa']", function
         type: 'GET',
         success: function (data) {
             var tempDiv = $("<div>").html(data);
+            var inputdoc = tempDiv.find('[name="inm_doc_ubicacion_id"]');
             var viewContent = tempDiv.find(".view");
 
-            $("#myModal .content").html(viewContent);
+            /*$("#myModal .content").html(inputdoc);
+            $("#myModal .content").html(viewContent);*/
+            $("#myModal .content").html('');
+            $("#myModal .content").append(inputdoc);
+            $("#myModal .content").append(viewContent);
             modal.showModal();
             loaderOverlay.remove();
         },
@@ -78,9 +83,9 @@ modal.addEventListener('click', function (event) {
         $("#myModal .content").empty();
         modal.close();
 
-        let inm_doc_ubicacion_id = $('[name="inm_doc_ubicacion_id"]');
+        console.log(registro_id);
+        /*let inm_doc_ubicacion_id = $('[name="inm_doc_ubicacion_id"]');
 
-        console.log(inm_doc_ubicacion_id.val());
         $.ajax({
             type: "POST",
             data: {id:inm_doc_ubicacion_id.val()},
@@ -91,7 +96,7 @@ modal.addEventListener('click', function (event) {
             error: function() {
                 alert("No se ha podido obtener la información");
             }
-        });
+        });*/
     }
 });
 

@@ -20,8 +20,6 @@
                     <?php echo $controlador->inputs->apellido_paterno; ?>
                     <?php echo $controlador->inputs->apellido_materno; ?>
                     <?php echo $controlador->inputs->nombre; ?>
-                    <?php echo $controlador->inputs->inm_doc_ubicacion_id; ?>
-
                 </div>
             </div>
 
