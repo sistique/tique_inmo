@@ -1,12 +1,10 @@
 const registro_id = getParameterByName('registro_id');
+let session_id = getParameterByName('session_id');
 
 const columns_tipos_documentos = [
     {
         title: "Tipo documento",
         data: "doc_tipo_documento_descripcion"
-    },{
-        title: "Etapa",
-        data: "doc_etapa"
     },
     {
         title: "Descarga",
@@ -38,6 +36,7 @@ var modalSend = document.getElementById("modalSnd");
 var closeBtn = document.getElementById("closeModalBtn");
 var openMdl = document.getElementById("enviar");
 var closeMdl = document.getElementById("closeModalSendBtn");
+let inm_doc_prospecto_id = '';
 
 $(document).on("click", "#table-inm_prospecto a[title='Vista Previa']", function (event) {
     event.preventDefault();
@@ -51,9 +50,13 @@ $(document).on("click", "#table-inm_prospecto a[title='Vista Previa']", function
         type: 'GET',
         success: function (data) {
             var tempDiv = $("<div>").html(data);
+            var inputdoc = tempDiv.find('[name="inm_doc_prospecto_id"]');
             var viewContent = tempDiv.find(".view");
+            inm_doc_prospecto_id = inputdoc.val();
 
-            $("#myModal .content").html(viewContent);
+            $("#myModal .content").html('');
+            $("#myModal .content").append(inputdoc);
+            $("#myModal .content").append(viewContent);
             modal.showModal();
             loaderOverlay.remove();
         },
@@ -68,6 +71,17 @@ $(document).on("click", "#table-inm_prospecto a[title='Vista Previa']", function
 closeBtn.onclick = function () {
     $("#myModal .content").empty();
     modal.close();
+    $.ajax({
+        type: "POST",
+        data: {id:inm_doc_prospecto_id},
+        url: 'index.php?seccion=inm_doc_prospecto&accion=elimina_temporal&ws=1&session_id='+session_id,
+        success: function(data_r) {
+            console.log(data_r);
+        },
+        error: function() {
+            alert("No se ha podido obtener la información");
+        }
+    });
 }
 openMdl.onclick = function () {
     modalSend.showModal();
@@ -79,6 +93,17 @@ modal.addEventListener('click', function (event) {
     if (event.target === modal) {
         $("#myModal .content").empty();
         modal.close();
+        $.ajax({
+            type: "POST",
+            data: {id:inm_doc_prospecto_id},
+            url: 'index.php?seccion=inm_doc_prospecto&accion=elimina_temporal&ws=1&session_id='+session_id,
+            success: function(data_r) {
+                console.log(data_r);
+            },
+            error: function() {
+                alert("No se ha podido obtener la información");
+            }
+        });
     }
 });
 
