@@ -158,7 +158,7 @@ class _dropbox
         return $response;
     }
 
-    public function preview(string $dropbox_id): bool|string
+    public function preview(string $dropbox_id): stdClass
     {
         $generales = new generales();
         $path_base = $generales->path_base;
@@ -190,14 +190,15 @@ class _dropbox
 
         $response = curl_exec($ch);
 
-        $ruta_mostrar = '';
+        $ruta_mostrar = new stdClass();
         if (curl_errno($ch)) {
             echo 'Error de cURL: ' . curl_error($ch);
         } else {
             $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             if ($httpCode === 200) {
                 file_put_contents($archivo_local, $response);
-                $ruta_mostrar = $generales->url_base.'archivos/temporales/'.$dropbox_id.'.pdf';
+                $ruta_mostrar->ruta_mostrar = $generales->url_base.'archivos/temporales/'.$dropbox_id.'.pdf';
+                $ruta_mostrar->ruta_archivo = 'archivos/temporales/'.$dropbox_id.'.pdf';
                 //echo "<iframe src=\"$ruta_mostrar\" width=\"100%\" height=\"600px\"></iframe>";
             } else {
                 echo "❌ Error al descargar. Código HTTP: $httpCode\n";

@@ -170,7 +170,15 @@ class controlador_inm_doc_ubicacion extends _ctl_formato {
         }
         $ruta_doc = $this->path_base."$registro->doc_documento_ruta_relativa";
 
+        if((new generales())->guarda_archivo_dropbox) {
+            $guarda = (new _dropbox(link: $this->link))->preview(dropbox_id: $registro->inm_dropbox_ruta_id_dropbox);
+            if (errores::$error) {
+                return $this->retorno_error('Error al guardar archivo', $guarda, header: $header,
+                    ws: $ws);
+            }
 
+            $ruta_doc = $this->path_base.$guarda->ruta_archivo;
+        }
 
         $name = $this->name_doc(registro: $registro);
         if(errores::$error){
@@ -291,14 +299,15 @@ class controlador_inm_doc_ubicacion extends _ctl_formato {
 
         $ruta_doc = $this->url_base."$registro->doc_documento_ruta_relativa";
 
-        $guarda = (new _dropbox(link: $this->link))->preview(dropbox_id: $registro->inm_dropbox_ruta_id_dropbox);
-        if (errores::$error) {
-            return $this->retorno_error('Error al guardar archivo', $guarda,header:  $header,
-                ws:  $ws);
+        if((new generales())->guarda_archivo_dropbox) {
+            $guarda = (new _dropbox(link: $this->link))->preview(dropbox_id: $registro->inm_dropbox_ruta_id_dropbox);
+            if (errores::$error) {
+                return $this->retorno_error('Error al guardar archivo', $guarda, header: $header,
+                    ws: $ws);
+            }
+
+            $ruta_doc = $guarda->ruta_mostrar;
         }
-
-        $ruta_doc = $guarda;
-
         $this->ruta_doc = $ruta_doc;
 
         if($registro->doc_extension_es_imagen === 'activo') {

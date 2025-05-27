@@ -2,6 +2,7 @@
 
 namespace gamboamartin\compresor;
 
+use config\generales;
 use gamboamartin\errores\errores;
 use Imagick;
 use ImagickException;
@@ -52,15 +53,22 @@ class compresor{
     private function agrega_archivos_zip(array $archivos, ZipArchive $zip): array
     {
         $datas = array();
-        foreach($archivos as $origen =>$name_file){
-            if(is_array($name_file)){
-                return $this->error->error('Error al el nombre del archivo no puede ser un array',$name_file);
+        foreach($archivos as $origen =>$name_file) {
+            if (is_array($name_file)) {
+                return $this->error->error('Error al el nombre del archivo no puede ser un array', $name_file);
             }
-            $data = $this->agrega_archivo_zip(origen: $origen,name_file: $name_file,zip: $zip);
-            if(errores::$error){
-                return $this->error->error('Error al agregar archivo',$data);
+
+            $data = $this->agrega_archivo_zip(origen: $origen, name_file: $name_file, zip: $zip);
+            if (errores::$error) {
+                return $this->error->error('Error al agregar archivo', $data);
             }
             $datas[] = $data;
+
+            if ((new generales())->guarda_archivo_dropbox) {
+                if(file_exists($origen)){
+                    unlink($origen);
+                }
+            }
         }
         return $datas;
     }
@@ -72,7 +80,7 @@ class compresor{
     private function crea_folder_temporal(): array|string
     {
         $errores = new errores();
-        $carpeta_temporales = PATH_BASE.'archivos/temporales/';
+        $carpeta_temporales = PATH_BASE.'archivos/temporales/zip/';
         if(!file_exists($carpeta_temporales) && !mkdir($carpeta_temporales, 0777, true)) {
             return $errores->error('Error ar crear carpeta',$carpeta_temporales);
         }
