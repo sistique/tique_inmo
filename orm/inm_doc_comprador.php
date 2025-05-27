@@ -3,6 +3,7 @@
 namespace gamboamartin\inmuebles\models;
 
 use base\orm\_modelo_parent;
+use config\generales;
 use gamboamartin\documento\models\doc_documento;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\controllers\_doctos;
@@ -20,6 +21,9 @@ class inm_doc_comprador extends _modelo_parent{
         $campos_obligatorios = array('inm_comprador_id','doc_documento_id');
 
         $columnas_extra= array();
+        $sql = "(SELECT inm_dropbox_ruta.id_dropbox FROM inm_dropbox_ruta WHERE inm_dropbox_ruta.doc_documento_id = doc_documento.id)";
+        $columnas_extra['inm_dropbox_ruta_id_dropbox'] = $sql;
+
         $renombres= array();
 
         $atributos_criticos = array('inm_comprador_id','doc_documento_id');
@@ -54,6 +58,9 @@ class inm_doc_comprador extends _modelo_parent{
             return $this->error->error(mensaje: 'Error el documento no es valido para la configuracion',data:  $confs);
         }
 
+        if((new generales())->guarda_archivo_dropbox) {
+            $registro_doc['ruta_relativa'] = 'inm_comprador/'.$this->registro['inm_comprador_id'].'/';
+        }
         $r_alta_doc = (new doc_documento(link: $this->link))->alta_documento(registro: $registro_doc,file: $file);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al insertar doc',data:  $r_alta_doc);
