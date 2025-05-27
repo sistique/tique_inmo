@@ -51,8 +51,14 @@ class inm_doc_ubicacion extends _modelo_parent
     {
         $registro_doc['doc_tipo_documento_id'] = $this->registro['doc_tipo_documento_id'];
         $file = $_FILES['documento'];
+
         if((new generales())->guarda_archivo_dropbox) {
-            $registro_doc['ruta_relativa'] = 'inm_ubicacion/';
+            /*$registro_ubi = (new inm_ubicacion(link: $this->link))->registro(
+                registro_id: $this->registro['inm_ubicacion_id']);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al obtener descripcion', data: $registro_ubi);
+            }*/
+            $registro_doc['ruta_relativa'] = 'inm_ubicacion/'.$this->registro['inm_ubicacion_id'].'/';
         }
         $r_alta_doc = (new doc_documento(link: $this->link))->alta_documento(registro: $registro_doc, file: $file);
         if (errores::$error) {

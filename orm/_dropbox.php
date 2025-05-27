@@ -42,6 +42,15 @@ class _dropbox
         $path_base = $generales->path_base;
 
         $dropboxPath = $ruta_base.$archivo_drop;
+
+        $carpeta = dirname($dropboxPath);
+        $carpeta_creada = $this->crear_carpeta_si_no_existe(carpeta_dropbox: $carpeta);
+        if (errores::$error) {
+            $error = (new errores())->error(mensaje: 'Error al obtener registro token', data: $carpeta_creada);
+            print_r($error);
+            exit;
+        }
+
         $localFilePath = $archivo_file;
         if($archivo_file === '' || $archivo_local !== ''){
             $localFilePath = $path_base.$archivo_local;
@@ -469,4 +478,42 @@ class _dropbox
 
         return $token;
     }
+
+    public function crear_carpeta_si_no_existe(string $carpeta_dropbox)
+    {
+        $token = $this->obten_token();
+        if (errores::$error) {
+            $error = (new errores())->error(mensaje: 'Error al obtener registro token', data: $token);
+            print_r($error);
+            exit;
+        }
+
+        $headers = [
+            'Authorization: Bearer ' . $token,
+            'Content-Type: application/json',
+        ];
+
+        $data = json_encode([
+            "path" => $carpeta_dropbox,
+            "autorename" => false
+        ]);
+
+        $ch = curl_init('https://api.dropboxapi.com/2/files/create_folder_v2');
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        $response = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        if ($httpCode !== 200 && strpos($response, 'conflict/folder') === false) {
+            echo "❌ Error al crear carpeta: $response";
+            exit;
+        }
+
+        return $response;
+    }
+
 }
