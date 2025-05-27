@@ -632,13 +632,16 @@ class compresor{
             }
         }
 
+        $generales = new generales();
+        $path_base = $generales->path_base;
+
         header("Cache-Control: public");
         header("Content-Description: File Transfer");
         header("Content-Disposition: attachment; filename=$name_file_zip");
         header("Content-Type: application/zip");
         header("Content-Transfer-Encoding: binary");
         readfile($zip);
-        unlink($zip);
+        unlink($path_base.$zip);
         exit;
     }
 
