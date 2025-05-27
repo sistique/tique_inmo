@@ -8,9 +8,11 @@
  */
 namespace gamboamartin\inmuebles\controllers;
 
+use config\generales;
 use gamboamartin\compresor\compresor;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_doc_prospecto_html;
+use gamboamartin\inmuebles\models\_dropbox;
 use gamboamartin\inmuebles\models\inm_doc_prospecto;
 use gamboamartin\inmuebles\models\inm_prospecto;
 use gamboamartin\system\links_menu;
@@ -116,15 +118,24 @@ class controlador_inm_doc_prospecto extends _ctl_formato {
             return $this->retorno_error(mensaje: 'Error al obtener documento',data:  $registro,header:  $header,
                 ws:  $ws);
         }
-        $ruta_doc = $this->path_base."$registro->doc_documento_ruta_relativa";
-
-        $content = file_get_contents($ruta_doc);
-
         $name_file = $this->name_file(registro: $registro);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener name_file',data:  $name_file,header:  $header,
                 ws:  $ws);
         }
+
+        if((new generales())->guarda_archivo_dropbox){
+            $guarda = (new _dropbox(link: $this->link))->download(dropbox_id: $registro->inm_dropbox_ruta_id_dropbox,
+                archivo_local: $name_file);
+            if (errores::$error) {
+                return $this->retorno_error('Error al guardar archivo', $guarda,header:  $header,
+                    ws:  $ws);
+            }
+        }
+
+        $ruta_doc = $this->path_base."$registro->doc_documento_ruta_relativa";
+
+        $content = file_get_contents($ruta_doc);
 
         if($header) {
             if (ob_get_level() > 0) {
@@ -155,7 +166,16 @@ class controlador_inm_doc_prospecto extends _ctl_formato {
         }
         $ruta_doc = $this->path_base."$registro->doc_documento_ruta_relativa";
 
+        if((new generales())->guarda_archivo_dropbox) {
+            $guarda = (new _dropbox(link: $this->link))->preview(dropbox_id: $registro->inm_dropbox_ruta_id_dropbox,
+                extencion: $registro->doc_extension_descripcion);
+            if (errores::$error) {
+                return $this->retorno_error('Error al guardar archivo', $guarda, header: $header,
+                    ws: $ws);
+            }
 
+            $ruta_doc = $this->path_base.$guarda->ruta_archivo;
+        }
 
         $name = $this->name_doc(registro: $registro);
         if(errores::$error){
@@ -180,6 +200,27 @@ class controlador_inm_doc_prospecto extends _ctl_formato {
 
         return $comprime;
 
+    }
+
+    public function elimina_temporal(bool $header, bool $ws = false){
+
+        $modelo_inm_doc_prospecto = new inm_doc_prospecto(link: $this->link);
+        $registro = $modelo_inm_doc_prospecto->registro(registro_id: $_POST['id']);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al comprimir file',data:  $registro,header:  $header,
+                ws:  $ws);
+        }
+
+        $generales = new generales();
+        $path_base = $generales->path_base;
+        $archivo_local = $path_base.'archivos/temporales/'.$registro['inm_dropbox_ruta_id_dropbox'].'.'.
+            $registro['doc_extension_descripcion'];
+
+        if(file_exists($archivo_local)){
+            unlink($archivo_local);
+        }
+
+        return $archivo_local;
     }
 
     public function modifica(bool $header, bool $ws = false): array|stdClass
@@ -254,17 +295,20 @@ class controlador_inm_doc_prospecto extends _ctl_formato {
                 ws:  $ws);
         }
 
-        $com_prospecto = (new inm_prospecto(link: $this->link))->get_com_prospecto(
-            inm_prospecto_id: $registro->inm_prospecto_id, retorno_obj: true);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener prospecto',data:  $com_prospecto,header:  $header,
-                ws:  $ws);
-        }
-
         $ruta_doc = $this->url_base."$registro->doc_documento_ruta_relativa";
 
+        if((new generales())->guarda_archivo_dropbox) {
+            $guarda = (new _dropbox(link: $this->link))->preview(dropbox_id: $registro->inm_dropbox_ruta_id_dropbox,
+                extencion: $registro->doc_extension_descripcion);
+            if (errores::$error) {
+                return $this->retorno_error('Error al guardar archivo', $guarda, header: $header,
+                    ws: $ws);
+            }
 
+            $ruta_doc = $guarda->ruta_mostrar;
+        }
         $this->ruta_doc = $ruta_doc;
+
         if($registro->doc_extension_es_imagen === 'activo') {
             $this->es_imagen = true;
         }
@@ -274,9 +318,7 @@ class controlador_inm_doc_prospecto extends _ctl_formato {
 
         $row_upd = new stdClass();
         $row_upd->nss = $registro->inm_prospecto_nss;
-        $row_upd->com_tipo_cliente_descripcion = $com_prospecto->com_tipo_prospecto_descripcion;
         $row_upd->curp = $registro->inm_prospecto_curp;
-        $row_upd->rfc = $com_prospecto->com_prospecto_rfc;
         $row_upd->apellido_paterno = $registro->inm_prospecto_apellido_paterno;
         $row_upd->apellido_materno = $registro->inm_prospecto_apellido_materno;
         $row_upd->nombre = $registro->inm_prospecto_nombre;
@@ -343,8 +385,14 @@ class controlador_inm_doc_prospecto extends _ctl_formato {
                 header: $header,ws:  $ws);
         }
 
-
         $this->button_inm_doc_prospecto_descarga = $button_inm_doc_prospecto_descarga;
+
+        $inm_doc_prospecto_id = $this->html->hidden(name:'inm_doc_prospecto_id',value: $this->registro_id);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al in_registro_id',data:  $inm_doc_prospecto_id,
+                header: $header,ws:  $ws);
+        }
+        $this->inputs->inm_doc_prospecto_id = $inm_doc_prospecto_id;
 
         return $registro;
 
