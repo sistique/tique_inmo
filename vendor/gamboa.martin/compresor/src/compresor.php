@@ -53,22 +53,16 @@ class compresor{
     private function agrega_archivos_zip(array $archivos, ZipArchive $zip): array
     {
         $datas = array();
-        foreach($archivos as $origen =>$name_file) {
-            if (is_array($name_file)) {
-                return $this->error->error('Error al el nombre del archivo no puede ser un array', $name_file);
+        foreach($archivos as $origen =>$name_file){
+            if(is_array($name_file)){
+                return $this->error->error('Error al el nombre del archivo no puede ser un array',$name_file);
             }
 
-            $data = $this->agrega_archivo_zip(origen: $origen, name_file: $name_file, zip: $zip);
-            if (errores::$error) {
-                return $this->error->error('Error al agregar archivo', $data);
+            $data = $this->agrega_archivo_zip(origen: $origen,name_file: $name_file,zip: $zip);
+            if(errores::$error){
+                return $this->error->error('Error al agregar archivo',$data);
             }
             $datas[] = $data;
-
-            if ((new generales())->guarda_archivo_dropbox) {
-                if(file_exists($origen)){
-                    unlink($origen);
-                }
-            }
         }
         return $datas;
     }
@@ -628,6 +622,14 @@ class compresor{
         $zip = compresor::comprime_archivos(archivos: $archivos);
         if(errores::$error){
             return $errores->error('Error al obtener zip',$zip);
+        }
+
+        if ((new generales())->guarda_archivo_dropbox) {
+            foreach ($archivos as $origen => $name_file) {
+                if(file_exists($origen)){
+                    unlink($origen);
+                }
+            }
         }
 
         header("Cache-Control: public");
