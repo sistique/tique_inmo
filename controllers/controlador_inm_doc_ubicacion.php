@@ -206,7 +206,15 @@ class controlador_inm_doc_ubicacion extends _ctl_formato {
                 ws:  $ws);
         }
 
-        print_r($registro);exit;
+        $generales = new generales();
+        $path_base = $generales->path_base;
+        $archivo_local = $path_base.'archivos/temporales/'.$registro['inm_dropbox_ruta_id_dropbox'].'.pdf';
+
+        if(file_exists($archivo_local)){
+            unlink($archivo_local);
+        }
+
+        return $archivo_local;
     }
 
     public function modifica(bool $header, bool $ws = false): array|stdClass

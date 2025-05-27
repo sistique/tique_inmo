@@ -36,6 +36,7 @@ var modalSend = document.getElementById("modalSnd");
 var closeBtn = document.getElementById("closeModalBtn");
 var openMdl = document.getElementById("enviar");
 var closeMdl = document.getElementById("closeModalSendBtn");
+let inm_doc_ubicacion_id = '';
 
 $(document).on("click", "#table-inm_ubicacion a[title='Vista Previa']", function (event) {
     event.preventDefault();
@@ -51,6 +52,7 @@ $(document).on("click", "#table-inm_ubicacion a[title='Vista Previa']", function
             var tempDiv = $("<div>").html(data);
             var inputdoc = tempDiv.find('[name="inm_doc_ubicacion_id"]');
             var viewContent = tempDiv.find(".view");
+            inm_doc_ubicacion_id = inputdoc.val();
 
             /*$("#myModal .content").html(inputdoc);
             $("#myModal .content").html(viewContent);*/
@@ -71,6 +73,18 @@ $(document).on("click", "#table-inm_ubicacion a[title='Vista Previa']", function
 closeBtn.onclick = function () {
     $("#myModal .content").empty();
     modal.close();
+
+    $.ajax({
+        type: "POST",
+        data: {id:inm_doc_ubicacion_id},
+        url: 'index.php?seccion=inm_doc_ubicacion&accion=elimina_temporal&ws=1&session_id='+session_id,
+        success: function(data_r) {
+            console.log(data_r);
+        },
+        error: function() {
+            alert("No se ha podido obtener la información");
+        }
+    });
 }
 openMdl.onclick = function () {
     modalSend.showModal();
@@ -83,12 +97,9 @@ modal.addEventListener('click', function (event) {
         $("#myModal .content").empty();
         modal.close();
 
-        console.log(registro_id);
-        /*let inm_doc_ubicacion_id = $('[name="inm_doc_ubicacion_id"]');
-
         $.ajax({
             type: "POST",
-            data: {id:inm_doc_ubicacion_id.val()},
+            data: {id:inm_doc_ubicacion_id},
             url: 'index.php?seccion=inm_doc_ubicacion&accion=elimina_temporal&ws=1&session_id='+session_id,
             success: function(data_r) {
                 console.log(data_r);
@@ -96,7 +107,7 @@ modal.addEventListener('click', function (event) {
             error: function() {
                 alert("No se ha podido obtener la información");
             }
-        });*/
+        });
     }
 });
 
