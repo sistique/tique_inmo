@@ -10,6 +10,7 @@
 namespace gamboamartin\inmuebles\controllers;
 
 use base\controller\init;
+use config\generales;
 use gamboamartin\calculo\calculo;
 use gamboamartin\comercial\models\com_agente;
 use gamboamartin\comercial\models\com_direccion;
@@ -19,6 +20,7 @@ use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_prospecto_ubicacion_html;
 use gamboamartin\inmuebles\html\inm_status_prospecto_ubicacion_html;
 use gamboamartin\inmuebles\models\_base_paquete;
+use gamboamartin\inmuebles\models\_dropbox;
 use gamboamartin\inmuebles\models\_email;
 use gamboamartin\inmuebles\models\_inm_prospecto;
 use gamboamartin\inmuebles\models\_upd_prospecto;
@@ -368,7 +370,21 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
 
             $fotos = array();
             foreach ($inm_doc_prospecto_ubicacion->registros as $reg){
-                $foto = $this->img_btn_modal(src: $reg['doc_documento_ruta_relativa'],
+                $src = $reg['doc_documento_ruta_relativa'];
+                if((new generales())->guarda_archivo_dropbox) {
+                    $guarda = (new _dropbox(link: $this->link))->preview(
+                        dropbox_id: $reg['inm_dropbox_ruta_id_dropbox'], extencion: $reg['doc_extension_descripcion']);
+                    if (errores::$error) {
+                        return $this->retorno_error('Error al guardar archivo', $guarda, header: $header,
+                            ws: $ws);
+                    }
+
+                    //print_r($guarda);Exit;
+                    $src = $guarda->ruta_mostrar;
+                    //$ruta_doc = $this->path_base.$guarda->ruta_archivo;
+                }
+
+                $foto = $this->img_btn_modal(src: $src,
                     css_id: $registro['doc_tipo_documento_id'],class_css: ['imagen']);
                 if(errores::$error){
                     return $this->retorno_error(mensaje: 'Error al obtener inm_conf_docs_prospecto',

@@ -30,14 +30,33 @@ $(".elimina_img").on("click", function() {
     $.ajax({
         type: "POST",
         data: {id:inm_doc_prospecto_ubicacion_id},
-        url: 'index.php?seccion=inm_doc_prospecto_ubicacion&accion=elimina_bd&ws=1&registro_id='+inm_doc_prospecto_ubicacion_id+'&session_id='+session_id,
+        url: 'index.php?seccion=inm_doc_prospecto_ubicacion&accion=elimina_temporal&ws=1&session_id='+session_id,
         success: function(data_r) {
-            console.log(data_r);
+            $.ajax({
+                type: "POST",
+                data: {id:inm_doc_prospecto_ubicacion_id},
+                url: 'index.php?seccion=inm_doc_prospecto_ubicacion&accion=elimina_bd&ws=1&registro_id='+inm_doc_prospecto_ubicacion_id+'&session_id='+session_id,
+                success: function(data_r) {
+                    console.log(data_r);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    //alert("No se ha podido obtener la información");
+
+                    console.error("❌ Error en AJAX");
+                    console.error("Estado: " + textStatus); // timeout, error, abort, etc.
+                    console.error("Código HTTP: " + jqXHR.status); // 404, 500, etc.
+                    console.error("Texto del error: " + errorThrown); // Internal Server Error, Not Found, etc.
+                    console.error("Respuesta del servidor: " + jqXHR.responseText); // HTML o JSON de respuesta de error
+
+                    alert("Ocurrió un error: " + errorThrown);
+                }
+            });
         },
         error: function() {
             alert("No se ha podido obtener la información");
         }
     });
+    
     $(this).closest(".contenedor_img").remove();
 
 });
