@@ -8,9 +8,11 @@
  */
 namespace gamboamartin\inmuebles\controllers;
 
+use config\generales;
 use gamboamartin\compresor\compresor;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_doc_comprador_html;
+use gamboamartin\inmuebles\models\_dropbox;
 use gamboamartin\inmuebles\models\inm_comprador;
 use gamboamartin\inmuebles\models\inm_doc_comprador;
 use gamboamartin\system\links_menu;
@@ -119,21 +121,30 @@ class controlador_inm_doc_comprador extends _ctl_formato {
 
     public function descarga(bool $header, bool $ws = false): array|string
     {
-
         $registro = $this->modelo->registro(registro_id: $this->registro_id, retorno_obj: true);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener documento',data:  $registro,header:  $header,
                 ws:  $ws);
         }
-        $ruta_doc = $this->path_base."$registro->doc_documento_ruta_relativa";
-
-        $content = file_get_contents($ruta_doc);
 
         $name_file = $this->name_file(registro: $registro);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener name_file',data:  $name_file,header:  $header,
                 ws:  $ws);
         }
+
+        if((new generales())->guarda_archivo_dropbox){
+            $guarda = (new _dropbox(link: $this->link))->download(dropbox_id: $registro->inm_dropbox_ruta_id_dropbox,
+                archivo_local: $name_file);
+            if (errores::$error) {
+                return $this->retorno_error('Error al guardar archivo', $guarda,header:  $header,
+                    ws:  $ws);
+            }
+        }
+
+        $ruta_doc = $this->path_base."$registro->doc_documento_ruta_relativa";
+
+        $content = file_get_contents($ruta_doc);
 
         if($header) {
             ob_clean();
@@ -162,7 +173,16 @@ class controlador_inm_doc_comprador extends _ctl_formato {
         }
         $ruta_doc = $this->path_base."$registro->doc_documento_ruta_relativa";
 
+        if((new generales())->guarda_archivo_dropbox) {
+            $guarda = (new _dropbox(link: $this->link))->preview(dropbox_id: $registro->inm_dropbox_ruta_id_dropbox,
+                extencion: $registro->doc_extension_descripcion);
+            if (errores::$error) {
+                return $this->retorno_error('Error al guardar archivo', $guarda, header: $header,
+                    ws: $ws);
+            }
 
+            $ruta_doc = $this->path_base.$guarda->ruta_archivo;
+        }
 
         $name = $this->name_doc(registro: $registro);
         if(errores::$error){
@@ -261,15 +281,18 @@ class controlador_inm_doc_comprador extends _ctl_formato {
                 ws:  $ws);
         }
 
-        $com_cliente = (new inm_comprador(link: $this->link))->get_com_cliente(
-            inm_comprador_id: $registro->inm_comprador_id, retorno_obj: true);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener cliente',data:  $com_cliente,header:  $header,
-                ws:  $ws);
-        }
-
         $ruta_doc = $this->url_base."$registro->doc_documento_ruta_relativa";
 
+        if((new generales())->guarda_archivo_dropbox) {
+            $guarda = (new _dropbox(link: $this->link))->preview(dropbox_id: $registro->inm_dropbox_ruta_id_dropbox,
+                extencion: $registro->doc_extension_descripcion);
+            if (errores::$error) {
+                return $this->retorno_error('Error al guardar archivo', $guarda, header: $header,
+                    ws: $ws);
+            }
+
+            $ruta_doc = $guarda->ruta_mostrar;
+        }
 
         $this->ruta_doc = $ruta_doc;
         if($registro->doc_extension_es_imagen === 'activo') {
@@ -281,9 +304,7 @@ class controlador_inm_doc_comprador extends _ctl_formato {
 
         $row_upd = new stdClass();
         $row_upd->nss = $registro->inm_comprador_nss;
-        $row_upd->com_tipo_cliente_descripcion = $com_cliente->com_tipo_cliente_descripcion;
         $row_upd->curp = $registro->inm_comprador_curp;
-        $row_upd->rfc = $com_cliente->com_cliente_rfc;
         $row_upd->apellido_paterno = $registro->inm_comprador_apellido_paterno;
         $row_upd->apellido_materno = $registro->inm_comprador_apellido_materno;
         $row_upd->nombre = $registro->inm_comprador_nombre;
@@ -352,6 +373,13 @@ class controlador_inm_doc_comprador extends _ctl_formato {
 
 
         $this->button_inm_doc_comprador_descarga = $button_inm_doc_comprador_descarga;
+
+        $inm_doc_comprador_id = $this->html->hidden(name:'inm_doc_comprador_id',value: $this->registro_id);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al in_registro_id',data:  $inm_doc_comprador_id,
+                header: $header,ws:  $ws);
+        }
+        $this->inputs->inm_doc_comprador_id = $inm_doc_comprador_id;
 
         return $registro;
 
