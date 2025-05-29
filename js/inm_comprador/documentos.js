@@ -36,7 +36,7 @@ var modalSend = document.getElementById("modalSnd");
 var closeBtn = document.getElementById("closeModalBtn");
 var openMdl = document.getElementById("enviar");
 var closeMdl = document.getElementById("closeModalSendBtn");
-let inm_doc_prospecto_id = '';
+let inm_doc_comprador_id = '';
 
 $(document).on("click", "#table-inm_comprador a[title='Vista Previa']", function (event) {
     event.preventDefault();
@@ -50,9 +50,9 @@ $(document).on("click", "#table-inm_comprador a[title='Vista Previa']", function
         type: 'GET',
         success: function (data) {
             var tempDiv = $("<div>").html(data);
-            var inputdoc = tempDiv.find('[name="inm_doc_prospecto_id"]');
+            var inputdoc = tempDiv.find('[name="inm_doc_comprador_id"]');
             var viewContent = tempDiv.find(".view");
-            inm_doc_prospecto_id = inputdoc.val();
+            inm_doc_comprador_id = inputdoc.val();
 
             $("#myModal .content").html('');
             $("#myModal .content").append(inputdoc);
@@ -73,8 +73,8 @@ closeBtn.onclick = function () {
     modal.close();
     $.ajax({
         type: "POST",
-        data: {id:inm_doc_prospecto_id},
-        url: 'index.php?seccion=inm_doc_prospecto&accion=elimina_temporal&ws=1&session_id='+session_id,
+        data: {id:inm_doc_comprador_id},
+        url: 'index.php?seccion=inm_doc_comprador&accion=elimina_temporal&ws=1&session_id='+session_id,
         success: function(data_r) {
             console.log(data_r);
         },
@@ -95,8 +95,8 @@ modal.addEventListener('click', function (event) {
         modal.close();
         $.ajax({
             type: "POST",
-            data: {id:inm_doc_prospecto_id},
-            url: 'index.php?seccion=inm_doc_prospecto&accion=elimina_temporal&ws=1&session_id='+session_id,
+            data: {id:inm_doc_comprador_id},
+            url: 'index.php?seccion=inm_doc_comprador&accion=elimina_temporal&ws=1&session_id='+session_id,
             success: function(data_r) {
                 console.log(data_r);
             },
