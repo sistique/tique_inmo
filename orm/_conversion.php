@@ -153,11 +153,16 @@ class _conversion{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener id_pref', data: $inm_comprador_ins);
         }
+
         if(!isset($data->inm_prospecto_completo->dp_cp_codigo)){
             $data->inm_prospecto_completo->dp_cp_codigo = '99999';
         }
         if(!isset($data->inm_prospecto_completo->dp_municipio_id)){
             $data->inm_prospecto_completo->dp_municipio_id = '1';
+        }
+
+        if(!isset($data->inm_prospecto_completo->com_agente_id)){
+            $data->inm_prospecto_completo->com_agente_id = '1';
         }
 
         $cp = $data->inm_prospecto_completo->dp_cp_codigo;
@@ -166,6 +171,7 @@ class _conversion{
             $cp = 99999;
         }
 
+        $inm_comprador_ins['com_agente_id'] = $data->inm_prospecto_completo->com_agente_id;
         $inm_comprador_ins['rfc'] = $data->inm_prospecto_completo->com_prospecto_rfc;
         $inm_comprador_ins['numero_exterior'] = 'POR ASIGNAR';
         $inm_comprador_ins['dp_municipio_id'] = $data->inm_prospecto_completo->dp_municipio_id;;
@@ -646,7 +652,7 @@ class _conversion{
             'inm_tipo_discapacidad_id','inm_persona_discapacidad_id','inm_estado_civil_id',
             'inm_institucion_hipotecaria_id','inm_sindicato_id','dp_municipio_nacimiento_id','fecha_nacimiento',
             'sub_cuenta','monto_final','descuento','puntos','inm_nacionalidad_id','inm_ocupacion_id','telefono_casa',
-            'correo_empresa','dp_calle_pertenece_id','com_agente_id');
+            'correo_empresa','dp_calle_pertenece_id');
     }
 
     /**

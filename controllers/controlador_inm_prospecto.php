@@ -10,6 +10,7 @@
 namespace gamboamartin\inmuebles\controllers;
 
 use base\controller\init;
+use config\generales;
 use gamboamartin\administrador\models\adm_campo;
 use gamboamartin\calculo\calculo;
 use gamboamartin\comercial\models\com_agente;
@@ -25,12 +26,15 @@ use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_prospecto_html;
 use gamboamartin\inmuebles\html\inm_status_prospecto_html;
 use gamboamartin\inmuebles\models\_base_paquete;
+use gamboamartin\inmuebles\models\_dropbox;
 use gamboamartin\inmuebles\models\_email;
 use gamboamartin\inmuebles\models\_inm_prospecto;
 use gamboamartin\inmuebles\models\_upd_prospecto;
 use gamboamartin\inmuebles\models\inm_beneficiario;
+use gamboamartin\inmuebles\models\inm_comprador;
 use gamboamartin\inmuebles\models\inm_conf_docs_prospecto;
 use gamboamartin\inmuebles\models\inm_conf_institucion_campo;
+use gamboamartin\inmuebles\models\inm_doc_comprador;
 use gamboamartin\inmuebles\models\inm_doc_prospecto;
 use gamboamartin\inmuebles\models\inm_prospecto;
 use gamboamartin\inmuebles\models\inm_referencia_prospecto;
@@ -280,6 +284,49 @@ class controlador_inm_prospecto extends _ctl_formato
             $this->link->rollBack();
             return $this->retorno_error(mensaje: 'Error al convertir en cliente', data: $conversion,
                 header: true, ws: false, class: __CLASS__, file: __FILE__, function: __FILE__, line: __LINE__);
+        }
+
+        $filtro['inm_prospecto.id'] = $this->registro_id;
+        $r_doc_prospecto = (new inm_doc_prospecto(link:$this->link))->filtro_and(filtro: $filtro);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al convertir en cliente', data: $r_doc_prospecto,
+                header: true, ws: false, class: __CLASS__, file: __FILE__, function: __FILE__, line: __LINE__);
+        }
+
+        if($r_doc_prospecto->n_registros > 0){
+            foreach ($r_doc_prospecto->registros as $registro) {
+                $ruta = $registro['doc_documento_ruta_absoluta'];
+                if((new generales())->guarda_archivo_dropbox && trim((string)$registro['inm_dropbox_ruta_id_dropbox']) !== '') {
+                    $guarda = (new _dropbox(link: $this->link))->preview(
+                        dropbox_id: $registro['inm_dropbox_ruta_id_dropbox'],
+                        extencion: $registro['doc_extension_descripcion']);
+                    if (errores::$error) {
+                        return $this->retorno_error('Error al guardar archivo', $guarda, header: $header,
+                            ws: $ws);
+                    }
+
+                    $ruta = $this->path_base.$guarda->ruta_archivo;
+                }
+
+                $_FILES['archivo_simulado'] = [
+                    'name' => basename($ruta),
+                    'type' => mime_content_type($ruta),
+                    'tmp_name' => $ruta,
+                    'error' => 0,
+                    'size' => filesize($ruta)
+                ];
+
+                $registro_doc['inm_comprador_id'] = $conversion->r_alta_comprador['registro_id'];
+                $registro_doc['doc_tipo_documento_id'] = $registro['doc_tipo_documento_id'];
+
+                $r_inm_doc_comprador = (new inm_doc_comprador(link:$this->link))->alta_registro(registro: $registro_doc);
+                if (errores::$error) {
+                    $this->link->rollBack();
+                    return $this->retorno_error(mensaje: 'Error al convertir en cliente', data: $r_inm_doc_comprador,
+                        header: true, ws: false, class: __CLASS__, file: __FILE__, function: __FILE__, line: __LINE__);
+                }
+            }
         }
 
         $this->link->commit();
