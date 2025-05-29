@@ -144,7 +144,6 @@ class _conversion{
             return $this->error->error(mensaje: 'Error al inicializar inm_comprador', data: $inm_comprador_ins);
         }
 
-
         $inm_comprador_ins = $this->defaults_alta_comprador(inm_comprador_ins: $inm_comprador_ins);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener inm_comprador_ins', data: $inm_comprador_ins);
@@ -261,7 +260,6 @@ class _conversion{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener prospecto', data: $data);
         }
-
 
         $inm_comprador_ins = $this->inm_comprador_ins(data: $data,link: $modelo->link);
         if(errores::$error){
@@ -529,7 +527,7 @@ class _conversion{
         }
 
 
-        $r_alta_rel = (new inm_rel_comprador_prospecto_(link: $link))->alta_registro(
+        $r_alta_rel = (new inm_rel_comprador_prospecto(link: $link))->alta_registro(
             registro: $inm_rel_prospecto_cliente_ins);
 
         if(errores::$error){
@@ -648,7 +646,7 @@ class _conversion{
             'inm_tipo_discapacidad_id','inm_persona_discapacidad_id','inm_estado_civil_id',
             'inm_institucion_hipotecaria_id','inm_sindicato_id','dp_municipio_nacimiento_id','fecha_nacimiento',
             'sub_cuenta','monto_final','descuento','puntos','inm_nacionalidad_id','inm_ocupacion_id','telefono_casa',
-            'correo_empresa','dp_calle_pertenece_id');
+            'correo_empresa','dp_calle_pertenece_id','com_agente_id');
     }
 
     /**

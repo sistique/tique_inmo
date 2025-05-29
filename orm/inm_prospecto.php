@@ -308,9 +308,9 @@ class inm_prospecto extends _modelo_parent{
         if($inm_prospecto_id<=0){
             return $this->error->error(mensaje: 'Error inm_prospecto_id es menor a 0', data: $inm_prospecto_id);
         }
+
         $r_alta_comprador = (new _conversion())->inserta_inm_comprador(inm_prospecto_id: $inm_prospecto_id,
             modelo: $this);
-
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al insertar cliente', data: $r_alta_comprador);
         }

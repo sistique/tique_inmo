@@ -276,7 +276,6 @@ class controlador_inm_prospecto extends _ctl_formato
         }
 
         $conversion = (new inm_prospecto(link: $this->link))->convierte_cliente(inm_prospecto_id: $this->registro_id);
-
         if (errores::$error) {
             $this->link->rollBack();
             return $this->retorno_error(mensaje: 'Error al convertir en cliente', data: $conversion,
