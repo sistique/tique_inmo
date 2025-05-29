@@ -475,7 +475,7 @@ class inm_prospecto_ubicacion extends _modelo_parent{
             return  $this->error->error(mensaje: 'El id no puede ser menor a 0 en '.$this->tabla, data: $id);
         }
 
-        $filtro['inm_prospecto.id'] = $id;
+        $filtro['inm_prospecto_ubicacion.id'] = $id;
 
         $del = (new inm_doc_prospecto_ubicacion(link: $this->link))->elimina_con_filtro_and(filtro:$filtro);
         if(errores::$error){
@@ -488,7 +488,7 @@ class inm_prospecto_ubicacion extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al eliminar inm_rel_prospecto_cliente',
                 data:  $del);
         }
-        
+
         $del = (new inm_rel_conyuge_prospecto_ubicacion(link: $this->link))->elimina_con_filtro_and(filtro:$filtro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al eliminar inm_rel_conyuge_prospecto',
