@@ -230,6 +230,27 @@ class controlador_inm_doc_comprador extends _ctl_formato {
 
     }
 
+    public function elimina_temporal(bool $header, bool $ws = false){
+
+        $modelo_inm_doc_prospecto = new inm_doc_comprador(link: $this->link);
+        $registro = $modelo_inm_doc_prospecto->registro(registro_id: $_POST['id']);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al comprimir file',data:  $registro,header:  $header,
+                ws:  $ws);
+        }
+
+        $generales = new generales();
+        $path_base = $generales->path_base;
+        $archivo_local = $path_base.'archivos/temporales/'.$registro['inm_dropbox_ruta_id_dropbox'].'.'.
+            $registro['doc_extension_descripcion'];
+
+        if(file_exists($archivo_local)){
+            unlink($archivo_local);
+        }
+
+        return $archivo_local;
+    }
+
     public function modifica(bool $header, bool $ws = false): array|stdClass
     {
 
