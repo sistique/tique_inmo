@@ -331,14 +331,17 @@ class controlador_inm_prospecto extends _ctl_formato
 
         $this->link->commit();
 
-        $out = (new _base())->out(controlador: $this, header: $header, result: $conversion,
+        $controlador_inm_comprador = new controlador_inm_comprador(link:$this->link);
+        $retorno->id_retorno = $conversion->r_alta_comprador->registro_id;
+        $retorno->siguiente_view = 'modifica';
+
+        $out = (new _base())->out(controlador: $controlador_inm_comprador, header: $header, result: $conversion,
             retorno: $retorno, ws: $ws);
         if (errores::$error) {
             $this->link->rollBack();
             return $this->retorno_error(mensaje: 'Error al dar salida', data: $out,
                 header: true, ws: false, class: __CLASS__, file: __FILE__, function: __FILE__, line: __LINE__);
         }
-
         $conversion->r_alta_rel->siguiente_view = $retorno->siguiente_view;
 
         return $conversion->r_alta_rel;
