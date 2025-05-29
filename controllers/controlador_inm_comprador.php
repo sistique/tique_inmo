@@ -19,6 +19,7 @@ use gamboamartin\inmuebles\models\_inm_prospecto;
 use gamboamartin\inmuebles\models\_upd_prospecto;
 use gamboamartin\inmuebles\models\inm_beneficiario;
 use gamboamartin\inmuebles\models\inm_comprador;
+use gamboamartin\inmuebles\models\inm_conf_docs_comprador;
 use gamboamartin\inmuebles\models\inm_referencia;
 use gamboamartin\inmuebles\models\inm_referencia_prospecto;
 use gamboamartin\inmuebles\models\inm_rel_cliente_valuador;
@@ -1455,6 +1456,20 @@ class controlador_inm_comprador extends _ctl_base {
 
     final public function subir_documento(bool $header, bool $ws = false){
 
+        $inm_comprador = (new inm_comprador(link: $this->link))->registro(registro_id: $this->registro_id);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener inm_comprador', data: $inm_comprador,
+                header: $header, ws: $ws);
+        }
+
+        $inm_conf_docs_comprador = (new inm_conf_docs_comprador(link: $this->link))->filtro_and(
+            columnas: ['doc_tipo_documento_id'],
+            filtro: array('inm_attr_tipo_credito_id' => $inm_comprador['inm_attr_tipo_credito_id']));
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener inm_conf_docs_comprador', data: $inm_conf_docs_comprador,
+                header: $header, ws: $ws);
+        }
+
         $this->inputs = new stdClass();
 
         $filtro['inm_comprador.id'] = $this->registro_id;
@@ -1465,16 +1480,24 @@ class controlador_inm_comprador extends _ctl_base {
         }
         $this->inputs->inm_comprador_id = $inm_comprador_id;
 
-        $doc_tipos_documentos = (new _doctos())->documentos_de_comprador(inm_comprador_id: $this->registro_id,
-            link: $this->link, todos: false);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener tipos de documento', data: $doc_tipos_documentos,
-                header: $header, ws: $ws);
+        $doc_ids = array_map(function ($registro) {
+            return $registro['doc_tipo_documento_id'];
+        }, $inm_conf_docs_comprador->registros);
+
+        $doc_tipos_documentos = array();
+
+        if (count($doc_ids) > 0) {
+            $doc_tipos_documentos = (new _doctos())->documentos_de_comprador(inm_comprador_id: $this->registro_id,
+                link: $this->link, todos: false, tipos_documentos: $doc_ids);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al obtener tipos de documento', data: $doc_tipos_documentos,
+                    header: $header, ws: $ws);
+            }
         }
 
         $_doc_tipo_documento_id = -1;
         $filtro = array();
-        if(isset($_GET['doc_tipo_documento_id'])){
+        if (isset($_GET['doc_tipo_documento_id'])) {
             $_doc_tipo_documento_id = $_GET['doc_tipo_documento_id'];
             $filtro['doc_tipo_documento.id'] = $_GET['doc_tipo_documento_id'];
         }
@@ -1482,7 +1505,7 @@ class controlador_inm_comprador extends _ctl_base {
         $doc_tipo_documento_id = (new doc_tipo_documento_html(html: $this->html_base))->select_doc_tipo_documento_id(
             cols: 12, con_registros: true, id_selected: $_doc_tipo_documento_id, link: $this->link, filtro: $filtro,
             registros: $doc_tipos_documentos);
-        if(errores::$error){
+        if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al generar input', data: $inm_comprador_id, header: $header, ws: $ws);
         }
         $this->inputs->doc_tipo_documento_id = $doc_tipo_documento_id;

@@ -23,7 +23,7 @@ class _doctos{
         $this->error = new errores();
     }
 
-    final public function documentos_de_comprador(int $inm_comprador_id, PDO $link, bool $todos){
+    final public function documentos_de_comprador(int $inm_comprador_id, PDO $link, bool $todos,array $tipos_documentos){
 
         $inm_comprador = (new inm_comprador(link: $link))->registro(registro_id: $inm_comprador_id,retorno_obj: true);
         if(errores::$error){
@@ -64,18 +64,18 @@ class _doctos{
         $confs = $r_inm_conf_docs_comprador->registros;
 
 
-        $values_in = array();
-        foreach ($confs as $value){
-            $values_in[] = $value['doc_tipo_documento_id'];
+        $in = array();
+
+        if (count($tipos_documentos) > 0) {
+            $in['llave'] = 'doc_tipo_documento.id';
+            $in['values'] = $tipos_documentos;
         }
-        $in['llave'] = 'doc_tipo_documento.id';
-        $in['values'] = $values_in;
 
         $r_doc_tipo_documento = (new doc_tipo_documento(link: $link))->filtro_and(in: $in);
-
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al Obtener tipos de documento',data:  $r_doc_tipo_documento);
         }
+
 
         return $r_doc_tipo_documento->registros;
     }
