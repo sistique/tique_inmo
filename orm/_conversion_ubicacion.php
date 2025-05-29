@@ -7,6 +7,7 @@ use gamboamartin\comercial\models\com_tipo_agente;
 use gamboamartin\comercial\models\com_tipo_prospecto;
 use gamboamartin\direccion_postal\models\dp_calle_pertenece;
 use gamboamartin\errores\errores;
+use gamboamartin\validacion\validacion;
 use PDO;
 use stdClass;
 
@@ -103,30 +104,14 @@ class _conversion_ubicacion{
             return $this->error->error(mensaje: 'Error al obtener inm_ubicacion_ins', data: $inm_ubicacion_ins);
         }
 
-        /*$inm_ubicacion_ins = $this->integra_ids_prefs(inm_ubicacion_ins: $inm_ubicacion_ins,link: $link);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al obtener id_pref', data: $inm_ubicacion_ins);
-        }
-        if(!isset($data->inm_prospecto_completo->dp_cp_codigo)){
-            $data->inm_prospecto_completo->dp_cp_codigo = '99999';
-        }
-        if(!isset($data->inm_prospecto_completo->dp_municipio_id)){
-            $data->inm_prospecto_completo->dp_municipio_id = '1';
-        }
-
-        $cp = $data->inm_prospecto_completo->dp_cp_codigo;
-
-        if($cp === 'PRED'){
-            $cp = 99999;
-        }
-
-        $inm_ubicacion_ins['rfc'] = $data->inm_prospecto_completo->com_prospecto_rfc;
-        $inm_ubicacion_ins['numero_exterior'] = 'POR ASIGNAR';
-        $inm_ubicacion_ins['dp_municipio_id'] = $data->inm_prospecto_completo->dp_municipio_id;;
-        $inm_ubicacion_ins['cp'] = $cp;*/
-
         if(!isset($inm_ubicacion_ins['inm_tipo_ubicacion_id'])){
             $inm_ubicacion_ins['inm_tipo_ubicacion_id'] = '1';
+        }
+
+        $keys_necesarios = array('dp_colonia_postal_id','inm_tipo_ubicacion_id');
+        $valida = (new validacion())->valida_existencia_keys(keys: $keys_necesarios,registro:  $inm_ubicacion_ins);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar row upd',data:  $valida);
         }
 
         return $inm_ubicacion_ins;

@@ -270,7 +270,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         $existe = (new inm_rel_ubicacion_prospecto_ubicacion(link: $this->link))->filtro_and(filtro: $filtro);
         if (errores::$error) {
             $this->link->rollBack();
-            return $this->retorno_error(mensaje: 'Error al convertir en cliente', data: $existe,
+            return $this->retorno_error(mensaje: 'Error al obtener relacion anterior', data: $existe,
                 header: true, ws: false, class: __CLASS__, file: __FILE__, function: __FILE__, line: __LINE__);
         }
 
@@ -280,7 +280,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
                 inm_prospecto_ubicacion_id: $this->registro_id);
             if (errores::$error) {
                 $this->link->rollBack();
-                return $this->retorno_error(mensaje: 'Error al convertir en cliente', data: $conversion,
+                return $this->retorno_error(mensaje: 'Error al convertir en ubicacion', data: $conversion,
                     header: true, ws: false, class: __CLASS__, file: __FILE__, function: __FILE__, line: __LINE__);
             }
         }
@@ -290,7 +290,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         $retorno = new stdClass();
 
         if($existe->n_registros <= 0) {
-            $retorno->id_retorno = $conversion->r_alta_ubicacion['registro_id'];
+            $retorno->id_retorno = $conversion->r_alta_ubicacion->registro_id;
             $retorno->siguiente_view = 'modifica';
         }else{
             $retorno->id_retorno = $existe->registros[0]['inm_ubicacion_id'];
