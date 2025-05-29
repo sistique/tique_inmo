@@ -483,6 +483,12 @@ class inm_prospecto_ubicacion extends _modelo_parent{
                 data:  $del);
         }
 
+        $del = (new inm_prospecto_ubicacion_proceso(link: $this->link))->elimina_con_filtro_and(filtro:$filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al eliminar inm_comprador_etapa',
+                data:  $del);
+        }
+
         $del = (new inm_rel_ubicacion_prospecto_ubicacion(link: $this->link))->elimina_con_filtro_and(filtro:$filtro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al eliminar inm_rel_prospecto_cliente',

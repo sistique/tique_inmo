@@ -381,7 +381,7 @@ class inm_prospecto extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al eliminar inm_comprador_etapa',
                 data:  $del);
         }
-        $del = (new inm_rel_comprador_prospecto_(link: $this->link))->elimina_con_filtro_and(filtro:$filtro);
+        $del = (new inm_rel_comprador_prospecto(link: $this->link))->elimina_con_filtro_and(filtro:$filtro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al eliminar inm_rel_prospecto_cliente',
                 data:  $del);
