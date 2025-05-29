@@ -286,8 +286,8 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
             }
         }
 
-        $filtro['inm_prospecto_ubicacion.id'] = $this->registro_id;
-        $r_doc_prospecto_ubicacion = (new inm_doc_prospecto_ubicacion(link:$this->link))->filtro_and(filtro: $filtro);
+        $filtro_doc['inm_prospecto_ubicacion.id'] = $this->registro_id;
+        $r_doc_prospecto_ubicacion = (new inm_doc_prospecto_ubicacion(link:$this->link))->filtro_and(filtro: $filtro_doc);
         if (errores::$error) {
             $this->link->rollBack();
             return $this->retorno_error(mensaje: 'Error al convertir en cliente', data: $r_doc_prospecto_ubicacion,
