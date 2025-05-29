@@ -5,6 +5,7 @@ namespace gamboamartin\inmuebles\models;
 use base\orm\_modelo_parent;
 use config\generales;
 use gamboamartin\documento\models\doc_documento;
+use gamboamartin\documento\models\doc_documento_etapa;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\controllers\_doctos;
 use PDO;
@@ -155,6 +156,31 @@ class inm_doc_comprador extends _modelo_parent{
         $descripcion .= ' '.$registro['inm_comprador_id'];
         $descripcion .= ' '.$r_alta_doc->registro_obj->doc_documento_nombre;
         return $descripcion;
+    }
+
+    public function elimina_bd(int $id): array|stdClass
+    {
+        $registro = $this->registro(registro_id: $id);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener registro', data: $registro);
+        }
+
+        $documento_etapa = (new doc_documento_etapa(link: $this->link))->elimina_con_filtro_and(filtro: array('doc_documento_id' => $registro['doc_documento_id']));
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al eliminar documento etapa', data: $documento_etapa);
+        }
+
+        $elimina = parent::elimina_bd($id);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al eliminar prospecto documento', data: $elimina);
+        }
+
+        $documento = (new doc_documento(link: $this->link))->elimina_bd(id: $registro['doc_documento_id']);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al eliminar documento', data: $documento);
+        }
+
+        return $elimina;
     }
 
     final public function inm_docs_comprador(int $inm_comprador_id, array $tipos_documentos)
