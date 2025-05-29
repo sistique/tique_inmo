@@ -715,7 +715,7 @@ class init{
      * @url https://github.com/gamboamartin/administrador/wiki/administrador.base.controller.init.key_select_txt.21.14.0
      */
     final public function key_select_txt(
-        int $cols, string $key, array $keys_selects, string $place_holder, bool $required = true): array
+        int $cols, string $key, array $keys_selects, string $place_holder, bool $required = true, bool $disabled = false): array
     {
         $key = trim($key);
         if($key === ''){
@@ -733,6 +733,9 @@ class init{
         }
         if(!isset($keys_selects[$key]->required)) {
             $keys_selects[$key]->required = $required;
+        }
+        if(!isset($keys_selects[$key]->disabled)) {
+            $keys_selects[$key]->disabled = $disabled;
         }
 
         return $keys_selects;

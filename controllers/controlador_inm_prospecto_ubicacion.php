@@ -219,7 +219,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
             'texto_exterior', 'texto_interior', 'documentos', 'receptor', 'asunto', 'mensaje','manzana','lote',
             'cuenta_predial', 'adeudo_hipoteca','adeudo_predial', 'cuenta_agua', 'adeudo_agua',
             'adeudo_luz','monto_devolucion', 'nivel','recamaras','metros_terreno', 'metros_construccion',
-            'fecha_otorgamiento_credito','cp','colonia','calle');
+            'fecha_otorgamiento_credito','cp','colonia','calle','inm_prospecto_ubicacion_ubicacion');
 
         $keys->selects = array();
 
@@ -572,14 +572,21 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         }
 
         $keys_selects = array();
-        $keys_selects = $this->init_selects(keys_selects: $keys_selects, key: "com_tipo_prospecto_id", label: "Tipo Prospecto",disabled: true);
+        $keys_selects = $this->init_selects(keys_selects: $keys_selects, key: "com_agente_id", label: "Agente",cols: 12);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al integrar selector',data:  $keys_selects);
         }
 
-        $keys_selects = $this->init_selects(keys_selects: $keys_selects, key: "com_agente_id", label: "Agente",cols: 12);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al integrar selector',data:  $keys_selects);
+        $keys_selects = (new init())->key_select_txt(cols: 12, key: 'razon_social',
+            keys_selects: $keys_selects, place_holder: 'Razon Social',disabled: true);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 12, key: 'inm_prospecto_ubicacion_ubicacion',
+            keys_selects: $keys_selects, place_holder: 'Ubicacion',disabled: true);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
         $base = $this->base_upd(keys_selects: $keys_selects, params: array(), params_ajustados: array());

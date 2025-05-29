@@ -12,13 +12,8 @@
                     <form method="post" action="<?php echo $controlador->link_alta_integra_relacion_bd; ?>" class="form-additional">
                         <?php include (new views())->ruta_templates."head/subtitulo.php"; ?>
 
-                        <?php echo $controlador->inputs->com_tipo_prospecto_id; ?>
-                        <?php echo $controlador->inputs->nss; ?>
-                        <?php echo $controlador->inputs->curp; ?>
-                        <?php echo $controlador->inputs->rfc; ?>
-                        <?php echo $controlador->inputs->apellido_paterno; ?>
-                        <?php echo $controlador->inputs->apellido_materno; ?>
-                        <?php echo $controlador->inputs->nombre; ?>
+                        <?php echo $controlador->inputs->razon_social; ?>
+                        <?php echo $controlador->inputs->inm_prospecto_ubicacion_ubicacion; ?>
                         <?php echo $controlador->inputs->com_agente_id; ?>
 
                         <div class="controls">
