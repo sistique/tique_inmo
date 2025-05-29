@@ -74,7 +74,8 @@ class controlador_inm_doc_comprador extends _ctl_formato {
         }
 
 
-        $inm_tipos_doc = (new _doctos())->documentos_de_comprador(link: $this->link);
+        $inm_tipos_doc = (new _doctos())->documentos_de_comprador(inm_comprador_id:$this->registro_id,
+            link: $this->link,todos: false);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al Obtener tipos de documento',data:  $inm_tipos_doc,
                 header: $header,ws:  $ws);

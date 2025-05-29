@@ -81,7 +81,8 @@ class inm_doc_comprador extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al insertar',data:  $r_alta_bd);
         }
 
-        $inm_conf_docs_comprador = (new _doctos())->documentos_de_comprador(inm_comprador_id: $this->registro['inm_comprador_id'],link:  $this->link);
+        $inm_conf_docs_comprador = (new _doctos())->documentos_de_comprador(
+            inm_comprador_id: $this->registro['inm_comprador_id'],link:  $this->link,todos: false);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener configuraciones de documentos',data:  $inm_conf_docs_comprador);
         }
