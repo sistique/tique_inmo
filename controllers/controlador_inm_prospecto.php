@@ -309,7 +309,7 @@ class controlador_inm_prospecto extends _ctl_formato
                     $ruta = $this->path_base.$guarda->ruta_archivo;
                 }
 
-                $_FILES['archivo_simulado'] = [
+                $_FILES['documento'] = [
                     'name' => basename($ruta),
                     'type' => mime_content_type($ruta),
                     'tmp_name' => $ruta,
