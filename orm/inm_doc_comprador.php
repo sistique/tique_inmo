@@ -82,6 +82,24 @@ class inm_doc_comprador extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al insertar',data:  $r_alta_bd);
         }
 
+        /*$inm_comprador = (new inm_comprador(link: $this->link))->registro(registro_id: $this->registro_id);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener inm_comprador', data: $inm_comprador,
+                header: $header, ws: $ws);
+        }
+
+        $inm_conf_docs_comprador = (new inm_conf_docs_comprador(link: $this->link))->filtro_and(
+            columnas: ['doc_tipo_documento_id'],
+            filtro: array('inm_attr_tipo_credito_id' => $inm_comprador['inm_attr_tipo_credito_id']));
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener inm_conf_docs_comprador', data: $inm_conf_docs_comprador,
+                header: $header, ws: $ws);
+        }
+
+        $doc_ids = array_map(function ($registro) {
+            return $registro['doc_tipo_documento_id'];
+        }, $inm_conf_docs_comprador->registros);
+
         $inm_conf_docs_comprador = (new _doctos())->documentos_de_comprador(
             inm_comprador_id: $this->registro['inm_comprador_id'],link:  $this->link,todos: false);
         if(errores::$error){
@@ -142,7 +160,7 @@ class inm_doc_comprador extends _modelo_parent{
                 return $this->error->error(mensaje: 'Error al insertar etapa',data:  $r_alta_proceso);
             }
         }
-
+*/
 
         return $r_alta_bd;
     }

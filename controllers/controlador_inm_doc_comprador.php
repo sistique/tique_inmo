@@ -14,6 +14,7 @@ use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_doc_comprador_html;
 use gamboamartin\inmuebles\models\_dropbox;
 use gamboamartin\inmuebles\models\inm_comprador;
+use gamboamartin\inmuebles\models\inm_conf_docs_comprador;
 use gamboamartin\inmuebles\models\inm_doc_comprador;
 use gamboamartin\system\links_menu;
 use gamboamartin\template\html;
@@ -73,9 +74,28 @@ class controlador_inm_doc_comprador extends _ctl_formato {
                 header: $header,ws:  $ws);
         }
 
+        $inm_comprador = (new inm_comprador(link: $this->link))->registro(registro_id: $this->registro_id);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener inm_comprador', data: $inm_comprador,
+                header: $header, ws: $ws);
+        }
+
+        $inm_conf_docs_comprador = (new inm_conf_docs_comprador(link: $this->link))->filtro_and(
+            columnas: ['doc_tipo_documento_id'],
+            filtro: array('inm_attr_tipo_credito_id' => $inm_comprador['inm_attr_tipo_credito_id']));
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener inm_conf_docs_comprador', data: $inm_conf_docs_comprador,
+                header: $header, ws: $ws);
+        }
+
+        $doc_ids = array_map(function ($registro) {
+            return $registro['doc_tipo_documento_id'];
+        }, $inm_conf_docs_comprador->registros);
+
+        $doc_tipos_documentos = array();
 
         $inm_tipos_doc = (new _doctos())->documentos_de_comprador(inm_comprador_id:$this->registro_id,
-            link: $this->link,todos: false);
+            link: $this->link,todos: false,tipos_documentos: $doc_ids);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al Obtener tipos de documento',data:  $inm_tipos_doc,
                 header: $header,ws:  $ws);
