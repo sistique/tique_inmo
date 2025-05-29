@@ -34,6 +34,8 @@ use gamboamartin\inmuebles\models\inm_doc_ubicacion;
 use gamboamartin\inmuebles\models\inm_prospecto;
 use gamboamartin\inmuebles\models\inm_prospecto_ubicacion;
 use gamboamartin\inmuebles\models\inm_referencia_prospecto;
+use gamboamartin\inmuebles\models\inm_rel_conyuge_prospecto_ubicacion;
+use gamboamartin\inmuebles\models\inm_rel_conyuge_ubicacion;
 use gamboamartin\inmuebles\models\inm_rel_ubicacion_prospecto_ubicacion;
 use gamboamartin\inmuebles\models\inm_status_prospecto_ubicacion;
 use gamboamartin\inmuebles\models\inm_tipo_beneficiario;
@@ -286,8 +288,29 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
             }
         }
 
-        $filtro_doc['inm_prospecto_ubicacion.id'] = $this->registro_id;
-        $r_doc_prospecto_ubicacion = (new inm_doc_prospecto_ubicacion(link:$this->link))->filtro_and(filtro: $filtro_doc);
+        $filtro_prosp['inm_prospecto_ubicacion.id'] = $this->registro_id;
+        $r_inm_rel_conyuge_prospecto_ubicacion =
+            (new inm_rel_conyuge_prospecto_ubicacion(link: $this->link))->filtro_and(filtro: $filtro_prosp);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener conyuge relacion',
+                data:  $r_inm_rel_conyuge_prospecto_ubicacion, header: true, ws: false, class: __CLASS__,
+                file: __FILE__, function: __FILE__, line: __LINE__);
+        }
+
+        if($r_inm_rel_conyuge_prospecto_ubicacion->n_registros > 0) {
+            $inm_rel_conyuge_ubicacion_ins['inm_ubicacion_id'] = $this->registro_id;
+            $inm_rel_conyuge_ubicacion_ins['inm_conyuge_id'] =
+                $r_inm_rel_conyuge_prospecto_ubicacion->registros[0]->inm_conyuge_id;
+            $r_inm_rel_conyuge_ubicacion_bd = (new inm_rel_conyuge_ubicacion(link: $this->link))->alta_registro(
+                registro: $inm_rel_conyuge_ubicacion_ins);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al insertar conyuge', data: $r_inm_rel_conyuge_ubicacion_bd,
+                    header: true, ws: false, class: __CLASS__, file: __FILE__, function: __FILE__, line: __LINE__);
+            }
+        }
+
+        $r_doc_prospecto_ubicacion = (new inm_doc_prospecto_ubicacion(link:$this->link))->filtro_and(
+            filtro: $filtro_prosp);
         if (errores::$error) {
             $this->link->rollBack();
             return $this->retorno_error(mensaje: 'Error al convertir en cliente', data: $r_doc_prospecto_ubicacion,
