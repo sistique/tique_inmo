@@ -1286,7 +1286,7 @@ class controlador_inm_comprador extends _ctl_base {
                 header: $header,ws:  $ws);
         }
 
-        $params = (new _inm_prospecto())->params_btn(accion_retorno: __FUNCTION__,
+        $params = (new \gamboamartin\inmuebles\controllers\_inm_comprador())->params_btn(accion_retorno: __FUNCTION__,
             registro_id:  $this->registro_id,seccion_retorno:  $this->tabla);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener params',data:  $params,
@@ -1295,7 +1295,7 @@ class controlador_inm_comprador extends _ctl_base {
 
         $beneficiarios = $r_inm_beneficiario->registros;
 
-        $beneficiarios = (new _inm_prospecto())->rows(controlador: $controlador_inm_prospecto,
+        $beneficiarios = (new \gamboamartin\inmuebles\controllers\_inm_comprador())->rows(controlador: $controlador_inm_prospecto,
             datas: $beneficiarios,params:  $params, seccion_exe: 'inm_beneficiario');
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener beneficiarios link del',data:  $beneficiarios,
@@ -1317,7 +1317,7 @@ class controlador_inm_comprador extends _ctl_base {
                 header: $header,ws:  $ws);
         }
 
-        $params = (new _inm_prospecto())->params_btn(accion_retorno: __FUNCTION__,
+        $params = (new \gamboamartin\inmuebles\controllers\_inm_comprador())->params_btn(accion_retorno: __FUNCTION__,
             registro_id:  $this->registro_id,seccion_retorno:  $this->tabla);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener params',data:  $params,
@@ -1326,7 +1326,7 @@ class controlador_inm_comprador extends _ctl_base {
 
         $referencia_prospectos = $r_inm_referencia_prospecto->registros;
 
-        $referencia_prospectos = (new _inm_prospecto())->rows(controlador: $controlador_inm_prospecto,
+        $referencia_prospectos = (new \gamboamartin\inmuebles\controllers\_inm_comprador())->rows(controlador: $controlador_inm_prospecto,
             datas: $referencia_prospectos,params:  $params, seccion_exe: 'inm_referencia_prospecto');
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener beneficiarios link del',data:  $referencia_prospectos,

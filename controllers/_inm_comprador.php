@@ -24,6 +24,42 @@ class _inm_comprador{
         return $aplica_seccion_co_acreditado;
     }
 
+    final public function params_btn(string $accion_retorno, int $registro_id, string $seccion_retorno ): array
+    {
+        $params['siguiente_view'] = $accion_retorno;
+        $params['accion_retorno'] = $accion_retorno;
+        $params['seccion_retorno'] = $seccion_retorno;
+        $params['id_retorno'] = $registro_id;
+        return $params;
+    }
+
+    final public function rows(controlador_inm_prospecto $controlador, array $datas, array $params, string $seccion_exe){
+
+        foreach ($datas as $indice=>$data){
+
+            $datas = $this->integra_button_del(
+                controlador: $controlador, data: $data,datas:  $datas,indice:  $indice,params:  $params,seccion_exe:  $seccion_exe);
+
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al obtener beneficiarios link del',data:  $datas);
+            }
+        }
+        return $datas;
+
+    }
+
+    private function integra_button_del(controlador_inm_prospecto $controlador, array $data, array $datas,
+                                        int $indice, array $params, string $seccion_exe){
+        $key_id = $seccion_exe.'_id';
+        $btn_del = $controlador->html->button_href(accion: 'elimina_bd',etiqueta: 'Elimina',
+            registro_id:  $data[$key_id],seccion: $seccion_exe,style: 'danger',
+            params: $params);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener link_del',data:  $btn_del);
+        }
+        $datas[$indice]['btn_del'] = $btn_del;
+        return $datas;
+    }
     /**
      * @param controlador_inm_comprador $controler
      * @param int $n_apartado
