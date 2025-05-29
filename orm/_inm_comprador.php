@@ -2,6 +2,7 @@
 namespace gamboamartin\inmuebles\models;
 
 use gamboamartin\banco\models\bn_cuenta;
+use gamboamartin\documento\models\doc_tipo_documento;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\controllers\_doctos;
 use gamboamartin\inmuebles\controllers\_keys_selects;
@@ -195,14 +196,20 @@ class _inm_comprador{
         return $r_inm_rel_co_acred->registros;
     }
 
-    private function inm_conf_docs_comprador(controlador_inm_comprador $controler, array $inm_docs_comprador){
-        $inm_conf_docs_comprador = (new _doctos())->documentos_de_comprador(inm_comprador_id: $controler->registro_id,
-            link:  $controler->link, todos: true);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al obtener configuraciones de documentos',
-                data:  $inm_conf_docs_comprador);
+    private function inm_conf_docs_comprador(controlador_inm_comprador $controler, array $inm_docs_comprador,
+                                             array $tipos_documentos){
+        $in = array();
+        if (count($tipos_documentos) > 0) {
+            $in['llave'] = 'doc_tipo_documento.id';
+            $in['values'] = $tipos_documentos;
         }
 
+        $r_doc_tipo_documento = (new doc_tipo_documento(link: $controler->link))->filtro_and(in: $in);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al Obtener tipos de documento',data:  $r_doc_tipo_documento);
+        }
+
+        $inm_conf_docs_comprador = $r_doc_tipo_documento->registros;
 
         foreach ($inm_conf_docs_comprador as $indice=>$doc_tipo_documento){
             $inm_conf_docs_comprador = $this->inm_docs_comprador(controler: $controler,
@@ -329,7 +336,24 @@ class _inm_comprador{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener documentos',data:  $inm_docs_comprador);
         }
-        $inm_conf_docs_comprador = $this->inm_conf_docs_comprador(controler: $controler,inm_docs_comprador:  $inm_docs_comprador);
+
+        $filtro['inm_conf_docs_comprador.es_foto'] = 'inactivo';
+        $inm_conf_docs_prospecto = (new inm_conf_docs_comprador(link: $controler->link))->filtro_and(
+            columnas: ['doc_tipo_documento_id'],filtro: $filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener inm_conf_docs_prospecto',data:  $inm_conf_docs_prospecto);
+        }
+
+        $doc_ids = array_map(function($registro) {
+            return $registro['doc_tipo_documento_id'];
+        }, $inm_conf_docs_prospecto->registros);
+
+        if (count($doc_ids) <= 0) {
+            return array();
+        }
+
+        $inm_conf_docs_comprador = $this->inm_conf_docs_comprador(controler: $controler,
+            inm_docs_comprador:  $inm_docs_comprador,tipos_documentos: $doc_ids);
 
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar buttons',data:  $inm_conf_docs_comprador);
@@ -506,5 +530,40 @@ class _inm_comprador{
     }
 
 
+    final public function integra_inm_documentos_comprador(controlador_inm_comprador $controler){
+        $inm_prospecto = (new inm_comprador(link: $controler->link))->registro(registro_id: $controler->registro_id);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener inm_comprador',data:  $inm_prospecto);
+        }
+
+        $filtro['inm_conf_docs_comprador.es_foto'] = 'inactivo';
+        $inm_conf_docs_prospecto = (new inm_conf_docs_comprador(link: $controler->link))->filtro_and(
+            columnas: ['doc_tipo_documento_id'],filtro: $filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener inm_conf_docs_prospecto',data:  $inm_conf_docs_prospecto);
+        }
+
+        $doc_ids = array_map(function($registro) {
+            return $registro['doc_tipo_documento_id'];
+        }, $inm_conf_docs_prospecto->registros);
+
+        if (count($doc_ids) <= 0) {
+            return array();
+        }
+
+        $inm_docs_prospecto = (new inm_doc_comprador(link: $controler->link))->inm_docs_comprador(
+            inm_comprador_id: $controler->registro_id, tipos_documentos: $doc_ids);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener inm_docs_prospecto',data:  $inm_docs_prospecto);
+        }
+
+        $inm_docs_prospecto = $this->inm_conf_docs_comprador(controler: $controler,
+            inm_docs_comprador:  $inm_docs_prospecto,tipos_documentos: $doc_ids);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al integrar buttons',data:  $inm_docs_prospecto);
+        }
+
+        return $inm_docs_prospecto;
+    }
 
 }
