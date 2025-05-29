@@ -30,6 +30,7 @@ use gamboamartin\inmuebles\models\_inm_prospecto_ubicacion;
 use gamboamartin\inmuebles\models\inm_conf_docs_prospecto_ubicacion;
 use gamboamartin\inmuebles\models\inm_doc_prospecto;
 use gamboamartin\inmuebles\models\inm_doc_prospecto_ubicacion;
+use gamboamartin\inmuebles\models\inm_doc_ubicacion;
 use gamboamartin\inmuebles\models\inm_prospecto;
 use gamboamartin\inmuebles\models\inm_prospecto_ubicacion;
 use gamboamartin\inmuebles\models\inm_referencia_prospecto;
@@ -284,6 +285,50 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
                     header: true, ws: false, class: __CLASS__, file: __FILE__, function: __FILE__, line: __LINE__);
             }
         }
+
+        $filtro['inm_prospecto_ubicacion.id'] = $this->registro_id;
+        $r_doc_prospecto_ubicacion = (new inm_doc_prospecto_ubicacion(link:$this->link))->filtro_and(filtro: $filtro);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al convertir en cliente', data: $r_doc_prospecto_ubicacion,
+                header: true, ws: false, class: __CLASS__, file: __FILE__, function: __FILE__, line: __LINE__);
+        }
+
+        if($r_doc_prospecto_ubicacion->n_registros > 0){
+            foreach ($r_doc_prospecto_ubicacion->registros as $registro) {
+                $ruta = $registro['doc_documento_ruta_absoluta'];
+                if((new generales())->guarda_archivo_dropbox && trim((string)$registro['inm_dropbox_ruta_id_dropbox']) !== '') {
+                    $guarda = (new _dropbox(link: $this->link))->preview(
+                        dropbox_id: $registro['inm_dropbox_ruta_id_dropbox'],
+                        extencion: $registro['doc_extension_descripcion']);
+                    if (errores::$error) {
+                        return $this->retorno_error('Error al guardar archivo', $guarda, header: $header,
+                            ws: $ws);
+                    }
+
+                    $ruta = $this->path_base.$guarda->ruta_archivo;
+                }
+
+                $_FILES['documento'] = [
+                    'name' => basename($ruta),
+                    'type' => mime_content_type($ruta),
+                    'tmp_name' => $ruta,
+                    'error' => 0,
+                    'size' => filesize($ruta)
+                ];
+
+                $registro_doc['inm_ubicacion_id'] = $conversion->r_alta_ubicacion->registro_id;
+                $registro_doc['doc_tipo_documento_id'] = $registro['doc_tipo_documento_id'];
+
+                $r_inm_doc_ubicacion = (new inm_doc_ubicacion(link:$this->link))->alta_registro(registro: $registro_doc);
+                if (errores::$error) {
+                    $this->link->rollBack();
+                    return $this->retorno_error(mensaje: 'Error al convertir en cliente', data: $r_inm_doc_ubicacion,
+                        header: true, ws: false, class: __CLASS__, file: __FILE__, function: __FILE__, line: __LINE__);
+                }
+            }
+        }
+
 
         $this->link->commit();
 
