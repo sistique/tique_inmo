@@ -3,7 +3,7 @@
 
 <?php echo $controlador->inputs->registro_id; ?>
 <main class="main section-color-primary">
-    <div class="container">
+    <div >
 
         <div class="row">
 
@@ -26,7 +26,7 @@
                 </div>
             </div>
 
-            <div class="container">
+            <div >
                 <div class="row">
                     <div class="col-md-12">
 

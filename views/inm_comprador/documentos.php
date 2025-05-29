@@ -2,7 +2,7 @@
 <?php use config\views; ?>
 
 <main class="main section-color-primary">
-    <div class="container">
+    <div>
 
         <div class="row">
 
@@ -29,7 +29,7 @@
         </div>
     </div>
     <br>
-    <div class="container">
+    <div>
         <div class="row">
             <div class="col-lg-12 table-responsive">
                 <table class="table table-striped">
