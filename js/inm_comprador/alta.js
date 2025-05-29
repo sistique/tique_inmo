@@ -211,13 +211,13 @@ correo_com_ct.change(function() {
 
 let btn = $(".btn-success");
 
-apartado_1.hide();
-apartado_2.hide();
-apartado_3.hide();
-apartado_4.hide();
-apartado_5.hide();
-apartado_13.hide();
-apartado_14.hide();
+apartado_1.show();
+apartado_2.show();
+apartado_3.show();
+apartado_4.show();
+apartado_5.show();
+apartado_13.show();
+apartado_14.show();
 collapse_a1.click(function() {
     apartado_1.toggle();
 
@@ -248,7 +248,7 @@ collapse_a14.click(function() {
 
 });
 
-let todo_aculto = true;
+let todo_aculto = false;
 
 
 $("#collapse_all").click(function() {
