@@ -317,7 +317,7 @@ class controlador_inm_prospecto extends _ctl_formato
                     'size' => filesize($ruta)
                 ];
 
-                $registro_doc['inm_comprador_id'] = $conversion->r_alta_comprador['registro_id'];
+                $registro_doc['inm_comprador_id'] = $conversion->r_alta_comprador->registro_id;
                 $registro_doc['doc_tipo_documento_id'] = $registro['doc_tipo_documento_id'];
 
                 $r_inm_doc_comprador = (new inm_doc_comprador(link:$this->link))->alta_registro(registro: $registro_doc);
