@@ -782,7 +782,8 @@ class controlador_inm_prospecto extends _ctl_formato
         return $r_modifica;
     }
 
-    public function integra_relacion_bd(bool $header, bool $ws = false): array|stdClass{
+    public function integra_relacion_bd(bool $header, bool $ws = false): array|stdClass
+    {
 
         $this->link->beginTransaction();
 
@@ -795,29 +796,15 @@ class controlador_inm_prospecto extends _ctl_formato
 
         $con_rel_agente = new com_rel_agente($this->link);
 
-        $filtro['com_prospecto.id'] = $inm_prospecto['com_prospecto_id'];
-        $r_com_rel = $con_rel_agente->filtro_and(filtro: $filtro);
-        if (errores::$error) {
-            $this->link->rollBack();
-            return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_com_rel, header: $header, ws: $ws);
-        }
-
         $registro['com_agente_id'] = $_POST['com_agente_id'];
         $registro['com_prospecto_id'] = $inm_prospecto['com_prospecto_id'];
 
-        if($r_com_rel->n_registros > 0){
-            $result = $con_rel_agente->modifica_bd(registro: $registro, id: $r_com_rel->registros[0]['com_rel_agente_id']);
-            if (errores::$error) {
-                $this->link->rollBack();
-                return $this->retorno_error(mensaje: 'Error al insertar datos', data: $result, header: $header, ws: $ws);
-            }
-        }else{
-            $result = $con_rel_agente->alta_registro(registro: $registro);
-            if (errores::$error) {
-                $this->link->rollBack();
-                return $this->retorno_error(mensaje: 'Error al insertar datos', data: $result, header: $header, ws: $ws);
-            }
+        $result = $con_rel_agente->alta_registro(registro: $registro);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al insertar datos', data: $result, header: $header, ws: $ws);
         }
+
 
         $registros_prosp['com_agente_id'] = $_POST['com_agente_id'];
         $r_modifica = (new com_prospecto(link: $this->link))->modifica_bd(registro: $registros_prosp,

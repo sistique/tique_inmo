@@ -48,6 +48,7 @@
                             <tr>
                                 <td><?php echo $etapa['com_rel_agente_id'] ?></td>
                                 <td><?php echo $etapa['com_agente_descripcion'] ?></td>
+                                <td><?php echo $etapa['com_rel_agente_fecha_alta'] ?></td>
                             </tr>
                         <?php } ?>
                         </tbody>
