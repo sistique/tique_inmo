@@ -17,6 +17,7 @@ use gamboamartin\comercial\models\com_direccion;
 use gamboamartin\comercial\models\com_direccion_prospecto;
 use gamboamartin\comercial\models\com_prospecto;
 use gamboamartin\comercial\models\com_prospecto_etapa;
+use gamboamartin\comercial\models\com_rel_agente;
 use gamboamartin\controllers\_controlador_adm_reporte\_fechas;
 use gamboamartin\controllers\_controlador_adm_reporte\_filtros;
 use gamboamartin\controllers\_controlador_adm_reporte\_table;
@@ -61,6 +62,8 @@ class controlador_inm_prospecto extends _ctl_formato
 
     public string $link_alta_bitacora = '';
     public array $etapas = array();
+    public array $relaciones = array();
+    public string $link_alta_integra_relacion_bd = '';
     public string $link_inm_doc_prospecto_alta_bd = '';
     public string $link_modifica_direccion = '';
     public string $link_agrupa_documentos = '';
@@ -672,6 +675,14 @@ class controlador_inm_prospecto extends _ctl_formato
         }
         $this->link_envia_documentos = $link;
 
+        $link = $this->obj_link->get_link(seccion: "inm_prospecto", accion: "integra_relacion_bd");
+        if (errores::$error) {
+            $error = $this->errores->error(mensaje: 'Error al recuperar link envia_documentos', data: $link);
+            print_r($error);
+            exit;
+        }
+        $this->link_alta_integra_relacion_bd = $link;
+
         return $link;
     }
 
@@ -736,17 +747,102 @@ class controlador_inm_prospecto extends _ctl_formato
             return $this->retorno_error(
                 mensaje: 'Error al generar salida de template', data: $r_modifica, header: $header, ws: $ws);
         }
-        $data = (new \gamboamartin\inmuebles\controllers\_inm_prospecto())->inputs_base(controlador: $this);
-        if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al integrar datos para front', data: $data,
-                header: $header, ws: $ws);
+
+        $keys_selects = array();
+        $keys_selects = $this->init_selects(keys_selects: $keys_selects, key: "com_agente_id", label: "Agente",cols: 12);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al integrar selector',data:  $keys_selects);
         }
-        $base = $this->base_upd(keys_selects: $data->keys_selects, params: array(), params_ajustados: array());
+
+        $keys_selects = (new init())->key_select_txt(cols: 12, key: 'razon_social',
+            keys_selects: $keys_selects, place_holder: 'Razon Social',disabled: true);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+
+        $base = $this->base_upd(keys_selects: $keys_selects, params: array(), params_ajustados: array());
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al integrar base', data: $base, header: $header, ws: $ws);
         }
+
+        $inm_prospecto = (new inm_prospecto($this->link))->registro(registro_id: $this->registro_id);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al insertar datos', data: $inm_prospecto, header: $header, ws: $ws);
+        }
+
+        $filtro['com_prospecto.id'] = $inm_prospecto['com_prospecto_id'];
+        $relaciones = (new com_rel_agente(link: $this->link))->filtro_and(filtro: $filtro);
+        if (errores::$error) {
+            $this->retorno_error(mensaje: 'Error al obtener etapas', data: $relaciones, header: $header, ws: $ws);
+        }
+
+        $this->relaciones = $relaciones->registros;
+
         return $r_modifica;
     }
+
+    public function integra_relacion_bd(bool $header, bool $ws = false): array|stdClass{
+
+        $this->link->beginTransaction();
+
+        $modelo_inm_prospecto = new inm_prospecto($this->link);
+        $inm_prospecto = $modelo_inm_prospecto->registro(registro_id: $this->registro_id);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al insertar datos', data: $inm_prospecto, header: $header, ws: $ws);
+        }
+
+        $con_rel_agente = new com_rel_agente($this->link);
+
+        $filtro['com_prospecto.id'] = $inm_prospecto['com_prospecto_id'];
+        $r_com_rel = $con_rel_agente->filtro_and(filtro: $filtro);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_com_rel, header: $header, ws: $ws);
+        }
+
+        $registro['com_agente_id'] = $_POST['com_agente_id'];
+        $registro['com_prospecto_id'] = $inm_prospecto['com_prospecto_id'];
+
+        if($r_com_rel->n_registros > 0){
+            $result = $con_rel_agente->modifica_bd(registro: $registro, id: $r_com_rel->registros[0]['com_rel_agente_id']);
+            if (errores::$error) {
+                $this->link->rollBack();
+                return $this->retorno_error(mensaje: 'Error al insertar datos', data: $result, header: $header, ws: $ws);
+            }
+        }else{
+            $result = $con_rel_agente->alta_registro(registro: $registro);
+            if (errores::$error) {
+                $this->link->rollBack();
+                return $this->retorno_error(mensaje: 'Error al insertar datos', data: $result, header: $header, ws: $ws);
+            }
+        }
+
+        $registros_prosp['com_agente_id'] = $_POST['com_agente_id'];
+        $r_modifica = (new com_prospecto(link: $this->link))->modifica_bd(registro: $registros_prosp,
+            id: $inm_prospecto['com_prospecto_id']);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_modifica, header: $header, ws: $ws);
+        }
+
+        $this->link->commit();
+
+        $link_integra_relacion_bd = $this->obj_link->link_con_id(
+            accion: 'integra_relacion', link: $this->link, registro_id: $this->registro_id, seccion: 'inm_prospecto');
+        if (errores::$error) {
+            $this->retorno_error(mensaje: 'Error al generar link', data: $link_integra_relacion_bd, header: $header, ws: $ws);
+        }
+
+        if($header) {
+            header('Location:' . $link_integra_relacion_bd);
+            exit;
+        }
+
+        return $result;
+    }
+
     public function init_selects_inputs(): array{
 
         $keys_selects = $this->init_selects(keys_selects: array(), key: "com_tipo_prospecto_id", label: "Tipo de Prospecto");
