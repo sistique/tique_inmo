@@ -324,7 +324,8 @@ class _inm_comprador{
     }
 
     final public function integra_inm_documentos(controlador_inm_comprador $controler){
-        $inm_docs_comprador = (new inm_doc_comprador(link: $controler->link))->inm_docs_comprador(inm_comprador_id: $controler->registro_id);
+        $inm_docs_comprador = (new inm_doc_comprador(link: $controler->link))->inm_docs_comprador(
+            inm_comprador_id: $controler->registro_id, tipos_documentos: array());
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener documentos',data:  $inm_docs_comprador);
         }

@@ -89,7 +89,8 @@ class inm_doc_comprador extends _modelo_parent{
 
 
 
-        $inm_docs_comprador = $this->inm_docs_comprador(inm_comprador_id: $this->registro['inm_comprador_id']);
+        $inm_docs_comprador = $this->inm_docs_comprador(inm_comprador_id: $this->registro['inm_comprador_id'],
+            tipos_documentos: array());
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener documentos',data:  $inm_docs_comprador);
         }
@@ -156,15 +157,22 @@ class inm_doc_comprador extends _modelo_parent{
         return $descripcion;
     }
 
-    final public function inm_docs_comprador(int $inm_comprador_id){
+    final public function inm_docs_comprador(int $inm_comprador_id, array $tipos_documentos)
+    {
+        $in = array();
 
-        $filtro['inm_comprador.id'] = $inm_comprador_id;
-        $r_inm_doc_comprador = $this->filtro_and(filtro: $filtro);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al obtener documentos',data:  $r_inm_doc_comprador);
+        if (count($tipos_documentos) > 0) {
+            $in['llave'] = 'doc_documento.doc_tipo_documento_id';
+            $in['values'] = $tipos_documentos;
         }
-        return $r_inm_doc_comprador->registros;
-    }
 
+        $r_inm_doc_prospecto = $this->filtro_and(filtro: array('inm_comprador.id' => $inm_comprador_id,
+            'inm_doc_comprador.es_foto' => 'inactivo'), in: $in);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener documentos', data: $r_inm_doc_prospecto);
+        }
+
+        return $r_inm_doc_prospecto->registros;
+    }
 
 }

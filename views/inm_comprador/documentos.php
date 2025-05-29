@@ -14,8 +14,6 @@
                     <?php include (new views())->ruta_templates."head/subtitulo.php"; ?>
                     <?php include (new views())->ruta_templates."mensajes.php"; ?>
 
-
-                    <?php echo $controlador->inputs->com_tipo_cliente_id; ?>
                     <?php echo $controlador->inputs->nss; ?>
                     <?php echo $controlador->inputs->curp; ?>
                     <?php echo $controlador->inputs->rfc; ?>
@@ -29,54 +27,53 @@
         </div>
     </div>
     <br>
+
+    <div style="margin-top: 20px;">
+        <div class="row">
+            <div class="col-lg-12" style="display: flex; gap: 15px;">
+                <form id="form-documentos" action="<?php echo $controlador->link_agrupa_documentos; ?>" method="post"
+                      enctype="multipart/form-data">
+                    <input type="hidden" id="documentos" name="documentos" required>
+                    <button id="agrupar" class="btn btn-success">Agrupar</button>
+                </form>
+                <form id="form-documentos-verificar" action="<?php echo $controlador->link_verifica_documentos; ?>" method="post"
+                      enctype="multipart/form-data">
+                    <input type="hidden" id="documentos-verificar" name="documentos" required>
+                    <button id="verificar" class="btn btn-success">Verificar</button>
+                </form>
+                    <button id="enviar" class="btn btn-success">Enviar Documentos</button>
+            </div>
+        </div>
+    </div>
+
     <div>
         <div class="row">
             <div class="col-lg-12 table-responsive">
-                <table class="table table-striped">
-                    <thead>
-
-                         <th>Tipo de Documento</th>
-                         <th>Descarga</th>
-                         <th>Vista Previa</th>
-                         <th>ZIP</th>
-                         <th>Elimina</th>
-
-                    </thead>
-                    <tbody>
-                    <?php
-                    foreach ($controlador->inm_conf_docs_comprador as $doc_tipo_documento){ ?>
-
-                    <tr>
-                        <td><?php echo $doc_tipo_documento['doc_tipo_documento_descripcion']; ?></td>
-                        <td><?php echo $doc_tipo_documento['descarga']; ?></td>
-                        <td><?php echo $doc_tipo_documento['vista_previa']; ?></td>
-                        <td><?php echo $doc_tipo_documento['descarga_zip']; ?></td>
-                        <td><?php echo $doc_tipo_documento['elimina_bd']; ?></td>
-                    </tr>
-                    <?php
-                    }
-                    ?>
-                    </tbody>
-                </table>
+                <table id="table-inm_comprador" class="table mb-0 table-striped table-sm "></table>
             </div>
         </div>
     </div>
 </main>
 
+<dialog id="myModal">
+    <span class="close-btn" id="closeModalBtn">&times;</span>
+    <h2>Vista Previa</h2>
+    <div class="content">
+    </div>
+</dialog>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<dialog id="modalSnd">
+    <span class="close-btn" id="closeModalSendBtn">&times;</span>
+    <h2>Enviar Documentos</h2>
+    <div class="content">
+        <form id="form-documentos-enviar" action="<?php echo $controlador->link_envia_documentos; ?>" method="post"
+              enctype="multipart/form-data">
+            <input type="hidden" id="documentos-enviar" name="documentos" required>
+            <?php echo $controlador->inputs->documentos;?>
+            <?php echo $controlador->inputs->receptor; ?>
+            <?php echo $controlador->inputs->asunto; ?>
+            <?php echo $controlador->inputs->mensaje; ?>
+            <button id="enviarDocs" class="btn btn-success">Enviar</button>
+        </form>
+    </div>
+</dialog>

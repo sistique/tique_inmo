@@ -1,9 +1,13 @@
 <?php
 namespace gamboamartin\inmuebles\controllers;
 
+use gamboamartin\documento\models\doc_tipo_documento;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_co_acreditado_html;
 use gamboamartin\inmuebles\html\inm_comprador_html;
+use gamboamartin\inmuebles\models\inm_conf_docs_comprador;
+use gamboamartin\inmuebles\models\inm_doc_comprador;
+use gamboamartin\inmuebles\models\inm_comprador;
 use stdClass;
 
 class _inm_comprador{
@@ -155,5 +159,151 @@ class _inm_comprador{
         $data->key_header = $key_header;
 
         return $data;
+    }
+
+    private function doc_existente(controlador_inm_comprador $controler, array $doc_tipo_documento, int $indice,
+                                   array $inm_conf_docs_comprador, array $inm_doc_comprador){
+
+        $existe = false;
+        if($doc_tipo_documento['doc_tipo_documento_id'] === $inm_doc_comprador['doc_tipo_documento_id']){
+
+            $existe = true;
+
+            $inm_conf_docs_comprador = $this->buttons_base(
+                controler: $controler,indice:  $indice,inm_comprador_id:  $controler->registro_id,
+                inm_conf_docs_comprador:  $inm_conf_docs_comprador,inm_doc_comprador:  $inm_doc_comprador);
+
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al integrar button',data:  $inm_conf_docs_comprador);
+            }
+        }
+
+        $data = new stdClass();
+        $data->existe = $existe;
+        $data->inm_conf_docs_comprador = $inm_conf_docs_comprador;
+        return $data;
+    }
+    
+    private function inm_docs_comprador(controlador_inm_comprador $controler, array $doc_tipo_documento,
+                                        int $indice, array $inm_conf_docs_comprador,array $inm_docs_comprador){
+        $existe = false;
+        foreach ($inm_docs_comprador as $inm_doc_comprador){
+
+            $existe_doc_comprador = $this->doc_existente(controler: $controler,
+                doc_tipo_documento:  $doc_tipo_documento,indice:  $indice,
+                inm_conf_docs_comprador:  $inm_conf_docs_comprador,inm_doc_comprador:  $inm_doc_comprador);
+
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al integrar datos',data:  $existe_doc_comprador);
+            }
+
+            $inm_conf_docs_comprador = $existe_doc_comprador->inm_conf_docs_comprador;
+            $existe = $existe_doc_comprador->existe;
+            if($existe){
+                break;
+            }
+
+        }
+        if(!$existe){
+            $inm_conf_docs_comprador = $this->integra_data(controler: $controler,
+                doc_tipo_documento:  $doc_tipo_documento,indice:  $indice,
+                inm_conf_docs_comprador:  $inm_conf_docs_comprador);
+
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al integrar button',data:  $inm_conf_docs_comprador);
+            }
+        }
+        return $inm_conf_docs_comprador;
+    }
+
+    private function integra_data(controlador_inm_comprador $controler, array $doc_tipo_documento,
+                                  int $indice, array $inm_conf_docs_comprador){
+        $params = array('doc_tipo_documento_id'=>$doc_tipo_documento['doc_tipo_documento_id']);
+
+        $button = $controler->html->button_href(accion: 'subir_documento',etiqueta:
+            'Subir Documento',registro_id:  $controler->registro_id,
+            seccion:  'inm_comprador',style:  'warning', params: $params);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al integrar button',data:  $button);
+        }
+
+        $inm_conf_docs_comprador = $this->integra_button_default(button: $button,
+            indice:  $indice,inm_conf_docs_comprador:  $inm_conf_docs_comprador);
+
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al integrar button',data:  $inm_conf_docs_comprador);
+        }
+        return $inm_conf_docs_comprador;
+    }
+
+    private function integra_button_default(string $button, int $indice, array $inm_conf_docs_comprador): array
+    {
+        $inm_conf_docs_comprador[$indice]['descarga'] = $button;
+        $inm_conf_docs_comprador[$indice]['vista_previa'] = $button;
+        $inm_conf_docs_comprador[$indice]['descarga_zip'] = $button;
+        $inm_conf_docs_comprador[$indice]['elimina_bd'] = $button;
+        return $inm_conf_docs_comprador;
+    }
+
+    private function inm_conf_docs_comprador(controlador_inm_comprador $controler, array $inm_docs_comprador, array $tipos_documentos){
+        $in = array();
+        if (count($tipos_documentos) > 0) {
+            $in['llave'] = 'doc_tipo_documento.id';
+            $in['values'] = $tipos_documentos;
+        }
+
+        $r_doc_tipo_documento = (new doc_tipo_documento(link: $controler->link))->filtro_and(in: $in);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al Obtener tipos de documento',data:  $r_doc_tipo_documento);
+        }
+
+        $inm_conf_docs_comprador = $r_doc_tipo_documento->registros;
+
+        foreach ($inm_conf_docs_comprador as $indice=>$doc_tipo_documento){
+            $inm_conf_docs_comprador = $this->inm_docs_comprador(controler: $controler,
+                doc_tipo_documento:  $doc_tipo_documento,indice:  $indice,
+                inm_conf_docs_comprador:  $inm_conf_docs_comprador,inm_docs_comprador:  $inm_docs_comprador);
+
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al integrar buttons',data:  $inm_conf_docs_comprador);
+            }
+        }
+        return $inm_conf_docs_comprador;
+    }
+
+    final public function integra_inm_documentos_comprador(controlador_inm_comprador $controler){
+        $inm_prospecto = (new inm_comprador(link: $controler->link))->registro(registro_id: $controler->registro_id);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener inm_comprador',data:  $inm_prospecto);
+        }
+
+        $filtro['inm_conf_docs_comprador.es_foto'] = 'inactivo';
+        $inm_conf_docs_prospecto = (new inm_conf_docs_comprador(link: $controler->link))->filtro_and(
+            columnas: ['doc_tipo_documento_id'],filtro: $filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener inm_conf_docs_prospecto',data:  $inm_conf_docs_prospecto);
+        }
+
+        $doc_ids = array_map(function($registro) {
+            return $registro['doc_tipo_documento_id'];
+        }, $inm_conf_docs_prospecto->registros);
+
+        if (count($doc_ids) <= 0) {
+            return array();
+        }
+
+        $inm_docs_prospecto = (new inm_doc_comprador(link: $controler->link))->inm_docs_comprador(
+            inm_comprador_id: $controler->registro_id, tipos_documentos: $doc_ids);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener inm_docs_prospecto',data:  $inm_docs_prospecto);
+        }
+
+        $inm_docs_prospecto = $this->inm_conf_docs_comprador(controler: $controler,
+            inm_docs_comprador:  $inm_docs_prospecto,tipos_documentos: $doc_ids);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al integrar buttons',data:  $inm_docs_prospecto);
+        }
+
+        return $inm_docs_prospecto;
     }
 }
