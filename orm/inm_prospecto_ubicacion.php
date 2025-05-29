@@ -477,35 +477,21 @@ class inm_prospecto_ubicacion extends _modelo_parent{
 
         $filtro['inm_prospecto.id'] = $id;
 
-        $del = (new inm_doc_prospecto(link: $this->link))->elimina_con_filtro_and(filtro:$filtro);
+        $del = (new inm_doc_prospecto_ubicacion(link: $this->link))->elimina_con_filtro_and(filtro:$filtro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al eliminar inm_comprador_etapa',
                 data:  $del);
         }
 
-        $del = (new inm_prospecto_proceso(link: $this->link))->elimina_con_filtro_and(filtro:$filtro);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al eliminar inm_comprador_etapa',
-                data:  $del);
-        }
-        $del = (new inm_rel_comprador_prospecto_(link: $this->link))->elimina_con_filtro_and(filtro:$filtro);
+        $del = (new inm_rel_ubicacion_prospecto_ubicacion(link: $this->link))->elimina_con_filtro_and(filtro:$filtro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al eliminar inm_rel_prospecto_cliente',
                 data:  $del);
         }
-        $del = (new inm_rel_conyuge_prospecto(link: $this->link))->elimina_con_filtro_and(filtro:$filtro);
+        
+        $del = (new inm_rel_conyuge_prospecto_ubicacion(link: $this->link))->elimina_con_filtro_and(filtro:$filtro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al eliminar inm_rel_conyuge_prospecto',
-                data:  $del);
-        }
-        $del = (new inm_beneficiario(link: $this->link))->elimina_con_filtro_and(filtro:$filtro);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al eliminar inm_beneficiario',
-                data:  $del);
-        }
-        $del = (new inm_referencia_prospecto(link: $this->link))->elimina_con_filtro_and(filtro:$filtro);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al eliminar inm_referencia_prospecto',
                 data:  $del);
         }
 
