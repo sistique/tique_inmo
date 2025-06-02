@@ -2438,8 +2438,13 @@ form textarea.form-control {
 }
 
 .form-check-input {
-    height: 26px !important;
+    height: 20px !important;
 }
+
+.form-check-label{
+    margin-bottom: 0 !important;
+}
+
 .form-additional textarea,
 .form-additional input {
     background: #f8f8f8;

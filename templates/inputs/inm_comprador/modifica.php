@@ -13,21 +13,15 @@
 <?php echo $controlador->inputs->es_segundo_credito; ?>
 
 <?php
-
-
-
 $checked_genero_m = 'checked';
 $checked_genero_f = '';
 if($controlador->row_upd->genero === 'F'){
     $checked_genero_m = '';
     $checked_genero_f = 'checked';
 }
-
-
 ?>
-
 <?php echo $controlador->inputs->inm_plazo_credito_sc_id; ?>
-
+        <?php echo $controlador->btn; ?>
     </div>
 
 
@@ -42,6 +36,7 @@ if($controlador->row_upd->genero === 'F'){
 <?php echo $controlador->inputs->monto_final; ?>
 <?php echo $controlador->inputs->descuento; ?>
 <?php echo $controlador->inputs->puntos; ?>
+<?php echo $controlador->btn; ?>
     </div>
 
 
@@ -51,6 +46,7 @@ if($controlador->row_upd->genero === 'F'){
 <?php echo $controlador->inputs->con_discapacidad; ?>
 <?php echo $controlador->inputs->inm_tipo_discapacidad_id; ?>
 <?php echo $controlador->inputs->inm_persona_discapacidad_id; ?>
+<?php echo $controlador->btn; ?>
     </div>
 
 <?php echo $controlador->header_frontend->apartado_4; ?>
@@ -64,6 +60,8 @@ if($controlador->row_upd->genero === 'F'){
 <?php echo $controlador->inputs->extension_nep; ?>
 <?php echo $controlador->inputs->inm_sindicato_id; ?>
 <?php echo $controlador->inputs->correo_empresa; ?>
+<?php echo $controlador->btn; ?>
+
     </div>
 
 
@@ -113,6 +111,7 @@ if($controlador->row_upd->genero === 'F'){
         <?php echo $controlador->inputs->inm_nacionalidad_id; ?>
         <?php echo $controlador->inputs->inm_ocupacion_id; ?>
         <?php echo $controlador->inputs->telefono_casa; ?>
+        <?php echo $controlador->btn; ?>
 
     </div>
 
@@ -129,6 +128,7 @@ if($controlador->row_upd->genero === 'F'){
     <?php echo $controlador->inputs->inm_co_acreditado->lada; ?>
     <?php echo $controlador->inputs->inm_co_acreditado->numero; ?>
     <?php echo $controlador->inputs->inm_co_acreditado->celular; ?>
+    <?php echo $controlador->btn; ?>
     <div class="control-group col-sm-6">
         <label class="control-label" for="inm_attr_tipo_credito_id">Genero</label>
         <label class="form-check-label chk">
@@ -168,13 +168,15 @@ if($controlador->row_upd->genero === 'F'){
 <?php echo $controlador->inputs->cat_sat_uso_cfdi_id; ?>
 <?php echo $controlador->inputs->cat_sat_tipo_persona_id; ?>
 <?php echo $controlador->inputs->bn_cuenta_id; ?>
+<?php echo $controlador->btn; ?>
 
     </div>
 
 <?php echo $controlador->header_frontend->apartado_14; ?>
 
     <div  id="apartado_14">
-<?php echo $controlador->inputs->com_tipo_cliente_id; ?>
+    <?php echo $controlador->inputs->com_tipo_cliente_id; ?>
+    <?php echo $controlador->btn; ?>
     </div>
 
 <?php echo $controlador->header_frontend->apartado_15; ?>
@@ -191,6 +193,7 @@ if($controlador->row_upd->genero === 'F'){
     <?php echo $controlador->inputs->conyuge->inm_ocupacion_id; ?>
     <?php echo $controlador->inputs->conyuge->telefono_casa; ?>
     <?php echo $controlador->inputs->conyuge->telefono_celular;  ?>
+    <?php echo $controlador->btn; ?>
 </div>
 
 <?php echo $controlador->header_frontend->apartado_16; ?>
@@ -200,6 +203,7 @@ if($controlador->row_upd->genero === 'F'){
     <?php echo $controlador->inputs->beneficiario->nombre; ?>
     <?php echo $controlador->inputs->beneficiario->apellido_paterno; ?>
     <?php echo $controlador->inputs->beneficiario->apellido_materno; ?>
+    <?php echo $controlador->btn; ?>
     <div class="col-md-12 table-responsive">
         <table class="table table-striped">
             <thead>
