@@ -8,6 +8,8 @@
                 <div class="widget  widget-box box-container form-main widget-form-cart" id="form">
                     <?php include (new views())->ruta_templates . "head/subtitulo.php"; ?>
                     <?php include (new views())->ruta_templates . "mensajes.php"; ?>
+                    <?php echo $controlador->buttons['btn_collapse_all']; ?>
+
                     <form method="post" action="<?php echo $controlador->link_modifica_bd; ?>" class="form-additional"
                           enctype="multipart/form-data">
 

@@ -623,13 +623,122 @@ sl_inm_institucion_hipotecaria.change(function () {
 });*/
 
 
+let apartado_1 = $("#apartado_1");
+let apartado_2 = $("#apartado_2");
+let apartado_3 = $("#apartado_3");
+let apartado_4 = $("#apartado_4");
+let apartado_5 = $("#apartado_5");
+let apartado_6 = $("#apartado_6");
+let apartado_7 = $("#apartado_7");
+let apartado_8 = $("#apartado_8");
+let apartado_9 = $("#apartado_9");
+let apartado_10 = $("#apartado_10");
+let apartado_11 = $("#apartado_11");
+
+let collapse_a1 = $("#collapse_a1");
+let collapse_a2 = $("#collapse_a2");
+let collapse_a3 = $("#collapse_a3");
+let collapse_a4 = $("#collapse_a4");
+let collapse_a5 = $("#collapse_a5");
+let collapse_a6 = $("#collapse_a6");
+let collapse_a7 = $("#collapse_a7");
+let collapse_a8 = $("#collapse_a8");
+let collapse_a9 = $("#collapse_a9");
+let collapse_a10 = $("#collapse_a10");
+let collapse_a11 = $("#collapse_a11");
 
 
+apartado_1.show();
+apartado_2.show();
+apartado_3.show();
+apartado_4.show();
+apartado_5.show();
+apartado_6.show();
+apartado_7.show();
+apartado_8.show();
+apartado_9.show();
+apartado_10.show();
+apartado_11.show();
 
+collapse_a1.click(function() {
+    apartado_1.toggle();
 
+});
+collapse_a2.click(function() {
+    apartado_2.toggle();
 
+});
+collapse_a3.click(function() {
+    apartado_3.toggle();
 
+});
+collapse_a4.click(function() {
+    apartado_4.toggle();
 
+});
+collapse_a5.click(function() {
+    apartado_5.toggle();
 
+});
 
+collapse_a1.click(function() {
+    apartado_1.toggle();
 
+});
+collapse_a6.click(function() {
+    apartado_6.toggle();
+
+});
+collapse_a7.click(function() {
+    apartado_7.toggle();
+
+});
+collapse_a8.click(function() {
+    apartado_8.toggle();
+
+});
+collapse_a9.click(function() {
+    apartado_9.toggle();
+
+});
+
+collapse_a10.click(function() {
+    apartado_10.toggle();
+});
+
+collapse_a11.click(function() {
+    apartado_11.toggle();
+
+});
+
+$("#collapse_all").click(function() {
+    if(todo_aculto){
+        apartado_1.hide();
+        apartado_2.hide();
+        apartado_3.hide();
+        apartado_4.hide();
+        apartado_5.hide();
+        apartado_6.hide();
+        apartado_7.hide();
+        apartado_8.hide();
+        apartado_9.hide();
+        apartado_10.hide();
+        apartado_11.hide();
+        todo_aculto = false;
+    }
+    else{
+        apartado_1.show();
+        apartado_2.show();
+        apartado_3.show();
+        apartado_4.show();
+        apartado_5.show();
+        apartado_6.show();
+        apartado_7.show();
+        apartado_8.show();
+        apartado_9.show();
+        apartado_10.show();
+        apartado_11.show();
+        todo_aculto = true;
+    }
+
+});

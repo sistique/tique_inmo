@@ -1299,6 +1299,15 @@ class controlador_inm_prospecto extends _ctl_formato
             return $this->errores->error(mensaje: 'Error al obtener inputs',data:  $inputs);
         }
 
+        $btn_collapse_all = $this->html->button_para_java(id_css: 'collapse_all',style:  'primary',
+            tag:  'Ver/Ocultar Todo');
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al btn_collapse_all',data:  $btn_collapse_all, header: $header,ws:  $ws);
+        }
+
+        $this->buttons['btn_collapse_all'] = $btn_collapse_all;
+
         /*foreach ($keys_selects as $key => $value) {
             echo '<br>';
             //print_r($key);
