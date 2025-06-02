@@ -867,6 +867,15 @@ class controlador_inm_ubicacion extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
         }
 
+        $btn_collapse_all = $this->html->button_para_java(id_css: 'collapse_all',style:  'primary',
+            tag:  'Ver/Ocultar Todo');
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al btn_collapse_all',data:  $btn_collapse_all, header: $header,ws:  $ws);
+        }
+
+        $this->buttons['btn_collapse_all'] = $btn_collapse_all;
+
         return $r_modifica;
     }
 
