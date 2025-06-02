@@ -111,7 +111,7 @@ class _com_cliente{
     private function com_cliente_upd(PDO $link, stdClass $registro): array
     {
 
-        $keys = array('inm_comprador_nombre','inm_comprador_apellido_paterno','dp_calle_pertenece_id');
+        $keys = array('inm_comprador_nombre','inm_comprador_apellido_paterno');
         $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al al validar $registro',data:  $valida);
@@ -130,19 +130,6 @@ class _com_cliente{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener com_cliente_upd',data:  $com_cliente_upd);
         }
-
-        $dp_calle_pertenece = (new dp_calle_pertenece(link: $link))->registro(
-            registro_id: $registro->dp_calle_pertenece_id,retorno_obj: true);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al obtener dp_calle_pertenece',data:  $dp_calle_pertenece);
-        }
-
-        $keys_dom = array('pais','estado','municipio','colonia','calle','cp');
-        foreach ($keys_dom as $key_dom){
-            $key_row = 'dp_'.$key_dom.'_descripcion';
-            $com_cliente_upd[$key_dom] = $dp_calle_pertenece->$key_row;
-        }
-        $com_cliente_upd['dp_municipio_id'] = $dp_calle_pertenece->dp_municipio_id;
 
         return $com_cliente_upd;
     }
@@ -494,7 +481,6 @@ class _com_cliente{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al al validar inm_comprador',data:  $valida);
         }
-
 
         $com_cliente_upd = $this->com_cliente_upd(link: $link, registro: $inm_comprador);
         if(errores::$error){

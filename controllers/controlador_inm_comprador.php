@@ -255,7 +255,6 @@ class controlador_inm_comprador extends _ctl_base {
                 header: $header,ws:  $ws);
         }
 
-
         $hiddens = (new _keys_selects())->hiddens(controler: $this,funcion: __FUNCTION__);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener inputs',data:  $hiddens,
@@ -266,7 +265,6 @@ class controlador_inm_comprador extends _ctl_base {
             controler: $this, id_retorno: $hiddens->id_retorno, in_registro_id: $hiddens->in_registro_id,
             inm_comprador_id: $inm_comprador_id, inm_ubicacion_id: '', precio_operacion: $hiddens->precio_operacion,
             seccion_retorno: $hiddens->seccion_retorno);
-
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener inputs_hidden',data:  $inputs, header: $header,ws:  $ws);
         }
