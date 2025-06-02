@@ -1561,7 +1561,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al obtener inputs',data:  $inputs);
         }
-        
+
         $btn_collapse_all = $this->html->button_para_java(id_css: 'collapse_all',style:  'primary',
             tag:  'Ver/Ocultar Todo');
         if(errores::$error){
