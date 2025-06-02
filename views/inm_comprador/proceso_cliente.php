@@ -73,7 +73,8 @@
                         <div class="conten" id="cpestana4">
                             <?php echo $controlador->inputs->com_cliente_id; ?>
 
-                            <a role="button" title="Solicitud Infonavit" href="index.php?seccion=inm_comprador&amp;accion=solicitud_infonavit&amp;registro_id=55&amp;session_id=5514223136&amp;adm_menu_id=45" class="btn btn-warning " style="margin-left: 2px; margin-bottom: 2px; ">Solicitud Infonavit</a>                        </div>
+                            <a role="button" title="Solicitud Infonavit" href="index.php?seccion=inm_comprador&amp;accion=solicitud_infonavit&amp;registro_id=55&amp;session_id=5514223136&amp;adm_menu_id=45" class="btn btn-warning " style="margin-left: 2px; margin-bottom: 2px; ">Solicitud Infonavit</a>
+                        </div>
                         <div class="conten" id="cpestana5">
                             <form method="post" action="<?php echo $controlador->link_asigna_avaluo_bd; ?>"
                                   class="form-additional" enctype="multipart/form-data">
@@ -82,7 +83,8 @@
                                 <?php echo $controlador->inputs->documento_constancia_credito; ?>
 
                                 <?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
-                            </form>                        </div>
+                            </form>
+                        </div>
                         <div class="conten" id="cpestana6">
                             <form method="post" action="<?php echo $controlador->link_asigna_firma_bd; ?>"
                                   class="form-additional" enctype="multipart/form-data">
@@ -92,7 +94,8 @@
                                 <?php echo $controlador->inputs->documento_isr_notaria; ?>
                                 <?php echo $controlador->inputs->isr; ?>
                                 <?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
-                            </form>                        </div>
+                            </form>
+                        </div>
                         <div class="conten" id="cpestana7">
                             <form method="post" action="<?php echo $controlador->link_asigna_escritura_bd; ?>"
                                   class="form-additional" enctype="multipart/form-data">
@@ -103,7 +106,8 @@
                                 <?php echo $controlador->inputs->fecha; ?>
 
                                 <?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
-                            </form>                        </div>
+                            </form>
+                        </div>
                         <div class="conten" id="cpestana8">
                             Contenido de la pestaña 2
                         </div>
