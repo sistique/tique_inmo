@@ -421,7 +421,9 @@ let apartado_4 = $("#apartado_4");
 let apartado_5 = $("#apartado_5");
 let apartado_13 = $("#apartado_13");
 let apartado_14 = $("#apartado_14");
-
+let apartado_15 = $("#apartado_15");
+let apartado_16 = $("#apartado_16");
+let apartado_17 = $("#apartado_17");
 let apartado_6 = $("#apartado_6");
 let apartado_7 = $("#apartado_7");
 let apartado_8 = $("#apartado_8");
@@ -433,24 +435,29 @@ let collapse_a4 = $("#collapse_a4");
 let collapse_a5 = $("#collapse_a5");
 let collapse_a13 = $("#collapse_a13");
 let collapse_a14 = $("#collapse_a14");
-
+let collapse_a15 = $("#collapse_a15");
+let collapse_a16 = $("#collapse_a16");
+let collapse_a17 = $("#collapse_a17");
 let collapse_a6 = $("#collapse_a6");
 let collapse_a7 = $("#collapse_a7");
 let collapse_a8 = $("#collapse_a8");
 
 let btn_modifica = $("#btn_modifica");
 
-apartado_1.hide();
-apartado_2.hide();
-apartado_3.hide();
-apartado_4.hide();
-apartado_5.hide();
-apartado_13.hide();
-apartado_14.hide();
+apartado_1.show();
+apartado_2.show();
+apartado_3.show();
+apartado_4.show();
+apartado_5.show();
+apartado_13.show();
+apartado_14.show();
+apartado_15.show();
+apartado_16.show();
+apartado_17.show();
 
-apartado_6.hide();
-apartado_7.hide();
-apartado_8.hide();
+apartado_6.show();
+apartado_7.show();
+apartado_8.show();
 
 in_descuento_pension_alimenticia_dh.change(function() {
     let value = $(this).val().trim();
@@ -768,8 +775,20 @@ collapse_a14.click(function() {
 
 });
 
+collapse_a15.click(function() {
+    apartado_15.toggle();
 
+});
 
+collapse_a16.click(function() {
+    apartado_16.toggle();
+
+});
+
+collapse_a17.click(function () {
+    apartado_17.toggle();
+
+});
 
 function habilita_co_acreditado(){
     inm_co_acreditado_nss.prop('disabled',false);
@@ -846,20 +865,6 @@ let todo_aculto = true;
 
 $("#collapse_all").click(function() {
     if(todo_aculto){
-        apartado_1.show();
-        apartado_2.show();
-        apartado_3.show();
-        apartado_4.show();
-        apartado_5.show();
-        apartado_13.show();
-        apartado_14.show();
-
-        apartado_6.show();
-        apartado_7.show();
-        apartado_8.show();
-        todo_aculto = false;
-    }
-    else{
         apartado_1.hide();
         apartado_2.hide();
         apartado_3.hide();
@@ -867,10 +872,30 @@ $("#collapse_all").click(function() {
         apartado_5.hide();
         apartado_13.hide();
         apartado_14.hide();
+        apartado_15.hide();
+        apartado_16.hide();
+        apartado_17.hide();
 
         apartado_6.hide();
         apartado_7.hide();
         apartado_8.hide();
+        todo_aculto = false;
+    }
+    else{
+        apartado_1.show();
+        apartado_2.show();
+        apartado_3.show();
+        apartado_4.show();
+        apartado_5.show();
+        apartado_13.show();
+        apartado_14.show();
+        apartado_15.show();
+        apartado_16.show();
+        apartado_17.show();
+
+        apartado_6.show();
+        apartado_7.show();
+        apartado_8.show();
         todo_aculto = true;
     }
 
