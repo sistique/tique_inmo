@@ -1196,7 +1196,6 @@ class _keys_selects{
     {
         $keys = array('com_cliente_rfc','com_cliente_numero_exterior','com_cliente_telefono','dp_pais_id',
             'dp_estado_id','dp_municipio_id', 'com_tipo_cliente_id');
-
         $valida = (new valida())->valida_existencia_keys(keys: $keys,registro:  $com_cliente);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar com_cliente',data:  $valida);
@@ -1206,29 +1205,26 @@ class _keys_selects{
             $com_cliente['com_cliente_numero_interior'] = '';
         }
 
-        $keys = array('dp_pais_id', 'dp_estado_id','dp_municipio_id','dp_cp_id','dp_calle_id','dp_colonia_id',
-            'dp_colonia_postal_id','dp_calle_pertenece_id');
+        $keys = array('dp_pais_id', 'dp_estado_id','dp_municipio_id','dp_cp_id','dp_colonia_id',
+            'dp_colonia_postal_id');
         $valida = (new valida())->valida_ids(keys: $keys,registro:  $controler->registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar com_cliente',data:  $valida);
         }
 
-        //print_r($controler->registro);exit;
-
-
         $controler->row_upd->rfc = $com_cliente['com_cliente_rfc'];
         $controler->row_upd->numero_exterior = $com_cliente['com_cliente_numero_exterior'];
         $controler->row_upd->numero_interior = $com_cliente['com_cliente_numero_interior'];
+        $controler->row_upd->calle = $com_cliente['com_cliente_calle'];
         $controler->row_upd->telefono = $com_cliente['com_cliente_telefono'];
         $controler->row_upd->dp_pais_id = $controler->registro['dp_pais_id'];
         $controler->row_upd->dp_estado_id = $controler->registro['dp_estado_id'];
         $controler->row_upd->dp_municipio_id = $controler->registro['dp_municipio_id'];
-        $controler->row_upd->com_tipo_cliente_id = $com_cliente['com_tipo_cliente_id'];
         $controler->row_upd->dp_cp_id = $controler->registro['dp_cp_id'];
-        $controler->row_upd->dp_calle_id = $controler->registro['dp_calle_id'];
         $controler->row_upd->dp_colonia_id = $controler->registro['dp_colonia_id'];
         $controler->row_upd->dp_colonia_postal_id = $controler->registro['dp_colonia_postal_id'];
-        $controler->row_upd->dp_calle_pertenece_id = $controler->registro['dp_calle_pertenece_id'];
+        $controler->row_upd->com_tipo_cliente_id = $com_cliente['com_tipo_cliente_id'];
+
         return $controler->row_upd;
     }
 }

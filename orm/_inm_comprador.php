@@ -267,8 +267,7 @@ class _inm_comprador{
         controlador_inm_comprador $controler, array $extra_params_keys = array(),
         array $registros = array()): array|string
     {
-        $columns_ds = array('inm_ubicacion_id','dp_estado_descripcion','dp_municipio_descripcion',
-            'dp_cp_descripcion','dp_colonia_descripcion','dp_calle_descripcion','inm_ubicacion_numero_exterior');
+        $columns_ds = array('inm_ubicacion_id','inm_ubicacion_ubicacion');
 
         $inm_ubicacion_id = (new inm_ubicacion_html(html: $controler->html_base))->select_inm_ubicacion_id(
             cols: 12, con_registros: true,id_selected: -1,link:  $controler->link, columns_ds: $columns_ds,
