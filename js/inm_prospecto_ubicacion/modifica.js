@@ -622,14 +622,62 @@ sl_inm_institucion_hipotecaria.change(function () {
 
 });*/
 
+let apartado_1 = $("#apartado_1");
+let apartado_2 = $("#apartado_2");
+let apartado_3 = $("#apartado_3");
+let apartado_4 = $("#apartado_4");
+let apartado_5 = $("#apartado_5");
 
+let collapse_a1 = $("#collapse_a1");
+let collapse_a2 = $("#collapse_a2");
+let collapse_a3 = $("#collapse_a3");
+let collapse_a4 = $("#collapse_a4");
+let collapse_a5 = $("#collapse_a5");
 
+apartado_1.show();
+apartado_2.show();
+apartado_3.show();
+apartado_4.show();
+apartado_5.show();
+collapse_a1.click(function() {
+    apartado_1.toggle();
 
+});
+collapse_a2.click(function() {
+    apartado_2.toggle();
 
+});
+collapse_a3.click(function() {
+    apartado_3.toggle();
 
+});
+collapse_a4.click(function() {
+    apartado_4.toggle();
 
+});
+collapse_a5.click(function() {
+    apartado_5.toggle();
 
+});
 
+let todo_aculto = true;
 
+$("#collapse_all").click(function() {
+    if(todo_aculto){
+        apartado_1.hide();
+        apartado_2.hide();
+        apartado_3.hide();
+        apartado_4.hide();
+        apartado_5.hide();
+        todo_aculto = false;
+    }
+    else{
+        apartado_1.show();
+        apartado_2.show();
+        apartado_3.show();
+        apartado_4.show();
+        apartado_5.show();
+        todo_aculto = true;
+    }
 
-
+});

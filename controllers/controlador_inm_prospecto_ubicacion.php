@@ -1561,6 +1561,15 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al obtener inputs',data:  $inputs);
         }
+        
+        $btn_collapse_all = $this->html->button_para_java(id_css: 'collapse_all',style:  'primary',
+            tag:  'Ver/Ocultar Todo');
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al btn_collapse_all',data:  $btn_collapse_all, header: $header,ws:  $ws);
+        }
+
+        $this->buttons['btn_collapse_all'] = $btn_collapse_all;
 
         $headers = (new \gamboamartin\inmuebles\controllers\_inm_prospecto_ubicacion())->headers_front(controlador: $this);
         if (errores::$error) {
