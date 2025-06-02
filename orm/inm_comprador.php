@@ -31,8 +31,22 @@ class inm_comprador extends _modelo_parent{
             'numero_com','numero_nep','inm_institucion_hipotecaria_id','inm_sindicato_id','dp_municipio_nacimiento_id',
             'fecha_nacimiento','monto_final','sub_cuenta','descuento','puntos','inm_nacionalidad_id',
             'inm_ocupacion_id','telefono_casa','correo_empresa');
+        
+        $renombres['dp_cp_empresa']['nombre_original']= 'dp_cp';
+        $renombres['dp_cp_empresa']['enlace']= 'dp_colonia_postal';
+        $renombres['dp_cp_empresa']['key']= 'id';
+        $renombres['dp_cp_empresa']['key_enlace']= 'dp_cp_id';
 
-        $renombres = array();
+        $renombres['dp_municipio_empresa']['nombre_original']= 'dp_municipio';
+        $renombres['dp_municipio_empresa']['enlace']= 'dp_cp_empresa';
+        $renombres['dp_municipio_empresa']['key']= 'id';
+        $renombres['dp_municipio_empresa']['key_enlace']= 'dp_municipio_id';
+
+        $renombres['dp_estado_empresa']['nombre_original']= 'dp_estado';
+        $renombres['dp_estado_empresa']['enlace']= 'dp_municipio_empresa';
+        $renombres['dp_estado_empresa']['key']= 'id';
+        $renombres['dp_estado_empresa']['key_enlace']= 'dp_estado_id';
+
         $renombres = (new _base_paquete())->rename_data_nac(enlace: $tabla, renombres: $renombres);
         if(errores::$error){
             $error = (new errores())->error(mensaje: 'Error al integrar rename', data: $renombres);
@@ -77,7 +91,7 @@ class inm_comprador extends _modelo_parent{
                         LEFT JOIN dp_estado ON dp_estado.id = dp_municipio.dp_estado_id
                         LEFT JOIN dp_pais ON dp_pais.id = dp_estado.dp_pais_id
                         WHERE
-                        inm_rel_ubi_comp.inm_comprador_id = inm_comprador.id
+                        inm_rel_ubi_comp.inm_comprador_id = 22
                          LIMIT 1), ''))";
 
         $columnas_extra['inm_ubicacion_completa'] = $sql;
