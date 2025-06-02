@@ -53,9 +53,7 @@
                                     <thead>
                                     <tr>
                                         <th>Id</th>
-                                        <th>Nombre</th>
-                                        <th>AP</th>
-                                        <th>AM</th>
+                                        <th>Nombre Cliente</th>
                                         <th>NSS</th>
                                         <th>Precio Operacion</th>
                                     <tr>
@@ -64,9 +62,9 @@
                                     <?php    foreach ($controlador->imp_compradores as $inm_comprador){ ?>
                                     <tr>
                                         <td><?php echo $inm_comprador['inm_comprador_id'] ?></td>
-                                        <td><?php echo $inm_comprador['inm_comprador_nombre'] ?></td>
-                                        <td><?php echo $inm_comprador['inm_comprador_apellido_paterno'] ?></td>
-                                        <td><?php echo $inm_comprador['inm_comprador_apellido_materno'] ?></td>
+                                        <td><?php echo $inm_comprador['inm_comprador_nombre']." ".
+                                                $inm_comprador['inm_comprador_apellido_paterno']." ".
+                                                $inm_comprador['inm_comprador_apellido_materno'] ?></td>
                                         <td><?php echo $inm_comprador['inm_comprador_nss'] ?></td>
                                         <td><?php echo $inm_comprador['inm_rel_ubi_comp_precio_operacion'] ?></td>
                                     <tr>
