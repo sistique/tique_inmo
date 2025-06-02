@@ -4,6 +4,7 @@ use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\controllers\_keys_selects;
 use gamboamartin\inmuebles\controllers\_ubicacion;
 use gamboamartin\inmuebles\controllers\controlador_inm_ubicacion;
+use gamboamartin\inmuebles\models\inm_comprador;
 use gamboamartin\inmuebles\models\inm_costo;
 use gamboamartin\inmuebles\models\inm_rel_ubi_comp;
 use gamboamartin\inmuebles\models\inm_ubicacion;
@@ -203,10 +204,25 @@ class inm_ubicacion_html extends html_controler {
             return $this->error->error(mensaje: 'Error inputs no esta inicializado',data:  $controler->inputs);
         }
 
-        $columns_ds = array('inm_comprador_curp','inm_comprador_nombre','inm_comprador_apellido_paterno',
+        $r_inm_rel_ubi_comp = (new inm_rel_ubi_comp(link: $controler->link))->registros();
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener compradores',data:  $r_inm_rel_ubi_comp);
+        }
+
+        $temporal = array();
+        foreach ($r_inm_rel_ubi_comp as $registro){
+            $temporal[] = $registro['inm_comprador_id'];
+        }
+
+        $not_in = array();
+        $not_in['llave'] = 'inm_comprador.id';
+        $not_in['values'] = $temporal;
+
+        $columns_ds = array('inm_comprador_nombre','inm_comprador_apellido_paterno','inm_comprador_apellido_materno',
             'inm_comprador_nss');
         $inm_comprador_id = (new inm_comprador_html(html: $controler->html_base))->select_inm_comprador_id(
-            cols: 12, con_registros: true,id_selected: -1,link:  $controler->link, columns_ds: $columns_ds);
+            cols: 12, con_registros: true,id_selected: -1,link:  $controler->link, columns_ds: $columns_ds,
+            not_in: $not_in);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener inm_comprador_id select',data:  $inm_comprador_id);
         }
@@ -221,14 +237,12 @@ class inm_ubicacion_html extends html_controler {
 
         $controler->link_rel_ubi_comp_alta_bd = $link_rel_ubi_comp_alta_bd;
 
-
         $filtro = array();
         $filtro['inm_ubicacion.id'] = $controler->registro_id;
         $r_inm_rel_ubi_comp = (new inm_rel_ubi_comp(link: $controler->link))->filtro_and(filtro: $filtro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener compradores',data:  $r_inm_rel_ubi_comp);
         }
-
         $controler->imp_compradores = $r_inm_rel_ubi_comp->registros;
 
         return $controler;
