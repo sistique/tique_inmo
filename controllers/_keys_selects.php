@@ -1206,16 +1206,8 @@ class _keys_selects{
             $com_cliente['com_cliente_numero_interior'] = '';
         }
 
-        $keys = array('dp_pais_id', 'dp_estado_id','dp_municipio_id', 'com_tipo_cliente_id');
-
-        $valida = (new valida())->valida_ids(keys: $keys,registro:  $com_cliente);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al validar com_cliente',data:  $valida);
-        }
-
         $keys = array('dp_pais_id', 'dp_estado_id','dp_municipio_id','dp_cp_id','dp_calle_id','dp_colonia_id',
             'dp_colonia_postal_id','dp_calle_pertenece_id');
-
         $valida = (new valida())->valida_ids(keys: $keys,registro:  $controler->registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar com_cliente',data:  $valida);
