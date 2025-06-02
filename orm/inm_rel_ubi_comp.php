@@ -13,51 +13,22 @@ class inm_rel_ubi_comp extends _modelo_parent{
     public function __construct(PDO $link)
     {
         $tabla = 'inm_rel_ubi_comp';
-        $columnas = array($tabla=>false,'inm_comprador'=>$tabla,'inm_ubicacion'=>$tabla);
+        $columnas = array($tabla=>false,'inm_comprador'=>$tabla,'inm_ubicacion'=>$tabla,
+            'dp_colonia_postal'=>'inm_ubicacion', 'dp_cp'=>'dp_colonia_postal','dp_colonia'=>'dp_colonia_postal',
+            'dp_municipio'=>'dp_cp', 'dp_estado'=>'dp_municipio','dp_pais'=>'dp_estado',);
 
         $campos_obligatorios = array('inm_comprador_id','inm_ubicacion_id','precio_operacion');
 
         $columnas_extra= array();
+        $sql = "(CONCAT_WS(' ', inm_ubicacion.calle, inm_ubicacion.numero_exterior, 
+        inm_ubicacion.numero_interior, dp_colonia.descripcion, dp_municipio.descripcion))";
 
-        $renombres['dp_calle_pertenece_ubicacion']['nombre_original']= 'dp_calle_pertenece';
-        $renombres['dp_calle_pertenece_ubicacion']['enlace']= 'inm_ubicacion';
-        $renombres['dp_calle_pertenece_ubicacion']['key']= 'id';
-        $renombres['dp_calle_pertenece_ubicacion']['key_enlace']= 'dp_calle_pertenece_id';
-
-        $renombres['dp_colonia_postal_ubicacion']['nombre_original']= 'dp_colonia_postal';
-        $renombres['dp_colonia_postal_ubicacion']['enlace']= 'dp_calle_pertenece_ubicacion';
-        $renombres['dp_colonia_postal_ubicacion']['key']= 'id';
-        $renombres['dp_colonia_postal_ubicacion']['key_enlace']= 'dp_colonia_postal_id';
-
-        $renombres['dp_cp_ubicacion']['nombre_original']= 'dp_cp';
-        $renombres['dp_cp_ubicacion']['enlace']= 'dp_colonia_postal_ubicacion';
-        $renombres['dp_cp_ubicacion']['key']= 'id';
-        $renombres['dp_cp_ubicacion']['key_enlace']= 'dp_cp_id';
-
-        $renombres['dp_municipio_ubicacion']['nombre_original']= 'dp_municipio';
-        $renombres['dp_municipio_ubicacion']['enlace']= 'dp_cp_ubicacion';
-        $renombres['dp_municipio_ubicacion']['key']= 'id';
-        $renombres['dp_municipio_ubicacion']['key_enlace']= 'dp_municipio_id';
-
-        $renombres['dp_estado_ubicacion']['nombre_original']= 'dp_estado';
-        $renombres['dp_estado_ubicacion']['enlace']= 'dp_municipio_ubicacion';
-        $renombres['dp_estado_ubicacion']['key']= 'id';
-        $renombres['dp_estado_ubicacion']['key_enlace']= 'dp_estado_id';
-
-        $renombres['dp_colonia_ubicacion']['nombre_original']= 'dp_colonia';
-        $renombres['dp_colonia_ubicacion']['enlace']= 'dp_colonia_postal_ubicacion';
-        $renombres['dp_colonia_ubicacion']['key']= 'id';
-        $renombres['dp_colonia_ubicacion']['key_enlace']= 'dp_colonia_id';
-
-        $renombres['dp_calle_ubicacion']['nombre_original']= 'dp_calle';
-        $renombres['dp_calle_ubicacion']['enlace']= 'dp_calle_pertenece_ubicacion';
-        $renombres['dp_calle_ubicacion']['key']= 'id';
-        $renombres['dp_calle_ubicacion']['key_enlace']= 'dp_calle_id';
+        $columnas_extra['inm_ubicacion_ubicacion'] = $sql;
 
         $atributos_criticos = array('inm_comprador_id','inm_ubicacion_id');
 
         parent::__construct(link: $link, tabla: $tabla, campos_obligatorios: $campos_obligatorios,
-            columnas: $columnas, columnas_extra: $columnas_extra, renombres: $renombres,
+            columnas: $columnas, columnas_extra: $columnas_extra,
             atributos_criticos: $atributos_criticos);
 
         $this->NAMESPACE = __NAMESPACE__;
