@@ -55,13 +55,7 @@
                                     <thead>
                                     <tr>
                                         <th>Id</th>
-                                        <th>Estado</th>
-                                        <th>Municipio</th>
-                                        <th>CP</th>
-                                        <th>Colonia</th>
-                                        <th>Calle</th>
-                                        <th>Ext</th>
-                                        <th>Int</th>
+                                        <th>Direccion</th>
                                         <th>Manzana</th>
                                         <th>Lote</th>
                                     <tr>
@@ -70,13 +64,7 @@
                                     <?php    foreach ($controlador->inm_ubicaciones as $inm_ubicacion){ ?>
                                     <tr>
                                         <td><?php echo $inm_ubicacion['inm_ubicacion_id'] ?></td>
-                                        <td><?php echo $inm_ubicacion['dp_estado_ubicacion_descripcion'] ?></td>
-                                        <td><?php echo $inm_ubicacion['dp_municipio_ubicacion_descripcion'] ?></td>
-                                        <td><?php echo $inm_ubicacion['dp_cp_ubicacion_descripcion'] ?></td>
-                                        <td><?php echo $inm_ubicacion['dp_colonia_ubicacion_descripcion'] ?></td>
-                                        <td><?php echo $inm_ubicacion['dp_calle_ubicacion_descripcion'] ?></td>
-                                        <td><?php echo $inm_ubicacion['inm_ubicacion_numero_exterior'] ?></td>
-                                        <td><?php echo $inm_ubicacion['inm_ubicacion_numero_interior'] ?></td>
+                                        <td><?php echo $inm_ubicacion['inm_ubicacion_ubicacion'] ?></td>
                                         <td><?php echo $inm_ubicacion['inm_ubicacion_manzana'] ?></td>
                                         <td><?php echo $inm_ubicacion['inm_ubicacion_lote'] ?></td>
                                     <tr>
