@@ -681,10 +681,6 @@ collapse_a5.click(function() {
 
 });
 
-collapse_a1.click(function() {
-    apartado_1.toggle();
-
-});
 collapse_a6.click(function() {
     apartado_6.toggle();
 
@@ -710,6 +706,8 @@ collapse_a11.click(function() {
     apartado_11.toggle();
 
 });
+
+let todo_aculto = true;
 
 $("#collapse_all").click(function() {
     if(todo_aculto){
