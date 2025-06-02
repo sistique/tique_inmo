@@ -24,6 +24,7 @@ use gamboamartin\inmuebles\models\inm_referencia;
 use gamboamartin\inmuebles\models\inm_referencia_prospecto;
 use gamboamartin\inmuebles\models\inm_rel_cliente_valuador;
 use gamboamartin\inmuebles\models\inm_rel_comprador_com_cliente;
+use gamboamartin\inmuebles\models\inm_rel_ubi_comp;
 use gamboamartin\inmuebles\models\inm_status_comprador;
 use gamboamartin\inmuebles\models\inm_status_prospecto;
 use gamboamartin\inmuebles\models\inm_ubicacion;
@@ -269,16 +270,21 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al obtener inputs_hidden',data:  $inputs, header: $header,ws:  $ws);
         }
 
-        $extra_params_keys[] = 'inm_ubicacion_precio';
-        $ubicaciones_con_precio = (new inm_ubicacion(link: $this->link))->ubicaciones_con_precio(etapa: 'ALTA',
-            inm_comprador_id:  $this->registro_id);
+
+        $r_inm_rel_ubi_comp = (new inm_rel_ubi_comp(link: $this->link))->registros();
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener ubicaciones con precio',data:  $ubicaciones_con_precio,
-                header: $header,ws:  $ws);
+            return $this->retorno_error(mensaje: 'Error al obtener inputs_hidden',data:  $inputs, header: $header,ws:  $ws);
         }
 
-        $inm_ubicacion_id = (new _inm_comprador())->inm_ubicacion_id_input(controler: $this,
-            extra_params_keys: $extra_params_keys, registros: $ubicaciones_con_precio);
+        $temporal = array();
+        foreach ($r_inm_rel_ubi_comp as $registro){
+            $temporal[] = $registro['inm_ubicacion_id'];
+        }
+
+        $not_in = array();
+        $not_in['llave'] = 'inm_ubicacion.id';
+        $not_in['values'] = $temporal;
+        $inm_ubicacion_id = (new _inm_comprador())->inm_ubicacion_id_input(controler: $this,not_in: $not_in);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al inm_ubicacion_id',data:  $inm_ubicacion_id,
                 header: $header,ws:  $ws);

@@ -705,7 +705,7 @@ class inm_ubicacion_html extends html_controler {
     final public function select_inm_ubicacion_id(
         int $cols, bool $con_registros, int $id_selected, PDO $link, array $columns_ds = array(),
         bool $disabled = false, array $extra_params_keys = array(), array $filtro = array(),
-        array $registros = array()): array|string
+        array $registros = array(), array $not_in = array()): array|string
     {
         $valida = (new directivas(html:$this->html_base))->valida_cols(cols:$cols);
         if(errores::$error){
@@ -717,7 +717,7 @@ class inm_ubicacion_html extends html_controler {
 
         $select = $this->select_catalogo(cols: $cols, con_registros: $con_registros, id_selected: $id_selected,
             modelo: $modelo, columns_ds: $columns_ds, disabled: $disabled, extra_params_keys: $extra_params_keys,
-            filtro: $filtro, label: 'Ubicacion', registros: $registros, required: true);
+            filtro: $filtro, label: 'Ubicacion', not_in: $not_in, registros: $registros, required: true);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al generar select', data: $select);
         }
