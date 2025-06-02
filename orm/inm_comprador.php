@@ -31,7 +31,7 @@ class inm_comprador extends _modelo_parent{
             'numero_com','numero_nep','inm_institucion_hipotecaria_id','inm_sindicato_id','dp_municipio_nacimiento_id',
             'fecha_nacimiento','monto_final','sub_cuenta','descuento','puntos','inm_nacionalidad_id',
             'inm_ocupacion_id','telefono_casa','correo_empresa');
-        
+
         $renombres['dp_cp_empresa']['nombre_original']= 'dp_cp';
         $renombres['dp_cp_empresa']['enlace']= 'dp_colonia_postal';
         $renombres['dp_cp_empresa']['key']= 'id';
