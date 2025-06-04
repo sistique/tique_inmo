@@ -18,6 +18,7 @@ use gamboamartin\inmuebles\html\inm_ubicacion_html;
 use gamboamartin\inmuebles\html\inm_valuador_html;
 use gamboamartin\inmuebles\models\_dropbox;
 use gamboamartin\inmuebles\models\_inm_ubicacion;
+use gamboamartin\inmuebles\models\inm_bitacora_status_ubicacion;
 use gamboamartin\inmuebles\models\inm_conf_docs_ubicacion;
 use gamboamartin\inmuebles\models\inm_doc_ubicacion;
 use gamboamartin\inmuebles\models\inm_nacionalidad;
@@ -1329,7 +1330,8 @@ class controlador_inm_ubicacion extends _ctl_base {
     {
         $inm_conf_docs_prospecto = (new _inm_ubicacion())->integra_inm_documentos_ubicacion(controler: $this);
         if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al integrar buttons', data: $inm_conf_docs_prospecto, header: $header, ws: $ws);
+            return $this->retorno_error(mensaje: 'Error al integrar buttons', data: $inm_conf_docs_prospecto,
+                header: $header, ws: $ws);
         }
 
         $salida['draw'] = count($inm_conf_docs_prospecto);
@@ -1342,15 +1344,32 @@ class controlador_inm_ubicacion extends _ctl_base {
         exit;
     }
 
-    public function validacion_bd()
+    public function validacion_bd(bool $header, bool $ws = false)
     {
         $this->link->beginTransaction();
 
-        print_r($_POST);exit;
-        /*if (errores::$error) {
+        $_FILES['documento'] =  $_FILES['rppc'];
+        $registro = array();
+        $registro['inm_ubicacion_id'] = $this->registro_id;
+        $registro['doc_tipo_documento_id'] = 2;
+        $r_inm_doc_ubicacion = (new inm_doc_ubicacion(link: $this->link))->alta_registro(registro: $registro);
+        if (errores::$error) {
             $this->link->rollBack();
-            return $this->retorno_error(mensaje: 'Error al insertar datos', data: $result, header: $header, ws: $ws);
-        }*/
+            return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_doc_ubicacion,
+                header: $header, ws: $ws);
+        }
+
+        $registro = array();
+        $registro['inm_ubicacion_id'] = $this->registro_id;
+        $registro['inm_status_ubicacion_id'] = 2;
+        $registro['fecha_estatus'] = date('Y-m-d\TH:i:s');
+        $r_inm_bitacora_status_ubicacion = (new inm_bitacora_status_ubicacion(link: $this->link))->alta_registro(
+            registro: $registro);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_bitacora_status_ubicacion,
+                header: $header, ws: $ws);
+        }
 
         $this->link->commit();
     }

@@ -27,7 +27,8 @@
                             <div class="conten" id="cpestana1">
                             </div>
                             <div class="conten" id="cpestana2">
-                                <form method="post" action="<?php echo $controlador->link_validacion_bd; ?>">
+                                <form method="post" action="<?php echo $controlador->link_validacion_bd; ?>"
+                                      enctype="multipart/form-data">
 
                                     <?php echo $controlador->inputs->documento_rppc; ?>
 
