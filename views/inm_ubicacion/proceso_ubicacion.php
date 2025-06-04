@@ -22,7 +22,7 @@
                                 <li id="pestana6"><a href='javascript:cambiarPestanna(pestanas,pestana6);'>FIRMADO</a></li>
                             </ul>
                         </div>
-                        <body onload="javascript:cambiarPestanna(pestanas,pestana1);">
+                        <body onload="javascript:valor_inicial();">
                         <div id="contenidopestanas">
                             <div class="conten" id="cpestana1">
                             </div>

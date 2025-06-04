@@ -4,7 +4,7 @@ let session_id = getParameterByName('session_id');
 
 function cambiarPestanna(pestannas,pestanna) {
 
-    pestanna = document.getElementById(pestanna.id);
+    pestanna_act = document.getElementById(pestanna.id);
     listaPestannas = document.getElementById(pestannas.id);
 
     cpestanna = document.getElementById('c'+pestanna.id);
@@ -22,13 +22,13 @@ function cambiarPestanna(pestannas,pestanna) {
     }
 
     $(document).ready(function(){
-        $(cpestanna).css('display','');
-        $(pestanna).css('background','#0f7ad5');
+        $(cpestanna).css('display','block');
+        $(pestanna_act).css('background','#0f7ad5');
     });
 
 }
 
-$(document).ready(function () {
+function valor_inicial() {
     let Pestannas = document.getElementById("pestanas");
     $.ajax({
         type: "POST",
@@ -38,10 +38,10 @@ $(document).ready(function () {
             let result = {};
             result.id = data_r;
 
-            cambiarPestanna(Pestannas,result);
+            cambiarPestanna(Pestannas, result);
         },
         error: function () {
             alert("No se ha podido obtener la información");
         }
     });
-});
+}
