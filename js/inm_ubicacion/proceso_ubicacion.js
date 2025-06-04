@@ -23,7 +23,7 @@ function cambiarPestanna(pestannas,pestanna) {
         i += 1;
     }
 
-    for (i = valor_pestana - 1; i >= 0; i--){
+    for (i = valor_pestana; i >= 0; i--){
         $(document).ready(function(){
             console.log($(listaPestannas.getElementsByTagName('li')[i]).attr('id'));
             let a = $(listaPestannas.getElementsByTagName('li')[i]).find('a');  // obtiene el <a> dentro del <li>
