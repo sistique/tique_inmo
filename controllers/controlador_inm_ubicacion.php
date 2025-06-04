@@ -1369,31 +1369,53 @@ class controlador_inm_ubicacion extends _ctl_base {
     {
         $this->link->beginTransaction();
 
-        $_FILES['documento'] =  $_FILES['rppc'];
-        $registro = array();
-        $registro['inm_ubicacion_id'] = $this->registro_id;
-        $registro['doc_tipo_documento_id'] = 34;
-        $r_inm_doc_ubicacion = (new inm_doc_ubicacion(link: $this->link))->alta_registro(registro: $registro);
+        $filtro_exi['inm_ubicacion.id'] = $this->registro_id;
+        $filtro_exi['inm_status_ubicacion.id'] = 2;
+        $existe = (new inm_bitacora_status_ubicacion(link: $this->link))->existe(filtro: $filtro_exi);
         if (errores::$error) {
             $this->link->rollBack();
-            return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_doc_ubicacion,
+            return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $existe,
                 header: $header, ws: $ws);
         }
 
-        $registro = array();
-        $registro['inm_ubicacion_id'] = $this->registro_id;
-        $registro['inm_status_ubicacion_id'] = 2;
-        $registro['fecha_status'] = date('Y-m-d\TH:i:s');
-        $r_inm_bitacora_status_ubicacion = (new inm_bitacora_status_ubicacion(link: $this->link))->alta_registro(
-            registro: $registro);
-        if (errores::$error) {
-            $this->link->rollBack();
-            return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_bitacora_status_ubicacion,
-                header: $header, ws: $ws);
+        if(!$existe) {
+            $_FILES['documento'] = $_FILES['rppc'];
+            $registro = array();
+            $registro['inm_ubicacion_id'] = $this->registro_id;
+            $registro['doc_tipo_documento_id'] = 34;
+            $r_inm_doc_ubicacion = (new inm_doc_ubicacion(link: $this->link))->alta_registro(registro: $registro);
+            if (errores::$error) {
+                $this->link->rollBack();
+                return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_doc_ubicacion,
+                    header: $header, ws: $ws);
+            }
+
+            $registro = array();
+            $registro['inm_ubicacion_id'] = $this->registro_id;
+            $registro['inm_status_ubicacion_id'] = 2;
+            $registro['fecha_status'] = date('Y-m-d\TH:i:s');
+            $r_inm_bitacora_status_ubicacion = (new inm_bitacora_status_ubicacion(link: $this->link))->alta_registro(
+                registro: $registro);
+            if (errores::$error) {
+                $this->link->rollBack();
+                return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_bitacora_status_ubicacion,
+                    header: $header, ws: $ws);
+            }
         }
 
         $this->link->commit();
 
-        return $r_inm_bitacora_status_ubicacion;
+        $link_proceso_ubicacion = $this->obj_link->link_con_id(
+            accion: 'proceso_ubicacion', link: $this->link, registro_id: $this->registro_id, seccion: 'inm_ubicacion');
+        if (errores::$error) {
+            $this->retorno_error(mensaje: 'Error al generar link', data: $link_proceso_ubicacion, header: $header, ws: $ws);
+        }
+
+        if($header) {
+            header('Location:' . $link_proceso_ubicacion);
+            exit;
+        }
+
+        return $this->registro_id;
     }
 }
