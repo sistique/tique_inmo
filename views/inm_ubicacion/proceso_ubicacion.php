@@ -27,13 +27,14 @@
                             <div class="conten" id="cpestana1">
                             </div>
                             <div class="conten" id="cpestana2">
-                                <form method="post" action="<?php echo $controlador->link_validacion_bd; ?>"
-                                      enctype="multipart/form-data">
+                                <form method="post" action="<?php echo $controlador->link_validacion_bd; ?>">
 
                                     <?php echo $controlador->inputs->documento_rppc; ?>
 
                                     <?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
                                 </form>
+
+
                             </div>
                             <div class="conten" id="cpestana3">
                                 <form method="post" action="<?php echo $controlador->link_solicitud_de_recurso_bd; ?>"

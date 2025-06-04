@@ -225,7 +225,7 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         if($r_inm_doc_ubicacion->n_registros > 0) {
             $button_inm_doc_ubicacion_descarga = $this->html->button_href(accion: 'descarga', etiqueta: 'Descarga',
-                registro_id: $r_inm_doc_ubicacion->registro[0]['inm_doc_ubicacion_id'],
+                registro_id: $r_inm_doc_ubicacion->registros[0]['inm_doc_ubicacion_id'],
                 seccion: 'inm_doc_ubicacion', style: 'success');
             if (errores::$error) {
                 return $this->retorno_error(mensaje: 'Error al integrar button',
@@ -235,7 +235,7 @@ class controlador_inm_ubicacion extends _ctl_base {
             $this->button_inm_doc_ubicacion_descarga = $button_inm_doc_ubicacion_descarga;
 
             $button_inm_doc_ubicacion_vista_previa = $this->html->button_href(accion: 'vista_previa',
-                etiqueta: 'Vista Previa', registro_id: $r_inm_doc_ubicacion->registro[0]['inm_doc_ubicacion_id'],
+                etiqueta: 'Vista Previa', registro_id: $r_inm_doc_ubicacion->registros[0]['inm_doc_ubicacion_id'],
                 seccion: 'inm_doc_ubicacion', style: 'success');
             if (errores::$error) {
                 return $this->retorno_error(mensaje: 'Error al integrar button',
@@ -245,7 +245,7 @@ class controlador_inm_ubicacion extends _ctl_base {
             $this->button_inm_doc_ubicacion_vista_previa = $button_inm_doc_ubicacion_vista_previa;
 
             $button_inm_doc_ubicacion_descarga_zip = $this->html->button_href(accion: 'descarga_zip',
-                etiqueta: 'Vista Previa', registro_id: $r_inm_doc_ubicacion->registro[0]['inm_doc_ubicacion_id'],
+                etiqueta: 'Descarga ZIP', registro_id: $r_inm_doc_ubicacion->registros[0]['inm_doc_ubicacion_id'],
                 seccion: 'inm_doc_ubicacion', style: 'success');
             if (errores::$error) {
                 return $this->retorno_error(mensaje: 'Error al integrar button',
@@ -255,8 +255,8 @@ class controlador_inm_ubicacion extends _ctl_base {
             $this->button_inm_doc_ubicacion_descarga_zip = $button_inm_doc_ubicacion_descarga_zip;
 
             $button_inm_doc_ubicacion_elimina_bd = $this->html->button_href(accion: 'elimina_bd',
-                etiqueta: 'Elimina', registro_id: $r_inm_doc_ubicacion->registro[0]['inm_doc_ubicacion_id'],
-                seccion: 'inm_doc_ubicacion', style: 'warning');
+                etiqueta: 'Elimina', registro_id: $r_inm_doc_ubicacion->registros[0]['inm_doc_ubicacion_id'],
+                seccion: 'inm_doc_ubicacion', style: 'danger');
             if (errores::$error) {
                 return $this->retorno_error(mensaje: 'Error al integrar button', data: $button_inm_doc_ubicacion_elimina_bd,
                     header: $header, ws: $ws);
