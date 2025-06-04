@@ -14,16 +14,19 @@
 
                         <div id="pestanas">
                             <ul id=lista>
-                                <li id="pestana1"><a href='javascript:cambiarPestanna(pestanas,pestana1);'>VALIDACION</a></li>
-                                <li id="pestana2"><a href='javascript:cambiarPestanna(pestanas,pestana2);'>SOLICITUD DE RECURSO</a></li>
-                                <li id="pestana3"><a href='javascript:cambiarPestanna(pestanas,pestana3);'>POR FIRMAR</a></li>
-                                <li id="pestana4"><a href='javascript:cambiarPestanna(pestanas,pestana4);'>FIRMADO POR APROBAR</a></li>
-                                <li id="pestana5"><a href='javascript:cambiarPestanna(pestanas,pestana5);'>FIRMADO</a></li>
+                                <li id="pestana1"><a href='javascript:cambiarPestanna(pestanas,pestana1);'>ALTA</a></li>
+                                <li id="pestana2"><a href='javascript:cambiarPestanna(pestanas,pestana2);'>VALIDACION</a></li>
+                                <li id="pestana3"><a href='javascript:cambiarPestanna(pestanas,pestana3);'>SOLICITUD DE RECURSO</a></li>
+                                <li id="pestana4"><a href='javascript:cambiarPestanna(pestanas,pestana4);'>POR FIRMAR</a></li>
+                                <li id="pestana5"><a href='javascript:cambiarPestanna(pestanas,pestana5);'>FIRMADO POR APROBAR</a></li>
+                                <li id="pestana6"><a href='javascript:cambiarPestanna(pestanas,pestana6);'>FIRMADO</a></li>
                             </ul>
                         </div>
                         <body onload="javascript:cambiarPestanna(pestanas,pestana1);">
                         <div id="contenidopestanas">
                             <div class="conten" id="cpestana1">
+                            </div>
+                            <div class="conten" id="cpestana2">
                                 <form method="post" action="<?php echo $controlador->link_validacion_bd; ?>">
 
                                     <?php echo $controlador->inputs->documento_rppc; ?>
@@ -31,7 +34,7 @@
                                     <?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
                                 </form>
                             </div>
-                            <div class="conten" id="cpestana2">
+                            <div class="conten" id="cpestana3">
                                 <form method="post" action="<?php echo $controlador->link_solicitud_de_recurso_bd; ?>"
                                       class="form-additional" enctype="multipart/form-data">
 
@@ -42,9 +45,9 @@
                                     <?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
                                 </form>
                             </div>
-                            <div class="conten" id="cpestana3">
-                            </div>
                             <div class="conten" id="cpestana4">
+                            </div>
+                            <div class="conten" id="cpestana5">
                                 <form method="post" action="<?php echo $controlador->link_firmado_por_aprobar_bd; ?>"
                                       class="form-additional" enctype="multipart/form-data">
 
@@ -56,7 +59,7 @@
                                     <?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
                                 </form>
                             </div>
-                            <div class="conten" id="cpestana5">
+                            <div class="conten" id="cpestana6">
                                 <form method="post" action="<?php echo $controlador->link_firmado_bd; ?>"
                                       class="form-additional" enctype="multipart/form-data">
 
