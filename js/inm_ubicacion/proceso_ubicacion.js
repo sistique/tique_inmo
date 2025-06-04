@@ -17,6 +17,8 @@ function cambiarPestanna(pestannas,pestanna) {
     while (typeof listacPestannas.getElementsByClassName('conten')[i] != 'undefined'){
         $(document).ready(function(){
             $(listacPestannas.getElementsByClassName('conten')[i]).css('display','none');
+            $(listaPestannas.getElementsByTagName('li')[i]).css('background','');
+            $(listaPestannas.getElementsByTagName('li')[i]).css('padding-bottom','');
         });
         i += 1;
     }
@@ -24,7 +26,8 @@ function cambiarPestanna(pestannas,pestanna) {
     for (i = valor_pestana - 1; i >= 0; i--){
         $(document).ready(function(){
             console.log($(listaPestannas.getElementsByTagName('li')[i]).attr('id'));
-
+            let a = $(listaPestannas.getElementsByTagName('li')[i]).find('a');  // obtiene el <a> dentro del <li>
+            a.css('pointer-events', 'auto');
             $(listaPestannas.getElementsByTagName('li')[i]).css('cursor','auto');
         });
     }
