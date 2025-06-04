@@ -13,7 +13,7 @@
                 <div class="widget  widget-box box-container form-main widget-form-cart" id="form">
 
                         <div id="pestanas">
-                            <ul id=lista>
+                            <ul id="lista">
                                 <li id="pestana1"><a href='javascript:cambiarPestanna(pestanas,pestana1);'>ALTA</a></li>
                                 <li id="pestana2"><a href='javascript:cambiarPestanna(pestanas,pestana2);'>VALIDACION</a></li>
                                 <li id="pestana3"><a href='javascript:cambiarPestanna(pestanas,pestana3);'>SOLICITUD DE RECURSO</a></li>

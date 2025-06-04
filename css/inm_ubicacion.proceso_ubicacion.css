@@ -33,3 +33,11 @@
 .conten{
     display: none;
 }
+
+#lista li{
+    cursor: not-allowed;
+}
+
+#lista li a{
+    pointer-events: none;
+}

@@ -4,6 +4,10 @@ let session_id = getParameterByName('session_id');
 
 function cambiarPestanna(pestannas,pestanna) {
 
+    let str = pestanna.id;
+    let valor_pestana = str.replace("pestana", "");
+    console.log(valor_pestana);
+
     pestanna_act = document.getElementById(pestanna.id);
     listaPestannas = document.getElementById(pestannas.id);
 
@@ -11,7 +15,6 @@ function cambiarPestanna(pestannas,pestanna) {
     listacPestannas = document.getElementById('contenido'+pestannas.id);
 
     i=0;
-
     while (typeof listacPestannas.getElementsByClassName('conten')[i] != 'undefined'){
         $(document).ready(function(){
             $(listacPestannas.getElementsByClassName('conten')[i]).css('display','none');
