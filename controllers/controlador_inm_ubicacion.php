@@ -610,6 +610,27 @@ class controlador_inm_ubicacion extends _ctl_base {
         return $result;
     }
 
+    public function get_etapa_actual(bool $header, bool $ws = false){
+        $pestanas = array("ALTA" => "pestana1", "VALIDACION" => "pestana2", "SOLICITUD DE RECURSO" => "pestana3",
+            "POR FIRMAR" => "pestana4", "FIRMADO POR APROBAR" => "pestana5", "FIRMADO" => "pestana6",
+            "CANCELADO"=> "sin_pestana");
+
+        $r_ubicacion = (new inm_ubicacion(link: $this->link))->registro(registro_id: $_POST['id']);
+        if (errores::$error) {
+            $this->retorno_error(mensaje: 'Error al obtener registro de ubicacion', data: $r_ubicacion,
+                header: $header, ws: $ws);
+        }
+
+        $pestana_actual = '';
+        foreach ($pestanas as $key => $value) {
+            if($key === $r_ubicacion['inm_status_ubicacion_descripcion']){
+                $pestana_actual = $value;
+            }
+        }
+
+        return $pestana_actual;
+    }
+
     /**
      * Inicializa el objeto Datatables con las columnas y filtros necesarios para visualizar la ubicación de los inmuebles.
      * La funcion consigue los datos para un tabla que debe mostrar la información sobre el id, código,
@@ -1362,7 +1383,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         $registro = array();
         $registro['inm_ubicacion_id'] = $this->registro_id;
         $registro['inm_status_ubicacion_id'] = 2;
-        $registro['fecha_estatus'] = date('Y-m-d\TH:i:s');
+        $registro['fecha_status'] = date('Y-m-d\TH:i:s');
         $r_inm_bitacora_status_ubicacion = (new inm_bitacora_status_ubicacion(link: $this->link))->alta_registro(
             registro: $registro);
         if (errores::$error) {
@@ -1372,5 +1393,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         }
 
         $this->link->commit();
+
+        return $r_inm_bitacora_status_ubicacion;
     }
 }

@@ -27,3 +27,21 @@ function cambiarPestanna(pestannas,pestanna) {
     });
 
 }
+
+$(document).ready(function () {
+    let Pestannas = document.getElementById("pestanas");
+    $.ajax({
+        type: "POST",
+        data: {id: registro_id},
+        url: 'index.php?seccion=inm_ubicacion&accion=get_etapa_actual&ws=1&session_id=' + session_id,
+        success: function (data_r) {
+            let result = {};
+            result.id = data_r;
+
+            cambiarPestanna(Pestannas,result);
+        },
+        error: function () {
+            alert("No se ha podido obtener la información");
+        }
+    });
+});
