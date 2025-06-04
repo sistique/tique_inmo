@@ -1341,4 +1341,17 @@ class controlador_inm_ubicacion extends _ctl_base {
         echo json_encode($salida);
         exit;
     }
+
+    public function validacion_bd()
+    {
+        $this->link->beginTransaction();
+
+        print_r($_POST);exit;
+        /*if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al insertar datos', data: $result, header: $header, ws: $ws);
+        }*/
+
+        $this->link->commit();
+    }
 }

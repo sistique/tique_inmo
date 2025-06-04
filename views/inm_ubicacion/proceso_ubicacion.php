@@ -46,6 +46,11 @@
                                 </form>
                             </div>
                             <div class="conten" id="cpestana4">
+                                <form method="post" action="<?php echo $controlador->link_por_firmar_bd; ?>"
+                                      class="form-additional" enctype="multipart/form-data">
+
+                                    <?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
+                                </form>
                             </div>
                             <div class="conten" id="cpestana5">
                                 <form method="post" action="<?php echo $controlador->link_firmado_por_aprobar_bd; ?>"
