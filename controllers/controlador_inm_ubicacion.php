@@ -442,24 +442,6 @@ class controlador_inm_ubicacion extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al obtener keys_selects', data:  $keys_selects, header: $header,ws:  $ws);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'nombre_beneficiario', keys_selects:$keys_selects,
-            place_holder: 'Nombre Beneficiario');
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'numero_cheque', keys_selects:$keys_selects,
-            place_holder: 'No. Cheque');
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'monto', keys_selects:$keys_selects,
-            place_holder: 'Monto');
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-
         $base = $this->base_upd(keys_selects: $keys_selects, params: array(),params_ajustados: array());
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
@@ -572,6 +554,92 @@ class controlador_inm_ubicacion extends _ctl_base {
         //print_r($this->row_upd);
 
         return $inm_conf_docs_ubicacion;
+    }
+
+    public function firmado_por_aprobar_bd(bool $header, bool $ws = false)
+    {
+        $this->link->beginTransaction();
+
+        $filtro_exi['inm_ubicacion.id'] = $this->registro_id;
+        $filtro_exi['inm_status_ubicacion.id'] = 5;
+        $existe = (new inm_bitacora_status_ubicacion(link: $this->link))->existe(filtro: $filtro_exi);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $existe,
+                header: $header, ws: $ws);
+        }
+
+        if(!$existe) {
+            $registro = array();
+            $registro['inm_ubicacion_id'] = $this->registro_id;
+            $registro['inm_status_ubicacion_id'] = 5;
+            $registro['fecha_status'] = date('Y-m-d\TH:i:s');
+            $r_inm_bitacora_status_ubicacion = (new inm_bitacora_status_ubicacion(link: $this->link))->alta_registro(
+                registro: $registro);
+            if (errores::$error) {
+                $this->link->rollBack();
+                return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_bitacora_status_ubicacion,
+                    header: $header, ws: $ws);
+            }
+        }
+
+        $this->link->commit();
+
+        $link_proceso_ubicacion = $this->obj_link->link_con_id(
+            accion: 'proceso_ubicacion', link: $this->link, registro_id: $this->registro_id, seccion: 'inm_ubicacion');
+        if (errores::$error) {
+            $this->retorno_error(mensaje: 'Error al generar link', data: $link_proceso_ubicacion, header: $header, ws: $ws);
+        }
+
+        if($header) {
+            header('Location:' . $link_proceso_ubicacion);
+            exit;
+        }
+
+        return $this->registro_id;
+    }
+
+    public function firmado_bd(bool $header, bool $ws = false)
+    {
+        $this->link->beginTransaction();
+
+        $filtro_exi['inm_ubicacion.id'] = $this->registro_id;
+        $filtro_exi['inm_status_ubicacion.id'] = 6;
+        $existe = (new inm_bitacora_status_ubicacion(link: $this->link))->existe(filtro: $filtro_exi);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $existe,
+                header: $header, ws: $ws);
+        }
+
+        if(!$existe) {
+            $registro = array();
+            $registro['inm_ubicacion_id'] = $this->registro_id;
+            $registro['inm_status_ubicacion_id'] = 6;
+            $registro['fecha_status'] = date('Y-m-d\TH:i:s');
+            $r_inm_bitacora_status_ubicacion = (new inm_bitacora_status_ubicacion(link: $this->link))->alta_registro(
+                registro: $registro);
+            if (errores::$error) {
+                $this->link->rollBack();
+                return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_bitacora_status_ubicacion,
+                    header: $header, ws: $ws);
+            }
+        }
+
+        $this->link->commit();
+
+        $link_proceso_ubicacion = $this->obj_link->link_con_id(
+            accion: 'proceso_ubicacion', link: $this->link, registro_id: $this->registro_id, seccion: 'inm_ubicacion');
+        if (errores::$error) {
+            $this->retorno_error(mensaje: 'Error al generar link', data: $link_proceso_ubicacion, header: $header, ws: $ws);
+        }
+
+        if($header) {
+            header('Location:' . $link_proceso_ubicacion);
+            exit;
+        }
+
+        return $this->registro_id;
     }
 
     final public function fotografias(bool $header, bool $ws = false): array|stdClass
@@ -1405,7 +1473,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         $this->link->beginTransaction();
 
         $filtro_exi['inm_ubicacion.id'] = $this->registro_id;
-        $filtro_exi['inm_status_ubicacion.id'] = 3;
+        $filtro_exi['inm_status_ubicacion.id'] = 4;
         $existe = (new inm_bitacora_status_ubicacion(link: $this->link))->existe(filtro: $filtro_exi);
         if (errores::$error) {
             $this->link->rollBack();
@@ -1416,7 +1484,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         if(!$existe) {
             $registro = array();
             $registro['inm_ubicacion_id'] = $this->registro_id;
-            $registro['inm_status_ubicacion_id'] = 3;
+            $registro['inm_status_ubicacion_id'] = 4;
             $registro['fecha_status'] = date('Y-m-d\TH:i:s');
             $r_inm_bitacora_status_ubicacion = (new inm_bitacora_status_ubicacion(link: $this->link))->alta_registro(
                 registro: $registro);
