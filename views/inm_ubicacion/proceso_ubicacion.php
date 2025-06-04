@@ -27,14 +27,28 @@
                             <div class="conten" id="cpestana1">
                             </div>
                             <div class="conten" id="cpestana2">
-                                <form method="post" action="<?php echo $controlador->link_validacion_bd; ?>">
+                                <form method="post" action="<?php echo $controlador->link_validacion_bd; ?>"
+                                      class="form-additional" enctype="multipart/form-data">
 
                                     <?php echo $controlador->inputs->documento_rppc; ?>
 
                                     <?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
                                 </form>
 
-
+                                <div class="row buttons-form">
+                                    <div class="col-lg-3">
+                                        <?php echo $controlador->button_inm_doc_ubicacion_descarga; ?>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <?php echo $controlador->button_inm_doc_ubicacion_vista_previa; ?>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <?php echo $controlador->button_inm_doc_ubicacion_descarga_zip; ?>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <?php echo $controlador->button_inm_doc_ubicacion_elimina_bd; ?>
+                                    </div>
+                                </div>
                             </div>
                             <div class="conten" id="cpestana3">
                                 <form method="post" action="<?php echo $controlador->link_solicitud_de_recurso_bd; ?>"

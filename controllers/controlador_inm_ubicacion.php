@@ -254,9 +254,11 @@ class controlador_inm_ubicacion extends _ctl_base {
 
             $this->button_inm_doc_ubicacion_descarga_zip = $button_inm_doc_ubicacion_descarga_zip;
 
+            $params = array('accion_retorno'=>'proceso_ubicacion','seccion_retorno'=>'inm_ubicacion',
+                'id_retorno'=>$this->registro_id);
             $button_inm_doc_ubicacion_elimina_bd = $this->html->button_href(accion: 'elimina_bd',
                 etiqueta: 'Elimina', registro_id: $r_inm_doc_ubicacion->registros[0]['inm_doc_ubicacion_id'],
-                seccion: 'inm_doc_ubicacion', style: 'danger');
+                seccion: 'inm_doc_ubicacion', style: 'danger',params: $params);
             if (errores::$error) {
                 return $this->retorno_error(mensaje: 'Error al integrar button', data: $button_inm_doc_ubicacion_elimina_bd,
                     header: $header, ws: $ws);
@@ -1425,6 +1427,15 @@ class controlador_inm_ubicacion extends _ctl_base {
         $filtro_exi['inm_ubicacion.id'] = $this->registro_id;
         $filtro_exi['inm_status_ubicacion.id'] = 2;
         $existe = (new inm_bitacora_status_ubicacion(link: $this->link))->existe(filtro: $filtro_exi);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $existe,
+                header: $header, ws: $ws);
+        }
+
+        $filtro_doc['inm_ubicacion.id'] = $this->registro_id;
+        $filtro_doc['doc_tipo_documento.id'] = 34;
+        $existe = (new inm_doc_ubicacion(link: $this->link))->existe(filtro: $filtro_doc);
         if (errores::$error) {
             $this->link->rollBack();
             return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $existe,
