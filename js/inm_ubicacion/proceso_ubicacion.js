@@ -4,9 +4,8 @@ let session_id = getParameterByName('session_id');
 
 function cambiarPestanna(pestannas,pestanna) {
 
-    let str = pestanna.id;
-    let valor_pestana = str.replace("pestana", "");
-    console.log(valor_pestana);
+    const str = pestanna.id;
+    const valor_pestana = parseInt(str.replace("pestana", ""));
 
     pestanna_act = document.getElementById(pestanna.id);
     listaPestannas = document.getElementById(pestannas.id);
@@ -18,10 +17,16 @@ function cambiarPestanna(pestannas,pestanna) {
     while (typeof listacPestannas.getElementsByClassName('conten')[i] != 'undefined'){
         $(document).ready(function(){
             $(listacPestannas.getElementsByClassName('conten')[i]).css('display','none');
-            $(listaPestannas.getElementsByTagName('li')[i]).css('background','');
-            $(listaPestannas.getElementsByTagName('li')[i]).css('padding-bottom','');
         });
         i += 1;
+    }
+
+    for (i = valor_pestana - 1; i >= 0; i--){
+        $(document).ready(function(){
+            console.log($(listaPestannas.getElementsByTagName('li')[i]).attr('id'));
+
+            $(listaPestannas.getElementsByTagName('li')[i]).css('cursor','auto');
+        });
     }
 
     $(document).ready(function(){

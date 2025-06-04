@@ -36,6 +36,8 @@
 
 #lista li{
     cursor: not-allowed;
+    background: '';
+    padding-bottom: '';
 }
 
 #lista li a{
