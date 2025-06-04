@@ -1433,6 +1433,20 @@ class controlador_inm_ubicacion extends _ctl_base {
                 header: $header, ws: $ws);
         }
 
+        if(!$existe) {
+            $registro = array();
+            $registro['inm_ubicacion_id'] = $this->registro_id;
+            $registro['inm_status_ubicacion_id'] = 2;
+            $registro['fecha_status'] = date('Y-m-d\TH:i:s');
+            $r_inm_bitacora_status_ubicacion = (new inm_bitacora_status_ubicacion(link: $this->link))->alta_registro(
+                registro: $registro);
+            if (errores::$error) {
+                $this->link->rollBack();
+                return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_bitacora_status_ubicacion,
+                    header: $header, ws: $ws);
+            }
+        }
+
         $filtro_doc['inm_ubicacion.id'] = $this->registro_id;
         $filtro_doc['doc_tipo_documento.id'] = 34;
         $existe = (new inm_doc_ubicacion(link: $this->link))->existe(filtro: $filtro_doc);
@@ -1451,18 +1465,6 @@ class controlador_inm_ubicacion extends _ctl_base {
             if (errores::$error) {
                 $this->link->rollBack();
                 return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_doc_ubicacion,
-                    header: $header, ws: $ws);
-            }
-
-            $registro = array();
-            $registro['inm_ubicacion_id'] = $this->registro_id;
-            $registro['inm_status_ubicacion_id'] = 2;
-            $registro['fecha_status'] = date('Y-m-d\TH:i:s');
-            $r_inm_bitacora_status_ubicacion = (new inm_bitacora_status_ubicacion(link: $this->link))->alta_registro(
-                registro: $registro);
-            if (errores::$error) {
-                $this->link->rollBack();
-                return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_bitacora_status_ubicacion,
                     header: $header, ws: $ws);
             }
         }
