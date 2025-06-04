@@ -37,7 +37,11 @@ class controlador_inm_ubicacion extends _ctl_base {
     public string $link_rel_ubi_comp_alta_bd = '';
     public string $link_opinion_valor_alta_bd = '';
     public string $link_costo_alta_bd = '';
-    public string $link_asigna_validacion_bd = '';
+    public string $link_validacion_bd = '';
+    public string $link_solicitud_de_recurso_bd = '';
+    public string $link_por_firmar_bd = '';
+    public string $link_firmado_por_aprobar_bd = '';
+    public string $link_firmado_bd = '';
     public string $link_inm_doc_ubicacion_alta_bd = '';
     public string $link_fotografia_bd = '';
     public array $imp_compradores = array();
@@ -197,20 +201,20 @@ class controlador_inm_ubicacion extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
         }
 
-        $link_asigna_validacion_bd = $this->obj_link->link_con_id(accion:'asigna_validacion_bd',
+        $link_validacion_bd = $this->obj_link->link_con_id(accion:'validacion_bd',
             link: $this->link,registro_id: $this->registro_id,seccion: 'inm_ubicacion');
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al generar link',data:  $link_asigna_validacion_bd,
+            return $this->retorno_error(mensaje: 'Error al generar link',data:  $link_validacion_bd,
                 header: $header,ws:  $ws);
         }
 
-        $this->link_asigna_validacion_bd = $link_asigna_validacion_bd;
+        $this->link_validacion_bd = $link_validacion_bd;
         $this->keys_selects = array_merge($keys_selects, $this->keys_selects);
 
         return $base;
     }
 
-    public function asigna_firmado(bool $header, bool $ws = false): array|stdClass
+    public function asigna_firmado_por_aprobar(bool $header, bool $ws = false): array|stdClass
     {
         $documento_poder = $this->html->input_file(cols: 12, name: 'poder', row_upd: new stdClass(), value_vacio: false,
             place_holder: 'Poder');
@@ -262,20 +266,20 @@ class controlador_inm_ubicacion extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
         }
 
-        $link_asigna_validacion_bd = $this->obj_link->link_con_id(accion:'asigna_validacion_bd',
+        $link_firmado_por_aprobar_bd = $this->obj_link->link_con_id(accion:'firmado_por_aprobar_bd',
             link: $this->link,registro_id: $this->registro_id,seccion: 'inm_ubicacion');
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al generar link',data:  $link_asigna_validacion_bd,
+            return $this->retorno_error(mensaje: 'Error al generar link',data:  $link_firmado_por_aprobar_bd,
                 header: $header,ws:  $ws);
         }
 
-        $this->link_asigna_validacion_bd = $link_asigna_validacion_bd;
+        $this->link_firmado_por_aprobar_bd = $link_firmado_por_aprobar_bd;
         $this->keys_selects = array_merge($keys_selects, $this->keys_selects);
 
         return $base;
     }
 
-    public function asigna_firmado_aprobado(bool $header, bool $ws = false): array|stdClass
+    public function asigna_firmado(bool $header, bool $ws = false): array|stdClass
     {
         $documento_poliza_firmada = $this->html->input_file(cols: 12, name: 'poliza_firmada', row_upd: new stdClass(),
             value_vacio: false, place_holder: 'Poliza Firmada');
@@ -304,21 +308,21 @@ class controlador_inm_ubicacion extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
         }
 
-        $link_asigna_validacion_bd = $this->obj_link->link_con_id(accion:'asigna_validacion_bd',
+        $link_firmado_bd = $this->obj_link->link_con_id(accion:'firmado_bd',
             link: $this->link,registro_id: $this->registro_id,seccion: 'inm_ubicacion');
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al generar link',data:  $link_asigna_validacion_bd,
+            return $this->retorno_error(mensaje: 'Error al generar link',data:  $link_firmado_bd,
                 header: $header,ws:  $ws);
         }
 
-        $this->link_asigna_validacion_bd = $link_asigna_validacion_bd;
+        $this->link_firmado_bd = $link_firmado_bd;
         $this->keys_selects = array_merge($keys_selects, $this->keys_selects);
 
 
         return $base;
     }
 
-    public function asigna_solicitud_recurso(bool $header, bool $ws = false): array|stdClass
+    public function asigna_solicitud_de_recurso(bool $header, bool $ws = false): array|stdClass
     {
 
         $data_row = $this->modelo->registro(registro_id: $this->registro_id,retorno_obj: true);
@@ -355,14 +359,14 @@ class controlador_inm_ubicacion extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
         }
 
-        $link_asigna_validacion_bd = $this->obj_link->link_con_id(accion:'asigna_validacion_bd',
+        $link_solicitud_de_recurso_bd = $this->obj_link->link_con_id(accion:'solicitud_de_recurso_bd',
             link: $this->link,registro_id: $this->registro_id,seccion: 'inm_ubicacion');
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al generar link',data:  $link_asigna_validacion_bd,
+            return $this->retorno_error(mensaje: 'Error al generar link',data:  $link_solicitud_de_recurso_bd,
                 header: $header,ws:  $ws);
         }
 
-        $this->link_asigna_validacion_bd = $link_asigna_validacion_bd;
+        $this->link_solicitud_de_recurso_bd = $link_solicitud_de_recurso_bd;
         $this->keys_selects = array_merge($keys_selects, $this->keys_selects);
 
         return $base;
@@ -1194,22 +1198,22 @@ class controlador_inm_ubicacion extends _ctl_base {
                 mensaje: 'Error al generar salida de template',data:  $asigna_validacion,header: $header,ws: $ws);
         }
 
-        $asigna_solicitud_recurso = $this->asigna_solicitud_recurso($header);
+        $asigna_solicitud_recurso = $this->asigna_solicitud_de_recurso($header);
         if(errores::$error){
             return $this->retorno_error(
                 mensaje: 'Error al generar salida de template',data:  $asigna_solicitud_recurso,header: $header,ws: $ws);
+        }
+
+        $asigna_firmado_por_aprobar = $this->asigna_firmado_por_aprobar($header);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al generar salida de template',data:  $asigna_firmado_por_aprobar,header: $header,ws: $ws);
         }
 
         $asigna_firmado = $this->asigna_firmado($header);
         if(errores::$error){
             return $this->retorno_error(
                 mensaje: 'Error al generar salida de template',data:  $asigna_firmado,header: $header,ws: $ws);
-        }
-
-        $asigna_firmado_aprobado = $this->asigna_firmado_aprobado($header);
-        if(errores::$error){
-            return $this->retorno_error(
-                mensaje: 'Error al generar salida de template',data:  $asigna_firmado_aprobado,header: $header,ws: $ws);
         }
 
         $base = $this->base_upd(keys_selects: $this->keys_selects, params: array(),params_ajustados: array());

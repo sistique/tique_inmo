@@ -15,16 +15,16 @@
                         <div id="pestanas">
                             <ul id=lista>
                                 <li id="pestana1"><a href='javascript:cambiarPestanna(pestanas,pestana1);'>VALIDACION</a></li>
-                                <li id="pestana2"><a href='javascript:cambiarPestanna(pestanas,pestana2);'>SOLICITUD RECURSO</a></li>
+                                <li id="pestana2"><a href='javascript:cambiarPestanna(pestanas,pestana2);'>SOLICITUD DE RECURSO</a></li>
                                 <li id="pestana3"><a href='javascript:cambiarPestanna(pestanas,pestana3);'>POR FIRMAR</a></li>
-                                <li id="pestana4"><a href='javascript:cambiarPestanna(pestanas,pestana4);'>FIRMADO</a></li>
-                                <li id="pestana5"><a href='javascript:cambiarPestanna(pestanas,pestana5);'>FIRMADO APROBADO</a></li>
+                                <li id="pestana4"><a href='javascript:cambiarPestanna(pestanas,pestana4);'>FIRMADO POR APROBAR</a></li>
+                                <li id="pestana5"><a href='javascript:cambiarPestanna(pestanas,pestana5);'>FIRMADO</a></li>
                             </ul>
                         </div>
                         <body onload="javascript:cambiarPestanna(pestanas,pestana1);">
                         <div id="contenidopestanas">
                             <div class="conten" id="cpestana1">
-                                <form method="post" action="<?php echo $controlador->link_asigna_validacion_bd; ?>">
+                                <form method="post" action="<?php echo $controlador->link_validacion_bd; ?>">
 
                                     <?php echo $controlador->inputs->documento_rppc; ?>
 
@@ -32,7 +32,7 @@
                                 </form>
                             </div>
                             <div class="conten" id="cpestana2">
-                                <form method="post" action="<?php echo $controlador->link_asigna_validacion_bd; ?>"
+                                <form method="post" action="<?php echo $controlador->link_solicitud_de_recurso_bd; ?>"
                                       class="form-additional" enctype="multipart/form-data">
 
                                     <?php echo $controlador->inputs->nombre_beneficiario; ?>
@@ -45,7 +45,7 @@
                             <div class="conten" id="cpestana3">
                             </div>
                             <div class="conten" id="cpestana4">
-                                <form method="post" action="<?php echo $controlador->link_asigna_validacion_bd; ?>"
+                                <form method="post" action="<?php echo $controlador->link_firmado_por_aprobar_bd; ?>"
                                       class="form-additional" enctype="multipart/form-data">
 
                                     <?php echo $controlador->inputs->inm_notaria_id; ?>
@@ -57,7 +57,7 @@
                                 </form>
                             </div>
                             <div class="conten" id="cpestana5">
-                                <form method="post" action="<?php echo $controlador->link_asigna_validacion_bd; ?>"
+                                <form method="post" action="<?php echo $controlador->link_firmado_bd; ?>"
                                       class="form-additional" enctype="multipart/form-data">
 
                                     <?php echo $controlador->inputs->documento_poliza_firmada; ?>
