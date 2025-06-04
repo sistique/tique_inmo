@@ -1351,7 +1351,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         $_FILES['documento'] =  $_FILES['rppc'];
         $registro = array();
         $registro['inm_ubicacion_id'] = $this->registro_id;
-        $registro['doc_tipo_documento_id'] = 2;
+        $registro['doc_tipo_documento_id'] = 34;
         $r_inm_doc_ubicacion = (new inm_doc_ubicacion(link: $this->link))->alta_registro(registro: $registro);
         if (errores::$error) {
             $this->link->rollBack();
