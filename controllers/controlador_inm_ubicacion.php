@@ -332,6 +332,58 @@ class controlador_inm_ubicacion extends _ctl_base {
         $this->link_firmado_por_aprobar_bd = $link_firmado_por_aprobar_bd;
         $this->keys_selects = array_merge($keys_selects, $this->keys_selects);
 
+        $filtro_inm_doc['inm_ubicacion.id'] = $this->registro_id;
+        $filtro_inm_doc['doc_tipo_documento.id'] = 35;
+        $r_inm_doc_ubicacion = (new inm_doc_ubicacion(link: $this->link))->filtro_and(filtro: $filtro_inm_doc);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al integrar doc',data:  $r_inm_doc_ubicacion,
+                header: $header,ws:  $ws);
+        }
+
+        if($r_inm_doc_ubicacion->n_registros > 0) {
+            $button_inm_doc_ubicacion_descarga = $this->html->button_href(accion: 'descarga', etiqueta: 'Descarga',
+                registro_id: $r_inm_doc_ubicacion->registros[0]['inm_doc_ubicacion_id'],
+                seccion: 'inm_doc_ubicacion', style: 'success');
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al integrar button',
+                    data: $button_inm_doc_ubicacion_descarga, header: $header, ws: $ws);
+            }
+
+            $this->button_inm_doc_ubicacion_descarga = $button_inm_doc_ubicacion_descarga;
+
+            $button_inm_doc_ubicacion_vista_previa = $this->html->button_href(accion: 'vista_previa',
+                etiqueta: 'Vista Previa', registro_id: $r_inm_doc_ubicacion->registros[0]['inm_doc_ubicacion_id'],
+                seccion: 'inm_doc_ubicacion', style: 'success');
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al integrar button',
+                    data: $button_inm_doc_ubicacion_vista_previa, header: $header, ws: $ws);
+            }
+
+            $this->button_inm_doc_ubicacion_vista_previa = $button_inm_doc_ubicacion_vista_previa;
+
+            $button_inm_doc_ubicacion_descarga_zip = $this->html->button_href(accion: 'descarga_zip',
+                etiqueta: 'Descarga ZIP', registro_id: $r_inm_doc_ubicacion->registros[0]['inm_doc_ubicacion_id'],
+                seccion: 'inm_doc_ubicacion', style: 'success');
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al integrar button',
+                    data: $button_inm_doc_ubicacion_descarga_zip, header: $header, ws: $ws);
+            }
+
+            $this->button_inm_doc_ubicacion_descarga_zip = $button_inm_doc_ubicacion_descarga_zip;
+
+            $params = array('accion_retorno'=>'proceso_ubicacion','seccion_retorno'=>'inm_ubicacion',
+                'id_retorno'=>$this->registro_id);
+            $button_inm_doc_ubicacion_elimina_bd = $this->html->button_href(accion: 'elimina_bd',
+                etiqueta: 'Elimina', registro_id: $r_inm_doc_ubicacion->registros[0]['inm_doc_ubicacion_id'],
+                seccion: 'inm_doc_ubicacion', style: 'danger',params: $params);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al integrar button', data: $button_inm_doc_ubicacion_elimina_bd,
+                    header: $header, ws: $ws);
+            }
+
+            $this->button_inm_doc_ubicacion_elimina_bd = $button_inm_doc_ubicacion_elimina_bd;
+        }
+
         return $base;
     }
 
@@ -374,6 +426,57 @@ class controlador_inm_ubicacion extends _ctl_base {
         $this->link_firmado_bd = $link_firmado_bd;
         $this->keys_selects = array_merge($keys_selects, $this->keys_selects);
 
+        $filtro_inm_doc['inm_ubicacion.id'] = $this->registro_id;
+        $filtro_inm_doc['doc_tipo_documento.id'] = 36;
+        $r_inm_doc_ubicacion = (new inm_doc_ubicacion(link: $this->link))->filtro_and(filtro: $filtro_inm_doc);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al integrar doc',data:  $r_inm_doc_ubicacion,
+                header: $header,ws:  $ws);
+        }
+
+        if($r_inm_doc_ubicacion->n_registros > 0) {
+            $button_inm_doc_ubicacion_descarga = $this->html->button_href(accion: 'descarga', etiqueta: 'Descarga',
+                registro_id: $r_inm_doc_ubicacion->registros[0]['inm_doc_ubicacion_id'],
+                seccion: 'inm_doc_ubicacion', style: 'success');
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al integrar button',
+                    data: $button_inm_doc_ubicacion_descarga, header: $header, ws: $ws);
+            }
+
+            $this->button_inm_doc_ubicacion_descarga = $button_inm_doc_ubicacion_descarga;
+
+            $button_inm_doc_ubicacion_vista_previa = $this->html->button_href(accion: 'vista_previa',
+                etiqueta: 'Vista Previa', registro_id: $r_inm_doc_ubicacion->registros[0]['inm_doc_ubicacion_id'],
+                seccion: 'inm_doc_ubicacion', style: 'success');
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al integrar button',
+                    data: $button_inm_doc_ubicacion_vista_previa, header: $header, ws: $ws);
+            }
+
+            $this->button_inm_doc_ubicacion_vista_previa = $button_inm_doc_ubicacion_vista_previa;
+
+            $button_inm_doc_ubicacion_descarga_zip = $this->html->button_href(accion: 'descarga_zip',
+                etiqueta: 'Descarga ZIP', registro_id: $r_inm_doc_ubicacion->registros[0]['inm_doc_ubicacion_id'],
+                seccion: 'inm_doc_ubicacion', style: 'success');
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al integrar button',
+                    data: $button_inm_doc_ubicacion_descarga_zip, header: $header, ws: $ws);
+            }
+
+            $this->button_inm_doc_ubicacion_descarga_zip = $button_inm_doc_ubicacion_descarga_zip;
+
+            $params = array('accion_retorno'=>'proceso_ubicacion','seccion_retorno'=>'inm_ubicacion',
+                'id_retorno'=>$this->registro_id);
+            $button_inm_doc_ubicacion_elimina_bd = $this->html->button_href(accion: 'elimina_bd',
+                etiqueta: 'Elimina', registro_id: $r_inm_doc_ubicacion->registros[0]['inm_doc_ubicacion_id'],
+                seccion: 'inm_doc_ubicacion', style: 'danger',params: $params);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al integrar button', data: $button_inm_doc_ubicacion_elimina_bd,
+                    header: $header, ws: $ws);
+            }
+
+            $this->button_inm_doc_ubicacion_elimina_bd = $button_inm_doc_ubicacion_elimina_bd;
+        }
 
         return $base;
     }

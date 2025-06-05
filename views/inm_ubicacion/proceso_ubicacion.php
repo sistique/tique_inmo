@@ -79,6 +79,20 @@
 
                                     <?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
                                 </form>
+                                <div class="row buttons-form">
+                                    <div class="col-lg-3">
+                                        <?php echo $controlador->button_inm_doc_ubicacion_descarga; ?>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <?php echo $controlador->button_inm_doc_ubicacion_vista_previa; ?>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <?php echo $controlador->button_inm_doc_ubicacion_descarga_zip; ?>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <?php echo $controlador->button_inm_doc_ubicacion_elimina_bd; ?>
+                                    </div>
+                                </div>
                             </div>
                             <div class="conten" id="cpestana6">
                                 <form method="post" action="<?php echo $controlador->link_firmado_bd; ?>"
@@ -88,6 +102,20 @@
 
                                     <?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
                                 </form>
+                                <div class="row buttons-form">
+                                    <div class="col-lg-3">
+                                        <?php echo $controlador->button_inm_doc_ubicacion_descarga; ?>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <?php echo $controlador->button_inm_doc_ubicacion_vista_previa; ?>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <?php echo $controlador->button_inm_doc_ubicacion_descarga_zip; ?>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <?php echo $controlador->button_inm_doc_ubicacion_elimina_bd; ?>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                 </div>
