@@ -686,6 +686,28 @@ class controlador_inm_ubicacion extends _ctl_base {
             }
         }
 
+        $filtro_doc['inm_ubicacion.id'] = $this->registro_id;
+        $filtro_doc['doc_tipo_documento.id'] = 35;
+        $existe = (new inm_doc_ubicacion(link: $this->link))->existe(filtro: $filtro_doc);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $existe,
+                header: $header, ws: $ws);
+        }
+
+        if(!$existe) {
+            $_FILES['documento'] = $_FILES['poder'];
+            $registro = array();
+            $registro['inm_ubicacion_id'] = $this->registro_id;
+            $registro['doc_tipo_documento_id'] = 35;
+            $r_inm_doc_ubicacion = (new inm_doc_ubicacion(link: $this->link))->alta_registro(registro: $registro);
+            if (errores::$error) {
+                $this->link->rollBack();
+                return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_doc_ubicacion,
+                    header: $header, ws: $ws);
+            }
+        }
+
         $this->link->commit();
 
         $link_proceso_ubicacion = $this->obj_link->link_con_id(
@@ -725,6 +747,28 @@ class controlador_inm_ubicacion extends _ctl_base {
             if (errores::$error) {
                 $this->link->rollBack();
                 return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_bitacora_status_ubicacion,
+                    header: $header, ws: $ws);
+            }
+        }
+
+        $filtro_doc['inm_ubicacion.id'] = $this->registro_id;
+        $filtro_doc['doc_tipo_documento.id'] = 36;
+        $existe = (new inm_doc_ubicacion(link: $this->link))->existe(filtro: $filtro_doc);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $existe,
+                header: $header, ws: $ws);
+        }
+
+        if(!$existe) {
+            $_FILES['documento'] = $_FILES['poliza_firmada'];
+            $registro = array();
+            $registro['inm_ubicacion_id'] = $this->registro_id;
+            $registro['doc_tipo_documento_id'] = 36;
+            $r_inm_doc_ubicacion = (new inm_doc_ubicacion(link: $this->link))->alta_registro(registro: $registro);
+            if (errores::$error) {
+                $this->link->rollBack();
+                return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_doc_ubicacion,
                     header: $header, ws: $ws);
             }
         }
