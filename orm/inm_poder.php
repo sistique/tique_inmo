@@ -11,7 +11,7 @@ class inm_poder extends _modelo_parent{
     public function __construct(PDO $link)
     {
         $tabla = 'inm_poder';
-        $columnas = array($tabla=>false,'inm_notaria'=>$tabla,'doc_documento'=>$tabla, 'inm_ubicacion'=>$tabla);
+        $columnas = array($tabla=>false,'inm_notaria'=>$tabla,'inm_doc_ubicacion'=>$tabla, 'inm_ubicacion'=>$tabla);
 
         $columnas_extra= array();
         $renombres= array();
@@ -29,7 +29,6 @@ class inm_poder extends _modelo_parent{
         if(!isset($this->registro['descripcion'])){
             $descripcion = $this->registro['inm_ubicacion_id'];
             $descripcion .= ' '.$this->registro['inm_notaria_id'];
-            $descripcion .= ' '.$this->registro['doc_documento_id'];
             $descripcion .= ' '.$this->registro['numero_escritura_poder'];
             $this->registro['descripcion'] = $descripcion;
         }

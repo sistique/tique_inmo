@@ -293,12 +293,25 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $this->inputs->documento_poder = $documento_poder;
 
+        $filtro_poder['inm_ubicacion.id'] = $this->registro_id;
+        $r_inm_poder = (new inm_poder(link: $this->link))->filtro_and(filtro: $filtro_poder);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $r_inm_poder,
+                header: $header, ws: $ws);
+        }
+
+        if($r_inm_poder->n_registros > 0){
+            $this->row_upd->inm_notaria_id = $r_inm_poder->registros[0]['inm_poder_inm_notaria_id'];
+            $this->row_upd->numero_escritura_poder = $r_inm_poder->registros[0]['inm_poder_numero_escritura_poder'];
+            $this->row_upd->fecha_poder = $r_inm_poder->registros[0]['inm_poder_fecha_poder'];
+        }
+
         $data_row = $this->modelo->registro(registro_id: $this->registro_id,retorno_obj: true);
         if(errores::$error){
             return $this->retorno_error(
                 mensaje: 'Error al obtener registro',data:  $data_row,header: $header,ws: $ws);
         }
-
 
         $keys_selects = (new _ubicacion())->keys_selects_base(controler: $this,data_row:  $data_row, disableds: array());
         if(errores::$error){
@@ -307,7 +320,7 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $columns_ds = array('inm_notaria_id','inm_notaria_descripcion');
         $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_notaria_id',
-            keys_selects:$keys_selects, id_selected: -1, label: 'Notaria',
+            keys_selects:$keys_selects, id_selected: $this->row_upd->inm_notaria_id, label: 'Notaria',
             columns_ds : $columns_ds);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
@@ -321,7 +334,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         }
 
         $fecha = $this->html->input_fecha(cols: 6, row_upd: $this->row_upd, value_vacio: false,
-            name: 'fecha_poder', place_holder: 'Fecha Poder');
+            name: 'fecha_poder', place_holder: 'Fecha Poder',value: $this->row_upd->fecha_poder);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al integrar fecha',
                 data:  $fecha, header: $header,ws: $ws);
@@ -721,7 +734,6 @@ class controlador_inm_ubicacion extends _ctl_base {
                 header: $header, ws: $ws);
         }
 
-        $inm_doc_ubicacion_id = 0;
         if($r_inm_doc_ubicacion_reg->n_registros <= 0) {
             $_FILES['documento'] = $_FILES['poder'];
             $registro = array();
@@ -740,7 +752,6 @@ class controlador_inm_ubicacion extends _ctl_base {
         }
 
         $filtro_poder['inm_ubicacion.id'] = $this->registro_id;
-        $filtro_poder['doc_tipo_documento.id'] = 35;
         $r_inm_poder = (new inm_poder(link: $this->link))->filtro_and(filtro: $filtro_poder);
         if (errores::$error) {
             $this->link->rollBack();
