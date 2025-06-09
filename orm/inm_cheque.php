@@ -34,7 +34,6 @@ class inm_cheque extends _modelo_parent{
 
         if(!isset($this->registro['codigo'])){
             $descripcion = $this->registro['inm_ubicacion_id'];
-            $descripcion .= ' '.$this->registro['inm_status_ubicacion_id'];
             $descripcion .= ' '.$this->registro['numero_cheque'] . rand();
             $this->registro['codigo'] = $descripcion;
         }

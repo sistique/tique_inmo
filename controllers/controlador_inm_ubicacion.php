@@ -19,6 +19,7 @@ use gamboamartin\inmuebles\html\inm_valuador_html;
 use gamboamartin\inmuebles\models\_dropbox;
 use gamboamartin\inmuebles\models\_inm_ubicacion;
 use gamboamartin\inmuebles\models\inm_bitacora_status_ubicacion;
+use gamboamartin\inmuebles\models\inm_cheque;
 use gamboamartin\inmuebles\models\inm_conf_docs_ubicacion;
 use gamboamartin\inmuebles\models\inm_doc_ubicacion;
 use gamboamartin\inmuebles\models\inm_nacionalidad;
@@ -1527,6 +1528,29 @@ class controlador_inm_ubicacion extends _ctl_base {
     public function solicitud_de_recurso_bd(bool $header, bool $ws = false)
     {
         $this->link->beginTransaction();
+
+        $filtro_che['inm_ubicacion.id'] = $this->registro_id;
+        $r_cheque = (new inm_cheque(link: $this->link))->filtro_and(filtro: $filtro_che);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $r_cheque,
+                header: $header, ws: $ws);
+        }
+
+        if($r_cheque->n_regitros <= 0){
+            $registro = array();
+            $registro['inm_ubicacion_id'] = $this->registro_id;
+            $registro['numero_cheque'] = $_POST['numero_cheque'];
+            $registro['monto'] = $_POST['monto'];
+            $registro['nombre_beneficiario'] = $_POST['nombre_beneficiario'];
+            $r_inm_cheque = (new inm_cheque(link: $this->link))->alta_registro(
+                registro: $registro);
+            if (errores::$error) {
+                $this->link->rollBack();
+                return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_cheque,
+                    header: $header, ws: $ws);
+            }
+        }
 
         $filtro_exi['inm_ubicacion.id'] = $this->registro_id;
         $filtro_exi['inm_status_ubicacion.id'] = 3;
