@@ -491,6 +491,20 @@ class controlador_inm_ubicacion extends _ctl_base {
                 mensaje: 'Error al obtener registro',data:  $data_row,header: $header,ws: $ws);
         }
 
+        $filtro_che['inm_ubicacion.id'] = $this->registro_id;
+        $r_cheque = (new inm_cheque(link: $this->link))->filtro_and(filtro: $filtro_che);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $r_cheque,
+                header: $header, ws: $ws);
+        }
+
+        if($r_cheque->n_registros > 0) {
+            $this->row_upd->nombre_beneficiario = $r_cheque->registros[0]['inm_cheque_nombre_beneficiario'];
+            $this->row_upd->numero_cheque = $r_cheque->registros[0]['inm_cheque_numero_cheque'];
+            $this->row_upd->monto = $r_cheque->registros[0]['inm_cheque_monto'];
+        }
+
         $keys_selects = (new _ubicacion())->keys_selects_base(controler: $this,data_row:  $data_row, disableds: array());
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener keys_selects', data:  $keys_selects, header: $header,ws:  $ws);
@@ -1537,7 +1551,7 @@ class controlador_inm_ubicacion extends _ctl_base {
                 header: $header, ws: $ws);
         }
 
-        if($r_cheque->n_regitros <= 0){
+        if($r_cheque->n_registros <= 0){
             $registro = array();
             $registro['inm_ubicacion_id'] = $this->registro_id;
             $registro['numero_cheque'] = $_POST['numero_cheque'];
@@ -1545,6 +1559,18 @@ class controlador_inm_ubicacion extends _ctl_base {
             $registro['nombre_beneficiario'] = $_POST['nombre_beneficiario'];
             $r_inm_cheque = (new inm_cheque(link: $this->link))->alta_registro(
                 registro: $registro);
+            if (errores::$error) {
+                $this->link->rollBack();
+                return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_cheque,
+                    header: $header, ws: $ws);
+            }
+        }else{
+            $registro = array();
+            $registro['numero_cheque'] = $_POST['numero_cheque'];
+            $registro['monto'] = $_POST['monto'];
+            $registro['nombre_beneficiario'] = $_POST['nombre_beneficiario'];
+            $r_inm_cheque = (new inm_cheque(link: $this->link))->modifica_bd(
+                registro: $registro, id: $r_cheque->registros[0]['inm_cheque_id']);
             if (errores::$error) {
                 $this->link->rollBack();
                 return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_cheque,
