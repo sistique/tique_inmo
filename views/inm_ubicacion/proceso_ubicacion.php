@@ -22,7 +22,7 @@
                     javascript:valor_inicial();
                     javascript:cambiarPestanna(pestanasubicacion,pestanaubicacion1);">
                     <div id="contenidopestanasgeneral">
-                        <div class="conten" id="cpestanageneral1">
+                        <div class="contengeneral" id="cpestanageneral1">
                             <div id="pestanasubicacion">
                                 <ul id="listaubicacion">
                                     <li id="pestanaubicacion1"><a href='javascript:cambiarPestanna(pestanasubicacion,pestanaubicacion1);'>MODIFICA</a></li>
@@ -150,7 +150,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="conten" id="cpestanageneral2">
+                        <div class="contengeneral" id="cpestanageneral2">
                             <div id="pestanas">
                                 <ul id="lista">
                                     <li id="pestana1"><a href='javascript:cambiarPestanna(pestanas,pestana1);'>ALTA</a></li>

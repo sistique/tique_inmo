@@ -11,9 +11,9 @@ function cambiarPestannaGeneral(pestannas,pestanna) {
     listacPestannas = document.getElementById('contenido'+pestannas.id);
 
     i=0;
-    while (typeof listacPestannas.getElementsByClassName('conten')[i] != 'undefined'){
+    while (typeof listacPestannas.getElementsByClassName('contengeneral')[i] != 'undefined'){
         $(document).ready(function(){
-            $(listacPestannas.getElementsByClassName('conten')[i]).css('display','none');
+            $(listacPestannas.getElementsByClassName('contengeneral')[i]).css('display','none');
             $(listaPestannas.getElementsByTagName('li')[i]).css('background','');
             $(listaPestannas.getElementsByTagName('li')[i]).css('padding-bottom','');
         });
@@ -23,8 +23,6 @@ function cambiarPestannaGeneral(pestannas,pestanna) {
     $(document).ready(function(){
         $(cpestanna).css('display','block');
         $(pestanna_act).css('background','#0f7ad5');
-        valor_inicial();
-        cambiarPestanna(pestanasubicacion,pestanaubicacion1);
     });
 }
 
