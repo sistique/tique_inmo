@@ -18,11 +18,11 @@
                         <?php echo $controlador->inputs->observaciones; ?>
 
                         <input type='hidden' name='seccion_retorno' value='inm_ubicacion'>
-                        <input type='hidden' name='btn_action_next' value='etapa'>
+                        <input type='hidden' name='btn_action_next' value='cancelado'>
                         <input type='hidden' name='id_retorno' value='<?php echo $controlador->registro_id; ?>'>
 
                         <div class="controls">
-                            <button type="submit" class="btn btn-success" value="etapa" name="btn_action_next">Alta</button><br>
+                            <button type="submit" class="btn btn-success" value="cancelado" name="btn_action_next">Alta</button><br>
                         </div>
                     </form>
 

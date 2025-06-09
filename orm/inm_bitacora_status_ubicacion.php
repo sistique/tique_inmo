@@ -45,6 +45,19 @@ class inm_bitacora_status_ubicacion extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al insertar prospecto',data:  $r_alta_bd);
         }
 
+        $filtro_status['inm_status_ubicacion.id'] = $this->registro['inm_status_ubicacion_id'];
+        $r_inm_status_ubicacion = (new inm_status_ubicacion(link: $this->link))->filtro_and(filtro: $filtro_status);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al ajustar status de prospecto',data:  $r_inm_status_ubicacion);
+        }
+
+        $regitros_mod['status'] = 'activo';
+        if($r_inm_status_ubicacion->n_registros > 0){
+            if($r_inm_status_ubicacion->registros[0]['inm_status_ubicacion_es_cancelado'] === 'activo') {
+                $regitros_mod['status'] = 'inactivo';
+            }
+        }
+
         $regitros_mod['inm_status_ubicacion_id'] = $this->registro['inm_status_ubicacion_id'];
         $r_modifica_bd = (new inm_ubicacion(link: $this->link))->modifica_bd(registro: $regitros_mod,
             id: $this->registro['inm_ubicacion_id']);
