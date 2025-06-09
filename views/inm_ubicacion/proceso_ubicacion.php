@@ -32,7 +32,11 @@
 
                                     <?php echo $controlador->inputs->documento_rppc; ?>
 
-                                    <?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
+                                    <div class="control-group btn-alta">
+                                        <div class="controls">
+                                            <button type="submit" class="btn btn-success">Avanza Etapa</button><br>
+                                        </div>
+                                    </div>
                                 </form>
 
                                 <div class="row buttons-form">
@@ -58,14 +62,22 @@
                                     <?php echo $controlador->inputs->numero_cheque; ?>
                                     <?php echo $controlador->inputs->monto; ?>
 
-                                    <?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
+                                    <div class="control-group btn-alta">
+                                        <div class="controls">
+                                            <button type="submit" class="btn btn-success">Avanza Etapa</button><br>
+                                        </div>
+                                    </div>
                                 </form>
                             </div>
                             <div class="conten" id="cpestana4">
                                 <form method="post" action="<?php echo $controlador->link_por_firmar_bd; ?>"
                                       class="form-additional" enctype="multipart/form-data">
 
-                                    <?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
+                                    <div class="control-group btn-alta">
+                                        <div class="controls">
+                                            <button type="submit" class="btn btn-success">Avanza Etapa</button><br>
+                                        </div>
+                                    </div>
                                 </form>
                             </div>
                             <div class="conten" id="cpestana5">
@@ -77,7 +89,11 @@
                                     <?php echo $controlador->inputs->numero_escritura_poder; ?>
                                     <?php echo $controlador->inputs->fecha_poder; ?>
 
-                                    <?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
+                                    <div class="control-group btn-alta">
+                                        <div class="controls">
+                                            <button type="submit" class="btn btn-success">Avanza Etapa</button><br>
+                                        </div>
+                                    </div>
                                 </form>
                                 <div class="row buttons-form">
                                     <div class="col-lg-3">
@@ -100,7 +116,11 @@
 
                                     <?php echo $controlador->inputs->documento_poliza_firmada; ?>
 
-                                    <?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
+                                    <div class="control-group btn-alta">
+                                        <div class="controls">
+                                            <button type="submit" class="btn btn-success">Avanza Etapa</button><br>
+                                        </div>
+                                    </div>
                                 </form>
                                 <div class="row buttons-form">
                                     <div class="col-lg-3">
