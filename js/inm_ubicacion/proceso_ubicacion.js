@@ -23,6 +23,8 @@ function cambiarPestannaGeneral(pestannas,pestanna) {
     $(document).ready(function(){
         $(cpestanna).css('display','block');
         $(pestanna_act).css('background','#0f7ad5');
+        valor_inicial();
+        cambiarPestanna(pestanasubicacion,pestanaubicacion1);
     });
 }
 

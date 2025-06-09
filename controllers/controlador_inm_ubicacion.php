@@ -1832,6 +1832,12 @@ class controlador_inm_ubicacion extends _ctl_base {
                 mensaje: 'Error al generar salida de template',data:  $r_modifica,header: $header,ws: $ws);
         }
 
+        $modifica = $this->modifica($header);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al generar salida de template',data:  $modifica,header: $header,ws: $ws);
+        }
+
         $asigna_validacion = $this->asigna_validacion($header);
         if(errores::$error){
             return $this->retorno_error(
