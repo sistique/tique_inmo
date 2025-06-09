@@ -45,10 +45,20 @@ class controlador_inm_ubicacion extends _ctl_base {
     public string $link_firmado_por_aprobar_bd = '';
     public string $link_firmado_bd = '';
     public string $link_inm_doc_ubicacion_alta_bd = '';
+
+    /*  */
     public string $button_inm_doc_ubicacion_descarga = '';
     public string $button_inm_doc_ubicacion_descarga_zip = '';
     public string $button_inm_doc_ubicacion_vista_previa = '';
     public string $button_inm_doc_ubicacion_elimina_bd = '';
+
+    /**/
+    public string $button_inm_doc_ubicacion_descarga_firmado_por_aprobar = '';
+    public string $button_inm_doc_ubicacion_descarga_zip_firmado_por_aprobar = '';
+    public string $button_inm_doc_ubicacion_vista_previa_firmado_por_aprobar = '';
+    public string $button_inm_doc_ubicacion_elimina_bd_firmado_por_aprobar = '';
+
+
     public string $link_fotografia_bd = '';
     public array $imp_compradores = array();
     public array $fotos = array();
@@ -350,7 +360,7 @@ class controlador_inm_ubicacion extends _ctl_base {
                     data: $button_inm_doc_ubicacion_descarga, header: $header, ws: $ws);
             }
 
-            $this->button_inm_doc_ubicacion_descarga = $button_inm_doc_ubicacion_descarga;
+            $this->button_inm_doc_ubicacion_descarga_firmado_por_aprobar = $button_inm_doc_ubicacion_descarga;
 
             $button_inm_doc_ubicacion_vista_previa = $this->html->button_href(accion: 'vista_previa',
                 etiqueta: 'Vista Previa', registro_id: $r_inm_doc_ubicacion->registros[0]['inm_doc_ubicacion_id'],
@@ -360,7 +370,7 @@ class controlador_inm_ubicacion extends _ctl_base {
                     data: $button_inm_doc_ubicacion_vista_previa, header: $header, ws: $ws);
             }
 
-            $this->button_inm_doc_ubicacion_vista_previa = $button_inm_doc_ubicacion_vista_previa;
+            $this->button_inm_doc_ubicacion_vista_previa_firmado_por_aprobar = $button_inm_doc_ubicacion_vista_previa;
 
             $button_inm_doc_ubicacion_descarga_zip = $this->html->button_href(accion: 'descarga_zip',
                 etiqueta: 'Descarga ZIP', registro_id: $r_inm_doc_ubicacion->registros[0]['inm_doc_ubicacion_id'],
@@ -370,7 +380,7 @@ class controlador_inm_ubicacion extends _ctl_base {
                     data: $button_inm_doc_ubicacion_descarga_zip, header: $header, ws: $ws);
             }
 
-            $this->button_inm_doc_ubicacion_descarga_zip = $button_inm_doc_ubicacion_descarga_zip;
+            $this->button_inm_doc_ubicacion_descarga_zip_firmado_por_aprobar = $button_inm_doc_ubicacion_descarga_zip;
 
             $params = array('accion_retorno'=>'proceso_ubicacion','seccion_retorno'=>'inm_ubicacion',
                 'id_retorno'=>$this->registro_id);
@@ -382,7 +392,7 @@ class controlador_inm_ubicacion extends _ctl_base {
                     header: $header, ws: $ws);
             }
 
-            $this->button_inm_doc_ubicacion_elimina_bd = $button_inm_doc_ubicacion_elimina_bd;
+            $this->button_inm_doc_ubicacion_elimina_bd_firmado_por_aprobar = $button_inm_doc_ubicacion_elimina_bd;
         }
 
         return $base;
