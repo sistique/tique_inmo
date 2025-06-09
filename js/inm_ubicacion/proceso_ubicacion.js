@@ -176,3 +176,6 @@ modal.addEventListener('click', function (event) {
         });
     }
 });
+
+/***** Documentos *****/
+
