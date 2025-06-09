@@ -11,6 +11,7 @@ namespace gamboamartin\gastos\controllers;
 
 use base\controller\controler;
 use gamboamartin\direccion_postal\models\dp_calle_pertenece;
+use gamboamartin\direccion_postal\models\dp_colonia_postal;
 use gamboamartin\errores\errores;
 use gamboamartin\gastos\models\gt_proveedor;
 use gamboamartin\system\_ctl_base;
@@ -156,8 +157,6 @@ class controlador_gt_proveedor extends _ctl_base
             con_registros: false);
         $this->keys_selects = $this->init_selects(keys_selects: $this->keys_selects, key: "dp_colonia_postal_id", label: "Colonia",
             con_registros: false);
-        $this->keys_selects = $this->init_selects(keys_selects: $this->keys_selects, key: "dp_calle_pertenece_id", label: "Calle",
-            con_registros: false);
         $this->keys_selects = $this->init_selects(keys_selects: $this->keys_selects, key: "gt_tipo_proveedor_id", label: "Tipo");
         $this->keys_selects = $this->init_selects(keys_selects: $this->keys_selects, key: "cat_sat_regimen_fiscal_id",
             label: "Régimen Fiscal");
@@ -181,6 +180,12 @@ class controlador_gt_proveedor extends _ctl_base
 
         $keys_selects = (new \base\controller\init())->key_select_txt(cols: 4, key: 'rfc',
             keys_selects: $keys_selects, place_holder: 'RFC');
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+
+        $keys_selects = (new \base\controller\init())->key_select_txt(cols: 6, key: 'calle',
+            keys_selects: $keys_selects, place_holder: 'Calle');
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
@@ -268,7 +273,7 @@ class controlador_gt_proveedor extends _ctl_base
                 ws: $ws);
         }
 
-        $calle = (new dp_calle_pertenece($this->link))->get_calle_pertenece($this->registro['dp_calle_pertenece_id']);
+        $calle = (new dp_colonia_postal($this->link))->get_colonia_postal($this->registro['dp_colonia_postal_id']);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al obtener calle', data: $calle);
         }
@@ -293,13 +298,8 @@ class controlador_gt_proveedor extends _ctl_base
         $this->asignar_propiedad(identificador: $identificador, propiedades: $propiedades);
 
         $identificador = "dp_colonia_postal_id";
-        $propiedades = array("id_selected" => $calle['dp_colonia_postal_id'], "con_registros" => true,
+        $propiedades = array("id_selected" => $this->row_upd->dp_colonia_postal_id, "con_registros" => true,
             "filtro" => array('dp_cp.id' => $calle['dp_cp_id']));
-        $this->asignar_propiedad(identificador: $identificador, propiedades: $propiedades);
-
-        $identificador = "dp_calle_pertenece_id";
-        $propiedades = array("id_selected" => $this->row_upd->dp_calle_pertenece_id, "con_registros" => true,
-            "filtro" => array('dp_colonia_postal.id' => $calle['dp_colonia_postal_id']));
         $this->asignar_propiedad(identificador: $identificador, propiedades: $propiedades);
 
         $identificador = "cat_sat_regimen_fiscal_id";

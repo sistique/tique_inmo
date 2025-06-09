@@ -14,9 +14,9 @@ class gt_proveedor extends _modelo_parent
     {
         $tabla = 'gt_proveedor';
         $columnas = array($tabla => false, 'cat_sat_regimen_fiscal' => $tabla, 'gt_tipo_proveedor' => $tabla,
-            'dp_calle_pertenece' => $tabla, 'dp_colonia_postal' => 'dp_calle_pertenece', 'dp_cp' => 'dp_colonia_postal',
-            'dp_municipio' => 'dp_cp', 'dp_estado' => 'dp_municipio', 'dp_pais' => 'dp_estado');
-        $campos_obligatorios = array('gt_tipo_proveedor_id', 'dp_calle_pertenece_id', 'cat_sat_regimen_fiscal_id',
+            'dp_colonia_postal' => $tabla, 'dp_cp' => 'dp_colonia_postal', 'dp_municipio' => 'dp_cp',
+            'dp_estado' => 'dp_municipio', 'dp_pais' => 'dp_estado');
+        $campos_obligatorios = array('gt_tipo_proveedor_id', 'dp_colonia_postal_id', 'cat_sat_regimen_fiscal_id',
             'rfc', 'exterior', 'telefono_1', 'contacto_1', 'pagina_web');
 
         $no_duplicados = array();
@@ -48,7 +48,7 @@ class gt_proveedor extends _modelo_parent
 
     protected function inicializa_campos(array $registros): array
     {
-        $keys = array('dp_calle_pertenece_id', 'cat_sat_regimen_fiscal_id', 'gt_tipo_proveedor_id');
+        $keys = array('dp_colonia_postal_id', 'cat_sat_regimen_fiscal_id', 'gt_tipo_proveedor_id');
         $valida = $this->validacion->valida_ids(keys: $keys, registro: $registros);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error validar campos', data: $valida);
