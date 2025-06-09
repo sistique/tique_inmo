@@ -18,7 +18,9 @@
                             <li id="pestanageneral2"><a href='javascript:cambiarPestannaGeneral(pestanasgeneral,pestanageneral2);'>ETAPAS</a></li>
                         </ul>
                     </div>
-                    <body onload="javascript:cambiarPestannaGeneral(pestanasgeneral,pestanageneral1); javascript:valor_inicial();">
+                    <body onload="javascript:cambiarPestannaGeneral(pestanasgeneral,pestanageneral1);
+                    javascript:valor_inicial();
+                    javascript:cambiarPestanna(pestanasubicacion,pestanaubicacion1);">
                     <div id="contenidopestanasgeneral">
                         <div class="conten" id="cpestanageneral1">
                             <div id="pestanasubicacion">
@@ -26,6 +28,7 @@
                                     <li id="pestanaubicacion1"><a href='javascript:cambiarPestanna(pestanasubicacion,pestanaubicacion1);'>MODIFICA</a></li>
                                     <li id="pestanaubicacion2"><a href='javascript:cambiarPestanna(pestanasubicacion,pestanaubicacion2);'>DOCUMENTOS</a></li>
                                     <li id="pestanaubicacion3"><a href='javascript:cambiarPestanna(pestanasubicacion,pestanaubicacion3);'>FOTOGRAFIAS</a></li>
+                                    <li id="pestanaubicacion4"><a href='javascript:cambiarPestanna(pestanasubicacion,pestanaubicacion4);'>ETAPA MANUAL</a></li>
                                 </ul>
                             </div>
                             <div id="contenidopestanasubicacion">
@@ -36,6 +39,9 @@
                                     2
                                 </div>
                                 <div class="conten" id="cpestanaubicacion3">
+                                    3
+                                </div>
+                                <div class="conten" id="cpestanaubicacion4">
                                     3
                                 </div>
                             </div>
