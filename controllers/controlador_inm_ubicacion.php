@@ -285,7 +285,7 @@ class controlador_inm_ubicacion extends _ctl_base {
     public function asigna_firmado_por_aprobar(bool $header, bool $ws = false): array|stdClass
     {
         $documento_poder = $this->html->input_file(cols: 12, name: 'poder', row_upd: new stdClass(), value_vacio: false,
-            place_holder: 'Poder');
+            place_holder: 'Poder',required: false);
         if (errores::$error) {
             return $this->retorno_error(
                 mensaje: 'Error al obtener inputs', data: $documento_poder, header: $header, ws: $ws);
