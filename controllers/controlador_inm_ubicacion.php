@@ -715,7 +715,7 @@ class controlador_inm_ubicacion extends _ctl_base {
             $this->retorno_error(mensaje: 'Error al generar template', data: $template, header: $header, ws: $ws);
         }
 
-        $columns_ds[] = 'inm_status_prospecto_ubicacion_descripcion';
+        $columns_ds[] = 'inm_status_ubicacion_descripcion';
 
         $inm_status_ubicacion_id = (new inm_status_ubicacion_html(html: $this->html_base))->select_inm_status_ubicacion_id(
             cols: 6, con_registros: true, id_selected: -1, link: $this->link, columns_ds: $columns_ds,
