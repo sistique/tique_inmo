@@ -110,6 +110,12 @@
     pointer-events: none;
 }
 
+/****** Documentos ******/
+
+#table-inm_ubicacion{
+    width: 100% !important;
+}
+
 /******* Vista de Modal Documentos ******/
 
 dialog {
