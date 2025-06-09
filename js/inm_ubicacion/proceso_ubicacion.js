@@ -2,6 +2,30 @@ let url = getAbsolutePath();
 let registro_id = getParameterByName('registro_id');
 let session_id = getParameterByName('session_id');
 
+/***** Pestañas *****/
+function cambiarPestannaGeneral(pestannas,pestanna) {
+    pestanna_act = document.getElementById(pestanna.id);
+    listaPestannas = document.getElementById(pestannas.id);
+
+    cpestanna = document.getElementById('c'+pestanna.id);
+    listacPestannas = document.getElementById('contenido'+pestannas.id);
+
+    i=0;
+    while (typeof listacPestannas.getElementsByClassName('conten')[i] != 'undefined'){
+        $(document).ready(function(){
+            $(listacPestannas.getElementsByClassName('conten')[i]).css('display','none');
+            $(listaPestannas.getElementsByTagName('li')[i]).css('background','');
+            $(listaPestannas.getElementsByTagName('li')[i]).css('padding-bottom','');
+        });
+        i += 1;
+    }
+
+    $(document).ready(function(){
+        $(cpestanna).css('display','block');
+        $(pestanna_act).css('background','#0f7ad5');
+    });
+}
+
 function cambiarPestanna(pestannas,pestanna) {
     pestanna_act = document.getElementById(pestanna.id);
     listaPestannas = document.getElementById(pestannas.id);
@@ -77,6 +101,8 @@ function valor_inicial() {
         }
     });
 }
+
+/***** Modal Documentos *****/
 
 var modal = document.getElementById("myModal");
 var closeBtn = document.getElementById("closeModalBtn");

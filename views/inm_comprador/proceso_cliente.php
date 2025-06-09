@@ -24,7 +24,7 @@
                             <li id="pestana7"><a href='javascript:cambiarPestanna(pestanas,pestana7);'>POR FIRMAR</a></li>
                             <li id="pestana8"><a href='javascript:cambiarPestanna(pestanas,pestana8);'>ESCRITURADO</a></li>
                             <li id="pestana9"><a href='javascript:cambiarPestanna(pestanas,pestana9);'>COTEJADO</a></li>
-                            <li id="pestana9"><a href='javascript:cambiarPestanna(pestanas,pestana10);'>COBRADO</a></li>
+                            <li id="pestana10"><a href='javascript:cambiarPestanna(pestanas,pestana10);'>COBRADO</a></li>
                         </ul>
                     </div>
                     <body onload="javascript:cambiarPestanna(pestanas,pestana1);">
@@ -113,10 +113,26 @@
                             Contenido de la pestaña 2
                         </div>
                         <div class="conten" id="cpestana9">
-                            Contenido de la pestaña 1
+                            <form method="post" action="<?php echo $controlador->link_por_firmar_bd; ?>"
+                                  class="form-additional" enctype="multipart/form-data">
+
+                                <div class="control-group btn-alta">
+                                    <div class="controls">
+                                        <button type="submit" class="btn btn-success">Avanza Etapa</button><br>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                         <div class="conten" id="cpestana10">
-                            Contenido de la pestaña 1
+                            <form method="post" action="<?php echo $controlador->link_por_firmar_bd; ?>"
+                                  class="form-additional" enctype="multipart/form-data">
+
+                                <div class="control-group btn-alta">
+                                    <div class="controls">
+                                        <button type="submit" class="btn btn-success">Avanza Etapa</button><br>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
 
                 </div>

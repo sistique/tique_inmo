@@ -1,3 +1,71 @@
+/******* Pestañas Generales ********/
+#pestanasgeneral {
+    float: top;
+}
+
+#pestanasgeneral ul{
+    margin-left: -40px;
+}
+
+#pestanasgeneral li{
+    list-style-type: none;
+    float: left;
+    text-align: center;
+    margin: 0px 2px -2px -0px;
+    background: #232F5C;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    padding: 10px;
+}
+
+#pestanasgeneral a:link{
+    text-decoration: none;
+    color: white;
+}
+
+#contenidopestanasgeneral{
+    clear: both;
+    padding: 10px 0px;
+    border-radius: 5px;
+    border-top-left-radius: 0px;
+    width: 100%;
+}
+
+/******* Pestañas de Ubicaciones ******/
+
+#pestanasubicacion {
+    float: top;
+}
+
+#pestanasubicacion ul{
+    margin-left: -40px;
+}
+
+#pestanasubicacion li{
+    list-style-type: none;
+    float: left;
+    text-align: center;
+    margin: 0px 2px -2px -0px;
+    background: #232F5C;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    padding: 10px;
+}
+
+#pestanasubicacion a:link{
+    text-decoration: none;
+    color: white;
+}
+
+#contenidopestanasubicacion{
+    clear: both;
+    padding: 10px 0px;
+    border-radius: 5px;
+    border-top-left-radius: 0px;
+    width: 100%;
+}
+
+/******* Pestañas de Etapas *******/
 #pestanas {
     float: top;
 }
@@ -41,6 +109,8 @@
 #lista li a{
     pointer-events: none;
 }
+
+/******* Vista de Modal Documentos ******/
 
 dialog {
     border: none;
