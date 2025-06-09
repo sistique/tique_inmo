@@ -745,10 +745,6 @@ class controlador_inm_ubicacion extends _ctl_base {
                 return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_doc_ubicacion,
                     header: $header, ws: $ws);
             }
-
-            $inm_doc_ubicacion_id = $r_inm_doc_ubicacion->registro_id;
-        }else{
-            $inm_doc_ubicacion_id = $r_inm_doc_ubicacion_reg->registros[0]['inm_doc_ubicacion_id'];
         }
 
         $filtro_poder['inm_ubicacion.id'] = $this->registro_id;
@@ -765,7 +761,6 @@ class controlador_inm_ubicacion extends _ctl_base {
             $registro['numero_escritura_poder'] = $_POST['numero_escritura_poder'];
             $registro['fecha_poder'] = $_POST['fecha_poder'];
             $registro['inm_notaria_id'] = $_POST['inm_notaria_id'];
-            $registro['inm_doc_ubicacion_id'] = $inm_doc_ubicacion_id;
             $result_inm_poder = (new inm_poder(link: $this->link))->alta_registro(registro: $registro);
             if (errores::$error) {
                 $this->link->rollBack();
@@ -778,7 +773,6 @@ class controlador_inm_ubicacion extends _ctl_base {
             $registro['numero_escritura_poder'] = $_POST['numero_escritura_poder'];
             $registro['fecha_poder'] = $_POST['fecha_poder'];
             $registro['inm_notaria_id'] = $_POST['inm_notaria_id'];
-            $registro['inm_doc_ubicacion_id'] = $inm_doc_ubicacion_id;
             $result_inm_poder = (new inm_poder(link: $this->link))->modifica_bd(registro: $registro,
                 id: $r_inm_poder->registros[0]['inm_poder_id']);
             if (errores::$error) {
