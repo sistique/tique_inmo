@@ -104,16 +104,16 @@
                                 </form>
                                 <div class="row buttons-form">
                                     <div class="col-lg-3">
-                                        <?php echo $controlador->button_inm_doc_ubicacion_descarga; ?>
+                                        <?php echo $controlador->button_inm_doc_ubicacion_descarga_firmado; ?>
                                     </div>
                                     <div class="col-lg-3">
-                                        <?php echo $controlador->button_inm_doc_ubicacion_vista_previa; ?>
+                                        <?php echo $controlador->button_inm_doc_ubicacion_vista_previa_firmado; ?>
                                     </div>
                                     <div class="col-lg-3">
-                                        <?php echo $controlador->button_inm_doc_ubicacion_descarga_zip; ?>
+                                        <?php echo $controlador->button_inm_doc_ubicacion_descarga_zip_firmado; ?>
                                     </div>
                                     <div class="col-lg-3">
-                                        <?php echo $controlador->button_inm_doc_ubicacion_elimina_bd; ?>
+                                        <?php echo $controlador->button_inm_doc_ubicacion_elimina_bd_firmado; ?>
                                     </div>
                                 </div>
                             </div>

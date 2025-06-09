@@ -59,6 +59,12 @@ class controlador_inm_ubicacion extends _ctl_base {
     public string $button_inm_doc_ubicacion_vista_previa_firmado_por_aprobar = '';
     public string $button_inm_doc_ubicacion_elimina_bd_firmado_por_aprobar = '';
 
+    /**/
+    public string $button_inm_doc_ubicacion_descarga_firmado = '';
+    public string $button_inm_doc_ubicacion_descarga_zip_firmado = '';
+    public string $button_inm_doc_ubicacion_vista_previa_firmado = '';
+    public string $button_inm_doc_ubicacion_elimina_bd_firmado = '';
+
 
     public string $link_fotografia_bd = '';
     public array $imp_compradores = array();
@@ -296,11 +302,13 @@ class controlador_inm_ubicacion extends _ctl_base {
         $filtro_poder['inm_ubicacion.id'] = $this->registro_id;
         $r_inm_poder = (new inm_poder(link: $this->link))->filtro_and(filtro: $filtro_poder);
         if (errores::$error) {
-            $this->link->rollBack();
             return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $r_inm_poder,
                 header: $header, ws: $ws);
         }
 
+        $this->row_upd->inm_notaria_id = -1;
+        $this->row_upd->numero_escritura_poder = '';
+        $this->row_upd->fecha_poder = '';
         if($r_inm_poder->n_registros > 0){
             $this->row_upd->inm_notaria_id = $r_inm_poder->registros[0]['inm_poder_inm_notaria_id'];
             $this->row_upd->numero_escritura_poder = $r_inm_poder->registros[0]['inm_poder_numero_escritura_poder'];
@@ -468,7 +476,7 @@ class controlador_inm_ubicacion extends _ctl_base {
                     data: $button_inm_doc_ubicacion_descarga, header: $header, ws: $ws);
             }
 
-            $this->button_inm_doc_ubicacion_descarga = $button_inm_doc_ubicacion_descarga;
+            $this->button_inm_doc_ubicacion_descarga_firmado = $button_inm_doc_ubicacion_descarga;
 
             $button_inm_doc_ubicacion_vista_previa = $this->html->button_href(accion: 'vista_previa',
                 etiqueta: 'Vista Previa', registro_id: $r_inm_doc_ubicacion->registros[0]['inm_doc_ubicacion_id'],
@@ -478,7 +486,7 @@ class controlador_inm_ubicacion extends _ctl_base {
                     data: $button_inm_doc_ubicacion_vista_previa, header: $header, ws: $ws);
             }
 
-            $this->button_inm_doc_ubicacion_vista_previa = $button_inm_doc_ubicacion_vista_previa;
+            $this->button_inm_doc_ubicacion_vista_previa_firmado = $button_inm_doc_ubicacion_vista_previa;
 
             $button_inm_doc_ubicacion_descarga_zip = $this->html->button_href(accion: 'descarga_zip',
                 etiqueta: 'Descarga ZIP', registro_id: $r_inm_doc_ubicacion->registros[0]['inm_doc_ubicacion_id'],
@@ -488,7 +496,7 @@ class controlador_inm_ubicacion extends _ctl_base {
                     data: $button_inm_doc_ubicacion_descarga_zip, header: $header, ws: $ws);
             }
 
-            $this->button_inm_doc_ubicacion_descarga_zip = $button_inm_doc_ubicacion_descarga_zip;
+            $this->button_inm_doc_ubicacion_descarga_zip_firmado = $button_inm_doc_ubicacion_descarga_zip;
 
             $params = array('accion_retorno'=>'proceso_ubicacion','seccion_retorno'=>'inm_ubicacion',
                 'id_retorno'=>$this->registro_id);
@@ -500,7 +508,7 @@ class controlador_inm_ubicacion extends _ctl_base {
                     header: $header, ws: $ws);
             }
 
-            $this->button_inm_doc_ubicacion_elimina_bd = $button_inm_doc_ubicacion_elimina_bd;
+            $this->button_inm_doc_ubicacion_elimina_bd_firmado = $button_inm_doc_ubicacion_elimina_bd;
         }
 
         return $base;

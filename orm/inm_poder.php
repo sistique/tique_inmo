@@ -11,7 +11,7 @@ class inm_poder extends _modelo_parent{
     public function __construct(PDO $link)
     {
         $tabla = 'inm_poder';
-        $columnas = array($tabla=>false,'inm_notaria'=>$tabla,'inm_doc_ubicacion'=>$tabla, 'inm_ubicacion'=>$tabla);
+        $columnas = array($tabla=>false,'inm_notaria'=>$tabla, 'inm_ubicacion'=>$tabla);
 
         $columnas_extra= array();
         $renombres= array();
