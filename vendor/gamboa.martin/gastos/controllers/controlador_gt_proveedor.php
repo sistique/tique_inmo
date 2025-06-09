@@ -81,7 +81,7 @@ class controlador_gt_proveedor extends _ctl_base
     protected function campos_view(): array
     {
         $keys = new stdClass();
-        $keys->inputs = array('codigo', 'descripcion', 'rfc', 'exterior', 'interior', 'contacto_1', 'contacto_2',
+        $keys->inputs = array('codigo', 'descripcion', 'rfc', 'calle','exterior', 'interior', 'contacto_1', 'contacto_2',
             'contacto_3', 'pagina_web', 'razon_social', 'telefono_1', 'telefono_2', 'telefono_3');
         $keys->telefonos = array();
         $keys->fechas = array();
@@ -93,7 +93,6 @@ class controlador_gt_proveedor extends _ctl_base
         $init_data['dp_municipio'] = "gamboamartin\\direccion_postal";
         $init_data['dp_cp'] = "gamboamartin\\direccion_postal";
         $init_data['dp_colonia_postal'] = "gamboamartin\\direccion_postal";
-        $init_data['dp_calle_pertenece'] = "gamboamartin\\direccion_postal";
         $init_data['cat_sat_regimen_fiscal'] = "gamboamartin\\cat_sat";
         $init_data['gt_tipo_proveedor'] = "gamboamartin\\gastos";
 
