@@ -44,6 +44,19 @@ class inm_bitacora_status_comprador extends _modelo_parent{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al insertar comprador',data:  $r_alta_bd);
         }
+        
+        $filtro_status['inm_status_comprador.id'] = $this->registro['inm_status_comprador_id'];
+        $r_inm_status_comprador = (new inm_status_comprador(link: $this->link))->filtro_and(filtro: $filtro_status);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al ajustar status de prospecto',data:  $r_inm_status_comprador);
+        }
+
+        $regitros_mod['status'] = 'activo';
+        if($r_inm_status_comprador->n_registros > 0){
+            if($r_inm_status_comprador->registros[0]['inm_status_comprador_es_cancelado'] === 'activo') {
+                $regitros_mod['status'] = 'inactivo';
+            }
+        }
 
         $regitros_mod['inm_status_comprador_id'] = $this->registro['inm_status_comprador_id'];
         $r_modifica_bd = (new inm_comprador(link: $this->link))->modifica_bd(registro: $regitros_mod,
