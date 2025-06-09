@@ -24,6 +24,7 @@ use gamboamartin\inmuebles\models\inm_conf_docs_ubicacion;
 use gamboamartin\inmuebles\models\inm_doc_ubicacion;
 use gamboamartin\inmuebles\models\inm_nacionalidad;
 use gamboamartin\inmuebles\models\inm_ocupacion;
+use gamboamartin\inmuebles\models\inm_poder;
 use gamboamartin\inmuebles\models\inm_status_ubicacion;
 use gamboamartin\inmuebles\models\inm_ubicacion;
 use gamboamartin\system\_ctl_base;
@@ -729,6 +730,44 @@ class controlador_inm_ubicacion extends _ctl_base {
             if (errores::$error) {
                 $this->link->rollBack();
                 return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_doc_ubicacion,
+                    header: $header, ws: $ws);
+            }
+        }
+
+        $filtro_poder['inm_ubicacion.id'] = $this->registro_id;
+        $filtro_poder['doc_tipo_documento.id'] = 35;
+        $r_inm_poder = (new inm_poder(link: $this->link))->filtro_and(filtro: $filtro_poder);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $r_inm_poder,
+                header: $header, ws: $ws);
+        }
+
+        if($r_inm_poder->n_registros <= 0) {
+            $registro = array();
+            $registro['inm_ubicacion_id'] = $this->registro_id;
+            $registro['numero_escritura_poder'] = $_POST['numero_escritura_poder'];
+            $registro['fecha_poder'] = $_POST['fecha_poder'];
+            $registro['inm_notaria_id'] = $_POST['inm_notaria_id'];
+            $registro['doc_documento_id'] = $_POST['doc_documento_id'];
+            $result_inm_poder = (new inm_poder(link: $this->link))->alta_registro(registro: $registro);
+            if (errores::$error) {
+                $this->link->rollBack();
+                return $this->retorno_error(mensaje: 'Error al insertar datos', data: $result_inm_poder,
+                    header: $header, ws: $ws);
+            }
+        }else{
+            $registro = array();
+            $registro['inm_ubicacion_id'] = $this->registro_id;
+            $registro['numero_escritura_poder'] = $_POST['numero_escritura_poder'];
+            $registro['fecha_poder'] = $_POST['fecha_poder'];
+            $registro['inm_notaria_id'] = $_POST['inm_notaria_id'];
+            $registro['doc_documento_id'] = $_POST['doc_documento_id'];
+            $result_inm_poder = (new inm_poder(link: $this->link))->modifica_bd(registro: $registro,
+                id: $r_inm_poder->registros[0]['inm_poder_id']);
+            if (errores::$error) {
+                $this->link->rollBack();
+                return $this->retorno_error(mensaje: 'Error al insertar datos', data: $result_inm_poder,
                     header: $header, ws: $ws);
             }
         }
