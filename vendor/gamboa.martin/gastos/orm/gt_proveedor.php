@@ -61,6 +61,7 @@ class gt_proveedor extends _modelo_parent
 
         $registros['codigo'] .= " - " . $registros['rfc'];
         $registros['descripcion'] = $registros['razon_social'];
+        $registros['descripcion_select'] = $registros['razon_social'] . " " . $registros['rfc'];
 
         return $registros;
     }
