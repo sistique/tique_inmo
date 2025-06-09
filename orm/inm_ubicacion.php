@@ -882,7 +882,19 @@ class inm_ubicacion extends _inm_ubicaciones {
 
     }
 
-     public function transacciona_conyuge(int $inm_ubicacion_id, PDO $link){
+    public function status_ubicacion(int $inm_ubicacion_id,
+                                               array $order = array('inm_bitacora_status_ubicacion.fecha_status'=>'DESC')){
+        $filtro['inm_ubicacion.id'] = $inm_ubicacion_id;
+        $r_inm_bitacora_ubicacion = (new inm_bitacora_status_ubicacion(link: $this->link))->filtro_and(filtro: $filtro,order: $order);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener etapas', data: $r_inm_bitacora_ubicacion);
+        }
+
+        return $r_inm_bitacora_ubicacion->registros;
+    }
+
+
+    public function transacciona_conyuge(int $inm_ubicacion_id, PDO $link){
         $datos = $this->datos_conyuge(link: $link,inm_ubicacion_id: $inm_ubicacion_id);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener dato conyuge',data:  $datos);
