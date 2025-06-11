@@ -1116,8 +1116,10 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $this->fotos = $inputs_fotos;
 
+        $params = array('pestana_general_actual' => 'pestanageneral1', 'pestana_actual' => $_GET['pestana_actual']);
         $link_fotografia_bd = $this->obj_link->link_con_id(
-            accion: 'fotografias_bd', link: $this->link, registro_id: $this->registro_id, seccion: 'inm_ubicacion');
+            accion: 'fotografias_bd', link: $this->link, registro_id: $this->registro_id, seccion: 'inm_ubicacion',
+            params: $params);
         if (errores::$error) {
             $this->retorno_error(mensaje: 'Error al generar link', data: $link_fotografia_bd, header: $header, ws: $ws);
         }
@@ -1187,8 +1189,8 @@ class controlador_inm_ubicacion extends _ctl_base {
         if(isset($_POST['btn_action_next'])){
             $accion = $_POST['btn_action_next'];
         }
-        $params = array('pestana_general_actual' => 'pestanageneral1');
 
+        $params = array('pestana_general_actual' => 'pestanageneral1', 'pestana_actual' => $_GET['pestana_actual']);
         $link_proceso_ubicacion = $this->obj_link->link_con_id(
             accion: $accion, link: $this->link, registro_id: $this->registro_id, seccion: 'inm_ubicacion',params: $params);
         if (errores::$error) {
@@ -2106,8 +2108,11 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $this->inputs->documento = $documento;
 
-        $params = array('pestana_general_actual' => 'pestanageneral1',
-            'pestana_actual' => $_GET['pestana_actual']);
+        $params = array();
+        if(isset($_GET['pestanageneral1'])) {
+            $params = array('pestana_general_actual' => 'pestanageneral1',
+                'pestana_actual' => $_GET['pestana_actual']);
+        }
         $link_alta_doc = $this->obj_link->link_alta_bd(link: $this->link, seccion: 'inm_doc_ubicacion',
             params: $params);
         if (errores::$error) {

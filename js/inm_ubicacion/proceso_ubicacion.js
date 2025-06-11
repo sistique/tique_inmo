@@ -113,6 +113,7 @@ function cambiarPestanna_inicialubicacion(pestannas) {
     if(pestana_actual !== ''){
         pestanna_ini = pestana_actual;
     }
+    console.log(pestanna_ini);
 
     pestanna_act = document.getElementById(pestanna_ini);
     listaPestannas = document.getElementById(pestannas.id);
