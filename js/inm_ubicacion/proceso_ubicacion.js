@@ -7,8 +7,6 @@ let pestana_actual = getParameterByName('pestana_actual');
 
 /***** Pestañas *****/
 function cambiarPestannaGeneral(pestannas,pestanna,pentannascontenido) {
-    console.log(pentannascontenido);
-
     pestanna_act = document.getElementById(pestanna.id);
     listaPestannas = document.getElementById(pestannas.id);
 
@@ -29,11 +27,20 @@ function cambiarPestannaGeneral(pestannas,pestanna,pentannascontenido) {
         $(cpestanna).css('display','block');
         $(pestanna_act).css('background','#0f7ad5');
 
+        const liActivo = pentannascontenido.querySelector('li[data-pestana="true"]');
+
         /*** URL PESTAÑA ACTUAL ***/
         const url = new URL(window.location.href);
         url.searchParams.set("pestana_general_actual", pestanna.id);
 
         window.history.pushState({}, '', url);
+
+        if(liActivo !== null){
+            console.log(liActivo.id);
+            url.searchParams.set("pestana_actual", liActivo.id);
+
+            window.history.pushState({}, '', url);
+        }
     });
 }
 
@@ -67,8 +74,6 @@ function cambiarPestannaGeneral_inicial(pestannas,pestanna) {
 }
 
 function cambiarPestanna(pestannas,pestanna) {
-    console.log(pestannas);
-
     pestanna_act = document.getElementById(pestanna.id);
     listaPestannas = document.getElementById(pestannas.id);
 
@@ -100,7 +105,6 @@ function cambiarPestanna(pestannas,pestanna) {
 }
 
 function cambiarPestanna_inicial(pestannas,pestanna) {
-
     const str = pestanna.id;
     const valor_pestana = parseInt(str.replace("pestana", ""));
 
