@@ -32,6 +32,35 @@ function cambiarPestannaGeneral(pestannas,pestanna) {
     });
 }
 
+function cambiarPestannaGeneral_inicial(pestannas,pestanna) {
+    pestanna_act = document.getElementById(pestanna.id);
+    listaPestannas = document.getElementById(pestannas.id);
+
+    cpestanna = document.getElementById('c'+pestanna.id);
+    listacPestannas = document.getElementById('contenido'+pestannas.id);
+
+    i=0;
+    while (typeof listacPestannas.getElementsByClassName('contengeneral')[i] != 'undefined'){
+        $(document).ready(function(){
+            $(listacPestannas.getElementsByClassName('contengeneral')[i]).css('display','none');
+            $(listaPestannas.getElementsByTagName('li')[i]).css('background','');
+            $(listaPestannas.getElementsByTagName('li')[i]).css('padding-bottom','');
+        });
+        i += 1;
+    }
+
+    $(document).ready(function(){
+        $(cpestanna).css('display','block');
+        $(pestanna_act).css('background','#0f7ad5');
+
+        /*** URL PESTAÑA ACTUAL ***/
+        const url = new URL(window.location.href);
+        url.searchParams.set("pestana_general_actual", pestanna.id);
+
+        window.history.pushState({}, '', url);
+    });
+}
+
 function cambiarPestanna(pestannas,pestanna) {
     pestanna_act = document.getElementById(pestanna.id);
     listaPestannas = document.getElementById(pestannas.id);
