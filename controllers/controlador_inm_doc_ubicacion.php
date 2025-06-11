@@ -229,7 +229,7 @@ class controlador_inm_doc_ubicacion extends _ctl_formato
     {
         $_POST['params'] = array();
         if(isset($_GET['pestana_general_actual'])) {
-            $_POST['params'] = array('pestana_general_actual' => 'pestanageneral1',
+            $_POST['params'] = array('pestana_general_actual' => $_GET['pestana_general_actual'],
                 'pestana_actual' => $_GET['pestana_actual']);
         }
 

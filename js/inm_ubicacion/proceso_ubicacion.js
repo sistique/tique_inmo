@@ -39,6 +39,11 @@ function cambiarPestannaGeneral(pestannas,pestanna,pentannascontenido) {
             url.searchParams.set("pestana_actual", liActivo.id);
 
             window.history.pushState({}, '', url);
+        }else{
+            if(pentannascontenido.id === 'pestanasubicacion'){
+                pestana_actual = 'pestanaubicacion1';
+                cambiarPestanna_inicialubicacion(pentannascontenido);
+            }
         }
     });
 }
@@ -113,7 +118,6 @@ function cambiarPestanna_inicialubicacion(pestannas) {
     if(pestana_actual !== ''){
         pestanna_ini = pestana_actual;
     }
-    console.log(pestanna_ini);
 
     pestanna_act = document.getElementById(pestanna_ini);
     listaPestannas = document.getElementById(pestannas.id);
