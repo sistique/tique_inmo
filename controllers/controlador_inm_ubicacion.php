@@ -225,8 +225,9 @@ class controlador_inm_ubicacion extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
         }
 
+        $params = array('pestana_general_actual' => 'pestanageneral2');
         $link_validacion_bd = $this->obj_link->link_con_id(accion:'validacion_bd',
-            link: $this->link,registro_id: $this->registro_id,seccion: 'inm_ubicacion');
+            link: $this->link,registro_id: $this->registro_id,seccion: 'inm_ubicacion',params: $params);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al generar link',data:  $link_validacion_bd,
                 header: $header,ws:  $ws);
@@ -357,8 +358,9 @@ class controlador_inm_ubicacion extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
         }
 
+        $params = array('pestana_general_actual' => 'pestanageneral2');
         $link_firmado_por_aprobar_bd = $this->obj_link->link_con_id(accion:'firmado_por_aprobar_bd',
-            link: $this->link,registro_id: $this->registro_id,seccion: 'inm_ubicacion');
+            link: $this->link,registro_id: $this->registro_id,seccion: 'inm_ubicacion',params: $params);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al generar link',data:  $link_firmado_por_aprobar_bd,
                 header: $header,ws:  $ws);
@@ -451,8 +453,9 @@ class controlador_inm_ubicacion extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
         }
 
+        $params = array('pestana_general_actual' => 'pestanageneral2');
         $link_firmado_bd = $this->obj_link->link_con_id(accion:'firmado_bd',
-            link: $this->link,registro_id: $this->registro_id,seccion: 'inm_ubicacion');
+            link: $this->link,registro_id: $this->registro_id,seccion: 'inm_ubicacion',params: $params);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al generar link',data:  $link_firmado_bd,
                 header: $header,ws:  $ws);
@@ -567,8 +570,9 @@ class controlador_inm_ubicacion extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
         }
 
+        $params = array('pestana_general_actual' => 'pestanageneral2');
         $link_solicitud_de_recurso_bd = $this->obj_link->link_con_id(accion:'solicitud_de_recurso_bd',
-            link: $this->link,registro_id: $this->registro_id,seccion: 'inm_ubicacion');
+            link: $this->link,registro_id: $this->registro_id,seccion: 'inm_ubicacion',params: $params);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al generar link',data:  $link_solicitud_de_recurso_bd,
                 header: $header,ws:  $ws);
@@ -599,8 +603,9 @@ class controlador_inm_ubicacion extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
         }
 
+        $params = array('pestana_general_actual' => 'pestanageneral2');
         $link_por_firmar_bd = $this->obj_link->link_con_id(accion:'por_firmar_bd',
-            link: $this->link,registro_id: $this->registro_id,seccion: 'inm_ubicacion');
+            link: $this->link,registro_id: $this->registro_id,seccion: 'inm_ubicacion',params: $params);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al generar link',data:  $link_por_firmar_bd,
                 header: $header,ws:  $ws);
@@ -954,8 +959,10 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $this->link->commit();
 
+        $params = array('pestana_general_actual' => 'pestanageneral2');
         $link_proceso_ubicacion = $this->obj_link->link_con_id(
-            accion: 'proceso_ubicacion', link: $this->link, registro_id: $this->registro_id, seccion: 'inm_ubicacion');
+            accion: 'proceso_ubicacion', link: $this->link, registro_id: $this->registro_id, seccion: 'inm_ubicacion',
+            params: $params);
         if (errores::$error) {
             $this->retorno_error(mensaje: 'Error al generar link', data: $link_proceso_ubicacion, header: $header, ws: $ws);
         }
@@ -1019,8 +1026,10 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $this->link->commit();
 
+        $params = array('pestana_general_actual' => 'pestanageneral2');
         $link_proceso_ubicacion = $this->obj_link->link_con_id(
-            accion: 'proceso_ubicacion', link: $this->link, registro_id: $this->registro_id, seccion: 'inm_ubicacion');
+            accion: 'proceso_ubicacion', link: $this->link, registro_id: $this->registro_id, seccion: 'inm_ubicacion',
+            params: $params);
         if (errores::$error) {
             $this->retorno_error(mensaje: 'Error al generar link', data: $link_proceso_ubicacion, header: $header, ws: $ws);
         }
@@ -1029,6 +1038,7 @@ class controlador_inm_ubicacion extends _ctl_base {
             header('Location:' . $link_proceso_ubicacion);
             exit;
         }
+
 
         return $this->registro_id;
     }
@@ -1177,13 +1187,13 @@ class controlador_inm_ubicacion extends _ctl_base {
         if(isset($_POST['btn_action_next'])){
             $accion = $_POST['btn_action_next'];
         }
+        $params = array('pestana_general_actual' => 'pestanageneral1');
 
         $link_proceso_ubicacion = $this->obj_link->link_con_id(
-            accion: $accion, link: $this->link, registro_id: $this->registro_id, seccion: 'inm_ubicacion');
+            accion: $accion, link: $this->link, registro_id: $this->registro_id, seccion: 'inm_ubicacion',params: $params);
         if (errores::$error) {
             $this->retorno_error(mensaje: 'Error al generar link', data: $link_proceso_ubicacion, header: $header, ws: $ws);
         }
-
         if($header) {
             header('Location:' . $link_proceso_ubicacion);
             exit;
@@ -1871,8 +1881,10 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $this->link->commit();
 
+        $params = array('pestana_general_actual' => 'pestanageneral2');
         $link_proceso_ubicacion = $this->obj_link->link_con_id(
-            accion: 'proceso_ubicacion', link: $this->link, registro_id: $this->registro_id, seccion: 'inm_ubicacion');
+            accion: 'proceso_ubicacion', link: $this->link, registro_id: $this->registro_id, seccion: 'inm_ubicacion',
+            params: $params);
         if (errores::$error) {
             $this->retorno_error(mensaje: 'Error al generar link', data: $link_proceso_ubicacion, header: $header, ws: $ws);
         }
@@ -2007,8 +2019,10 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $this->link->commit();
 
+        $params = array('pestana_general_actual' => 'pestanageneral2');
         $link_proceso_ubicacion = $this->obj_link->link_con_id(
-            accion: 'proceso_ubicacion', link: $this->link, registro_id: $this->registro_id, seccion: 'inm_ubicacion');
+            accion: 'proceso_ubicacion', link: $this->link, registro_id: $this->registro_id, seccion: 'inm_ubicacion',
+            params: $params);
         if (errores::$error) {
             $this->retorno_error(mensaje: 'Error al generar link', data: $link_proceso_ubicacion, header: $header, ws: $ws);
         }
@@ -2017,6 +2031,7 @@ class controlador_inm_ubicacion extends _ctl_base {
             header('Location:' . $link_proceso_ubicacion);
             exit;
         }
+
 
         return $this->registro_id;
     }
@@ -2196,8 +2211,10 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $this->link->commit();
 
+        $params = array('pestana_general_actual' => 'pestanageneral2');
         $link_proceso_ubicacion = $this->obj_link->link_con_id(
-            accion: 'proceso_ubicacion', link: $this->link, registro_id: $this->registro_id, seccion: 'inm_ubicacion');
+            accion: 'proceso_ubicacion', link: $this->link, registro_id: $this->registro_id, seccion: 'inm_ubicacion',
+            params: $params);
         if (errores::$error) {
             $this->retorno_error(mensaje: 'Error al generar link', data: $link_proceso_ubicacion, header: $header, ws: $ws);
         }

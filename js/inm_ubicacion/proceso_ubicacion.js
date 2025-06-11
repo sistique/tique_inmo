@@ -43,11 +43,18 @@ function cambiarPestannaGeneral(pestannas,pestanna,pentannascontenido) {
     });
 }
 
-function cambiarPestannaGeneral_inicial(pestannas,pestanna) {
-    pestanna_act = document.getElementById(pestanna.id);
+function cambiarPestannaGeneral_inicial(pestannas) {
+    console.log(pestana_general_actual);
+
+    let pestanna_ini = 'pestanageneral1';
+    if(pestana_general_actual !== ''){
+        pestanna_ini = pestana_general_actual;
+    }
+
+    pestanna_act = document.getElementById(pestanna_ini);
     listaPestannas = document.getElementById(pestannas.id);
 
-    cpestanna = document.getElementById('c'+pestanna.id);
+    cpestanna = document.getElementById('c'+pestanna_ini);
     listacPestannas = document.getElementById('contenido'+pestannas.id);
 
     i=0;
@@ -66,7 +73,7 @@ function cambiarPestannaGeneral_inicial(pestannas,pestanna) {
 
         /*** URL PESTAÑA ACTUAL ***/
         const url = new URL(window.location.href);
-        url.searchParams.set("pestana_general_actual", pestanna.id);
+        url.searchParams.set("pestana_general_actual", pestanna_ini);
 
         window.history.pushState({}, '', url);
     });

@@ -18,7 +18,7 @@
                             <li id="pestanageneral2"><a href='javascript:cambiarPestannaGeneral(pestanasgeneral,pestanageneral2,pestanas);'>ETAPAS</a></li>
                         </ul>
                     </div>
-                    <body onload="javascript:cambiarPestannaGeneral_inicial(pestanasgeneral,pestanageneral1);
+                    <body onload="javascript:cambiarPestannaGeneral_inicial(pestanasgeneral);
                     javascript:valor_inicial();
                     javascript:cambiarPestanna(pestanasubicacion,pestanaubicacion1);">
                     <div id="contenidopestanasgeneral">
