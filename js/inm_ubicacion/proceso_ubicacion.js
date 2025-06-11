@@ -2,8 +2,13 @@ let url = getAbsolutePath();
 let registro_id = getParameterByName('registro_id');
 let session_id = getParameterByName('session_id');
 
+let pestana_general_actual = getParameterByName('pestana_general_actual');
+let pestana_actual = getParameterByName('pestana_actual');
+
 /***** Pestañas *****/
-function cambiarPestannaGeneral(pestannas,pestanna) {
+function cambiarPestannaGeneral(pestannas,pestanna,pentannascontenido) {
+    console.log(pentannascontenido);
+
     pestanna_act = document.getElementById(pestanna.id);
     listaPestannas = document.getElementById(pestannas.id);
 
@@ -62,6 +67,8 @@ function cambiarPestannaGeneral_inicial(pestannas,pestanna) {
 }
 
 function cambiarPestanna(pestannas,pestanna) {
+    console.log(pestannas);
+
     pestanna_act = document.getElementById(pestanna.id);
     listaPestannas = document.getElementById(pestannas.id);
 
@@ -74,6 +81,7 @@ function cambiarPestanna(pestannas,pestanna) {
             $(listacPestannas.getElementsByClassName('conten')[i]).css('display','none');
             $(listaPestannas.getElementsByTagName('li')[i]).css('background','');
             $(listaPestannas.getElementsByTagName('li')[i]).css('padding-bottom','');
+            $(listaPestannas.getElementsByTagName('li')[i]).attr('data-pestana','');
         });
         i += 1;
     }
@@ -81,6 +89,7 @@ function cambiarPestanna(pestannas,pestanna) {
     $(document).ready(function(){
         $(cpestanna).css('display','block');
         $(pestanna_act).css('background','#0f7ad5');
+        $(pestanna_act).attr('data-pestana', 'true');
 
         /*** URL PESTAÑA ACTUAL ***/
         const url = new URL(window.location.href);
@@ -107,6 +116,7 @@ function cambiarPestanna_inicial(pestannas,pestanna) {
             $(listacPestannas.getElementsByClassName('conten')[i]).css('display','none');
             $(listaPestannas.getElementsByTagName('li')[i]).css('background','');
             $(listaPestannas.getElementsByTagName('li')[i]).css('padding-bottom','');
+            $(listaPestannas.getElementsByTagName('li')[i]).attr('data-pestana','');
         });
         i += 1;
     }
@@ -122,6 +132,7 @@ function cambiarPestanna_inicial(pestannas,pestanna) {
     $(document).ready(function(){
         $(cpestanna).css('display','block');
         $(pestanna_act).css('background','#0f7ad5');
+        $(pestanna_act).attr('data-pestana', 'true');
 
         const url = new URL(window.location.href);
         url.searchParams.set("pestana_actual", pestanna.id);
