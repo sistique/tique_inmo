@@ -1156,17 +1156,6 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $this->link->commit();
 
-        $link_fotografia_bd = $this->obj_link->link_con_id(
-            accion: 'fotografias', link: $this->link, registro_id: $this->registro_id, seccion: 'inm_ubicacion');
-        if (errores::$error) {
-            $this->retorno_error(mensaje: 'Error al generar link', data: $link_fotografia_bd, header: $header, ws: $ws);
-        }
-
-        if($header) {
-            header('Location:' . $link_fotografia_bd);
-            exit;
-        }
-
         return $result;
     }
 

@@ -93,8 +93,9 @@ class _dropbox
             $json = json_decode($response, true);
             $id_dropbox = $json['id'];
 
+            /*
             echo "✅ Código HTTP: $httpCode\n";
-            echo "📥 Respuesta: $response\n";
+            echo "📥 Respuesta: $response\n";*/
         }
 
         curl_close($ch);
