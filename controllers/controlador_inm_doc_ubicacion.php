@@ -96,29 +96,17 @@ class controlador_inm_doc_ubicacion extends _ctl_formato {
 
     public function alta_bd(bool $header, bool $ws = false): array|stdClass
     {
+        $_POST['params'] = array();
+        if(isset($_GET['pestana_general_actual'])) {
+            $_POST['params'] = array('pestana_general_actual' => 'pestanageneral1',
+                'pestana_actual' => $_GET['pestana_actual']);
+        }
+
         $r_alta_bd =  parent::alta_bd($header, $ws);
         if(errores::$error){
             return $this->retorno_error(
                 mensaje: 'Error al obtener inputs',data:  $r_alta_bd, header: $header,ws:  $ws);
         }
-
-        $params = array();
-        if(isset($_GET['pestana_general_actual'])) {
-            $params = array('pestana_general_actual' => 'pestanageneral1',
-                'pestana_actual' => $_GET['pestana_actual']);
-        }
-        $link_proceso_ubicacion = $this->obj_link->link_con_id(
-            accion: 'proceso_ubicacion', link: $this->link, registro_id: $_POST['inm_ubicacion_id'],
-            seccion: 'inm_ubicacion', params: $params);
-        if (errores::$error) {
-            $this->retorno_error(mensaje: 'Error al generar link', data: $link_proceso_ubicacion, header: $header, ws: $ws);
-        }
-
-        if($header) {
-            header('Location:' . $link_proceso_ubicacion);
-            exit;
-        }
-
 
         return $r_alta_bd;
     }

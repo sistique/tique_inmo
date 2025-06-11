@@ -15,6 +15,7 @@ use gamboamartin\system\_importador\_exporta;
 use gamboamartin\system\_importador\_importa;
 use gamboamartin\system\_importador\_maquetacion;
 use gamboamartin\system\_importador\_xls;
+use gamboamartin\system\html_controler\params;
 use gamboamartin\template\directivas;
 use gamboamartin\template\html;
 use PDO;
@@ -367,6 +368,12 @@ class system extends controlador_base
             unset($_POST['id_retorno']);
         }
 
+        $params = array();
+        if (isset($_POST['params'])) {
+            $params = $_POST['params'];
+            unset($_POST['params']);
+        }
+
         $valida = $this->validacion->valida_alta_bd(controler: $this);
         if (errores::$error) {
             if (!$transaccion_previa) {
@@ -389,7 +396,7 @@ class system extends controlador_base
         }
 
         $out = $this->out_alta(header: $header, id_retorno: $id_retorno, r_alta_bd: $r_alta_bd,
-            seccion_retorno: $seccion_retorno, siguiente_view: $siguiente_view, ws: $ws);
+            seccion_retorno: $seccion_retorno, siguiente_view: $siguiente_view, ws: $ws,params: $params);
         if (errores::$error) {
             print_r($out);
             die('Error');
@@ -1521,14 +1528,14 @@ class system extends controlador_base
     }
 
     final protected function out_alta(bool   $header, int $id_retorno, stdClass $r_alta_bd, string $seccion_retorno,
-                                      string $siguiente_view, bool $ws): true
+                                      string $siguiente_view, bool $ws, $params = array()): true
     {
         if ($header) {
             if ($id_retorno === -1) {
                 $id_retorno = $r_alta_bd->registro_id;
             }
             $this->retorno_base(registro_id: $id_retorno, result: $r_alta_bd, siguiente_view: $siguiente_view,
-                ws: $ws, seccion_retorno: $seccion_retorno, valida_permiso: true);
+                ws: $ws, seccion_retorno: $seccion_retorno, valida_permiso: true, params: $params);
         }
         if ($ws) {
             header('Content-Type: application/json');
