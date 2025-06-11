@@ -2186,7 +2186,7 @@ class links_menu{
      * // )
      * ```
      */
-    final public function link_alta_bd(PDO $link, string $seccion): array|string
+    final public function link_alta_bd(PDO $link, string $seccion, array $params = array()): array|string
     {
         $alta_bd = '';
         $tengo_permiso = (new adm_usuario(link: $link))->tengo_permiso(adm_accion: 'alta_bd', adm_seccion: $seccion);
@@ -2203,6 +2203,12 @@ class links_menu{
                 $adm_menu_id = $_GET['adm_menu_id'];
             }
             $alta_bd .= "&session_id=$this->session_id&adm_menu_id=$adm_menu_id";
+
+            $vars_get = $this->var_gets(params_get: $params);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al generar params get', data: $vars_get);
+            }
+            $alta_bd .= $vars_get;
         }
         return $alta_bd;
     }

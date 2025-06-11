@@ -2106,7 +2106,10 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $this->inputs->documento = $documento;
 
-        $link_alta_doc = $this->obj_link->link_alta_bd(link: $this->link, seccion: 'inm_doc_ubicacion');
+        $params = array('pestana_general_actual' => 'pestanageneral1',
+            'pestana_actual' => $_GET['pestana_actual']);
+        $link_alta_doc = $this->obj_link->link_alta_bd(link: $this->link, seccion: 'inm_doc_ubicacion',
+            params: $params);
         if (errores::$error) {
             return $this->retorno_error(
                 mensaje: 'Error al generar link', data: $link_alta_doc, header: $header, ws: $ws);

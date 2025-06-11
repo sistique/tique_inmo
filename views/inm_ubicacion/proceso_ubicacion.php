@@ -20,7 +20,7 @@
                     </div>
                     <body onload="javascript:cambiarPestannaGeneral_inicial(pestanasgeneral);
                     javascript:valor_inicial();
-                    javascript:cambiarPestanna(pestanasubicacion,pestanaubicacion1);">
+                    javascript:cambiarPestanna_inicialubicacion(pestanasubicacion,pestanaubicacion1);">
                     <div id="contenidopestanasgeneral">
                         <div class="contengeneral" id="cpestanageneral1">
                             <div id="pestanasubicacion">
