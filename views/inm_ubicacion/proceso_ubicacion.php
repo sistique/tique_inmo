@@ -157,9 +157,9 @@
                                                     <?php echo $controlador->inputs->fecha; ?>
                                                     <?php echo $controlador->inputs->observaciones; ?>
 
-                                                    <input type='hidden' name='seccion_retorno' value='inm_ubicacion'>
-                                                    <input type='hidden' name='btn_action_next' value='etapa'>
-                                                    <input type='hidden' name='id_retorno' value='<?php echo $controlador->registro_id; ?>'>
+                                                    <?php echo $controlador->inputs->btn_action_next; ?>
+                                                    <?php echo $controlador->inputs->id_retorno; ?>
+                                                    <?php echo $controlador->inputs->seccion_retorno; ?>
 
                                                     <div class="controls">
                                                         <button type="submit" class="btn btn-success" value="etapa" name="btn_action_next">Alta</button><br>
