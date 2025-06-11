@@ -161,9 +161,7 @@
                                                     <?php echo $controlador->inputs->id_retorno; ?>
                                                     <?php echo $controlador->inputs->seccion_retorno; ?>
 
-                                                    <div class="controls">
-                                                        <button type="submit" class="btn btn-success" value="etapa" name="btn_action_next">Alta</button><br>
-                                                    </div>
+                                                    <?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
                                                 </form>
 
                                             </div>
