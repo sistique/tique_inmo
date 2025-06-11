@@ -36,7 +36,6 @@ function cambiarPestannaGeneral(pestannas,pestanna,pentannascontenido) {
         window.history.pushState({}, '', url);
 
         if(liActivo !== null){
-            console.log(liActivo.id);
             url.searchParams.set("pestana_actual", liActivo.id);
 
             window.history.pushState({}, '', url);
@@ -137,11 +136,6 @@ function cambiarPestanna_inicial(pestannas,pestanna) {
         $(cpestanna).css('display','block');
         $(pestanna_act).css('background','#0f7ad5');
         $(pestanna_act).attr('data-pestana', 'true');
-
-        const url = new URL(window.location.href);
-        url.searchParams.set("pestana_actual", pestanna.id);
-
-        window.history.pushState({}, '', url);
     });
 }
 
