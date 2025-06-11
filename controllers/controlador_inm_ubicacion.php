@@ -832,7 +832,7 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $this->inputs->inm_ubicacion_id = $inm_ubicacion_id;
 
-        $params = array('pestana_general_actual' => 'pestanageneral1', 'pestana_actual' => 'pestanaubicacion3');
+        $params = array('pestana_general_actual' => 'pestanageneral1', 'pestana_actual' => 'pestanaubicacion4');
         $link_alta_bitacora= $this->obj_link->link_alta_bd(link: $this->link, seccion: 'inm_bitacora_status_ubicacion',
             params: $params);
         if (errores::$error) {
