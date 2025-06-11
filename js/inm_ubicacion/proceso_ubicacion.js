@@ -259,7 +259,8 @@ const options = {paging: false, info: false, searching: false}
 
 const table_tipos_documentos = table('inm_ubicacion', columns_tipos_documentos, [], [], function () {
     }, true,
-    "tipos_documentos", {registro_id: registro_id}, options);
+    "tipos_documentos", {registro_id: registro_id,pestana_general_actual: pestana_general_actual,
+        pestana_actual:pestana_actual}, options);
 
 $(document).on("click", "#table-inm_ubicacion a[title='Vista Previa']", function (event) {
     event.preventDefault();

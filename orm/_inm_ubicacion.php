@@ -249,6 +249,11 @@ class _inm_ubicacion{
                                        int $indice, array $inm_conf_docs_ubicacion){
         $params = array('doc_tipo_documento_id'=>$doc_tipo_documento['doc_tipo_documento_id']);
 
+        if(isset($_GET['pestana_general_actual'])){
+            $params['pestana_general_actual'] = 'pestanageneral1';
+            $params['pestana_actual'] = 'pestanaubicacion2';
+        }
+
         $button = $controler->html->button_href(accion: 'subir_documento',etiqueta:
             'Subir Documento',registro_id:  $controler->registro_id,
             seccion:  'inm_ubicacion',style:  'warning', params: $params);
