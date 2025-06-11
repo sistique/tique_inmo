@@ -3265,7 +3265,7 @@ class links_menu{
      * // )
      * ```
      */
-    private function var_gets(array $params_get): string|array
+    public function var_gets(array $params_get): string|array
     {
         $vars_get = '';
 

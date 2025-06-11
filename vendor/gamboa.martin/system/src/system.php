@@ -832,7 +832,14 @@ class system extends controlador_base
             $id_retorno = $_GET['id_retorno'];
         }
 
-        $header_retorno = $this->header_retorno(accion: $siguiente_view, seccion: $seccion_retorno, id_retorno: $id_retorno);
+        $params = array();
+        if (isset($_POST['params'])) {
+            $params = $_POST['params'];
+            unset($_POST['params']);
+        }
+
+        $header_retorno = $this->header_retorno(accion: $siguiente_view, seccion: $seccion_retorno,
+            id_retorno: $id_retorno,params: $params);
         if (errores::$error) {
 
             return $this->retorno_error(mensaje: 'Error al maquetar retorno', data: $header_retorno,
@@ -995,7 +1002,7 @@ class system extends controlador_base
         return $out;
     }
 
-    protected function header_retorno(string $accion, string $seccion, int $id_retorno = -1): array|string
+    protected function header_retorno(string $accion, string $seccion, int $id_retorno = -1, array $params = array()): array|string
     {
         $accion = trim($accion);
         $seccion = trim($seccion);
@@ -1012,9 +1019,13 @@ class system extends controlador_base
             return $this->errores->error(mensaje: 'Error al obtener retornos data', data: $retornos);
         }
 
+        $vars_get = (new links_menu(link: $this->link,registro_id: $id_retorno))->var_gets(params_get: $params);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al generar params get', data: $vars_get);
+        }
 
         $header_retorno = "index.php?seccion=$retornos->next_seccion&accion=$retornos->next_accion&adm_menu_id=$retornos->adm_menu_id";
-        $header_retorno .= "&session_id=$this->session_id&registro_id=$retornos->id_retorno";
+        $header_retorno .= "&session_id=$this->session_id&registro_id=$retornos->id_retorno$vars_get";
         return $header_retorno;
     }
 
