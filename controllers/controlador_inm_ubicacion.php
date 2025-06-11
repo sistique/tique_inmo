@@ -1009,11 +1009,6 @@ class controlador_inm_ubicacion extends _ctl_base {
 
     final public function fotografias(bool $header, bool $ws = false): array|stdClass
     {
-        $template = $this->modifica(header: false);
-        if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al integrar base', data: $template, header: $header, ws: $ws);
-        }
-
         $filtro['inm_conf_docs_ubicacion.es_foto'] = 'activo';
         $inm_conf_docs_ubicacion = (new inm_conf_docs_ubicacion(link: $this->link))->filtro_and(
             columnas: ['doc_tipo_documento_id','doc_tipo_documento_descripcion'], filtro: $filtro);
@@ -1093,7 +1088,34 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $this->link_fotografia_bd = $link_fotografia_bd;
 
-        return $template;
+        $retorno = 'fotografias';
+        if(isset($_GET['pestana_general_actual'])){
+            $retorno = 'proceso_ubicacion';
+        }
+
+        $btn_action_next = $this->html->hidden('btn_action_next', value: $retorno);
+        if (errores::$error) {
+            return $this->retorno_error(
+                mensaje: 'Error al generar btn_action_next', data: $btn_action_next, header: $header, ws: $ws);
+        }
+
+        $id_retorno = $this->html->hidden('id_retorno', value: $this->registro_id);
+        if (errores::$error) {
+            return $this->retorno_error(
+                mensaje: 'Error al generar btn_action_next', data: $btn_action_next, header: $header, ws: $ws);
+        }
+
+        $seccion_retorno = $this->html->hidden('seccion_retorno', value: $this->seccion);
+        if (errores::$error) {
+            return $this->retorno_error(
+                mensaje: 'Error al generar btn_action_next', data: $btn_action_next, header: $header, ws: $ws);
+        }
+
+        $this->inputs->btn_action_next = $btn_action_next;
+        $this->inputs->id_retorno = $id_retorno;
+        $this->inputs->seccion_retorno = $seccion_retorno;
+
+        return $this->inputs;
     }
 
     public function fotografias_bd(bool $header, bool $ws = false): array|stdClass{
