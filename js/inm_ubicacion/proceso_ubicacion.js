@@ -23,6 +23,12 @@ function cambiarPestannaGeneral(pestannas,pestanna) {
     $(document).ready(function(){
         $(cpestanna).css('display','block');
         $(pestanna_act).css('background','#0f7ad5');
+
+        /*** URL PESTAÑA ACTUAL ***/
+        const url = new URL(window.location.href);
+        url.searchParams.set("pestana_general_actual", pestanna.id);
+
+        window.history.pushState({}, '', url);
     });
 }
 
@@ -46,6 +52,12 @@ function cambiarPestanna(pestannas,pestanna) {
     $(document).ready(function(){
         $(cpestanna).css('display','block');
         $(pestanna_act).css('background','#0f7ad5');
+
+        /*** URL PESTAÑA ACTUAL ***/
+        const url = new URL(window.location.href);
+        url.searchParams.set("pestana_actual", pestanna.id);
+
+        window.history.pushState({}, '', url);
     });
 }
 
@@ -81,6 +93,11 @@ function cambiarPestanna_inicial(pestannas,pestanna) {
     $(document).ready(function(){
         $(cpestanna).css('display','block');
         $(pestanna_act).css('background','#0f7ad5');
+
+        const url = new URL(window.location.href);
+        url.searchParams.set("pestana_actual", pestanna.id);
+
+        window.history.pushState({}, '', url);
     });
 }
 
