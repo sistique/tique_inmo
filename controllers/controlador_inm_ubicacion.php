@@ -276,7 +276,8 @@ class controlador_inm_ubicacion extends _ctl_base {
             $this->button_inm_doc_ubicacion_descarga_zip = $button_inm_doc_ubicacion_descarga_zip;
 
             $params = array('accion_retorno'=>'proceso_ubicacion','seccion_retorno'=>'inm_ubicacion',
-                'id_retorno'=>$this->registro_id);
+                'id_retorno'=>$this->registro_id, 'pestana_general_actual' => 'pestanageneral2',
+                'pestana_actual' => 'pestana2');
             $button_inm_doc_ubicacion_elimina_bd = $this->html->button_href(accion: 'elimina_bd',
                 etiqueta: 'Elimina', registro_id: $r_inm_doc_ubicacion->registros[0]['inm_doc_ubicacion_id'],
                 seccion: 'inm_doc_ubicacion', style: 'danger',params: $params);
@@ -409,7 +410,8 @@ class controlador_inm_ubicacion extends _ctl_base {
             $this->button_inm_doc_ubicacion_descarga_zip_firmado_por_aprobar = $button_inm_doc_ubicacion_descarga_zip;
 
             $params = array('accion_retorno'=>'proceso_ubicacion','seccion_retorno'=>'inm_ubicacion',
-                'id_retorno'=>$this->registro_id);
+                'id_retorno'=>$this->registro_id,'pestana_general_actual' => 'pestanageneral2',
+                'pestana_actual' => 'pestana5');
             $button_inm_doc_ubicacion_elimina_bd = $this->html->button_href(accion: 'elimina_bd',
                 etiqueta: 'Elimina', registro_id: $r_inm_doc_ubicacion->registros[0]['inm_doc_ubicacion_id'],
                 seccion: 'inm_doc_ubicacion', style: 'danger',params: $params);
@@ -504,7 +506,8 @@ class controlador_inm_ubicacion extends _ctl_base {
             $this->button_inm_doc_ubicacion_descarga_zip_firmado = $button_inm_doc_ubicacion_descarga_zip;
 
             $params = array('accion_retorno'=>'proceso_ubicacion','seccion_retorno'=>'inm_ubicacion',
-                'id_retorno'=>$this->registro_id);
+                'id_retorno'=>$this->registro_id,'pestana_general_actual' => 'pestanageneral2',
+                'pestana_actual' => 'pestana6');
             $button_inm_doc_ubicacion_elimina_bd = $this->html->button_href(accion: 'elimina_bd',
                 etiqueta: 'Elimina', registro_id: $r_inm_doc_ubicacion->registros[0]['inm_doc_ubicacion_id'],
                 seccion: 'inm_doc_ubicacion', style: 'danger',params: $params);
