@@ -1385,12 +1385,14 @@ class html{
         }
 
         $type = 'date';
+        $step = '';
         if($value_hora){
             $type = 'datetime-local';
+            $step = 'step="1"';
         }
 
         $html = "<input type='$type' name='$params->name' value='$value' |class| $params->disabled $params->required ";
-        $html.= "id='$params->id_css' placeholder='$params->place_holder' />";
+        $html.= "id='$params->id_css' placeholder='$params->place_holder' $step/>";
         return $html;
     }
 
