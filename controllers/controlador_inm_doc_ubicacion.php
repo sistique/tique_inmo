@@ -102,8 +102,11 @@ class controlador_inm_doc_ubicacion extends _ctl_formato {
                 mensaje: 'Error al obtener inputs',data:  $r_alta_bd, header: $header,ws:  $ws);
         }
 
-        $params = array('pestana_general_actual' => 'pestanageneral1',
-            'pestana_actual' => $_GET['pestana_actual']);
+        $params = array();
+        if(isset($_GET['pestana_general_actual'])) {
+            $params = array('pestana_general_actual' => 'pestanageneral1',
+                'pestana_actual' => $_GET['pestana_actual']);
+        }
         $link_proceso_ubicacion = $this->obj_link->link_con_id(
             accion: 'proceso_ubicacion', link: $this->link, registro_id: $_POST['inm_ubicacion_id'],
             seccion: 'inm_ubicacion', params: $params);
