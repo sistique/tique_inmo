@@ -1442,6 +1442,33 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $this->buttons['btn_collapse_all'] = $btn_collapse_all;
 
+        $retorno = 'modifica';
+        if(isset($_GET['pestana_general_actual'])){
+            $retorno = 'proceso_ubicacion';
+        }
+
+        $btn_action_next = $this->html->hidden('btn_action_next', value: $retorno);
+        if (errores::$error) {
+            return $this->retorno_error(
+                mensaje: 'Error al generar btn_action_next', data: $btn_action_next, header: $header, ws: $ws);
+        }
+
+        $id_retorno = $this->html->hidden('id_retorno', value: $this->registro_id);
+        if (errores::$error) {
+            return $this->retorno_error(
+                mensaje: 'Error al generar btn_action_next', data: $btn_action_next, header: $header, ws: $ws);
+        }
+
+        $seccion_retorno = $this->html->hidden('seccion_retorno', value: $this->seccion);
+        if (errores::$error) {
+            return $this->retorno_error(
+                mensaje: 'Error al generar btn_action_next', data: $btn_action_next, header: $header, ws: $ws);
+        }
+
+        $this->inputs->btn_action_next = $btn_action_next;
+        $this->inputs->id_retorno = $id_retorno;
+        $this->inputs->seccion_retorno = $seccion_retorno;
+
         return $r_modifica;
     }
 
@@ -2015,7 +2042,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         $this->link_inm_doc_ubicacion_alta_bd = $link_alta_doc;
 
         $retorno = 'documentos';
-        if(isset($_GET['proceso_ubicacion'])){
+        if(isset($_GET['pestana_general_actual'])){
             $retorno = 'proceso_ubicacion';
         }
 
