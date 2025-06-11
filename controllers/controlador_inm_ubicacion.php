@@ -832,15 +832,12 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $this->inputs->inm_ubicacion_id = $inm_ubicacion_id;
 
-        $params = array();
-        if(isset($_GET['pestana_general_actual'])) {
-            $params = array('pestana_general_actual' => 'pestanageneral1',
-                'pestana_actual' => $_GET['pestana_actual']);
-        }
-        $link_alta_bitacora= $this->obj_link->link_alta_bd(link: $this->link, seccion:  'inm_bitacora_status_ubicacion',
+        $params = array('pestana_general_actual' => 'pestanageneral1', 'pestana_actual' => 'pestanaubicacion3');
+        $link_alta_bitacora= $this->obj_link->link_alta_bd(link: $this->link, seccion: 'inm_bitacora_status_ubicacion',
             params: $params);
         if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al generar link', data: $link_alta_bitacora, header: $header, ws: $ws);
+            return $this->retorno_error(mensaje: 'Error al generar link', data: $link_alta_bitacora, header: $header,
+                ws: $ws);
         }
 
         $this->link_alta_bitacora = $link_alta_bitacora;
@@ -1121,11 +1118,7 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $this->fotos = $inputs_fotos;
 
-        $params = array();
-        if(isset($_GET['pestana_general_actual'])) {
-            $params = array('pestana_general_actual' => 'pestanageneral1',
-                'pestana_actual' => $_GET['pestana_actual']);
-        }
+        $params = array('pestana_general_actual' => 'pestanageneral1', 'pestana_actual' => 'pestanaubicacion3');
         $link_fotografia_bd = $this->obj_link->link_con_id(
             accion: 'fotografias_bd', link: $this->link, registro_id: $this->registro_id, seccion: 'inm_ubicacion',
             params: $params);
