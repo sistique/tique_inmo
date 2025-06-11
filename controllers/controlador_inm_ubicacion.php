@@ -1175,11 +1175,26 @@ class controlador_inm_ubicacion extends _ctl_base {
                     $_FILES['documento'] = $valor;
                     $result = $inm_doc_ubicacion->alta_registro(registro: $registro);
                     if (errores::$error) {
-                        $this->link->rollBack();
                         return $this->retorno_error(mensaje: 'Error al insertar datos', data: $result, header: $header, ws: $ws);
                     }
                 }
             }
+        }
+
+        $accion = 'fotografias';
+        if(isset($_POST['btn_action_next'])){
+            $accion = $_POST['btn_action_next'];
+        }
+
+        $link_proceso_ubicacion = $this->obj_link->link_con_id(
+            accion: $accion, link: $this->link, registro_id: $this->registro_id, seccion: 'inm_ubicacion');
+        if (errores::$error) {
+            $this->retorno_error(mensaje: 'Error al generar link', data: $link_proceso_ubicacion, header: $header, ws: $ws);
+        }
+
+        if($header) {
+            header('Location:' . $link_proceso_ubicacion);
+            exit;
         }
 
         return $result;

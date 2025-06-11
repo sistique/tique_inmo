@@ -261,3 +261,42 @@ const table_tipos_documentos = table('inm_ubicacion', columns_tipos_documentos, 
     }, true,
     "tipos_documentos", {registro_id: registro_id,pestana_general_actual: pestana_general_actual,
         pestana_actual:pestana_actual}, options);
+
+/***** Fotografias*****/
+
+$(".elimina_img").on("click", function() {
+    let inm_doc_ubicacion_id = $(this).data('inm_doc_ubicacion_id');
+
+    $.ajax({
+        type: "POST",
+        data: {id:inm_doc_ubicacion_id},
+        url: 'index.php?seccion=inm_doc_ubicacion&accion=elimina_temporal&ws=1&session_id='+session_id,
+        success: function(data_r) {
+            $.ajax({
+                type: "POST",
+                data: {id:inm_doc_ubicacion_id},
+                url: 'index.php?seccion=inm_doc_ubicacion&accion=elimina_bd&ws=1&registro_id='+inm_doc_ubicacion_id+'&session_id='+session_id,
+                success: function(data_r) {
+                    console.log(data_r);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    //alert("No se ha podido obtener la información");
+
+                    console.error("❌ Error en AJAX");
+                    console.error("Estado: " + textStatus); // timeout, error, abort, etc.
+                    console.error("Código HTTP: " + jqXHR.status); // 404, 500, etc.
+                    console.error("Texto del error: " + errorThrown); // Internal Server Error, Not Found, etc.
+                    console.error("Respuesta del servidor: " + jqXHR.responseText); // HTML o JSON de respuesta de error
+
+                    alert("Ocurrió un error: " + errorThrown);
+                }
+            });
+        },
+        error: function() {
+            alert("No se ha podido obtener la información");
+        }
+    });
+
+    $(this).closest(".contenedor_img").remove();
+
+});
