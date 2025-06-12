@@ -15,12 +15,16 @@
     background: #232F5C;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
-    padding: 10px;
 }
 
 #pestanasgeneral a:link{
-    text-decoration: none;
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    text-align: center;
     color: white;
+    text-decoration: none;
 }
 
 #contenidopestanasgeneral{
@@ -49,12 +53,16 @@
     background: #232F5C;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
-    padding: 10px;
 }
 
 #pestanasubicacion a:link{
-    text-decoration: none;
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    text-align: center;
     color: white;
+    text-decoration: none;
 }
 
 #contenidopestanasubicacion{
@@ -82,12 +90,16 @@
     background: #232F5C;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
-    padding: 10px;
 }
 
 #pestanas a:link{
-    text-decoration: none;
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    text-align: center;
     color: white;
+    text-decoration: none;
 }
 
 #contenidopestanas{
