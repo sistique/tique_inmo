@@ -333,16 +333,14 @@
                                                 <form method="post" action="<?php echo $controlador->link_alta_bitacora; ?>" class="form-additional">
                                                     <?php echo $controlador->inputs->inm_comprador_id; ?>
                                                     <?php echo $controlador->inputs->inm_status_comprador_id; ?>
-                                                    <?php echo $controlador->inputs->fecha; ?>
+                                                    <?php echo $controlador->inputs->fecha_etapa; ?>
                                                     <?php echo $controlador->inputs->observaciones; ?>
 
-                                                    <input type='hidden' name='seccion_retorno' value='inm_comprador'>
-                                                    <input type='hidden' name='btn_action_next' value='etapa'>
-                                                    <input type='hidden' name='id_retorno' value='<?php echo $controlador->registro_id; ?>'>
+                                                    <?php echo $controlador->inputs->btn_action_next; ?>
+                                                    <?php echo $controlador->inputs->id_retorno; ?>
+                                                    <?php echo $controlador->inputs->seccion_retorno; ?>
 
-                                                    <div class="controls">
-                                                        <button type="submit" class="btn btn-success" value="etapa" name="btn_action_next">Alta</button><br>
-                                                    </div>
+                                                    <?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
                                                 </form>
 
                                             </div>

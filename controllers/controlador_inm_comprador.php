@@ -1010,7 +1010,7 @@ class controlador_inm_comprador extends _ctl_base {
             $this->retorno_error(mensaje: 'Error al generar input fecha', data: $fecha, header: $header, ws: $ws);
         }
 
-        $this->inputs->fecha = $fecha;
+        $this->inputs->fecha_etapa = $fecha;
 
         $observaciones = $this->html->input_text(cols: 12, disabled: false, name: 'observaciones', place_holder: 'Observaciones',
             row_upd: new stdClass(), value_vacio: false, required: false);
@@ -1027,8 +1027,8 @@ class controlador_inm_comprador extends _ctl_base {
 
         $this->inputs->inm_comprador_id = $inm_comprador_id;
 
-        $params = array('pestana_general_actual' => 'pestanageneral1', 'pestana_actual' => 'pestanacliente4');
-        $link_alta_bitacora= $this->obj_link->link_alta_bd(link: $this->link, seccion: 'inm_bitacora_status_cliente',
+        $params = array('pestana_general_actual' => 'pestanageneral1', 'pestana_actual' => 'pestanacliente3');
+        $link_alta_bitacora= $this->obj_link->link_alta_bd(link: $this->link, seccion: 'inm_bitacora_status_comprador',
             params: $params);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al generar link', data: $link_alta_bitacora, header: $header,

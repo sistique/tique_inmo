@@ -14,7 +14,7 @@
 
                         <?php echo $controlador->inputs->inm_comprador_id; ?>
                         <?php echo $controlador->inputs->inm_status_comprador_id; ?>
-                        <?php echo $controlador->inputs->fecha; ?>
+                        <?php echo $controlador->inputs->fecha_etapa; ?>
                         <?php echo $controlador->inputs->observaciones; ?>
 
                         <input type='hidden' name='seccion_retorno' value='inm_comprador'>
