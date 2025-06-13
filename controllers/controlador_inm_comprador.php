@@ -294,7 +294,7 @@ class controlador_inm_comprador extends _ctl_base {
                 header: $header,ws:  $ws);
         }
 
-        $this->inputs->inm_ubicacion_id = $inm_ubicacion_id;
+        $this->inputs->inm_ubicacion_util_id = $inm_ubicacion_id;
 
         $link_rel_ubi_comp_alta_bd = $this->obj_link->link_alta_bd(link: $this->link,seccion: 'inm_rel_ubi_comp');
         if(errores::$error){

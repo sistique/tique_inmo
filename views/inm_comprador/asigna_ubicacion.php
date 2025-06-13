@@ -18,7 +18,7 @@
                     <?php include (new views())->ruta_templates."head/subtitulo.php"; ?>
                     <?php include (new views())->ruta_templates."mensajes.php"; ?>
 
-                    <?php echo $controlador->inputs->inm_ubicacion_id; ?>
+                    <?php echo $controlador->inputs->inm_ubicacion_util_id; ?>
                     <?php echo $controlador->inputs->precio_operacion; ?>
 
                     <?php echo $controlador->inputs->com_tipo_cliente_id; ?>
