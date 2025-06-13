@@ -29,6 +29,7 @@
                                     <li id="pestanacliente1"><a href='javascript:cambiarPestanna(pestanascliente,pestanacliente1);'>MODIFICA</a></li>
                                     <li id="pestanacliente2"><a href='javascript:cambiarPestanna(pestanascliente,pestanacliente2);'>DOCUMENTOS</a></li>
                                     <li id="pestanacliente3"><a href='javascript:cambiarPestanna(pestanascliente,pestanacliente3);'>ETAPA MANUAL</a></li>
+                                    <li id="pestanacliente4"><a href='javascript:cambiarPestanna(pestanascliente,pestanacliente4);'>ASIGNA UBICACION</a></li>
                                 </ul>
                             </div>
                             <div id="contenidopestanascliente">
@@ -375,6 +376,67 @@
                                                 </table>
                                             </div> <!-- /. widget-table-->
                                         </div><!-- /.center-content -->
+                                    </div>
+                                </div>
+                                <div class="conten" id="cpestanacliente4">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="widget  widget-box box-container form-main widget-form-cart" id="form">
+                                                <?php echo $controlador->inputs->registro_id; ?>
+                                                <form method="post" action="<?php echo $controlador->link_rel_ubi_comp_alta_bd; ?>"
+                                                      class="form-additional">
+
+                                                    <?php echo $controlador->inputs->inm_ubicacion_id; ?>
+                                                    <?php echo $controlador->inputs->precio_operacion; ?>
+
+                                                    <?php echo $controlador->inputs->com_tipo_cliente_id; ?>
+                                                    <?php echo $controlador->inputs->nss; ?>
+                                                    <?php echo $controlador->inputs->curp; ?>
+                                                    <?php echo $controlador->inputs->rfc; ?>
+                                                    <?php echo $controlador->inputs->apellido_paterno; ?>
+                                                    <?php echo $controlador->inputs->apellido_materno; ?>
+                                                    <?php echo $controlador->inputs->nombre; ?>
+                                                    <?php echo $controlador->inputs->inm_comprador_id; ?>
+                                                    <?php echo $controlador->inputs->inm_comprador_id; ?>
+                                                    <?php echo $controlador->inputs->seccion_retorno; ?>
+                                                    <?php echo $controlador->inputs->btn_action_next; ?>
+                                                    <?php echo $controlador->inputs->id_retorno; ?>
+                                                    <?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
+                                                </form>
+                                            </div>
+                                        </div>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="widget widget-box box-container widget-mylistings">
+                                                        <div class="widget-header" style="display: flex;justify-content: space-between;align-items: center;">
+                                                            <h2>Ubicaciones</h2>
+                                                        </div>
+                                                        <div class="table table-responsive">
+                                                            <table class='table table-striped data-partida'>
+                                                                <thead>
+                                                                <tr>
+                                                                    <th>Id</th>
+                                                                    <th>Direccion</th>
+                                                                    <th>Manzana</th>
+                                                                    <th>Lote</th>
+                                                                <tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                <?php    foreach ($controlador->inm_ubicaciones as $inm_ubicacion){ ?>
+                                                                <tr>
+                                                                    <td><?php echo $inm_ubicacion['inm_ubicacion_id'] ?></td>
+                                                                    <td><?php echo $inm_ubicacion['inm_ubicacion_ubicacion'] ?></td>
+                                                                    <td><?php echo $inm_ubicacion['inm_ubicacion_manzana'] ?></td>
+                                                                    <td><?php echo $inm_ubicacion['inm_ubicacion_lote'] ?></td>
+                                                                <tr>
+                                                                    <?php }  ?>
+                                                                </tbody>
+                                                            </table>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                     </div>
                                 </div>
                             </div>
