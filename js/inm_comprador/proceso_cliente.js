@@ -51,7 +51,7 @@ function cambiarPestannaGeneral_inicial(pestannas) {
     if(pestana_general_actual !== ''){
         pestanna_ini = pestana_general_actual;
     }
-console.log(pestanna_ini);
+
     pestanna_act = document.getElementById(pestanna_ini);
     listaPestannas = document.getElementById(pestannas.id);
 
@@ -188,7 +188,7 @@ function valor_inicial() {
     $.ajax({
         type: "POST",
         data: {id: registro_id},
-        url: 'index.php?seccion=inm_cliente&accion=get_etapa_actual&ws=1&session_id=' + session_id,
+        url: 'index.php?seccion=inm_comprador&accion=get_etapa_actual&ws=1&session_id=' + session_id,
         success: function (data_r) {
             let result = {};
             result.id = data_r;
@@ -1378,7 +1378,6 @@ function dp_asigna_calles_pertenece(dp_colonia_postal_id = '',dp_calle_pertenece
         type: 'GET',
         url: url,
     }).done(function( data ) {  // Función que se ejecuta si todo ha ido bien
-        console.log(data);
         sl_dp_calle_pertenece_id.empty();
         integra_new_option(name_selector_dependiente,'Seleccione una calle','-1');
         $.each(data.registros, function( index, dp_calle_pertenece ) {
@@ -1399,7 +1398,6 @@ function dp_asigna_colonias_postales(dp_cp_id = '',dp_colonia_postal_id = '',nam
         type: 'GET',
         url: url,
     }).done(function( data ) {  // Función que se ejecuta si todo ha ido bien
-        console.log(data);
         sl_dp_colonia_postal_id.empty();
         integra_new_option(name_selector_dependiente,'Seleccione una colonia','-1');
         $.each(data.registros, function( index, dp_colonia_postal ) {
@@ -1420,7 +1418,6 @@ function dp_asigna_cps(dp_municipio_id = '',dp_cp_id = '', name_selector_dependi
         type: 'GET',
         url: url,
     }).done(function( data ) {  // Función que se ejecuta si todo ha ido bien
-        console.log(data);
         sl_dp_cp_id.empty();
         integra_new_option(name_selector_dependiente,'Seleccione un cp','-1');
         $.each(data.registros, function( index, dp_cp ) {
@@ -1443,7 +1440,6 @@ function dp_asigna_estados(dp_pais_id = '',dp_estado_id = '', name_selector_depe
         type: 'GET',
         url: url,
     }).done(function( data ) {  // Función que se ejecuta si todo ha ido bien
-        console.log(data);
         sl_dp_estado_id.empty();
         integra_new_option(name_selector_dependiente,'Seleccione un estado','-1');
 
@@ -1469,7 +1465,6 @@ function dp_asigna_municipios(dp_estado_id = '',dp_municipio_id = '', name_selec
         type: 'GET',
         url: url,
     }).done(function( data ) {  // Función que se ejecuta si todo ha ido bien
-        console.log(data);
         sl_dp_municipio_id.empty();
 
         integra_new_option(name_selector_dependiente,'Seleccione un municipio','-1');

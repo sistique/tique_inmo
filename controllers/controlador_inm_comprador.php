@@ -938,6 +938,28 @@ class controlador_inm_comprador extends _ctl_base {
 
     }
 
+    public function get_etapa_actual(bool $header, bool $ws = false){
+        $pestanas = array("DETENIDO" => "pestana1", "ASIGNADO" => "pestana2", "EN AVALUO" => "pestana3",
+            "POR INGRESAR" => "pestana4", "INGRESADO" => "pestana5", "AUTORIZADO" => "pestana6",
+            "POR FIRMAR" => "pestana7", "ESCRITURADO" => "pestana8", "COTEJADO" => "pestana9",
+            "CANCELADO"=> "sin_pestana");
+
+        $r_comprador = (new inm_comprador(link: $this->link))->registro(registro_id: $_POST['id']);
+        if (errores::$error) {
+            $this->retorno_error(mensaje: 'Error al obtener registro de comprador', data: $r_comprador,
+                header: $header, ws: $ws);
+        }
+
+        $pestana_actual = '';
+        foreach ($pestanas as $key => $value) {
+            if($key === $r_comprador['inm_status_comprador_descripcion']){
+                $pestana_actual = $value;
+            }
+        }
+
+        return $pestana_actual;
+    }
+
     /**
      * Inicializa los elementos mostrables para datatables
      * @return stdClass
