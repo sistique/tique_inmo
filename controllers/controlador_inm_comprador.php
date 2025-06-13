@@ -236,7 +236,7 @@ class controlador_inm_comprador extends _ctl_base {
     public function asigna_ubicacion(bool $header, bool $ws = false): array|stdClass
     {
 
-        if(isset($_GET['accion']) && $_GET['accion'] == 'documentos') {
+        if(isset($_GET['accion']) && $_GET['accion'] == 'asigna_ubicacion') {
             $template = $this->modifica(header: false);
             if (errores::$error) {
                 return $this->retorno_error(mensaje: 'Error al integrar base', data: $template, header: $header, ws: $ws);
