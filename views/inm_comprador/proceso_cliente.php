@@ -113,7 +113,7 @@
                                         <?php echo $controlador->inputs->dp_municipio_id; ?>
                                         <?php echo $controlador->inputs->dp_cp_id; ?>
                                         <?php echo $controlador->inputs->dp_colonia_postal_id; ?>
-                                        <?php echo $controlador->inputs->dp_calle_pertenece_id; ?>
+                                        <?php echo $controlador->inputs->calle; ?>
                                         <?php echo $controlador->inputs->numero_exterior; ?>
                                         <?php echo $controlador->inputs->numero_interior; ?>
                                         <?php echo $controlador->inputs->lada_com; ?>

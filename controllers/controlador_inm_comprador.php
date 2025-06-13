@@ -879,7 +879,7 @@ class controlador_inm_comprador extends _ctl_base {
         $keys = new stdClass();
         $keys->inputs = array('descripcion', 'es_segundo_credito', 'descuento_pension_alimenticia_dh',
             'descuento_pension_alimenticia_fc','monto_credito_solicitado_dh','monto_ahorro_voluntario','nss','curp',
-            'rfc','apellido_paterno','apellido_materno','nombre','numero_exterior','numero_interior','telefono',
+            'rfc','apellido_paterno','apellido_materno','nombre','calle','numero_exterior','numero_interior','telefono',
             'nombre_empresa_patron','nrp_nep','lada_nep','numero_nep','extension_nep','lada_com','numero_com',
             'cel_com','genero','correo_com','fecha_nacimiento','sub_cuenta','monto_final','descuento','puntos',
             'telefono_casa','correo_empresa','mts_construidos','mts_terrenos','valor_avaluo','numero_escritura','isr');
@@ -1129,6 +1129,11 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
 
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'calle',
+            keys_selects:$keys_selects, place_holder: 'Calle');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'numero_exterior',
             keys_selects:$keys_selects, place_holder: 'Exterior');
         if(errores::$error){
