@@ -607,6 +607,202 @@ class controlador_inm_comprador extends _ctl_base {
         return $base;
     }
 
+    public function asigna_cotejado(bool $header, bool $ws = false): array|stdClass
+    {
+
+        $filtro['inm_comprador.id']= $this->registro_id;
+        $registro = (new inm_rel_comprador_com_cliente(link: $this->link))->filtro_and(filtro:$filtro);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener registro',data:  $registro,header: $header,ws: $ws);
+        }
+
+        $keys_selects = (new _keys_selects())->key_selects_asigna_ubicacion(controler: $this);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
+                header: $header,ws:  $ws);
+        }
+
+        $documento_validacion_poder = $this->html->input_file(cols: 12,name: 'validacion_poder',row_upd:  new stdClass(),value_vacio:  false,
+            place_holder: 'Validacion Poder');
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener inputs',data:  $documento_validacion_poder, header: $header,ws:  $ws);
+        }
+
+        $this->inputs->documento_validacion_poder = $documento_validacion_poder;
+
+        $documento_acuse_patron = $this->html->input_file(cols: 12,name: 'acuse_patron',
+            row_upd:  new stdClass(),value_vacio:  false,place_holder: 'Acuse de Patron');
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener inputs',data:  $documento_acuse_patron, header: $header,ws:  $ws);
+        }
+
+        $this->inputs->documento_acuse_patron = $documento_acuse_patron;
+
+        $documento_escrituras = $this->html->input_file(cols: 12,name: 'escrituras',
+            row_upd:  new stdClass(),value_vacio:  false,place_holder: 'Escrituras');
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener inputs',data:  $documento_escrituras, header: $header,ws:  $ws);
+        }
+
+        $this->inputs->documento_escrituras = $documento_escrituras;
+
+        $fecha = $this->html->input_fecha(cols: 6, row_upd: $this->row_upd,value_vacio:  false);
+
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al integrar fecha',
+                data:  $fecha, header: $header,ws: $ws);
+        }
+
+        $this->inputs->fecha = $fecha;
+
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'numero_escritura',
+            keys_selects: $keys_selects, place_holder: 'No. Escritura');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $base = $this->base_upd(keys_selects: $keys_selects, params: array(),params_ajustados: array());
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
+        }
+
+        $inm_comprador_id = $this->html->hidden(name:'inm_comprador_id',value: $this->registro_id);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al in_registro_id',data:  $inm_comprador_id,
+                header: $header,ws:  $ws);
+        }
+
+        $hiddens = (new _keys_selects())->hiddens(controler: $this,funcion: __FUNCTION__);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener inputs',data:  $hiddens,
+                header: $header,ws:  $ws);
+        }
+
+        $inputs = (new _keys_selects())->inputs_form_base(btn_action_next: $hiddens->btn_action_next,
+            controler: $this, id_retorno: $hiddens->id_retorno, in_registro_id: $hiddens->in_registro_id,
+            inm_comprador_id: $inm_comprador_id, inm_ubicacion_id: '', precio_operacion: $hiddens->precio_operacion,
+            seccion_retorno: $hiddens->seccion_retorno);
+
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener inputs_hidden',data:  $inputs, header: $header,ws:  $ws);
+        }
+
+        $link_asigna_escritura_bd = $this->obj_link->link_con_id(accion:'asigna_escritura_bd',
+            link: $this->link,registro_id: $this->registro_id,seccion: 'inm_comprador');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al generar link',data:  $link_asigna_escritura_bd,
+                header: $header,ws:  $ws);
+        }
+
+        $this->link_asigna_escritura_bd = $link_asigna_escritura_bd;
+
+        $this->keys_selects = array_merge($keys_selects, $this->keys_selects);
+
+        return $base;
+    }
+
+    public function asigna_cobrado(bool $header, bool $ws = false): array|stdClass
+    {
+
+        $filtro['inm_comprador.id']= $this->registro_id;
+        $registro = (new inm_rel_comprador_com_cliente(link: $this->link))->filtro_and(filtro:$filtro);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener registro',data:  $registro,header: $header,ws: $ws);
+        }
+
+        $keys_selects = (new _keys_selects())->key_selects_asigna_ubicacion(controler: $this);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
+                header: $header,ws:  $ws);
+        }
+
+        $documento_validacion_poder = $this->html->input_file(cols: 12,name: 'validacion_poder',row_upd:  new stdClass(),value_vacio:  false,
+            place_holder: 'Validacion Poder');
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener inputs',data:  $documento_validacion_poder, header: $header,ws:  $ws);
+        }
+
+        $this->inputs->documento_validacion_poder = $documento_validacion_poder;
+
+        $documento_acuse_patron = $this->html->input_file(cols: 12,name: 'acuse_patron',
+            row_upd:  new stdClass(),value_vacio:  false,place_holder: 'Acuse de Patron');
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener inputs',data:  $documento_acuse_patron, header: $header,ws:  $ws);
+        }
+
+        $this->inputs->documento_acuse_patron = $documento_acuse_patron;
+
+        $documento_escrituras = $this->html->input_file(cols: 12,name: 'escrituras',
+            row_upd:  new stdClass(),value_vacio:  false,place_holder: 'Escrituras');
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener inputs',data:  $documento_escrituras, header: $header,ws:  $ws);
+        }
+
+        $this->inputs->documento_escrituras = $documento_escrituras;
+
+        $fecha = $this->html->input_fecha(cols: 6, row_upd: $this->row_upd,value_vacio:  false);
+
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al integrar fecha',
+                data:  $fecha, header: $header,ws: $ws);
+        }
+
+        $this->inputs->fecha = $fecha;
+
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'numero_escritura',
+            keys_selects: $keys_selects, place_holder: 'No. Escritura');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $base = $this->base_upd(keys_selects: $keys_selects, params: array(),params_ajustados: array());
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
+        }
+
+        $inm_comprador_id = $this->html->hidden(name:'inm_comprador_id',value: $this->registro_id);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al in_registro_id',data:  $inm_comprador_id,
+                header: $header,ws:  $ws);
+        }
+
+        $hiddens = (new _keys_selects())->hiddens(controler: $this,funcion: __FUNCTION__);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener inputs',data:  $hiddens,
+                header: $header,ws:  $ws);
+        }
+
+        $inputs = (new _keys_selects())->inputs_form_base(btn_action_next: $hiddens->btn_action_next,
+            controler: $this, id_retorno: $hiddens->id_retorno, in_registro_id: $hiddens->in_registro_id,
+            inm_comprador_id: $inm_comprador_id, inm_ubicacion_id: '', precio_operacion: $hiddens->precio_operacion,
+            seccion_retorno: $hiddens->seccion_retorno);
+
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener inputs_hidden',data:  $inputs, header: $header,ws:  $ws);
+        }
+
+        $link_asigna_escritura_bd = $this->obj_link->link_con_id(accion:'asigna_escritura_bd',
+            link: $this->link,registro_id: $this->registro_id,seccion: 'inm_comprador');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al generar link',data:  $link_asigna_escritura_bd,
+                header: $header,ws:  $ws);
+        }
+
+        $this->link_asigna_escritura_bd = $link_asigna_escritura_bd;
+
+        $this->keys_selects = array_merge($keys_selects, $this->keys_selects);
+
+        return $base;
+    }
+
     public function proceso_cliente(bool $header, bool $ws = false): array|stdClass
     {
 
@@ -674,6 +870,18 @@ class controlador_inm_comprador extends _ctl_base {
         if(errores::$error){
             return $this->retorno_error(
                 mensaje: 'Error al generar salida de template',data:  $asigna_escriturado,header: $header,ws: $ws);
+        }
+
+        $asigna_cotejado = $this->asigna_cotejado($header);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al generar salida de template',data:  $asigna_cotejado,header: $header,ws: $ws);
+        }
+
+        $asigna_cobrado = $this->asigna_cobrado($header);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al generar salida de template',data:  $asigna_cobrado,header: $header,ws: $ws);
         }
 
         $base = $this->base_upd(keys_selects: $this->keys_selects, params: array(),params_ajustados: array());
