@@ -275,7 +275,7 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
 
-        $r_inm_rel_ubi_comp = (new inm_rel_ubi_comp(link: $this->link))->registros();
+        $r_inm_rel_ubi_comp = (new inm_rel_ubi_comp(link: $this->link))->registros_activos();
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener inputs_hidden',data:  $inputs, header: $header,ws:  $ws);
         }

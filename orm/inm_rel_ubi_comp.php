@@ -51,22 +51,24 @@ class inm_rel_ubi_comp extends _modelo_parent{
         $valida_comprador = $this->valida_relacion(
             filtro: [
                 'inm_comprador.id' => $registro['inm_comprador_id'],
-                'inm_comprador.status' => 'activo'
+                'inm_rel_ubi_comp.status' => 'activo'
             ],
             mensaje: 'Ya existe una ubicación relacionada'
         );
         if (errores::$error || !empty($valida_comprador)) {
+            $_SESSION['warning'][]['mensaje'] = $valida_comprador->mensaje;
             return $valida_comprador;
         }
 
         $valida_ubicacion = $this->valida_relacion(
             filtro: [
                 'inm_ubicacion.id' => $registro['inm_ubicacion_id'],
-                'inm_ubicacion.status' => 'activo'
+                'inm_rel_ubi_comp.status' => 'activo'
             ],
             mensaje: 'Ya existe un cliente relacionado'
         );
         if (errores::$error || !empty($valida_ubicacion)) {
+            $_SESSION['warning'][]['mensaje'] = $valida_ubicacion->mensaje;
             return $valida_ubicacion;
         }
 
@@ -286,9 +288,10 @@ class inm_rel_ubi_comp extends _modelo_parent{
         }
 
         if($resultado->n_registros > 0){
-            $data = $this->imp_rel_ubi_comp_filtro($filtro);
+            $registro_puro = $this->registro(registro_id: $resultado->registros[0]['inm_rel_ubi_comp_id'],
+                columnas_en_bruto: true,retorno_obj: true);
             if(errores::$error){
-                return $this->error->error(mensaje: 'Error al obtener relacion', data: $data);
+                return $this->error->error(mensaje: 'Error al obtener relacion', data: $registro_puro);
             }
 
             return $this->data_result_transaccion(
@@ -297,7 +300,7 @@ class inm_rel_ubi_comp extends _modelo_parent{
                 registro_ejecutado: $this->registro,
                 registro_id: $resultado->registros[0]['inm_rel_ubi_comp_id'],
                 registro_original: $resultado->registros[0],
-                registro_puro: $resultado->registros[0],
+                registro_puro: $registro_puro,
                 sql: 'Registro existente'
             );
         }

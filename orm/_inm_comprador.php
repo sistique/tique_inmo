@@ -292,14 +292,15 @@ class _inm_comprador{
      * @return array
      * @version 1.104.1
      */
-    final public function inm_ubicaciones(int $inm_comprador_id, PDO $link): array
+    final public function inm_ubicaciones(int $inm_comprador_id, PDO $link,
+                                          $order = array('inm_rel_ubi_comp.fecha_alta'=>'DESC')): array
     {
         if($inm_comprador_id<= 0){
             return $this->error->error(mensaje: 'Error inm_comprador_id es menor a 0',data:  $inm_comprador_id);
         }
         $filtro = array();
         $filtro['inm_comprador.id'] = $inm_comprador_id;
-        $r_inm_rel_ubi_comp = (new inm_rel_ubi_comp(link: $link))->filtro_and(filtro: $filtro);
+        $r_inm_rel_ubi_comp = (new inm_rel_ubi_comp(link: $link))->filtro_and(filtro: $filtro, order: $order);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener compradores',data:  $r_inm_rel_ubi_comp);
         }

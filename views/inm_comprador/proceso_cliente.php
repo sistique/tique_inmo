@@ -414,6 +414,8 @@
                                                                 <thead>
                                                                 <tr>
                                                                     <th>Id</th>
+                                                                    <th>Fecha Asignacion</th>
+                                                                    <th>Estatus de Asignacion</th>
                                                                     <th>Direccion</th>
                                                                     <th>Manzana</th>
                                                                     <th>Lote</th>
@@ -423,6 +425,8 @@
                                                                 <?php    foreach ($controlador->inm_ubicaciones as $inm_ubicacion){ ?>
                                                                 <tr>
                                                                     <td><?php echo $inm_ubicacion['inm_ubicacion_id'] ?></td>
+                                                                    <td><?php echo $inm_ubicacion['inm_rel_ubi_comp_fecha_alta'] ?></td>
+                                                                    <td><?php echo $inm_ubicacion['inm_rel_ubi_comp_status'] ?></td>
                                                                     <td><?php echo $inm_ubicacion['inm_ubicacion_ubicacion'] ?></td>
                                                                     <td><?php echo $inm_ubicacion['inm_ubicacion_manzana'] ?></td>
                                                                     <td><?php echo $inm_ubicacion['inm_ubicacion_lote'] ?></td>
