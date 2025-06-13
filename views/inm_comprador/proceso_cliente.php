@@ -742,7 +742,6 @@
 
                                         <?php echo $controlador->btn; ?>
                                     </form>
-
                                 </div>
                                 <div class="conten" id="cpestana2">
                                     <div class="row">
@@ -764,6 +763,7 @@
                                                     <?php echo $controlador->inputs->nombre; ?>
                                                     <?php echo $controlador->inputs->inm_comprador_id; ?>
                                                     <?php echo $controlador->inputs->inm_comprador_id; ?>
+
                                                     <?php echo $controlador->inputs->seccion_retorno; ?>
                                                     <?php echo $controlador->inputs->btn_action_next; ?>
                                                     <?php echo $controlador->inputs->id_retorno; ?>
@@ -829,9 +829,23 @@
                                     </form>
                                 </div>
                                 <div class="conten" id="cpestana5">
-                                    <?php echo $controlador->inputs->com_cliente_id; ?>
+                                    <form method="post" action="<?php echo $controlador->link_por_firmar_bd; ?>"
+                                          class="form-additional" enctype="multipart/form-data">
+                                        <?php echo $controlador->inputs->com_cliente_id; ?>
+                                        <div class="control-group btn-alta">
+                                            <div class="controls">
+                                                <button type="submit" class="btn btn-success">Avanza Etapa</button><br>
+                                            </div>
+                                        </div>
+                                    </form>
 
-                                    <a role="button" title="Solicitud Infonavit" href="index.php?seccion=inm_comprador&amp;accion=solicitud_infonavit&amp;registro_id=55&amp;session_id=5514223136&amp;adm_menu_id=45" class="btn btn-warning " style="margin-left: 2px; margin-bottom: 2px; ">Solicitud Infonavit</a>
+                                    <div class="row buttons-form">
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_solicitud_infonavit; ?>
+                                        </div>
+                                    </div>
+
+                                    <a role="button" title="Solicitud Infonavit" href="index.php?seccion=inm_comprador&amp;accion=solicitud_infonavit&amp;registro_id=<?php echo $controlador->regitros_id; ?>&amp;session_id=5514223136&amp;adm_menu_id=45" class="btn btn-warning " style="margin-left: 2px; margin-bottom: 2px; ">Solicitud Infonavit</a>
                                 </div>
                                 <div class="conten" id="cpestana6">
                                     <form method="post" action="<?php echo $controlador->link_asigna_avaluo_bd; ?>"

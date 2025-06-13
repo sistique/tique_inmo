@@ -53,8 +53,6 @@ class controlador_inm_comprador extends _ctl_base {
     public string $link_rel_ubi_comp_alta_bd = '';
 
     /**/
-    public string $link_asignado_bd = '';
-    public string $link_en_avaluo_bd = '';
     public string $link_por_ingresar_bd = '';
     public string $link_ingresado_bd = '';
     public string $link_autorizado_bd = '';

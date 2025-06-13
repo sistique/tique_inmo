@@ -77,6 +77,27 @@ class inm_rel_ubi_comp extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al insertar', data: $r_alta_bd);
         }
 
+        $filtro_exi['inm_comprador.id'] = $registro['inm_comprador_id'];
+        $filtro_exi['inm_status_comprador.id'] = 2;
+        $existe = (new inm_bitacora_status_comprador(link: $this->link))->existe(filtro: $filtro_exi);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->error->error(mensaje: 'Error al obtener datos de bitacora', data: $existe);
+        }
+
+        if(!$existe) {
+            $registro_alta = array();
+            $registro_alta['inm_comprador_id'] = $registro['inm_comprador_id'];
+            $registro_alta['inm_status_comprador_id'] = 2;
+            $registro_alta['fecha_status'] = date('Y-m-d\TH:i:s');
+            $r_inm_bitacora_status_comprador = (new inm_bitacora_status_comprador(link: $this->link))->alta_registro(
+                registro: $registro_alta);
+            if (errores::$error) {
+                $this->link->rollBack();
+                return $this->error->error(mensaje: 'Error al insertar datos', data: $r_inm_bitacora_status_comprador);
+            }
+        }
+
         $etapas = $this->inserta_etapas(function: __FUNCTION__,registro: $this->registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al insertar etapas', data: $etapas);
