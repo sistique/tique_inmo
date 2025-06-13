@@ -2,6 +2,8 @@ let url = getAbsolutePath();
 let registro_id = getParameterByName('registro_id');
 let session_id = getParameterByName('session_id');
 
+let pestana_general_actual = getParameterByName('pestana_general_actual');
+let pestana_actual = getParameterByName('pestana_actual');
 function cambiarPestannaGeneral(pestannas,pestanna,pentannascontenido) {
     pestanna_act = document.getElementById(pestanna.id);
     listaPestannas = document.getElementById(pestannas.id);
@@ -49,7 +51,7 @@ function cambiarPestannaGeneral_inicial(pestannas) {
     if(pestana_general_actual !== ''){
         pestanna_ini = pestana_general_actual;
     }
-
+console.log(pestanna_ini);
     pestanna_act = document.getElementById(pestanna_ini);
     listaPestannas = document.getElementById(pestannas.id);
 
