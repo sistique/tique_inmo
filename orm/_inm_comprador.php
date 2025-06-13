@@ -41,6 +41,13 @@ class _inm_comprador{
         $params = array('accion_retorno'=>'documentos','seccion_retorno'=>$controler->seccion,
             'id_retorno'=>$inm_comprador_id);
 
+        if(isset($_GET['pestana_general_actual'])){
+            $params['accion_retorno'] = 'proceso_cliente';
+
+            $params['pestana_general_actual'] = 'pestanageneral1';
+            $params['pestana_actual'] = 'pestanacliente2';
+        }
+
         $inm_conf_docs_comprador = (new _inm_comprador())->button(accion: 'elimina_bd', controler: $controler,
             etiqueta: 'Elimina', indice: $indice, inm_doc_comprador_id: $inm_doc_comprador['inm_doc_comprador_id'],
             inm_conf_docs_comprador: $inm_conf_docs_comprador, params: $params, style: 'danger');
