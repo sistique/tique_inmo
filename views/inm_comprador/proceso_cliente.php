@@ -1,4 +1,4 @@
-<?php /** @var  gamboamartin\inmuebles\controllers\controlador_inm_ubicacion $controlador  controlador en ejecucion */ ?>
+<?php /** @var  gamboamartin\inmuebles\controllers\controlador_inm_cliente $controlador  controlador en ejecucion */ ?>
 <?php use config\views; ?>
 
 <main class="main section-color-primary">
@@ -15,24 +15,24 @@
 
                     <div id="pestanasgeneral">
                         <ul id="listageneral">
-                            <li id="pestanageneral1"><a href='javascript:cambiarPestannaGeneral(pestanasgeneral,pestanageneral1,pestanasubicacion);'>CLIENTE</a></li>
+                            <li id="pestanageneral1"><a href='javascript:cambiarPestannaGeneral(pestanasgeneral,pestanageneral1,pestanascliente);'>CLIENTE</a></li>
                             <li id="pestanageneral2"><a href='javascript:cambiarPestannaGeneral(pestanasgeneral,pestanageneral2,pestanas);'>ETAPAS</a></li>
                         </ul>
                     </div>
                     <body onload="javascript:cambiarPestannaGeneral_inicial(pestanasgeneral);
                     javascript:valor_inicial();
-                    javascript:cambiarPestanna_inicialubicacion(pestanasubicacion);">
+                    javascript:cambiarPestanna_inicialcliente(pestanascliente);">
                     <div id="contenidopestanasgeneral">
                         <div class="contengeneral" id="cpestanageneral1">
-                            <div id="pestanasubicacion">
-                                <ul id="listaubicacion">
-                                    <li id="pestanaubicacion1"><a href='javascript:cambiarPestanna(pestanasubicacion,pestanaubicacion1);'>MODIFICA</a></li>
-                                    <li id="pestanaubicacion2"><a href='javascript:cambiarPestanna(pestanasubicacion,pestanaubicacion2);'>DOCUMENTOS</a></li>
-                                    <li id="pestanaubicacion3"><a href='javascript:cambiarPestanna(pestanasubicacion,pestanaubicacion4);'>ETAPA MANUAL</a></li>
+                            <div id="pestanascliente">
+                                <ul id="listacliente">
+                                    <li id="pestanacliente1"><a href='javascript:cambiarPestanna(pestanascliente,pestanacliente1);'>MODIFICA</a></li>
+                                    <li id="pestanacliente2"><a href='javascript:cambiarPestanna(pestanascliente,pestanacliente2);'>DOCUMENTOS</a></li>
+                                    <li id="pestanacliente3"><a href='javascript:cambiarPestanna(pestanascliente,pestanacliente3);'>ETAPA MANUAL</a></li>
                                 </ul>
                             </div>
-                            <div id="contenidopestanasubicacion">
-                                <div class="conten" id="cpestanaubicacion1">
+                            <div id="contenidopestanascliente">
+                                <div class="conten" id="cpestanacliente1">
                                     <form method="post" action="<?php echo $controlador->link_modifica_bd; ?>" class="form-additional"
                                           enctype="multipart/form-data">
 
@@ -115,22 +115,22 @@
                                         <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
                                     </form>
                                 </div>
-                                <div class="conten" id="cpestanaubicacion2">
+                                <div class="conten" id="cpestanacliente2">
                                     <div>
                                         <div class="row">
                                             <div class="col-lg-12 table-responsive">
-                                                <table id="table-inm_ubicacion" class="table mb-0 table-striped table-sm "></table>
+                                                <table id="table-inm_cliente" class="table mb-0 table-striped table-sm "></table>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="conten" id="cpestanaubicacion3">
+                                <div class="conten" id="cpestanacliente3">
                                     <div class="row">
                                         <div class="col-lg-12">
                                             <div class="widget  widget-box box-container form-main widget-form-cart" id="form">
                                                 <form method="post" action="<?php echo $controlador->link_alta_bitacora; ?>" class="form-additional">
-                                                    <?php echo $controlador->inputs->inm_ubicacion_id; ?>
-                                                    <?php echo $controlador->inputs->inm_status_ubicacion_id; ?>
+                                                    <?php echo $controlador->inputs->inm_cliente_id; ?>
+                                                    <?php echo $controlador->inputs->inm_status_cliente_id; ?>
                                                     <?php echo $controlador->inputs->fecha; ?>
                                                     <?php echo $controlador->inputs->observaciones; ?>
 
@@ -163,10 +163,10 @@
                                                     foreach ($controlador->etapas as $etapa){
                                                         ?>
                                                         <tr>
-                                                            <td><?php echo $etapa['inm_bitacora_status_ubicacion_id'] ?></td>
-                                                            <td><?php echo $etapa['inm_status_ubicacion_descripcion'] ?></td>
-                                                            <td><?php echo $etapa['inm_bitacora_status_ubicacion_fecha_status'] ?></td>
-                                                            <td><?php echo $etapa['inm_bitacora_status_ubicacion_observaciones'] ?></td>
+                                                            <td><?php echo $etapa['inm_bitacora_status_cliente_id'] ?></td>
+                                                            <td><?php echo $etapa['inm_status_cliente_descripcion'] ?></td>
+                                                            <td><?php echo $etapa['inm_bitacora_status_cliente_fecha_status'] ?></td>
+                                                            <td><?php echo $etapa['inm_bitacora_status_cliente_observaciones'] ?></td>
                                                         </tr>
                                                     <?php } ?>
                                                     </tbody>
@@ -197,7 +197,7 @@
                                 <div class="conten" id="cpestana1">
                                     <form method="post" action="<?php echo $controlador->link_rel_ubi_comp_alta_bd; ?>" class="form-additional">
 
-                                        <?php echo $controlador->inputs->inm_ubicacion_id; ?>
+                                        <?php echo $controlador->inputs->inm_cliente_id; ?>
                                         <?php echo $controlador->inputs->precio_operacion; ?>
 
                                         <?php echo $controlador->inputs->com_tipo_cliente_id; ?>

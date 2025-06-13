@@ -2,6 +2,82 @@ let url = getAbsolutePath();
 let registro_id = getParameterByName('registro_id');
 let session_id = getParameterByName('session_id');
 
+function cambiarPestannaGeneral(pestannas,pestanna,pentannascontenido) {
+    pestanna_act = document.getElementById(pestanna.id);
+    listaPestannas = document.getElementById(pestannas.id);
+
+    cpestanna = document.getElementById('c'+pestanna.id);
+    listacPestannas = document.getElementById('contenido'+pestannas.id);
+
+    i=0;
+    while (typeof listacPestannas.getElementsByClassName('contengeneral')[i] != 'undefined'){
+        $(document).ready(function(){
+            $(listacPestannas.getElementsByClassName('contengeneral')[i]).css('display','none');
+            $(listaPestannas.getElementsByTagName('li')[i]).css('background','');
+            $(listaPestannas.getElementsByTagName('li')[i]).css('padding-bottom','');
+        });
+        i += 1;
+    }
+
+    $(document).ready(function(){
+        $(cpestanna).css('display','block');
+        $(pestanna_act).css('background','#0f7ad5');
+
+        const liActivo = pentannascontenido.querySelector('li[data-pestana="true"]');
+
+        /*** URL PESTAÑA ACTUAL ***/
+        const url = new URL(window.location.href);
+        url.searchParams.set("pestana_general_actual", pestanna.id);
+
+        window.history.pushState({}, '', url);
+
+        if(liActivo !== null){
+            url.searchParams.set("pestana_actual", liActivo.id);
+
+            window.history.pushState({}, '', url);
+        }else{
+            if(pentannascontenido.id === 'pestanascliente'){
+                pestana_actual = 'pestanacliente1';
+                cambiarPestanna_inicialcliente(pentannascontenido);
+            }
+        }
+    });
+}
+
+function cambiarPestannaGeneral_inicial(pestannas) {
+    let pestanna_ini = 'pestanageneral1';
+    if(pestana_general_actual !== ''){
+        pestanna_ini = pestana_general_actual;
+    }
+
+    pestanna_act = document.getElementById(pestanna_ini);
+    listaPestannas = document.getElementById(pestannas.id);
+
+    cpestanna = document.getElementById('c'+pestanna_ini);
+    listacPestannas = document.getElementById('contenido'+pestannas.id);
+
+    i=0;
+    while (typeof listacPestannas.getElementsByClassName('contengeneral')[i] != 'undefined'){
+        $(document).ready(function(){
+            $(listacPestannas.getElementsByClassName('contengeneral')[i]).css('display','none');
+            $(listaPestannas.getElementsByTagName('li')[i]).css('background','');
+            $(listaPestannas.getElementsByTagName('li')[i]).css('padding-bottom','');
+        });
+        i += 1;
+    }
+
+    $(document).ready(function(){
+        $(cpestanna).css('display','block');
+        $(pestanna_act).css('background','#0f7ad5');
+
+        /*** URL PESTAÑA ACTUAL ***/
+        const url = new URL(window.location.href);
+        url.searchParams.set("pestana_general_actual", pestanna_ini);
+
+        window.history.pushState({}, '', url);
+    });
+}
+
 function cambiarPestanna(pestannas,pestanna) {
     pestanna_act = document.getElementById(pestanna.id);
     listaPestannas = document.getElementById(pestannas.id);
@@ -15,6 +91,7 @@ function cambiarPestanna(pestannas,pestanna) {
             $(listacPestannas.getElementsByClassName('conten')[i]).css('display','none');
             $(listaPestannas.getElementsByTagName('li')[i]).css('background','');
             $(listaPestannas.getElementsByTagName('li')[i]).css('padding-bottom','');
+            $(listaPestannas.getElementsByTagName('li')[i]).attr('data-pestana','');
         });
         i += 1;
     }
@@ -22,11 +99,53 @@ function cambiarPestanna(pestannas,pestanna) {
     $(document).ready(function(){
         $(cpestanna).css('display','block');
         $(pestanna_act).css('background','#0f7ad5');
+        $(pestanna_act).attr('data-pestana', 'true');
+
+        /*** URL PESTAÑA ACTUAL ***/
+        const url = new URL(window.location.href);
+        url.searchParams.set("pestana_actual", pestanna.id);
+
+        window.history.pushState({}, '', url);
+    });
+}
+
+function cambiarPestanna_inicialcliente(pestannas) {
+    let pestanna_ini = 'pestanacliente1';
+    if(pestana_actual !== ''){
+        pestanna_ini = pestana_actual;
+    }
+
+    pestanna_act = document.getElementById(pestanna_ini);
+    listaPestannas = document.getElementById(pestannas.id);
+
+    cpestanna = document.getElementById('c'+pestanna_ini);
+    listacPestannas = document.getElementById('contenido'+pestannas.id);
+
+    i=0;
+    while (typeof listacPestannas.getElementsByClassName('conten')[i] != 'undefined'){
+        $(document).ready(function(){
+            $(listacPestannas.getElementsByClassName('conten')[i]).css('display','none');
+            $(listaPestannas.getElementsByTagName('li')[i]).css('background','');
+            $(listaPestannas.getElementsByTagName('li')[i]).css('padding-bottom','');
+            $(listaPestannas.getElementsByTagName('li')[i]).attr('data-pestana','');
+        });
+        i += 1;
+    }
+
+    $(document).ready(function(){
+        $(cpestanna).css('display','block');
+        $(pestanna_act).css('background','#0f7ad5');
+        $(pestanna_act).attr('data-pestana', 'true');
+
+        /*** URL PESTAÑA ACTUAL ***/
+        const url = new URL(window.location.href);
+        url.searchParams.set("pestana_actual", pestanna_ini);
+
+        window.history.pushState({}, '', url);
     });
 }
 
 function cambiarPestanna_inicial(pestannas,pestanna) {
-
     const str = pestanna.id;
     const valor_pestana = parseInt(str.replace("pestana", ""));
 
@@ -42,6 +161,7 @@ function cambiarPestanna_inicial(pestannas,pestanna) {
             $(listacPestannas.getElementsByClassName('conten')[i]).css('display','none');
             $(listaPestannas.getElementsByTagName('li')[i]).css('background','');
             $(listaPestannas.getElementsByTagName('li')[i]).css('padding-bottom','');
+            $(listaPestannas.getElementsByTagName('li')[i]).attr('data-pestana','');
         });
         i += 1;
     }
@@ -57,6 +177,7 @@ function cambiarPestanna_inicial(pestannas,pestanna) {
     $(document).ready(function(){
         $(cpestanna).css('display','block');
         $(pestanna_act).css('background','#0f7ad5');
+        $(pestanna_act).attr('data-pestana', 'true');
     });
 }
 
@@ -65,7 +186,7 @@ function valor_inicial() {
     $.ajax({
         type: "POST",
         data: {id: registro_id},
-        url: 'index.php?seccion=inm_comprador&accion=get_etapa_actual&ws=1&session_id=' + session_id,
+        url: 'index.php?seccion=inm_cliente&accion=get_etapa_actual&ws=1&session_id=' + session_id,
         success: function (data_r) {
             let result = {};
             result.id = data_r;
