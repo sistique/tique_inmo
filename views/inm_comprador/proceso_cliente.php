@@ -34,8 +34,8 @@
                             </div>
                             <div id="contenidopestanascliente">
                                 <div class="conten" id="cpestanacliente1">
-                                    <?php echo $controlador->buttons['btn_collapse_all']; ?>
-
+                                    <form method="post" action="<?php echo $controlador->link_modifica_bd; ?>" class="form-additional"
+                                          enctype="multipart/form-data">
                                     <?php echo $controlador->header_frontend->apartado_1; ?>
 
                                     <div  id="apartado_1">
@@ -315,7 +315,7 @@
 
 
                                     <?php echo $controlador->btn; ?>
-
+                                    </form>
                                 </div>
                                 <div class="conten" id="cpestanacliente2">
                                     <div>
