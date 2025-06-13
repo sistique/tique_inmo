@@ -330,7 +330,7 @@ class controlador_inm_comprador extends _ctl_base {
         return $base;
     }
 
-    public function asigna_autorizacion(bool $header, bool $ws = false): array|stdClass
+    public function asigna_autorizado(bool $header, bool $ws = false): array|stdClass
     {
         $filtro['inm_comprador.id']= $this->registro_id;
         $registro = (new inm_rel_comprador_com_cliente(link: $this->link))->filtro_and(filtro:$filtro);
@@ -412,7 +412,7 @@ class controlador_inm_comprador extends _ctl_base {
         return $base;
     }
 
-    public function asigna_firma(bool $header, bool $ws = false): array|stdClass
+    public function asigna_por_firma(bool $header, bool $ws = false): array|stdClass
     {
         $filtro['inm_comprador.id']= $this->registro_id;
         $registro = (new inm_rel_comprador_com_cliente(link: $this->link))->filtro_and(filtro:$filtro);
@@ -509,7 +509,7 @@ class controlador_inm_comprador extends _ctl_base {
         return $base;
     }
 
-    public function asigna_escritura(bool $header, bool $ws = false): array|stdClass
+    public function asigna_escriturado(bool $header, bool $ws = false): array|stdClass
     {
 
         $filtro['inm_comprador.id']= $this->registro_id;
@@ -640,34 +640,40 @@ class controlador_inm_comprador extends _ctl_base {
                 mensaje: 'Error al generar salida de template',data:  $asigna_ubicacion,header: $header,ws: $ws);
         }
 
-        $asigna_valuador = $this->asigna_valuador($header);
+        $asigna_en_avaluo = $this->asigna_en_avaluo($header);
         if(errores::$error){
             return $this->retorno_error(
-                mensaje: 'Error al generar salida de template',data:  $asigna_valuador,header: $header,ws: $ws);
+                mensaje: 'Error al generar salida de template',data:  $asigna_en_avaluo,header: $header,ws: $ws);
         }
 
-        $asigna_avaluo = $this->asigna_avaluo($header);
+        $asigna_por_ingresar = $this->asigna_por_ingresar($header);
         if(errores::$error){
             return $this->retorno_error(
-                mensaje: 'Error al generar salida de template',data:  $asigna_avaluo,header: $header,ws: $ws);
+                mensaje: 'Error al generar salida de template',data:  $asigna_por_ingresar,header: $header,ws: $ws);
         }
 
-        $asigna_autorizacion = $this->asigna_autorizacion($header);
+        $asigna_ingresado = $this->asigna_ingresado($header);
         if(errores::$error){
             return $this->retorno_error(
-                mensaje: 'Error al generar salida de template',data:  $asigna_autorizacion,header: $header,ws: $ws);
+                mensaje: 'Error al generar salida de template',data:  $asigna_ingresado,header: $header,ws: $ws);
         }
 
-        $asigna_firma = $this->asigna_firma($header);
+        $asigna_autorizado = $this->asigna_autorizado($header);
         if(errores::$error){
             return $this->retorno_error(
-                mensaje: 'Error al generar salida de template',data:  $asigna_firma,header: $header,ws: $ws);
+                mensaje: 'Error al generar salida de template',data:  $asigna_autorizado,header: $header,ws: $ws);
         }
 
-        $asigna_escritura = $this->asigna_escritura($header);
+        $asigna_por_firma = $this->asigna_por_firma($header);
         if(errores::$error){
             return $this->retorno_error(
-                mensaje: 'Error al generar salida de template',data:  $asigna_escritura,header: $header,ws: $ws);
+                mensaje: 'Error al generar salida de template',data:  $asigna_por_firma,header: $header,ws: $ws);
+        }
+
+        $asigna_escriturado = $this->asigna_escriturado($header);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al generar salida de template',data:  $asigna_escriturado,header: $header,ws: $ws);
         }
 
         $base = $this->base_upd(keys_selects: $this->keys_selects, params: array(),params_ajustados: array());
@@ -702,7 +708,98 @@ class controlador_inm_comprador extends _ctl_base {
     }
 
 
-    public function asigna_avaluo(bool $header, bool $ws = false): array|stdClass
+    public function asigna_por_ingresar(bool $header, bool $ws = false): array|stdClass
+    {
+
+        $filtro['inm_comprador.id']= $this->registro_id;
+        $registro = (new inm_rel_comprador_com_cliente(link: $this->link))->filtro_and(filtro:$filtro);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener registro',data:  $registro,header: $header,ws: $ws);
+        }
+
+        $keys_selects = (new _keys_selects())->key_selects_asigna_ubicacion(controler: $this);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
+                header: $header,ws:  $ws);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'mts_terrenos',
+            keys_selects:$keys_selects, place_holder: 'Metros de Terreno');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'mts_construidos',
+            keys_selects:$keys_selects, place_holder: 'Metros de Construidos');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'valor_avaluo',
+            keys_selects:$keys_selects, place_holder: 'Valor Avaluo');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $documento = $this->html->input_file(cols: 12,name: 'avaluo',row_upd:  new stdClass(),value_vacio:  false);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener inputs',data:  $documento, header: $header,ws:  $ws);
+        }
+
+        $this->inputs->documento = $documento;
+
+        $columns_ds = array('com_cliente_rfc','com_cliente_razon_social');
+        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'com_cliente_id',
+            keys_selects:$keys_selects, id_selected: $registro->registros[0]['com_cliente_id'], label: 'Cliente',
+            columns_ds : $columns_ds,disabled: true);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
+                header: $header,ws:  $ws);
+        }
+
+        $base = $this->base_upd(keys_selects: $keys_selects, params: array(),params_ajustados: array());
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
+        }
+
+        $inm_comprador_id = $this->html->hidden(name:'inm_comprador_id',value: $this->registro_id);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al in_registro_id',data:  $inm_comprador_id,
+                header: $header,ws:  $ws);
+        }
+
+        $hiddens = (new _keys_selects())->hiddens(controler: $this,funcion: __FUNCTION__);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener inputs',data:  $hiddens,
+                header: $header,ws:  $ws);
+        }
+
+        $inputs = (new _keys_selects())->inputs_form_base(btn_action_next: $hiddens->btn_action_next,
+            controler: $this, id_retorno: $hiddens->id_retorno, in_registro_id: $hiddens->in_registro_id,
+            inm_comprador_id: $inm_comprador_id, inm_ubicacion_id: '', precio_operacion: $hiddens->precio_operacion,
+            seccion_retorno: $hiddens->seccion_retorno);
+
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener inputs_hidden',data:  $inputs, header: $header,ws:  $ws);
+        }
+
+        $link_asigna_avaluo_bd = $this->obj_link->link_con_id(accion:'asigna_ubicacion_bd',
+            link: $this->link,registro_id: $this->registro_id,seccion: 'inm_comprador');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al generar link',data:  $link_asigna_avaluo_bd,
+                header: $header,ws:  $ws);
+        }
+
+        $this->link_asigna_avaluo_bd = $link_asigna_avaluo_bd;
+
+        $this->keys_selects = array_merge($keys_selects, $this->keys_selects);
+
+        return $base;
+    }
+
+    public function asigna_ingresado(bool $header, bool $ws = false): array|stdClass
     {
 
         $filtro['inm_comprador.id']= $this->registro_id;
@@ -846,7 +943,7 @@ class controlador_inm_comprador extends _ctl_base {
         return $result;
     }
 
-    public function asigna_valuador(bool $header, bool $ws = false): array|stdClass
+    public function asigna_en_avaluo(bool $header, bool $ws = false): array|stdClass
     {
 
         $filtro_rel['inm_comprador.id'] = $this->registro_id;
