@@ -4,7 +4,7 @@ let session_id = getParameterByName('session_id');
 
 let pestana_general_actual = getParameterByName('pestana_general_actual');
 let pestana_actual = getParameterByName('pestana_actual');
-function cambiarPestannaGeneral(pestannas,pestanna,pentannascontenido) {
+function cambiarPestannaGeneralCl(pestannas,pestanna,pentannascontenido) {
     pestanna_act = document.getElementById(pestanna.id);
     listaPestannas = document.getElementById(pestannas.id);
 
@@ -1584,4 +1584,5 @@ const options = {paging: false, info: false, searching: false}
 
 const table_tipos_documentos = table('inm_comprador', columns_tipos_documentos, [], [], function () {
     }, true,
-    "tipos_documentos", {registro_id: registro_id}, options);
+    "tipos_documentos", {registro_id: registro_id,pestana_general_actual: pestana_general_actual,
+        pestana_actual:pestana_actual}, options);

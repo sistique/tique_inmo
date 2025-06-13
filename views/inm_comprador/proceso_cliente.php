@@ -15,8 +15,8 @@
 
                     <div id="pestanasgeneral">
                         <ul id="listageneral">
-                            <li id="pestanageneral1"><a href='javascript:cambiarPestannaGeneral(pestanasgeneral,pestanageneral1,pestanascliente);'>CLIENTE</a></li>
-                            <li id="pestanageneral2"><a href='javascript:cambiarPestannaGeneral(pestanasgeneral,pestanageneral2,pestanas);'>ETAPAS</a></li>
+                            <li id="pestanageneral1"><a href='javascript:cambiarPestannaGeneralCl(pestanasgeneral,pestanageneral1,pestanascliente);'>CLIENTE</a></li>
+                            <li id="pestanageneral2"><a href='javascript:cambiarPestannaGeneralCl(pestanasgeneral,pestanageneral2,pestanas);'>ETAPAS</a></li>
                         </ul>
                     </div>
                     <body onload="javascript:cambiarPestannaGeneral_inicial(pestanasgeneral);
