@@ -52,9 +52,18 @@ class controlador_inm_comprador extends _ctl_base {
 
     public string $link_rel_ubi_comp_alta_bd = '';
 
-    public string $link_asigna_avaluo_bd = '';
-    public string $link_asigna_firma_bd = '';
-    public string $link_asigna_escritura_bd = '';
+    /**/
+    public string $link_asignado_bd = '';
+    public string $link_en_avaluo_bd = '';
+    public string $link_por_ingresar_bd = '';
+    public string $link_ingresado_bd = '';
+    public string $link_autorizado_bd = '';
+    public string $link_por_firmar_bd = '';
+    public string $link_escriturado_bd = '';
+    public string $link_cotejado_bd = '';
+    public string $link_cobrado_bd = '';
+
+    /**/
     public string $link_inm_rel_cliente_valuador_alta_bd = '';
     public string $link_inm_rel_co_acred_alta_bd = '';
     public string $link_asigna_nuevo_co_acreditado_bd = '';
