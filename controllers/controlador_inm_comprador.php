@@ -296,7 +296,12 @@ class controlador_inm_comprador extends _ctl_base {
 
         $this->inputs->inm_ubicacion_util_id = $inm_ubicacion_id;
 
-        $link_rel_ubi_comp_alta_bd = $this->obj_link->link_alta_bd(link: $this->link,seccion: 'inm_rel_ubi_comp');
+        $params = array();
+        if(isset($_GET['accion']) && $_GET['accion'] == 'proceso_cliente') {
+            $params = array('pestana_general_actual' => 'pestanageneral1', 'pestana_actual' => 'pestanacliente4');
+        }
+        $link_rel_ubi_comp_alta_bd = $this->obj_link->link_alta_bd(link: $this->link,seccion: 'inm_rel_ubi_comp',
+            params: $params);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al generar link',data:  $link_rel_ubi_comp_alta_bd,
                 header: $header,ws:  $ws);
@@ -1027,7 +1032,10 @@ class controlador_inm_comprador extends _ctl_base {
 
         $this->inputs->inm_comprador_id = $inm_comprador_id;
 
-        $params = array('pestana_general_actual' => 'pestanageneral1', 'pestana_actual' => 'pestanacliente3');
+        $params = array();
+        if(isset($_GET['accion']) && $_GET['accion'] == 'proceso_cliente') {
+            $params = array('pestana_general_actual' => 'pestanageneral1', 'pestana_actual' => 'pestanacliente3');
+        }
         $link_alta_bitacora= $this->obj_link->link_alta_bd(link: $this->link, seccion: 'inm_bitacora_status_comprador',
             params: $params);
         if (errores::$error) {

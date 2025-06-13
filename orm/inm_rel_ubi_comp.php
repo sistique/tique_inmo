@@ -37,42 +37,28 @@ class inm_rel_ubi_comp extends _modelo_parent{
 
     public function alta_bd(array $keys_integra_ds = array('codigo', 'descripcion')): array|stdClass
     {
-
-
         $registro = $this->integra_descripcion_aut(registro: $this->registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al generar descripcion',data:  $registro);
         }
-
 
         $datos = $this->datos_row(registro: $registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener datos',data:  $datos);
         }
 
-
-        /*if(round($datos->inm_precio->inm_precio_precio_venta,2) !== round($this->registro['precio_operacion'],2)){
-            return $this->error->error(mensaje: 'Error al validar precio de operacion',data:  $datos);
-        }*/
-
         $this->registro = $registro;
-
-
         $r_alta_bd = $this->alta_bd_base(keys_integra_ds: $keys_integra_ds,registro:  $this->registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar respuesta registro', data: $r_alta_bd);
         }
-
 
         $etapas = $this->inserta_etapas(function: __FUNCTION__,registro: $this->registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al insertar etapas', data: $etapas);
         }
 
-
-
         return $r_alta_bd;
-
     }
 
     private function alta_bd_base(array $keys_integra_ds, array $registro){
@@ -104,8 +90,7 @@ class inm_rel_ubi_comp extends _modelo_parent{
 
         $r_alta_bd = $this->data_result_transaccion(mensaje: 'Registro insertado con éxito', registro: $data->registro,
             registro_ejecutado: $this->registro, registro_id: $data->r_registro->registros[0]['inm_rel_ubi_comp_id'],
-            registro_puro: $data->registro_puro,
-            sql: 'Registro existente');
+            registro_original: $data->registro, registro_puro: $data->registro_puro, sql: 'Registro existente');
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar respuesta registro', data: $r_alta_bd);
         }
