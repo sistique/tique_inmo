@@ -112,13 +112,14 @@
     display: none;
 }
 
-#lista li{
+/*
+#listacl li{
     cursor: not-allowed;
 }
 
-#lista li a{
+#listacl li a{
     pointer-events: none;
-}
+}*/
 
 /****** Documentos ******/
 

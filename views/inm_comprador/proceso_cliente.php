@@ -445,7 +445,7 @@
                         </div>
                         <div class="contengeneral" id="cpestanageneral2">
                             <div id="pestanas">
-                                <ul id=lista>
+                                <ul id=listacl>
                                     <li id="pestana1"><a href='javascript:cambiarPestanna(pestanas,pestana1);'>DETENIDO</a></li>
                                     <li id="pestana2"><a href='javascript:cambiarPestanna(pestanas,pestana2);'>ASIGNADO</a></li>
                                     <li id="pestana3"><a href='javascript:cambiarPestanna(pestanas,pestana3);'>EN AVALUO</a></li>
@@ -497,6 +497,8 @@
                                                             <thead>
                                                             <tr>
                                                                 <th>Id</th>
+                                                                <th>Fecha Asignacion</th>
+                                                                <th>Estatus de Asignacion</th>
                                                                 <th>Direccion</th>
                                                                 <th>Manzana</th>
                                                                 <th>Lote</th>
@@ -506,6 +508,8 @@
                                                             <?php    foreach ($controlador->inm_ubicaciones as $inm_ubicacion){ ?>
                                                             <tr>
                                                                 <td><?php echo $inm_ubicacion['inm_ubicacion_id'] ?></td>
+                                                                <td><?php echo $inm_ubicacion['inm_rel_ubi_comp_fecha_alta'] ?></td>
+                                                                <td><?php echo $inm_ubicacion['inm_rel_ubi_comp_status'] ?></td>
                                                                 <td><?php echo $inm_ubicacion['inm_ubicacion_ubicacion'] ?></td>
                                                                 <td><?php echo $inm_ubicacion['inm_ubicacion_manzana'] ?></td>
                                                                 <td><?php echo $inm_ubicacion['inm_ubicacion_lote'] ?></td>
@@ -513,7 +517,6 @@
                                                                 <?php }  ?>
                                                             </tbody>
                                                         </table>
-
                                                     </div>
                                                 </div>
                                             </div>
@@ -579,7 +582,15 @@
                                     </form>
                                 </div>
                                 <div class="conten" id="cpestana8">
-                                    Contenido de la pestaña 2
+                                    <form method="post" action="<?php echo $controlador->link_por_firmar_bd; ?>"
+                                          class="form-additional" enctype="multipart/form-data">
+
+                                        <div class="control-group btn-alta">
+                                            <div class="controls">
+                                                <button type="submit" class="btn btn-success">Avanza Etapa</button><br>
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
                                 <div class="conten" id="cpestana9">
                                     <form method="post" action="<?php echo $controlador->link_por_firmar_bd; ?>"
