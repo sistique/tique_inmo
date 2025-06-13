@@ -13,7 +13,9 @@ class inm_rel_comprador_com_cliente extends _modelo_parent{
     public function __construct(PDO $link)
     {
         $tabla = 'inm_rel_comprador_com_cliente';
-        $columnas = array($tabla=>false,'inm_comprador'=>$tabla,'com_cliente'=>$tabla);
+        $columnas = array($tabla=>false,'inm_comprador'=>$tabla,'com_cliente'=>$tabla,
+            'dp_colonia_postal'=>'com_cliente', 'dp_cp'=>'dp_colonia_postal','dp_colonia'=>'dp_colonia_postal',
+            'dp_municipio'=>'dp_cp', 'dp_estado'=>'dp_municipio','dp_pais'=>'dp_estado');
 
         $campos_obligatorios = array('inm_comprador_id','com_cliente_id');
 

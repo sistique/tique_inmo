@@ -126,7 +126,7 @@ class _base_comprador{
      * @param PDO $link Conexion a  la base de datos
      * @return array
      */
-    final public function inm_rel_comprador_cliente(int $inm_comprador_id, PDO $link): array
+    final public function inm_rel_comprador_cliente(int $inm_comprador_id, PDO $link,bool $columnas_en_bruto = false): array
     {
         if($inm_comprador_id<=0){
             return $this->error->error(mensaje: 'Error inm_comprador_id es menor a 0',data:  $inm_comprador_id);
@@ -134,7 +134,7 @@ class _base_comprador{
         $filtro['inm_comprador.id'] = $inm_comprador_id;
 
         $r_imp_rel_comprador_com_cliente = (new inm_rel_comprador_com_cliente(link: $link))->filtro_and(
-            filtro:$filtro);
+            columnas_en_bruto:$columnas_en_bruto, filtro:$filtro);
         if(errores::$error){
             return $this->error->error(
                 mensaje: 'Error al obtener imp_rel_comprador_com_cliente',data:  $r_imp_rel_comprador_com_cliente);

@@ -19,9 +19,9 @@ class inm_comprador extends _modelo_parent{
             'inm_tipo_discapacidad'=>$tabla,'inm_persona_discapacidad'=>$tabla,'inm_estado_civil'=>$tabla,
             'bn_cuenta'=>$tabla,'org_sucursal'=>'bn_cuenta','org_empresa'=>'org_sucursal',
             'inm_institucion_hipotecaria'=>$tabla,'inm_sindicato'=>$tabla,'inm_nacionalidad'=>$tabla,
-            'inm_ocupacion'=>$tabla, 'com_agente'=>$tabla,'inm_status_comprador' => $tabla,
-            'dp_colonia_postal'=>'com_cliente', 'dp_cp'=>'dp_colonia_postal','dp_colonia'=>'dp_colonia_postal',
-            'dp_municipio'=>'dp_cp', 'dp_estado'=>'dp_municipio','dp_pais'=>'dp_estado');
+            'inm_ocupacion'=>$tabla, 'com_agente'=>$tabla,'inm_status_comprador' => $tabla,'dp_colonia_postal'=>$tabla,
+            'dp_cp'=>'dp_colonia_postal','dp_colonia'=>'dp_colonia_postal','dp_municipio'=>'dp_cp',
+            'dp_estado'=>'dp_municipio','dp_pais'=>'dp_estado');
 
         $campos_obligatorios = array('apellido_paterno','bn_cuenta_id','cel_com','correo_com','curp',
             'descuento_pension_alimenticia_dh', 'descuento_pension_alimenticia_fc', 'es_segundo_credito',
@@ -359,18 +359,18 @@ class inm_comprador extends _modelo_parent{
             return $this->error->error(mensaje: 'Error inm_comprador_id es menor a 0',data:  $inm_comprador_id);
         }
         $imp_rel_comprador_com_cliente = (new _base_comprador())->inm_rel_comprador_cliente(
-            inm_comprador_id: $inm_comprador_id,link: $this->link);
+            inm_comprador_id: $inm_comprador_id, link: $this->link, columnas_en_bruto: $columnas_en_bruto);
         if(errores::$error){
             return $this->error->error(
                 mensaje: 'Error al obtener imp_rel_comprador_com_cliente',data:  $imp_rel_comprador_com_cliente);
         }
 
-        $com_cliente = (new _base_comprador())->com_cliente(com_cliente_id: $imp_rel_comprador_com_cliente['com_cliente_id'],
+        /*$com_cliente = (new _base_comprador())->com_cliente(com_cliente_id: $imp_rel_comprador_com_cliente['com_cliente_id'],
             link: $this->link, columnas_en_bruto: $columnas_en_bruto, retorno_obj: $retorno_obj);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener com_cliente',data:  $com_cliente);
-        }
-        return $com_cliente;
+        }*/
+        return $imp_rel_comprador_com_cliente;
     }
 
     /**
@@ -548,7 +548,7 @@ class inm_comprador extends _modelo_parent{
 
         return $r_inm_bitacora_comprador->registros;
     }
-
+    
     final public function tiene_cliente(int $inm_comprador_id):bool
     {
         $filtro['inm_comprador.id'] = $inm_comprador_id;
