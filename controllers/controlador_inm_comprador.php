@@ -950,7 +950,6 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         $inm_conf_docs_comprador = (new _inm_comprador())->integra_inm_documentos(controler: $this);
-
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al integrar buttons',data:  $inm_conf_docs_comprador, header: $header,ws:  $ws);
         }
@@ -1659,7 +1658,13 @@ class controlador_inm_comprador extends _ctl_base {
 
         $this->inputs->documento = $documento;
 
-        $link_alta_doc = $this->obj_link->link_alta_bd(link:  $this->link,seccion:  'inm_doc_comprador');
+        $params = array();
+        if(isset($_GET['pestana_general_actual'])) {
+            $params = array('pestana_general_actual' => 'pestanageneral1',
+                'pestana_actual' => $_GET['pestana_actual']);
+        }
+        $link_alta_doc = $this->obj_link->link_alta_bd(link:  $this->link,seccion:  'inm_doc_comprador',
+            params: $params);
         if(errores::$error){
             return $this->retorno_error(
                 mensaje: 'Error al generar link',data:  $link_alta_doc, header: $header,ws:  $ws);
@@ -1667,7 +1672,12 @@ class controlador_inm_comprador extends _ctl_base {
 
         $this->link_inm_doc_comprador_alta_bd = $link_alta_doc;
 
-        $btn_action_next = $this->html->hidden('btn_action_next',value: 'documentos');
+        $retorno = 'documentos';
+        if(isset($_GET['pestana_general_actual'])){
+            $retorno = 'proceso_cliente';
+        }
+
+        $btn_action_next = $this->html->hidden('btn_action_next',value: $retorno);
         if(errores::$error){
             return $this->retorno_error(
                 mensaje: 'Error al generar btn_action_next',data:  $btn_action_next, header: $header,ws:  $ws);
@@ -1688,8 +1698,6 @@ class controlador_inm_comprador extends _ctl_base {
         $this->inputs->btn_action_next = $btn_action_next;
         $this->inputs->id_retorno = $id_retorno;
         $this->inputs->seccion_retorno = $seccion_retorno;
-
-
     }
 
 

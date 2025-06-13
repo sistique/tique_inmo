@@ -313,6 +313,11 @@ class _inm_comprador{
                                        int $indice, array $inm_conf_docs_comprador){
         $params = array('doc_tipo_documento_id'=>$doc_tipo_documento['doc_tipo_documento_id']);
 
+        if(isset($_GET['pestana_general_actual'])){
+            $params['pestana_general_actual'] = 'pestanageneral1';
+            $params['pestana_actual'] = 'pestanacliente2';
+        }
+
         $button = $controler->html->button_href(accion: 'subir_documento',etiqueta:
             'Subir Documento',registro_id:  $controler->registro_id,
             seccion:  'inm_comprador',style:  'warning', params: $params);
