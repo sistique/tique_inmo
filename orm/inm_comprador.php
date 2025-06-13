@@ -538,6 +538,17 @@ class inm_comprador extends _modelo_parent{
         return $r_modifica_post;
     }
 
+    public function status_comprador(int $inm_comprador_id,
+                                     array $order = array('inm_bitacora_status_comprador.fecha_status'=>'DESC')){
+        $filtro['inm_comprador.id'] = $inm_comprador_id;
+        $r_inm_bitacora_comprador = (new inm_bitacora_status_comprador(link: $this->link))->filtro_and(filtro: $filtro,order: $order);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener etapas', data: $r_inm_bitacora_comprador);
+        }
+
+        return $r_inm_bitacora_comprador->registros;
+    }
+
     final public function tiene_cliente(int $inm_comprador_id):bool
     {
         $filtro['inm_comprador.id'] = $inm_comprador_id;
