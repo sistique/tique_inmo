@@ -817,7 +817,7 @@
                                     </form>
                                 </div>
                                 <div class="conten" id="cpestana4">
-                                    <form method="post" action="<?php echo $controlador->link_asigna_avaluo_bd; ?>"
+                                    <form method="post" action="<?php echo $controlador->link_por_ingresar_bd; ?>"
                                           class="form-additional" enctype="multipart/form-data">
                                         <?php echo $controlador->inputs->com_cliente_id; ?>
                                         <?php echo $controlador->inputs->mts_terrenos; ?>
@@ -848,7 +848,7 @@
                                     <a role="button" title="Solicitud Infonavit" href="index.php?seccion=inm_comprador&amp;accion=solicitud_infonavit&amp;registro_id=<?php echo $controlador->regitros_id; ?>&amp;session_id=5514223136&amp;adm_menu_id=45" class="btn btn-warning " style="margin-left: 2px; margin-bottom: 2px; ">Solicitud Infonavit</a>
                                 </div>
                                 <div class="conten" id="cpestana6">
-                                    <form method="post" action="<?php echo $controlador->link_asigna_avaluo_bd; ?>"
+                                    <form method="post" action="<?php echo $controlador->link_autorizado_bd; ?>"
                                           class="form-additional" enctype="multipart/form-data">
 
                                         <?php echo $controlador->inputs->documento_sic; ?>
@@ -858,7 +858,7 @@
                                     </form>
                                 </div>
                                 <div class="conten" id="cpestana7">
-                                    <form method="post" action="<?php echo $controlador->link_asigna_firma_bd; ?>"
+                                    <form method="post" action="<?php echo $controlador->link_por_firmar_bd; ?>"
                                           class="form-additional" enctype="multipart/form-data">
                                         <?php echo $controlador->inputs->documento_anexos; ?>
                                         <?php echo $controlador->inputs->documento_instruccion_credito; ?>
@@ -869,7 +869,7 @@
                                     </form>
                                 </div>
                                 <div class="conten" id="cpestana8">
-                                    <form method="post" action="<?php echo $controlador->link_asigna_escritura_bd; ?>"
+                                    <form method="post" action="<?php echo $controlador->link_escriturado_bd; ?>"
                                           class="form-additional" enctype="multipart/form-data">
                                         <?php echo $controlador->inputs->documento_validacion_poder; ?>
                                         <?php echo $controlador->inputs->documento_acuse_patron; ?>

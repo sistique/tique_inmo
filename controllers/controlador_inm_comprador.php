@@ -398,14 +398,14 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al obtener inputs_hidden',data:  $inputs, header: $header,ws:  $ws);
         }
 
-        $link_asigna_avaluo_bd = $this->obj_link->link_con_id(accion:'asigna_ubicacion_bd',
+        $link_autorizado_bd = $this->obj_link->link_con_id(accion:'asigna_ubicacion_bd',
             link: $this->link,registro_id: $this->registro_id,seccion: 'inm_comprador');
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al generar link',data:  $link_asigna_avaluo_bd,
+            return $this->retorno_error(mensaje: 'Error al generar link',data:  $link_autorizado_bd,
                 header: $header,ws:  $ws);
         }
 
-        $this->link_asigna_avaluo_bd = $link_asigna_avaluo_bd;
+        $this->link_autorizado_bd = $link_autorizado_bd;
 
         $this->keys_selects = array_merge($keys_selects, $this->keys_selects);
 
@@ -495,14 +495,14 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al obtener inputs_hidden',data:  $inputs, header: $header,ws:  $ws);
         }
 
-        $link_asigna_firma_bd = $this->obj_link->link_con_id(accion:'asigna_firma_bd',
+        $link_por_firmar_bd = $this->obj_link->link_con_id(accion:'por_firmar_bd',
             link: $this->link,registro_id: $this->registro_id,seccion: 'inm_comprador');
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al generar link',data:  $link_asigna_firma_bd,
+            return $this->retorno_error(mensaje: 'Error al generar link',data:  $link_por_firmar_bd,
                 header: $header,ws:  $ws);
         }
 
-        $this->link_asigna_firma_bd = $link_asigna_firma_bd;
+        $this->link_por_firmar_bd = $link_por_firmar_bd;
 
         $this->keys_selects = array_merge($keys_selects, $this->keys_selects);
 
@@ -593,14 +593,14 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al obtener inputs_hidden',data:  $inputs, header: $header,ws:  $ws);
         }
 
-        $link_asigna_escritura_bd = $this->obj_link->link_con_id(accion:'asigna_escritura_bd',
+        $link_escriturado_bd = $this->obj_link->link_con_id(accion:'escriturado_bd',
             link: $this->link,registro_id: $this->registro_id,seccion: 'inm_comprador');
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al generar link',data:  $link_asigna_escritura_bd,
+            return $this->retorno_error(mensaje: 'Error al generar link',data:  $link_escriturado_bd,
                 header: $header,ws:  $ws);
         }
 
-        $this->link_asigna_escritura_bd = $link_asigna_escritura_bd;
+        $this->link_escriturado_bd = $link_escriturado_bd;
 
         $this->keys_selects = array_merge($keys_selects, $this->keys_selects);
 
@@ -691,14 +691,14 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al obtener inputs_hidden',data:  $inputs, header: $header,ws:  $ws);
         }
 
-        $link_asigna_escritura_bd = $this->obj_link->link_con_id(accion:'asigna_escritura_bd',
+        $link_cotejado_bd = $this->obj_link->link_con_id(accion:'cotejado_bd',
             link: $this->link,registro_id: $this->registro_id,seccion: 'inm_comprador');
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al generar link',data:  $link_asigna_escritura_bd,
+            return $this->retorno_error(mensaje: 'Error al generar link',data:  $link_cotejado_bd,
                 header: $header,ws:  $ws);
         }
 
-        $this->link_asigna_escritura_bd = $link_asigna_escritura_bd;
+        $this->link_cotejado_bd = $link_cotejado_bd;
 
         $this->keys_selects = array_merge($keys_selects, $this->keys_selects);
 
@@ -789,14 +789,14 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al obtener inputs_hidden',data:  $inputs, header: $header,ws:  $ws);
         }
 
-        $link_asigna_escritura_bd = $this->obj_link->link_con_id(accion:'asigna_escritura_bd',
+        $link_cobrado_bd = $this->obj_link->link_con_id(accion:'cobrado_bd',
             link: $this->link,registro_id: $this->registro_id,seccion: 'inm_comprador');
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al generar link',data:  $link_asigna_escritura_bd,
+            return $this->retorno_error(mensaje: 'Error al generar link',data:  $link_cobrado_bd,
                 header: $header,ws:  $ws);
         }
 
-        $this->link_asigna_escritura_bd = $link_asigna_escritura_bd;
+        $this->link_cobrado_bd = $link_cobrado_bd;
 
         $this->keys_selects = array_merge($keys_selects, $this->keys_selects);
 
@@ -993,14 +993,14 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al obtener inputs_hidden',data:  $inputs, header: $header,ws:  $ws);
         }
 
-        $link_asigna_avaluo_bd = $this->obj_link->link_con_id(accion:'asigna_ubicacion_bd',
+        $link_por_ingresar_bd = $this->obj_link->link_con_id(accion:'asigna_ubicacion_bd',
             link: $this->link,registro_id: $this->registro_id,seccion: 'inm_comprador');
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al generar link',data:  $link_asigna_avaluo_bd,
+            return $this->retorno_error(mensaje: 'Error al generar link',data:  $link_por_ingresar_bd,
                 header: $header,ws:  $ws);
         }
 
-        $this->link_asigna_avaluo_bd = $link_asigna_avaluo_bd;
+        $this->link_por_ingresar_bd = $link_por_ingresar_bd;
 
         $this->keys_selects = array_merge($keys_selects, $this->keys_selects);
 
@@ -1084,14 +1084,14 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al obtener inputs_hidden',data:  $inputs, header: $header,ws:  $ws);
         }
 
-        $link_asigna_avaluo_bd = $this->obj_link->link_con_id(accion:'asigna_ubicacion_bd',
+        $link_ingresado_bd = $this->obj_link->link_con_id(accion:'asigna_ubicacion_bd',
             link: $this->link,registro_id: $this->registro_id,seccion: 'inm_comprador');
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al generar link',data:  $link_asigna_avaluo_bd,
+            return $this->retorno_error(mensaje: 'Error al generar link',data:  $link_ingresado_bd,
                 header: $header,ws:  $ws);
         }
 
-        $this->link_asigna_avaluo_bd = $link_asigna_avaluo_bd;
+        $this->link_ingresado_bd = $link_ingresado_bd;
 
         $this->keys_selects = array_merge($keys_selects, $this->keys_selects);
 
