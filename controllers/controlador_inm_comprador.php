@@ -1217,11 +1217,11 @@ class controlador_inm_comprador extends _ctl_base {
     protected function campos_view(): array
     {
         $keys = new stdClass();
-        $keys->inputs = array('descripcion', 'es_segundo_credito', 'descuento_pension_alimenticia_dh',
+        $keys->inputs = array('descripcion', 'descuento_pension_alimenticia_dh',
             'descuento_pension_alimenticia_fc','monto_credito_solicitado_dh','monto_ahorro_voluntario','nss','curp',
             'rfc','apellido_paterno','apellido_materno','nombre','calle','numero_exterior','numero_interior','telefono',
             'nombre_empresa_patron','nrp_nep','lada_nep','numero_nep','extension_nep','lada_com','numero_com',
-            'cel_com','genero','correo_com','fecha_nacimiento','sub_cuenta','monto_final','descuento','puntos',
+            'cel_com','genero','correo_com','sub_cuenta','monto_final','descuento','puntos',
             'telefono_casa','correo_empresa','mts_construidos','mts_terrenos','valor_avaluo','numero_escritura','isr');
         $keys->selects = array();
 
@@ -1645,9 +1645,8 @@ class controlador_inm_comprador extends _ctl_base {
 
         $this->inputs->dp_municipio_nacimiento_id = $sl_dp_municipio_nacimiento_id;
 
-        $fecha_nacimiento = $this->html->input_fecha(cols: 12,row_upd: $this->row_upd,value_vacio:  false,
-            value: $this->row_upd->fecha_nacimiento);
-
+        $fecha_nacimiento = $this->html->input_fecha(cols: 12, row_upd: $this->row_upd, value_vacio: false,
+            place_holder: 'Fecha de Nacimiento', value: $this->row_upd->fecha_nacimiento);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al integrar fecha_nacimiento',
                 data:  $fecha_nacimiento, header: $header,ws: $ws);
@@ -1818,10 +1817,7 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         $this->referencias = $referencia_prospectos;
-
-
-
-
+        
         return $r_modifica;
     }
 
