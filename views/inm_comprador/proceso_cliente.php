@@ -829,7 +829,7 @@
                                     </form>
                                 </div>
                                 <div class="conten" id="cpestana5">
-                                    <form method="post" action="<?php echo $controlador->link_por_firmar_bd; ?>"
+                                    <form method="post" action="<?php echo $controlador->link_ingresado_bd; ?>"
                                           class="form-additional" enctype="multipart/form-data">
                                         <?php echo $controlador->inputs->com_cliente_id; ?>
                                         <div class="control-group btn-alta">
@@ -881,7 +881,7 @@
                                     </form>
                                 </div>
                                 <div class="conten" id="cpestana9">
-                                    <form method="post" action="<?php echo $controlador->link_por_firmar_bd; ?>"
+                                    <form method="post" action="<?php echo $controlador->link_cotejado_bd; ?>"
                                           class="form-additional" enctype="multipart/form-data">
 
                                         <div class="control-group btn-alta">
@@ -892,7 +892,7 @@
                                     </form>
                                 </div>
                                 <div class="conten" id="cpestana10">
-                                    <form method="post" action="<?php echo $controlador->link_por_firmar_bd; ?>"
+                                    <form method="post" action="<?php echo $controlador->link_cobrado_bd; ?>"
                                           class="form-additional" enctype="multipart/form-data">
 
                                         <div class="control-group btn-alta">
