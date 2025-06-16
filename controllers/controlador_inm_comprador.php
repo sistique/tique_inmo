@@ -445,7 +445,7 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         if($r_inm_doc_comprador->n_registros > 0) {
-            $this->descripcion_constancia_credito = 'SIC';
+            $this->descripcion_sic = 'SIC';
 
             $button_inm_doc_comprador_descarga = $this->html->button_href(accion: 'descarga', etiqueta: 'Descarga',
                 registro_id: $r_inm_doc_comprador->registros[0]['inm_doc_comprador_id'],
