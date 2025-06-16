@@ -999,8 +999,8 @@ class controlador_inm_comprador extends _ctl_base {
                 header: $header,ws:  $ws);
         }
 
-        $documento_validacion_poder = $this->html->input_file(cols: 12,name: 'validacion_poder',row_upd:  new stdClass(),value_vacio:  false,
-            place_holder: 'Validacion Poder');
+        $documento_validacion_poder = $this->html->input_file(cols: 12,name: 'validacion_poder',
+            row_upd:  new stdClass(),value_vacio:  false, place_holder: 'Validacion Poder',required: false);
         if(errores::$error){
             return $this->retorno_error(
                 mensaje: 'Error al obtener inputs',data:  $documento_validacion_poder, header: $header,ws:  $ws);
@@ -1008,7 +1008,7 @@ class controlador_inm_comprador extends _ctl_base {
         $this->inputs->documento_validacion_poder = $documento_validacion_poder;
 
         $documento_acuse_patron = $this->html->input_file(cols: 12,name: 'acuse_patron',
-            row_upd:  new stdClass(),value_vacio:  false,place_holder: 'Acuse de Patron');
+            row_upd:  new stdClass(),value_vacio:  false,place_holder: 'Acuse de Patron', required: false);
         if(errores::$error){
             return $this->retorno_error(
                 mensaje: 'Error al obtener inputs',data:  $documento_acuse_patron, header: $header,ws:  $ws);
@@ -1016,7 +1016,7 @@ class controlador_inm_comprador extends _ctl_base {
         $this->inputs->documento_acuse_patron = $documento_acuse_patron;
 
         $documento_escrituras = $this->html->input_file(cols: 12,name: 'escritura',
-            row_upd:  new stdClass(),value_vacio:  false,place_holder: 'Escrituras');
+            row_upd:  new stdClass(),value_vacio:  false,place_holder: 'Escrituras', required: false);
         if(errores::$error){
             return $this->retorno_error(
                 mensaje: 'Error al obtener inputs',data:  $documento_escrituras, header: $header,ws:  $ws);
@@ -1262,47 +1262,6 @@ class controlador_inm_comprador extends _ctl_base {
                 header: $header,ws:  $ws);
         }
 
-        $documento_validacion_poder = $this->html->input_file(cols: 12,name: 'validacion_poder',row_upd:  new stdClass(),value_vacio:  false,
-            place_holder: 'Validacion Poder');
-        if(errores::$error){
-            return $this->retorno_error(
-                mensaje: 'Error al obtener inputs',data:  $documento_validacion_poder, header: $header,ws:  $ws);
-        }
-
-        $this->inputs->documento_validacion_poder = $documento_validacion_poder;
-
-        $documento_acuse_patron = $this->html->input_file(cols: 12,name: 'acuse_patron',
-            row_upd:  new stdClass(),value_vacio:  false,place_holder: 'Acuse de Patron');
-        if(errores::$error){
-            return $this->retorno_error(
-                mensaje: 'Error al obtener inputs',data:  $documento_acuse_patron, header: $header,ws:  $ws);
-        }
-
-        $this->inputs->documento_acuse_patron = $documento_acuse_patron;
-
-        $documento_escrituras = $this->html->input_file(cols: 12,name: 'escrituras',
-            row_upd:  new stdClass(),value_vacio:  false,place_holder: 'Escrituras');
-        if(errores::$error){
-            return $this->retorno_error(
-                mensaje: 'Error al obtener inputs',data:  $documento_escrituras, header: $header,ws:  $ws);
-        }
-
-        $this->inputs->documento_escrituras = $documento_escrituras;
-
-        $fecha = $this->html->input_fecha(cols: 6, row_upd: $this->row_upd,value_vacio:  false);
-
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al integrar fecha',
-                data:  $fecha, header: $header,ws: $ws);
-        }
-
-        $this->inputs->fecha = $fecha;
-
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'numero_escritura',
-            keys_selects: $keys_selects, place_holder: 'No. Escritura');
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
 
         $base = $this->base_upd(keys_selects: $keys_selects, params: array(),params_ajustados: array());
         if(errores::$error){
@@ -1358,48 +1317,6 @@ class controlador_inm_comprador extends _ctl_base {
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);
-        }
-
-        $documento_validacion_poder = $this->html->input_file(cols: 12,name: 'validacion_poder',row_upd:  new stdClass(),value_vacio:  false,
-            place_holder: 'Validacion Poder');
-        if(errores::$error){
-            return $this->retorno_error(
-                mensaje: 'Error al obtener inputs',data:  $documento_validacion_poder, header: $header,ws:  $ws);
-        }
-
-        $this->inputs->documento_validacion_poder = $documento_validacion_poder;
-
-        $documento_acuse_patron = $this->html->input_file(cols: 12,name: 'acuse_patron',
-            row_upd:  new stdClass(),value_vacio:  false,place_holder: 'Acuse de Patron');
-        if(errores::$error){
-            return $this->retorno_error(
-                mensaje: 'Error al obtener inputs',data:  $documento_acuse_patron, header: $header,ws:  $ws);
-        }
-
-        $this->inputs->documento_acuse_patron = $documento_acuse_patron;
-
-        $documento_escrituras = $this->html->input_file(cols: 12,name: 'escrituras',
-            row_upd:  new stdClass(),value_vacio:  false,place_holder: 'Escrituras');
-        if(errores::$error){
-            return $this->retorno_error(
-                mensaje: 'Error al obtener inputs',data:  $documento_escrituras, header: $header,ws:  $ws);
-        }
-
-        $this->inputs->documento_escrituras = $documento_escrituras;
-
-        $fecha = $this->html->input_fecha(cols: 6, row_upd: $this->row_upd,value_vacio:  false);
-
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al integrar fecha',
-                data:  $fecha, header: $header,ws: $ws);
-        }
-
-        $this->inputs->fecha = $fecha;
-
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'numero_escritura',
-            keys_selects: $keys_selects, place_holder: 'No. Escritura');
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
         $base = $this->base_upd(keys_selects: $keys_selects, params: array(),params_ajustados: array());

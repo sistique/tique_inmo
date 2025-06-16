@@ -41,14 +41,15 @@ class inm_escritura extends _modelo_parent{
         }
 
         if(!$existe) {
-            $_FILES['documento'] = $_FILES['validacion_poder'];
-            $registro = array();
-            $registro['inm_comprador_id'] = $this->registro['inm_comprador_id'];
-            $registro['doc_tipo_documento_id'] = 46;
-            $r_inm_doc_comprador = (new inm_doc_comprador(link: $this->link))->alta_registro(registro: $registro);
-            if (errores::$error) {
-                return $this->error->error(mensaje: 'Error al insertar datos', data: $r_inm_doc_comprador);
-
+            if(trim($_FILES['validacion_poder']['name']) !== '') {
+                $_FILES['documento'] = $_FILES['validacion_poder'];
+                $registro = array();
+                $registro['inm_comprador_id'] = $this->registro['inm_comprador_id'];
+                $registro['doc_tipo_documento_id'] = 46;
+                $r_inm_doc_comprador = (new inm_doc_comprador(link: $this->link))->alta_registro(registro: $registro);
+                if (errores::$error) {
+                    return $this->error->error(mensaje: 'Error al insertar datos', data: $r_inm_doc_comprador);
+                }
             }
         }
 
@@ -61,14 +62,15 @@ class inm_escritura extends _modelo_parent{
         }
 
         if(!$existe) {
-            $_FILES['documento'] = $_FILES['acuse_patron'];
-            $registro = array();
-            $registro['inm_comprador_id'] = $this->registro['inm_comprador_id'];
-            $registro['doc_tipo_documento_id'] = 47;
-            $r_inm_doc_comprador = (new inm_doc_comprador(link: $this->link))->alta_registro(registro: $registro);
-            if (errores::$error) {
-                return $this->error->error(mensaje: 'Error al insertar datos', data: $r_inm_doc_comprador);
-
+            if(trim($_FILES['acuse_patron']['name']) !== '') {
+                $_FILES['documento'] = $_FILES['acuse_patron'];
+                $registro = array();
+                $registro['inm_comprador_id'] = $this->registro['inm_comprador_id'];
+                $registro['doc_tipo_documento_id'] = 47;
+                $r_inm_doc_comprador = (new inm_doc_comprador(link: $this->link))->alta_registro(registro: $registro);
+                if (errores::$error) {
+                    return $this->error->error(mensaje: 'Error al insertar datos', data: $r_inm_doc_comprador);
+                }
             }
         }
 
@@ -81,14 +83,15 @@ class inm_escritura extends _modelo_parent{
         }
 
         if(!$existe) {
-            $_FILES['documento'] = $_FILES['escritura'];
-            $registro = array();
-            $registro['inm_comprador_id'] = $this->registro['inm_comprador_id'];
-            $registro['doc_tipo_documento_id'] = 37;
-            $r_inm_doc_comprador = (new inm_doc_comprador(link: $this->link))->alta_registro(registro: $registro);
-            if (errores::$error) {
-                return $this->error->error(mensaje: 'Error al insertar datos', data: $r_inm_doc_comprador);
-
+            if(trim($_FILES['escritura']['name']) !== '') {
+                $_FILES['documento'] = $_FILES['escritura'];
+                $registro = array();
+                $registro['inm_comprador_id'] = $this->registro['inm_comprador_id'];
+                $registro['doc_tipo_documento_id'] = 37;
+                $r_inm_doc_comprador = (new inm_doc_comprador(link: $this->link))->alta_registro(registro: $registro);
+                if (errores::$error) {
+                    return $this->error->error(mensaje: 'Error al insertar datos', data: $r_inm_doc_comprador);
+                }
             }
         }
 
