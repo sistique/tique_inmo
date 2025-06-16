@@ -55,6 +55,23 @@ class controlador_inm_rel_cliente_valuador extends _ctl_formato {
         return $r_alta;
     }
 
+    public function alta_bd(bool $header, bool $ws = false): array|stdClass
+    {
+        $_POST['params'] = array();
+        if(isset($_GET['pestana_general_actual'])) {
+            $_POST['params'] = array('pestana_general_actual' => 'pestanageneral2',
+                'pestana_actual' => $_GET['pestana_actual']);
+        }
+
+        $r_alta_bd = parent::alta_bd($header, $ws);
+        if (errores::$error) {
+            return $this->retorno_error(
+                mensaje: 'Error al obtener inputs', data: $r_alta_bd, header: $header, ws: $ws);
+        }
+
+        return $r_alta_bd;
+    }
+
     protected function campos_view(): array
     {
         $keys = new stdClass();

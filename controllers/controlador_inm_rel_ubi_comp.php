@@ -67,7 +67,7 @@ class controlador_inm_rel_ubi_comp extends _ctl_base {
     {
         $_POST['params'] = array();
         if(isset($_GET['pestana_general_actual'])) {
-            $_POST['params'] = array('pestana_general_actual' => 'pestanageneral1',
+            $_POST['params'] = array('pestana_general_actual' => 'pestanageneral2',
                 'pestana_actual' => $_GET['pestana_actual']);
         }
 

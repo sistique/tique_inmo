@@ -305,7 +305,7 @@ class controlador_inm_comprador extends _ctl_base {
 
         $params = array();
         if(isset($_GET['accion']) && $_GET['accion'] == 'proceso_cliente') {
-            $params = array('pestana_general_actual' => 'pestanageneral1', 'pestana_actual' => 'pestanacliente4');
+            $params = array('pestana_general_actual' => 'pestanageneral2', 'pestana_actual' => 'pestana2');
         }
         $link_rel_ubi_comp_alta_bd = $this->obj_link->link_alta_bd(link: $this->link,seccion: 'inm_rel_ubi_comp',
             params: $params);
@@ -1161,6 +1161,17 @@ class controlador_inm_comprador extends _ctl_base {
                 mensaje: 'Error al obtener registro',data:  $registro,header: $header,ws: $ws);
         }
 
+        $registro_valuador = (new inm_rel_cliente_valuador($this->link))->filtro_and(filtro: $filtro_rel);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener registro',data:  $registro,header: $header,ws: $ws);
+        }
+
+        $inm_valuador_id = -1;
+        if($registro_valuador->n_registros > 0){
+            $inm_valuador_id = $registro_valuador->registros[0]['inm_valuador_id'];
+        }
+
         $keys_selects = (new _keys_selects())->key_selects_asigna_ubicacion(controler: $this);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
@@ -1169,7 +1180,7 @@ class controlador_inm_comprador extends _ctl_base {
 
         $columns_ds = array('inm_valuador_descripcion');
         $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_valuador_id',
-            keys_selects: $keys_selects, id_selected: -1, label: 'Valuador', columns_ds : $columns_ds);
+            keys_selects: $keys_selects, id_selected: $inm_valuador_id, label: 'Valuador', columns_ds : $columns_ds);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);
@@ -1189,11 +1200,17 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
         }
 
-        $link_inm_rel_cliente_valuador_alta_bd = $this->obj_link->link_alta_bd(link: $this->link,seccion: 'inm_rel_cliente_valuador');
+        $params = array();
+        if(isset($_GET['accion']) && $_GET['accion'] == 'proceso_cliente') {
+            $params = array('pestana_general_actual' => 'pestanageneral2', 'pestana_actual' => 'pestana3');
+        }
+        $link_inm_rel_cliente_valuador_alta_bd = $this->obj_link->link_alta_bd(link: $this->link,
+            seccion: 'inm_rel_cliente_valuador',params: $params);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al generar link',data:  $link_inm_rel_cliente_valuador_alta_bd,
                 header: $header,ws:  $ws);
         }
+        $this->link_inm_rel_cliente_valuador_alta_bd = $link_inm_rel_cliente_valuador_alta_bd;
 
         /*$this->link_inm_rel_cliente_valuador_alta_bd = $link_inm_rel_cliente_valuador_alta_bd;
         $filtro['com_cliente.id'] = $registro->registros[0]['com_cliente_id'];
@@ -1817,7 +1834,7 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         $this->referencias = $referencia_prospectos;
-        
+
         return $r_modifica;
     }
 
