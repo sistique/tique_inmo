@@ -2572,7 +2572,8 @@ class controlador_inm_comprador extends _ctl_base {
     public function por_firmar_bd(bool $header, bool $ws = false)
     {
         $this->link->beginTransaction();
-        
+
+        print_r($_FILES);exiT;
         $filtro_exi['inm_comprador.id'] = $this->registro_id;
         $filtro_exi['inm_status_comprador.id'] = 7;
         $existe = (new inm_bitacora_status_comprador(link: $this->link))->existe(filtro: $filtro_exi);
@@ -2606,15 +2607,17 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         if(!$existe) {
-            $_FILES['documento'] = $_FILES['anexos'];
-            $registro = array();
-            $registro['inm_comprador_id'] = $this->registro_id;
-            $registro['doc_tipo_documento_id'] = 41;
-            $r_inm_doc_comprador = (new inm_doc_comprador(link: $this->link))->alta_registro(registro: $registro);
-            if (errores::$error) {
-                $this->link->rollBack();
-                return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_doc_comprador,
-                    header: $header, ws: $ws);
+            if(!isset($_FILES['anexos']['name'])) {
+                $_FILES['documento'] = $_FILES['anexos'];
+                $registro = array();
+                $registro['inm_comprador_id'] = $this->registro_id;
+                $registro['doc_tipo_documento_id'] = 41;
+                $r_inm_doc_comprador = (new inm_doc_comprador(link: $this->link))->alta_registro(registro: $registro);
+                if (errores::$error) {
+                    $this->link->rollBack();
+                    return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_doc_comprador,
+                        header: $header, ws: $ws);
+                }
             }
         }
 
@@ -2628,15 +2631,17 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         if(!$existe) {
-            $_FILES['documento'] = $_FILES['instruccion_credito'];
-            $registro = array();
-            $registro['inm_comprador_id'] = $this->registro_id;
-            $registro['doc_tipo_documento_id'] = 42;
-            $r_inm_doc_comprador = (new inm_doc_comprador(link: $this->link))->alta_registro(registro: $registro);
-            if (errores::$error) {
-                $this->link->rollBack();
-                return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_doc_comprador,
-                    header: $header, ws: $ws);
+            if(!isset($_FILES['instruccion_credito']['name'])) {
+                $_FILES['documento'] = $_FILES['instruccion_credito'];
+                $registro = array();
+                $registro['inm_comprador_id'] = $this->registro_id;
+                $registro['doc_tipo_documento_id'] = 42;
+                $r_inm_doc_comprador = (new inm_doc_comprador(link: $this->link))->alta_registro(registro: $registro);
+                if (errores::$error) {
+                    $this->link->rollBack();
+                    return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_doc_comprador,
+                        header: $header, ws: $ws);
+                }
             }
         }
 
@@ -2650,15 +2655,17 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         if(!$existe) {
-            $_FILES['documento'] = $_FILES['notificacion_descuento'];
-            $registro = array();
-            $registro['inm_comprador_id'] = $this->registro_id;
-            $registro['doc_tipo_documento_id'] = 43;
-            $r_inm_doc_comprador = (new inm_doc_comprador(link: $this->link))->alta_registro(registro: $registro);
-            if (errores::$error) {
-                $this->link->rollBack();
-                return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_doc_comprador,
-                    header: $header, ws: $ws);
+            if(!isset($_FILES['notificacion_descuento']['name'])) {
+                $_FILES['documento'] = $_FILES['notificacion_descuento'];
+                $registro = array();
+                $registro['inm_comprador_id'] = $this->registro_id;
+                $registro['doc_tipo_documento_id'] = 43;
+                $r_inm_doc_comprador = (new inm_doc_comprador(link: $this->link))->alta_registro(registro: $registro);
+                if (errores::$error) {
+                    $this->link->rollBack();
+                    return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_doc_comprador,
+                        header: $header, ws: $ws);
+                }
             }
         }
 
@@ -2672,15 +2679,17 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         if(!$existe) {
-            $_FILES['documento'] = $_FILES['isr_notaria'];
-            $registro = array();
-            $registro['inm_comprador_id'] = $this->registro_id;
-            $registro['doc_tipo_documento_id'] = 44;
-            $r_inm_doc_comprador = (new inm_doc_comprador(link: $this->link))->alta_registro(registro: $registro);
-            if (errores::$error) {
-                $this->link->rollBack();
-                return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_doc_comprador,
-                    header: $header, ws: $ws);
+            if(!isset($_FILES['isr_notaria']['name'])) {
+                $_FILES['documento'] = $_FILES['isr_notaria'];
+                $registro = array();
+                $registro['inm_comprador_id'] = $this->registro_id;
+                $registro['doc_tipo_documento_id'] = 44;
+                $r_inm_doc_comprador = (new inm_doc_comprador(link: $this->link))->alta_registro(registro: $registro);
+                if (errores::$error) {
+                    $this->link->rollBack();
+                    return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_doc_comprador,
+                        header: $header, ws: $ws);
+                }
             }
         }
 
@@ -2694,15 +2703,17 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         if(!$existe) {
-            $_FILES['documento'] = $_FILES['isr'];
-            $registro = array();
-            $registro['inm_comprador_id'] = $this->registro_id;
-            $registro['doc_tipo_documento_id'] = 45;
-            $r_inm_doc_comprador = (new inm_doc_comprador(link: $this->link))->alta_registro(registro: $registro);
-            if (errores::$error) {
-                $this->link->rollBack();
-                return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_doc_comprador,
-                    header: $header, ws: $ws);
+            if(!isset($_FILES['isr']['name'])) {
+                $_FILES['documento'] = $_FILES['isr'];
+                $registro = array();
+                $registro['inm_comprador_id'] = $this->registro_id;
+                $registro['doc_tipo_documento_id'] = 45;
+                $r_inm_doc_comprador = (new inm_doc_comprador(link: $this->link))->alta_registro(registro: $registro);
+                if (errores::$error) {
+                    $this->link->rollBack();
+                    return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_doc_comprador,
+                        header: $header, ws: $ws);
+                }
             }
         }
 
