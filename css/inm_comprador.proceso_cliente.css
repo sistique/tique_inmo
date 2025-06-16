@@ -3,6 +3,10 @@
     padding-left: 20px;
 }
 
+.label-docs{
+    margin: 10px 0px !important;
+}
+
 /******* Pestañas Generales ********/
 #pestanasgeneral {
     float: top;

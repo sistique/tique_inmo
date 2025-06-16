@@ -800,7 +800,7 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         if($r_inm_doc_comprador->n_registros > 0) {
-            $this->descripcion_notificacion_descuento = 'Instruccion de Credito';
+            $this->descripcion_notificacion_descuento = 'Notificacion de Descuento';
 
             $button_inm_doc_comprador_descarga = $this->html->button_href(accion: 'descarga', etiqueta: 'Descarga',
                 registro_id: $r_inm_doc_comprador->registros[0]['inm_doc_comprador_id'],
@@ -855,7 +855,7 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         if($r_inm_doc_comprador->n_registros > 0) {
-            $this->descripcion_isr_notaria = 'Instruccion de Credito';
+            $this->descripcion_isr_notaria = 'ISR Notaria';
 
             $button_inm_doc_comprador_descarga = $this->html->button_href(accion: 'descarga', etiqueta: 'Descarga',
                 registro_id: $r_inm_doc_comprador->registros[0]['inm_doc_comprador_id'],
@@ -910,7 +910,7 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         if($r_inm_doc_comprador->n_registros > 0) {
-            $this->descripcion_isr = 'Instruccion de Credito';
+            $this->descripcion_isr = 'ISR';
 
             $button_inm_doc_comprador_descarga = $this->html->button_href(accion: 'descarga', etiqueta: 'Descarga',
                 registro_id: $r_inm_doc_comprador->registros[0]['inm_doc_comprador_id'],
@@ -2573,7 +2573,6 @@ class controlador_inm_comprador extends _ctl_base {
     {
         $this->link->beginTransaction();
 
-        print_r($_FILES);exiT;
         $filtro_exi['inm_comprador.id'] = $this->registro_id;
         $filtro_exi['inm_status_comprador.id'] = 7;
         $existe = (new inm_bitacora_status_comprador(link: $this->link))->existe(filtro: $filtro_exi);
@@ -2607,7 +2606,7 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         if(!$existe) {
-            if(!isset($_FILES['anexos']['name'])) {
+            if(trim($_FILES['anexos']['name']) !== '') {
                 $_FILES['documento'] = $_FILES['anexos'];
                 $registro = array();
                 $registro['inm_comprador_id'] = $this->registro_id;
@@ -2631,7 +2630,7 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         if(!$existe) {
-            if(!isset($_FILES['instruccion_credito']['name'])) {
+            if(trim($_FILES['instruccion_credito']['name']) !== '') {
                 $_FILES['documento'] = $_FILES['instruccion_credito'];
                 $registro = array();
                 $registro['inm_comprador_id'] = $this->registro_id;
@@ -2655,7 +2654,7 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         if(!$existe) {
-            if(!isset($_FILES['notificacion_descuento']['name'])) {
+            if(trim($_FILES['notificacion_descuento']['name']) !== '') {
                 $_FILES['documento'] = $_FILES['notificacion_descuento'];
                 $registro = array();
                 $registro['inm_comprador_id'] = $this->registro_id;
@@ -2679,7 +2678,7 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         if(!$existe) {
-            if(!isset($_FILES['isr_notaria']['name'])) {
+            if(trim($_FILES['isr_notaria']['name']) !== '') {
                 $_FILES['documento'] = $_FILES['isr_notaria'];
                 $registro = array();
                 $registro['inm_comprador_id'] = $this->registro_id;
@@ -2703,7 +2702,7 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         if(!$existe) {
-            if(!isset($_FILES['isr']['name'])) {
+            if(trim($_FILES['isr']['name']) !== '') {
                 $_FILES['documento'] = $_FILES['isr'];
                 $registro = array();
                 $registro['inm_comprador_id'] = $this->registro_id;

@@ -882,7 +882,7 @@
                                     </form>
                                     <div class="row buttons-form">
                                         <div class="col-lg-12">
-                                            <label>
+                                            <label class="label-docs">
                                                 <?php echo $controlador->descripcion_sic; ?>
                                             </label>
                                         </div>
@@ -900,7 +900,7 @@
                                         </div>
 
                                         <div class="col-lg-12">
-                                            <label>
+                                            <label class="label-docs">
                                                 <?php echo $controlador->descripcion_constancia_credito; ?>
                                             </label>
                                         </div>
@@ -930,7 +930,7 @@
                                     </form>
                                     <div class="row buttons-form">
                                         <div class="col-lg-12">
-                                            <label>
+                                            <label class="label-docs">
                                                 <?php echo $controlador->descripcion_anexos; ?>
                                             </label>
                                         </div>
@@ -948,7 +948,7 @@
                                         </div>
 
                                         <div class="col-lg-12">
-                                            <label>
+                                            <label class="label-docs">
                                                 <?php echo $controlador->descripcion_instruccion_credito; ?>
                                             </label>
                                         </div>
@@ -966,7 +966,7 @@
                                         </div>
 
                                         <div class="col-lg-12">
-                                            <label>
+                                            <label class="label-docs">
                                                 <?php echo $controlador->descripcion_notificacion_descuento; ?>
                                             </label>
                                         </div>
@@ -984,7 +984,7 @@
                                         </div>
 
                                         <div class="col-lg-12">
-                                            <label>
+                                            <label class="label-docs">
                                                 <?php echo $controlador->descripcion_isr_notaria; ?>
                                             </label>
                                         </div>
@@ -1002,7 +1002,7 @@
                                         </div>
 
                                         <div class="col-lg-12">
-                                            <label>
+                                            <label class="label-docs">
                                                 <?php echo $controlador->descripcion_isr; ?>
                                             </label>
                                         </div>
