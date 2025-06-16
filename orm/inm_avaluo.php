@@ -11,7 +11,7 @@ use PDO;
 class inm_avaluo extends _modelo_parent{
     public function __construct(PDO $link)
     {
-        $tabla = 'inm_rel_cliente_valuador';
+        $tabla = 'inm_avaluo';
         $columnas = array($tabla=>false,'inm_comprador'=>$tabla);
 
         $campos_obligatorios = array();

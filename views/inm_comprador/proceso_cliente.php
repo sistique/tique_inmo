@@ -824,11 +824,16 @@
                                 <div class="conten" id="cpestana4">
                                     <form method="post" action="<?php echo $controlador->link_inm_avaluo_alta_bd; ?>"
                                           class="form-additional" enctype="multipart/form-data">
+                                        <?php echo $controlador->inputs->inm_comprador_id; ?>
                                         <?php echo $controlador->inputs->com_cliente_id; ?>
                                         <?php echo $controlador->inputs->mts_terrenos; ?>
                                         <?php echo $controlador->inputs->mts_construidos; ?>
                                         <?php echo $controlador->inputs->valor_avaluo; ?>
                                         <?php echo $controlador->inputs->documento; ?>
+
+                                        <?php echo $controlador->inputs->seccion_retorno; ?>
+                                        <?php echo $controlador->inputs->btn_action_next; ?>
+                                        <?php echo $controlador->inputs->id_retorno; ?>
 
                                         <?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
                                     </form>
