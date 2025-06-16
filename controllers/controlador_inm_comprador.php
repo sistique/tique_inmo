@@ -601,7 +601,7 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         $documento_anexos = $this->html->input_file(cols: 12,name: 'anexos',row_upd:  new stdClass(),value_vacio:  false,
-            place_holder: 'Anexos');
+            place_holder: 'Anexos',required: false);
         if(errores::$error){
             return $this->retorno_error(
                 mensaje: 'Error al obtener inputs',data:  $documento_anexos, header: $header,ws:  $ws);
@@ -610,7 +610,7 @@ class controlador_inm_comprador extends _ctl_base {
         $this->inputs->documento_anexos = $documento_anexos;
 
         $documento_instruccion_credito = $this->html->input_file(cols: 12,name: 'instruccion_credito',
-            row_upd:  new stdClass(),value_vacio:  false,place_holder: 'Instruccion de Credito');
+            row_upd:  new stdClass(),value_vacio:  false,place_holder: 'Instruccion de Credito',required: false);
         if(errores::$error){
             return $this->retorno_error(
                 mensaje: 'Error al obtener inputs',data:  $documento_instruccion_credito, header: $header,ws:  $ws);
@@ -619,7 +619,7 @@ class controlador_inm_comprador extends _ctl_base {
         $this->inputs->documento_instruccion_credito = $documento_instruccion_credito;
 
         $documento_notificacion_descuento = $this->html->input_file(cols: 12,name: 'notificacion_descuento',
-            row_upd:  new stdClass(),value_vacio:  false,place_holder: 'Notificacion de Descuento');
+            row_upd:  new stdClass(),value_vacio:  false,place_holder: 'Notificacion de Descuento',required: false);
         if(errores::$error){
             return $this->retorno_error(
                 mensaje: 'Error al obtener inputs',data:  $documento_notificacion_descuento, header: $header,ws:  $ws);
@@ -628,7 +628,7 @@ class controlador_inm_comprador extends _ctl_base {
         $this->inputs->documento_notificacion_descuento = $documento_notificacion_descuento;
 
         $documento_isr_notaria = $this->html->input_file(cols: 12,name: 'isr_notaria',
-            row_upd:  new stdClass(),value_vacio:  false,place_holder: 'ISR Notaria');
+            row_upd:  new stdClass(),value_vacio:  false,place_holder: 'ISR Notaria',required: false);
         if(errores::$error){
             return $this->retorno_error(
                 mensaje: 'Error al obtener inputs',data:  $documento_isr_notaria, header: $header,ws:  $ws);
@@ -637,7 +637,7 @@ class controlador_inm_comprador extends _ctl_base {
         $this->inputs->documento_isr_notaria = $documento_isr_notaria;
 
         $keys_selects = (new init())->key_select_txt(cols: 12,key: 'isr',
-            keys_selects:$keys_selects, place_holder: 'ISR');
+            keys_selects:$keys_selects, place_holder: 'ISR',required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
@@ -789,6 +789,171 @@ class controlador_inm_comprador extends _ctl_base {
             }
 
             $this->button_inm_doc_comprador_elimina_bd_instruccion_credito = $button_inm_doc_comprador_elimina_bd;
+        }
+        
+        $filtro_inm_doc['inm_comprador.id'] = $this->registro_id;
+        $filtro_inm_doc['doc_tipo_documento.id'] = 43;
+        $r_inm_doc_comprador = (new inm_doc_comprador(link: $this->link))->filtro_and(filtro: $filtro_inm_doc);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al integrar doc',data:  $r_inm_doc_comprador,
+                header: $header,ws:  $ws);
+        }
+
+        if($r_inm_doc_comprador->n_registros > 0) {
+            $this->descripcion_notificacion_descuento = 'Instruccion de Credito';
+
+            $button_inm_doc_comprador_descarga = $this->html->button_href(accion: 'descarga', etiqueta: 'Descarga',
+                registro_id: $r_inm_doc_comprador->registros[0]['inm_doc_comprador_id'],
+                seccion: 'inm_doc_comprador', style: 'success');
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al integrar button',
+                    data: $button_inm_doc_comprador_descarga, header: $header, ws: $ws);
+            }
+
+            $this->button_inm_doc_comprador_descarga_notificacion_descuento = $button_inm_doc_comprador_descarga;
+
+            $button_inm_doc_comprador_vista_previa = $this->html->button_href(accion: 'vista_previa',
+                etiqueta: 'Vista Previa', registro_id: $r_inm_doc_comprador->registros[0]['inm_doc_comprador_id'],
+                seccion: 'inm_doc_comprador', style: 'success');
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al integrar button',
+                    data: $button_inm_doc_comprador_vista_previa, header: $header, ws: $ws);
+            }
+
+            $this->button_inm_doc_comprador_vista_previa_notificacion_descuento= $button_inm_doc_comprador_vista_previa;
+
+            $button_inm_doc_comprador_descarga_zip = $this->html->button_href(accion: 'descarga_zip',
+                etiqueta: 'Descarga ZIP', registro_id: $r_inm_doc_comprador->registros[0]['inm_doc_comprador_id'],
+                seccion: 'inm_doc_comprador', style: 'success');
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al integrar button',
+                    data: $button_inm_doc_comprador_descarga_zip, header: $header, ws: $ws);
+            }
+
+            $this->button_inm_doc_comprador_descarga_zip_notificacion_descuento = $button_inm_doc_comprador_descarga_zip;
+
+            $params = array('accion_retorno'=>'proceso_cliente','seccion_retorno'=>'inm_comprador',
+                'id_retorno'=>$this->registro_id, 'pestana_general_actual' => 'pestanageneral2',
+                'pestana_actual' => 'pestana4');
+            $button_inm_doc_comprador_elimina_bd = $this->html->button_href(accion: 'elimina_bd',
+                etiqueta: 'Elimina', registro_id: $r_inm_doc_comprador->registros[0]['inm_doc_comprador_id'],
+                seccion: 'inm_doc_comprador', style: 'danger',params: $params);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al integrar button', data: $button_inm_doc_comprador_elimina_bd,
+                    header: $header, ws: $ws);
+            }
+
+            $this->button_inm_doc_comprador_elimina_bd_notificacion_descuento = $button_inm_doc_comprador_elimina_bd;
+        }
+        
+        $filtro_inm_doc['inm_comprador.id'] = $this->registro_id;
+        $filtro_inm_doc['doc_tipo_documento.id'] = 44;
+        $r_inm_doc_comprador = (new inm_doc_comprador(link: $this->link))->filtro_and(filtro: $filtro_inm_doc);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al integrar doc',data:  $r_inm_doc_comprador,
+                header: $header,ws:  $ws);
+        }
+
+        if($r_inm_doc_comprador->n_registros > 0) {
+            $this->descripcion_isr_notaria = 'Instruccion de Credito';
+
+            $button_inm_doc_comprador_descarga = $this->html->button_href(accion: 'descarga', etiqueta: 'Descarga',
+                registro_id: $r_inm_doc_comprador->registros[0]['inm_doc_comprador_id'],
+                seccion: 'inm_doc_comprador', style: 'success');
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al integrar button',
+                    data: $button_inm_doc_comprador_descarga, header: $header, ws: $ws);
+            }
+
+            $this->button_inm_doc_comprador_descarga_isr_notaria = $button_inm_doc_comprador_descarga;
+
+            $button_inm_doc_comprador_vista_previa = $this->html->button_href(accion: 'vista_previa',
+                etiqueta: 'Vista Previa', registro_id: $r_inm_doc_comprador->registros[0]['inm_doc_comprador_id'],
+                seccion: 'inm_doc_comprador', style: 'success');
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al integrar button',
+                    data: $button_inm_doc_comprador_vista_previa, header: $header, ws: $ws);
+            }
+
+            $this->button_inm_doc_comprador_vista_previa_isr_notaria= $button_inm_doc_comprador_vista_previa;
+
+            $button_inm_doc_comprador_descarga_zip = $this->html->button_href(accion: 'descarga_zip',
+                etiqueta: 'Descarga ZIP', registro_id: $r_inm_doc_comprador->registros[0]['inm_doc_comprador_id'],
+                seccion: 'inm_doc_comprador', style: 'success');
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al integrar button',
+                    data: $button_inm_doc_comprador_descarga_zip, header: $header, ws: $ws);
+            }
+
+            $this->button_inm_doc_comprador_descarga_zip_isr_notaria = $button_inm_doc_comprador_descarga_zip;
+
+            $params = array('accion_retorno'=>'proceso_cliente','seccion_retorno'=>'inm_comprador',
+                'id_retorno'=>$this->registro_id, 'pestana_general_actual' => 'pestanageneral2',
+                'pestana_actual' => 'pestana4');
+            $button_inm_doc_comprador_elimina_bd = $this->html->button_href(accion: 'elimina_bd',
+                etiqueta: 'Elimina', registro_id: $r_inm_doc_comprador->registros[0]['inm_doc_comprador_id'],
+                seccion: 'inm_doc_comprador', style: 'danger',params: $params);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al integrar button', data: $button_inm_doc_comprador_elimina_bd,
+                    header: $header, ws: $ws);
+            }
+
+            $this->button_inm_doc_comprador_elimina_bd_isr_notaria = $button_inm_doc_comprador_elimina_bd;
+        }     
+        
+        $filtro_inm_doc['inm_comprador.id'] = $this->registro_id;
+        $filtro_inm_doc['doc_tipo_documento.id'] = 45;
+        $r_inm_doc_comprador = (new inm_doc_comprador(link: $this->link))->filtro_and(filtro: $filtro_inm_doc);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al integrar doc',data:  $r_inm_doc_comprador,
+                header: $header,ws:  $ws);
+        }
+
+        if($r_inm_doc_comprador->n_registros > 0) {
+            $this->descripcion_isr = 'Instruccion de Credito';
+
+            $button_inm_doc_comprador_descarga = $this->html->button_href(accion: 'descarga', etiqueta: 'Descarga',
+                registro_id: $r_inm_doc_comprador->registros[0]['inm_doc_comprador_id'],
+                seccion: 'inm_doc_comprador', style: 'success');
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al integrar button',
+                    data: $button_inm_doc_comprador_descarga, header: $header, ws: $ws);
+            }
+
+            $this->button_inm_doc_comprador_descarga_isr = $button_inm_doc_comprador_descarga;
+
+            $button_inm_doc_comprador_vista_previa = $this->html->button_href(accion: 'vista_previa',
+                etiqueta: 'Vista Previa', registro_id: $r_inm_doc_comprador->registros[0]['inm_doc_comprador_id'],
+                seccion: 'inm_doc_comprador', style: 'success');
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al integrar button',
+                    data: $button_inm_doc_comprador_vista_previa, header: $header, ws: $ws);
+            }
+
+            $this->button_inm_doc_comprador_vista_previa_isr= $button_inm_doc_comprador_vista_previa;
+
+            $button_inm_doc_comprador_descarga_zip = $this->html->button_href(accion: 'descarga_zip',
+                etiqueta: 'Descarga ZIP', registro_id: $r_inm_doc_comprador->registros[0]['inm_doc_comprador_id'],
+                seccion: 'inm_doc_comprador', style: 'success');
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al integrar button',
+                    data: $button_inm_doc_comprador_descarga_zip, header: $header, ws: $ws);
+            }
+
+            $this->button_inm_doc_comprador_descarga_zip_isr = $button_inm_doc_comprador_descarga_zip;
+
+            $params = array('accion_retorno'=>'proceso_cliente','seccion_retorno'=>'inm_comprador',
+                'id_retorno'=>$this->registro_id, 'pestana_general_actual' => 'pestanageneral2',
+                'pestana_actual' => 'pestana4');
+            $button_inm_doc_comprador_elimina_bd = $this->html->button_href(accion: 'elimina_bd',
+                etiqueta: 'Elimina', registro_id: $r_inm_doc_comprador->registros[0]['inm_doc_comprador_id'],
+                seccion: 'inm_doc_comprador', style: 'danger',params: $params);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al integrar button', data: $button_inm_doc_comprador_elimina_bd,
+                    header: $header, ws: $ws);
+            }
+
+            $this->button_inm_doc_comprador_elimina_bd_isr = $button_inm_doc_comprador_elimina_bd;
         }
 
         return $base;
@@ -1707,7 +1872,7 @@ class controlador_inm_comprador extends _ctl_base {
         $init_data['inm_tipo_discapacidad'] = "gamboamartin\\inmuebles";
         $init_data['inm_persona_discapacidad'] = "gamboamartin\\inmuebles";
         $init_data['inm_estado_civil'] = "gamboamartin\\inmuebles";
-        $init_data['inm_instruccion_hipotecaria'] = "gamboamartin\\inmuebles";
+        $init_data['inm_institucion_hipotecaria'] = "gamboamartin\\inmuebles";
         $init_data['inm_sindicato'] = "gamboamartin\\inmuebles";
         $init_data['inm_nacionalidad'] = "gamboamartin\\inmuebles";
         $init_data['inm_ocupacion'] = "gamboamartin\\inmuebles";
@@ -2407,7 +2572,7 @@ class controlador_inm_comprador extends _ctl_base {
     public function por_firmar_bd(bool $header, bool $ws = false)
     {
         $this->link->beginTransaction();
-
+        
         $filtro_exi['inm_comprador.id'] = $this->registro_id;
         $filtro_exi['inm_status_comprador.id'] = 7;
         $existe = (new inm_bitacora_status_comprador(link: $this->link))->existe(filtro: $filtro_exi);
@@ -2420,7 +2585,7 @@ class controlador_inm_comprador extends _ctl_base {
         if(!$existe) {
             $registro = array();
             $registro['inm_comprador_id'] = $this->registro_id;
-            $registro['inm_status_comprador_id'] = 6;
+            $registro['inm_status_comprador_id'] = 7;
             $registro['fecha_status'] = date('Y-m-d\TH:i:s');
             $r_inm_bitacora_status_comprador = (new inm_bitacora_status_comprador(link: $this->link))->alta_registro(
                 registro: $registro);
@@ -2485,7 +2650,7 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         if(!$existe) {
-            $_FILES['documento'] = $_FILES['notificacion_de_descuento'];
+            $_FILES['documento'] = $_FILES['notificacion_descuento'];
             $registro = array();
             $registro['inm_comprador_id'] = $this->registro_id;
             $registro['doc_tipo_documento_id'] = 43;

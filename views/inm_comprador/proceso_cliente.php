@@ -898,9 +898,7 @@
                                         <div class="col-lg-3">
                                             <?php echo $controlador->button_inm_doc_comprador_elimina_bd_sic; ?>
                                         </div>
-                                    </div>
 
-                                    <div class="row buttons-form">
                                         <div class="col-lg-12">
                                             <label>
                                                 <?php echo $controlador->descripcion_constancia_credito; ?>
@@ -948,9 +946,7 @@
                                         <div class="col-lg-3">
                                             <?php echo $controlador->button_inm_doc_comprador_elimina_bd_anexos; ?>
                                         </div>
-                                    </div>
 
-                                    <div class="row buttons-form">
                                         <div class="col-lg-12">
                                             <label>
                                                 <?php echo $controlador->descripcion_instruccion_credito; ?>
@@ -968,9 +964,7 @@
                                         <div class="col-lg-3">
                                             <?php echo $controlador->button_inm_doc_comprador_elimina_bd_instruccion_credito; ?>
                                         </div>
-                                    </div>
-                                    
-                                    <div class="row buttons-form">
+
                                         <div class="col-lg-12">
                                             <label>
                                                 <?php echo $controlador->descripcion_notificacion_descuento; ?>
@@ -988,9 +982,7 @@
                                         <div class="col-lg-3">
                                             <?php echo $controlador->button_inm_doc_comprador_elimina_bd_notificacion_descuento; ?>
                                         </div>
-                                    </div>
-                                    
-                                    <div class="row buttons-form">
+
                                         <div class="col-lg-12">
                                             <label>
                                                 <?php echo $controlador->descripcion_isr_notaria; ?>
@@ -1008,9 +1000,7 @@
                                         <div class="col-lg-3">
                                             <?php echo $controlador->button_inm_doc_comprador_elimina_bd_isr_notaria; ?>
                                         </div>
-                                    </div>
-                                    
-                                    <div class="row buttons-form">
+
                                         <div class="col-lg-12">
                                             <label>
                                                 <?php echo $controlador->descripcion_isr; ?>
