@@ -75,6 +75,20 @@ class controlador_inm_comprador extends _ctl_base {
     public string $button_inm_doc_comprador_vista_previa = '';
     public string $button_inm_doc_comprador_elimina_bd = '';
 
+    /* DOCUMENTO AUTORIZADO */
+    public string $descripcion_sic = '';
+    public string $button_inm_doc_comprador_descarga_sic = '';
+    public string $button_inm_doc_comprador_descarga_zip_sic = '';
+    public string $button_inm_doc_comprador_vista_previa_sic = '';
+    public string $button_inm_doc_comprador_elimina_bd_sic = '';
+
+
+    public string $descripcion_constancia_credito = '';
+    public string $button_inm_doc_comprador_descarga_constancia_credito = '';
+    public string $button_inm_doc_comprador_descarga_zip_constancia_credito = '';
+    public string $button_inm_doc_comprador_vista_previa_constancia_credito = '';
+    public string $button_inm_doc_comprador_elimina_bd_constancia_credito = '';
+
     /* BOTON DE DESCARGA SOLICITUD INFONAVIT */
     public string $button_solicitud_infonavit = '';
 
@@ -358,7 +372,7 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         $documento_sic = $this->html->input_file(cols: 12,name: 'sic',row_upd:  new stdClass(),value_vacio:  false,
-            place_holder: 'SIC');
+            place_holder: 'SIC', required: false);
         if(errores::$error){
             return $this->retorno_error(
                 mensaje: 'Error al obtener inputs',data:  $documento_sic, header: $header,ws:  $ws);
@@ -367,7 +381,7 @@ class controlador_inm_comprador extends _ctl_base {
         $this->inputs->documento_sic = $documento_sic;
 
         $documento_constancia_credito = $this->html->input_file(cols: 12,name: 'constancia_credito',
-            row_upd:  new stdClass(),value_vacio:  false,place_holder: 'Constancia de Credito');
+            row_upd:  new stdClass(),value_vacio:  false,place_holder: 'Constancia de Credito',  required: false);
         if(errores::$error){
             return $this->retorno_error(
                 mensaje: 'Error al obtener inputs',data:  $documento_constancia_credito, header: $header,ws:  $ws);
@@ -410,8 +424,9 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al obtener inputs_hidden',data:  $inputs, header: $header,ws:  $ws);
         }
 
-        $link_autorizado_bd = $this->obj_link->link_con_id(accion:'asigna_ubicacion_bd',
-            link: $this->link,registro_id: $this->registro_id,seccion: 'inm_comprador');
+        $params = array('pestana_general_actual' => 'pestanageneral2');
+        $link_autorizado_bd = $this->obj_link->link_con_id(accion:'autorizado_bd',
+            link: $this->link,registro_id: $this->registro_id,seccion: 'inm_comprador',params: $params);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al generar link',data:  $link_autorizado_bd,
                 header: $header,ws:  $ws);
@@ -420,6 +435,117 @@ class controlador_inm_comprador extends _ctl_base {
         $this->link_autorizado_bd = $link_autorizado_bd;
 
         $this->keys_selects = array_merge($keys_selects, $this->keys_selects);
+
+        $filtro_inm_doc['inm_comprador.id'] = $this->registro_id;
+        $filtro_inm_doc['doc_tipo_documento.id'] = 39;
+        $r_inm_doc_comprador = (new inm_doc_comprador(link: $this->link))->filtro_and(filtro: $filtro_inm_doc);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al integrar doc',data:  $r_inm_doc_comprador,
+                header: $header,ws:  $ws);
+        }
+
+        if($r_inm_doc_comprador->n_registros > 0) {
+            $this->descripcion_constancia_credito = 'SIC';
+
+            $button_inm_doc_comprador_descarga = $this->html->button_href(accion: 'descarga', etiqueta: 'Descarga',
+                registro_id: $r_inm_doc_comprador->registros[0]['inm_doc_comprador_id'],
+                seccion: 'inm_doc_comprador', style: 'success');
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al integrar button',
+                    data: $button_inm_doc_comprador_descarga, header: $header, ws: $ws);
+            }
+
+            $this->button_inm_doc_comprador_descarga_sic = $button_inm_doc_comprador_descarga;
+
+            $button_inm_doc_comprador_vista_previa = $this->html->button_href(accion: 'vista_previa',
+                etiqueta: 'Vista Previa', registro_id: $r_inm_doc_comprador->registros[0]['inm_doc_comprador_id'],
+                seccion: 'inm_doc_comprador', style: 'success');
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al integrar button',
+                    data: $button_inm_doc_comprador_vista_previa, header: $header, ws: $ws);
+            }
+
+            $this->button_inm_doc_comprador_vista_previa_sic = $button_inm_doc_comprador_vista_previa;
+
+            $button_inm_doc_comprador_descarga_zip = $this->html->button_href(accion: 'descarga_zip',
+                etiqueta: 'Descarga ZIP', registro_id: $r_inm_doc_comprador->registros[0]['inm_doc_comprador_id'],
+                seccion: 'inm_doc_comprador', style: 'success');
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al integrar button',
+                    data: $button_inm_doc_comprador_descarga_zip, header: $header, ws: $ws);
+            }
+
+            $this->button_inm_doc_comprador_descarga_zip_sic = $button_inm_doc_comprador_descarga_zip;
+
+            $params = array('accion_retorno'=>'proceso_cliente','seccion_retorno'=>'inm_comprador',
+                'id_retorno'=>$this->registro_id, 'pestana_general_actual' => 'pestanageneral2',
+                'pestana_actual' => 'pestana4');
+            $button_inm_doc_comprador_elimina_bd = $this->html->button_href(accion: 'elimina_bd',
+                etiqueta: 'Elimina', registro_id: $r_inm_doc_comprador->registros[0]['inm_doc_comprador_id'],
+                seccion: 'inm_doc_comprador', style: 'danger',params: $params);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al integrar button', data: $button_inm_doc_comprador_elimina_bd,
+                    header: $header, ws: $ws);
+            }
+
+            $this->button_inm_doc_comprador_elimina_bd_sic = $button_inm_doc_comprador_elimina_bd;
+        }
+
+        $filtro_inm_doc['inm_comprador.id'] = $this->registro_id;
+        $filtro_inm_doc['doc_tipo_documento.id'] = 40;
+        $r_inm_doc_comprador = (new inm_doc_comprador(link: $this->link))->filtro_and(filtro: $filtro_inm_doc);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al integrar doc',data:  $r_inm_doc_comprador,
+                header: $header,ws:  $ws);
+        }
+
+        if($r_inm_doc_comprador->n_registros > 0) {
+            $this->descripcion_constancia_credito = 'Constancia de Credito';
+
+            $button_inm_doc_comprador_descarga = $this->html->button_href(accion: 'descarga', etiqueta: 'Descarga',
+                registro_id: $r_inm_doc_comprador->registros[0]['inm_doc_comprador_id'],
+                seccion: 'inm_doc_comprador', style: 'success');
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al integrar button',
+                    data: $button_inm_doc_comprador_descarga, header: $header, ws: $ws);
+            }
+
+            $this->button_inm_doc_comprador_descarga_constancia_credito = $button_inm_doc_comprador_descarga;
+
+            $button_inm_doc_comprador_vista_previa = $this->html->button_href(accion: 'vista_previa',
+                etiqueta: 'Vista Previa', registro_id: $r_inm_doc_comprador->registros[0]['inm_doc_comprador_id'],
+                seccion: 'inm_doc_comprador', style: 'success');
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al integrar button',
+                    data: $button_inm_doc_comprador_vista_previa, header: $header, ws: $ws);
+            }
+
+            $this->button_inm_doc_comprador_vista_previa_constancia_credito = $button_inm_doc_comprador_vista_previa;
+
+            $button_inm_doc_comprador_descarga_zip = $this->html->button_href(accion: 'descarga_zip',
+                etiqueta: 'Descarga ZIP', registro_id: $r_inm_doc_comprador->registros[0]['inm_doc_comprador_id'],
+                seccion: 'inm_doc_comprador', style: 'success');
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al integrar button',
+                    data: $button_inm_doc_comprador_descarga_zip, header: $header, ws: $ws);
+            }
+
+            $this->button_inm_doc_comprador_descarga_zip_constancia_credito = $button_inm_doc_comprador_descarga_zip;
+
+            $params = array('accion_retorno'=>'proceso_cliente','seccion_retorno'=>'inm_comprador',
+                'id_retorno'=>$this->registro_id, 'pestana_general_actual' => 'pestanageneral2',
+                'pestana_actual' => 'pestana4');
+            $button_inm_doc_comprador_elimina_bd = $this->html->button_href(accion: 'elimina_bd',
+                etiqueta: 'Elimina', registro_id: $r_inm_doc_comprador->registros[0]['inm_doc_comprador_id'],
+                seccion: 'inm_doc_comprador', style: 'danger',params: $params);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al integrar button', data: $button_inm_doc_comprador_elimina_bd,
+                    header: $header, ws: $ws);
+            }
+
+            $this->button_inm_doc_comprador_elimina_bd_constancia_credito = $button_inm_doc_comprador_elimina_bd;
+        }
+
 
         return $base;
     }
@@ -1166,8 +1292,9 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al obtener inputs_hidden',data:  $inputs, header: $header,ws:  $ws);
         }
 
+        $params = array('pestana_general_actual' => 'pestanageneral2');
         $link_ingresado_bd = $this->obj_link->link_con_id(accion:'ingresado_bd',
-            link: $this->link,registro_id: $this->registro_id,seccion: 'inm_comprador');
+            link: $this->link,registro_id: $this->registro_id,seccion: 'inm_comprador',params: $params);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al generar link',data:  $link_ingresado_bd,
                 header: $header,ws:  $ws);
@@ -1315,6 +1442,95 @@ class controlador_inm_comprador extends _ctl_base {
         $this->keys_selects = array_merge($keys_selects, $this->keys_selects);
 
         return $base;
+    }
+
+    public function autorizado_bd(bool $header, bool $ws = false)
+    {
+        $this->link->beginTransaction();
+
+        $filtro_exi['inm_comprador.id'] = $this->registro_id;
+        $filtro_exi['inm_status_comprador.id'] = 6;
+        $existe = (new inm_bitacora_status_comprador(link: $this->link))->existe(filtro: $filtro_exi);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $existe,
+                header: $header, ws: $ws);
+        }
+
+        if(!$existe) {
+            $registro = array();
+            $registro['inm_comprador_id'] = $this->registro_id;
+            $registro['inm_status_comprador_id'] = 6;
+            $registro['fecha_status'] = date('Y-m-d\TH:i:s');
+            $r_inm_bitacora_status_comprador = (new inm_bitacora_status_comprador(link: $this->link))->alta_registro(
+                registro: $registro);
+            if (errores::$error) {
+                $this->link->rollBack();
+                return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_bitacora_status_comprador,
+                    header: $header, ws: $ws);
+            }
+        }
+
+        $filtro_doc['inm_comprador.id'] = $this->registro_id;
+        $filtro_doc['doc_tipo_documento.id'] = 39;
+        $existe = (new inm_doc_comprador(link: $this->link))->existe(filtro: $filtro_doc);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $existe,
+                header: $header, ws: $ws);
+        }
+
+        if(!$existe) {
+            $_FILES['documento'] = $_FILES['sic'];
+            $registro = array();
+            $registro['inm_comprador_id'] = $this->registro_id;
+            $registro['doc_tipo_documento_id'] = 39;
+            $r_inm_doc_comprador = (new inm_doc_comprador(link: $this->link))->alta_registro(registro: $registro);
+            if (errores::$error) {
+                $this->link->rollBack();
+                return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_doc_comprador,
+                    header: $header, ws: $ws);
+            }
+        }
+
+        $filtro_doc['inm_comprador.id'] = $this->registro_id;
+        $filtro_doc['doc_tipo_documento.id'] = 40;
+        $existe = (new inm_doc_comprador(link: $this->link))->existe(filtro: $filtro_doc);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $existe,
+                header: $header, ws: $ws);
+        }
+
+        if(!$existe) {
+            $_FILES['documento'] = $_FILES['constancia_credito'];
+            $registro = array();
+            $registro['inm_comprador_id'] = $this->registro_id;
+            $registro['doc_tipo_documento_id'] = 40;
+            $r_inm_doc_comprador = (new inm_doc_comprador(link: $this->link))->alta_registro(registro: $registro);
+            if (errores::$error) {
+                $this->link->rollBack();
+                return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_doc_comprador,
+                    header: $header, ws: $ws);
+            }
+        }
+
+        $this->link->commit();
+
+        $params = array('pestana_general_actual' => 'pestanageneral2');
+        $link_proceso_comprador = $this->obj_link->link_con_id(
+            accion: 'proceso_cliente', link: $this->link, registro_id: $this->registro_id, seccion: 'inm_comprador',
+            params: $params);
+        if (errores::$error) {
+            $this->retorno_error(mensaje: 'Error al generar link', data: $link_proceso_comprador, header: $header, ws: $ws);
+        }
+
+        if($header) {
+            header('Location:' . $link_proceso_comprador);
+            exit;
+        }
+
+        return $this->registro_id;
     }
 
 

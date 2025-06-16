@@ -880,6 +880,45 @@
 
                                         <?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
                                     </form>
+                                    <div class="row buttons-form">
+                                        <div class="col-lg-12">
+                                            <label>
+                                                <?php echo $controlador->descripcion_sic; ?>
+                                            </label>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_comprador_descarga_sic; ?>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_comprador_vista_previa_sic; ?>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_comprador_descarga_zip_sic; ?>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_comprador_elimina_bd_sic; ?>
+                                        </div>
+                                    </div>
+
+                                    <div class="row buttons-form">
+                                        <div class="col-lg-12">
+                                            <label>
+                                                <?php echo $controlador->descripcion_constancia_credito; ?>
+                                            </label>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_comprador_descarga_constancia_credito; ?>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_comprador_vista_previa_constancia_credito; ?>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_comprador_descarga_zip_constancia_credito; ?>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_comprador_elimina_bd_constancia_credito; ?>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="conten" id="cpestana7">
                                     <form method="post" action="<?php echo $controlador->link_por_firmar_bd; ?>"
