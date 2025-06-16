@@ -950,7 +950,8 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $documento = $this->html->input_file(cols: 12,name: 'avaluo',row_upd:  new stdClass(),value_vacio:  false);
+        $documento = $this->html->input_file(cols: 12,name: 'avaluo',row_upd:  new stdClass(),value_vacio:  false,
+            place_holder: 'Avaluo');
         if(errores::$error){
             return $this->retorno_error(
                 mensaje: 'Error al obtener inputs',data:  $documento, header: $header,ws:  $ws);
