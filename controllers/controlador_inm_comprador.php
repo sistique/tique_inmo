@@ -53,7 +53,6 @@ class controlador_inm_comprador extends _ctl_base {
     public string $link_rel_ubi_comp_alta_bd = '';
 
     /**/
-    public string $link_por_ingresar_bd = '';
     public string $link_ingresado_bd = '';
     public string $link_autorizado_bd = '';
     public string $link_por_firmar_bd = '';
@@ -62,6 +61,7 @@ class controlador_inm_comprador extends _ctl_base {
     public string $link_cobrado_bd = '';
 
     /**/
+    public string $link_inm_avaluo_alta_bd = '';
     public string $link_inm_rel_cliente_valuador_alta_bd = '';
     public string $link_inm_rel_co_acred_alta_bd = '';
     public string $link_asigna_nuevo_co_acreditado_bd = '';
@@ -988,21 +988,22 @@ class controlador_inm_comprador extends _ctl_base {
             controler: $this, id_retorno: $hiddens->id_retorno, in_registro_id: $hiddens->in_registro_id,
             inm_comprador_id: $inm_comprador_id, inm_ubicacion_id: '', precio_operacion: $hiddens->precio_operacion,
             seccion_retorno: $hiddens->seccion_retorno);
-
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener inputs_hidden',data:  $inputs, header: $header,ws:  $ws);
         }
+        $this->keys_selects = array_merge($keys_selects, $this->keys_selects);
 
-        $link_por_ingresar_bd = $this->obj_link->link_con_id(accion:'asigna_ubicacion_bd',
-            link: $this->link,registro_id: $this->registro_id,seccion: 'inm_comprador');
+        $params = array();
+        if(isset($_GET['accion']) && $_GET['accion'] == 'proceso_cliente') {
+            $params = array('pestana_general_actual' => 'pestanageneral2', 'pestana_actual' => 'pestana4');
+        }
+        $link_inm_avaluo_alta_bd = $this->obj_link->link_alta_bd(link: $this->link,
+            seccion: 'inm_avaluo',params: $params);
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al generar link',data:  $link_por_ingresar_bd,
+            return $this->retorno_error(mensaje: 'Error al generar link',data:  $link_inm_avaluo_alta_bd,
                 header: $header,ws:  $ws);
         }
-
-        $this->link_por_ingresar_bd = $link_por_ingresar_bd;
-
-        $this->keys_selects = array_merge($keys_selects, $this->keys_selects);
+        $this->link_inm_avaluo_alta_bd = $link_inm_avaluo_alta_bd;
 
         return $base;
     }

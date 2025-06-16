@@ -817,7 +817,7 @@
                                     </form>
                                 </div>
                                 <div class="conten" id="cpestana4">
-                                    <form method="post" action="<?php echo $controlador->link_por_ingresar_bd; ?>"
+                                    <form method="post" action="<?php echo $controlador->link_inm_avaluo_alta_bd; ?>"
                                           class="form-additional" enctype="multipart/form-data">
                                         <?php echo $controlador->inputs->com_cliente_id; ?>
                                         <?php echo $controlador->inputs->mts_terrenos; ?>
