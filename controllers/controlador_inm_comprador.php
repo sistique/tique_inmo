@@ -18,6 +18,7 @@ use gamboamartin\inmuebles\models\_base_paquete;
 use gamboamartin\inmuebles\models\_inm_comprador;
 use gamboamartin\inmuebles\models\_inm_prospecto;
 use gamboamartin\inmuebles\models\_upd_prospecto;
+use gamboamartin\inmuebles\models\inm_avaluo;
 use gamboamartin\inmuebles\models\inm_beneficiario;
 use gamboamartin\inmuebles\models\inm_comprador;
 use gamboamartin\inmuebles\models\inm_conf_docs_comprador;
@@ -926,19 +927,34 @@ class controlador_inm_comprador extends _ctl_base {
                 mensaje: 'Error al obtener registro',data:  $registro,header: $header,ws: $ws);
         }
 
+        $filtro_che['inm_comprador.id'] = $this->registro_id;
+        $r_avaluo = (new inm_avaluo(link: $this->link))->filtro_and(filtro: $filtro_che);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $r_avaluo,
+                header: $header, ws: $ws);
+        }
+
+        if($r_avaluo->n_registros > 0) {
+            $this->row_upd->metros_terreno = $r_avaluo->registros[0]['inm_avaluo_metros_terreno'];
+            $this->row_upd->metros_construidos = $r_avaluo->registros[0]['inm_avaluo_metros_construidos'];
+            $this->row_upd->valor_avaluo = $r_avaluo->registros[0]['inm_avaluo_valor_avaluo'];
+        }
+
+
         $keys_selects = (new _keys_selects())->key_selects_asigna_ubicacion(controler: $this);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'mts_terrenos',
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'metros_terreno',
             keys_selects:$keys_selects, place_holder: 'Metros de Terreno');
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'mts_construidos',
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'metros_construidos',
             keys_selects:$keys_selects, place_holder: 'Metros de Construidos');
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);

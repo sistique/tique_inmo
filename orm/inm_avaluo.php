@@ -92,6 +92,28 @@ class inm_avaluo extends _modelo_parent{
             }
         }
 
+        $filtro_doc['inm_comprador.id'] =  $this->registro['inm_comprador_id'];
+        $filtro_doc['doc_tipo_documento.id'] = 34;
+        $existe = (new inm_doc_comprador(link: $this->link))->existe(filtro: $filtro_doc);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->error->error(mensaje: 'Error al insertar datos', data: $existe);
+
+        }
+
+        if(!$existe) {
+            $_FILES['documento'] = $_FILES['rppc'];
+            $registro = array();
+            $registro['inm_comprador_id'] = $this->registro_id;
+            $registro['doc_tipo_documento_id'] = 34;
+            $r_inm_doc_comprador = (new inm_doc_comprador(link: $this->link))->alta_registro(registro: $registro);
+            if (errores::$error) {
+                $this->link->rollBack();
+                return $this->error->error(mensaje: 'Error al insertar datos', data: $r_inm_doc_comprador);
+
+            }
+        }
+
         return $r_alta_bd;
 
     }

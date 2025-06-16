@@ -841,6 +841,7 @@
                                 <div class="conten" id="cpestana5">
                                     <form method="post" action="<?php echo $controlador->link_ingresado_bd; ?>"
                                           class="form-additional" enctype="multipart/form-data">
+                                        <?php echo $controlador->inputs->inm_comprador_id; ?>
                                         <?php echo $controlador->inputs->com_cliente_id; ?>
                                         <div class="control-group btn-alta">
                                             <div class="controls">
@@ -860,6 +861,7 @@
                                 <div class="conten" id="cpestana6">
                                     <form method="post" action="<?php echo $controlador->link_autorizado_bd; ?>"
                                           class="form-additional" enctype="multipart/form-data">
+                                        <?php echo $controlador->inputs->inm_comprador_id; ?>
 
                                         <?php echo $controlador->inputs->documento_sic; ?>
                                         <?php echo $controlador->inputs->documento_constancia_credito; ?>
