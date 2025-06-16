@@ -1473,9 +1473,9 @@ body .top-box > .container {
         max-height: 61px;
     }
     
-    .top-bar-fixed .menu .nav-link {
+    /*.top-bar-fixed .menu .nav-link {
         padding: 25px 15px;
-    }
+    }*/
     
     .top-bar-fixed .menu  .lang-manu {
         padding-top: 13px;

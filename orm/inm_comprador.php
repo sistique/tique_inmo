@@ -91,7 +91,7 @@ class inm_comprador extends _modelo_parent{
                         LEFT JOIN dp_estado ON dp_estado.id = dp_municipio.dp_estado_id
                         LEFT JOIN dp_pais ON dp_pais.id = dp_estado.dp_pais_id
                         WHERE
-                        inm_rel_ubi_comp.inm_comprador_id = 22
+                        inm_rel_ubi_comp.inm_comprador_id = inm_comprador.id
                          LIMIT 1), ''))";
 
         $columnas_extra['inm_ubicacion_completa'] = $sql;
