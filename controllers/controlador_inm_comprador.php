@@ -22,6 +22,7 @@ use gamboamartin\inmuebles\models\inm_avaluo;
 use gamboamartin\inmuebles\models\inm_beneficiario;
 use gamboamartin\inmuebles\models\inm_comprador;
 use gamboamartin\inmuebles\models\inm_conf_docs_comprador;
+use gamboamartin\inmuebles\models\inm_doc_comprador;
 use gamboamartin\inmuebles\models\inm_referencia;
 use gamboamartin\inmuebles\models\inm_referencia_prospecto;
 use gamboamartin\inmuebles\models\inm_rel_cliente_valuador;
@@ -66,6 +67,12 @@ class controlador_inm_comprador extends _ctl_base {
     public string $link_inm_rel_cliente_valuador_alta_bd = '';
     public string $link_inm_rel_co_acred_alta_bd = '';
     public string $link_asigna_nuevo_co_acreditado_bd = '';
+    
+    /* DOCUMENTO AVALUO */
+    public string $button_inm_doc_comprador_descarga = '';
+    public string $button_inm_doc_comprador_descarga_zip = '';
+    public string $button_inm_doc_comprador_vista_previa = '';
+    public string $button_inm_doc_comprador_elimina_bd = '';
 
     public inm_comprador_html $html_entidad;
 
@@ -973,7 +980,7 @@ class controlador_inm_comprador extends _ctl_base {
                 mensaje: 'Error al obtener inputs',data:  $documento, header: $header,ws:  $ws);
         }
 
-        $this->inputs->documento = $documento;
+        $this->inputs->avaluo = $documento;
 
         $columns_ds = array('com_cliente_rfc','com_cliente_razon_social');
         $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'com_cliente_id',
@@ -1021,6 +1028,59 @@ class controlador_inm_comprador extends _ctl_base {
                 header: $header,ws:  $ws);
         }
         $this->link_inm_avaluo_alta_bd = $link_inm_avaluo_alta_bd;
+
+        $filtro_inm_doc['inm_comprador.id'] = $this->registro_id;
+        $filtro_inm_doc['doc_tipo_documento.id'] = 38;
+        $r_inm_doc_comprador = (new inm_doc_comprador(link: $this->link))->filtro_and(filtro: $filtro_inm_doc);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al integrar doc',data:  $r_inm_doc_comprador,
+                header: $header,ws:  $ws);
+        }
+
+        if($r_inm_doc_comprador->n_registros > 0) {
+            $button_inm_doc_comprador_descarga = $this->html->button_href(accion: 'descarga', etiqueta: 'Descarga',
+                registro_id: $r_inm_doc_comprador->registros[0]['inm_doc_comprador_id'],
+                seccion: 'inm_doc_comprador', style: 'success');
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al integrar button',
+                    data: $button_inm_doc_comprador_descarga, header: $header, ws: $ws);
+            }
+
+            $this->button_inm_doc_comprador_descarga = $button_inm_doc_comprador_descarga;
+
+            $button_inm_doc_comprador_vista_previa = $this->html->button_href(accion: 'vista_previa',
+                etiqueta: 'Vista Previa', registro_id: $r_inm_doc_comprador->registros[0]['inm_doc_comprador_id'],
+                seccion: 'inm_doc_comprador', style: 'success');
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al integrar button',
+                    data: $button_inm_doc_comprador_vista_previa, header: $header, ws: $ws);
+            }
+
+            $this->button_inm_doc_comprador_vista_previa = $button_inm_doc_comprador_vista_previa;
+
+            $button_inm_doc_comprador_descarga_zip = $this->html->button_href(accion: 'descarga_zip',
+                etiqueta: 'Descarga ZIP', registro_id: $r_inm_doc_comprador->registros[0]['inm_doc_comprador_id'],
+                seccion: 'inm_doc_comprador', style: 'success');
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al integrar button',
+                    data: $button_inm_doc_comprador_descarga_zip, header: $header, ws: $ws);
+            }
+
+            $this->button_inm_doc_comprador_descarga_zip = $button_inm_doc_comprador_descarga_zip;
+
+            $params = array('accion_retorno'=>'proceso_cliente','seccion_retorno'=>'inm_comprador',
+                'id_retorno'=>$this->registro_id, 'pestana_general_actual' => 'pestanageneral2',
+                'pestana_actual' => 'pestana4');
+            $button_inm_doc_comprador_elimina_bd = $this->html->button_href(accion: 'elimina_bd',
+                etiqueta: 'Elimina', registro_id: $r_inm_doc_comprador->registros[0]['inm_doc_comprador_id'],
+                seccion: 'inm_doc_comprador', style: 'danger',params: $params);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al integrar button', data: $button_inm_doc_comprador_elimina_bd,
+                    header: $header, ws: $ws);
+            }
+
+            $this->button_inm_doc_comprador_elimina_bd = $button_inm_doc_comprador_elimina_bd;
+        }
 
         return $base;
     }

@@ -42,7 +42,7 @@ class inm_doc_comprador extends _modelo_parent{
         $registro_doc['doc_tipo_documento_id'] = $this->registro['doc_tipo_documento_id'];
         $file = $_FILES['documento'];
 
-        $confs = (new inm_conf_docs_comprador(link: $this->link))->registros();
+        /*$confs = (new inm_conf_docs_comprador(link: $this->link))->registros();
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener configuraciones',data:  $confs);
         }
@@ -57,7 +57,7 @@ class inm_doc_comprador extends _modelo_parent{
 
         if(!$es_tipo_valido){
             return $this->error->error(mensaje: 'Error el documento no es valido para la configuracion',data:  $confs);
-        }
+        }*/
 
         if((new generales())->guarda_archivo_dropbox) {
             $registro_doc['ruta_relativa'] = 'inm_comprador/'.$this->registro['inm_comprador_id'].'/';

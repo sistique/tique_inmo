@@ -826,10 +826,10 @@
                                           class="form-additional" enctype="multipart/form-data">
                                         <?php echo $controlador->inputs->inm_comprador_id; ?>
                                         <?php echo $controlador->inputs->com_cliente_id; ?>
-                                        <?php echo $controlador->inputs->mts_terrenos; ?>
-                                        <?php echo $controlador->inputs->mts_construidos; ?>
+                                        <?php echo $controlador->inputs->metros_terreno; ?>
+                                        <?php echo $controlador->inputs->metros_construidos; ?>
                                         <?php echo $controlador->inputs->valor_avaluo; ?>
-                                        <?php echo $controlador->inputs->documento; ?>
+                                        <?php echo $controlador->inputs->avaluo; ?>
 
                                         <?php echo $controlador->inputs->seccion_retorno; ?>
                                         <?php echo $controlador->inputs->btn_action_next; ?>
@@ -837,6 +837,20 @@
 
                                         <?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
                                     </form>
+                                    <div class="row buttons-form">
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_comprador_descarga; ?>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_comprador_vista_previa; ?>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_comprador_descarga_zip; ?>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_comprador_elimina_bd; ?>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="conten" id="cpestana5">
                                     <form method="post" action="<?php echo $controlador->link_ingresado_bd; ?>"
