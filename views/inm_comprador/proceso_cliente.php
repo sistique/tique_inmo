@@ -930,6 +930,45 @@
                                         <?php echo $controlador->inputs->isr; ?>
                                         <?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
                                     </form>
+                                    <div class="row buttons-form">
+                                        <div class="col-lg-12">
+                                            <label>
+                                                <?php echo $controlador->descripcion_anexos; ?>
+                                            </label>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_comprador_descarga_anexos; ?>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_comprador_vista_previa_anexos; ?>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_comprador_descarga_zip_anexos; ?>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_comprador_elimina_bd_anexos; ?>
+                                        </div>
+                                    </div>
+
+                                    <div class="row buttons-form">
+                                        <div class="col-lg-12">
+                                            <label>
+                                                <?php echo $controlador->descripcion_institucion_credito; ?>
+                                            </label>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_comprador_descarga_institucion_credito; ?>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_comprador_vista_previa_institucion_credito; ?>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_comprador_descarga_zip_institucion_credito; ?>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_comprador_elimina_bd_institucion_credito; ?>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="conten" id="cpestana8">
                                     <form method="post" action="<?php echo $controlador->link_escriturado_bd; ?>"
