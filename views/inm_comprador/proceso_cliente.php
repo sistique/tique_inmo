@@ -869,8 +869,6 @@
                                             <?php echo $controlador->button_solicitud_infonavit; ?>
                                         </div>
                                     </div>
-
-                                    <a role="button" title="Solicitud Infonavit" href="index.php?seccion=inm_comprador&amp;accion=solicitud_infonavit&amp;registro_id=<?php echo $controlador->regitros_id; ?>&amp;session_id=5514223136&amp;adm_menu_id=45" class="btn btn-warning " style="margin-left: 2px; margin-bottom: 2px; ">Solicitud Infonavit</a>
                                 </div>
                                 <div class="conten" id="cpestana6">
                                     <form method="post" action="<?php echo $controlador->link_autorizado_bd; ?>"

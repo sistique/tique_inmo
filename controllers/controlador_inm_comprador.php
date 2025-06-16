@@ -20,6 +20,7 @@ use gamboamartin\inmuebles\models\_inm_prospecto;
 use gamboamartin\inmuebles\models\_upd_prospecto;
 use gamboamartin\inmuebles\models\inm_avaluo;
 use gamboamartin\inmuebles\models\inm_beneficiario;
+use gamboamartin\inmuebles\models\inm_bitacora_status_comprador;
 use gamboamartin\inmuebles\models\inm_comprador;
 use gamboamartin\inmuebles\models\inm_conf_docs_comprador;
 use gamboamartin\inmuebles\models\inm_doc_comprador;
@@ -73,6 +74,9 @@ class controlador_inm_comprador extends _ctl_base {
     public string $button_inm_doc_comprador_descarga_zip = '';
     public string $button_inm_doc_comprador_vista_previa = '';
     public string $button_inm_doc_comprador_elimina_bd = '';
+
+    /* BOTON DE DESCARGA SOLICITUD INFONAVIT */
+    public string $button_solicitud_infonavit = '';
 
     public inm_comprador_html $html_entidad;
 
@@ -1162,7 +1166,7 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al obtener inputs_hidden',data:  $inputs, header: $header,ws:  $ws);
         }
 
-        $link_ingresado_bd = $this->obj_link->link_con_id(accion:'asigna_ubicacion_bd',
+        $link_ingresado_bd = $this->obj_link->link_con_id(accion:'ingresado_bd',
             link: $this->link,registro_id: $this->registro_id,seccion: 'inm_comprador');
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al generar link',data:  $link_ingresado_bd,
@@ -1170,6 +1174,16 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         $this->link_ingresado_bd = $link_ingresado_bd;
+
+        $button_solicitud_infonavit = $this->html->button_href(accion: 'solicitud_infonavit',
+            etiqueta: 'Solicitud Infonavit', registro_id: $this->registro_id, seccion: 'inm_comprador',
+            style: 'success');
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al integrar button',
+                data: $button_solicitud_infonavit, header: $header, ws: $ws);
+        }
+
+        $this->button_solicitud_infonavit = $button_solicitud_infonavit;
 
         $this->keys_selects = array_merge($keys_selects, $this->keys_selects);
 
@@ -1536,6 +1550,52 @@ class controlador_inm_comprador extends _ctl_base {
 
         return $datatables;
     }
+
+    public function ingresado_bd(bool $header, bool $ws = false)
+    {
+        $this->link->beginTransaction();
+
+        $filtro_exi['inm_comprador.id'] = $this->registro_id;
+        $filtro_exi['inm_status_comprador.id'] = 5;
+        $existe = (new inm_bitacora_status_comprador(link: $this->link))->existe(filtro: $filtro_exi);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $existe,
+                header: $header, ws: $ws);
+        }
+
+        if(!$existe) {
+            $registro = array();
+            $registro['inm_comprador_id'] = $this->registro_id;
+            $registro['inm_status_comprador_id'] = 5;
+            $registro['fecha_status'] = date('Y-m-d\TH:i:s');
+            $r_inm_bitacora_status_comprador = (new inm_bitacora_status_comprador(link: $this->link))->alta_registro(
+                registro: $registro);
+            if (errores::$error) {
+                $this->link->rollBack();
+                return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_bitacora_status_comprador,
+                    header: $header, ws: $ws);
+            }
+        }
+
+        $this->link->commit();
+
+        $params = array('pestana_general_actual' => 'pestanageneral2');
+        $link_proceso_comprador = $this->obj_link->link_con_id(
+            accion: 'proceso_cliente', link: $this->link, registro_id: $this->registro_id, seccion: 'inm_comprador',
+            params: $params);
+        if (errores::$error) {
+            $this->retorno_error(mensaje: 'Error al generar link', data: $link_proceso_comprador, header: $header, ws: $ws);
+        }
+
+        if($header) {
+            header('Location:' . $link_proceso_comprador);
+            exit;
+        }
+
+        return $this->registro_id;
+    }
+
     protected function key_selects_txt(array $keys_selects): array
     {
 
