@@ -65,6 +65,7 @@ class controlador_inm_comprador extends _ctl_base {
 
     /**/
     public string $link_inm_avaluo_alta_bd = '';
+    public string $link_inm_escritura_alta_bd = '';
     public string $link_inm_rel_cliente_valuador_alta_bd = '';
     public string $link_inm_rel_co_acred_alta_bd = '';
     public string $link_asigna_nuevo_co_acreditado_bd = '';
@@ -961,7 +962,6 @@ class controlador_inm_comprador extends _ctl_base {
 
     public function asigna_escriturado(bool $header, bool $ws = false): array|stdClass
     {
-
         $filtro['inm_comprador.id']= $this->registro_id;
         $registro = (new inm_rel_comprador_com_cliente(link: $this->link))->filtro_and(filtro:$filtro);
         if(errores::$error){
@@ -981,7 +981,6 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->retorno_error(
                 mensaje: 'Error al obtener inputs',data:  $documento_validacion_poder, header: $header,ws:  $ws);
         }
-
         $this->inputs->documento_validacion_poder = $documento_validacion_poder;
 
         $documento_acuse_patron = $this->html->input_file(cols: 12,name: 'acuse_patron',
@@ -990,26 +989,24 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->retorno_error(
                 mensaje: 'Error al obtener inputs',data:  $documento_acuse_patron, header: $header,ws:  $ws);
         }
-
         $this->inputs->documento_acuse_patron = $documento_acuse_patron;
 
-        $documento_escrituras = $this->html->input_file(cols: 12,name: 'escrituras',
+        $documento_escrituras = $this->html->input_file(cols: 12,name: 'escritura',
             row_upd:  new stdClass(),value_vacio:  false,place_holder: 'Escrituras');
         if(errores::$error){
             return $this->retorno_error(
                 mensaje: 'Error al obtener inputs',data:  $documento_escrituras, header: $header,ws:  $ws);
         }
-
         $this->inputs->documento_escrituras = $documento_escrituras;
 
-        $fecha = $this->html->input_fecha(cols: 6, row_upd: $this->row_upd,value_vacio:  false);
-
+        $hoy = date('Y-m-d');
+        $fecha = $this->html->input_fecha(cols: 6, row_upd: $this->row_upd,value_vacio:  false,name: 'fecha_escritura',
+            place_holder: 'Fecha Escritura',value: $hoy);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al integrar fecha',
                 data:  $fecha, header: $header,ws: $ws);
         }
-
-        $this->inputs->fecha = $fecha;
+        $this->inputs->fecha_escritura = $fecha;
 
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'numero_escritura',
             keys_selects: $keys_selects, place_holder: 'No. Escritura');
@@ -1038,19 +1035,21 @@ class controlador_inm_comprador extends _ctl_base {
             controler: $this, id_retorno: $hiddens->id_retorno, in_registro_id: $hiddens->in_registro_id,
             inm_comprador_id: $inm_comprador_id, inm_ubicacion_id: '', precio_operacion: $hiddens->precio_operacion,
             seccion_retorno: $hiddens->seccion_retorno);
-
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener inputs_hidden',data:  $inputs, header: $header,ws:  $ws);
         }
 
-        $link_escriturado_bd = $this->obj_link->link_con_id(accion:'escriturado_bd',
-            link: $this->link,registro_id: $this->registro_id,seccion: 'inm_comprador');
+        $params = array();
+        if(isset($_GET['accion']) && $_GET['accion'] == 'proceso_cliente') {
+            $params = array('pestana_general_actual' => 'pestanageneral2', 'pestana_actual' => 'pestana8');
+        }
+        $link_inm_escritura_alta_bd = $this->obj_link->link_alta_bd(link: $this->link,
+            seccion: 'inm_escritura',params: $params);
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al generar link',data:  $link_escriturado_bd,
+            return $this->retorno_error(mensaje: 'Error al generar link',data:  $link_inm_escritura_alta_bd,
                 header: $header,ws:  $ws);
         }
-
-        $this->link_escriturado_bd = $link_escriturado_bd;
+        $this->link_inm_escritura_alta_bd = $link_inm_escritura_alta_bd;
 
         $this->keys_selects = array_merge($keys_selects, $this->keys_selects);
 

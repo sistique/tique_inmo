@@ -1021,13 +1021,13 @@
                                     </div>
                                 </div>
                                 <div class="conten" id="cpestana8">
-                                    <form method="post" action="<?php echo $controlador->link_escriturado_bd; ?>"
+                                    <form method="post" action="<?php echo $controlador->link_inm_escritura_alta_bd; ?>"
                                           class="form-additional" enctype="multipart/form-data">
                                         <?php echo $controlador->inputs->documento_validacion_poder; ?>
                                         <?php echo $controlador->inputs->documento_acuse_patron; ?>
                                         <?php echo $controlador->inputs->documento_escrituras; ?>
                                         <?php echo $controlador->inputs->numero_escritura; ?>
-                                        <?php echo $controlador->inputs->fecha; ?>
+                                        <?php echo $controlador->inputs->fecha_escritura; ?>
 
                                         <?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
                                     </form>
