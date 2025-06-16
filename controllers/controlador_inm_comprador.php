@@ -97,11 +97,32 @@ class controlador_inm_comprador extends _ctl_base {
     public string $button_inm_doc_comprador_elimina_bd_anexos = '';
 
 
-    public string $descripcion_institucion_credito = '';
-    public string $button_inm_doc_comprador_descarga_institucion_credito = '';
-    public string $button_inm_doc_comprador_descarga_zip_institucion_credito = '';
-    public string $button_inm_doc_comprador_vista_previa_institucion_credito = '';
-    public string $button_inm_doc_comprador_elimina_bd_institucion_credito = '';
+    public string $descripcion_instruccion_credito = '';
+    public string $button_inm_doc_comprador_descarga_instruccion_credito = '';
+    public string $button_inm_doc_comprador_descarga_zip_instruccion_credito = '';
+    public string $button_inm_doc_comprador_vista_previa_instruccion_credito = '';
+    public string $button_inm_doc_comprador_elimina_bd_instruccion_credito = '';
+
+    
+    public string $descripcion_notificacion_descuento = '';
+    public string $button_inm_doc_comprador_descarga_notificacion_descuento = '';
+    public string $button_inm_doc_comprador_descarga_zip_notificacion_descuento = '';
+    public string $button_inm_doc_comprador_vista_previa_notificacion_descuento = '';
+    public string $button_inm_doc_comprador_elimina_bd_notificacion_descuento = '';
+
+    
+    public string $descripcion_isr_notaria = '';
+    public string $button_inm_doc_comprador_descarga_isr_notaria = '';
+    public string $button_inm_doc_comprador_descarga_zip_isr_notaria = '';
+    public string $button_inm_doc_comprador_vista_previa_isr_notaria = '';
+    public string $button_inm_doc_comprador_elimina_bd_isr_notaria = '';
+    
+    
+    public string $descripcion_isr = '';
+    public string $button_inm_doc_comprador_descarga_isr = '';
+    public string $button_inm_doc_comprador_descarga_zip_isr = '';
+    public string $button_inm_doc_comprador_vista_previa_isr = '';
+    public string $button_inm_doc_comprador_elimina_bd_isr = '';
 
     /* BOTON DE DESCARGA SOLICITUD INFONAVIT */
     public string $button_solicitud_infonavit = '';
@@ -724,7 +745,7 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         if($r_inm_doc_comprador->n_registros > 0) {
-            $this->descripcion_institucion_credito = 'Institucion de Credito';
+            $this->descripcion_instruccion_credito = 'Instruccion de Credito';
 
             $button_inm_doc_comprador_descarga = $this->html->button_href(accion: 'descarga', etiqueta: 'Descarga',
                 registro_id: $r_inm_doc_comprador->registros[0]['inm_doc_comprador_id'],
@@ -734,7 +755,7 @@ class controlador_inm_comprador extends _ctl_base {
                     data: $button_inm_doc_comprador_descarga, header: $header, ws: $ws);
             }
 
-            $this->button_inm_doc_comprador_descarga_institucion_credito = $button_inm_doc_comprador_descarga;
+            $this->button_inm_doc_comprador_descarga_instruccion_credito = $button_inm_doc_comprador_descarga;
 
             $button_inm_doc_comprador_vista_previa = $this->html->button_href(accion: 'vista_previa',
                 etiqueta: 'Vista Previa', registro_id: $r_inm_doc_comprador->registros[0]['inm_doc_comprador_id'],
@@ -744,7 +765,7 @@ class controlador_inm_comprador extends _ctl_base {
                     data: $button_inm_doc_comprador_vista_previa, header: $header, ws: $ws);
             }
 
-            $this->button_inm_doc_comprador_vista_previa_institucion_credito= $button_inm_doc_comprador_vista_previa;
+            $this->button_inm_doc_comprador_vista_previa_instruccion_credito= $button_inm_doc_comprador_vista_previa;
 
             $button_inm_doc_comprador_descarga_zip = $this->html->button_href(accion: 'descarga_zip',
                 etiqueta: 'Descarga ZIP', registro_id: $r_inm_doc_comprador->registros[0]['inm_doc_comprador_id'],
@@ -754,7 +775,7 @@ class controlador_inm_comprador extends _ctl_base {
                     data: $button_inm_doc_comprador_descarga_zip, header: $header, ws: $ws);
             }
 
-            $this->button_inm_doc_comprador_descarga_zip_institucion_credito = $button_inm_doc_comprador_descarga_zip;
+            $this->button_inm_doc_comprador_descarga_zip_instruccion_credito = $button_inm_doc_comprador_descarga_zip;
 
             $params = array('accion_retorno'=>'proceso_cliente','seccion_retorno'=>'inm_comprador',
                 'id_retorno'=>$this->registro_id, 'pestana_general_actual' => 'pestanageneral2',
@@ -767,7 +788,7 @@ class controlador_inm_comprador extends _ctl_base {
                     header: $header, ws: $ws);
             }
 
-            $this->button_inm_doc_comprador_elimina_bd_institucion_credito = $button_inm_doc_comprador_elimina_bd;
+            $this->button_inm_doc_comprador_elimina_bd_instruccion_credito = $button_inm_doc_comprador_elimina_bd;
         }
 
         return $base;
@@ -1686,7 +1707,7 @@ class controlador_inm_comprador extends _ctl_base {
         $init_data['inm_tipo_discapacidad'] = "gamboamartin\\inmuebles";
         $init_data['inm_persona_discapacidad'] = "gamboamartin\\inmuebles";
         $init_data['inm_estado_civil'] = "gamboamartin\\inmuebles";
-        $init_data['inm_institucion_hipotecaria'] = "gamboamartin\\inmuebles";
+        $init_data['inm_instruccion_hipotecaria'] = "gamboamartin\\inmuebles";
         $init_data['inm_sindicato'] = "gamboamartin\\inmuebles";
         $init_data['inm_nacionalidad'] = "gamboamartin\\inmuebles";
         $init_data['inm_ocupacion'] = "gamboamartin\\inmuebles";
@@ -2442,7 +2463,7 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         if(!$existe) {
-            $_FILES['documento'] = $_FILES['institucion_credito'];
+            $_FILES['documento'] = $_FILES['instruccion_credito'];
             $registro = array();
             $registro['inm_comprador_id'] = $this->registro_id;
             $registro['doc_tipo_documento_id'] = 42;

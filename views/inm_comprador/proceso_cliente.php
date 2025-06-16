@@ -953,20 +953,80 @@
                                     <div class="row buttons-form">
                                         <div class="col-lg-12">
                                             <label>
-                                                <?php echo $controlador->descripcion_institucion_credito; ?>
+                                                <?php echo $controlador->descripcion_instruccion_credito; ?>
                                             </label>
                                         </div>
                                         <div class="col-lg-3">
-                                            <?php echo $controlador->button_inm_doc_comprador_descarga_institucion_credito; ?>
+                                            <?php echo $controlador->button_inm_doc_comprador_descarga_instruccion_credito; ?>
                                         </div>
                                         <div class="col-lg-3">
-                                            <?php echo $controlador->button_inm_doc_comprador_vista_previa_institucion_credito; ?>
+                                            <?php echo $controlador->button_inm_doc_comprador_vista_previa_instruccion_credito; ?>
                                         </div>
                                         <div class="col-lg-3">
-                                            <?php echo $controlador->button_inm_doc_comprador_descarga_zip_institucion_credito; ?>
+                                            <?php echo $controlador->button_inm_doc_comprador_descarga_zip_instruccion_credito; ?>
                                         </div>
                                         <div class="col-lg-3">
-                                            <?php echo $controlador->button_inm_doc_comprador_elimina_bd_institucion_credito; ?>
+                                            <?php echo $controlador->button_inm_doc_comprador_elimina_bd_instruccion_credito; ?>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row buttons-form">
+                                        <div class="col-lg-12">
+                                            <label>
+                                                <?php echo $controlador->descripcion_notificacion_descuento; ?>
+                                            </label>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_comprador_descarga_notificacion_descuento; ?>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_comprador_vista_previa_notificacion_descuento; ?>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_comprador_descarga_zip_notificacion_descuento; ?>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_comprador_elimina_bd_notificacion_descuento; ?>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row buttons-form">
+                                        <div class="col-lg-12">
+                                            <label>
+                                                <?php echo $controlador->descripcion_isr_notaria; ?>
+                                            </label>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_comprador_descarga_isr_notaria; ?>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_comprador_vista_previa_isr_notaria; ?>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_comprador_descarga_zip_isr_notaria; ?>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_comprador_elimina_bd_isr_notaria; ?>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row buttons-form">
+                                        <div class="col-lg-12">
+                                            <label>
+                                                <?php echo $controlador->descripcion_isr; ?>
+                                            </label>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_comprador_descarga_isr; ?>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_comprador_vista_previa_isr; ?>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_comprador_descarga_zip_isr; ?>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_comprador_elimina_bd_isr; ?>
                                         </div>
                                     </div>
                                 </div>
