@@ -1031,6 +1031,61 @@
 
                                         <?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
                                     </form>
+                                    <div class="row buttons-form">
+                                        <div class="col-lg-12">
+                                            <label class="label-docs">
+                                                <?php echo $controlador->descripcion_validacion_poder; ?>
+                                            </label>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_comprador_descarga_validacion_poder; ?>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_comprador_vista_previa_validacion_poder; ?>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_comprador_descarga_zip_validacion_poder; ?>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_comprador_elimina_bd_validacion_poder; ?>
+                                        </div>
+
+                                        <div class="col-lg-12">
+                                            <label class="label-docs">
+                                                <?php echo $controlador->descripcion_acuse_patron; ?>
+                                            </label>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_comprador_descarga_acuse_patron; ?>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_comprador_vista_previa_acuse_patron; ?>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_comprador_descarga_zip_acuse_patron; ?>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_comprador_elimina_bd_acuse_patron; ?>
+                                        </div>
+
+                                        <div class="col-lg-12">
+                                            <label class="label-docs">
+                                                <?php echo $controlador->descripcion_escritura; ?>
+                                            </label>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_comprador_descarga_escritura; ?>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_comprador_vista_previa_escritura; ?>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_comprador_descarga_zip_escritura; ?>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_comprador_elimina_bd_escritura; ?>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="conten" id="cpestana9">
                                     <form method="post" action="<?php echo $controlador->link_cotejado_bd; ?>"
