@@ -919,7 +919,7 @@
                                     </div>
                                 </div>
                                 <div class="conten" id="cpestana7">
-                                    <form method="post" action="<?php echo $controlador->link_por_firmar_bd; ?>"
+                                    <form method="post" action="<?php echo $controlador->link_inm_firma_alta_bd; ?>"
                                           class="form-additional" enctype="multipart/form-data">
                                         <?php echo $controlador->inputs->documento_anexos; ?>
                                         <?php echo $controlador->inputs->documento_instruccion_credito; ?>
@@ -999,24 +999,6 @@
                                         </div>
                                         <div class="col-lg-3">
                                             <?php echo $controlador->button_inm_doc_comprador_elimina_bd_isr_notaria; ?>
-                                        </div>
-
-                                        <div class="col-lg-12">
-                                            <label class="label-docs">
-                                                <?php echo $controlador->descripcion_isr; ?>
-                                            </label>
-                                        </div>
-                                        <div class="col-lg-3">
-                                            <?php echo $controlador->button_inm_doc_comprador_descarga_isr; ?>
-                                        </div>
-                                        <div class="col-lg-3">
-                                            <?php echo $controlador->button_inm_doc_comprador_vista_previa_isr; ?>
-                                        </div>
-                                        <div class="col-lg-3">
-                                            <?php echo $controlador->button_inm_doc_comprador_descarga_zip_isr; ?>
-                                        </div>
-                                        <div class="col-lg-3">
-                                            <?php echo $controlador->button_inm_doc_comprador_elimina_bd_isr; ?>
                                         </div>
                                     </div>
                                 </div>
