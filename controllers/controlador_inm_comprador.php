@@ -1289,8 +1289,9 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al obtener inputs_hidden',data:  $inputs, header: $header,ws:  $ws);
         }
 
+        $params = array('pestana_general_actual' => 'pestanageneral2');
         $link_cotejado_bd = $this->obj_link->link_con_id(accion:'cotejado_bd',
-            link: $this->link,registro_id: $this->registro_id,seccion: 'inm_comprador');
+            link: $this->link,registro_id: $this->registro_id,seccion: 'inm_comprador',params: $params);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al generar link',data:  $link_cotejado_bd,
                 header: $header,ws:  $ws);
@@ -1345,8 +1346,9 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al obtener inputs_hidden',data:  $inputs, header: $header,ws:  $ws);
         }
 
+        $params = array('pestana_general_actual' => 'pestanageneral2');
         $link_cobrado_bd = $this->obj_link->link_con_id(accion:'cobrado_bd',
-            link: $this->link,registro_id: $this->registro_id,seccion: 'inm_comprador');
+            link: $this->link,registro_id: $this->registro_id,seccion: 'inm_comprador',params: $params);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al generar link',data:  $link_cobrado_bd,
                 header: $header,ws:  $ws);
@@ -2021,6 +2023,95 @@ class controlador_inm_comprador extends _ctl_base {
 
 
         return $r_modifica;
+    }
+
+    public function cotejado_bd(bool $header, bool $ws = false)
+    {
+        $this->link->beginTransaction();
+
+        $filtro_exi['inm_comprador.id'] = $this->registro_id;
+        $filtro_exi['inm_status_comprador.id'] = 9;
+        $existe = (new inm_bitacora_status_comprador(link: $this->link))->existe(filtro: $filtro_exi);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $existe,
+                header: $header, ws: $ws);
+        }
+
+        if(!$existe) {
+            $registro = array();
+            $registro['inm_comprador_id'] = $this->registro_id;
+            $registro['inm_status_comprador_id'] = 9;
+            $registro['fecha_status'] = date('Y-m-d\TH:i:s');
+            $r_inm_bitacora_status_comprador = (new inm_bitacora_status_comprador(link: $this->link))->alta_registro(
+                registro: $registro);
+            if (errores::$error) {
+                $this->link->rollBack();
+                return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_bitacora_status_comprador,
+                    header: $header, ws: $ws);
+            }
+        }
+
+        $this->link->commit();
+
+        $params = array('pestana_general_actual' => 'pestanageneral2');
+        $link_proceso_comprador = $this->obj_link->link_con_id(
+            accion: 'proceso_cliente', link: $this->link, registro_id: $this->registro_id, seccion: 'inm_comprador',
+            params: $params);
+        if (errores::$error) {
+            $this->retorno_error(mensaje: 'Error al generar link', data: $link_proceso_comprador, header: $header, ws: $ws);
+        }
+
+        if($header) {
+            header('Location:' . $link_proceso_comprador);
+            exit;
+        }
+
+        return $this->registro_id;
+    }
+    public function cobrado_bd(bool $header, bool $ws = false)
+    {
+        $this->link->beginTransaction();
+
+        $filtro_exi['inm_comprador.id'] = $this->registro_id;
+        $filtro_exi['inm_status_comprador.id'] = 10;
+        $existe = (new inm_bitacora_status_comprador(link: $this->link))->existe(filtro: $filtro_exi);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $existe,
+                header: $header, ws: $ws);
+        }
+
+        if(!$existe) {
+            $registro = array();
+            $registro['inm_comprador_id'] = $this->registro_id;
+            $registro['inm_status_comprador_id'] = 10;
+            $registro['fecha_status'] = date('Y-m-d\TH:i:s');
+            $r_inm_bitacora_status_comprador = (new inm_bitacora_status_comprador(link: $this->link))->alta_registro(
+                registro: $registro);
+            if (errores::$error) {
+                $this->link->rollBack();
+                return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_bitacora_status_comprador,
+                    header: $header, ws: $ws);
+            }
+        }
+
+        $this->link->commit();
+
+        $params = array('pestana_general_actual' => 'pestanageneral2');
+        $link_proceso_comprador = $this->obj_link->link_con_id(
+            accion: 'proceso_cliente', link: $this->link, registro_id: $this->registro_id, seccion: 'inm_comprador',
+            params: $params);
+        if (errores::$error) {
+            $this->retorno_error(mensaje: 'Error al generar link', data: $link_proceso_comprador, header: $header, ws: $ws);
+        }
+
+        if($header) {
+            header('Location:' . $link_proceso_comprador);
+            exit;
+        }
+
+        return $this->registro_id;
     }
 
     final public function documentos(bool $header, bool $ws = false): array
