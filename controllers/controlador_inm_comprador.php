@@ -1526,12 +1526,11 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         $documento = $this->html->input_file(cols: 12,name: 'avaluo',row_upd:  new stdClass(),value_vacio:  false,
-            place_holder: 'Avaluo');
+            place_holder: 'Avaluo',required: false);
         if(errores::$error){
             return $this->retorno_error(
                 mensaje: 'Error al obtener inputs',data:  $documento, header: $header,ws:  $ws);
         }
-
         $this->inputs->avaluo = $documento;
 
         $columns_ds = array('com_cliente_rfc','com_cliente_razon_social');

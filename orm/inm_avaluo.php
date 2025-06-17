@@ -31,24 +31,24 @@ class inm_avaluo extends _modelo_parent{
 
     public function alta_bd(array $keys_integra_ds = array('codigo', 'descripcion')): array|\stdClass
     {
-
         $filtro_doc['inm_comprador.id'] =  $this->registro['inm_comprador_id'];
         $filtro_doc['doc_tipo_documento.id'] = 38;
         $existe = (new inm_doc_comprador(link: $this->link))->existe(filtro: $filtro_doc);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al insertar datos', data: $existe);
-
         }
 
         if(!$existe) {
-            $_FILES['documento'] = $_FILES['avaluo'];
-            $registro = array();
-            $registro['inm_comprador_id'] = $this->registro['inm_comprador_id'];
-            $registro['doc_tipo_documento_id'] = 38;
-            $r_inm_doc_comprador = (new inm_doc_comprador(link: $this->link))->alta_registro(registro: $registro);
-            if (errores::$error) {
-                return $this->error->error(mensaje: 'Error al insertar datos', data: $r_inm_doc_comprador);
+            if(trim($_FILES['avaluo']['name']) !== '') {
+                $_FILES['documento'] = $_FILES['avaluo'];
+                $registro = array();
+                $registro['inm_comprador_id'] = $this->registro['inm_comprador_id'];
+                $registro['doc_tipo_documento_id'] = 38;
+                $r_inm_doc_comprador = (new inm_doc_comprador(link: $this->link))->alta_registro(registro: $registro);
+                if (errores::$error) {
+                    return $this->error->error(mensaje: 'Error al insertar datos', data: $r_inm_doc_comprador);
 
+                }
             }
         }
 
