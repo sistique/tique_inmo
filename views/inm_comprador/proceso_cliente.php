@@ -921,11 +921,17 @@
                                 <div class="conten" id="cpestana7">
                                     <form method="post" action="<?php echo $controlador->link_inm_firma_alta_bd; ?>"
                                           class="form-additional" enctype="multipart/form-data">
+                                        <?php echo $controlador->inputs->inm_comprador_id; ?>
+
                                         <?php echo $controlador->inputs->documento_anexos; ?>
                                         <?php echo $controlador->inputs->documento_instruccion_credito; ?>
                                         <?php echo $controlador->inputs->documento_notificacion_descuento; ?>
                                         <?php echo $controlador->inputs->documento_isr_notaria; ?>
                                         <?php echo $controlador->inputs->isr; ?>
+
+                                        <?php echo $controlador->inputs->seccion_retorno; ?>
+                                        <?php echo $controlador->inputs->btn_action_next; ?>
+                                        <?php echo $controlador->inputs->id_retorno; ?>
                                         <?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
                                     </form>
                                     <div class="row buttons-form">

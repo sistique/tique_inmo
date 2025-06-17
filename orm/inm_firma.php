@@ -32,7 +32,7 @@ class inm_firma extends _modelo_parent{
     public function alta_bd(array $keys_integra_ds = array('codigo', 'descripcion')): array|\stdClass
     {
 
-        $filtro_doc['inm_comprador.id'] = $this->registro_id;
+        $filtro_doc['inm_comprador.id'] = $this->registro['inm_comprador_id'];
         $filtro_doc['doc_tipo_documento.id'] = 41;
         $existe = (new inm_doc_comprador(link: $this->link))->existe(filtro: $filtro_doc);
         if(errores::$error){
@@ -42,7 +42,7 @@ class inm_firma extends _modelo_parent{
             if(trim($_FILES['anexos']['name']) !== '') {
                 $_FILES['documento'] = $_FILES['anexos'];
                 $registro = array();
-                $registro['inm_comprador_id'] = $this->registro_id;
+                $registro['inm_comprador_id'] = $this->registro['inm_comprador_id'];
                 $registro['doc_tipo_documento_id'] = 41;
                 $r_inm_doc_comprador = (new inm_doc_comprador(link: $this->link))->alta_registro(registro: $registro);
                 if(errores::$error){
@@ -51,7 +51,7 @@ class inm_firma extends _modelo_parent{
             }
         }
 
-        $filtro_doc['inm_comprador.id'] = $this->registro_id;
+        $filtro_doc['inm_comprador.id'] = $this->registro['inm_comprador_id'];
         $filtro_doc['doc_tipo_documento.id'] = 42;
         $existe = (new inm_doc_comprador(link: $this->link))->existe(filtro: $filtro_doc);
         if(errores::$error){
@@ -62,7 +62,7 @@ class inm_firma extends _modelo_parent{
             if(trim($_FILES['instruccion_credito']['name']) !== '') {
                 $_FILES['documento'] = $_FILES['instruccion_credito'];
                 $registro = array();
-                $registro['inm_comprador_id'] = $this->registro_id;
+                $registro['inm_comprador_id'] = $this->registro['inm_comprador_id'];
                 $registro['doc_tipo_documento_id'] = 42;
                 $r_inm_doc_comprador = (new inm_doc_comprador(link: $this->link))->alta_registro(registro: $registro);
                 if(errores::$error){
@@ -71,7 +71,7 @@ class inm_firma extends _modelo_parent{
             }
         }
 
-        $filtro_doc['inm_comprador.id'] = $this->registro_id;
+        $filtro_doc['inm_comprador.id'] = $this->registro['inm_comprador_id'];
         $filtro_doc['doc_tipo_documento.id'] = 43;
         $existe = (new inm_doc_comprador(link: $this->link))->existe(filtro: $filtro_doc);
         if(errores::$error){
@@ -82,7 +82,7 @@ class inm_firma extends _modelo_parent{
             if(trim($_FILES['notificacion_descuento']['name']) !== '') {
                 $_FILES['documento'] = $_FILES['notificacion_descuento'];
                 $registro = array();
-                $registro['inm_comprador_id'] = $this->registro_id;
+                $registro['inm_comprador_id'] = $this->registro['inm_comprador_id'];
                 $registro['doc_tipo_documento_id'] = 43;
                 $r_inm_doc_comprador = (new inm_doc_comprador(link: $this->link))->alta_registro(registro: $registro);
                 if(errores::$error){
@@ -91,7 +91,7 @@ class inm_firma extends _modelo_parent{
             }
         }
 
-        $filtro_doc['inm_comprador.id'] = $this->registro_id;
+        $filtro_doc['inm_comprador.id'] = $this->registro['inm_comprador_id'];
         $filtro_doc['doc_tipo_documento.id'] = 44;
         $existe = (new inm_doc_comprador(link: $this->link))->existe(filtro: $filtro_doc);
         if(errores::$error){
@@ -102,7 +102,7 @@ class inm_firma extends _modelo_parent{
             if(trim($_FILES['isr_notaria']['name']) !== '') {
                 $_FILES['documento'] = $_FILES['isr_notaria'];
                 $registro = array();
-                $registro['inm_comprador_id'] = $this->registro_id;
+                $registro['inm_comprador_id'] = $this->registro['inm_comprador_id'];
                 $registro['doc_tipo_documento_id'] = 44;
                 $r_inm_doc_comprador = (new inm_doc_comprador(link: $this->link))->alta_registro(registro: $registro);
                 if(errores::$error){
