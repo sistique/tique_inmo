@@ -155,7 +155,7 @@
                                                             ?>
                                                         </div>
                                                     <?php } ?>
-                                                    
+
                                                     <?php echo $controlador->inputs->btn_action_next; ?>
                                                     <?php echo $controlador->inputs->id_retorno; ?>
                                                     <?php echo $controlador->inputs->seccion_retorno; ?>
@@ -169,7 +169,44 @@
                                     </div>
                                 </div>
                                 <div class="conten" id="cpestanaubicacion4">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="widget  widget-box box-container form-main widget-form-cart" id="form">
+                                                <form method="post" action="<?php echo $controlador->link_alta_integra_relacion_bd; ?>" class="form-additional">
+                                                    <?php echo $controlador->inputs->razon_social; ?>
+                                                    <?php echo $controlador->inputs->inm_prospecto_ubicacion_ubicacion; ?>
+                                                    <?php echo $controlador->inputs->com_agente_id; ?>
 
+                                                    <?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="widget widget-box box-container widget-mylistings">
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>Id</th>
+                                                        <th>Agente</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <?php
+                                                    foreach ($controlador->relaciones as $etapa){
+                                                        ?>
+                                                        <tr>
+                                                            <td><?php echo $etapa['com_rel_agente_id'] ?></td>
+                                                            <td><?php echo $etapa['com_agente_descripcion'] ?></td>
+                                                            <td><?php echo $etapa['com_rel_agente_fecha_alta'] ?></td>
+                                                        </tr>
+                                                    <?php } ?>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="conten" id="cpestanaubicacion5">
                                     <div class="row">
