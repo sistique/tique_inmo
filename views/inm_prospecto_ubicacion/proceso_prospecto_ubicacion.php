@@ -135,13 +135,87 @@
                                     </div>
                                 </div>
                                 <div class="conten" id="cpestanaubicacion3">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="widget  widget-box box-container form-main widget-form-cart" id="form">
+                                                <form enctype="multipart/form-data" method="post" action="<?php echo $controlador->link_fotografia_bd; ?>" class="form-additional">
+                                                    <?php include (new views())->ruta_templates."head/subtitulo.php"; ?>
+                                                    <?php foreach ($controlador->fotos as $registro){ ?>
+                                                        <div class="col-lg-12 contorno"  data-doc_tipo_documento_id ="<?php echo $registro['doc_tipo_documento_id']; ?>" >
+                                                            <?php echo $registro['input']; ?>
+                                                            <?php foreach ($registro['fotos'] as $foto){
+                                                                foreach ($foto as $img){?>
+                                                                    <div class="col-lg-6 contenedor_img" data-doc_documento_id ="<?php echo $img['doc_documento_id']; ?>">
+                                                                        <?php echo $img['input']; ?>
+                                                                        <a class="btn btn-danger elimina_img"  data-inm_doc_prospecto_ubicacion_id =
+                                                                        "<?php echo $img['inm_doc_prospecto_ubicacion_id']; ?>">Elimina</a>.
+                                                                    </div>
+                                                                <?php       }
+                                                            }
+                                                            ?>
+                                                        </div>
+                                                    <?php } ?>
+                                                    <?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
+                                                </form>
 
+                                            </div>
+
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="conten" id="cpestanaubicacion4">
 
                                 </div>
                                 <div class="conten" id="cpestanaubicacion5">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="widget  widget-box box-container form-main widget-form-cart" id="form">
+                                                <form method="post" action="<?php echo $controlador->link_alta_bitacora; ?>" class="form-additional">
+                                                    <?php echo $controlador->inputs->inm_prospecto_ubicacion_id; ?>
+                                                    <?php echo $controlador->inputs->inm_status_prospecto_ubicacion_id; ?>
+                                                    <?php echo $controlador->inputs->fecha; ?>
+                                                    <?php echo $controlador->inputs->observaciones; ?>
 
+                                                    <?php echo $controlador->inputs->btn_action_next; ?>
+                                                    <?php echo $controlador->inputs->id_retorno; ?>
+                                                    <?php echo $controlador->inputs->seccion_retorno; ?>
+
+                                                    <?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
+                                                </form>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="widget widget-box box-container widget-mylistings">
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>Id</th>
+                                                        <th>Etapa</th>
+                                                        <th>Fecha</th>
+                                                        <th>Observaciones</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <?php
+                                                    foreach ($controlador->etapas as $etapa){
+                                                        ?>
+                                                        <tr>
+                                                            <td><?php echo $etapa['inm_bitacora_status_prospecto_ubicacion_id'] ?></td>
+                                                            <td><?php echo $etapa['inm_status_prospecto_ubicacion_descripcion'] ?></td>
+                                                            <td><?php echo $etapa['inm_bitacora_status_prospecto_ubicacion_fecha_status'] ?></td>
+                                                            <td><?php echo $etapa['inm_bitacora_status_prospecto_ubicacion_observaciones'] ?></td>
+                                                        </tr>
+                                                    <?php } ?>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
