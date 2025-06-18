@@ -24,6 +24,8 @@ use gamboamartin\inmuebles\models\inm_bitacora_status_comprador;
 use gamboamartin\inmuebles\models\inm_comprador;
 use gamboamartin\inmuebles\models\inm_conf_docs_comprador;
 use gamboamartin\inmuebles\models\inm_doc_comprador;
+use gamboamartin\inmuebles\models\inm_escritura;
+use gamboamartin\inmuebles\models\inm_firma;
 use gamboamartin\inmuebles\models\inm_referencia;
 use gamboamartin\inmuebles\models\inm_referencia_prospecto;
 use gamboamartin\inmuebles\models\inm_rel_cliente_valuador;
@@ -620,6 +622,18 @@ class controlador_inm_comprador extends _ctl_base {
                 mensaje: 'Error al obtener registro',data:  $registro,header: $header,ws: $ws);
         }
 
+        $filtro_che['inm_comprador.id'] = $this->registro_id;
+        $r_firma = (new inm_firma(link: $this->link))->filtro_and(filtro: $filtro_che);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $r_firma,
+                header: $header, ws: $ws);
+        }
+
+        if($r_firma->n_registros > 0) {
+            $this->row_upd->isr = $r_firma->registros[0]['inm_firma_isr'];
+        }
+
         $keys_selects = (new _keys_selects())->key_selects_asigna_ubicacion(controler: $this);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
@@ -995,6 +1009,20 @@ class controlador_inm_comprador extends _ctl_base {
                 mensaje: 'Error al obtener registro',data:  $registro,header: $header,ws: $ws);
         }
 
+        $filtro_che['inm_comprador.id'] = $this->registro_id;
+        $r_escritura = (new inm_escritura(link: $this->link))->filtro_and(filtro: $filtro_che);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $r_escritura,
+                header: $header, ws: $ws);
+        }
+
+        $hoy = date('Y-m-d');
+        if($r_escritura->n_registros > 0) {
+            $this->row_upd->numero_escritura = $r_escritura->registros[0]['inm_escritura_numero_escritura'];
+            $hoy = $r_escritura->registros[0]['inm_escritura_fecha_escritura'];
+        }
+
         $keys_selects = (new _keys_selects())->key_selects_asigna_ubicacion(controler: $this);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
@@ -1025,7 +1053,6 @@ class controlador_inm_comprador extends _ctl_base {
         }
         $this->inputs->documento_escrituras = $documento_escrituras;
 
-        $hoy = date('Y-m-d');
         $fecha = $this->html->input_fecha(cols: 6, row_upd: $this->row_upd,value_vacio:  false,name: 'fecha_escritura',
             place_holder: 'Fecha Escritura',value: $hoy);
         if(errores::$error){
@@ -2234,7 +2261,7 @@ class controlador_inm_comprador extends _ctl_base {
         $pestanas = array("DETENIDO" => "pestana1", "ASIGNADO" => "pestana2", "EN AVALUO" => "pestana3",
             "POR INGRESAR" => "pestana4", "INGRESADO" => "pestana5", "AUTORIZADO" => "pestana6",
             "POR FIRMAR" => "pestana7", "ESCRITURADO" => "pestana8", "COTEJADO" => "pestana9",
-            "CANCELADO"=> "sin_pestana");
+            "COBRADO" => "pestana10", "CANCELADO"=> "sin_pestana");
 
         $r_comprador = (new inm_comprador(link: $this->link))->registro(registro_id: $_POST['id']);
         if (errores::$error) {
