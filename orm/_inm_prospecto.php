@@ -68,6 +68,14 @@ class _inm_prospecto{
         $params = array('accion_retorno'=>'documentos','seccion_retorno'=>$controler->seccion,
             'id_retorno'=>$inm_prospecto_id);
 
+        if(isset($_GET['pestana_general_actual'])){
+            $params['accion_retorno'] = 'proceso_prospecto_ubicacion';
+
+            $params['pestana_general_actual'] = 'pestanageneral1';
+            $params['pestana_actual'] = 'pestanaubicacion2';
+        }
+
+
         $inm_conf_docs_comprador = (new _inm_prospecto())->button_ubicacion(accion: 'elimina_bd', controler: $controler,
             etiqueta: 'Elimina', indice: $indice, inm_doc_prospecto_id: $inm_doc_prospecto['inm_doc_prospecto_ubicacion_id'],
             inm_conf_docs_prospecto: $inm_conf_docs_prospecto, params: $params, style: 'danger');
@@ -410,6 +418,11 @@ class _inm_prospecto{
     private function integra_data_ubicacion(controlador_inm_prospecto_ubicacion $controler, array $doc_tipo_documento,
                                   int $indice, array $inm_conf_docs_prospecto){
         $params = array('doc_tipo_documento_id'=>$doc_tipo_documento['doc_tipo_documento_id']);
+
+        if(isset($_GET['pestana_general_actual'])){
+            $params['pestana_general_actual'] = 'pestanageneral1';
+            $params['pestana_actual'] = 'pestanaubicacion2';
+        }
 
         $button = $controler->html->button_href(accion: 'subir_documento',etiqueta:
             'Subir Documento',registro_id:  $controler->registro_id,
