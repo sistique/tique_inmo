@@ -171,7 +171,7 @@ class _doctos{
 
         $filtro['inm_prospecto_ubicacion.id'] = $inm_prospecto_ubicacion_id;
 
-
+/*
         $r_inm_prospecto_ubicacion_proceso = (new inm_prospecto_ubicacion_proceso(link: $link))->filtro_and(filtro: $filtro, limit: 1,
             order: array('inm_prospecto_ubicacion_proceso.id'=>'DESC'));
         if(errores::$error){
@@ -214,7 +214,7 @@ class _doctos{
             return $this->error->error(mensaje: 'Error de integridad',data:  $r_inm_prospecto_ubicacion_proceso);
         }
         $inm_prospecto_proceso = $r_inm_prospecto_ubicacion_proceso->registros[0];
-
+*/
         $filtro = array();
         //$filtro['inm_attr_tipo_credito.id'] = $inm_prospecto->inm_attr_tipo_credito_id;
         //$filtro['inm_destino_credito.id'] = $inm_prospecto->inm_destino_credito_id;

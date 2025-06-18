@@ -1,4 +1,4 @@
-<?php /** @var  gamboamartin\inmuebles\controllers\controlador_inm_ubicacion $controlador  controlador en ejecucion */ ?>
+<?php /** @var  gamboamartin\inmuebles\controllers\controlador_inm_prospecto_ubicacion $controlador  controlador en ejecucion */ ?>
 <?php use config\views; ?>
 
 <main class="main section-color-primary">
@@ -119,7 +119,7 @@
                                     <div>
                                         <div class="row">
                                             <div class="col-lg-12 table-responsive">
-                                                <table id="table-inm_ubicacion" class="table mb-0 table-striped table-sm "></table>
+                                                <table id="table-inm_prospecto_ubicacion" class="table mb-0 table-striped table-sm "></table>
                                             </div>
                                         </div>
                                     </div>
@@ -155,7 +155,7 @@
                                         <div class="col-lg-12">
                                             <div class="widget  widget-box box-container form-main widget-form-cart" id="form">
                                                 <form method="post" action="<?php echo $controlador->link_alta_bitacora; ?>" class="form-additional">
-                                                    <?php echo $controlador->inputs->inm_ubicacion_id; ?>
+                                                    <?php echo $controlador->inputs->inm_prospecto_ubicacion_id; ?>
                                                     <?php echo $controlador->inputs->inm_status_ubicacion_id; ?>
                                                     <?php echo $controlador->inputs->fecha; ?>
                                                     <?php echo $controlador->inputs->observaciones; ?>

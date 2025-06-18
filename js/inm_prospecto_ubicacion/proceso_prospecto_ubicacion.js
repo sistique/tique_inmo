@@ -190,7 +190,7 @@ function valor_inicial() {
     $.ajax({
         type: "POST",
         data: {id: registro_id},
-        url: 'index.php?seccion=inm_ubicacion&accion=get_etapa_actual&ws=1&session_id=' + session_id,
+        url: 'index.php?seccion=inm_prospecto_ubicacion&accion=get_etapa_actual&ws=1&session_id=' + session_id,
         success: function (data_r) {
             let result = {};
             result.id = data_r;
@@ -488,7 +488,7 @@ $("#collapse_all").click(function() {
 
 var modal = document.getElementById("myModal");
 var closeBtn = document.getElementById("closeModalBtn");
-let inm_doc_ubicacion_id = '';
+let inm_doc_prospecto_ubicacion_id = '';
 $(document).on("click", "a[title='Vista Previa']", function (event) {
     event.preventDefault();
     var url = $(this).attr("href");
@@ -501,9 +501,9 @@ $(document).on("click", "a[title='Vista Previa']", function (event) {
         type: 'GET',
         success: function (data) {
             var tempDiv = $("<div>").html(data);
-            var inputdoc = tempDiv.find('[name="inm_doc_ubicacion_id"]');
+            var inputdoc = tempDiv.find('[name="inm_doc_prospecto_ubicacion_id"]');
             var viewContent = tempDiv.find(".view");
-            inm_doc_ubicacion_id = inputdoc.val();
+            inm_doc_prospecto_ubicacion_id = inputdoc.val();
 
             /*$("#myModal .content").html(inputdoc);
             $("#myModal .content").html(viewContent);*/
@@ -527,8 +527,8 @@ closeBtn.onclick = function () {
 
     $.ajax({
         type: "POST",
-        data: {id:inm_doc_ubicacion_id},
-        url: 'index.php?seccion=inm_doc_ubicacion&accion=elimina_temporal&ws=1&session_id='+session_id,
+        data: {id:inm_doc_prospecto_ubicacion_id},
+        url: 'index.php?seccion=inm_doc_prospecto_ubicacion&accion=elimina_temporal&ws=1&session_id='+session_id,
         success: function(data_r) {
             console.log(data_r);
         },
@@ -545,8 +545,8 @@ modal.addEventListener('click', function (event) {
 
         $.ajax({
             type: "POST",
-            data: {id:inm_doc_ubicacion_id},
-            url: 'index.php?seccion=inm_doc_ubicacion&accion=elimina_temporal&ws=1&session_id='+session_id,
+            data: {id:inm_doc_prospecto_ubicacion_id},
+            url: 'index.php?seccion=inm_doc_prospecto_ubicacion&accion=elimina_temporal&ws=1&session_id='+session_id,
             success: function(data_r) {
                 console.log(data_r);
             },
@@ -584,7 +584,7 @@ const columns_tipos_documentos = [
 
 const options = {paging: false, info: false, searching: false}
 
-const table_tipos_documentos = table('inm_ubicacion', columns_tipos_documentos, [], [], function () {
+const table_tipos_documentos = table('inm_prospecto_ubicacion', columns_tipos_documentos, [], [], function () {
     }, true,
     "tipos_documentos", {registro_id: registro_id,pestana_general_actual: pestana_general_actual,
         pestana_actual:pestana_actual}, options);
@@ -592,17 +592,17 @@ const table_tipos_documentos = table('inm_ubicacion', columns_tipos_documentos, 
 /***** Fotografias*****/
 
 $(".elimina_img").on("click", function() {
-    let inm_doc_ubicacion_id = $(this).data('inm_doc_ubicacion_id');
+    let inm_doc_prospecto_ubicacion_id = $(this).data('inm_doc_prospecto_ubicacion_id');
 
     $.ajax({
         type: "POST",
-        data: {id:inm_doc_ubicacion_id},
-        url: 'index.php?seccion=inm_doc_ubicacion&accion=elimina_temporal&ws=1&session_id='+session_id,
+        data: {id:inm_doc_prospecto_ubicacion_id},
+        url: 'index.php?seccion=inm_doc_prospecto_ubicacion&accion=elimina_temporal&ws=1&session_id='+session_id,
         success: function(data_r) {
             $.ajax({
                 type: "POST",
-                data: {id:inm_doc_ubicacion_id},
-                url: 'index.php?seccion=inm_doc_ubicacion&accion=elimina_bd&ws=1&registro_id='+inm_doc_ubicacion_id+'&session_id='+session_id,
+                data: {id:inm_doc_prospecto_ubicacion_id},
+                url: 'index.php?seccion=inm_doc_prospecto_ubicacion&accion=elimina_bd&ws=1&registro_id='+inm_doc_prospecto_ubicacion_id+'&session_id='+session_id,
                 success: function(data_r) {
                     console.log(data_r);
                 },
