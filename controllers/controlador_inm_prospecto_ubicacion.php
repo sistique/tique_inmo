@@ -638,9 +638,13 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
 
         $this->inputs->inm_prospecto_ubicacion_id = $inm_prospecto_ubicacion_id;
 
-
+        $params = array();
+        if(isset($_GET['accion']) && $_GET['accion'] === 'proceso_prospecto_ubicacion') {
+            $params = array('pestana_general_actual' => 'pestanageneral1',
+                'pestana_actual' => 'pestanaubicacion5');
+        }
         $link_alta_bitacora= $this->obj_link->link_alta_bd(link: $this->link,
-            seccion:  'inm_bitacora_status_prospecto_ubicacion');
+            seccion:  'inm_bitacora_status_prospecto_ubicacion',params: $params);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al generar link', data: $link_alta_bitacora, header: $header,
                 ws: $ws);
