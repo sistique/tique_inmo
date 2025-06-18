@@ -466,7 +466,8 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
                     accion: 'elimina_bd', link: $this->link, registro_id: $reg['inm_doc_prospecto_ubicacion_id'],
                     seccion: 'inm_doc_prospecto_ubicacion');
                 if (errores::$error) {
-                    $this->retorno_error(mensaje: 'Error al generar link', data: $link_elimina_foto_bd, header: $header, ws: $ws);
+                    $this->retorno_error(mensaje: 'Error al generar link', data: $link_elimina_foto_bd, header: $header,
+                                ws: $ws);
                 }
 
                 $contenedor = array();
@@ -484,15 +485,22 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
                     mensaje: 'Error al obtener inputs', data: $documento, header: $header, ws: $ws);
             }
 
-            $inputs_fotos[$registro['doc_tipo_documento_id']]['doc_tipo_documento_id'] = $registro['doc_tipo_documento_id'];
+            $inputs_fotos[$registro['doc_tipo_documento_id']]['doc_tipo_documento_id'] =
+                $registro['doc_tipo_documento_id'];
             $inputs_fotos[$registro['doc_tipo_documento_id']]['input'] = $documento;
             $inputs_fotos[$registro['doc_tipo_documento_id']]['fotos'] = $fotos;
         }
 
         $this->fotos = $inputs_fotos;
 
+        $params = array();
+        if(isset($_GET['pestana_general_actual'])) {
+            $params = array('pestana_general_actual' => 'pestanageneral1',
+                'pestana_actual' => $_GET['pestana_actual']);
+        }
         $link_fotografia_bd = $this->obj_link->link_con_id(
-            accion: 'fotografias_bd', link: $this->link, registro_id: $this->registro_id, seccion: 'inm_prospecto_ubicacion');
+            accion: 'fotografias_bd', link: $this->link, registro_id: $this->registro_id,
+            seccion: 'inm_prospecto_ubicacion',params: $params);
         if (errores::$error) {
             $this->retorno_error(mensaje: 'Error al generar link', data: $link_fotografia_bd, header: $header, ws: $ws);
         }
@@ -540,8 +548,18 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
 
         $this->link->commit();
 
+        $accion = 'fotografias';
+        if(isset($_POST['btn_action_next'])){
+            $accion = $_POST['btn_action_next'];
+        }
+
+        $params = array();
+        if (isset($_GET['pestana_general_actual'])) {
+            $params = array('pestana_general_actual' => 'pestanageneral1', 'pestana_actual' => $_GET['pestana_actual']);
+        }
         $link_fotografia_bd = $this->obj_link->link_con_id(
-            accion: 'fotografias', link: $this->link, registro_id: $this->registro_id, seccion: 'inm_prospecto_ubicacion');
+            accion: $accion, link: $this->link, registro_id: $this->registro_id,
+            seccion: 'inm_prospecto_ubicacion',params: $params);
         if (errores::$error) {
             $this->retorno_error(mensaje: 'Error al generar link', data: $link_fotografia_bd, header: $header, ws: $ws);
         }

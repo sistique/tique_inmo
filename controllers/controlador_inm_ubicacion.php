@@ -1199,8 +1199,10 @@ class controlador_inm_ubicacion extends _ctl_base {
             $accion = $_POST['btn_action_next'];
         }
 
-        $params = array('pestana_general_actual' => 'pestanageneral1', 'pestana_actual' => $_GET['pestana_actual']);
-        $link_proceso_ubicacion = $this->obj_link->link_con_id(
+        $params = array();
+        if (isset($_GET['pestana_general_actual'])) {
+            $params = array('pestana_general_actual' => 'pestanageneral1', 'pestana_actual' => $_GET['pestana_actual']);
+        }        $link_proceso_ubicacion = $this->obj_link->link_con_id(
             accion: $accion, link: $this->link, registro_id: $this->registro_id, seccion: 'inm_ubicacion',params: $params);
         if (errores::$error) {
             $this->retorno_error(mensaje: 'Error al generar link', data: $link_proceso_ubicacion, header: $header, ws: $ws);
