@@ -38,6 +38,8 @@ use stdClass;
 class controlador_inm_ubicacion extends _ctl_base {
     public stdClass $header_frontend;
     public inm_ubicacion_html $html_entidad;
+
+    public string $link_exportar_xls ='';
     public string $link_rel_ubi_comp_alta_bd = '';
     public string $link_alta_bitacora = '';
     public string $link_opinion_valor_alta_bd = '';
@@ -102,6 +104,16 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $this->header_frontend = new stdClass();
         $this->lista_get_data = true;
+
+        $link_exportar_xls = $this->obj_link->link_con_id(accion: 'exportar_xls',link: $this->link,
+            registro_id:  $this->registro_id,seccion:  $this->tabla);
+        if (errores::$error) {
+            $error = $this->errores->error(mensaje: 'Error al generar link', data: $link_exportar_xls);
+            print_r($error);
+            die('Error');
+        }
+
+        $this->link_exportar_xls = $link_exportar_xls;
     }
 
     /**
