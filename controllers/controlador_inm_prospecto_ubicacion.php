@@ -494,9 +494,9 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         $this->fotos = $inputs_fotos;
 
         $params = array();
-        if(isset($_GET['pestana_general_actual'])) {
+        if(isset($_GET['accion']) && $_GET['accion'] === 'proceso_prospecto_ubicacion') {
             $params = array('pestana_general_actual' => 'pestanageneral1',
-                'pestana_actual' => $_GET['pestana_actual']);
+                'pestana_actual' => 'pestanaubicacion3');
         }
         $link_fotografia_bd = $this->obj_link->link_con_id(
             accion: 'fotografias_bd', link: $this->link, registro_id: $this->registro_id,
@@ -1974,7 +1974,11 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
 
         $this->link_inm_doc_prospecto_alta_bd = $link_alta_doc;
 
-        $btn_action_next = $this->html->hidden('btn_action_next', value: 'documentos');
+        $retorno = 'documentos';
+        if(isset($_GET['pestana_general_actual'])){
+            $retorno = 'proceso_prospecto_ubicacion';
+        }
+        $btn_action_next = $this->html->hidden('btn_action_next', value: $retorno);
         if (errores::$error) {
             return $this->retorno_error(
                 mensaje: 'Error al generar btn_action_next', data: $btn_action_next, header: $header, ws: $ws);

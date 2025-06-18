@@ -1125,7 +1125,11 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $this->fotos = $inputs_fotos;
 
-        $params = array('pestana_general_actual' => 'pestanageneral1', 'pestana_actual' => 'pestanaubicacion3');
+        $params = array();
+        if(isset($_GET['accion']) && $_GET['accion'] === 'proceso_ubicacion') {
+            $params = array('pestana_general_actual' => 'pestanageneral1',
+                'pestana_actual' => 'pestanaubicacion3');
+        }
         $link_fotografia_bd = $this->obj_link->link_con_id(
             accion: 'fotografias_bd', link: $this->link, registro_id: $this->registro_id, seccion: 'inm_ubicacion',
             params: $params);
