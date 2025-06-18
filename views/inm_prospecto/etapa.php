@@ -33,18 +33,18 @@
 
 <main class="main section-color-primary">
     <div class="row">
-            <div class="col-md-12">
-                <div class="widget widget-box box-container widget-mylistings">
-                    <table class="table table-striped">
-                        <thead>
-                        <tr>
-                            <th>Id</th>
-                            <th>Etapa</th>
-                            <th>Fecha</th>
-                            <th>Observaciones</th>
-                        </tr>
-                        </thead>
-                        <tbody>
+        <div class="col-md-12">
+            <div class="widget widget-box box-container widget-mylistings">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Etapa</th>
+                        <th>Fecha</th>
+                        <th>Observaciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
                         <?php
                         foreach ($controlador->etapas as $etapa){
                         ?>
@@ -55,10 +55,10 @@
                             <td><?php echo $etapa['inm_bitacora_status_prospecto_observaciones'] ?></td>
                         </tr>
                         <?php } ?>
-                        </tbody>
-                    </table>
-                </div> <!-- /. widget-table-->
-            </div><!-- /.center-content -->
-        </div>
+                    </tbody>
+                </table>
+            </div> <!-- /. widget-table-->
+        </div><!-- /.center-content -->
+    </div>
 </main>
 
