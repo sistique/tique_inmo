@@ -55,7 +55,8 @@ class com_rel_agente extends _modelo_parent{
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error al obtener com_rel_agente', data: $r_com_rel_agente );
             }
-            $rel_com_agente_id = $r_com_rel_agente->registros[0]['rel_com_agente_id'];
+
+            $rel_com_agente_id = $r_com_rel_agente->registros[0]['id'];
 
             $registro = $this->registro(registro_id: $rel_com_agente_id);
             if(errores::$error){
@@ -70,8 +71,8 @@ class com_rel_agente extends _modelo_parent{
             $transacciones->sql = 'SELECT';
 
             $r_alta_bd = $this->data_result_transaccion(mensaje: 'Registro previamente insertado', registro: $registro,
-                registro_ejecutado: $this->registro, registro_id: $rel_com_agente_id, registro_puro: $registro_puro,
-                sql: $transacciones->sql);
+                registro_ejecutado: $this->registro, registro_id: $rel_com_agente_id, registro_original: $registro,
+                registro_puro: $registro_puro, sql: $transacciones->sql);
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error al maquetar respuesta registro', data: $registro);
             }
