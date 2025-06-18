@@ -586,11 +586,12 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
 
         $columns_ds[] = 'inm_status_prospecto_ubicacion_descripcion';
 
-        $inm_status_prospecto_ubicacion_id = (new inm_status_prospecto_ubicacion_html(html: $this->html_base))->select_inm_status_prospecto_ubicacion_id(
-            cols: 6, con_registros: true, id_selected: -1, link: $this->link, columns_ds: $columns_ds,
-            label: 'Status Prospecto Ubicacion');
+        $inm_status_prospecto_ubicacion_id = (new inm_status_prospecto_ubicacion_html(html: $this->html_base))->
+        select_inm_status_prospecto_ubicacion_id(cols: 6, con_registros: true, id_selected: -1, link: $this->link,
+            columns_ds: $columns_ds, label: 'Status Prospecto Ubicacion');
         if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al obtener selector de etapa', data: $inm_status_prospecto_ubicacion_id, header: $header, ws: $ws);
+            return $this->retorno_error(mensaje: 'Error al obtener selector de etapa',
+                data: $inm_status_prospecto_ubicacion_id, header: $header, ws: $ws);
         }
         $this->inputs->inm_status_prospecto_ubicacion_id = $inm_status_prospecto_ubicacion_id;
 
@@ -603,30 +604,35 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
 
         $this->inputs->fecha = $fecha;
 
-        $observaciones = $this->html->input_text(cols: 12, disabled: false, name: 'observaciones', place_holder: 'Observaciones',
-            row_upd: new stdClass(), value_vacio: false, required: false);
+        $observaciones = $this->html->input_text(cols: 12, disabled: false, name: 'observaciones',
+            place_holder: 'Observaciones', row_upd: new stdClass(), value_vacio: false, required: false);
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $observaciones,  header: $header, ws: $ws);
+            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $observaciones,  header: $header,
+                ws: $ws);
         }
 
         $this->inputs->observaciones = $observaciones;
 
         $inm_prospecto_ubicacion_id = $this->html->hidden(name:'inm_prospecto_ubicacion_id',value: $this->registro_id);
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $inm_prospecto_ubicacion_id,  header: $header, ws: $ws);
+            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $inm_prospecto_ubicacion_id,
+                header: $header, ws: $ws);
         }
 
         $this->inputs->inm_prospecto_ubicacion_id = $inm_prospecto_ubicacion_id;
 
 
-        $link_alta_bitacora= $this->obj_link->link_alta_bd(link: $this->link, seccion:  'inm_bitacora_status_prospecto_ubicacion');
+        $link_alta_bitacora= $this->obj_link->link_alta_bd(link: $this->link,
+            seccion:  'inm_bitacora_status_prospecto_ubicacion');
         if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al generar link', data: $link_alta_bitacora, header: $header, ws: $ws);
+            return $this->retorno_error(mensaje: 'Error al generar link', data: $link_alta_bitacora, header: $header,
+                ws: $ws);
         }
 
         $this->link_alta_bitacora = $link_alta_bitacora;
 
-        $etapas = (new inm_prospecto_ubicacion(link: $this->link))->status_prospecto_ubicacion(inm_prospecto_id: $this->registro_id);
+        $etapas = (new inm_prospecto_ubicacion(link: $this->link))->status_prospecto_ubicacion(
+            inm_prospecto_id: $this->registro_id);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al obtener etapas', data: $etapas, header: $header, ws: $ws);
         }
