@@ -613,9 +613,9 @@ class controlador_inm_prospecto extends _ctl_formato
         }
 
         if(!empty($_POST['agente'])){
-            $filtro_especial[2][$table.'.agente']['operador'] = 'LIKE';
-            $filtro_especial[2][$table.'.agente']['valor'] = '%'.$_POST['agente'].'%';
-            $filtro_especial[2][$table.'.agente']['comparacion'] = 'AND';
+            $filtro_especial[2]['com_agente.descripcion']['operador'] = 'LIKE';
+            $filtro_especial[2]['com_agente.descripcion']['valor'] = '%'.$_POST['agente'].'%';
+            $filtro_especial[2]['com_agente.descripcion']['comparacion'] = 'AND';
 
             $filtro_text['com_agente.descripcion'] = $_POST['agente'];
         }

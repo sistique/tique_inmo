@@ -28,6 +28,7 @@ use gamboamartin\inmuebles\models\inm_ocupacion;
 use gamboamartin\inmuebles\models\inm_poder;
 use gamboamartin\inmuebles\models\inm_status_ubicacion;
 use gamboamartin\inmuebles\models\inm_ubicacion;
+use gamboamartin\plugins\exportador;
 use gamboamartin\system\_ctl_base;
 use gamboamartin\system\links_menu;
 use gamboamartin\template\html;
@@ -896,6 +897,44 @@ class controlador_inm_ubicacion extends _ctl_base {
         $this->inputs->seccion_retorno = $seccion_retorno;
 
         return $this->inputs;
+    }
+
+    public function exportar_xls(bool $header, bool $ws = false)
+    {
+        $nombre_hojas = array('Ubicaciones');
+        $keys_hojas = array();
+
+        $registros = $this->result_inm_prosp();
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener inm_ubicacion', data: $registros, header: $header,
+                ws: $ws);
+        }
+
+        $ths[] = array('etiqueta'=>'ID', 'campo'=>'inm_ubicacion_id');
+        $ths[] = array('etiqueta'=>'Ubicacion', 'campo'=>'inm_ubicacion_ubicacion');
+        $ths[] = array('etiqueta'=>'CP', 'campo'=>'dp_cp_descripcion');
+        $ths[] = array('etiqueta'=>'Agente', 'campo'=>'com_agente_descripcion');
+        $ths[] = array('etiqueta'=>'Status ubicacion', 'campo'=>'inm_status_ubicacion_descripcion');
+
+        $keys = array();
+        foreach ($ths as $data_th) {
+            $keys[] = $data_th['campo'];
+        }
+
+        $keys_hojas['Ubicaciones'] = new stdClass();
+        $keys_hojas['Ubicaciones']->keys = $keys;
+        $keys_hojas['Ubicaciones']->registros = $registros->registros;
+
+
+        $moneda = array();
+        $totales_hoja = new stdClass();
+        //$totales_hoja->ubicacions = (array)$registros->totales;
+        $xls = (new exportador())->genera_xls(header: $header, name: 'Ubicaciones', nombre_hojas: $nombre_hojas,
+            keys_hojas: $keys_hojas, path_base: $this->path_base, moneda: $moneda/*, totales_hoja: $totales_hoja*/);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener xls', data: $xls, header: $header, ws: $ws);
+        }
+
     }
 
     public function firmado_por_aprobar_bd(bool $header, bool $ws = false)
@@ -2067,6 +2106,70 @@ class controlador_inm_ubicacion extends _ctl_base {
 
 
         return $this->registro_id;
+    }
+
+    private function result_inm_prosp(): array|stdClass
+    {
+        $result = new stdClass();
+        $result->registros = array();
+        $result->totales = array();
+
+        $table = 'inm_ubicacion';
+
+        $filtro_rango = array();
+        if(!empty($_POST['fecha_inicial'])){
+            $filtro_rango[$table.'.fecha_alta']['valor1'] = $_POST['fecha_inicial'];
+        }
+        if(!empty($_POST['fecha_final'])) {
+            $filtro_rango[$table . '.fecha_alta']['valor2'] = $_POST['fecha_final'];
+        }
+
+        $filtro_especial = array();
+
+        if(!empty($_POST['nombre_ubicacion'])){
+            $filtro_especial[0][$table.'.inm_ubicacion_ubicacion']['operador'] = 'LIKE';
+            $filtro_especial[0][$table.'.inm_ubicacion_ubicacion']['valor'] = '%'.$_POST['nombre_ubicacion'].'%';
+            $filtro_especial[0][$table.'.inm_ubicacion_ubicacion']['comparacion'] = 'AND';
+
+            //$filtro_text[$table.'.razon_social'] = $_POST['nombre_ubicacion'];
+        }
+
+        if(!empty($_POST['predial'])){
+            $filtro_especial[1][$table.'.cuenta_predial']['operador'] = 'LIKE';
+            $filtro_especial[1][$table.'.cuenta_predial']['valor'] = '%'.$_POST['predial'].'%';
+            $filtro_especial[1][$table.'.cuenta_predial']['comparacion'] = 'AND';
+
+            //$filtro_text[$table.'.cuenta_predial'] = $_POST['cuenta_predial'];
+        }
+
+        if(!empty($_POST['agente'])){
+            $filtro_especial[2]['com_agente.descripcion']['operador'] = 'LIKE';
+            $filtro_especial[2]['com_agente.descripcion']['valor'] = '%'.$_POST['agente'].'%';
+            $filtro_especial[2]['com_agente.descripcion']['comparacion'] = 'AND';
+
+            //$filtro_text['com_agente.descripcion'] = $_POST['agente'];
+        }
+
+        $in = array();
+        if(!empty($_POST['inm_status_ubicacion'])){
+            $array = explode(",", $_POST['inm_status_ubicacion']);
+            $in['llave'] = 'inm_status_ubicacion.descripcion';
+            $in['values'] = $array;
+        }
+
+        /*$columnas_totales[] = 'inm_ubicacion_sub_total_base';
+        $columnas_totales[] = 'inm_ubicacion_total_descuento';
+        $columnas_totales[] = 'inm_ubicacion_total_traslados';
+        $columnas_totales[] = 'inm_ubicacion_total_retenciones';
+        $columnas_totales[] = 'inm_ubicacion_total';*/
+
+        $result = (new inm_ubicacion(link: $this->link))->filtro_and(filtro_especial: $filtro_especial,
+            filtro_rango: $filtro_rango, in: $in);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al obtener ubicacions', data: $result);
+        }
+
+        return $result;
     }
 
     final public function subir_documento(bool $header, bool $ws = false)

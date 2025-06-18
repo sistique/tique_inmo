@@ -129,8 +129,8 @@ echo "<style>
                     </div>
 
                     <div class="col-md-4">
-                        <label for="predia">Predia</label>
-                        <input type="text" id="predia" data-tipo="filtro" data-filtro_campo="inm_ubicacion.predia"
+                        <label for="predial">Predial</label>
+                        <input type="text" id="predial" data-tipo="filtro" data-filtro_campo="inm_ubicacion.cuenta_predial"
                                placeholder="Ej: 9999999999">
                     </div>
                 </div>
@@ -143,7 +143,7 @@ echo "<style>
                     <input type="hidden" name="nombre_ubicacion" id="hidden_nombre_ubicacion">
                     <input type="hidden" name="ubicacion" id="hidden_ubicacion">
                     <input type="hidden" name="agente" id="hidden_agente">
-                    <input type="hidden" name="predia" id="hidden_predia">
+                    <input type="hidden" name="predial" id="hidden_predial">
                     <button id="descargar_excel">Descargar Excel</button>
                 </form>
             </div>
