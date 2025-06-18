@@ -238,7 +238,6 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         $init_data['inm_prototipo'] = "gamboamartin\\inmuebles";
         $init_data['inm_complemento'] = "gamboamartin\\inmuebles";
         $init_data['inm_estado_vivienda'] = "gamboamartin\\inmuebles";
-        $init_data['inm_prospecto_ubicacion'] = "gamboamartin\\inmuebles";
         $init_data['dp_pais'] = "gamboamartin\\direccion_postal";
         $init_data['dp_estado'] = "gamboamartin\\direccion_postal";
         $init_data['dp_municipio'] = "gamboamartin\\direccion_postal";
