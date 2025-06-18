@@ -221,8 +221,8 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
             'correo_mi_cuenta_infonavit', 'password_mi_cuenta_infonavit', 'nss_extra', 'liga_red_social', 'area_empresa',
             'texto_exterior', 'texto_interior', 'documentos', 'receptor', 'asunto', 'mensaje','manzana','lote',
             'cuenta_predial', 'adeudo_hipoteca','adeudo_predial', 'cuenta_agua', 'adeudo_agua',
-            'adeudo_luz','monto_devolucion', 'nivel','recamaras','metros_terreno', 'metros_construccion',
-            'fecha_otorgamiento_credito','cp','colonia','calle','inm_prospecto_ubicacion_ubicacion');
+            'adeudo_luz','monto_devolucion', 'nivel','recamaras','metros_terreno', 'metros_construccion','cp','colonia',
+            'calle','inm_prospecto_ubicacion_ubicacion');
 
         $keys->selects = array();
 
@@ -391,7 +391,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
             return $this->retorno_error(mensaje: 'Error al integrar buttons', data: $inm_conf_docs_prospecto, header: $header, ws: $ws);
         }
 
-        $keys_selects = $this->init_selects_inputs();
+        /*$keys_selects = $this->init_selects_inputs();
         if (errores::$error) {return $this->errores->error(mensaje: 'Error al inicializar selects', data: $keys_selects);
         }
 
@@ -405,7 +405,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         $this->row_upd->asunto = "TU MENSAJE";
         $this->row_upd->mensaje = "TU MENSAJE";
         $this->inm_conf_docs_prospecto = $inm_conf_docs_prospecto;
-
+*/
         //print_r($this->row_upd);
 
         return $this->inputs;
@@ -1609,6 +1609,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         }
 
         $this->inputs->direccion = $direccion;
+        $this->keys_selects = array_merge($keys_selects, $this->keys_selects);
 
         return $r_modifica;
     }
