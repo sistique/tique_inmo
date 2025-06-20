@@ -39,6 +39,7 @@ use gamboamartin\inmuebles\models\inm_rel_conyuge_ubicacion;
 use gamboamartin\inmuebles\models\inm_rel_ubicacion_prospecto_ubicacion;
 use gamboamartin\inmuebles\models\inm_status_prospecto_ubicacion;
 use gamboamartin\inmuebles\models\inm_tipo_beneficiario;
+use gamboamartin\plugins\exportador;
 use gamboamartin\proceso\html\pr_etapa_proceso_html;
 use gamboamartin\system\actions;
 use gamboamartin\system\links_menu;
@@ -62,6 +63,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
     public stdClass $header_frontend;
     public inm_prospecto_ubicacion_html $html_entidad;
 
+    public string $link_exportar_xls ='';
     public string $link_alta_etapa = '';
     public array $etapas = array();
     public string $link_inm_doc_prospecto_alta_bd = '';
@@ -115,6 +117,16 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
             print_r($error);
             die('Error');
         }
+
+        $link_exportar_xls = $this->obj_link->link_con_id(accion: 'exportar_xls',link: $this->link,
+            registro_id:  $this->registro_id,seccion:  $this->tabla);
+        if (errores::$error) {
+            $error = $this->errores->error(mensaje: 'Error al generar link', data: $link_exportar_xls);
+            print_r($error);
+            die('Error');
+        }
+
+        $this->link_exportar_xls = $link_exportar_xls;
     }
 
     /**
@@ -663,6 +675,45 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
 
         return $this->inputs;
     }
+
+    public function exportar_xls(bool $header, bool $ws = false)
+    {
+        $nombre_hojas = array('Prospecto Ubicaciones');
+        $keys_hojas = array();
+
+        $registros = $this->result_inm_prosp();
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener inm_prospecto_ubicacion', data: $registros, header: $header,
+                ws: $ws);
+        }
+
+        $ths[] = array('etiqueta'=>'ID', 'campo'=>'inm_prospecto_ubicacion_id');
+        $ths[] = array('etiqueta'=>'prospecto_ubicacion', 'campo'=>'inm_prospecto_ubicacion_prospecto_ubicacion');
+        $ths[] = array('etiqueta'=>'CP', 'campo'=>'dp_cp_descripcion');
+        $ths[] = array('etiqueta'=>'Agente', 'campo'=>'com_agente_descripcion');
+        $ths[] = array('etiqueta'=>'Status prospecto_ubicacion', 'campo'=>'inm_status_prospecto_ubicacion_descripcion');
+
+        $keys = array();
+        foreach ($ths as $data_th) {
+            $keys[] = $data_th['campo'];
+        }
+
+        $keys_hojas['Prospecto Ubicaciones'] = new stdClass();
+        $keys_hojas['Prospecto Ubicaciones']->keys = $keys;
+        $keys_hojas['Prospecto Ubicaciones']->registros = $registros->registros;
+
+
+        $moneda = array();
+        $totales_hoja = new stdClass();
+        //$totales_hoja->prospecto_ubicacions = (array)$registros->totales;
+        $xls = (new exportador())->genera_xls(header: $header, name: 'Prospecto Ubicaciones', nombre_hojas: $nombre_hojas,
+            keys_hojas: $keys_hojas, path_base: $this->path_base, moneda: $moneda/*, totales_hoja: $totales_hoja*/);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener xls', data: $xls, header: $header, ws: $ws);
+        }
+
+    }
+
 
     public function integra_relacion(bool $header, bool $ws = false): array|stdClass
     {
@@ -1916,6 +1967,70 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         exit;
     }
 
+    private function result_inm_prosp(): array|stdClass
+    {
+        $result = new stdClass();
+        $result->registros = array();
+        $result->totales = array();
+
+        $table = 'inm_prospecto_ubicacion';
+
+        $filtro_rango = array();
+        if(!empty($_POST['fecha_inicial'])){
+            $filtro_rango[$table.'.fecha_alta']['valor1'] = $_POST['fecha_inicial'];
+        }
+        if(!empty($_POST['fecha_final'])) {
+            $filtro_rango[$table . '.fecha_alta']['valor2'] = $_POST['fecha_final'];
+        }
+
+        $filtro_especial = array();
+
+        if(!empty($_POST['nombre_prospecto_ubicacion'])){
+            $filtro_especial[0][$table.'.inm_prospecto_ubicacion_prospecto_ubicacion']['operador'] = 'LIKE';
+            $filtro_especial[0][$table.'.inm_prospecto_ubicacion_prospecto_ubicacion']['valor'] = '%'.$_POST['nombre_prospecto_ubicacion'].'%';
+            $filtro_especial[0][$table.'.inm_prospecto_ubicacion_prospecto_ubicacion']['comparacion'] = 'AND';
+
+            //$filtro_text[$table.'.razon_social'] = $_POST['nombre_prospecto_ubicacion'];
+        }
+
+        if(!empty($_POST['predial'])){
+            $filtro_especial[1][$table.'.cuenta_predial']['operador'] = 'LIKE';
+            $filtro_especial[1][$table.'.cuenta_predial']['valor'] = '%'.$_POST['predial'].'%';
+            $filtro_especial[1][$table.'.cuenta_predial']['comparacion'] = 'AND';
+
+            //$filtro_text[$table.'.cuenta_predial'] = $_POST['cuenta_predial'];
+        }
+
+        if(!empty($_POST['agente'])){
+            $filtro_especial[2]['com_agente.descripcion']['operador'] = 'LIKE';
+            $filtro_especial[2]['com_agente.descripcion']['valor'] = '%'.$_POST['agente'].'%';
+            $filtro_especial[2]['com_agente.descripcion']['comparacion'] = 'AND';
+
+            //$filtro_text['com_agente.descripcion'] = $_POST['agente'];
+        }
+
+        $in = array();
+        if(!empty($_POST['inm_status_prospecto_ubicacion'])){
+            $array = explode(",", $_POST['inm_status_prospecto_ubicacion']);
+            $in['llave'] = 'inm_status_prospecto_ubicacion.descripcion';
+            $in['values'] = $array;
+        }
+
+        /*$columnas_totales[] = 'inm_prospecto_ubicacion_sub_total_base';
+        $columnas_totales[] = 'inm_prospecto_ubicacion_total_descuento';
+        $columnas_totales[] = 'inm_prospecto_ubicacion_total_traslados';
+        $columnas_totales[] = 'inm_prospecto_ubicacion_total_retenciones';
+        $columnas_totales[] = 'inm_prospecto_ubicacion_total';*/
+
+        $result = (new inm_prospecto_ubicacion(link: $this->link))->filtro_and(filtro_especial: $filtro_especial,
+            filtro_rango: $filtro_rango, in: $in);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al obtener prospecto_ubicacions', data: $result);
+        }
+
+        return $result;
+    }
+    
     final public function subir_documento(bool $header, bool $ws = false)
     {
         $inm_prospecto = (new inm_prospecto_ubicacion(link: $this->link))->registro(registro_id: $this->registro_id);
