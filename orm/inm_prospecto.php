@@ -5,6 +5,7 @@ namespace gamboamartin\inmuebles\models;
 use base\orm\_modelo_parent;
 use gamboamartin\administrador\models\adm_usuario;
 use gamboamartin\comercial\models\com_prospecto;
+use gamboamartin\comercial\models\com_rel_agente;
 use gamboamartin\errores\errores;
 use gamboamartin\proceso\models\pr_sub_proceso;
 use PDO;
@@ -287,6 +288,16 @@ class inm_prospecto extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al insertar prospecto',data:  $r_alta_bd);
         }
 
+        $con_rel_agente = new com_rel_agente($this->link);
+
+        $registro_rel['com_agente_id'] = $this->registro['com_agente_id'];
+        $registro_rel['com_prospecto_id'] = $this->registro['com_prospecto_id'];
+
+        $result = $con_rel_agente->alta_registro(registro: $registro_rel);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return  $this->error->error(mensaje: 'Error al insertar datos', data: $result);
+        }
 
         $alta_inm_prospecto_proceso = $this->inserta_sub_proceso(inm_prospecto_id: $r_alta_bd->registro_id);
         if(errores::$error){

@@ -7,6 +7,7 @@ use gamboamartin\administrador\models\adm_usuario;
 use gamboamartin\comercial\models\com_direccion;
 use gamboamartin\comercial\models\com_direccion_prospecto;
 use gamboamartin\comercial\models\com_prospecto;
+use gamboamartin\comercial\models\com_rel_agente;
 use gamboamartin\comercial\models\com_tipo_direccion;
 use gamboamartin\comercial\models\com_tipo_prospecto;
 use gamboamartin\errores\errores;
@@ -338,6 +339,17 @@ class inm_prospecto_ubicacion extends _modelo_parent{
             return $this->error->error(mensaje: 'Error insertar alta_inm_prospecto_proceso',
                 data:  $alta_inm_prospecto_proceso);
         }*/
+
+        $con_rel_agente = new com_rel_agente($this->link);
+
+        $registro_rel['com_agente_id'] = $this->registro['com_agente_id'];
+        $registro_rel['com_prospecto_id'] = $this->registro['com_prospecto_id'];
+
+        $result = $con_rel_agente->alta_registro(registro: $registro_rel);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return  $this->error->error(mensaje: 'Error al insertar datos', data: $result);
+        }
 
         $filtro_status_prospecto_ubicacion['inm_status_prospecto_ubicacion.descripcion'] = 'ALTA';
         $r_status_prospecto_ubicacion = (new inm_status_prospecto_ubicacion(link: $this->link))->filtro_and(
