@@ -19,13 +19,12 @@ class inm_prospecto extends _modelo_parent{
             'inm_attr_tipo_credito'=>$tabla,'inm_destino_credito'=>$tabla,'inm_plazo_credito_sc'=>$tabla,
             'inm_tipo_discapacidad'=>$tabla,'inm_persona_discapacidad'=>$tabla,'inm_estado_civil'=>$tabla,
             'inm_institucion_hipotecaria'=>$tabla,'com_agente'=>'com_prospecto','com_tipo_prospecto'=>'com_prospecto',
-            'com_medio_prospeccion'=>'com_prospecto', 'adm_usuario'=>'com_agente','dp_calle_pertenece'=>$tabla,
-            'dp_colonia_postal'=>'dp_calle_pertenece', 'dp_calle'=>'dp_calle_pertenece',
-            'dp_colonia'=>'dp_colonia_postal','dp_cp'=>'dp_colonia_postal', 'dp_municipio'=>'dp_cp',
+            'com_medio_prospeccion'=>'com_prospecto', 'adm_usuario'=>'com_agente','dp_colonia_postal' => $tabla,
+            'dp_cp'=>'dp_colonia_postal','dp_colonia'=>'dp_colonia_postal','dp_municipio'=>'dp_cp',
             'dp_estado'=>'dp_municipio','dp_pais'=>'dp_estado','inm_sindicato'=>$tabla, 'inm_nacionalidad'=>$tabla,
             'inm_ocupacion'=>$tabla,'inm_status_prospecto'=>$tabla);
 
-        $campos_obligatorios = array('com_prospecto_id','razon_social','dp_calle_pertenece_id','rfc',
+        $campos_obligatorios = array('com_prospecto_id','razon_social','rfc',
             'numero_exterior','numero_interior','inm_sindicato_id','dp_municipio_nacimiento_id','fecha_nacimiento',
             'monto_final','sub_cuenta','descuento','puntos','inm_nacionalidad_id','inm_ocupacion_id','telefono_casa',
             'correo_empresa','nombre_completo_valida');
@@ -78,7 +77,7 @@ class inm_prospecto extends _modelo_parent{
 
         $columnas_extra['usuario_permitido_id'] = $sql;
 
-        $atributos_criticos = array('com_prospecto_id','razon_social','dp_calle_pertenece_id','rfc',
+        $atributos_criticos = array('com_prospecto_id','razon_social','rfc',
             'numero_exterior','numero_interior','inm_sindicato_id','dp_municipio_nacimiento_id','observaciones',
             'fecha_nacimiento','monto_final','sub_cuenta','descuento','puntos','inm_nacionalidad_id',
             'inm_ocupacion_id','telefono_casa','correo_empresa');
