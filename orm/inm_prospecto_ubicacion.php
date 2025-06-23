@@ -62,13 +62,22 @@ class inm_prospecto_ubicacion extends _modelo_parent{
         }
 
 
-        $sql = "( IFNULL ((SELECT
-                    adm_usuario_permitido.id 
-                    FROM com_agente AS com_agente_permitido 
+        /*$sql = "( IFNULL ((SELECT
+                    adm_usuario_permitido.id
+                    FROM com_agente AS com_agente_permitido
                     LEFT JOIN adm_usuario AS adm_usuario_permitido ON  com_agente_permitido.adm_usuario_id = adm_usuario_permitido.id
-                    LEFT JOIN com_rel_agente ON com_rel_agente.com_agente_id = com_agente_permitido.id 
-                    WHERE  adm_usuario_permitido.id = $_SESSION[usuario_id] AND 
-                    com_rel_agente.com_prospecto_id = com_prospecto.id),-1) )";
+                    LEFT JOIN com_rel_agente ON com_rel_agente.com_agente_id = com_agente_permitido.id
+                    WHERE  adm_usuario_permitido.id = $_SESSION[usuario_id] AND
+                    com_rel_agente.com_prospecto_id = com_prospecto.id),-1) )";*/
+
+        $sql = "(IFNULL ((SELECT
+				adm_usuario_permitido.id
+			FROM
+				com_agente AS com_agente_permitido
+				LEFT JOIN adm_usuario AS adm_usuario_permitido ON com_agente_permitido.adm_usuario_id = adm_usuario_permitido.id
+			WHERE
+				adm_usuario_permitido.id = $_SESSION[usuario_id]
+				AND com_agente_permitido.id = com_prospecto.com_agente_id),- 1))";
 
 
         if($adm_usuario['adm_grupo_root'] === 'activo'){
