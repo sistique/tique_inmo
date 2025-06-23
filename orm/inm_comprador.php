@@ -161,7 +161,14 @@ class inm_comprador extends _modelo_parent{
             $registro_entrada['dp_municipio_id'] = $inm_prospecto->dp_municipio_id;
         }
 
-        $filtro_status_comprador['inm_status_comprador.descripcion'] = 'ALTA';
+        $transacciones = (new _alta_comprador())->posterior_alta(
+            accion: __FUNCTION__, etapa: 'ALTA', inm_comprador_id: $r_alta_bd->registro_id, link: $this->link,
+            pr_proceso_descripcion: 'INMOBILIARIA CLIENTES', registro_entrada: $registro_entrada, tabla: $this->tabla);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al insertar transacciones', data: $transacciones);
+        }
+
+        $filtro_status_comprador['inm_status_comprador.descripcion'] = 'DETENIDO';
         $r_status_comprador = (new inm_status_comprador(link: $this->link))->filtro_and(
             filtro: $filtro_status_comprador);
         if(errores::$error){
@@ -178,12 +185,6 @@ class inm_comprador extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al registrar elemnto de bitacora comprador', data: $r_alta_status);
         }
 
-        $transacciones = (new _alta_comprador())->posterior_alta(
-            accion: __FUNCTION__, etapa: 'ALTA', inm_comprador_id: $r_alta_bd->registro_id, link: $this->link,
-            pr_proceso_descripcion: 'INMOBILIARIA CLIENTES', registro_entrada: $registro_entrada, tabla: $this->tabla);
-        if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al insertar transacciones', data: $transacciones);
-        }
 
         return $r_alta_bd;
 

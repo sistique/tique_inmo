@@ -847,7 +847,7 @@ class _com_cliente{
     {
         $keys = array('cat_sat_forma_pago_id','cat_sat_metodo_pago_id','cat_sat_moneda_id','cat_sat_regimen_fiscal_id',
             'cat_sat_tipo_persona_id', 'cat_sat_uso_cfdi_id','com_tipo_cliente_id', 'numero_exterior','rfc',
-            'dp_municipio_id');
+            'dp_colonia_postal_id');
 
         $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $registro_entrada);
         if(errores::$error){
@@ -855,7 +855,7 @@ class _com_cliente{
         }
 
         $keys = array('cat_sat_forma_pago_id','cat_sat_metodo_pago_id','cat_sat_moneda_id','cat_sat_regimen_fiscal_id',
-            'cat_sat_tipo_persona_id', 'cat_sat_uso_cfdi_id','com_tipo_cliente_id','dp_municipio_id');
+            'cat_sat_tipo_persona_id', 'cat_sat_uso_cfdi_id','com_tipo_cliente_id','dp_colonia_postal_id');
 
         $valida = $this->validacion->valida_ids(keys: $keys,registro:  $registro_entrada);
         if(errores::$error){
@@ -876,7 +876,7 @@ class _com_cliente{
     {
         $keys = array('rfc','numero_exterior','lada_com','numero_com', 'cat_sat_regimen_fiscal_id','cat_sat_moneda_id',
             'cat_sat_forma_pago_id','cat_sat_metodo_pago_id', 'cat_sat_uso_cfdi_id','com_tipo_cliente_id',
-            'cat_sat_tipo_persona_id','cp');
+            'cat_sat_tipo_persona_id');
 
         $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $registro_entrada);
         if(errores::$error){

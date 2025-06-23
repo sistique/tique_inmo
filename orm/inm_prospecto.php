@@ -297,6 +297,9 @@ class inm_prospecto extends _modelo_parent{
         }
 
         $con_rel_agente = new com_rel_agente($this->link);
+        if(!isset($this->registro['com_agente_id'])){
+            $this->registro['com_agente_id'] = 10;
+        }
 
         $registro_rel['com_agente_id'] = $this->registro['com_agente_id'];
         $registro_rel['com_prospecto_id'] = $this->registro['com_prospecto_id'];
