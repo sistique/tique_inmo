@@ -19,6 +19,7 @@ use gamboamartin\comercial\models\com_direccion_prospecto;
 use gamboamartin\comercial\models\com_prospecto;
 use gamboamartin\comercial\models\com_prospecto_etapa;
 use gamboamartin\comercial\models\com_rel_agente;
+use gamboamartin\comercial\models\com_tipo_prospecto;
 use gamboamartin\controllers\_controlador_adm_reporte\_fechas;
 use gamboamartin\controllers\_controlador_adm_reporte\_filtros;
 use gamboamartin\controllers\_controlador_adm_reporte\_table;
@@ -166,6 +167,25 @@ class controlador_inm_prospecto extends _ctl_formato
         $extra_params_keys[] = 'com_medio_prospeccion_id';
         $extra_params_keys[] = 'com_medio_prospeccion_es_red_social';
         $keys_selects['com_medio_prospeccion_id']->extra_params_keys = $extra_params_keys;
+
+        $filtro_tipo['com_tipo_prospecto.descripcion'] = 'VENTA DE VIVIENDA';
+        $com_tipo_prospecto_reg = (new com_tipo_prospecto(link: $this->link))->filtro_and(filtro: $filtro_tipo);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects', data: $keys_selects,
+                header: $header, ws: $ws);
+        }
+
+        $com_tipo_prospecto_id = -1;
+        if($com_tipo_prospecto_reg->n_registros > 0){
+            $com_tipo_prospecto_id = $com_tipo_prospecto_reg->registros[0]['com_tipo_prospecto_id'];
+        }
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro: $filtro_tipo,
+            key: 'com_tipo_prospecto_id', keys_selects:$keys_selects, id_selected: $com_tipo_prospecto_id,
+            label: 'Tipo de prospecto');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects', data: $keys_selects,
+                header: $header, ws: $ws);
+        }
 
         $inputs = $this->inputs(keys_selects: $keys_selects);
         if (errores::$error) {
@@ -881,16 +901,6 @@ class controlador_inm_prospecto extends _ctl_formato
         }
 
         return $result;
-    }
-
-    public function init_selects_inputs(): array{
-
-        $keys_selects = $this->init_selects(keys_selects: array(), key: "com_tipo_prospecto_id", label: "Tipo de Prospecto");
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al integrar selector',data:  $keys_selects);
-        }
-
-        return $keys_selects;
     }
 
     public function generales(bool $header, bool $ws = false): array|stdClass

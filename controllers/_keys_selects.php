@@ -787,10 +787,11 @@ class _keys_selects{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
+        /*
         $keys_selects = $this->key_select_tipo_agente(controler: $controler,keys_selects:  $keys_selects);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
+        }*/
         $keys_selects = $this->key_select_sindicato(controler: $controler,keys_selects:  $keys_selects);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);

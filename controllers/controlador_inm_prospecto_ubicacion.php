@@ -16,6 +16,7 @@ use gamboamartin\comercial\models\com_agente;
 use gamboamartin\comercial\models\com_direccion;
 use gamboamartin\comercial\models\com_prospecto;
 use gamboamartin\comercial\models\com_rel_agente;
+use gamboamartin\comercial\models\com_tipo_prospecto;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_prospecto_ubicacion_html;
 use gamboamartin\inmuebles\html\inm_status_prospecto_ubicacion_html;
@@ -151,21 +152,25 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
                 header: $header, ws: $ws);
         }
 
-        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'com_agente_id',
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'com_agente_id',
             keys_selects:$keys_selects, id_selected: $id_selected, label: 'Agente');
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects', data: $keys_selects,
                 header: $header, ws: $ws);
         }
 
-        $com_tipo_prospecto_id = (new com_prospecto(link: $this->link))->id_preferido_detalle(
-            entidad_preferida: 'com_tipo_prospecto');
+        $filtro_tipo['com_tipo_prospecto.descripcion'] = 'COMPRA VIVIENDA';
+        $com_tipo_prospecto_reg = (new com_tipo_prospecto(link: $this->link))->filtro_and(filtro: $filtro_tipo);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects', data: $keys_selects,
                 header: $header, ws: $ws);
         }
 
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(),
+        $com_tipo_prospecto_id = -1;
+        if($com_tipo_prospecto_reg->n_registros > 0){
+            $com_tipo_prospecto_id = $com_tipo_prospecto_reg->registros[0]['com_tipo_prospecto_id'];
+        }
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro: $filtro_tipo,
             key: 'com_tipo_prospecto_id', keys_selects:$keys_selects, id_selected: $com_tipo_prospecto_id,
             label: 'Tipo de prospecto');
         if(errores::$error){
