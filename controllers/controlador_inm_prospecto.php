@@ -907,17 +907,23 @@ class controlador_inm_prospecto extends _ctl_formato
 
         $registro['com_agente_id'] = $_POST['com_agente_id'];
         $registro['com_prospecto_id'] = $inm_prospecto['com_prospecto_id'];
-
         $result = $con_rel_agente->alta_registro(registro: $registro);
         if (errores::$error) {
             $this->link->rollBack();
             return $this->retorno_error(mensaje: 'Error al insertar datos', data: $result, header: $header, ws: $ws);
         }
 
-
         $registros_prosp['com_agente_id'] = $_POST['com_agente_id'];
         $r_modifica = (new com_prospecto(link: $this->link))->modifica_bd(registro: $registros_prosp,
             id: $inm_prospecto['com_prospecto_id']);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_modifica, header: $header, ws: $ws);
+        }
+
+        $registros_prosp['com_agente_id'] = $_POST['com_agente_id'];
+        $r_modifica = (new inm_prospecto(link: $this->link))->modifica_bd(registro: $registros_prosp,
+            id: $this->registro_id);
         if (errores::$error) {
             $this->link->rollBack();
             return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_modifica, header: $header, ws: $ws);
