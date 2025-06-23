@@ -299,12 +299,25 @@ class inm_prospecto extends _modelo_parent{
             return  $this->error->error(mensaje: 'Error al insertar datos', data: $result);
         }
 
-        $alta_inm_prospecto_proceso = $this->inserta_sub_proceso(inm_prospecto_id: $r_alta_bd->registro_id);
+        $filtro_status_prospecto['inm_status_prospecto.descripcion'] = 'ALTA';
+        $r_status_prospecto = (new inm_status_prospecto(link: $this->link))->filtro_and(
+            filtro: $filtro_status_prospecto);
         if(errores::$error){
-            return $this->error->error(mensaje: 'Error insertar alta_inm_prospecto_proceso',
-                data:  $alta_inm_prospecto_proceso);
+            return $this->error->error(mensaje: 'Error al obtener status prospecto',
+                data: $r_status_prospecto);
         }
 
+        $modelo_inm_bitacora = new inm_bitacora_status_prospecto(link: $this->link);
+        $modelo_inm_bitacora->registro['inm_status_prospecto_id'] =
+            $r_status_prospecto->registros[0]['inm_status_prospecto_id'];
+        $modelo_inm_bitacora->registro['inm_prospecto_id'] = $r_alta_bd->registro_id;
+        $modelo_inm_bitacora->registro['fecha_status'] =  date('Y-m-d\TH:i:s');
+        $modelo_inm_bitacora->registro['observaciones'] =  'Status Inicial';
+        $r_alta_status = $modelo_inm_bitacora->alta_bd();
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al registrar elemnto de bitacora prospecto',
+                data: $r_alta_status);
+        }
 
         return $r_alta_bd;
     }
