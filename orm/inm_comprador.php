@@ -153,18 +153,30 @@ class inm_comprador extends _modelo_parent{
         }
 
         if(!isset($registro_entrada['cp'])){
-
             $inm_prospecto = (new inm_comprador(link: $this->link))->inm_prospecto(inm_comprador_id: $r_alta_bd->registro_id);
             if (errores::$error) {
                 return $this->error->error(mensaje: 'Error al obtener prospecto', data: $inm_prospecto);
             }
             $registro_entrada['cp'] = $inm_prospecto->dp_cp_codigo;
             $registro_entrada['dp_municipio_id'] = $inm_prospecto->dp_municipio_id;
-
-            //print_r($inm_prospecto);exit;
         }
 
+        $filtro_status_comprador['inm_status_comprador.descripcion'] = 'ALTA';
+        $r_status_comprador = (new inm_status_comprador(link: $this->link))->filtro_and(
+            filtro: $filtro_status_comprador);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener status comprador', data: $r_status_comprador);
+        }
 
+        $modelo_inm_bitacora = new inm_bitacora_status_comprador(link: $this->link);
+        $modelo_inm_bitacora->registro['inm_status_comprador_id'] = $r_status_comprador->registros[0]['inm_status_comprador_id'];
+        $modelo_inm_bitacora->registro['inm_comprador_id'] = $r_alta_bd->registro_id;
+        $modelo_inm_bitacora->registro['fecha_status'] =  date('Y-m-d\TH:i:s');
+        $modelo_inm_bitacora->registro['observaciones'] =  'Status Inicial';
+        $r_alta_status = $modelo_inm_bitacora->alta_bd();
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al registrar elemnto de bitacora comprador', data: $r_alta_status);
+        }
 
         $transacciones = (new _alta_comprador())->posterior_alta(
             accion: __FUNCTION__, etapa: 'ALTA', inm_comprador_id: $r_alta_bd->registro_id, link: $this->link,

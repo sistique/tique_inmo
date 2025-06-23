@@ -455,7 +455,7 @@ class _alta_comprador{
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al obtener cliente', data: $integra_relacion_com_cliente);
         }
-
+/*
         $sub_proceso = $this->sub_proceso(inm_comprador_id: $inm_comprador_id,
             link: $link, pr_proceso_descripcion: 'INMOBILIARIA CLIENTES', pr_sub_proceso_descripcion: 'ALTA',
             tabla: $tabla);
@@ -469,11 +469,11 @@ class _alta_comprador{
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al insertar etapa', data: $r_inm_comprador_etapa);
         }
-
+*/
         $data = new stdClass();
         $data->integra_relacion_com_cliente = $integra_relacion_com_cliente;
-        $data->sub_proceso = $sub_proceso;
-        $data->r_inm_comprador_etapa = $r_inm_comprador_etapa;
+        /*$data->sub_proceso = $sub_proceso;
+        $data->r_inm_comprador_etapa = $r_inm_comprador_etapa;*/
         return $data;
     }
 
