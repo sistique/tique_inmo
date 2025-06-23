@@ -748,14 +748,6 @@ class controlador_inm_prospecto extends _ctl_formato
         }
         $this->link_envia_documentos = $link;
 
-        $link = $this->obj_link->get_link(seccion: "inm_prospecto", accion: "integra_relacion_bd");
-        if (errores::$error) {
-            $error = $this->errores->error(mensaje: 'Error al recuperar link envia_documentos', data: $link);
-            print_r($error);
-            exit;
-        }
-        $this->link_alta_integra_relacion_bd = $link;
-
         return $link;
     }
 
@@ -853,6 +845,21 @@ class controlador_inm_prospecto extends _ctl_formato
 
         $this->relaciones = $relaciones->registros;
 
+        $params = array();
+        if(isset($_GET['accion']) && $_GET['accion'] === 'proceso_prospecto') {
+            $params = array('pestana_general_actual' => 'pestanageneral1',
+                'pestana_actual' => 'pestanaprospecto3');
+        }
+        $link_integra_relacion_bd = $this->obj_link->link_con_id(
+            accion: 'integra_relacion_bd', link: $this->link, registro_id: $this->registro_id,
+            seccion: 'inm_prospecto',params: $params);
+        if (errores::$error) {
+            $this->retorno_error(mensaje: 'Error al generar link', data: $link_integra_relacion_bd, header: $header, ws: $ws);
+        }
+
+        $this->link_alta_integra_relacion_bd = $link_integra_relacion_bd;
+
+
         return $this->inputs;
     }
 
@@ -890,10 +897,21 @@ class controlador_inm_prospecto extends _ctl_formato
 
         $this->link->commit();
 
+        $accion = 'integra_relacion';
+        if(isset($_POST['btn_action_next'])){
+            $accion = $_POST['btn_action_next'];
+        }
+
+        $params = array();
+        if (isset($_GET['pestana_general_actual'])) {
+            $params = array('pestana_general_actual' => 'pestanageneral1', 'pestana_actual' => $_GET['pestana_actual']);
+        }
         $link_integra_relacion_bd = $this->obj_link->link_con_id(
-            accion: 'integra_relacion', link: $this->link, registro_id: $this->registro_id, seccion: 'inm_prospecto');
+            accion: $accion, link: $this->link, registro_id: $this->registro_id, seccion: 'inm_prospecto',
+            params: $params);
         if (errores::$error) {
-            $this->retorno_error(mensaje: 'Error al generar link', data: $link_integra_relacion_bd, header: $header, ws: $ws);
+            $this->retorno_error(mensaje: 'Error al generar link', data: $link_integra_relacion_bd, header: $header,
+                ws: $ws);
         }
 
         if($header) {

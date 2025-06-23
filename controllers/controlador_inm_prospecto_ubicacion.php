@@ -834,7 +834,8 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
             accion: $accion, link: $this->link, registro_id: $this->registro_id,
             seccion: 'inm_prospecto_ubicacion',params: $params);
         if (errores::$error) {
-            $this->retorno_error(mensaje: 'Error al generar link', data: $link_integra_relacion_bd, header: $header, ws: $ws);
+            $this->retorno_error(mensaje: 'Error al generar link', data: $link_integra_relacion_bd, header: $header,
+                ws: $ws);
         }
 
         if($header) {
