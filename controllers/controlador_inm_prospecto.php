@@ -1802,7 +1802,12 @@ class controlador_inm_prospecto extends _ctl_formato
 
         $this->inputs->documento = $documento;
 
-        $link_alta_doc = $this->obj_link->link_alta_bd(link: $this->link, seccion: 'inm_doc_prospecto');
+        $params = array();
+        if(isset($_GET['pestana_general_actual'])) {
+            $params = array('pestana_general_actual' => 'pestanageneral1',
+                'pestana_actual' => $_GET['pestana_actual']);
+        }
+        $link_alta_doc = $this->obj_link->link_alta_bd(link: $this->link, seccion: 'inm_doc_prospecto',params: $params);
         if (errores::$error) {
             return $this->retorno_error(
                 mensaje: 'Error al generar link', data: $link_alta_doc, header: $header, ws: $ws);
@@ -1810,7 +1815,11 @@ class controlador_inm_prospecto extends _ctl_formato
 
         $this->link_inm_doc_prospecto_alta_bd = $link_alta_doc;
 
-        $btn_action_next = $this->html->hidden('btn_action_next', value: 'documentos');
+        $retorno = 'documentos';
+        if(isset($_GET['pestana_general_actual'])){
+            $retorno = 'proceso_prospecto';
+        }
+        $btn_action_next = $this->html->hidden('btn_action_next', value: $retorno);
         if (errores::$error) {
             return $this->retorno_error(
                 mensaje: 'Error al generar btn_action_next', data: $btn_action_next, header: $header, ws: $ws);
