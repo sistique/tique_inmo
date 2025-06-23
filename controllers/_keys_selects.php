@@ -783,11 +783,11 @@ class _keys_selects{
      */
     final public function keys_selects_prospecto(controlador_inm_prospecto $controler, array $keys_selects): array
     {
-        $keys_selects = $this->key_select_agente(controler: $controler,keys_selects:  $keys_selects);
+        /*$keys_selects = $this->key_select_agente(controler: $controler,keys_selects:  $keys_selects);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
-        /*
+
         $keys_selects = $this->key_select_tipo_agente(controler: $controler,keys_selects:  $keys_selects);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);

@@ -149,6 +149,27 @@ class controlador_inm_prospecto extends _ctl_formato
                 header: $header, ws: $ws);
         }
 
+        $filtro_agente['adm_usuario.id'] = $_SESSION['usuario_id'];
+        $r_agente = (new com_agente(link: $this->link))->filtro_and(filtro: $filtro_agente);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al insertar prospecto',data:  $r_agente,
+                header: $header, ws: $ws);
+        }
+
+        $filtro_agente_sel = array();
+        $com_agente_id = -1;
+        if($r_agente->n_registros > 0){
+            $filtro_agente_sel['com_agente.id'] = $r_agente->registros[0]['com_agente_id'];
+            $com_agente_id = $r_agente->registros[0]['com_agente_id'];
+        }
+
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro: $filtro_agente_sel, key: 'com_agente_id',
+            keys_selects:$keys_selects, id_selected: $com_agente_id, label: 'Agente');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects', data: $keys_selects,
+                header: $header, ws: $ws);
+        }
+
         $keys_selects = (new init())->key_select_txt(cols: 12, key: 'liga_red_social',
             keys_selects: $keys_selects, place_holder: 'Liga Red Social', required: false);
         if (errores::$error) {
