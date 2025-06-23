@@ -5,7 +5,6 @@ use gamboamartin\comercial\models\com_cliente;
 use gamboamartin\comercial\models\com_medio_prospeccion;
 use gamboamartin\comercial\models\com_tipo_agente;
 use gamboamartin\comercial\models\com_tipo_prospecto;
-use gamboamartin\direccion_postal\models\dp_calle_pertenece;
 use gamboamartin\errores\errores;
 use PDO;
 use stdClass;
@@ -652,7 +651,7 @@ class _conversion{
             'inm_tipo_discapacidad_id','inm_persona_discapacidad_id','inm_estado_civil_id',
             'inm_institucion_hipotecaria_id','inm_sindicato_id','dp_municipio_nacimiento_id','fecha_nacimiento',
             'sub_cuenta','monto_final','descuento','puntos','inm_nacionalidad_id','inm_ocupacion_id','telefono_casa',
-            'correo_empresa','dp_calle_pertenece_id');
+            'correo_empresa');
     }
 
     /**

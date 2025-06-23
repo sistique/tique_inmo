@@ -65,11 +65,6 @@ class _prospecto{
             return $this->error->error(mensaje: 'Error al asignar descripcion',data:  $registro);
         }
 
-        /*$registro = $this->asigna_dp_calle_pertenece_id(modelo: $modelo,registro:  $registro);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al asignar dp_calle_pertenece_id',data:  $registro);
-        }*/
-
         $registro = $this->asigna_com_medio_prospeccion_id(modelo: $modelo,registro:  $registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al asignar com_medio_prospeccion_id',data:  $registro);
@@ -109,25 +104,6 @@ class _prospecto{
                 return $this->error->error(mensaje: 'Error al obtener descripcion',data:  $descripcion);
             }
             $registro['descripcion'] = $descripcion;
-        }
-        return $registro;
-    }
-
-    /**
-     * Asigna la calle por default
-     * @param inm_prospecto $modelo Modelo en ejecucion
-     * @param array $registro Registro en proceso
-     * @return array
-     * @version 2.189.1
-     */
-    private function asigna_dp_calle_pertenece_id(inm_prospecto|inm_prospecto_ubicacion $modelo, array $registro): array
-    {
-        if(!isset($registro['dp_calle_pertenece_id'])){
-            $dp_calle_pertenece_id = $this->dp_calle_pertenece_id(modelo: $modelo);
-            if(errores::$error){
-                return $this->error->error(mensaje: 'Error al obtener dp_calle_pertenece_id',data:  $dp_calle_pertenece_id);
-            }
-            $registro['dp_calle_pertenece_id'] = $dp_calle_pertenece_id;
         }
         return $registro;
     }
@@ -177,24 +153,6 @@ class _prospecto{
         $com_prospecto_ins['com_medio_prospeccion_id'] = $registro['com_medio_prospeccion_id'];
 
         return $com_prospecto_ins;
-    }
-
-    /**
-     * Obtiene la calle de prospecto mas usada
-     * @param inm_prospecto $modelo Modelo de prospecto
-     * @return array|int
-     * @version 2.188.1
-     */
-    private function  dp_calle_pertenece_id(inm_prospecto|inm_prospecto_ubicacion $modelo): int|array
-    {
-        $dp_calle_pertenece_id = $modelo->id_preferido_detalle(entidad_preferida: 'dp_calle_pertenece');
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al obtener dp_calle_pertenece_id',data:  $dp_calle_pertenece_id);
-        }
-        if($dp_calle_pertenece_id === -1){
-            $dp_calle_pertenece_id = 100;
-        }
-        return $dp_calle_pertenece_id;
     }
 
     private function  com_medio_prospeccion_id(inm_prospecto $modelo): int|array
