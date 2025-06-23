@@ -426,7 +426,7 @@ class _inm_comprador{
         $controler->inputs->es_segundo_credito = $es_segundo_credito;
 
         $con_discapacidad = $controler->html->directivas->input_radio_doble(campo: 'con_discapacidad',
-            checked_default: $checked_default_cd,tag: 'Con Discapacidad', val_1: 'NO',val_2: 'SI');
+            checked_default: $checked_default_cd,tag: 'Con Discapacidad', val_1: 'SI',val_2: 'NO');
 
 
         if(errores::$error){
