@@ -688,7 +688,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         }
 
         $ths[] = array('etiqueta'=>'ID', 'campo'=>'inm_prospecto_ubicacion_id');
-        $ths[] = array('etiqueta'=>'prospecto_ubicacion', 'campo'=>'inm_prospecto_ubicacion_prospecto_ubicacion');
+        $ths[] = array('etiqueta'=>'prospecto_ubicacion', 'campo'=>'inm_prospecto_ubicacion_ubicacion');
         $ths[] = array('etiqueta'=>'CP', 'campo'=>'dp_cp_descripcion');
         $ths[] = array('etiqueta'=>'Agente', 'campo'=>'com_agente_descripcion');
         $ths[] = array('etiqueta'=>'Status prospecto_ubicacion', 'campo'=>'inm_status_prospecto_ubicacion_descripcion');
@@ -701,7 +701,6 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         $keys_hojas['Prospecto Ubicaciones'] = new stdClass();
         $keys_hojas['Prospecto Ubicaciones']->keys = $keys;
         $keys_hojas['Prospecto Ubicaciones']->registros = $registros->registros;
-
 
         $moneda = array();
         $totales_hoja = new stdClass();
@@ -1985,18 +1984,26 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
 
         $filtro_especial = array();
 
-        if(!empty($_POST['nombre_prospecto_ubicacion'])){
-            $filtro_especial[0][$table.'.inm_prospecto_ubicacion_prospecto_ubicacion']['operador'] = 'LIKE';
-            $filtro_especial[0][$table.'.inm_prospecto_ubicacion_prospecto_ubicacion']['valor'] = '%'.$_POST['nombre_prospecto_ubicacion'].'%';
-            $filtro_especial[0][$table.'.inm_prospecto_ubicacion_prospecto_ubicacion']['comparacion'] = 'AND';
+        if(!empty($_POST['ubicacion'])){
+            $filtro_especial[0]['inm_prospecto_ubicacion_ubicacion']['operador'] = 'LIKE';
+            $filtro_especial[0]['inm_prospecto_ubicacion_ubicacion']['valor'] = '%'.$_POST['ubicacion'].'%';
+            $filtro_especial[0]['inm_prospecto_ubicacion_ubicacion']['comparacion'] = 'AND';
 
             //$filtro_text[$table.'.razon_social'] = $_POST['nombre_prospecto_ubicacion'];
         }
 
-        if(!empty($_POST['predial'])){
-            $filtro_especial[1][$table.'.cuenta_predial']['operador'] = 'LIKE';
-            $filtro_especial[1][$table.'.cuenta_predial']['valor'] = '%'.$_POST['predial'].'%';
-            $filtro_especial[1][$table.'.cuenta_predial']['comparacion'] = 'AND';
+        if(!empty($_POST['nombre_prospecto_ubicacion'])){
+            $filtro_especial[1]['com_prospecto'.'.razon_social']['operador'] = 'LIKE';
+            $filtro_especial[1]['com_prospecto'.'.razon_social']['valor'] = '%'.$_POST['nombre_prospecto_ubicacion'].'%';
+            $filtro_especial[1]['com_prospecto'.'.razon_social']['comparacion'] = 'AND';
+
+            //$filtro_text[$table.'.cuenta_predial'] = $_POST['cuenta_predial'];
+        }
+
+        if(!empty($_POST['nss'])){
+            $filtro_especial[1][$table.'.nss']['operador'] = 'LIKE';
+            $filtro_especial[1][$table.'.nss']['valor'] = '%'.$_POST['nss'].'%';
+            $filtro_especial[1][$table.'.nss']['comparacion'] = 'AND';
 
             //$filtro_text[$table.'.cuenta_predial'] = $_POST['cuenta_predial'];
         }

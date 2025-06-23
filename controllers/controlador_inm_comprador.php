@@ -34,6 +34,7 @@ use gamboamartin\inmuebles\models\inm_rel_ubi_comp;
 use gamboamartin\inmuebles\models\inm_status_comprador;
 use gamboamartin\inmuebles\models\inm_status_prospecto;
 use gamboamartin\inmuebles\models\inm_ubicacion;
+use gamboamartin\plugins\exportador;
 use gamboamartin\system\_ctl_base;
 use gamboamartin\system\links_menu;
 use gamboamartin\template\html;
@@ -2270,7 +2271,7 @@ class controlador_inm_comprador extends _ctl_base {
 
     public function exportar_xls(bool $header, bool $ws = false)
     {
-        $nombre_hojas = array('Prospecto Ubicaciones');
+        $nombre_hojas = array('Clientes');
         $keys_hojas = array();
 
         $registros = $this->result_inm_prosp();
@@ -2279,26 +2280,28 @@ class controlador_inm_comprador extends _ctl_base {
                 ws: $ws);
         }
 
-        $ths[] = array('etiqueta'=>'ID', 'campo'=>'inm_prospecto_ubicacion_id');
-        $ths[] = array('etiqueta'=>'prospecto_ubicacion', 'campo'=>'inm_prospecto_ubicacion_prospecto_ubicacion');
-        $ths[] = array('etiqueta'=>'CP', 'campo'=>'dp_cp_descripcion');
+        $ths[] = array('etiqueta'=>'ID', 'campo'=>'inm_comprador_id');
+        $ths[] = array('etiqueta'=>'comprador', 'campo'=>'inm_comprador_razon_social');
+        $ths[] = array('etiqueta'=>'comprador', 'campo'=>'inm_ubicacion_completa');
         $ths[] = array('etiqueta'=>'Agente', 'campo'=>'com_agente_descripcion');
-        $ths[] = array('etiqueta'=>'Status prospecto_ubicacion', 'campo'=>'inm_status_prospecto_ubicacion_descripcion');
+        $ths[] = array('etiqueta'=>'Status comprador', 'campo'=>'inm_comprador_nss');
+        $ths[] = array('etiqueta'=>'Status comprador', 'campo'=>'inm_comprador_password_mi_cuenta_infonavit');
+        $ths[] = array('etiqueta'=>'Status comprador', 'campo'=>'inm_comprador_numero_credito');
+        $ths[] = array('etiqueta'=>'Status comprador', 'campo'=>'inm_status_comprador_descripcion');
 
         $keys = array();
         foreach ($ths as $data_th) {
             $keys[] = $data_th['campo'];
         }
 
-        $keys_hojas['Prospecto Ubicaciones'] = new stdClass();
-        $keys_hojas['Prospecto Ubicaciones']->keys = $keys;
-        $keys_hojas['Prospecto Ubicaciones']->registros = $registros->registros;
-
+        $keys_hojas['Clientes'] = new stdClass();
+        $keys_hojas['Clientes']->keys = $keys;
+        $keys_hojas['Clientes']->registros = $registros->registros;
 
         $moneda = array();
         $totales_hoja = new stdClass();
         //$totales_hoja->prospecto_ubicacions = (array)$registros->totales;
-        $xls = (new exportador())->genera_xls(header: $header, name: 'Prospecto Ubicaciones', nombre_hojas: $nombre_hojas,
+        $xls = (new exportador())->genera_xls(header: $header, name: 'Clientes', nombre_hojas: $nombre_hojas,
             keys_hojas: $keys_hojas, path_base: $this->path_base, moneda: $moneda/*, totales_hoja: $totales_hoja*/);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al obtener xls', data: $xls, header: $header, ws: $ws);
@@ -3011,7 +3014,7 @@ class controlador_inm_comprador extends _ctl_base {
         $result->registros = array();
         $result->totales = array();
 
-        $table = 'inm_prospecto_ubicacion';
+        $table = 'inm_comprador';
 
         $filtro_rango = array();
         if(!empty($_POST['fecha_inicial'])){
@@ -3023,20 +3026,36 @@ class controlador_inm_comprador extends _ctl_base {
 
         $filtro_especial = array();
 
-        if(!empty($_POST['nombre_prospecto_ubicacion'])){
-            $filtro_especial[0][$table.'.inm_prospecto_ubicacion_prospecto_ubicacion']['operador'] = 'LIKE';
-            $filtro_especial[0][$table.'.inm_prospecto_ubicacion_prospecto_ubicacion']['valor'] = '%'.$_POST['nombre_prospecto_ubicacion'].'%';
-            $filtro_especial[0][$table.'.inm_prospecto_ubicacion_prospecto_ubicacion']['comparacion'] = 'AND';
+        if(!empty($_POST['nombre_comprador'])){
+            $filtro_especial[0][$table.'.inm_comprador_razon_social']['operador'] = 'LIKE';
+            $filtro_especial[0][$table.'.inm_comprador_razon_social']['valor'] = '%'.$_POST['nombre_comprador'].'%';
+            $filtro_especial[0][$table.'.inm_comprador_razon_social']['comparacion'] = 'AND';
 
             //$filtro_text[$table.'.razon_social'] = $_POST['nombre_prospecto_ubicacion'];
         }
 
-        if(!empty($_POST['predial'])){
-            $filtro_especial[1][$table.'.cuenta_predial']['operador'] = 'LIKE';
-            $filtro_especial[1][$table.'.cuenta_predial']['valor'] = '%'.$_POST['predial'].'%';
-            $filtro_especial[1][$table.'.cuenta_predial']['comparacion'] = 'AND';
+        if(!empty($_POST['nss'])){
+            $filtro_especial[1][$table.'.nss']['operador'] = 'LIKE';
+            $filtro_especial[1][$table.'.nss']['valor'] = '%'.$_POST['nss'].'%';
+            $filtro_especial[1][$table.'.nss']['comparacion'] = 'AND';
 
             //$filtro_text[$table.'.cuenta_predial'] = $_POST['cuenta_predial'];
+        }
+
+        if(!empty($_POST['numero_credito'])){
+            $filtro_especial[1][$table.'.numero_credito']['operador'] = 'LIKE';
+            $filtro_especial[1][$table.'.numero_credito']['valor'] = '%'.$_POST['numero_credito'].'%';
+            $filtro_especial[1][$table.'.numero_credito']['comparacion'] = 'AND';
+
+            //$filtro_text[$table.'.cuenta_predial'] = $_POST['cuenta_predial'];
+        }
+
+        if(!empty($_POST['ubicacion'])){
+            $filtro_especial[2]['inm_ubicacion_completa']['operador'] = 'LIKE';
+            $filtro_especial[2]['inm_ubicacion_completa']['valor'] = '%'.$_POST['ubicacion'].'%';
+            $filtro_especial[2]['inm_ubicacion_completa']['comparacion'] = 'AND';
+
+            //$filtro_text['com_agente.descripcion'] = $_POST['agente'];
         }
 
         if(!empty($_POST['agente'])){
@@ -3048,9 +3067,9 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         $in = array();
-        if(!empty($_POST['inm_status_prospecto_ubicacion'])){
-            $array = explode(",", $_POST['inm_status_prospecto_ubicacion']);
-            $in['llave'] = 'inm_status_prospecto_ubicacion.descripcion';
+        if(!empty($_POST['inm_status_comprador'])){
+            $array = explode(",", $_POST['inm_status_comprador']);
+            $in['llave'] = 'inm_status_comprador.descripcion';
             $in['values'] = $array;
         }
 
