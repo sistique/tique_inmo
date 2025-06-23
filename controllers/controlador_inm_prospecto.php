@@ -866,7 +866,8 @@ class controlador_inm_prospecto extends _ctl_formato
         }
 
         $filtro['com_prospecto.id'] = $inm_prospecto['com_prospecto_id'];
-        $relaciones = (new com_rel_agente(link: $this->link))->filtro_and(filtro: $filtro);
+        $order = array('com_rel_agente.id'=>'DESC');
+        $relaciones = (new com_rel_agente(link: $this->link))->filtro_and(filtro: $filtro,order: $order);
         if (errores::$error) {
             $this->retorno_error(mensaje: 'Error al obtener etapas', data: $relaciones, header: $header, ws: $ws);
         }
