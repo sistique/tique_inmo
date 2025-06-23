@@ -146,18 +146,27 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
 
         $keys_selects = array();
 
-        $id_selected = $this->id_selected_agente(link: $this->link);
+        $filtro_agente['adm_usuario.id'] = $_SESSION['usuario_id'];
+        $r_agente = (new com_agente(link: $this->link))->filtro_and(filtro: $filtro_agente);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al insertar prospecto',data:  $r_agente,
+                header: $header, ws: $ws);
+        }
+
+        $filtro_agente_sel = array();
+        $com_agente_id = -1;
+        if($r_agente->n_registros > 0){
+            $filtro_agente_sel['com_agente.id'] = $r_agente->registros[0]['com_agente_id'];
+            $com_agente_id = $r_agente->registros[0]['com_agente_id'];
+        }
+
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro: $filtro_agente_sel, key: 'com_agente_id',
+            keys_selects:$keys_selects, id_selected: $com_agente_id, label: 'Agente');
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects', data: $keys_selects,
                 header: $header, ws: $ws);
         }
 
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'com_agente_id',
-            keys_selects:$keys_selects, id_selected: $id_selected, label: 'Agente');
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects', data: $keys_selects,
-                header: $header, ws: $ws);
-        }
 
         $filtro_tipo['com_tipo_prospecto.descripcion'] = 'COMPRA VIVIENDA';
         $com_tipo_prospecto_reg = (new com_tipo_prospecto(link: $this->link))->filtro_and(filtro: $filtro_tipo);
