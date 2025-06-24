@@ -450,7 +450,7 @@ class controlador_inm_ubicacion extends _ctl_base {
     public function asigna_firmado(bool $header, bool $ws = false): array|stdClass
     {
         $documento_poliza_firmada = $this->html->input_file(cols: 12, name: 'poliza_firmada', row_upd: new stdClass(),
-            value_vacio: false, place_holder: 'Poliza Firmada');
+            value_vacio: false, place_holder: 'Poliza Firmada',required: false);
         if (errores::$error) {
             return $this->retorno_error(
                 mensaje: 'Error al obtener inputs', data: $documento_poliza_firmada, header: $header, ws: $ws);
@@ -459,7 +459,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         $this->inputs->documento_poliza_firmada = $documento_poliza_firmada;
 
         $documento_poliza_comision_firmada = $this->html->input_file(cols: 12, name: 'poliza_comision_firmada', row_upd: new stdClass(),
-            value_vacio: false, place_holder: 'Poliza Comision Firmada');
+            value_vacio: false, place_holder: 'Poliza Comision Firmada',required: false);
         if (errores::$error) {
             return $this->retorno_error(
                 mensaje: 'Error al obtener inputs', data: $documento_poliza_firmada, header: $header, ws: $ws);
