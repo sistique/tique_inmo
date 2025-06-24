@@ -386,6 +386,7 @@
                                           class="form-additional" enctype="multipart/form-data">
 
                                         <?php echo $controlador->inputs->documento_poliza_firmada; ?>
+                                        <?php echo $controlador->inputs->documento_poliza_comision_firmada; ?>
 
                                         <div class="control-group btn-alta">
                                             <div class="controls">
@@ -394,6 +395,11 @@
                                         </div>
                                     </form>
                                     <div class="row buttons-form">
+                                        <div class="col-lg-12">
+                                            <label class="label-docs">
+                                                <?php echo $controlador->descripcion_poliza_firmada; ?>
+                                            </label>
+                                        </div>
                                         <div class="col-lg-3">
                                             <?php echo $controlador->button_inm_doc_ubicacion_descarga_firmado; ?>
                                         </div>
@@ -405,6 +411,26 @@
                                         </div>
                                         <div class="col-lg-3">
                                             <?php echo $controlador->button_inm_doc_ubicacion_elimina_bd_firmado; ?>
+                                        </div>
+                                    </div>
+
+                                    <div class="row buttons-form">
+                                        <div class="col-lg-12">
+                                            <label class="label-docs">
+                                                <?php echo $controlador->descripcion_poliza_comision_firmada; ?>
+                                            </label>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_ubicacion_descarga_firmado_comision; ?>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_ubicacion_vista_previa_firmado_comision; ?>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_ubicacion_descarga_zip_firmado_comision; ?>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_ubicacion_elimina_bd_firmado_comision; ?>
                                         </div>
                                     </div>
                                 </div>
