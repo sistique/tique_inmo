@@ -32,6 +32,12 @@
 [1. Body ]
 */
 
+.form-control[type="file"] {
+    font-size: 17px;
+    padding: 12px;
+    height: 125px !important;
+}
+
 @font-face {
     font-family: 'Open Sans Light';
     src: url("../fonts/OpenSansLight/OpenSans-Light.ttf") format("truetype"),
