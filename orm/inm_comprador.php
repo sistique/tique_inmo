@@ -112,14 +112,16 @@ class inm_comprador extends _modelo_parent{
      */
     public function alta_bd(array $keys_integra_ds = array('codigo', 'descripcion')): array|stdClass
     {
+        if(!isset($registro['dp_colonia_postal_id']) || (string)$registro['dp_colonia_postal_id'] === '-1'){
+            $this->registro['dp_colonia_postal_id'] = 105;
+        }
+        
         $registro_entrada = $this->registro;
-
 
         $registro = (new _alta_comprador())->init_row_alta(modelo: $this, registro: $this->registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al inicializar registro',data:  $registro);
         }
-
 
         $this->registro = $registro;
 
