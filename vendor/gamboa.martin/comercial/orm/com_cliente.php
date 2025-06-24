@@ -40,7 +40,7 @@ class com_cliente extends _modelo_parent
 
         $campos_obligatorios = array('cat_sat_moneda_id', 'cat_sat_regimen_fiscal_id', 'cat_sat_moneda_id',
             'cat_sat_forma_pago_id', 'cat_sat_uso_cfdi_id', 'cat_sat_tipo_de_comprobante_id', 'cat_sat_metodo_pago_id',
-            'telefono', 'cat_sat_tipo_persona_id', 'pais', 'estado', 'municipio', 'colonia', 'calle', 'cp', 'dp_municipio_id');
+            'telefono', 'cat_sat_tipo_persona_id', 'pais', 'estado', 'municipio', 'colonia', 'calle', 'cp');
 
         $columnas_extra['com_cliente_n_sucursales'] =
             "(SELECT COUNT(*) FROM com_sucursal WHERE com_sucursal.com_cliente_id = com_cliente.id)";
@@ -118,7 +118,7 @@ class com_cliente extends _modelo_parent
             return $this->error->error(mensaje: 'Error al inicializar foraneas', data: $this->registro);
         }
 
-        $keys = array('telefono', 'numero_exterior', 'razon_social', 'dp_municipio_id');
+        $keys = array('telefono', 'numero_exterior', 'razon_social');
         $valida = $this->validacion->valida_existencia_keys(keys: $keys, registro: $this->registro);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al validar registro', data: $valida);
@@ -134,15 +134,15 @@ class com_cliente extends _modelo_parent
             $es_empleado = $this->registro["es_empleado"];
         }
 
-        $dp_municipio_modelo = new dp_municipio(link: $this->link);
-        $dp_municipio = $dp_municipio_modelo->registro(registro_id: $this->registro['dp_municipio_id']);
+        $dp_colonia_postal_modelo = new dp_colonia_postal(link: $this->link);
+        $dp_colonia_postal = $dp_colonia_postal_modelo->registro(registro_id: $this->registro['dp_colonia_postal_id']);
         if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al obtener dp_municipio', data: $dp_municipio);
+            return $this->error->error(mensaje: 'Error al obtener dp_colonia_postal', data: $dp_colonia_postal);
         }
 
-        $this->registro['pais'] = $dp_municipio['dp_pais_descripcion'];
-        $this->registro['estado'] = $dp_municipio['dp_estado_descripcion'];
-        $this->registro['municipio'] = $dp_municipio['dp_municipio_descripcion'];
+        $this->registro['pais'] = $dp_colonia_postal['dp_pais_descripcion'];
+        $this->registro['estado'] = $dp_colonia_postal['dp_estado_descripcion'];
+        $this->registro['municipio'] = $dp_colonia_postal['dp_municipio_descripcion'];
 
 
         $this->registro = $this->limpia_campos(registro: $this->registro, campos_limpiar: array('dp_pais_id',
@@ -193,7 +193,7 @@ class com_cliente extends _modelo_parent
         $data = (new com_sucursal($this->link))->maqueta_data(calle: $this->registro['calle'],
             codigo: $this->registro["codigo"], colonia: $this->registro['colonia'], cp: $this->registro['cp'],
             nombre_contacto: $this->registro["razon_social"], com_cliente_id: $r_alta_bd->registro_id,
-            telefono: $this->registro["telefono"], dp_municipio_id: $dp_municipio['dp_municipio_id'],
+            telefono: $this->registro["telefono"], dp_municipio_id: $dp_colonia_postal['dp_municipio_id'],
             numero_exterior: $this->registro["numero_exterior"], numero_interior: $this->registro["numero_interior"],
             es_empleado: $es_empleado);
         if (errores::$error) {
@@ -575,7 +575,7 @@ class com_cliente extends _modelo_parent
     private function com_sucursal_upd_dom(stdClass $com_cliente, array $com_sucursal_upd): array
     {
         $keys = array('numero_exterior', 'telefono', 'pais', 'estado', 'municipio', 'colonia',
-            'calle', 'dp_municipio_id', 'cp');
+            'calle', 'cp');
         $valida = $this->validacion->valida_existencia_keys(keys: $keys, registro: $com_cliente);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al validar cliente', data: $valida);
