@@ -11,7 +11,7 @@ class inm_cheque extends _modelo_parent{
     public function __construct(PDO $link)
     {
         $tabla = 'inm_cheque';
-        $columnas = array($tabla=>false,'inm_ubicacion'=>$tabla);
+        $columnas = array($tabla=>false,'inm_ubicacion'=>$tabla, 'inm_tipo_cheque'=>$tabla);
 
         $columnas_extra= array();
         $renombres= array();
