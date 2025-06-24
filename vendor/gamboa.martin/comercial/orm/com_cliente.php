@@ -15,6 +15,7 @@ use gamboamartin\cat_sat\models\cat_sat_uso_cfdi;
 use gamboamartin\comercial\controllers\controlador_com_cliente;
 use gamboamartin\direccion_postal\models\dp_calle_pertenece;
 use gamboamartin\direccion_postal\models\dp_municipio;
+use gamboamartin\direccion_postal\models\dp_colonia_postal;
 use gamboamartin\documento\models\adm_grupo;
 use gamboamartin\documento\models\doc_conf_tipo_documento_seccion;
 use gamboamartin\documento\models\doc_documento;

@@ -33,9 +33,9 @@
 */
 
 .form-control[type="file"] {
-    font-size: 17px;
+    font-size: 15px;
     padding: 12px;
-    height: 125px !important;
+    height: 85px !important;
     /*background: #f8f8f8 !important;*/
 }
 
