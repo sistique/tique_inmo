@@ -884,10 +884,31 @@ class controlador_inm_ubicacion extends _ctl_base {
             }
         }
 
-        $inm_conf_docs_ubicacion = (new _inm_ubicacion())->integra_inm_documentos(controler: $this);
+        $inm_conf_docs_ubicacion = (new _inm_ubicacion())->integra_inm_documentos_ubicacion(controler: $this);
         if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al integrar buttons', data: $inm_conf_docs_ubicacion, header: $header, ws: $ws);
+            return $this->retorno_error(mensaje: 'Error al integrar buttons', data: $inm_conf_docs_ubicacion,
+                header: $header, ws: $ws);
         }
+
+        $temp = array();
+        foreach ($inm_conf_docs_ubicacion as $docs){
+            $res = "<tr>
+            <td>$docs[doc_tipo_documento_descripcion]</td>
+            <td>$docs[descarga]</td>
+            <td>$docs[vista_previa]</td>
+            <td>$docs[descarga_zip]</td>
+            <td>$docs[elimina_bd]</td>
+            </tr>";
+            if(isset($docs['subir_documento'])){
+                $res = "<tr>
+                <td>$docs[doc_tipo_documento_descripcion]</td>
+                <td colspan='4'>$docs[subir_documento]</td>
+                </tr>";
+            }
+            $temp[] = $res;
+        }
+
+        $this->inm_conf_docs_ubicacion = $temp;
 
         $params = array();
         if(isset($_GET['accion']) && $_GET['accion'] === 'proceso_ubicacion') {
@@ -917,6 +938,59 @@ class controlador_inm_ubicacion extends _ctl_base {
         //print_r($this->row_upd);
 
         return $inm_conf_docs_ubicacion;
+    }
+
+    public function documentos_bd(bool $header, bool $ws = false): array|stdClass{
+        $inm_doc_ubicacion =  new inm_doc_ubicacion(link: $this->link);
+
+        $names = array();
+        foreach ($_FILES['documentos']['name'] as $key => $foto){
+            $names[$key]['name'] = $foto;
+        }
+
+        foreach ($_FILES['documentos']['tmp_name'] as $key => $foto){
+            $names[$key]['tmp_name'] = $foto;
+        }
+
+        $result = array();
+        foreach ($names as $key => $name){
+            $valor = array();
+            foreach ($name['name'] as $item => $value){
+
+                $valor['name'] = $name['name'][$item];
+                $valor['tmp_name'] = $name['tmp_name'][$item];
+
+                if($name['name'][$item] !== '' && $name['tmp_name'][$item] !== '') {
+                    $registro['doc_tipo_documento_id'] = $key;
+                    $registro['inm_ubicacion_id'] = $this->registro_id;
+                    $_FILES['documento'] = $valor;
+                    $result = $inm_doc_ubicacion->alta_registro(registro: $registro);
+                    if (errores::$error) {
+                        return $this->retorno_error(mensaje: 'Error al insertar datos', data: $result, header: $header, ws: $ws);
+                    }
+                }
+            }
+        }
+
+        $accion = 'documentos';
+        if(isset($_POST['btn_action_next'])){
+            $accion = $_POST['btn_action_next'];
+        }
+
+        $params = array();
+        if (isset($_GET['pestana_general_actual'])) {
+            $params = array('pestana_general_actual' => 'pestanageneral1', 'pestana_actual' => $_GET['pestana_actual']);
+        }        $link_proceso_ubicacion = $this->obj_link->link_con_id(
+            accion: $accion, link: $this->link, registro_id: $this->registro_id, seccion: 'inm_ubicacion',params: $params);
+        if (errores::$error) {
+            $this->retorno_error(mensaje: 'Error al generar link', data: $link_proceso_ubicacion, header: $header, ws: $ws);
+        }
+        if($header) {
+            header('Location:' . $link_proceso_ubicacion);
+            exit;
+        }
+
+        return $result;
     }
 
     public function etapa(bool $header, bool $ws = false): array|stdClass

@@ -249,6 +249,7 @@ class _inm_ubicacion{
         $inm_conf_docs_ubicacion[$indice]['vista_previa'] = $button;
         $inm_conf_docs_ubicacion[$indice]['descarga_zip'] = $button;
         $inm_conf_docs_ubicacion[$indice]['elimina_bd'] = $button;
+        $inm_conf_docs_ubicacion[$indice]['subir_documento'] = $button;
         return $inm_conf_docs_ubicacion;
     }
 
@@ -268,13 +269,13 @@ class _inm_ubicacion{
             return $this->error->error(mensaje: 'Error al integrar button',data:  $button);
         }
 
-        /*$button = $controler->html->input_file(cols: 12, name:
+        $button = $controler->html->input_file(cols: 12, name:
             'documentos['.$doc_tipo_documento['doc_tipo_documento_id'].'][]',
             row_upd: new stdClass(), value_vacio: false, place_holder: 'Subir Documento',required: false,
             con_label: false);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al obtener inputs', data: $button);
-        }*/
+        }
 
         $inm_conf_docs_ubicacion = $this->integra_button_default(button: $button,
             indice:  $indice,inm_conf_docs_ubicacion:  $inm_conf_docs_ubicacion);
