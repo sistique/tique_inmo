@@ -508,7 +508,7 @@ class com_cliente extends _modelo_parent
         $data['codigo'] = $sucursal['com_sucursal_codigo'];
 
         $com_sucursal_descripcion = (new com_sucursal(link: $this->link))->ds(
-            com_cliente_razon_social: $com_cliente->razon_social, com_cliente_rfc: $com_cliente->rfc, data: $data);
+            com_cliente_razon_social: $com_cliente->com_cliente_razon_social, com_cliente_rfc: $com_cliente->com_cliente_rfc, data: $data);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al obtener com_sucursal_descripcion',
                 data: $com_sucursal_descripcion);
@@ -536,13 +536,13 @@ class com_cliente extends _modelo_parent
             return $this->error->error(mensaje: 'Error com_cliente_id debe ser mayor a 0', data: $com_cliente_id);
         }
 
-        $keys = array('numero_exterior', 'telefono');
+        $keys = array('com_cliente_numero_exterior', 'com_cliente_telefono');
         $valida = $this->validacion->valida_existencia_keys(keys: $keys, registro: $com_cliente);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al validar cliente', data: $valida);
         }
-        if (!isset($com_cliente->numero_interior)) {
-            $com_cliente->numero_interior = '';
+        if (!isset($com_cliente->com_cliente_numero_interior)) {
+            $com_cliente->com_cliente_numero_interior = '';
         }
 
         $com_sucursal_descripcion = trim($com_sucursal_descripcion);
@@ -574,27 +574,28 @@ class com_cliente extends _modelo_parent
      */
     private function com_sucursal_upd_dom(stdClass $com_cliente, array $com_sucursal_upd): array
     {
-        $keys = array('numero_exterior', 'telefono', 'pais', 'estado', 'municipio', 'colonia',
-            'calle', 'cp');
+        $keys = array('com_cliente_numero_exterior', 'com_cliente_telefono', 'com_cliente_pais', 'com_cliente_estado',
+            'com_cliente_municipio', 'com_cliente_colonia', 'com_cliente_calle', 'com_cliente_cp');
         $valida = $this->validacion->valida_existencia_keys(keys: $keys, registro: $com_cliente);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al validar cliente', data: $valida);
         }
-        if (!isset($com_cliente->numero_interior)) {
-            $com_cliente->numero_interior = '';
+        if (!isset($com_cliente->com_cliente_numero_interior)) {
+            $com_cliente->com_cliente_numero_interior = '';
         }
-        $com_sucursal_upd['numero_exterior'] = trim($com_cliente->numero_exterior);
-        $com_sucursal_upd['numero_interior'] = trim($com_cliente->numero_interior);
-        $com_sucursal_upd['telefono_1'] = trim($com_cliente->telefono);
-        $com_sucursal_upd['telefono_2'] = trim($com_cliente->telefono);
-        $com_sucursal_upd['telefono_3'] = trim($com_cliente->telefono);
-        $com_sucursal_upd['pais'] = trim($com_cliente->pais);
-        $com_sucursal_upd['estado'] = trim($com_cliente->estado);
-        $com_sucursal_upd['municipio'] = trim($com_cliente->municipio);
-        $com_sucursal_upd['colonia'] = trim($com_cliente->colonia);
-        $com_sucursal_upd['calle'] = trim($com_cliente->calle);
+
+        $com_sucursal_upd['numero_exterior'] = trim($com_cliente->com_cliente_numero_exterior);
+        $com_sucursal_upd['numero_interior'] = trim($com_cliente->com_cliente_numero_interior);
+        $com_sucursal_upd['telefono_1'] = trim($com_cliente->com_cliente_telefono);
+        $com_sucursal_upd['telefono_2'] = trim($com_cliente->com_cliente_telefono);
+        $com_sucursal_upd['telefono_3'] = trim($com_cliente->com_cliente_telefono);
+        $com_sucursal_upd['pais'] = trim($com_cliente->com_cliente_pais);
+        $com_sucursal_upd['estado'] = trim($com_cliente->com_cliente_estado);
+        $com_sucursal_upd['municipio'] = trim($com_cliente->com_cliente_municipio);
+        $com_sucursal_upd['colonia'] = trim($com_cliente->com_cliente_colonia);
+        $com_sucursal_upd['calle'] = trim($com_cliente->com_cliente_calle);
         $com_sucursal_upd['dp_municipio_id'] = trim($com_cliente->dp_municipio_id);
-        $com_sucursal_upd['cp'] = trim($com_cliente->cp);
+        $com_sucursal_upd['cp'] = trim($com_cliente->com_cliente_cp);
 
 
         return $com_sucursal_upd;
@@ -1056,7 +1057,7 @@ class com_cliente extends _modelo_parent
             }
         }
 
-        $com_cliente = $this->registro(registro_id: $id, columnas_en_bruto: true, retorno_obj: true);
+        $com_cliente = $this->registro(registro_id: $id, columnas_en_bruto: false, retorno_obj: true);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al obtener cliente', data: $com_cliente);
         }
@@ -1126,13 +1127,13 @@ class com_cliente extends _modelo_parent
             return $this->error->error(mensaje: 'Error al al validar datos', data: $valida);
         }
 
-        $keys = array('numero_exterior', 'telefono');
+        $keys = array('com_cliente_numero_exterior', 'com_cliente_telefono');
         $valida = $this->validacion->valida_existencia_keys(keys: $keys, registro: $com_cliente);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al validar cliente', data: $valida);
         }
-        if (!isset($com_cliente->numero_interior)) {
-            $com_cliente->numero_interior = '';
+        if (!isset($com_cliente->com_cliente_numero_interior)) {
+            $com_cliente->com_cliente_numero_interior = '';
         }
 
         $com_sucursal_descripcion = $this->com_sucursal_descripcion(com_cliente: $com_cliente, sucursal: $sucursal);
@@ -1201,13 +1202,13 @@ class com_cliente extends _modelo_parent
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error validar $sucursal', data: $valida);
         }
-        $keys = array('numero_exterior', 'telefono');
+        $keys = array('com_cliente_numero_exterior', 'com_cliente_telefono');
         $valida = $this->validacion->valida_existencia_keys(keys: $keys, registro: $com_cliente);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al validar cliente', data: $valida);
         }
-        if (!isset($com_cliente->numero_interior)) {
-            $com_cliente->numero_interior = '';
+        if (!isset($com_cliente->com_cliente_numero_interior)) {
+            $com_cliente->com_cliente_numero_interior = '';
         }
 
         $com_sucursal_upd = $this->row_com_sucursal_upd(com_cliente: $com_cliente, com_cliente_id: $com_cliente_id, sucursal: $sucursal);
@@ -1236,13 +1237,13 @@ class com_cliente extends _modelo_parent
         if ($com_cliente_id <= 0) {
             return $this->error->error(mensaje: 'Error $com_cliente_id debe ser mayor a 0', data: $com_cliente_id);
         }
-        $keys = array('numero_exterior', 'telefono');
+        $keys = array('com_cliente_numero_exterior', 'com_cliente_telefono');
         $valida = $this->validacion->valida_existencia_keys(keys: $keys, registro: $com_cliente);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al validar cliente', data: $valida);
         }
-        if (!isset($com_cliente->numero_interior)) {
-            $com_cliente->numero_interior = '';
+        if (!isset($com_cliente->com_cliente_numero_interior)) {
+            $com_cliente->com_cliente_numero_interior = '';
         }
 
         $r_com_sucursales = array();
@@ -1283,7 +1284,7 @@ class com_cliente extends _modelo_parent
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al al validar sucursal', data: $valida);
         }
-        $keys = array('razon_social', 'rfc');
+        $keys = array('com_cliente_razon_social', 'com_cliente_rfc');
         $valida = $this->validacion->valida_existencia_keys(keys: $keys, registro: $com_cliente);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al al validar com_cliente', data: $valida);
