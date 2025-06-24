@@ -330,6 +330,8 @@
                                         <?php echo $controlador->inputs->nombre_beneficiario; ?>
                                         <?php echo $controlador->inputs->numero_cheque; ?>
                                         <?php echo $controlador->inputs->monto; ?>
+                                        <?php echo $controlador->inputs->numero_cheque_comision; ?>
+                                        <?php echo $controlador->inputs->monto_comision; ?>
 
                                         <div class="control-group btn-alta">
                                             <div class="controls">
@@ -337,36 +339,6 @@
                                             </div>
                                         </div>
                                     </form>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="widget widget-box box-container widget-mylistings">
-                                                <table class="table table-striped">
-                                                    <thead>
-                                                    <tr>
-                                                        <th>Id</th>
-                                                        <th>Beneficiario</th>
-                                                        <th>No. Cheque</th>
-                                                        <th>Moto</th>
-                                                        <th>Fecha</th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    <?php
-                                                    foreach ($controlador->cheques as $cheque){
-                                                        ?>
-                                                        <tr>
-                                                            <td><?php echo $cheque['inm_cheque_id'] ?></td>
-                                                            <td><?php echo $cheque['inm_cheque_nombre_beneficiario'] ?></td>
-                                                            <td><?php echo $cheque['inm_cheque_numero_cheque'] ?></td>
-                                                            <td><?php echo $cheque['inm_cheque_monto'] ?></td>
-                                                            <td><?php echo $cheque['inm_cheque_fecha_alta'] ?></td>
-                                                        </tr>
-                                                    <?php } ?>
-                                                    </tbody>
-                                                </table>
-                                            </div> <!-- /. widget-table-->
-                                        </div><!-- /.center-content -->
-                                    </div>
                                 </div>
                                 <div class="conten" id="cpestana4">
                                     <form method="post" action="<?php echo $controlador->link_por_firmar_bd; ?>"
