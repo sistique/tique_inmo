@@ -66,7 +66,7 @@ class inm_cheque extends _modelo_parent{
             if (errores::$error) {
                 return $this->error->error(mensaje: 'Error al insertar prospecto',data:  $r_inm_costo);
             }
-        }*//
+        }*/
 
         return $r_alta_bd;
     }
