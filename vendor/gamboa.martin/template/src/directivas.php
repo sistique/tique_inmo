@@ -650,7 +650,7 @@ class directivas{
      * @see html::div_label() Genera el contenedor `<div>` con estructura y clases definidas.
      * @see html::limpia_salida() Limpia y normaliza el HTML generado antes de mostrarlo.
      */
-    private function div_label(string $html, string $name, string $place_holder): array|string
+    private function div_label(string $html, string $name, string $place_holder, bool $con_label = true): array|string
     {
         $name = trim($name);
         if($name === ''){
@@ -662,12 +662,15 @@ class directivas{
                 es_final: true);
         }
 
-        $label = $this->html->label(id_css: $name, place_holder: $place_holder);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al generar label', data: $label);
+        $label = '';
+        if($con_label) {
+            $label = $this->html->label(id_css: $name, place_holder: $place_holder);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al generar label', data: $label);
+            }
         }
 
-        $div = $this->html->div_label(html:  $html,label:$label);
+        $div = $this->html->div_label(html: $html,label:$label, con_label: $con_label);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar div', data: $div);
         }
@@ -1672,7 +1675,7 @@ class directivas{
      * @return array|string
      */
     final public function input_file(bool $disabled, string $name, string $place_holder, bool $required, stdClass $row_upd,
-                               bool $value_vacio, bool $multiple = false): array|string
+                               bool $value_vacio, bool $multiple = false, bool $con_label = true): array|string
     {
 
         $valida = $this->valida_etiquetas(name: $name,place_holder:  $place_holder);
@@ -1689,8 +1692,7 @@ class directivas{
             required: $required, value: $row_upd_->$name,multiple: $multiple);
 
 
-
-        $div = $this->div_label(html:$html, name: $name, place_holder: $place_holder);
+        $div = $this->div_label(html:$html, name: $name, place_holder: $place_holder, con_label: $con_label);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar div', data: $div);
         }

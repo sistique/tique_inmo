@@ -119,7 +119,9 @@
                                     <div>
                                         <div class="row">
                                             <div class="col-lg-12 table-responsive">
-                                                <table id="table-inm_ubicacion" class="table mb-0 table-striped table-sm "></table>
+                                                <form enctype="multipart/form-data" method="post" action="<?php echo $controlador->link_documento_bd; ?>" class="form-additional">
+                                                    <table id="table-inm_ubicacion" class="table mb-0 table-striped table-sm "></table>
+                                                </form>
                                             </div>
                                         </div>
                                     </div>

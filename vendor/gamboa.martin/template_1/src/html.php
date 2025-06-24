@@ -67,14 +67,19 @@ class html extends \gamboamartin\template\html {
         return str_replace(array('|class|'), array("class='control-group col-sm-$cols'"), $html_r);
     }
 
-    public function div_label(string $html, string $label): string
+    public function div_label(string $html, string $label, bool $con_label = true): string
     {
         $html = parent::div_label(html: $html,label:  $label);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al generar div', data: $html);
         }
+
+        $estilo = '';
+        if(!$con_label){
+            $estilo = 'content_sin_label';
+        }
         
-        return str_replace('|class|', "class='controls'", $html);
+        return str_replace('|class|', "class='controls $estilo'", $html);
 
     }
 

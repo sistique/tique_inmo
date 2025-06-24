@@ -1706,7 +1706,8 @@ class html_controler
     }
 
     public function input_file(int $cols, string $name, stdClass $row_upd, bool $value_vacio,bool $disabled = false,
-                               string $place_holder = 'Documento', bool $required = true, bool $multiple = false): array|string
+                               string $place_holder = 'Documento', bool $required = true, bool $multiple = false,
+                               bool $con_label = true): array|string
     {
 
         if($cols<=0){
@@ -1717,12 +1718,13 @@ class html_controler
         }
 
         $html =$this->directivas->input_file(disabled: $disabled, name: $name, place_holder: $place_holder,
-            required: $required, row_upd: $row_upd, value_vacio: $value_vacio,multiple: $multiple);
+            required: $required, row_upd: $row_upd, value_vacio: $value_vacio,multiple: $multiple,
+            con_label: $con_label);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al generar input', data: $html);
         }
 
-        $div = $this->directivas->html->div_group(cols: $cols,html:  $html);
+        $div = $this->directivas->html->div_group(cols: $cols,html: $html);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar div', data: $div);
         }

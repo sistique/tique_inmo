@@ -79,6 +79,7 @@ class controlador_inm_ubicacion extends _ctl_base {
 
 
     public string $link_fotografia_bd = '';
+    public string $link_documento_bd = '';
     public array $imp_compradores = array();
     public array $cheques = array();
     public array $fotos = array();
@@ -887,6 +888,20 @@ class controlador_inm_ubicacion extends _ctl_base {
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al integrar buttons', data: $inm_conf_docs_ubicacion, header: $header, ws: $ws);
         }
+
+        $params = array();
+        if(isset($_GET['accion']) && $_GET['accion'] === 'proceso_ubicacion') {
+            $params = array('pestana_general_actual' => 'pestanageneral1',
+                'pestana_actual' => 'pestanaubicacion2');
+        }
+        $link_documento_bd = $this->obj_link->link_con_id(
+            accion: 'documentos_bd', link: $this->link, registro_id: $this->registro_id, seccion: 'inm_ubicacion',
+            params: $params);
+        if (errores::$error) {
+            $this->retorno_error(mensaje: 'Error al generar link', data: $link_documento_bd, header: $header, ws: $ws);
+        }
+
+        $this->link_documento_bd = $link_documento_bd;
 
         //$keys_selects['com_tipo_ubicacion_id']->id_selected = $this->registro['com_tipo_ubicacion_id'];
 
