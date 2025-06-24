@@ -73,6 +73,7 @@ class controlador_inm_ubicacion extends _ctl_base {
 
     public string $link_fotografia_bd = '';
     public array $imp_compradores = array();
+    public array $cheques = array();
     public array $fotos = array();
     public array $etapas = array();
     public array $inm_opiniones_valor = array();
@@ -552,11 +553,13 @@ class controlador_inm_ubicacion extends _ctl_base {
                 header: $header, ws: $ws);
         }
 
-        if($r_cheque->n_registros > 0) {
+        $this->cheques = $r_cheque->registros;
+
+        /*if($r_cheque->n_registros > 0) {
             $this->row_upd->nombre_beneficiario = $r_cheque->registros[0]['inm_cheque_nombre_beneficiario'];
             $this->row_upd->numero_cheque = $r_cheque->registros[0]['inm_cheque_numero_cheque'];
             $this->row_upd->monto = $r_cheque->registros[0]['inm_cheque_monto'];
-        }
+        }*/
 
         $keys_selects = (new _ubicacion())->keys_selects_base(controler: $this,data_row:  $data_row, disableds: array());
         if(errores::$error){

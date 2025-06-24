@@ -31,6 +31,38 @@
                 </div>
             </div>
         </div>
+        
+        <div class="row">
+            <div class="col-md-12">
+                <div class="widget widget-box box-container widget-mylistings">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Beneficiario</th>
+                            <th>No. Cheque</th>
+                            <th>Moto</th>
+                            <th>Fecha</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php
+                        foreach ($controlador->cheques as $cheque){
+                            ?>
+                            <tr>
+                                <td><?php echo $cheque['inm_cheque_id'] ?></td>
+                                <td><?php echo $cheque['inm_cheque_nombre_beneficiario'] ?></td>
+                                <td><?php echo $cheque['inm_cheque_numero_cheque'] ?></td>
+                                <td><?php echo $cheque['inm_cheque_monto'] ?></td>
+                                <td><?php echo $cheque['inm_cheque_fecha_alta'] ?></td>
+                            </tr>
+                        <?php } ?>
+                        </tbody>
+                    </table>
+                </div> <!-- /. widget-table-->
+            </div><!-- /.center-content -->
+        </div>
+    </div>
 
 
 </main>
