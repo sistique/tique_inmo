@@ -21,11 +21,11 @@ class _inm_ubicacion{
 
     private function button(string $accion, controlador_inm_ubicacion $controler, string $etiqueta, int $indice,
                                  int $inm_doc_ubicacion_id, array $inm_conf_docs_ubicacion, array $params = array(),
-                                 string $style = 'success', string $target = ''): array
+                                 string $style = 'success', string $target = '', string $css_extra = ""): array
     {
         $button = $controler->html->button_href(accion: $accion, etiqueta: $etiqueta,
-            registro_id: $inm_doc_ubicacion_id, seccion: 'inm_doc_ubicacion', style: $style, params: $params,
-            target: $target);
+            registro_id: $inm_doc_ubicacion_id, seccion: 'inm_doc_ubicacion', style: $style, css_extra: $css_extra,
+            params: $params, target: $target);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar button',data:  $button);
         }
@@ -45,10 +45,11 @@ class _inm_ubicacion{
             $params['pestana_general_actual'] = 'pestanageneral1';
             $params['pestana_actual'] = 'pestanaubicacion2';
         }
+        $css_extra = 'boton-accion';
 
         $inm_conf_docs_comprador = (new _inm_ubicacion())->button(accion: 'elimina_bd', controler: $controler,
             etiqueta: 'Elimina', indice: $indice, inm_doc_ubicacion_id: $inm_doc_ubicacion['inm_doc_ubicacion_id'],
-            inm_conf_docs_ubicacion: $inm_conf_docs_ubicacion, params: $params, style: 'danger');
+            inm_conf_docs_ubicacion: $inm_conf_docs_ubicacion, params: $params, style: 'danger',css_extra: $css_extra);
 
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar button',data:  $inm_conf_docs_comprador);
@@ -59,9 +60,10 @@ class _inm_ubicacion{
     private function buttons(controlador_inm_ubicacion $controler, int $indice, array $inm_conf_docs_ubicacion,
                                   array $inm_doc_ubicacion){
 
+        $css_extra = 'boton-accion';
         $inm_conf_docs_ubicacion = $this->button(accion: 'descarga', controler: $controler,
             etiqueta: 'Descarga', indice: $indice, inm_doc_ubicacion_id: $inm_doc_ubicacion['inm_doc_ubicacion_id'],
-            inm_conf_docs_ubicacion: $inm_conf_docs_ubicacion);
+            inm_conf_docs_ubicacion: $inm_conf_docs_ubicacion,css_extra: $css_extra);
 
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar button',data:  $inm_conf_docs_ubicacion);
@@ -69,7 +71,7 @@ class _inm_ubicacion{
 
         $inm_conf_docs_ubicacion = $this->button(accion: 'vista_previa', controler: $controler,
             etiqueta: 'Vista Previa', indice: $indice, inm_doc_ubicacion_id: $inm_doc_ubicacion['inm_doc_ubicacion_id'],
-            inm_conf_docs_ubicacion: $inm_conf_docs_ubicacion, target: '_blank');
+            inm_conf_docs_ubicacion: $inm_conf_docs_ubicacion, target: '_blank', css_extra: $css_extra);
 
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar button',data:  $inm_conf_docs_ubicacion);
@@ -77,7 +79,7 @@ class _inm_ubicacion{
 
         $inm_conf_docs_ubicacion = $this->button(accion: 'descarga_zip', controler: $controler,
             etiqueta: 'ZIP', indice: $indice, inm_doc_ubicacion_id: $inm_doc_ubicacion['inm_doc_ubicacion_id'],
-            inm_conf_docs_ubicacion: $inm_conf_docs_ubicacion);
+            inm_conf_docs_ubicacion: $inm_conf_docs_ubicacion,css_extra: $css_extra);
 
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar button',data:  $inm_conf_docs_ubicacion);

@@ -1,3 +1,9 @@
+.boton-accion {
+    min-width: 275px; /* o el valor que necesites */
+    display: inline-block;
+    text-align: center;
+}
+
 .content_sin_label{
     margin: 0 !important;
 }
