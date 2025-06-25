@@ -314,6 +314,8 @@ class _inm_comprador{
         $inm_conf_docs_comprador[$indice]['vista_previa'] = $button;
         $inm_conf_docs_comprador[$indice]['descarga_zip'] = $button;
         $inm_conf_docs_comprador[$indice]['elimina_bd'] = $button;
+        $inm_conf_docs_comprador[$indice]['subir_documento'] = $button;
+
         return $inm_conf_docs_comprador;
     }
 
@@ -331,6 +333,14 @@ class _inm_comprador{
             seccion:  'inm_comprador',style:  'warning', params: $params);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar button',data:  $button);
+        }
+
+        $button = $controler->html->input_file(cols: 12, name:
+            'documentos['.$doc_tipo_documento['doc_tipo_documento_id'].'][]',
+            row_upd: new stdClass(), value_vacio: false, place_holder: 'Subir Documento',required: false,
+            con_label: false);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener inputs', data: $button);
         }
 
         $inm_conf_docs_comprador = $this->integra_button_default(button: $button,

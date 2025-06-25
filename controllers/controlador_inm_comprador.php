@@ -2173,7 +2173,25 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al integrar buttons',data:  $inm_conf_docs_comprador, header: $header,ws:  $ws);
         }
 
-        $this->inm_conf_docs_comprador = $inm_conf_docs_comprador;
+        $temp = array();
+        foreach ($inm_conf_docs_comprador as $docs){
+            $res = "<tr>
+            <td>$docs[doc_tipo_documento_descripcion]</td>
+            <td>$docs[descarga]</td>
+            <td>$docs[vista_previa]</td>
+            <td>$docs[descarga_zip]</td>
+            <td>$docs[elimina_bd]</td>
+            </tr>";
+            if(isset($docs['subir_documento'])){
+                $res = "<tr>
+                <td>$docs[doc_tipo_documento_descripcion]</td>
+                <td colspan='4'>$docs[subir_documento]</td>
+                </tr>";
+            }
+            $temp[] = $res;
+        }
+
+        $this->inm_conf_docs_comprador = $temp;
 
 
         return $inm_conf_docs_comprador;
