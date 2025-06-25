@@ -25,10 +25,10 @@ class _inm_comprador{
 
     private function button(string $accion, controlador_inm_comprador $controler, string $etiqueta, int $indice,
                                  int $inm_doc_comprador_id, array $inm_conf_docs_comprador, array $params = array(),
-                                 string $style = 'success', string $target = ''): array
+                                 string $style = 'success', string $target = '', string $css_extra = ''): array
     {
         $button = $controler->html->button_href(accion: $accion, etiqueta: $etiqueta, registro_id: $inm_doc_comprador_id,
-            seccion: 'inm_doc_comprador', style: $style, params: $params, target: $target);
+            seccion: 'inm_doc_comprador', style: $style, css_extra: $css_extra, params: $params, target: $target);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar button',data:  $button);
         }
@@ -48,9 +48,11 @@ class _inm_comprador{
             $params['pestana_actual'] = 'pestanacliente2';
         }
 
+        $css_extra = 'boton-accion';
+
         $inm_conf_docs_comprador = (new _inm_comprador())->button(accion: 'elimina_bd', controler: $controler,
             etiqueta: 'Elimina', indice: $indice, inm_doc_comprador_id: $inm_doc_comprador['inm_doc_comprador_id'],
-            inm_conf_docs_comprador: $inm_conf_docs_comprador, params: $params, style: 'danger');
+            inm_conf_docs_comprador: $inm_conf_docs_comprador, params: $params, style: 'danger',css_extra: $css_extra);
 
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar button',data:  $inm_conf_docs_comprador);
@@ -60,10 +62,10 @@ class _inm_comprador{
 
     private function buttons(controlador_inm_comprador $controler, int $indice, array $inm_conf_docs_comprador,
                                   array $inm_doc_comprador){
-
+        $css_extra = 'boton-accion';
         $inm_conf_docs_comprador = $this->button(accion: 'descarga', controler: $controler,
             etiqueta: 'Descarga', indice: $indice, inm_doc_comprador_id: $inm_doc_comprador['inm_doc_comprador_id'],
-            inm_conf_docs_comprador: $inm_conf_docs_comprador);
+            inm_conf_docs_comprador: $inm_conf_docs_comprador,css_extra: $css_extra);
 
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar button',data:  $inm_conf_docs_comprador);
@@ -71,7 +73,7 @@ class _inm_comprador{
 
         $inm_conf_docs_comprador = $this->button(accion: 'vista_previa', controler: $controler,
             etiqueta: 'Vista Previa', indice: $indice, inm_doc_comprador_id: $inm_doc_comprador['inm_doc_comprador_id'],
-            inm_conf_docs_comprador: $inm_conf_docs_comprador, target: '_blank');
+            inm_conf_docs_comprador: $inm_conf_docs_comprador, target: '_blank',css_extra: $css_extra);
 
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar button',data:  $inm_conf_docs_comprador);
@@ -79,7 +81,7 @@ class _inm_comprador{
 
         $inm_conf_docs_comprador = $this->button(accion: 'descarga_zip', controler: $controler,
             etiqueta: 'ZIP', indice: $indice, inm_doc_comprador_id: $inm_doc_comprador['inm_doc_comprador_id'],
-            inm_conf_docs_comprador: $inm_conf_docs_comprador);
+            inm_conf_docs_comprador: $inm_conf_docs_comprador,css_extra: $css_extra);
 
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar button',data:  $inm_conf_docs_comprador);

@@ -53,6 +53,7 @@ class controlador_inm_comprador extends _ctl_base {
     public array $inm_conf_docs_comprador = array();
     public array $etapas = array();
 
+    public string $link_documento_bd ='';
     public string $link_exportar_xls ='';
     public string $link_inm_doc_comprador_alta_bd = '';
     public string $link_alta_bitacora = '';
@@ -2193,9 +2194,75 @@ class controlador_inm_comprador extends _ctl_base {
 
         $this->inm_conf_docs_comprador = $temp;
 
+        $params = array();
+        if(isset($_GET['accion']) && $_GET['accion'] === 'proceso_cliente') {
+            $params = array('pestana_general_actual' => 'pestanageneral1',
+                'pestana_actual' => 'pestanacliente2');
+        }
+        $link_documento_bd = $this->obj_link->link_con_id(
+            accion: 'documentos_bd', link: $this->link, registro_id: $this->registro_id, seccion: 'inm_comprador',
+            params: $params);
+        if (errores::$error) {
+            $this->retorno_error(mensaje: 'Error al generar link', data: $link_documento_bd, header: $header, ws: $ws);
+        }
+
+        $this->link_documento_bd = $link_documento_bd;
 
         return $inm_conf_docs_comprador;
 
+    }
+
+    public function documentos_bd(bool $header, bool $ws = false): array|stdClass{
+        $inm_doc_comprador =  new inm_doc_comprador(link: $this->link);
+
+        $names = array();
+        foreach ($_FILES['documentos']['name'] as $key => $foto){
+            $names[$key]['name'] = $foto;
+        }
+
+        foreach ($_FILES['documentos']['tmp_name'] as $key => $foto){
+            $names[$key]['tmp_name'] = $foto;
+        }
+
+        $result = array();
+        foreach ($names as $key => $name){
+            $valor = array();
+            foreach ($name['name'] as $item => $value){
+
+                $valor['name'] = $name['name'][$item];
+                $valor['tmp_name'] = $name['tmp_name'][$item];
+
+                if($name['name'][$item] !== '' && $name['tmp_name'][$item] !== '') {
+                    $registro['doc_tipo_documento_id'] = $key;
+                    $registro['inm_comprador_id'] = $this->registro_id;
+                    $_FILES['documento'] = $valor;
+                    $result = $inm_doc_comprador->alta_registro(registro: $registro);
+                    if (errores::$error) {
+                        return $this->retorno_error(mensaje: 'Error al insertar datos', data: $result, header: $header, ws: $ws);
+                    }
+                }
+            }
+        }
+
+        $accion = 'documentos';
+        if(isset($_POST['btn_action_next'])){
+            $accion = $_POST['btn_action_next'];
+        }
+
+        $params = array();
+        if (isset($_GET['pestana_general_actual'])) {
+            $params = array('pestana_general_actual' => 'pestanageneral1', 'pestana_actual' => $_GET['pestana_actual']);
+        }        $link_proceso_comprador = $this->obj_link->link_con_id(
+            accion: $accion, link: $this->link, registro_id: $this->registro_id, seccion: 'inm_comprador',params: $params);
+        if (errores::$error) {
+            $this->retorno_error(mensaje: 'Error al generar link', data: $link_proceso_comprador, header: $header, ws: $ws);
+        }
+        if($header) {
+            header('Location:' . $link_proceso_comprador);
+            exit;
+        }
+
+        return $result;
     }
 
     public function etapa(bool $header, bool $ws = false): array|stdClass
