@@ -449,25 +449,6 @@
                                     <div class="row buttons-form">
                                         <div class="col-lg-12">
                                             <label class="label-docs">
-                                                <?php echo $controlador->descripcion_poliza_comision_firmada; ?>
-                                            </label>
-                                        </div>
-                                        <div class="col-lg-3">
-                                            <?php echo $controlador->button_inm_doc_ubicacion_descarga_firmado_comision; ?>
-                                        </div>
-                                        <div class="col-lg-3">
-                                            <?php echo $controlador->button_inm_doc_ubicacion_vista_previa_firmado_comision; ?>
-                                        </div>
-                                        <div class="col-lg-3">
-                                            <?php echo $controlador->button_inm_doc_ubicacion_descarga_zip_firmado_comision; ?>
-                                        </div>
-                                        <div class="col-lg-3">
-                                            <?php echo $controlador->button_inm_doc_ubicacion_elimina_bd_firmado_comision; ?>
-                                        </div>
-                                    </div>
-                                    <div class="row buttons-form">
-                                        <div class="col-lg-12">
-                                            <label class="label-docs">
                                                 <?php echo $controlador->descripcion_comprobante_transferencia_firmada; ?>
                                             </label>
                                         </div>
@@ -482,6 +463,26 @@
                                         </div>
                                         <div class="col-lg-3">
                                             <?php echo $controlador->button_inm_doc_ubicacion_elimina_bd_transferencia_firmada; ?>
+                                        </div>
+                                    </div>
+
+                                    <div class="row buttons-form">
+                                        <div class="col-lg-12">
+                                            <label class="label-docs">
+                                                <?php echo $controlador->descripcion_poliza_comision_firmada; ?>
+                                            </label>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_ubicacion_descarga_firmado_comision; ?>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_ubicacion_vista_previa_firmado_comision; ?>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_ubicacion_descarga_zip_firmado_comision; ?>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_ubicacion_elimina_bd_firmado_comision; ?>
                                         </div>
                                     </div>
                                 </div>
