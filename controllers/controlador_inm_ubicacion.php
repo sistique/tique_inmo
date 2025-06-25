@@ -466,40 +466,83 @@ class controlador_inm_ubicacion extends _ctl_base {
 
     public function asigna_firmado(bool $header, bool $ws = false): array|stdClass
     {
-        $documento_poliza_firmada = $this->html->input_file(cols: 12, name: 'poliza_firmada', row_upd: new stdClass(),
-            value_vacio: false, place_holder: 'Poliza Firmada',required: false);
+
+        $filtro_che['inm_ubicacion.id'] = $this->registro_id;
+        $filtro_che['inm_tipo_cheque.id'] = 1;
+        $r_cheque = (new inm_cheque(link: $this->link))->filtro_and(filtro: $filtro_che);
         if (errores::$error) {
-            return $this->retorno_error(
-                mensaje: 'Error al obtener inputs', data: $documento_poliza_firmada, header: $header, ws: $ws);
+            return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $r_cheque,
+                header: $header, ws: $ws);
         }
 
-        $this->inputs->documento_poliza_firmada = $documento_poliza_firmada;  
-        
-        $documento_transferencia = $this->html->input_file(cols: 12, name: 'transferencia', row_upd: new stdClass(),
-            value_vacio: false, place_holder: 'Comprobante Transferencia',required: false);
+        $documento_poliza_firmada = "";
+        if($r_cheque->n_registros > 0) {
+            $documento_poliza_firmada = $this->html->input_file(cols: 12, name: 'poliza_firmada', row_upd: new stdClass(),
+                value_vacio: false, place_holder: 'Poliza Firmada',required: false);
+            if (errores::$error) {
+                return $this->retorno_error(
+                    mensaje: 'Error al obtener inputs', data: $documento_poliza_firmada, header: $header, ws: $ws);
+            }
+        }
+
+        $this->inputs->documento_poliza_firmada = $documento_poliza_firmada;
+
+        $filtro_transfer['inm_ubicacion.id'] = $this->registro_id;
+        $r_transferencia = (new inm_transferencia(link: $this->link))->filtro_and(filtro: $filtro_transfer);
         if (errores::$error) {
-            return $this->retorno_error(
-                mensaje: 'Error al obtener inputs', data: $documento_transferencia, header: $header, ws: $ws);
+            return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $r_transferencia,
+                header: $header, ws: $ws);
+        }
+
+        $documento_transferencia = "";
+        if($r_transferencia->n_registros > 0) {
+            $documento_transferencia = $this->html->input_file(cols: 12, name: 'transferencia', row_upd: new stdClass(),
+                value_vacio: false, place_holder: 'Comprobante Transferencia', required: false);
+            if (errores::$error) {
+                return $this->retorno_error(
+                    mensaje: 'Error al obtener inputs', data: $documento_transferencia, header: $header, ws: $ws);
+            }
         }
 
         $this->inputs->documento_transferencia = $documento_transferencia;
 
-        $documento_poliza_comision_firmada = $this->html->input_file(cols: 12, name: 'poliza_comision_firmada', row_upd: new stdClass(),
-            value_vacio: false, place_holder: 'Poliza Comision Firmada',required: false);
+        $filtro_che['inm_ubicacion.id'] = $this->registro_id;
+        $filtro_che['inm_tipo_cheque.id'] = 2;
+        $r_cheque = (new inm_cheque(link: $this->link))->filtro_and(filtro: $filtro_che);
         if (errores::$error) {
-            return $this->retorno_error(
-                mensaje: 'Error al obtener inputs', data: $documento_poliza_firmada, header: $header, ws: $ws);
+            return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $r_cheque,
+                header: $header, ws: $ws);
+        }
+
+        $documento_poliza_comision_firmada = "";
+        if($r_cheque->n_registros > 0) {
+            $documento_poliza_comision_firmada = $this->html->input_file(cols: 12, name: 'poliza_comision_firmada', row_upd: new stdClass(),
+                value_vacio: false, place_holder: 'Poliza Comision Firmada', required: false);
+            if (errores::$error) {
+                return $this->retorno_error(
+                    mensaje: 'Error al obtener inputs', data: $documento_poliza_firmada, header: $header, ws: $ws);
+            }
         }
 
         $this->inputs->documento_poliza_comision_firmada = $documento_poliza_comision_firmada;
 
-        $documento_poliza_secundaria_firmada = $this->html->input_file(cols: 12, name: 'poliza_secundaria_firmada', row_upd: new stdClass(),
-            value_vacio: false, place_holder: 'Poliza Secundaria Firmada',required: false);
+        $filtro_che['inm_ubicacion.id'] = $this->registro_id;
+        $filtro_che['inm_tipo_cheque.id'] = 3;
+        $r_cheque = (new inm_cheque(link: $this->link))->filtro_and(filtro: $filtro_che);
         if (errores::$error) {
-            return $this->retorno_error(
-                mensaje: 'Error al obtener inputs', data: $documento_poliza_firmada, header: $header, ws: $ws);
+            return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $r_cheque,
+                header: $header, ws: $ws);
         }
 
+        $documento_poliza_secundaria_firmada = "";
+        if($r_cheque->n_registros > 0) {
+            $documento_poliza_secundaria_firmada = $this->html->input_file(cols: 12, name: 'poliza_secundaria_firmada', row_upd: new stdClass(),
+                value_vacio: false, place_holder: 'Poliza Secundaria Firmada', required: false);
+            if (errores::$error) {
+                return $this->retorno_error(
+                    mensaje: 'Error al obtener inputs', data: $documento_poliza_firmada, header: $header, ws: $ws);
+            }
+        }
         $this->inputs->documento_poliza_secundaria_firmada = $documento_poliza_secundaria_firmada;
 
         $data_row = $this->modelo->registro(registro_id: $this->registro_id,retorno_obj: true);
@@ -2682,6 +2725,16 @@ class controlador_inm_ubicacion extends _ctl_base {
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
         }
+
+        $columns_ds = array('inm_ubicacion_id','inm_ubicacion_ubicacion');
+        $filtro['inm_ubicacion.id'] = $this->registro_id;
+        $inm_prospecto_id = (new inm_ubicacion_html(html: $this->html_base))->select_inm_ubicacion_id(
+            cols: 12, con_registros: true, id_selected: $this->registro_id, link: $this->link, columns_ds: $columns_ds,
+            filtro: $filtro);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al generar input', data: $inm_prospecto_id, header: $header, ws: $ws);
+        }
+        $this->inputs->inm_ubicacion_seleccionado_id  = $inm_prospecto_id;
 
         $btn_action_next = $this->html->hidden('btn_action_next', value: 'proceso_ubicacion');
         if (errores::$error) {

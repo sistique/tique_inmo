@@ -12,6 +12,7 @@
                 <?php include (new views())->ruta_templates."mensajes.php"; ?>
                 <div class="widget  widget-box box-container form-main widget-form-cart" id="form">
 
+                    <?php echo $controlador->inputs->inm_ubicacion_seleccionado_id; ?>
                     <div id="pestanasgeneral">
                         <ul id="listageneral">
                             <li id="pestanageneral1"><a href='javascript:cambiarPestannaGeneral(pestanasgeneral,pestanageneral1,pestanasubicacion);'>UBICACION</a></li>
