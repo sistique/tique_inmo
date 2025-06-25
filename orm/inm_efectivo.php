@@ -42,35 +42,22 @@ class inm_efectivo extends _modelo_parent{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al insertar prospecto',data:  $r_alta_bd);
         }
-/*
-        if($this->registro['inm_tipo_efectivo_id'] === 1){
-            $registro = array();
-            $registro['inm_ubicacion_id'] = $this->registro['inm_ubicacion_id'];
-            $registro['inm_concepto_id'] = 19;
-            $registro['monto'] = $this->registro['monto'];
-            $registro['fecha'] = date('Y-m-d');
-            $registro['referencia'] = $this->registro['nombre_beneficiario'];
-            $r_inm_costo = (new inm_costo(link: $this->link))->alta_registro(
-                registro: $registro);
-            if (errores::$error) {
-                return $this->error->error(mensaje: 'Error al insertar prospecto',data:  $r_inm_costo);
-            }
-        }else if($this->registro['inm_tipo_efectivo_id'] === 2){
-            $registro = array();
-            $registro['inm_ubicacion_id'] = $this->registro['inm_ubicacion_id'];
-            $registro['inm_concepto_id'] = 36;
-            $registro['monto'] = $this->registro['monto'];
-            $registro['referencia'] = $this->registro['nombre_beneficiario'];
-            $r_inm_costo = (new inm_costo(link: $this->link))->alta_registro(
-                registro: $registro);
-            if (errores::$error) {
-                return $this->error->error(mensaje: 'Error al insertar prospecto',data:  $r_inm_costo);
-            }
-        }*/
+
+        $registro = array();
+        $registro['inm_ubicacion_id'] = $this->registro['inm_ubicacion_id'];
+        $registro['inm_concepto_id'] = 19;
+        $registro['monto'] = $this->registro['monto'];
+        $registro['fecha'] = date('Y-m-d');
+        $registro['referencia'] = $this->registro['nombre_beneficiario'];
+        $r_inm_costo = (new inm_costo(link: $this->link))->alta_registro(
+            registro: $registro);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al insertar prospecto',data:  $r_inm_costo);
+        }
 
         return $r_alta_bd;
     }
-    /*
+
     public function modifica_bd(array $registro, int $id, bool $reactiva = false, array $keys_integra_ds = array('codigo', 'descripcion')): array|stdClass
     {
         $r_modifica_bd = parent::modifica_bd(registro: $registro,id:  $id,reactiva:  $reactiva,
@@ -79,32 +66,8 @@ class inm_efectivo extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al modificar descripcion',data:  $r_modifica_bd);
         }
 
-        if($this->registro['inm_tipo_efectivo_id'] === 1){
-            $registro = array();
-            $registro['inm_ubicacion_id'] = $this->registro['inm_ubicacion_id'];
-            $registro['inm_concepto_id'] = 19;
-            $registro['monto'] = $this->registro['monto'];
-            $registro['fecha'] = date('Y-m-d');
-            $registro['referencia'] = $this->registro['nombre_beneficiario'];
-            $r_inm_costo = (new inm_costo(link: $this->link))->alta_registro(
-                registro: $registro);
-            if (errores::$error) {
-                return $this->error->error(mensaje: 'Error al insertar prospecto',data:  $r_inm_costo);
-            }
-        }else if($this->registro['inm_tipo_efectivo_id'] === 2){
-            $registro = array();
-            $registro['inm_ubicacion_id'] = $this->registro['inm_ubicacion_id'];
-            $registro['inm_concepto_id'] = 36;
-            $registro['monto'] = $this->registro['monto'];
-            $registro['referencia'] = $this->registro['nombre_beneficiario'];
-            $r_inm_costo = (new inm_costo(link: $this->link))->alta_registro(
-                registro: $registro);
-            if (errores::$error) {
-                return $this->error->error(mensaje: 'Error al insertar prospecto',data:  $r_inm_costo);
-            }
-        }
 
         return $r_modifica_bd;
-    }*/
+    }
 
 }
