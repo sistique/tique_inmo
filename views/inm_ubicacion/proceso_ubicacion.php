@@ -359,6 +359,8 @@
                                         <?php echo $controlador->inputs->nombre_beneficiario; ?>
                                         <?php echo $controlador->inputs->numero_cheque; ?>
                                         <?php echo $controlador->inputs->monto; ?>
+                                        <?php echo $controlador->inputs->transferencia; ?>
+                                        <?php echo $controlador->inputs->monto_transferencia; ?>
                                         <?php echo $controlador->inputs->numero_cheque_comision; ?>
                                         <?php echo $controlador->inputs->monto_comision; ?>
 
@@ -415,6 +417,7 @@
                                           class="form-additional" enctype="multipart/form-data">
 
                                         <?php echo $controlador->inputs->documento_poliza_firmada; ?>
+                                        <?php //echo $controlador->inputs->documento_poliza_firmada; ?>
                                         <?php echo $controlador->inputs->documento_poliza_comision_firmada; ?>
 
                                         <div class="control-group btn-alta">
