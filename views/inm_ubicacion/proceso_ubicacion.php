@@ -359,6 +359,10 @@
                                         <?php echo $controlador->inputs->nombre_beneficiario; ?>
                                         <?php echo $controlador->inputs->numero_cheque; ?>
                                         <?php echo $controlador->inputs->monto; ?>
+
+                                        <?php echo $controlador->inputs->numero_cheque_secundario; ?>
+                                        <?php echo $controlador->inputs->monto_cheque_secundario; ?>
+
                                         <?php echo $controlador->inputs->transferencia; ?>
                                         <?php echo $controlador->inputs->monto_transferencia; ?>
                                         <?php echo $controlador->inputs->numero_cheque_comision; ?>

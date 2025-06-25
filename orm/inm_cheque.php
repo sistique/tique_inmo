@@ -53,6 +53,8 @@ class inm_cheque extends _modelo_parent{
             $registro['inm_concepto_id'] = 19;
         }else if($this->registro['inm_tipo_cheque_id'] === 2){
             $registro['inm_concepto_id'] = 36;
+        }else if($this->registro['inm_tipo_cheque_id'] === 3){
+            $registro['inm_concepto_id'] = 19;
         }
 
         $r_inm_costo = (new inm_costo(link: $this->link))->alta_registro(registro: $registro);
@@ -110,6 +112,8 @@ class inm_cheque extends _modelo_parent{
                 $registro_che['inm_concepto_id'] = 19;
             }else if($registro['inm_tipo_cheque_id'] === 2){
                 $registro_che['inm_concepto_id'] = 36;
+            }else if($this->registro['inm_tipo_cheque_id'] === 3){
+                $registro['inm_concepto_id'] = 19;
             }
 
             $r_inm_costo = (new inm_costo(link: $this->link))->alta_registro(registro: $registro_che);
