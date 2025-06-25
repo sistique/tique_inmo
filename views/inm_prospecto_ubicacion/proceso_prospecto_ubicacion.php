@@ -126,13 +126,42 @@
                                     </div>
                                 </div>
                                 <div class="conten" id="cpestanaubicacion2">
-                                    <div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="widget widget-box box-container widget-mylistings">
+                                                <form enctype="multipart/form-data" method="post" action="<?php echo $controlador->link_documento_bd; ?>" class="form-additional">
+                                                    <table class="table table-striped">
+                                                        <thead>
+                                                        <tr>
+                                                            <th>Tipo Documento</th>
+                                                            <th>Descarga</th>
+                                                            <th>Vista Previa</th>
+                                                            <th>Zip</th>
+                                                            <th>Elimina</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        <?php
+                                                        foreach ($controlador->inm_conf_docs_prospecto as $docs) {
+                                                            echo $docs;
+                                                        }?>
+                                                        </tbody>
+                                                    </table>
+                                                    <?php echo $controlador->inputs->btn_action_next; ?>
+                                                    <?php echo $controlador->inputs->id_retorno; ?>
+                                                    <?php echo $controlador->inputs->seccion_retorno; ?>
+                                                    <?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--<div>
                                         <div class="row">
                                             <div class="col-lg-12 table-responsive">
                                                 <table id="table-inm_prospecto_ubicacion" class="table mb-0 table-striped table-sm "></table>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div>-->
                                 </div>
                                 <div class="conten" id="cpestanaubicacion3">
                                     <div class="row">
