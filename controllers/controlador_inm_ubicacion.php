@@ -3013,7 +3013,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         }
 
         $filtro_exi['inm_ubicacion.id'] = $this->registro_id;
-        $filtro_exi['inm_status_ubicacion.id'] = 3;
+        $filtro_exi['inm_status_ubicacion.id'] = 8;
         $existe = (new inm_bitacora_status_ubicacion(link: $this->link))->existe(filtro: $filtro_exi);
         if (errores::$error) {
             $this->link->rollBack();
@@ -3024,7 +3024,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         if(!$existe) {
             $registro = array();
             $registro['inm_ubicacion_id'] = $this->registro_id;
-            $registro['inm_status_ubicacion_id'] = 3;
+            $registro['inm_status_ubicacion_id'] = 8;
             $registro['fecha_status'] = date('Y-m-d\TH:i:s');
             $r_inm_bitacora_status_ubicacion = (new inm_bitacora_status_ubicacion(link: $this->link))->alta_registro(
                 registro: $registro);
