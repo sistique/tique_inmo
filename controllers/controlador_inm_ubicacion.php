@@ -1025,7 +1025,7 @@ class controlador_inm_ubicacion extends _ctl_base {
             'rfc', 'lada_com', 'numero_com', 'cel_com', 'correo_com', 'razon_social','nivel','recamaras',
             'metros_terreno','metros_construccion','adeudo_hipoteca', 'adeudo_predial','cuenta_agua','adeudo_agua',
             'adeudo_luz','monto_devolucion','transferencia','monto_transferencia','efectivo','numero_cheque_secundario',
-            'monto_cheque_secundario');
+            'monto_cheque_secundario','numero_credito');
         $keys->selects = array();
 
 
@@ -1043,6 +1043,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         $init_data['inm_estado_vivienda'] = "gamboamartin\\inmuebles";
         $init_data['inm_prototipo'] = "gamboamartin\\inmuebles";
         $init_data['inm_complemento'] = "gamboamartin\\inmuebles";
+        $init_data['inm_attr_tipo_credito'] = "gamboamartin\\inmuebles";
 
         $campos_view = $this->campos_view_base(init_data: $init_data,keys:  $keys);
 

@@ -72,6 +72,7 @@
                                             <?php echo $controlador->inputs->numero_interior; ?>
 
                                             <?php echo $controlador->inputs->inm_estado_vivienda_id; ?>
+                                            <?php echo $controlador->inputs->inm_attr_tipo_credito_id; ?>
                                             <?php echo $controlador->inputs->fecha_otorgamiento_credito; ?>
                                             <?php echo $controlador->inputs->inm_prototipo_id; ?>
                                             <?php echo $controlador->inputs->inm_complemento_id; ?>

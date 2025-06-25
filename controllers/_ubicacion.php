@@ -498,6 +498,15 @@ class _ubicacion{
         }
         $keys_selects['inm_complemento_id']->required = false;
 
+        $columns_ds = array('inm_attr_tipo_credito_descripcion');
+        $keys_selects = $controler->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_attr_tipo_credito_id',
+            keys_selects: $keys_selects, id_selected: $data_row->inm_attr_tipo_credito_id, label: 'Tipo Credito',
+            columns_ds : $columns_ds);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+        $keys_selects['inm_attr_tipo_credito_id']->required = false;
+
         foreach ($disableds as $campo_id){
             $keys_selects[$campo_id]->disabled = true;
         }
