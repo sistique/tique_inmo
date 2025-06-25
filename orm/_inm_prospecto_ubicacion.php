@@ -23,7 +23,7 @@ class _inm_prospecto_ubicacion{
                                  string $style = 'success', string $target = '', string $css_extra = ""): array
     {
         $button = $controler->html->button_href(accion: $accion, etiqueta: $etiqueta,
-            registro_id: $inm_doc_prospecto_id, seccion: 'inm_doc_prospecto', style: $style, css_extra: $css_extra,
+            registro_id: $inm_doc_prospecto_id, seccion: 'inm_doc_prospecto_ubicacion', style: $style, css_extra: $css_extra,
             params: $params, target: $target);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar button',data:  $button);
