@@ -846,43 +846,43 @@ class controlador_inm_ubicacion extends _ctl_base {
         }
 
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'numero_cheque_secundario', keys_selects:$keys_selects,
-            place_holder: 'No. Cheque Secundario');
+            place_holder: 'No. Cheque Sec', required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'monto_cheque_secundario', keys_selects:$keys_selects,
-            place_holder: 'Monto Secundario');
+            place_holder: 'Monto Secundario',required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'transferencia', keys_selects:$keys_selects,
-            place_holder: 'Transferencia');
+            place_holder: 'Transferencia',required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'monto_transferencia', keys_selects:$keys_selects,
-            place_holder: 'Monto Transferencia');
+            place_holder: 'Monto Transferencia',required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'numero_cheque_comision', keys_selects:$keys_selects,
-            place_holder: 'No. Cheque Comision');
+            place_holder: 'No. Cheque Comision', required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'monto_comision', keys_selects:$keys_selects,
-            place_holder: 'Monto Comision');
+            place_holder: 'Monto Comision', required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
         $keys_selects = (new init())->key_select_txt(cols: 12,key: 'efectivo', keys_selects:$keys_selects,
-            place_holder: 'Efectivo');
+            place_holder: 'Efectivo', required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
