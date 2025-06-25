@@ -227,8 +227,9 @@ class _ubicacion{
         $headers['1'] = '1. DATOS PERSONALES';
         $headers['2'] = '2. DATOS DE CONTACTO';
         $headers['3'] = '3. VIVIENDA';
-        $headers['4'] = '4. ADEUDO';
-        $headers['5'] = '5. CONYUGE';
+        $headers['4'] = '4. CREDITO';
+        $headers['5'] = '5. ADEUDO';
+        $headers['6'] = '6. CONYUGE';
 
         return $headers;
     }
@@ -492,16 +493,17 @@ class _ubicacion{
 
         $columns_ds = array('inm_complemento_descripcion');
         $keys_selects = $controler->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_complemento_id',
-            keys_selects: $keys_selects, id_selected: $data_row->inm_complemento_id, label: 'Complemento', columns_ds : $columns_ds);
+            keys_selects: $keys_selects, id_selected: $data_row->inm_complemento_id, label: 'Complemento',
+            columns_ds : $columns_ds);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
         $keys_selects['inm_complemento_id']->required = false;
 
         $columns_ds = array('inm_attr_tipo_credito_descripcion');
-        $keys_selects = $controler->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_attr_tipo_credito_id',
-            keys_selects: $keys_selects, id_selected: $data_row->inm_attr_tipo_credito_id, label: 'Tipo Credito',
-            columns_ds : $columns_ds);
+        $keys_selects = $controler->key_select(cols: 6, con_registros: true,filtro:  array(),
+            key: 'inm_attr_tipo_credito_id', keys_selects: $keys_selects,
+            id_selected: $data_row->inm_attr_tipo_credito_id, label: 'Tipo Credito', columns_ds : $columns_ds);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }

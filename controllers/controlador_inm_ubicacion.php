@@ -1025,7 +1025,7 @@ class controlador_inm_ubicacion extends _ctl_base {
             'rfc', 'lada_com', 'numero_com', 'cel_com', 'correo_com', 'razon_social','nivel','recamaras',
             'metros_terreno','metros_construccion','adeudo_hipoteca', 'adeudo_predial','cuenta_agua','adeudo_agua',
             'adeudo_luz','monto_devolucion','transferencia','monto_transferencia','efectivo','numero_cheque_secundario',
-            'monto_cheque_secundario','numero_credito');
+            'monto_cheque_secundario','numero_credito','correo_mi_cuenta_infonavit','password_mi_cuenta_infonavit');
         $keys->selects = array();
 
 
@@ -2219,7 +2219,7 @@ class controlador_inm_ubicacion extends _ctl_base {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 12, key: 'adeudo_hipoteca',
+        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'adeudo_hipoteca',
             keys_selects: $keys_selects, place_holder: 'Adeudo Hipoteca', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
@@ -2256,7 +2256,7 @@ class controlador_inm_ubicacion extends _ctl_base {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'adeudo_luz',
+        $keys_selects = (new init())->key_select_txt(cols: 12, key: 'adeudo_luz',
             keys_selects: $keys_selects, place_holder: 'Adeudo Luz', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
@@ -2281,6 +2281,24 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $keys_selects = (new init())->key_select_txt(cols: 12,key: 'calle', keys_selects: $keys_selects,
             place_holder: 'Calle',required: false);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'numero_credito', keys_selects: $keys_selects,
+            place_holder: 'Numero Credito',required: false);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'correo_mi_cuenta_infonavit', keys_selects: $keys_selects,
+            place_holder: 'Correo Infonavit',required: false);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'password_mi_cuenta_infonavit', keys_selects: $keys_selects,
+            place_holder: 'Contraseña Infonavit',required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
