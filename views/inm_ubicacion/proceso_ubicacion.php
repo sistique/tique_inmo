@@ -247,9 +247,10 @@
                                     <li id="pestana1"><a href='javascript:cambiarPestanna(pestanas,pestana1);'>ALTA</a></li>
                                     <li id="pestana2"><a href='javascript:cambiarPestanna(pestanas,pestana2);'>VALIDACION</a></li>
                                     <li id="pestana3"><a href='javascript:cambiarPestanna(pestanas,pestana3);'>SOLICITUD DE RECURSO</a></li>
-                                    <li id="pestana4"><a href='javascript:cambiarPestanna(pestanas,pestana4);'>POR FIRMAR</a></li>
-                                    <li id="pestana5"><a href='javascript:cambiarPestanna(pestanas,pestana5);'>FIRMADO POR APROBAR</a></li>
-                                    <li id="pestana6"><a href='javascript:cambiarPestanna(pestanas,pestana6);'>FIRMADO</a></li>
+                                    <li id="pestana4"><a href='javascript:cambiarPestanna(pestanas,pestana4);'>EMISION DE RECURSO</a></li>
+                                    <li id="pestana5"><a href='javascript:cambiarPestanna(pestanas,pestana5);'>POR FIRMAR</a></li>
+                                    <li id="pestana6"><a href='javascript:cambiarPestanna(pestanas,pestana6);'>FIRMADO POR APROBAR</a></li>
+                                    <li id="pestana7"><a href='javascript:cambiarPestanna(pestanas,pestana7);'>FIRMADO</a></li>
                                 </ul>
                             </div>
                             <div id="contenidopestanas">
@@ -380,6 +381,24 @@
                                           class="form-additional" enctype="multipart/form-data">
 
                                         <?php echo $controlador->inputs->nombre_beneficiario; ?>
+                                        <?php echo $controlador->inputs->monto; ?>
+                                        <?php echo $controlador->inputs->monto_cheque_secundario; ?>
+                                        <?php echo $controlador->inputs->monto_transferencia; ?>
+                                        <?php echo $controlador->inputs->monto_comision; ?>
+                                        <?php echo $controlador->inputs->efectivo; ?>
+
+                                        <div class="control-group btn-alta">
+                                            <div class="controls">
+                                                <button type="submit" class="btn btn-success">Avanza Etapa</button><br>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="conten" id="cpestana4">
+                                    <form method="post" action="<?php echo $controlador->link_emision_de_recurso_bd; ?>"
+                                          class="form-additional" enctype="multipart/form-data">
+
+                                        <?php echo $controlador->inputs->nombre_beneficiario; ?>
                                         <?php echo $controlador->inputs->numero_cheque; ?>
                                         <?php echo $controlador->inputs->monto; ?>
 
@@ -399,7 +418,7 @@
                                         </div>
                                     </form>
                                 </div>
-                                <div class="conten" id="cpestana4">
+                                <div class="conten" id="cpestana5">
                                     <form method="post" action="<?php echo $controlador->link_por_firmar_bd; ?>"
                                           class="form-additional" enctype="multipart/form-data">
 
@@ -410,7 +429,7 @@
                                         </div>
                                     </form>
                                 </div>
-                                <div class="conten" id="cpestana5">
+                                <div class="conten" id="cpestana6">
                                     <form method="post" action="<?php echo $controlador->link_firmado_por_aprobar_bd; ?>"
                                           class="form-additional" enctype="multipart/form-data">
 
@@ -440,7 +459,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="conten" id="cpestana6">
+                                <div class="conten" id="cpestana7">
                                     <form method="post" action="<?php echo $controlador->link_firmado_bd; ?>"
                                           class="form-additional" enctype="multipart/form-data">
 

@@ -49,6 +49,7 @@ class controlador_inm_ubicacion extends _ctl_base {
     public string $link_costo_alta_bd = '';
     public string $link_validacion_bd = '';
     public string $link_solicitud_de_recurso_bd = '';
+    public string $link_emision_de_recurso_bd = '';
     public string $link_por_firmar_bd = '';
     public string $link_firmado_por_aprobar_bd = '';
     public string $link_firmado_bd = '';
@@ -949,6 +950,163 @@ class controlador_inm_ubicacion extends _ctl_base {
         return $base;
     }
 
+    public function asigna_emision_de_recurso(bool $header, bool $ws = false): array|stdClass
+    {
+
+        $data_row = $this->modelo->registro(registro_id: $this->registro_id,retorno_obj: true);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener registro',data:  $data_row,header: $header,ws: $ws);
+        }
+
+        $filtro_che['inm_ubicacion.id'] = $this->registro_id;
+        $filtro_che['inm_tipo_cheque.id'] = 1;
+        $r_cheque = (new inm_cheque(link: $this->link))->filtro_and(filtro: $filtro_che);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $r_cheque,
+                header: $header, ws: $ws);
+        }
+
+        if($r_cheque->n_registros > 0) {
+            $this->row_upd->nombre_beneficiario = $r_cheque->registros[0]['inm_cheque_nombre_beneficiario'];
+            $this->row_upd->numero_cheque = $r_cheque->registros[0]['inm_cheque_numero_cheque'];
+            $this->row_upd->monto = $r_cheque->registros[0]['inm_cheque_monto'];
+        }
+
+        $filtro_che['inm_ubicacion.id'] = $this->registro_id;
+        $filtro_che['inm_tipo_cheque.id'] = 2;
+        $r_cheque = (new inm_cheque(link: $this->link))->filtro_and(filtro: $filtro_che);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $r_cheque,
+                header: $header, ws: $ws);
+        }
+
+        if($r_cheque->n_registros > 0) {
+            $this->row_upd->numero_cheque_comision = $r_cheque->registros[0]['inm_cheque_numero_cheque'];
+            $this->row_upd->monto_comision = $r_cheque->registros[0]['inm_cheque_monto'];
+        }
+
+        $filtro_che['inm_ubicacion.id'] = $this->registro_id;
+        $filtro_che['inm_tipo_cheque.id'] = 3;
+        $r_cheque = (new inm_cheque(link: $this->link))->filtro_and(filtro: $filtro_che);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $r_cheque,
+                header: $header, ws: $ws);
+        }
+
+        if($r_cheque->n_registros > 0) {
+            $this->row_upd->numero_cheque_secundario = $r_cheque->registros[0]['inm_cheque_numero_cheque'];
+            $this->row_upd->monto_cheque_secundario = $r_cheque->registros[0]['inm_cheque_monto'];
+        }
+
+        $filtro_transfe['inm_ubicacion.id'] = $this->registro_id;
+        $r_transferencia = (new inm_transferencia(link: $this->link))->filtro_and(filtro: $filtro_transfe);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $r_transferencia,
+                header: $header, ws: $ws);
+        }
+
+        if($r_transferencia->n_registros > 0) {
+            $this->row_upd->transferencia = $r_transferencia->registros[0]['inm_transferencia_transferencia'];
+            $this->row_upd->monto_transferencia = $r_transferencia->registros[0]['inm_transferencia_monto'];
+        }
+
+
+        $filtro_efec['inm_ubicacion.id'] = $this->registro_id;
+        $r_efectivo = (new inm_efectivo(link: $this->link))->filtro_and(filtro: $filtro_efec);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $r_efectivo,
+                header: $header, ws: $ws);
+        }
+
+        if($r_efectivo->n_registros > 0) {
+            $this->row_upd->efectivo = $r_efectivo->registros[0]['inm_efectivo_monto'];
+        }
+
+        $keys_selects = (new _ubicacion())->keys_selects_base(controler: $this,data_row:  $data_row, disableds: array());
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener keys_selects', data:  $keys_selects, header: $header,ws:  $ws);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'nombre_beneficiario', keys_selects:$keys_selects,
+            place_holder: 'Nombre Beneficiario');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'numero_cheque', keys_selects:$keys_selects,
+            place_holder: 'No. Cheque');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'monto', keys_selects:$keys_selects,
+            place_holder: 'Monto');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'numero_cheque_secundario', keys_selects:$keys_selects,
+            place_holder: 'No. Cheque Sec', required: false);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'monto_cheque_secundario', keys_selects:$keys_selects,
+            place_holder: 'Monto Secundario',required: false);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'transferencia', keys_selects:$keys_selects,
+            place_holder: 'Transferencia',required: false);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'monto_transferencia', keys_selects:$keys_selects,
+            place_holder: 'Monto Transferencia',required: false);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'numero_cheque_comision', keys_selects:$keys_selects,
+            place_holder: 'No. Cheque Comision', required: false);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'monto_comision', keys_selects:$keys_selects,
+            place_holder: 'Monto Comision', required: false);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'efectivo', keys_selects:$keys_selects,
+            place_holder: 'Efectivo', required: false);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $base = $this->base_upd(keys_selects: $keys_selects, params: array(),params_ajustados: array());
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
+        }
+
+        $params = array('pestana_general_actual' => 'pestanageneral2');
+        $link_emision_de_recurso_bd = $this->obj_link->link_con_id(accion:'emision_de_recurso_bd',
+            link: $this->link,registro_id: $this->registro_id,seccion: 'inm_ubicacion',params: $params);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al generar link',data:  $link_emision_de_recurso_bd,
+                header: $header,ws:  $ws);
+        }
+
+        $this->link_emision_de_recurso_bd = $link_emision_de_recurso_bd;
+        $this->keys_selects = array_merge($keys_selects, $this->keys_selects);
+
+        return $base;
+    }
+
     public function asigna_por_firmar(bool $header, bool $ws = false): array|stdClass
     {
 
@@ -1790,8 +1948,8 @@ class controlador_inm_ubicacion extends _ctl_base {
 
     public function get_etapa_actual(bool $header, bool $ws = false){
         $pestanas = array("ALTA" => "pestana1", "VALIDACION" => "pestana2", "SOLICITUD DE RECURSO" => "pestana3",
-            "POR FIRMAR" => "pestana4", "FIRMADO POR APROBAR" => "pestana5", "FIRMADO" => "pestana6",
-            "CANCELADO"=> "sin_pestana");
+            "EMISION DE RECURSO"=>"pestana4", "POR FIRMAR" => "pestana5", "FIRMADO POR APROBAR" => "pestana6",
+            "FIRMADO" => "pestana7", "CANCELADO"=> "sin_pestana");
 
         $r_ubicacion = (new inm_ubicacion(link: $this->link))->registro(registro_id: $_POST['id']);
         if (errores::$error) {
@@ -2658,6 +2816,243 @@ class controlador_inm_ubicacion extends _ctl_base {
         return $this->registro_id;
     }
 
+    public function emision_de_recurso_bd(bool $header, bool $ws = false)
+    {
+        $this->link->beginTransaction();
+
+        if(isset($_POST['numero_cheque']) && trim($_POST['numero_cheque']) !== '') {
+            $filtro_che['inm_ubicacion.id'] = $this->registro_id;
+            $filtro_che['inm_tipo_cheque.id'] = 1;
+            $r_cheque = (new inm_cheque(link: $this->link))->filtro_and(filtro: $filtro_che);
+            if (errores::$error) {
+                $this->link->rollBack();
+                return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $r_cheque,
+                    header: $header, ws: $ws);
+            }
+
+            if ($r_cheque->n_registros <= 0) {
+                $registro = array();
+                $registro['inm_ubicacion_id'] = $this->registro_id;
+                $registro['numero_cheque'] = $_POST['numero_cheque'];
+                $registro['monto'] = $_POST['monto'];
+                $registro['nombre_beneficiario'] = $_POST['nombre_beneficiario'];
+                $registro['inm_tipo_cheque_id'] = 1;
+                $r_inm_cheque = (new inm_cheque(link: $this->link))->alta_registro(
+                    registro: $registro);
+                if (errores::$error) {
+                    $this->link->rollBack();
+                    return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_cheque,
+                        header: $header, ws: $ws);
+                }
+            } else {
+                $registro = array();
+                $registro['numero_cheque'] = $_POST['numero_cheque'];
+                $registro['monto'] = $_POST['monto'];
+                $registro['nombre_beneficiario'] = $_POST['nombre_beneficiario'];
+                $registro['inm_tipo_cheque_id'] = 1;
+                $r_inm_cheque = (new inm_cheque(link: $this->link))->modifica_bd(
+                    registro: $registro, id: $r_cheque->registros[0]['inm_cheque_id']);
+                if (errores::$error) {
+                    $this->link->rollBack();
+                    return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_cheque,
+                        header: $header, ws: $ws);
+                }
+            }
+        }
+
+        if(isset($_POST['numero_cheque_comision']) && trim($_POST['numero_cheque_comision']) !== '') {
+            $filtro_che['inm_ubicacion.id'] = $this->registro_id;
+            $filtro_che['inm_tipo_cheque.id'] = 2;
+            $r_cheque = (new inm_cheque(link: $this->link))->filtro_and(filtro: $filtro_che);
+            if (errores::$error) {
+                $this->link->rollBack();
+                return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $r_cheque,
+                    header: $header, ws: $ws);
+            }
+
+            if ($r_cheque->n_registros <= 0) {
+                $registro = array();
+                $registro['inm_ubicacion_id'] = $this->registro_id;
+                $registro['numero_cheque'] = $_POST['numero_cheque_comision'];
+                $registro['monto'] = $_POST['monto_comision'];
+                $registro['nombre_beneficiario'] = $_POST['nombre_beneficiario'];
+                $registro['inm_tipo_cheque_id'] = 2;
+                $r_inm_cheque = (new inm_cheque(link: $this->link))->alta_registro(
+                    registro: $registro);
+                if (errores::$error) {
+                    $this->link->rollBack();
+                    return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_cheque,
+                        header: $header, ws: $ws);
+                }
+            } else {
+                $registro = array();
+                $registro['numero_cheque'] = $_POST['numero_cheque_comision'];
+                $registro['monto'] = $_POST['monto_comision'];
+                $registro['nombre_beneficiario'] = $_POST['nombre_beneficiario'];
+                $registro['inm_tipo_cheque_id'] = 2;
+                $r_inm_cheque = (new inm_cheque(link: $this->link))->modifica_bd(
+                    registro: $registro, id: $r_cheque->registros[0]['inm_cheque_id']);
+                if (errores::$error) {
+                    $this->link->rollBack();
+                    return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_cheque,
+                        header: $header, ws: $ws);
+                }
+            }
+        }
+
+        if(isset($_POST['numero_cheque_secundario']) && trim($_POST['numero_cheque_secundario']) !== '') {
+            $filtro_che['inm_ubicacion.id'] = $this->registro_id;
+            $filtro_che['inm_tipo_cheque.id'] = 3;
+            $r_cheque = (new inm_cheque(link: $this->link))->filtro_and(filtro: $filtro_che);
+            if (errores::$error) {
+                $this->link->rollBack();
+                return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $r_cheque,
+                    header: $header, ws: $ws);
+            }
+
+            if ($r_cheque->n_registros <= 0) {
+                $registro = array();
+                $registro['inm_ubicacion_id'] = $this->registro_id;
+                $registro['numero_cheque'] = $_POST['numero_cheque_secundario'];
+                $registro['monto'] = $_POST['monto_cheque_secundario'];
+                $registro['nombre_beneficiario'] = $_POST['nombre_beneficiario'];
+                $registro['inm_tipo_cheque_id'] = 3;
+                $r_inm_cheque = (new inm_cheque(link: $this->link))->alta_registro(
+                    registro: $registro);
+                if (errores::$error) {
+                    $this->link->rollBack();
+                    return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_cheque,
+                        header: $header, ws: $ws);
+                }
+            } else {
+                $registro = array();
+                $registro['numero_cheque'] = $_POST['numero_cheque_secundario'];
+                $registro['monto'] = $_POST['monto_cheque_secundario'];
+                $registro['nombre_beneficiario'] = $_POST['nombre_beneficiario'];
+                $registro['inm_tipo_cheque_id'] = 3;
+                $r_inm_cheque = (new inm_cheque(link: $this->link))->modifica_bd(
+                    registro: $registro, id: $r_cheque->registros[0]['inm_cheque_id']);
+                if (errores::$error) {
+                    $this->link->rollBack();
+                    return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_cheque,
+                        header: $header, ws: $ws);
+                }
+            }
+        }
+
+        if(isset($_POST['transferencia']) && trim($_POST['transferencia']) !== '') {
+            $filtro_transfe['inm_ubicacion.id'] = $this->registro_id;
+            $r_transferencia = (new inm_transferencia(link: $this->link))->filtro_and(filtro: $filtro_transfe);
+            if (errores::$error) {
+                $this->link->rollBack();
+                return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $r_transferencia,
+                    header: $header, ws: $ws);
+            }
+
+            if ($r_transferencia->n_registros <= 0) {
+                $registro = array();
+                $registro['inm_ubicacion_id'] = $this->registro_id;
+                $registro['transferencia'] = $_POST['transferencia'];
+                $registro['monto'] = $_POST['monto_transferencia'];
+                $registro['nombre_beneficiario'] = $_POST['nombre_beneficiario'];
+                $r_inm_transferencia = (new inm_transferencia(link: $this->link))->alta_registro(
+                    registro: $registro);
+                if (errores::$error) {
+                    $this->link->rollBack();
+                    return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_transferencia,
+                        header: $header, ws: $ws);
+                }
+            } else {
+                $registro = array();
+                $registro['numero_transferencia'] = $_POST['transferencia'];
+                $registro['monto'] = $_POST['monto_transferencia'];
+                $registro['nombre_beneficiario'] = $_POST['nombre_beneficiario'];
+                $r_inm_transferencia = (new inm_transferencia(link: $this->link))->modifica_bd(
+                    registro: $registro, id: $r_transferencia->registros[0]['inm_transferencia_id']);
+                if (errores::$error) {
+                    $this->link->rollBack();
+                    return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_transferencia,
+                        header: $header, ws: $ws);
+                }
+            }
+        }
+
+        if(isset($_POST['efectivo']) && trim($_POST['efectivo']) !== '') {
+            $filtro_efec['inm_ubicacion.id'] = $this->registro_id;
+            $r_efectivo = (new inm_efectivo(link: $this->link))->filtro_and(filtro: $filtro_efec);
+            if (errores::$error) {
+                $this->link->rollBack();
+                return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $r_efectivo,
+                    header: $header, ws: $ws);
+            }
+
+            if ($r_efectivo->n_registros <= 0) {
+                $registro = array();
+                $registro['inm_ubicacion_id'] = $this->registro_id;
+                $registro['monto'] = $_POST['efectivo'];
+                $registro['nombre_beneficiario'] = $_POST['nombre_beneficiario'];
+                $r_inm_efectivo = (new inm_efectivo(link: $this->link))->alta_registro(
+                    registro: $registro);
+                if (errores::$error) {
+                    $this->link->rollBack();
+                    return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_efectivo,
+                        header: $header, ws: $ws);
+                }
+            } else {
+                $registro = array();
+                $registro['monto'] = $_POST['efectivo'];
+                $registro['nombre_beneficiario'] = $_POST['nombre_beneficiario'];
+                $r_inm_efectivo = (new inm_efectivo(link: $this->link))->modifica_bd(
+                    registro: $registro, id: $r_efectivo->registros[0]['inm_efectivo_id']);
+                if (errores::$error) {
+                    $this->link->rollBack();
+                    return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_efectivo,
+                        header: $header, ws: $ws);
+                }
+            }
+        }
+
+        $filtro_exi['inm_ubicacion.id'] = $this->registro_id;
+        $filtro_exi['inm_status_ubicacion.id'] = 3;
+        $existe = (new inm_bitacora_status_ubicacion(link: $this->link))->existe(filtro: $filtro_exi);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $existe,
+                header: $header, ws: $ws);
+        }
+
+        if(!$existe) {
+            $registro = array();
+            $registro['inm_ubicacion_id'] = $this->registro_id;
+            $registro['inm_status_ubicacion_id'] = 3;
+            $registro['fecha_status'] = date('Y-m-d\TH:i:s');
+            $r_inm_bitacora_status_ubicacion = (new inm_bitacora_status_ubicacion(link: $this->link))->alta_registro(
+                registro: $registro);
+            if (errores::$error) {
+                $this->link->rollBack();
+                return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_bitacora_status_ubicacion,
+                    header: $header, ws: $ws);
+            }
+        }
+
+        $this->link->commit();
+
+        $params = array('pestana_general_actual' => 'pestanageneral2');
+        $link_proceso_ubicacion = $this->obj_link->link_con_id(
+            accion: 'proceso_ubicacion', link: $this->link, registro_id: $this->registro_id, seccion: 'inm_ubicacion',
+            params: $params);
+        if (errores::$error) {
+            $this->retorno_error(mensaje: 'Error al generar link', data: $link_proceso_ubicacion, header: $header, ws: $ws);
+        }
+
+        if($header) {
+            header('Location:' . $link_proceso_ubicacion);
+            exit;
+        }
+
+        return $this->registro_id;
+    }
+
 
     public function proceso_ubicacion(bool $header, bool $ws = false): array|stdClass
     {
@@ -2701,6 +3096,12 @@ class controlador_inm_ubicacion extends _ctl_base {
         if(errores::$error){
             return $this->retorno_error(
                 mensaje: 'Error al generar salida de template',data:  $asigna_solicitud_recurso,header: $header,ws: $ws);
+        }
+
+        $asigna_emision_recurso = $this->asigna_emision_de_recurso($header);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al generar salida de template',data:  $asigna_emision_recurso,header: $header,ws: $ws);
         }
 
         $asigna_por_firmar = $this->asigna_por_firmar($header);
