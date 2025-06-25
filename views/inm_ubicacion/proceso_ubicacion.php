@@ -419,6 +419,7 @@
                                         <?php echo $controlador->inputs->documento_poliza_firmada; ?>
                                         <?php echo $controlador->inputs->documento_transferencia; ?>
                                         <?php echo $controlador->inputs->documento_poliza_comision_firmada; ?>
+                                        <?php echo $controlador->inputs->documento_poliza_secundaria_firmada; ?>
 
                                         <div class="control-group btn-alta">
                                             <div class="controls">
@@ -483,6 +484,26 @@
                                         </div>
                                         <div class="col-lg-3">
                                             <?php echo $controlador->button_inm_doc_ubicacion_elimina_bd_firmado_comision; ?>
+                                        </div>
+                                    </div>
+
+                                    <div class="row buttons-form">
+                                        <div class="col-lg-12">
+                                            <label class="label-docs">
+                                                <?php echo $controlador->descripcion_poliza_secundaria_firmada; ?>
+                                            </label>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_ubicacion_descarga_firmado_poliza_secundaria; ?>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_ubicacion_vista_previa_firmado_poliza_secundaria; ?>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_ubicacion_descarga_zip_firmado_poliza_secundaria; ?>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_ubicacion_elimina_bd_firmado_poliza_secundaria; ?>
                                         </div>
                                     </div>
                                 </div>
