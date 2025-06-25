@@ -38,6 +38,13 @@ class _inm_prospecto_ubicacion{
         $params = array('accion_retorno'=>'documentos','seccion_retorno'=>$controler->seccion,
             'id_retorno'=>$inm_prospecto_id);
 
+        if(isset($_GET['pestana_general_actual'])){
+            $params['accion_retorno'] = 'proceso_prospecto_ubicacion';
+
+            $params['pestana_general_actual'] = 'pestanageneral1';
+            $params['pestana_actual'] = 'pestanaubicacion2';
+        }
+
         $css_extra = 'boton-accion';
         $inm_conf_docs_comprador = (new _inm_prospecto_ubicacion())->button(accion: 'elimina_bd', controler: $controler,
             etiqueta: 'Elimina', indice: $indice, inm_doc_prospecto_id: $inm_doc_prospecto['inm_doc_prospecto_ubicacion_id'],
