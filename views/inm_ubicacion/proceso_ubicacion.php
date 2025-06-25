@@ -363,6 +363,7 @@
                                         <?php echo $controlador->inputs->monto_transferencia; ?>
                                         <?php echo $controlador->inputs->numero_cheque_comision; ?>
                                         <?php echo $controlador->inputs->monto_comision; ?>
+                                        <?php echo $controlador->inputs->efectivo; ?>
 
                                         <div class="control-group btn-alta">
                                             <div class="controls">
