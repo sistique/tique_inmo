@@ -701,7 +701,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         }
 
         if($r_inm_doc_ubicacion->n_registros > 0) {
-            $this->descripcion_poliza_secundaria_firmada = 'Comprobante Transferencia';
+            $this->descripcion_poliza_secundaria_firmada = 'Poliza Secundaria';
             $button_inm_doc_ubicacion_descarga = $this->html->button_href(accion: 'descarga', etiqueta: 'Descarga',
                 registro_id: $r_inm_doc_ubicacion->registros[0]['inm_doc_ubicacion_id'],
                 seccion: 'inm_doc_ubicacion', style: 'success');
