@@ -621,7 +621,6 @@ class controlador_inm_ubicacion extends _ctl_base {
         $filtro_che['inm_tipo_cheque.id'] = 1;
         $r_cheque = (new inm_cheque(link: $this->link))->filtro_and(filtro: $filtro_che);
         if (errores::$error) {
-            $this->link->rollBack();
             return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $r_cheque,
                 header: $header, ws: $ws);
         }
@@ -636,7 +635,6 @@ class controlador_inm_ubicacion extends _ctl_base {
         $filtro_che['inm_tipo_cheque.id'] = 2;
         $r_cheque = (new inm_cheque(link: $this->link))->filtro_and(filtro: $filtro_che);
         if (errores::$error) {
-            $this->link->rollBack();
             return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $r_cheque,
                 header: $header, ws: $ws);
         }
@@ -646,10 +644,9 @@ class controlador_inm_ubicacion extends _ctl_base {
             $this->row_upd->monto_comision = $r_cheque->registros[0]['inm_cheque_monto'];
         }
         
-        $filtro_che['inm_ubicacion.id'] = $this->registro_id;
-        $r_transferencia = (new inm_transferencia(link: $this->link))->filtro_and(filtro: $filtro_che);
+        $filtro_transfe['inm_ubicacion.id'] = $this->registro_id;
+        $r_transferencia = (new inm_transferencia(link: $this->link))->filtro_and(filtro: $filtro_transfe);
         if (errores::$error) {
-            $this->link->rollBack();
             return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $r_transferencia,
                 header: $header, ws: $ws);
         }
@@ -683,7 +680,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         }
 
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'monto_transferencia', keys_selects:$keys_selects,
-            place_holder: 'Transferencia');
+            place_holder: 'Monto Transferencia');
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
@@ -843,7 +840,7 @@ class controlador_inm_ubicacion extends _ctl_base {
             'monto_comision','numero_escritura_poder', 'nombre','apellido_paterno','apellido_materno','nss','curp',
             'rfc', 'lada_com', 'numero_com', 'cel_com', 'correo_com', 'razon_social','nivel','recamaras',
             'metros_terreno','metros_construccion','adeudo_hipoteca', 'adeudo_predial','cuenta_agua','adeudo_agua',
-            'adeudo_luz','monto_devolucion');
+            'adeudo_luz','monto_devolucion','transferencia','monto_transferencia');
         $keys->selects = array();
 
 
@@ -2213,8 +2210,8 @@ class controlador_inm_ubicacion extends _ctl_base {
         }
 
         if(isset($_POST['transferencia']) && trim($_POST['transferencia']) !== '') {
-            $filtro_che['inm_ubicacion.id'] = $this->registro_id;
-            $r_transferencia = (new inm_transferencia(link: $this->link))->filtro_and(filtro: $filtro_che);
+            $filtro_transfe['inm_ubicacion.id'] = $this->registro_id;
+            $r_transferencia = (new inm_transferencia(link: $this->link))->filtro_and(filtro: $filtro_transfe);
             if (errores::$error) {
                 $this->link->rollBack();
                 return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $r_transferencia,
