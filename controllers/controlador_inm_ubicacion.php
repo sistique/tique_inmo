@@ -79,6 +79,13 @@ class controlador_inm_ubicacion extends _ctl_base {
     public string $button_inm_doc_ubicacion_elimina_bd_firmado_comision = '';
 
 
+    public string $descripcion_comprobante_transferencia_firmada = '';
+    public string $button_inm_doc_ubicacion_descarga_transferencia_firmada = '';
+    public string $button_inm_doc_ubicacion_descarga_zip_transferencia_firmada= '';
+    public string $button_inm_doc_ubicacion_vista_previa_transferencia_firmada = '';
+    public string $button_inm_doc_ubicacion_elimina_bd_transferencia_firmada = '';
+
+
     public string $link_fotografia_bd = '';
     public string $link_documento_bd = '';
     public array $imp_compradores = array();
@@ -458,7 +465,16 @@ class controlador_inm_ubicacion extends _ctl_base {
                 mensaje: 'Error al obtener inputs', data: $documento_poliza_firmada, header: $header, ws: $ws);
         }
 
-        $this->inputs->documento_poliza_firmada = $documento_poliza_firmada;
+        $this->inputs->documento_poliza_firmada = $documento_poliza_firmada;  
+        
+        $documento_transferencia = $this->html->input_file(cols: 12, name: 'transferencia', row_upd: new stdClass(),
+            value_vacio: false, place_holder: 'Comprobante Transferencia',required: false);
+        if (errores::$error) {
+            return $this->retorno_error(
+                mensaje: 'Error al obtener inputs', data: $documento_transferencia, header: $header, ws: $ws);
+        }
+
+        $this->inputs->documento_transferencia = $documento_transferencia;
 
         $documento_poliza_comision_firmada = $this->html->input_file(cols: 12, name: 'poliza_comision_firmada', row_upd: new stdClass(),
             value_vacio: false, place_holder: 'Poliza Comision Firmada',required: false);
@@ -604,6 +620,60 @@ class controlador_inm_ubicacion extends _ctl_base {
             }
 
             $this->button_inm_doc_ubicacion_elimina_bd_firmado_comision = $button_inm_doc_ubicacion_elimina_bd;
+        }
+
+        $filtro_inm_doc['inm_ubicacion.id'] = $this->registro_id;
+        $filtro_inm_doc['doc_tipo_documento.id'] = 49;
+        $r_inm_doc_ubicacion = (new inm_doc_ubicacion(link: $this->link))->filtro_and(filtro: $filtro_inm_doc);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al integrar doc',data:  $r_inm_doc_ubicacion,
+                header: $header,ws:  $ws);
+        }
+
+        if($r_inm_doc_ubicacion->n_registros > 0) {
+            $this->descripcion_comprobante_transferencia_firmada = 'Comprobante Transferencia';
+            $button_inm_doc_ubicacion_descarga = $this->html->button_href(accion: 'descarga', etiqueta: 'Descarga',
+                registro_id: $r_inm_doc_ubicacion->registros[0]['inm_doc_ubicacion_id'],
+                seccion: 'inm_doc_ubicacion', style: 'success');
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al integrar button',
+                    data: $button_inm_doc_ubicacion_descarga, header: $header, ws: $ws);
+            }
+
+            $this->button_inm_doc_ubicacion_descarga_transferencia_firmada = $button_inm_doc_ubicacion_descarga;
+
+            $button_inm_doc_ubicacion_vista_previa = $this->html->button_href(accion: 'vista_previa',
+                etiqueta: 'Vista Previa', registro_id: $r_inm_doc_ubicacion->registros[0]['inm_doc_ubicacion_id'],
+                seccion: 'inm_doc_ubicacion', style: 'success');
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al integrar button',
+                    data: $button_inm_doc_ubicacion_vista_previa, header: $header, ws: $ws);
+            }
+
+            $this->button_inm_doc_ubicacion_vista_previa_transferencia_firmada = $button_inm_doc_ubicacion_vista_previa;
+
+            $button_inm_doc_ubicacion_descarga_zip = $this->html->button_href(accion: 'descarga_zip',
+                etiqueta: 'Descarga ZIP', registro_id: $r_inm_doc_ubicacion->registros[0]['inm_doc_ubicacion_id'],
+                seccion: 'inm_doc_ubicacion', style: 'success');
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al integrar button',
+                    data: $button_inm_doc_ubicacion_descarga_zip, header: $header, ws: $ws);
+            }
+
+            $this->button_inm_doc_ubicacion_descarga_zip_transferencia_firmada = $button_inm_doc_ubicacion_descarga_zip;
+
+            $params = array('accion_retorno'=>'proceso_ubicacion','seccion_retorno'=>'inm_ubicacion',
+                'id_retorno'=>$this->registro_id,'pestana_general_actual' => 'pestanageneral2',
+                'pestana_actual' => 'pestana6');
+            $button_inm_doc_ubicacion_elimina_bd = $this->html->button_href(accion: 'elimina_bd',
+                etiqueta: 'Elimina', registro_id: $r_inm_doc_ubicacion->registros[0]['inm_doc_ubicacion_id'],
+                seccion: 'inm_doc_ubicacion', style: 'danger',params: $params);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al integrar button', data: $button_inm_doc_ubicacion_elimina_bd,
+                    header: $header, ws: $ws);
+            }
+
+            $this->button_inm_doc_ubicacion_elimina_bd_transferencia_firmada = $button_inm_doc_ubicacion_elimina_bd;
         }
         return $base;
     }
@@ -1325,6 +1395,29 @@ class controlador_inm_ubicacion extends _ctl_base {
             }
         }
 
+        $filtro_doc['inm_ubicacion.id'] = $this->registro_id;
+        $filtro_doc['doc_tipo_documento.id'] = 49;
+        $existe = (new inm_doc_ubicacion(link: $this->link))->existe(filtro: $filtro_doc);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $existe,
+                header: $header, ws: $ws);
+        }
+
+        if(!$existe) {
+            if(trim($_FILES['transferencia']['name']) !== '') {
+                $_FILES['documento'] = $_FILES['transferencia'];
+                $registro = array();
+                $registro['inm_ubicacion_id'] = $this->registro_id;
+                $registro['doc_tipo_documento_id'] = 49;
+                $r_inm_doc_ubicacion = (new inm_doc_ubicacion(link: $this->link))->alta_registro(registro: $registro);
+                if (errores::$error) {
+                    $this->link->rollBack();
+                    return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_doc_ubicacion,
+                        header: $header, ws: $ws);
+                }
+            }
+        }
 
         $this->link->commit();
 
