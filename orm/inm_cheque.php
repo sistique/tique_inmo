@@ -61,8 +61,8 @@ class inm_cheque extends _modelo_parent{
         }
 
         $registro = array();
-        $registro['inm_costo_id'] = $r_inm_costo['registro_id'];
-        $registro['inm_cheque_id'] = $r_alta_bd['registro_id'];
+        $registro['inm_costo_id'] = $r_inm_costo->registro_id;
+        $registro['inm_cheque_id'] = $r_alta_bd->registro_id;
         $r_rel_costo_cheque = (new inm_rel_costo_cheque(link: $this->link))->alta_registro(registro: $registro);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al insertar prospecto',data:  $r_rel_costo_cheque);
@@ -105,10 +105,26 @@ class inm_cheque extends _modelo_parent{
             $registro_che['monto'] = $registro['monto'];
             $registro_che['fecha'] = date('Y-m-d');
             $registro_che['referencia'] = $registro['nombre_beneficiario'];
+
+            if($registro['inm_tipo_cheque_id'] === 1){
+                $registro_che['inm_concepto_id'] = 19;
+            }else if($registro['inm_tipo_cheque_id'] === 2){
+                $registro_che['inm_concepto_id'] = 36;
+            }
+
             $r_inm_costo = (new inm_costo(link: $this->link))->alta_registro(registro: $registro_che);
             if (errores::$error) {
                 return $this->error->error(mensaje: 'Error al insertar prospecto',data:  $r_inm_costo);
             }
+
+            $registro = array();
+            $registro['inm_costo_id'] = $r_inm_costo->registro_id;
+            $registro['inm_cheque_id'] = $id;
+            $r_rel_costo_cheque = (new inm_rel_costo_cheque(link: $this->link))->alta_registro(registro: $registro);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al insertar prospecto',data:  $r_rel_costo_cheque);
+            }
+
         }
 
         return $r_modifica_bd;

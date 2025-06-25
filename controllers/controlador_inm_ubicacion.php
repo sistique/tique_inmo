@@ -2366,6 +2366,7 @@ class controlador_inm_ubicacion extends _ctl_base {
                 $registro['numero_cheque'] = $_POST['numero_cheque'];
                 $registro['monto'] = $_POST['monto'];
                 $registro['nombre_beneficiario'] = $_POST['nombre_beneficiario'];
+                $registro['inm_tipo_cheque_id'] = 1;
                 $r_inm_cheque = (new inm_cheque(link: $this->link))->modifica_bd(
                     registro: $registro, id: $r_cheque->registros[0]['inm_cheque_id']);
                 if (errores::$error) {
@@ -2405,6 +2406,7 @@ class controlador_inm_ubicacion extends _ctl_base {
                 $registro['numero_cheque'] = $_POST['numero_cheque_comision'];
                 $registro['monto'] = $_POST['monto_comision'];
                 $registro['nombre_beneficiario'] = $_POST['nombre_beneficiario'];
+                $registro['inm_tipo_cheque_id'] = 2;
                 $r_inm_cheque = (new inm_cheque(link: $this->link))->modifica_bd(
                     registro: $registro, id: $r_cheque->registros[0]['inm_cheque_id']);
                 if (errores::$error) {

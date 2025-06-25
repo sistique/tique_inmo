@@ -57,9 +57,16 @@ class inm_costo extends _modelo_parent{
         }
 
 
-        $registro = $this->integra_codigo(registro: $this->registro);
+        if (!isset($this->registro['descripcion'])) {
+            $descripcion = $this->registro['inm_ubicacion_id'];
+            $descripcion .= ' ' . $this->registro['inm_concepto_id'];
+            $descripcion .= ' ' . $this->registro['fecha'];
+            $this->registro['descripcion'] = $descripcion;
+        }
+
+        $this->registro = $this->integra_codigo(registro: $this->registro);
         if(errores::$error){
-            return $this->error->error(mensaje: 'Error al integrar codigo',data:  $registro);
+            return $this->error->error(mensaje: 'Error al integrar codigo',data:  $this->registro);
         }
 
 
@@ -174,8 +181,9 @@ class inm_costo extends _modelo_parent{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al regenerar opinion de valor', data: $regenera);
         }
-
-        $registro_upd = $this->integra_codigo(registro: $r_modifica_bd->registro_puro);
+        
+        $registro_puro = (array)$r_modifica_bd->registro_puro;
+        $registro_upd = $this->integra_codigo(registro: $registro_puro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar codigo',data:  $registro);
         }
