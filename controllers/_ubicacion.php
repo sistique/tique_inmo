@@ -166,6 +166,11 @@ class _ubicacion{
         }
         $data_row->inm_tipo_ubicacion_id = $inm_tipo_ubicacion_id;
 
+        $inm_attr_tipo_credito_id = $modelo_preferido->id_preferido_detalle(entidad_preferida: 'inm_attr_tipo_credito');
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener inm_attr_tipo_credito_id', data:  $inm_attr_tipo_credito_id);
+        }
+        $data_row->inm_attr_tipo_credito_id = $inm_attr_tipo_credito_id;
         return $data_row;
     }
 
