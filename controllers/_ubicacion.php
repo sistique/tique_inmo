@@ -471,10 +471,12 @@ class _ubicacion{
         }
 
         $columns_ds = array('com_agente_descripcion');
-        $filtro = array();
-        $filtro['com_tipo_agente.descripcion'] = 'COMPRADOR';
-        $keys_selects = $controler->key_select(cols:12, con_registros: true,filtro: $filtro, key: 'com_agente_id',
-            keys_selects: $keys_selects, id_selected: $data_row->com_agente_id, label: 'Agente', columns_ds : $columns_ds);
+        $tipo_agente = array('COMPRADOR','PREDETERMINADO');
+        $in['llave'] = 'com_tipo_agente.descripcion';
+        $in['values'] = $tipo_agente;
+        $keys_selects = $controler->key_select(cols:12, con_registros: true,filtro: array(), key: 'com_agente_id',
+            keys_selects: $keys_selects, id_selected: $data_row->com_agente_id, label: 'Agente',
+            columns_ds : $columns_ds,in: $in);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
