@@ -23,14 +23,13 @@ class inm_comprador extends _modelo_parent{
             'dp_cp'=>'dp_colonia_postal','dp_colonia'=>'dp_colonia_postal','dp_municipio'=>'dp_cp',
             'dp_estado'=>'dp_municipio','dp_pais'=>'dp_estado');
 
-        $campos_obligatorios = array('apellido_paterno','bn_cuenta_id','cel_com','correo_com','curp',
-            'descuento_pension_alimenticia_dh', 'descuento_pension_alimenticia_fc', 'es_segundo_credito',
-            'inm_attr_tipo_credito_id', 'inm_destino_credito_id','inm_estado_civil_id','inm_persona_discapacidad_id',
-            'inm_producto_infonavit_id', 'inm_plazo_credito_sc_id', 'inm_tipo_discapacidad_id','lada_com','lada_nep',
-            'monto_ahorro_voluntario', 'monto_credito_solicitado_dh','nombre','nombre_empresa_patron', 'nrp_nep',
-            'numero_com','numero_nep','inm_institucion_hipotecaria_id','inm_sindicato_id','dp_municipio_nacimiento_id',
-            'fecha_nacimiento','monto_final','sub_cuenta','descuento','puntos','inm_nacionalidad_id',
-            'inm_ocupacion_id','telefono_casa','correo_empresa');
+        $campos_obligatorios = array('apellido_paterno','bn_cuenta_id','curp', 'descuento_pension_alimenticia_dh',
+            'descuento_pension_alimenticia_fc', 'es_segundo_credito', 'inm_attr_tipo_credito_id',
+            'inm_destino_credito_id','inm_estado_civil_id','inm_persona_discapacidad_id', 'inm_producto_infonavit_id',
+            'inm_plazo_credito_sc_id', 'inm_tipo_discapacidad_id', 'monto_ahorro_voluntario',
+            'monto_credito_solicitado_dh','nombre','inm_institucion_hipotecaria_id','inm_sindicato_id',
+            'dp_municipio_nacimiento_id', 'fecha_nacimiento','monto_final','sub_cuenta','descuento','puntos',
+            'inm_nacionalidad_id', 'inm_ocupacion_id','telefono_casa');
 
         $renombres['dp_cp_empresa']['nombre_original']= 'dp_cp';
         $renombres['dp_cp_empresa']['enlace']= 'dp_colonia_postal';
@@ -58,7 +57,7 @@ class inm_comprador extends _modelo_parent{
             'descuento_pension_alimenticia_dh', 'descuento_pension_alimenticia_fc','es_segundo_credito',
             'extension_nep','genero', 'inm_attr_tipo_credito_id', 'inm_destino_credito_id','inm_estado_civil_id',
             'inm_persona_discapacidad_id', 'inm_plazo_credito_sc_id', 'inm_producto_infonavit_id',
-            'inm_tipo_discapacidad_id','lada_com','lada_nep', 'monto_ahorro_voluntario', 'monto_credito_solicitado_dh',
+            'inm_tipo_discapacidad_id','lada_com', 'monto_ahorro_voluntario', 'monto_credito_solicitado_dh',
             'nombre', 'nombre_empresa_patron', 'nrp_nep','numero_com','numero_nep','inm_institucion_hipotecaria_id',
             'inm_sindicato_id','dp_municipio_nacimiento_id','fecha_nacimiento','monto_final','sub_cuenta','descuento',
             'puntos','inm_nacionalidad_id','inm_ocupacion_id','telefono_casa','correo_empresa');

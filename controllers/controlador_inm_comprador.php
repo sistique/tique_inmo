@@ -2605,7 +2605,7 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         $keys_selects = (new init())->key_select_txt(cols: 12,key: 'telefono_casa',
-            keys_selects:$keys_selects, place_holder: 'Telefono de Casa');
+            keys_selects:$keys_selects, place_holder: 'Telefono de Casa', required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }

@@ -622,20 +622,31 @@ class _alta_comprador{
      */
     private function valida_base_comprador(array $registro): bool|array
     {
-        $keys = array('lada_nep','numero_nep','lada_com','numero_com');
-        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $registro);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
-        }
+        if(((isset($registro['lada_nep']) && trim($registro['lada_nep']) !== '') &&
+                (isset($registro['numero_nep']) && trim($registro['numero_nep']) !== '')) ||
+            ((isset($registro['lada_com']) && trim($registro['lada_com']) !== '') &&
+                (isset($registro['numero_com']) && trim($registro['numero_com']) !== ''))) {
+            $keys = array('lada_nep', 'numero_nep', 'lada_com', 'numero_com');
+            $valida = $this->validacion->valida_existencia_keys(keys: $keys, registro: $registro);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al validar registro', data: $valida);
+            }
 
-        $numero_completo_nep = $this->numero_completo_nep(registro: $registro);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al validar numero_completo_nep',data:  $numero_completo_nep);
-        }
+            if (((isset($registro['lada_nep']) && trim($registro['lada_nep']) !== '') &&
+                (isset($registro['numero_nep']) && trim($registro['numero_nep']) !== ''))) {
+                $numero_completo_nep = $this->numero_completo_nep(registro: $registro);
+                if (errores::$error) {
+                    return $this->error->error(mensaje: 'Error al validar numero_completo_nep', data: $numero_completo_nep);
+                }
+            }
 
-        $numero_completo_com = $this->numero_completo_com(registro: $registro);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al validar numero_completo_com',data:  $numero_completo_com);
+            if (((isset($registro['lada_com']) && trim($registro['lada_com']) !== '') &&
+                (isset($registro['numero_com']) && trim($registro['numero_com']) !== ''))) {
+                $numero_completo_com = $this->numero_completo_com(registro: $registro);
+                if (errores::$error) {
+                    return $this->error->error(mensaje: 'Error al validar numero_completo_com', data: $numero_completo_com);
+                }
+            }
         }
 
         $valida = $this->validacion->valida_rfc(key: 'rfc',registro:  $registro);
