@@ -7,6 +7,7 @@ use gamboamartin\comercial\models\com_agente;
 use gamboamartin\comercial\models\com_tipo_prospecto;
 use gamboamartin\direccion_postal\models\dp_calle_pertenece;
 use gamboamartin\direccion_postal\models\dp_colonia_postal;
+use gamboamartin\direccion_postal\models\dp_municipio;
 use gamboamartin\errores\errores;
 use gamboamartin\proceso\models\pr_proceso;
 use PDO;
@@ -444,6 +445,37 @@ class inm_ubicacion extends _inm_ubicaciones {
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar conyuge',data:  $valida);
         }
+
+        if(!isset($conyuge['dp_municipio_id'])){
+            $filtro_tipo_prosp['dp_municipio.predeterminado'] = 'activo';
+            $r_municipio = (new dp_municipio(link: $this->link))->filtro_and(filtro:$filtro_tipo_prosp);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al maquetar row',data:  $r_municipio);
+            }
+
+            $conyuge['dp_municipio_id'] = $r_municipio->registros[0]['dp_municipio_id'];
+        }
+
+        if(!isset($conyuge['inm_nacionalidad_id'])){
+            $filtro_tipo_prosp['inm_nacionalidad.predeterminado'] = 'activo';
+            $r_nacionalidad = (new inm_nacionalidad(link: $this->link))->filtro_and(filtro:$filtro_tipo_prosp);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al maquetar row',data:  $r_nacionalidad);
+            }
+
+            $conyuge['inm_nacionalidad_id'] = $r_nacionalidad->registros[0]['inm_nacionalidad_id'];
+        }
+
+        if(!isset($conyuge['inm_ocupacion_id'])){
+            $filtro_tipo_prosp['inm_ocupacion.predeterminado'] = 'activo';
+            $r_ocupacion = (new inm_ocupacion(link: $this->link))->filtro_and(filtro:$filtro_tipo_prosp);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al maquetar row',data:  $r_ocupacion);
+            }
+
+            $conyuge['inm_ocupacion_id'] = $r_ocupacion->registros[0]['inm_ocupacion_id'];
+        }
+        
         $keys = array('dp_municipio_id','inm_nacionalidad_id', 'inm_ocupacion_id');
         $valida = $this->validacion->valida_ids(keys: $keys,registro:  $conyuge);
         if(errores::$error){
