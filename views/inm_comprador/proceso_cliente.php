@@ -860,6 +860,7 @@
                                         <?php echo $controlador->inputs->metros_construidos; ?>
                                         <?php echo $controlador->inputs->valor_avaluo; ?>
                                         <?php echo $controlador->inputs->avaluo; ?>
+                                        <?php echo $controlador->inputs->documento_poder; ?>
 
                                         <?php echo $controlador->inputs->seccion_retorno; ?>
                                         <?php echo $controlador->inputs->btn_action_next; ?>
@@ -868,6 +869,11 @@
                                         <?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
                                     </form>
                                     <div class="row buttons-form">
+                                        <div class="col-lg-12">
+                                            <label class="label-docs">
+                                                <?php echo $controlador->descripcion_doc_comprador; ?>
+                                            </label>
+                                        </div>
                                         <div class="col-lg-3">
                                             <?php echo $controlador->button_inm_doc_comprador_descarga; ?>
                                         </div>
@@ -879,6 +885,23 @@
                                         </div>
                                         <div class="col-lg-3">
                                             <?php echo $controlador->button_inm_doc_comprador_elimina_bd; ?>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <label class="label-docs">
+                                                <?php echo $controlador->descripcion_doc_ubicacion_escritura; ?>
+                                            </label>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_ubicacion_escritura_descarga; ?>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_ubicacion_escritura_vista_previa; ?>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_ubicacion_escritura_descarga_zip; ?>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_ubicacion_escritura_elimina_bd; ?>
                                         </div>
                                     </div>
                                 </div>

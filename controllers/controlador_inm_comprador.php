@@ -24,6 +24,7 @@ use gamboamartin\inmuebles\models\inm_bitacora_status_comprador;
 use gamboamartin\inmuebles\models\inm_comprador;
 use gamboamartin\inmuebles\models\inm_conf_docs_comprador;
 use gamboamartin\inmuebles\models\inm_doc_comprador;
+use gamboamartin\inmuebles\models\inm_doc_ubicacion;
 use gamboamartin\inmuebles\models\inm_escritura;
 use gamboamartin\inmuebles\models\inm_firma;
 use gamboamartin\inmuebles\models\inm_referencia;
@@ -77,10 +78,17 @@ class controlador_inm_comprador extends _ctl_base {
     public string $link_asigna_nuevo_co_acreditado_bd = '';
     
     /* DOCUMENTO AVALUO */
+    public string $descripcion_doc_comprador = '';
     public string $button_inm_doc_comprador_descarga = '';
     public string $button_inm_doc_comprador_descarga_zip = '';
     public string $button_inm_doc_comprador_vista_previa = '';
     public string $button_inm_doc_comprador_elimina_bd = '';
+
+    public string $descripcion_doc_ubicacion_escritura = '';
+    public string $button_inm_doc_ubicacion_escritura_descarga = '';
+    public string $button_inm_doc_ubicacion_escritura_descarga_zip = '';
+    public string $button_inm_doc_ubicacion_escritura_vista_previa = '';
+    public string $button_inm_doc_ubicacion_escritura_elimina_bd = '';
 
     /* DOCUMENTO AUTORIZADO */
     public string $descripcion_sic = '';
@@ -1605,6 +1613,15 @@ class controlador_inm_comprador extends _ctl_base {
         }
         $this->inputs->avaluo = $documento;
 
+        $documento_poder = $this->html->input_file(cols: 12, name: 'poder', row_upd: new stdClass(), value_vacio: false,
+            place_holder: 'Poder',required: false);
+        if (errores::$error) {
+            return $this->retorno_error(
+                mensaje: 'Error al obtener inputs', data: $documento_poder, header: $header, ws: $ws);
+        }
+
+        $this->inputs->documento_poder = $documento_poder;
+
         $columns_ds = array('com_cliente_rfc','com_cliente_razon_social');
         $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'com_cliente_id',
             keys_selects:$keys_selects, id_selected: $registro->registros[0]['com_cliente_id'], label: 'Cliente',
@@ -1652,6 +1669,72 @@ class controlador_inm_comprador extends _ctl_base {
         }
         $this->link_inm_avaluo_alta_bd = $link_inm_avaluo_alta_bd;
 
+        $filtro_rel_ubi['inm_rel_ubi_comp.status'] = 'activo';
+        $filtro_rel_ubi['inm_comprador.id'] = $this->registro['inm_comprador_id'];
+        $r_inm_rel_ubi_comp = (new inm_rel_ubi_comp(link: $this->link))->filtro_and(filtro: $filtro_rel_ubi);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al generar link',data:  $r_inm_rel_ubi_comp,
+                header: $header,ws:  $ws);        }
+
+        if($r_inm_rel_ubi_comp->n_registros <= 0){
+            return $this->retorno_error(mensaje: 'Error al generar link',data:  $r_inm_rel_ubi_comp,
+                header: $header,ws:  $ws);        }
+
+        $filtro_doc['inm_ubicacion.id'] = $r_inm_rel_ubi_comp->registros[0]['inm_ubicacion_id'];
+        $filtro_doc['doc_tipo_documento.id'] = 35;
+        $r_inm_doc_ubicacion_reg = (new inm_doc_ubicacion(link: $this->link))->filtro_and(filtro: $filtro_doc);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al generar link',data:  $r_inm_doc_ubicacion_reg,
+                header: $header,ws:  $ws);
+        }
+
+        if($r_inm_doc_ubicacion_reg->n_registros > 0) {
+            $this->descripcion_doc_ubicacion_escritura = "Escritura Poder";
+
+            $button_inm_doc_ubicacion_escritura_descarga = $this->html->button_href(accion: 'descarga',
+                etiqueta: 'Descarga', registro_id: $r_inm_doc_ubicacion_reg->registros[0]['inm_doc_ubicacion_id'],
+                seccion: 'inm_doc_ubicacion_escritura', style: 'success');
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al integrar button',
+                    data: $button_inm_doc_ubicacion_escritura_descarga, header: $header, ws: $ws);
+            }
+
+            $this->button_inm_doc_ubicacion_escritura_descarga = $button_inm_doc_ubicacion_escritura_descarga;
+
+            $button_inm_doc_ubicacion_escritura_vista_previa = $this->html->button_href(accion: 'vista_previa',
+                etiqueta: 'Vista Previa', registro_id: $r_inm_doc_ubicacion_reg->registros[0]['inm_doc_ubicacion_id'],
+                seccion: 'inm_doc_ubicacion_escritura', style: 'success');
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al integrar button',
+                    data: $button_inm_doc_ubicacion_escritura_vista_previa, header: $header, ws: $ws);
+            }
+
+            $this->button_inm_doc_ubicacion_escritura_vista_previa = $button_inm_doc_ubicacion_escritura_vista_previa;
+
+            $button_inm_doc_ubicacion_escritura_descarga_zip = $this->html->button_href(accion: 'descarga_zip',
+                etiqueta: 'Descarga ZIP', registro_id: $r_inm_doc_ubicacion_reg->registros[0]['inm_doc_ubicacion_id'],
+                seccion: 'inm_doc_ubicacion_escritura', style: 'success');
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al integrar button',
+                    data: $button_inm_doc_ubicacion_escritura_descarga_zip, header: $header, ws: $ws);
+            }
+
+            $this->button_inm_doc_ubicacion_escritura_descarga_zip = $button_inm_doc_ubicacion_escritura_descarga_zip;
+
+            $params = array('accion_retorno'=>'proceso_cliente','seccion_retorno'=>'inm_comprador',
+                'id_retorno'=>$this->registro_id, 'pestana_general_actual' => 'pestanageneral2',
+                'pestana_actual' => 'pestana4');
+            $button_inm_doc_ubicacion_escritura_elimina_bd = $this->html->button_href(accion: 'elimina_bd',
+                etiqueta: 'Elimina', registro_id: $r_inm_doc_ubicacion_reg->registros[0]['inm_doc_ubicacion_id'],
+                seccion: 'inm_doc_ubicacion_escritura', style: 'danger',params: $params);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al integrar button',
+                    data: $button_inm_doc_ubicacion_escritura_elimina_bd, header: $header, ws: $ws);
+            }
+
+            $this->button_inm_doc_ubicacion_escritura_elimina_bd = $button_inm_doc_ubicacion_escritura_elimina_bd;
+        }
+
         $filtro_inm_doc['inm_comprador.id'] = $this->registro_id;
         $filtro_inm_doc['doc_tipo_documento.id'] = 38;
         $r_inm_doc_comprador = (new inm_doc_comprador(link: $this->link))->filtro_and(filtro: $filtro_inm_doc);
@@ -1661,6 +1744,8 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         if($r_inm_doc_comprador->n_registros > 0) {
+            $this->descripcion_doc_comprador = "Avaluo";
+
             $button_inm_doc_comprador_descarga = $this->html->button_href(accion: 'descarga', etiqueta: 'Descarga',
                 registro_id: $r_inm_doc_comprador->registros[0]['inm_doc_comprador_id'],
                 seccion: 'inm_doc_comprador', style: 'success');
