@@ -64,7 +64,7 @@
 
                         <?php echo $controlador->header_frontend->apartado_4; ?>
                         <div id="apartado_4">
-                            <?php echo $controlador->inputs->inm_attr_tipo_credito_id; ?>
+                            <?php echo $controlador->inputs->inm_tipo_credito_id; ?>
                             <?php echo $controlador->inputs->numero_credito; ?>
                             <?php echo $controlador->inputs->correo_mi_cuenta_infonavit; ?>
                             <?php echo $controlador->inputs->password_mi_cuenta_infonavit; ?>

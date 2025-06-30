@@ -166,11 +166,11 @@ class _ubicacion{
         }
         $data_row->inm_tipo_ubicacion_id = $inm_tipo_ubicacion_id;
 
-        $inm_attr_tipo_credito_id = $modelo_preferido->id_preferido_detalle(entidad_preferida: 'inm_attr_tipo_credito');
+        $inm_tipo_credito_id = $modelo_preferido->id_preferido_detalle(entidad_preferida: 'inm_tipo_credito');
         if(errores::$error){
-            return $this->error->error(mensaje: 'Error al obtener inm_attr_tipo_credito_id', data:  $inm_attr_tipo_credito_id);
+            return $this->error->error(mensaje: 'Error al obtener inm_tipo_credito_id', data:  $inm_tipo_credito_id);
         }
-        $data_row->inm_attr_tipo_credito_id = $inm_attr_tipo_credito_id;
+        $data_row->inm_tipo_credito_id = $inm_tipo_credito_id;
         return $data_row;
     }
 
@@ -507,14 +507,14 @@ class _ubicacion{
         }
         $keys_selects['inm_complemento_id']->required = false;
 
-        $columns_ds = array('inm_attr_tipo_credito_descripcion');
+        $columns_ds = array('inm_tipo_credito_descripcion');
         $keys_selects = $controler->key_select(cols: 6, con_registros: true,filtro:  array(),
-            key: 'inm_attr_tipo_credito_id', keys_selects: $keys_selects,
-            id_selected: $data_row->inm_attr_tipo_credito_id, label: 'Tipo Credito', columns_ds : $columns_ds);
+            key: 'inm_tipo_credito_id', keys_selects: $keys_selects,
+            id_selected: $data_row->inm_tipo_credito_id, label: 'Tipo Credito', columns_ds : $columns_ds);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
-        $keys_selects['inm_attr_tipo_credito_id']->required = false;
+        $keys_selects['inm_tipo_credito_id']->required = false;
 
         foreach ($disableds as $campo_id){
             $keys_selects[$campo_id]->disabled = true;

@@ -1216,7 +1216,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         $init_data['inm_estado_vivienda'] = "gamboamartin\\inmuebles";
         $init_data['inm_prototipo'] = "gamboamartin\\inmuebles";
         $init_data['inm_complemento'] = "gamboamartin\\inmuebles";
-        $init_data['inm_attr_tipo_credito'] = "gamboamartin\\inmuebles";
+        $init_data['inm_tipo_credito'] = "gamboamartin\\inmuebles";
 
         $campos_view = $this->campos_view_base(init_data: $init_data,keys:  $keys);
 
