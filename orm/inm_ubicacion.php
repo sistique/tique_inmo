@@ -439,8 +439,7 @@ class inm_ubicacion extends _inm_ubicaciones {
 
     private function inserta_conyuge(array $conyuge, int $inm_ubicacion_id, PDO $link): array|stdClass
     {
-        $keys = array('nombre','apellido_paterno','curp','rfc','dp_municipio_id','inm_nacionalidad_id',
-            'inm_ocupacion_id','telefono_casa','telefono_celular','fecha_nacimiento');
+        $keys = array('nombre','apellido_paterno');
         $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $conyuge);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar conyuge',data:  $valida);

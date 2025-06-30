@@ -3,6 +3,8 @@
 namespace gamboamartin\inmuebles\models;
 
 use base\orm\_modelo_parent;
+use gamboamartin\comercial\models\com_agente;
+use gamboamartin\direccion_postal\models\dp_municipio;
 use gamboamartin\errores\errores;
 use PDO;
 use stdClass;
@@ -14,8 +16,7 @@ class inm_conyuge extends _modelo_parent{
         $tabla = 'inm_conyuge';
         $columnas = array($tabla=>false,'inm_ocupacion'=>$tabla,'inm_nacionalidad'=>$tabla,'dp_municipio'=>$tabla,
             'dp_estado'=>'dp_municipio');
-        $campos_obligatorios = array('nombre','apellido_paterno','dp_municipio_id','inm_nacionalidad_id','curp','rfc',
-            'inm_ocupacion_id','telefono_casa','telefono_celular','fecha_nacimiento');
+        $campos_obligatorios = array('nombre','apellido_paterno');
         $atributos_criticos = array('nombre','apellido_paterno','dp_municipio_id','inm_nacionalidad_id','curp','rfc',
             'inm_ocupacion_id','telefono_casa','telefono_celular','fecha_nacimiento');
         $columnas_extra= array();
@@ -46,6 +47,36 @@ class inm_conyuge extends _modelo_parent{
         $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $this->registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
+        }
+
+        if(!isset($this->registro['dp_municipio_id'])){
+            $filtro_tipo_prosp['dp_municipio.predeterminado'] = 'activo';
+            $r_municipio = (new dp_municipio(link: $this->link))->filtro_and(filtro:$filtro_tipo_prosp);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al maquetar row',data:  $r_municipio);
+            }
+
+            $this->registro['dp_municipio_id'] = $r_municipio->registros[0]['dp_municipio_id'];
+        }
+
+        if(!isset($this->registro['inm_nacionalidad_id'])){
+            $filtro_tipo_prosp['inm_nacionalidad.predeterminado'] = 'activo';
+            $r_nacionalidad = (new inm_nacionalidad(link: $this->link))->filtro_and(filtro:$filtro_tipo_prosp);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al maquetar row',data:  $r_nacionalidad);
+            }
+
+            $this->registro['inm_nacionalidad_id'] = $r_nacionalidad->registros[0]['inm_nacionalidad_id'];
+        }
+
+        if(!isset($this->registro['inm_ocupacion_id'])){
+            $filtro_tipo_prosp['inm_ocupacion.predeterminado'] = 'activo';
+            $r_ocupacion = (new inm_ocupacion(link: $this->link))->filtro_and(filtro:$filtro_tipo_prosp);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al maquetar row',data:  $r_ocupacion);
+            }
+
+            $this->registro['inm_ocupacion_id'] = $r_ocupacion->registros[0]['inm_ocupacion_id'];
         }
 
         $keys = array('dp_municipio_id','inm_nacionalidad_id', 'inm_ocupacion_id');

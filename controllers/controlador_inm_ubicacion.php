@@ -2211,7 +2211,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         return $datatables;
     }
 
-    public function inputs_conyuge(bool $header, bool $ws = false, controlador_inm_ubicacion $controler){
+    public function inputs_conyuge(bool $header, controlador_inm_ubicacion $controler, bool $ws = false){
 
         $conyuge = new stdClass();
 
@@ -2443,7 +2443,7 @@ class controlador_inm_ubicacion extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al obtener keys_selects', data:  $keys_selects, header: $header,ws:  $ws);
         }
 
-        $conyuge = $this->inputs_conyuge(header: $header, ws: $ws, controler: $this);
+        $conyuge = $this->inputs_conyuge(header: $header, controler: $this, ws: $ws);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al obtener conyuge', data: $conyuge,
                 header: $header, ws: $ws);
