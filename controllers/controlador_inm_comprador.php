@@ -409,7 +409,7 @@ class controlador_inm_comprador extends _ctl_base {
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener inputs_hidden',data:  $inputs, header: $header,ws:  $ws);
         }
-print_r($r_inm_rel_ubi_comp);exit;
+
         $temporal = array();
         foreach ($r_inm_rel_ubi_comp->registros as $registro){
             $temporal[] = $registro['inm_ubicacion_id'];
@@ -418,7 +418,8 @@ print_r($r_inm_rel_ubi_comp);exit;
         $not_in = array();
         $not_in['llave'] = 'inm_ubicacion.id';
         $not_in['values'] = $temporal;
-        $inm_ubicacion_id = (new _inm_comprador())->inm_ubicacion_id_input(controler: $this,not_in: $not_in);
+        $inm_ubicacion_id = (new _inm_comprador())->inm_ubicacion_id_input(controler: $this, in: $in_ubi,
+            not_in: $not_in);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al inm_ubicacion_id',data:  $inm_ubicacion_id,
                 header: $header,ws:  $ws);
