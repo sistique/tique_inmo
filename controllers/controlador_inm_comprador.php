@@ -1614,7 +1614,7 @@ class controlador_inm_comprador extends _ctl_base {
         $this->inputs->avaluo = $documento;
 
         $documento_poder = $this->html->input_file(cols: 12, name: 'poder', row_upd: new stdClass(), value_vacio: false,
-            place_holder: 'Poder',required: false);
+            place_holder: 'Escritura Poder',required: false);
         if (errores::$error) {
             return $this->retorno_error(
                 mensaje: 'Error al obtener inputs', data: $documento_poder, header: $header, ws: $ws);
