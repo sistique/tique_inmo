@@ -424,6 +424,25 @@ function dp_asigna_municipios_conyuge(dp_estado_id = '', dp_municipio_id = '', s
 
 }
 
+let sl_inm_attr_tipo_credito_id = $("#inm_attr_tipo_credito_id");
+sl_inm_attr_tipo_credito_id.change(function () {
+    tipo_credito_id = $(this).val();
+
+    $.ajax({
+        type: "POST",
+        data: {filtros:{'inm_attr_tipo_credito.id':tipo_credito_id}},
+        url: 'index.php?seccion=inm_attr_tipo_credito&accion=filtro_and&ws=1&session_id='+session_id,
+        success: function(data_r) {
+            console.log(data_r);
+        },
+        error: function() {
+            alert("No se ha podido obtener la información");
+        }
+    });
+});
+
+
+
 let apartado_1 = $("#apartado_1");
 let apartado_2 = $("#apartado_2");
 let apartado_3 = $("#apartado_3");
@@ -443,7 +462,8 @@ apartado_2.show();
 apartado_3.show();
 apartado_4.show();
 apartado_5.show();
-apartado_6.show();
+apartado_6.hide();
+
 collapse_a1.click(function() {
     apartado_1.toggle();
 
@@ -479,7 +499,6 @@ $("#collapse_all").click(function() {
         apartado_3.hide();
         apartado_4.hide();
         apartado_5.hide();
-        apartado_6.hide();
         todo_aculto = false;
     }
     else{
@@ -488,10 +507,8 @@ $("#collapse_all").click(function() {
         apartado_3.show();
         apartado_4.show();
         apartado_5.show();
-        apartado_6.show();
         todo_aculto = true;
     }
-
 });
 
 /***** Modal Documentos *****/

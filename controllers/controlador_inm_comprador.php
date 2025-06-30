@@ -1674,65 +1674,64 @@ class controlador_inm_comprador extends _ctl_base {
         $r_inm_rel_ubi_comp = (new inm_rel_ubi_comp(link: $this->link))->filtro_and(filtro: $filtro_rel_ubi);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al generar link',data:  $r_inm_rel_ubi_comp,
-                header: $header,ws:  $ws);        }
-
-        if($r_inm_rel_ubi_comp->n_registros <= 0){
-            return $this->retorno_error(mensaje: 'Error al generar link',data:  $r_inm_rel_ubi_comp,
-                header: $header,ws:  $ws);        }
-
-        $filtro_doc['inm_ubicacion.id'] = $r_inm_rel_ubi_comp->registros[0]['inm_ubicacion_id'];
-        $filtro_doc['doc_tipo_documento.id'] = 35;
-        $r_inm_doc_ubicacion_reg = (new inm_doc_ubicacion(link: $this->link))->filtro_and(filtro: $filtro_doc);
-        if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al generar link',data:  $r_inm_doc_ubicacion_reg,
                 header: $header,ws:  $ws);
         }
 
-        if($r_inm_doc_ubicacion_reg->n_registros > 0) {
-            $this->descripcion_doc_ubicacion_escritura = "Escritura Poder";
-
-            $button_inm_doc_ubicacion_escritura_descarga = $this->html->button_href(accion: 'descarga',
-                etiqueta: 'Descarga', registro_id: $r_inm_doc_ubicacion_reg->registros[0]['inm_doc_ubicacion_id'],
-                seccion: 'inm_doc_ubicacion_escritura', style: 'success');
+        if($r_inm_rel_ubi_comp->n_registros > 0) {
+            $filtro_doc['inm_ubicacion.id'] = $r_inm_rel_ubi_comp->registros[0]['inm_ubicacion_id'];
+            $filtro_doc['doc_tipo_documento.id'] = 35;
+            $r_inm_doc_ubicacion_reg = (new inm_doc_ubicacion(link: $this->link))->filtro_and(filtro: $filtro_doc);
             if (errores::$error) {
-                return $this->retorno_error(mensaje: 'Error al integrar button',
-                    data: $button_inm_doc_ubicacion_escritura_descarga, header: $header, ws: $ws);
+                return $this->retorno_error(mensaje: 'Error al generar link', data: $r_inm_doc_ubicacion_reg,
+                    header: $header, ws: $ws);
             }
 
-            $this->button_inm_doc_ubicacion_escritura_descarga = $button_inm_doc_ubicacion_escritura_descarga;
+            if ($r_inm_doc_ubicacion_reg->n_registros > 0) {
+                $this->descripcion_doc_ubicacion_escritura = "Escritura Poder";
 
-            $button_inm_doc_ubicacion_escritura_vista_previa = $this->html->button_href(accion: 'vista_previa',
-                etiqueta: 'Vista Previa', registro_id: $r_inm_doc_ubicacion_reg->registros[0]['inm_doc_ubicacion_id'],
-                seccion: 'inm_doc_ubicacion_escritura', style: 'success');
-            if (errores::$error) {
-                return $this->retorno_error(mensaje: 'Error al integrar button',
-                    data: $button_inm_doc_ubicacion_escritura_vista_previa, header: $header, ws: $ws);
+                $button_inm_doc_ubicacion_escritura_descarga = $this->html->button_href(accion: 'descarga',
+                    etiqueta: 'Descarga', registro_id: $r_inm_doc_ubicacion_reg->registros[0]['inm_doc_ubicacion_id'],
+                    seccion: 'inm_doc_ubicacion_escritura', style: 'success');
+                if (errores::$error) {
+                    return $this->retorno_error(mensaje: 'Error al integrar button',
+                        data: $button_inm_doc_ubicacion_escritura_descarga, header: $header, ws: $ws);
+                }
+
+                $this->button_inm_doc_ubicacion_escritura_descarga = $button_inm_doc_ubicacion_escritura_descarga;
+
+                $button_inm_doc_ubicacion_escritura_vista_previa = $this->html->button_href(accion: 'vista_previa',
+                    etiqueta: 'Vista Previa', registro_id: $r_inm_doc_ubicacion_reg->registros[0]['inm_doc_ubicacion_id'],
+                    seccion: 'inm_doc_ubicacion_escritura', style: 'success');
+                if (errores::$error) {
+                    return $this->retorno_error(mensaje: 'Error al integrar button',
+                        data: $button_inm_doc_ubicacion_escritura_vista_previa, header: $header, ws: $ws);
+                }
+
+                $this->button_inm_doc_ubicacion_escritura_vista_previa = $button_inm_doc_ubicacion_escritura_vista_previa;
+
+                $button_inm_doc_ubicacion_escritura_descarga_zip = $this->html->button_href(accion: 'descarga_zip',
+                    etiqueta: 'Descarga ZIP', registro_id: $r_inm_doc_ubicacion_reg->registros[0]['inm_doc_ubicacion_id'],
+                    seccion: 'inm_doc_ubicacion_escritura', style: 'success');
+                if (errores::$error) {
+                    return $this->retorno_error(mensaje: 'Error al integrar button',
+                        data: $button_inm_doc_ubicacion_escritura_descarga_zip, header: $header, ws: $ws);
+                }
+
+                $this->button_inm_doc_ubicacion_escritura_descarga_zip = $button_inm_doc_ubicacion_escritura_descarga_zip;
+
+                $params = array('accion_retorno' => 'proceso_cliente', 'seccion_retorno' => 'inm_comprador',
+                    'id_retorno' => $this->registro_id, 'pestana_general_actual' => 'pestanageneral2',
+                    'pestana_actual' => 'pestana4');
+                $button_inm_doc_ubicacion_escritura_elimina_bd = $this->html->button_href(accion: 'elimina_bd',
+                    etiqueta: 'Elimina', registro_id: $r_inm_doc_ubicacion_reg->registros[0]['inm_doc_ubicacion_id'],
+                    seccion: 'inm_doc_ubicacion_escritura', style: 'danger', params: $params);
+                if (errores::$error) {
+                    return $this->retorno_error(mensaje: 'Error al integrar button',
+                        data: $button_inm_doc_ubicacion_escritura_elimina_bd, header: $header, ws: $ws);
+                }
+
+                $this->button_inm_doc_ubicacion_escritura_elimina_bd = $button_inm_doc_ubicacion_escritura_elimina_bd;
             }
-
-            $this->button_inm_doc_ubicacion_escritura_vista_previa = $button_inm_doc_ubicacion_escritura_vista_previa;
-
-            $button_inm_doc_ubicacion_escritura_descarga_zip = $this->html->button_href(accion: 'descarga_zip',
-                etiqueta: 'Descarga ZIP', registro_id: $r_inm_doc_ubicacion_reg->registros[0]['inm_doc_ubicacion_id'],
-                seccion: 'inm_doc_ubicacion_escritura', style: 'success');
-            if (errores::$error) {
-                return $this->retorno_error(mensaje: 'Error al integrar button',
-                    data: $button_inm_doc_ubicacion_escritura_descarga_zip, header: $header, ws: $ws);
-            }
-
-            $this->button_inm_doc_ubicacion_escritura_descarga_zip = $button_inm_doc_ubicacion_escritura_descarga_zip;
-
-            $params = array('accion_retorno'=>'proceso_cliente','seccion_retorno'=>'inm_comprador',
-                'id_retorno'=>$this->registro_id, 'pestana_general_actual' => 'pestanageneral2',
-                'pestana_actual' => 'pestana4');
-            $button_inm_doc_ubicacion_escritura_elimina_bd = $this->html->button_href(accion: 'elimina_bd',
-                etiqueta: 'Elimina', registro_id: $r_inm_doc_ubicacion_reg->registros[0]['inm_doc_ubicacion_id'],
-                seccion: 'inm_doc_ubicacion_escritura', style: 'danger',params: $params);
-            if (errores::$error) {
-                return $this->retorno_error(mensaje: 'Error al integrar button',
-                    data: $button_inm_doc_ubicacion_escritura_elimina_bd, header: $header, ws: $ws);
-            }
-
-            $this->button_inm_doc_ubicacion_escritura_elimina_bd = $button_inm_doc_ubicacion_escritura_elimina_bd;
         }
 
         $filtro_inm_doc['inm_comprador.id'] = $this->registro_id;
