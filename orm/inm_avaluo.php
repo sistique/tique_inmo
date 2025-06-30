@@ -31,6 +31,29 @@ class inm_avaluo extends _modelo_parent{
 
     public function alta_bd(array $keys_integra_ds = array('codigo', 'descripcion')): array|\stdClass
     {
+        $filtro_rel_ubi['inm_rel_ubi_comp.status'] = 'activo';
+        $filtro_rel_ubi['inm_comprador.id'] = $this->registro['inm_comprador_id'];
+        $r_inm_rel_ubi_comp = (new inm_rel_ubi_comp(link: $this->link))->filtro_and(filtro: $filtro_rel_ubi);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener inputs_hidden',data:  $r_inm_rel_ubi_comp);
+        }
+
+        if($r_inm_rel_ubi_comp->n_registros <= 0){
+            return $this->error->error(mensaje: 'Error no existe relacion ubicacion',data:  $r_inm_rel_ubi_comp);
+        }
+
+        $filtro_doc['inm_ubicacion.id'] = $r_inm_rel_ubi_comp->registros[0]['inm_ubicacion_id'];
+        $filtro_doc['doc_tipo_documento.id'] = 35;
+        $r_inm_doc_ubicacion_reg = (new inm_doc_ubicacion(link: $this->link))->filtro_and(filtro: $filtro_doc);
+        if (errores::$error) {
+            return  $this->error->error(mensaje: 'Error al obtener datos de bitacora', data: $r_inm_doc_ubicacion_reg);
+        }
+
+        if($r_inm_doc_ubicacion_reg->n_registros <= 0) {
+            return $this->error->error(mensaje: 'Error no existe documento Escritura Poder',
+                data: $r_inm_doc_ubicacion_reg);
+        }
+
         $filtro_doc['inm_comprador.id'] =  $this->registro['inm_comprador_id'];
         $filtro_doc['doc_tipo_documento.id'] = 38;
         $existe = (new inm_doc_comprador(link: $this->link))->existe(filtro: $filtro_doc);
