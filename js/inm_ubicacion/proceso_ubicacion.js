@@ -424,24 +424,7 @@ function dp_asigna_municipios_conyuge(dp_estado_id = '', dp_municipio_id = '', s
 
 }
 
-/*let sl_inm_attr_tipo_credito_id = $("#inm_attr_tipo_credito_id");
-sl_inm_attr_tipo_credito_id.change(function () {
-    tipo_credito_id = $(this).val();
-
-    $.ajax({
-        type: "POST",
-        data: {filtros:{'inm_attr_tipo_credito.id':tipo_credito_id}},
-        url: 'index.php?seccion=inm_attr_tipo_credito&accion=filtro_and&ws=1&session_id='+session_id,
-        success: function(data_r) {
-            console.log(data_r);
-        },
-        error: function() {
-            alert("No se ha podido obtener la información");
-        }
-    });
-});*/
-
-
+let aplica_conyuge = false;
 
 let apartado_1 = $("#apartado_1");
 let apartado_2 = $("#apartado_2");
@@ -485,10 +468,11 @@ collapse_a5.click(function() {
 
 });
 
-collapse_a6.click(function() {
-    apartado_6.toggle();
-
-});
+/*if(aplica_conyuge) {
+    collapse_a6.click(function () {
+        apartado_6.toggle();
+    });
+}*/
 
 let todo_aculto = true;
 
@@ -509,6 +493,33 @@ $("#collapse_all").click(function() {
         apartado_5.show();
         todo_aculto = true;
     }
+});
+
+let sl_inm_tipo_credito_id = $("#inm_tipo_credito_id");
+sl_inm_tipo_credito_id.change(function () {
+    tipo_credito_id = $(this).val();
+
+    $.ajax({
+        type: "POST",
+        data: {'id':tipo_credito_id},
+        url: 'index.php?seccion=inm_tipo_credito&accion=get_tipo_credito&ws=1&session_id='+session_id,
+        success: function(data_r) {
+            if(data_r.inm_tipo_credito_muestra_conyuge === "activo"){
+                apartado_6.toggle();
+                aplica_conyuge = true;
+
+                collapse_a6.click(function () {
+                    apartado_6.toggle();
+                });
+            }else{
+                apartado_6.hide();
+                aplica_conyuge = false;
+            }
+        },
+        error: function() {
+            alert("No se ha podido obtener la información");
+        }
+    });
 });
 
 /***** Modal Documentos *****/
