@@ -42,6 +42,7 @@ class inm_avaluo extends _modelo_parent{
             return $this->error->error(mensaje: 'Error no existe relacion ubicacion',data:  $r_inm_rel_ubi_comp);
         }
 
+        $filtro_doc = array();
         $filtro_doc['inm_ubicacion.id'] = $r_inm_rel_ubi_comp->registros[0]['inm_ubicacion_id'];
         $filtro_doc['doc_tipo_documento.id'] = 35;
         $r_inm_doc_ubicacion_reg = (new inm_doc_ubicacion(link: $this->link))->filtro_and(filtro: $filtro_doc);
@@ -50,10 +51,19 @@ class inm_avaluo extends _modelo_parent{
         }
 
         if($r_inm_doc_ubicacion_reg->n_registros <= 0) {
-            return $this->error->error(mensaje: 'Error no existe documento Escritura Poder',
-                data: $r_inm_doc_ubicacion_reg);
+            if(trim($_FILES['poder']['name']) !== '') {
+                $_FILES['documento'] = $_FILES['poder'];
+                $registro = array();
+                $registro['inm_ubicacion_id'] = $r_inm_rel_ubi_comp->registros[0]['inm_ubicacion_id'];
+                $registro['doc_tipo_documento_id'] = 35;
+                $r_inm_doc_ubicacion = (new inm_doc_ubicacion(link: $this->link))->alta_registro(registro: $registro);
+                if (errores::$error) {
+                    return $this->error->error(mensaje: 'Error al insertar datos', data: $r_inm_doc_ubicacion);
+                }
+            }
         }
 
+        $filtro_doc = array();
         $filtro_doc['inm_comprador.id'] =  $this->registro['inm_comprador_id'];
         $filtro_doc['doc_tipo_documento.id'] = 38;
         $existe = (new inm_doc_comprador(link: $this->link))->existe(filtro: $filtro_doc);
@@ -70,7 +80,6 @@ class inm_avaluo extends _modelo_parent{
                 $r_inm_doc_comprador = (new inm_doc_comprador(link: $this->link))->alta_registro(registro: $registro);
                 if (errores::$error) {
                     return $this->error->error(mensaje: 'Error al insertar datos', data: $r_inm_doc_comprador);
-
                 }
             }
         }
