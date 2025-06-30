@@ -56,9 +56,9 @@
 <?php echo $controlador->inputs->nss; ?>
 <?php echo $controlador->inputs->curp; ?>
 <?php echo $controlador->inputs->rfc; ?>
-<?php echo $controlador->inputs->apellido_paterno; ?>
+        <?php echo $controlador->inputs->nombre; ?>
+        <?php echo $controlador->inputs->apellido_paterno; ?>
 <?php echo $controlador->inputs->apellido_materno; ?>
-<?php echo $controlador->inputs->nombre; ?>
 
 <?php echo $controlador->inputs->dp_pais_id; ?>
 <?php echo $controlador->inputs->dp_estado_id; ?>
