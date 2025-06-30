@@ -60,6 +60,9 @@ class inm_avaluo extends _modelo_parent{
                 if (errores::$error) {
                     return $this->error->error(mensaje: 'Error al insertar datos', data: $r_inm_doc_ubicacion);
                 }
+            }else{
+                return $this->error->error(mensaje: 'Error no existe documento Escritura Poder',
+                    data: $r_inm_doc_ubicacion_reg);
             }
         }
 
