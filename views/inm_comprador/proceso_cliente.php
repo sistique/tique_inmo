@@ -13,6 +13,7 @@
                 <?php include (new views())->ruta_templates."mensajes.php"; ?>
                 <div class="widget  widget-box box-container form-main widget-form-cart" id="form">
 
+                    <?php echo $controlador->inputs->inm_comprador_seleccionado_id; ?>
                     <div id="pestanasgeneral">
                         <ul id="listageneral">
                             <li id="pestanageneral1"><a href='javascript:cambiarPestannaGeneralCl(pestanasgeneral,pestanageneral1,pestanascliente);'>CLIENTE</a></li>
@@ -424,7 +425,6 @@
                                                     <?php echo $controlador->inputs->apellido_paterno; ?>
                                                     <?php echo $controlador->inputs->apellido_materno; ?>
                                                     <?php echo $controlador->inputs->nombre; ?>
-                                                    <?php echo $controlador->inputs->inm_comprador_id; ?>
                                                     <?php echo $controlador->inputs->inm_comprador_id; ?>
                                                     <?php echo $controlador->inputs->seccion_retorno; ?>
                                                     <?php echo $controlador->inputs->btn_action_next; ?>
