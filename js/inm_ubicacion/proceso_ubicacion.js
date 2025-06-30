@@ -424,8 +424,6 @@ function dp_asigna_municipios_conyuge(dp_estado_id = '', dp_municipio_id = '', s
 
 }
 
-let aplica_conyuge = false;
-
 let apartado_1 = $("#apartado_1");
 let apartado_2 = $("#apartado_2");
 let apartado_3 = $("#apartado_3");
@@ -468,12 +466,6 @@ collapse_a5.click(function() {
 
 });
 
-/*if(aplica_conyuge) {
-    collapse_a6.click(function () {
-        apartado_6.toggle();
-    });
-}*/
-
 let todo_aculto = true;
 
 $("#collapse_all").click(function() {
@@ -506,14 +498,14 @@ sl_inm_tipo_credito_id.change(function () {
         success: function(data_r) {
             if(data_r.inm_tipo_credito_muestra_conyuge === "activo"){
                 apartado_6.toggle();
-                aplica_conyuge = true;
 
-                collapse_a6.click(function () {
+                collapse_a6.off("click").click(function () {
                     apartado_6.toggle();
                 });
             }else{
                 apartado_6.hide();
-                aplica_conyuge = false;
+
+                collapse_a6.off("click");
             }
         },
         error: function() {
