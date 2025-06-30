@@ -49,7 +49,8 @@ class inm_conyuge extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
         }
 
-        if(!isset($this->registro['dp_municipio_id'])){
+        if(!isset($this->registro['dp_municipio_id']) || trim($this->registro['dp_municipio_id']) === ''){
+            $filtro_tipo_prosp = array();
             $filtro_tipo_prosp['dp_municipio.predeterminado'] = 'activo';
             $r_municipio = (new dp_municipio(link: $this->link))->filtro_and(filtro:$filtro_tipo_prosp);
             if(errores::$error){
@@ -59,7 +60,8 @@ class inm_conyuge extends _modelo_parent{
             $this->registro['dp_municipio_id'] = $r_municipio->registros[0]['dp_municipio_id'];
         }
 
-        if(!isset($this->registro['inm_nacionalidad_id'])){
+        if(!isset($this->registro['inm_nacionalidad_id']) || trim($this->registro['inm_nacionalidad_id']) === ''){
+            $filtro_tipo_prosp = array();
             $filtro_tipo_prosp['inm_nacionalidad.predeterminado'] = 'activo';
             $r_nacionalidad = (new inm_nacionalidad(link: $this->link))->filtro_and(filtro:$filtro_tipo_prosp);
             if(errores::$error){
@@ -69,7 +71,8 @@ class inm_conyuge extends _modelo_parent{
             $this->registro['inm_nacionalidad_id'] = $r_nacionalidad->registros[0]['inm_nacionalidad_id'];
         }
 
-        if(!isset($this->registro['inm_ocupacion_id'])){
+        if(!isset($this->registro['inm_ocupacion_id']) || trim($this->registro['inm_ocupacion_id']) === ''){
+            $filtro_tipo_prosp = array();
             $filtro_tipo_prosp['inm_ocupacion.predeterminado'] = 'activo';
             $r_ocupacion = (new inm_ocupacion(link: $this->link))->filtro_and(filtro:$filtro_tipo_prosp);
             if(errores::$error){
