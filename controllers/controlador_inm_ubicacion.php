@@ -2232,6 +2232,8 @@ class controlador_inm_ubicacion extends _ctl_base {
         $row_upd->fecha_nacimiento = '';
         $row_upd->curp = '';
         $row_upd->rfc = '';
+        $row_upd->numero_credito = '';
+        $row_upd->adeudo_hipoteca = '';
         $row_upd->telefono_casa = '';
         $row_upd->telefono_celular = '';
         $row_upd->dp_estado_id = -1;
@@ -2302,6 +2304,24 @@ class controlador_inm_ubicacion extends _ctl_base {
         }
 
         $conyuge->rfc = $rfc;
+
+        $numero_credito = $controler->html->input_text(cols: 6, disabled: false, name: 'conyuge[numero_credito]',
+            place_holder: 'Numero Credito', row_upd: $row_upd, value_vacio: false,
+            class_css: array('conyuge_numero_credito'), required: false, value: $row_upd->numero_credito);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $numero_credito,header: $header, ws:$ws);
+        }
+
+        $conyuge->numero_credito = $numero_credito;
+
+        $adeudo_hipoteca = $controler->html->input_text(cols: 6, disabled: false, name: 'conyuge[adeudo_hipoteca]',
+            place_holder: 'Adeudo Hipoteca', row_upd: $row_upd, value_vacio: false,
+            class_css: array('conyuge_adeudo_hipoteca'), required: false, value: $row_upd->adeudo_hipoteca);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $adeudo_hipoteca,header: $header, ws:$ws);
+        }
+
+        $conyuge->adeudo_hipoteca = $adeudo_hipoteca;
 
         $telefono_casa = $controler->html->input_text(cols: 6, disabled: false, name: 'conyuge[telefono_casa]',
             place_holder: 'Tel Casa', row_upd: $row_upd, value_vacio: false, class_css: array('conyuge_telefono_casa'),
