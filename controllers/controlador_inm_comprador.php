@@ -383,14 +383,35 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al obtener inputs_hidden',data:  $inputs, header: $header,ws:  $ws);
         }
 
+        $filtro_ubi['inm_ubicacion.status'] = 'activo';
 
-        $r_inm_rel_ubi_comp = (new inm_rel_ubi_comp(link: $this->link))->registros_activos();
+        $in_ubi = array();
+        $in_ubi['llave'] = 'inm_status_ubicacion.id';
+        $in_ubi['values'] = array('5','6');
+
+        $r_ubicacion_etapa = (new inm_ubicacion(link: $this->link))->filtro_and(filtro: $filtro_ubi, in: $in_ubi);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener ubicacones firmadas',data:  $r_ubicacion_etapa,
+                header: $header,ws:  $ws);
+        }
+
+        $rel_ubis_fir = array();
+        foreach ($r_ubicacion_etapa->registros as $registro){
+            $rel_ubis_fir[] = $registro['inm_ubicacion_id'];
+        }
+
+        $filtro_rel_ubi['inm_rel_ubi_comp.status'] = 'activo';
+
+        $in_ubi = array();
+        $in_ubi['llave'] = 'inm_ubicacion.id';
+        $in_ubi['values'] = $rel_ubis_fir;
+        $r_inm_rel_ubi_comp = (new inm_rel_ubi_comp(link: $this->link))->filtro_and(filtro: $filtro_rel_ubi, in: $in_ubi);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener inputs_hidden',data:  $inputs, header: $header,ws:  $ws);
         }
-
+print_r($r_inm_rel_ubi_comp);exit;
         $temporal = array();
-        foreach ($r_inm_rel_ubi_comp as $registro){
+        foreach ($r_inm_rel_ubi_comp->registros as $registro){
             $temporal[] = $registro['inm_ubicacion_id'];
         }
 

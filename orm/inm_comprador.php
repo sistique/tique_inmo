@@ -3,6 +3,7 @@
 namespace gamboamartin\inmuebles\models;
 
 use base\orm\_modelo_parent;
+use gamboamartin\comercial\models\com_agente;
 use gamboamartin\comercial\models\com_cliente;
 use gamboamartin\errores\errores;
 use PDO;
@@ -113,6 +114,16 @@ class inm_comprador extends _modelo_parent{
     {
         if(!isset($registro['dp_colonia_postal_id']) || (string)$registro['dp_colonia_postal_id'] === '-1'){
             $this->registro['dp_colonia_postal_id'] = 105;
+        }
+
+        if(!isset($this->registro['com_agente_id'])){
+            $filtro_tipo_prosp['com_tipo_agente.descripcion'] = 'PREDETERMINADO';
+            $r_agente = (new com_agente(link: $this->link))->filtro_and(filtro:$filtro_tipo_prosp);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al maquetar row',data:  $r_agente);
+            }
+
+            $this->registro['com_agente_id'] = $r_agente->registros[0]['com_agente_id'];
         }
 
         $registro_entrada = $this->registro;
