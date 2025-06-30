@@ -150,11 +150,6 @@ class _com_cliente{
         if($razon_social === ''){
             return $this->error->error(mensaje: 'Error razon_social esta vacia',data:  $razon_social);
         }
-        $telefono = trim($telefono);
-        if($telefono === ''){
-            return $this->error->error(mensaje: 'Error telefono esta vacio',data:  $telefono);
-        }
-
 
         $valida = $this->valida_data_transaccion_cliente(registro_entrada: $registro);
         if(errores::$error){
@@ -251,7 +246,7 @@ class _com_cliente{
      */
     private function data_upd(array|stdClass $registro_entrada): array|stdClass
     {
-        $keys = array('lada_com','numero_com','nombre','apellido_paterno');
+        $keys = array('nombre','apellido_paterno');
         $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $registro_entrada);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar registro entrada', data: $valida);
@@ -261,8 +256,12 @@ class _com_cliente{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar razon_social', data: $razon_social);
         }
-        $telefono = trim($registro_entrada['lada_com']).trim($registro_entrada['numero_com']);
 
+        $telefono = '';
+        if((isset($registro_entrada['lada_com']) && trim($registro_entrada['lada_com']) !== '') &&
+            (isset($registro_entrada['numero_com']) && trim($registro_entrada['numero_com']) !== '')){
+            $telefono = trim($registro_entrada['lada_com']).trim($registro_entrada['numero_com']);
+        }
         $numero_interior = '';
 
         if(isset($registro_entrada['numero_interior'])) {
@@ -825,7 +824,7 @@ class _com_cliente{
      */
     final public function valida_data_result_cliente(array|stdClass $registro_entrada): bool|array
     {
-        $keys = array('lada_com','numero_com','nombre','apellido_paterno');
+        $keys = array('nombre','apellido_paterno');
         $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $registro_entrada);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar registro entrada', data: $valida);
@@ -874,9 +873,8 @@ class _com_cliente{
      */
     private function valida_existencia_keys_com(array|stdClass $registro_entrada): bool|array
     {
-        $keys = array('rfc','numero_exterior','lada_com','numero_com', 'cat_sat_regimen_fiscal_id','cat_sat_moneda_id',
-            'cat_sat_forma_pago_id','cat_sat_metodo_pago_id', 'cat_sat_uso_cfdi_id','com_tipo_cliente_id',
-            'cat_sat_tipo_persona_id');
+        $keys = array('rfc','numero_exterior','cat_sat_regimen_fiscal_id','cat_sat_moneda_id', 'cat_sat_forma_pago_id',
+            'cat_sat_metodo_pago_id', 'cat_sat_uso_cfdi_id','com_tipo_cliente_id', 'cat_sat_tipo_persona_id');
 
         $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $registro_entrada);
         if(errores::$error){
@@ -896,7 +894,7 @@ class _com_cliente{
     private function valida_ids_com(array|stdClass $registro_entrada): array
     {
         $keys = array('cat_sat_forma_pago_id','cat_sat_metodo_pago_id','cat_sat_moneda_id','cat_sat_regimen_fiscal_id',
-            'cat_sat_tipo_persona_id', 'cat_sat_uso_cfdi_id','com_tipo_cliente_id', 'lada_com', 'numero_com');
+            'cat_sat_tipo_persona_id', 'cat_sat_uso_cfdi_id','com_tipo_cliente_id');
 
         $valida = $this->validacion->valida_ids(keys: $keys,registro:  $registro_entrada);
         if(errores::$error){

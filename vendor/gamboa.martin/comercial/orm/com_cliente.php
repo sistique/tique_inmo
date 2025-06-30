@@ -537,7 +537,7 @@ class com_cliente extends _modelo_parent
             return $this->error->error(mensaje: 'Error com_cliente_id debe ser mayor a 0', data: $com_cliente_id);
         }
 
-        $keys = array('com_cliente_numero_exterior', 'com_cliente_telefono');
+        $keys = array('com_cliente_numero_exterior');
         $valida = $this->validacion->valida_existencia_keys(keys: $keys, registro: $com_cliente);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al validar cliente', data: $valida);
@@ -575,7 +575,7 @@ class com_cliente extends _modelo_parent
      */
     private function com_sucursal_upd_dom(stdClass $com_cliente, array $com_sucursal_upd): array
     {
-        $keys = array('com_cliente_numero_exterior', 'com_cliente_telefono', 'com_cliente_pais', 'com_cliente_estado',
+        $keys = array('com_cliente_numero_exterior', 'com_cliente_pais', 'com_cliente_estado',
             'com_cliente_municipio', 'com_cliente_colonia', 'com_cliente_calle', 'com_cliente_cp');
         $valida = $this->validacion->valida_existencia_keys(keys: $keys, registro: $com_cliente);
         if (errores::$error) {
@@ -583,6 +583,9 @@ class com_cliente extends _modelo_parent
         }
         if (!isset($com_cliente->com_cliente_numero_interior)) {
             $com_cliente->com_cliente_numero_interior = '';
+        }
+        if (!isset($com_cliente->com_cliente_telefono)) {
+            $com_cliente->com_cliente_telefono = '';
         }
 
         $com_sucursal_upd['numero_exterior'] = trim($com_cliente->com_cliente_numero_exterior);
@@ -1128,7 +1131,7 @@ class com_cliente extends _modelo_parent
             return $this->error->error(mensaje: 'Error al al validar datos', data: $valida);
         }
 
-        $keys = array('com_cliente_numero_exterior', 'com_cliente_telefono');
+        $keys = array('com_cliente_numero_exterior');
         $valida = $this->validacion->valida_existencia_keys(keys: $keys, registro: $com_cliente);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al validar cliente', data: $valida);
@@ -1203,7 +1206,7 @@ class com_cliente extends _modelo_parent
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error validar $sucursal', data: $valida);
         }
-        $keys = array('com_cliente_numero_exterior', 'com_cliente_telefono');
+        $keys = array('com_cliente_numero_exterior');
         $valida = $this->validacion->valida_existencia_keys(keys: $keys, registro: $com_cliente);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al validar cliente', data: $valida);
@@ -1238,7 +1241,7 @@ class com_cliente extends _modelo_parent
         if ($com_cliente_id <= 0) {
             return $this->error->error(mensaje: 'Error $com_cliente_id debe ser mayor a 0', data: $com_cliente_id);
         }
-        $keys = array('com_cliente_numero_exterior', 'com_cliente_telefono');
+        $keys = array('com_cliente_numero_exterior');
         $valida = $this->validacion->valida_existencia_keys(keys: $keys, registro: $com_cliente);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al validar cliente', data: $valida);

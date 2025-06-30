@@ -1204,14 +1204,19 @@ class _keys_selects{
      */
     private function row_data_cliente(array $com_cliente, controlador_inm_comprador $controler): stdClass|array
     {
-        $keys = array('com_cliente_rfc','com_cliente_telefono','com_tipo_cliente_id');
+        $keys = array('com_cliente_rfc','com_tipo_cliente_id');
         $valida = (new valida())->valida_existencia_keys(keys: $keys,registro:  $com_cliente);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar com_cliente',data:  $valida);
         }
 
+        $telefono = '';
+        if(isset($com_cliente['com_cliente_telefono']) && $com_cliente['com_cliente_telefono'] !== ''){
+            $telefono = $com_cliente['com_cliente_telefono'];
+        }
+
         $controler->row_upd->rfc = $com_cliente['com_cliente_rfc'];
-        $controler->row_upd->telefono = $com_cliente['com_cliente_telefono'];
+        $controler->row_upd->telefono = $telefono;
         $controler->row_upd->com_tipo_cliente_id = $com_cliente['com_tipo_cliente_id'];
 
         return $controler->row_upd;
