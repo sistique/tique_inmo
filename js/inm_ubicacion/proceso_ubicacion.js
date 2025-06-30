@@ -424,7 +424,7 @@ function dp_asigna_municipios_conyuge(dp_estado_id = '', dp_municipio_id = '', s
 
 }
 
-let sl_inm_attr_tipo_credito_id = $("#inm_attr_tipo_credito_id");
+/*let sl_inm_attr_tipo_credito_id = $("#inm_attr_tipo_credito_id");
 sl_inm_attr_tipo_credito_id.change(function () {
     tipo_credito_id = $(this).val();
 
@@ -439,7 +439,7 @@ sl_inm_attr_tipo_credito_id.change(function () {
             alert("No se ha podido obtener la información");
         }
     });
-});
+});*/
 
 
 
