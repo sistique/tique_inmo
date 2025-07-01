@@ -488,6 +488,32 @@ $("#collapse_all").click(function() {
 });
 
 let sl_inm_tipo_credito_id = $("#inm_tipo_credito_id");
+
+function inicializa_conyuge(){
+    tipo_credito_id = sl_inm_tipo_credito_id.val();
+
+    $.ajax({
+        type: "POST",
+        data: {'id':tipo_credito_id},
+        url: 'index.php?seccion=inm_tipo_credito&accion=get_tipo_credito&ws=1&session_id='+session_id,
+        success: function(data_r) {
+            if(data_r.inm_tipo_credito_muestra_conyuge === "activo"){
+                apartado_6.toggle();
+                collapse_a6.off("click").click(function () {
+                    apartado_6.toggle();
+                });
+            }else{
+                apartado_6.hide();
+
+                collapse_a6.off("click");
+            }
+        },
+        error: function() {
+            alert("No se ha podido obtener la información");
+        }
+    });
+}
+
 sl_inm_tipo_credito_id.change(function () {
     tipo_credito_id = $(this).val();
 
