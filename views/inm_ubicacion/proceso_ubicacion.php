@@ -386,23 +386,22 @@
                                         <?php echo $controlador->inputs->inm_tipo_gasto_id; ?>
 
                                         <?php echo $controlador->inputs->nombre_beneficiario; ?>
-                                        <?php echo $controlador->inputs->inm_tipo_cheque_id; ?>
-                                        <?php echo $controlador->inputs->bn_cuenta_id; ?>
-                                        <?php echo $controlador->inputs->monto; ?>
-                                        <?php echo $controlador->inputs->monto_transferencia; ?>
-                                        <?php echo $controlador->inputs->efectivo; ?>
-
+                                        <div id="cont_cheque">
+                                            <?php echo $controlador->inputs->inm_tipo_cheque_id; ?>
+                                            <?php echo $controlador->inputs->bn_cuenta_id; ?>
+                                            <?php echo $controlador->inputs->monto; ?>
+                                        </div>
+                                        <div id="cont_transfer">
+                                            <?php echo $controlador->inputs->monto_transferencia; ?>
+                                        </div>
+                                        <div id="cont_efectivo">
+                                            <?php echo $controlador->inputs->efectivo; ?>
+                                        </div>
                                         <div class="control-group btn-alta">
                                             <div class="controls">
                                                 <button type="submit" class="btn btn-success" value="alta_gasto">
                                                     Alta
                                                 </button>
-                                                <br>
-                                            </div>
-                                        </div>
-
-                                        <div class="control-group btn-alta">
-                                            <div class="controls">
                                                 <button type="submit" class="btn btn-success" value="avanza_etapa">
                                                     Avanza Etapa
                                                 </button>

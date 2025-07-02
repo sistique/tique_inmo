@@ -804,7 +804,7 @@ class controlador_inm_ubicacion extends _ctl_base {
                 mensaje: 'Error al obtener registro',data:  $data_row,header: $header,ws: $ws);
         }
 
-        $filtro_che['inm_ubicacion.id'] = $this->registro_id;
+        /*$filtro_che['inm_ubicacion.id'] = $this->registro_id;
         $filtro_che['inm_tipo_cheque.id'] = 1;
         $r_cheque = (new inm_cheque(link: $this->link))->filtro_and(filtro: $filtro_che);
         if (errores::$error) {
@@ -862,7 +862,7 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         if($r_efectivo->n_registros > 0) {
             $this->row_upd->efectivo = $r_efectivo->registros[0]['inm_efectivo_monto'];
-        }
+        }*/
 
         $keys_selects = (new _ubicacion())->keys_selects_base(controler: $this,data_row:  $data_row, disableds: array());
         if(errores::$error){
@@ -945,7 +945,6 @@ class controlador_inm_ubicacion extends _ctl_base {
                 ws:  $ws);
         }
 
-
         $this->cheques = $r_inm_cheque->registros;
 
         $filtro['inm_ubicacion.id'] = $this->registro_id;
@@ -991,7 +990,7 @@ class controlador_inm_ubicacion extends _ctl_base {
                 mensaje: 'Error al obtener registro',data:  $data_row,header: $header,ws: $ws);
         }
 
-        $filtro_che['inm_ubicacion.id'] = $this->registro_id;
+        /*$filtro_che['inm_ubicacion.id'] = $this->registro_id;
         $filtro_che['inm_tipo_cheque.id'] = 1;
         $r_cheque = (new inm_cheque(link: $this->link))->filtro_and(filtro: $filtro_che);
         if (errores::$error) {
@@ -1053,7 +1052,7 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         if($r_efectivo->n_registros > 0) {
             $this->row_upd->efectivo = $r_efectivo->registros[0]['inm_efectivo_monto'];
-        }
+        }*/
 
         $keys_selects = (new _ubicacion())->keys_selects_base(controler: $this,data_row:  $data_row, disableds: array());
         if(errores::$error){

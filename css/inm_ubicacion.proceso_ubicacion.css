@@ -1,3 +1,15 @@
+#cont_cheque {
+    display: none;
+}
+
+#cont_transfer {
+    display: none;
+}
+
+#cont_efectivo {
+    display: none;
+}
+
 /******* Pestañas Generales ********/
 #pestanasgeneral {
     float: top;
