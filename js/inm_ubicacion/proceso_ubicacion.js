@@ -232,6 +232,10 @@ sl_inm_tipo_gasto_id.change(function(){
     console.log(inm_tipo_gasto_id);
 });
 
+/***** Emision de Recurso *****/
+
+
+
 /***** Modifica ******/
 
 let sl_dp_pais_id = $("#dp_pais_id");

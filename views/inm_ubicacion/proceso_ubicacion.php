@@ -523,6 +523,7 @@
                                                 <table class="table table-striped">
                                                     <thead>
                                                     <tr>
+                                                        <th></th>
                                                         <th>Id</th>
                                                         <th>Beneficiario</th>
                                                         <th>Referencia</th>
@@ -534,12 +535,13 @@
                                                     </thead>
                                                     <tbody>
                                                     <tr>
-                                                        <td colspan="7">Cheques</td>
+                                                        <td colspan="8">Cheques</td>
                                                     </tr>
                                                     <?php
                                                     foreach ($controlador->cheques as $cheque){
                                                         ?>
                                                         <tr>
+                                                            <td><?php echo $cheque['checkbox'] ?></td>
                                                             <td><?php echo $cheque['inm_cheque_id'] ?></td>
                                                             <td><?php echo $cheque['inm_cheque_nombre_beneficiario'] ?></td>
                                                             <td><?php echo $cheque['inm_cheque_numero_cheque'] ?></td>
@@ -550,12 +552,13 @@
                                                         </tr>
                                                     <?php } ?>
                                                     <tr>
-                                                        <td colspan="7">Transferencias</td>
+                                                        <td colspan="8">Transferencias</td>
                                                     </tr>
                                                     <?php
                                                     foreach ($controlador->transferencias as $transferencia){
                                                         ?>
                                                         <tr>
+                                                            <td><?php echo $transferencia['checkbox'] ?></td>
                                                             <td><?php echo $transferencia['inm_transferencia_id'] ?></td>
                                                             <td><?php echo $transferencia['inm_transferencia_nombre_beneficiario'] ?></td>
                                                             <td><?php echo $transferencia['inm_transferencia_transferencia'] ?></td>
@@ -566,12 +569,13 @@
                                                         </tr>
                                                     <?php } ?>
                                                     <tr>
-                                                        <td colspan="7">Efectivo</td>
+                                                        <td colspan="8">Efectivo</td>
                                                     </tr>
                                                     <?php
                                                     foreach ($controlador->efectivos as $efectivo){
                                                         ?>
                                                         <tr>
+                                                            <td><?php echo $efectivo['checkbox'] ?></td>
                                                             <td><?php echo $efectivo['inm_efectivo_id'] ?></td>
                                                             <td><?php echo $efectivo['inm_efectivo_nombre_beneficiario'] ?></td>
                                                             <td></td>

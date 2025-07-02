@@ -1218,6 +1218,10 @@ class controlador_inm_ubicacion extends _ctl_base {
             }
             $inm_cheque['elimina_bd'] = $button;
 
+            $check = "<input type='checkbox'  id='cheque-$inm_cheque[inm_cheque_id]' 
+                        name='cheque-$inm_cheque[inm_cheque_id]' value='$inm_cheque[inm_cheque_id]'>";
+            $inm_cheque['checkbox'] = $check;
+
             $registros[] = $inm_cheque;
         }
 
@@ -1248,6 +1252,10 @@ class controlador_inm_ubicacion extends _ctl_base {
                     ws:  $ws);
             }
             $inm_transferencia['elimina_bd'] = $button;
+
+            $check = "<input type='checkbox'  id='transferencia-$inm_transferencia[inm_transferencia_id]' 
+                        name='transferencia-$inm_transferencia[inm_transferencia_id]' value='$inm_transferencia[inm_transferencia_id]'>";
+            $inm_transferencia['checkbox'] = $check;
 
             $registros[] = $inm_transferencia;
         }
@@ -1280,6 +1288,10 @@ class controlador_inm_ubicacion extends _ctl_base {
                     ws:  $ws);
             }
             $inm_efectivo['elimina_bd'] = $button;
+
+            $check = "<input type='checkbox'  id='efectivo-$inm_efectivo[inm_efectivo_id]' 
+                        name='efectivo-$inm_efectivo[inm_efectivo_id]' value='$inm_efectivo[inm_efectivo_id]'>";
+            $inm_efectivo['checkbox'] = $check;
 
             $registros[] = $inm_efectivo;
         }
