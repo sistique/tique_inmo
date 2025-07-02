@@ -789,7 +789,7 @@ class _ctl_base extends system{
      */
     final public function key_select(int $cols, bool $con_registros, array $filtro,string $key, array $keys_selects,
                                   int|null $id_selected, string $label, array $columns_ds = array(),
-                                        bool $disabled = false, $in = array()): array
+                                        bool $disabled = false, $in = array(), bool $required = true): array
     {
         $key = trim($key);
         if($key === ''){
@@ -809,7 +809,8 @@ class _ctl_base extends system{
             $keys_selects[$key] = new stdClass();
         }
 
-        $keys_params = array('cols','con_registros','label','id_selected','filtro','columns_ds','disabled','in');
+        $keys_params = array('cols','con_registros','label','id_selected','filtro','columns_ds','disabled','in',
+            'required');
 
         foreach ($keys_params as $key_val){
 

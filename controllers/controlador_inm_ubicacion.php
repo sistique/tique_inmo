@@ -876,7 +876,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         $columns_ds = array('inm_tipo_gasto_id','inm_tipo_gasto_descripcion');
         $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_tipo_gasto_id',
             keys_selects:$keys_selects, id_selected:-1, label: 'Tipo Gasto',
-            columns_ds : $columns_ds);
+            columns_ds : $columns_ds,required: false);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);
@@ -885,7 +885,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         $columns_ds = array('inm_tipo_cheque_id','inm_tipo_cheque_descripcion');
         $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_tipo_cheque_id',
             keys_selects:$keys_selects, id_selected:-1, label: 'Tipo Cheque',
-            columns_ds : $columns_ds);
+            columns_ds : $columns_ds,required: false);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);
@@ -894,7 +894,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         $columns_ds = array('bn_cuenta_id','bn_cuenta_descripcion');
         $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'bn_cuenta_id',
             keys_selects:$keys_selects, id_selected:-1, label: 'Cuenta',
-            columns_ds : $columns_ds);
+            columns_ds : $columns_ds,required: false);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);
@@ -3059,72 +3059,36 @@ class controlador_inm_ubicacion extends _ctl_base {
         }
 */
         if(isset($_POST['inm_tipo_gasto_id']) && trim($_POST['inm_tipo_gasto_id']) === '2') {
-            $filtro_transfe['inm_ubicacion.id'] = $this->registro_id;
-            $r_transferencia = (new inm_transferencia(link: $this->link))->filtro_and(filtro: $filtro_transfe);
+            $registro = array();
+            $registro['inm_ubicacion_id'] = $this->registro_id;
+            $registro['monto'] = $_POST['monto_transferencia'];
+            $registro['nombre_beneficiario'] = $_POST['nombre_beneficiario'];
+
+            $registro['numero_transferencia'] = '';
+
+            if(isset($_POST['transferencia'])){
+                $registro['numero_transferencia'] = $_POST['transferencia'];
+            }
+            $r_inm_transferencia = (new inm_transferencia(link: $this->link))->alta_registro(
+                registro: $registro);
             if (errores::$error) {
                 $this->link->rollBack();
-                return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $r_transferencia,
+                return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_transferencia,
                     header: $header, ws: $ws);
-            }
-
-            if ($r_transferencia->n_registros <= 0) {
-                $registro = array();
-                $registro['inm_ubicacion_id'] = $this->registro_id;
-                $registro['monto'] = $_POST['monto_transferencia'];
-                $registro['nombre_beneficiario'] = $_POST['nombre_beneficiario'];
-                $r_inm_transferencia = (new inm_transferencia(link: $this->link))->alta_registro(
-                    registro: $registro);
-                if (errores::$error) {
-                    $this->link->rollBack();
-                    return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_transferencia,
-                        header: $header, ws: $ws);
-                }
-            } else {
-                $registro = array();
-                $registro['monto'] = $_POST['monto_transferencia'];
-                $registro['nombre_beneficiario'] = $_POST['nombre_beneficiario'];
-                $r_inm_transferencia = (new inm_transferencia(link: $this->link))->modifica_bd(
-                    registro: $registro, id: $r_transferencia->registros[0]['inm_transferencia_id']);
-                if (errores::$error) {
-                    $this->link->rollBack();
-                    return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_transferencia,
-                        header: $header, ws: $ws);
-                }
             }
         }
 
         if(isset($_POST['inm_tipo_gasto_id']) && trim($_POST['inm_tipo_gasto_id']) === '3') {
-            $filtro_efec['inm_ubicacion.id'] = $this->registro_id;
-            $r_efectivo = (new inm_efectivo(link: $this->link))->filtro_and(filtro: $filtro_efec);
+            $registro = array();
+            $registro['inm_ubicacion_id'] = $this->registro_id;
+            $registro['monto'] = $_POST['efectivo'];
+            $registro['nombre_beneficiario'] = $_POST['nombre_beneficiario'];
+            $r_inm_efectivo = (new inm_efectivo(link: $this->link))->alta_registro(
+                registro: $registro);
             if (errores::$error) {
                 $this->link->rollBack();
-                return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $r_efectivo,
+                return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_efectivo,
                     header: $header, ws: $ws);
-            }
-
-            if ($r_efectivo->n_registros <= 0) {
-                $registro = array();
-                $registro['inm_ubicacion_id'] = $this->registro_id;
-                $registro['monto'] = $_POST['efectivo'];
-                $registro['nombre_beneficiario'] = $_POST['nombre_beneficiario'];
-                $r_inm_efectivo = (new inm_efectivo(link: $this->link))->alta_registro(
-                    registro: $registro);
-                if (errores::$error) {
-                    $this->link->rollBack();
-                    return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_efectivo,
-                        header: $header, ws: $ws);
-                }
-            } else {
-                $registro = array();
-                $registro['monto'] = $_POST['efectivo'];
-                $registro['nombre_beneficiario'] = $_POST['nombre_beneficiario'];
-                $r_inm_efectivo = (new inm_efectivo(link: $this->link))->modifica_bd(
-                    registro: $registro, id: $r_efectivo->registros[0]['inm_efectivo_id']);
-                if (errores::$error) {
-                    $this->link->rollBack();
-                    return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_efectivo,
-                        header: $header, ws: $ws);
-                }
             }
         }
 
