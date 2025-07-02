@@ -10,6 +10,7 @@ namespace gamboamartin\inmuebles\controllers;
 
 use base\controller\init;
 use config\generales;
+use gamboamartin\banco\models\bn_cuenta;
 use gamboamartin\direccion_postal\models\dp_estado;
 use gamboamartin\direccion_postal\models\dp_municipio;
 use gamboamartin\documento\models\doc_tipo_documento;
@@ -28,6 +29,7 @@ use gamboamartin\inmuebles\models\inm_nacionalidad;
 use gamboamartin\inmuebles\models\inm_ocupacion;
 use gamboamartin\inmuebles\models\inm_poder;
 use gamboamartin\inmuebles\models\inm_status_ubicacion;
+use gamboamartin\inmuebles\models\inm_tipo_cheque;
 use gamboamartin\inmuebles\models\inm_transferencia;
 use gamboamartin\inmuebles\models\inm_ubicacion;
 use gamboamartin\plugins\exportador;
@@ -885,7 +887,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         $columns_ds = array('inm_tipo_cheque_id','inm_tipo_cheque_descripcion');
         $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_tipo_cheque_id',
             keys_selects:$keys_selects, id_selected:-1, label: 'Tipo Cheque',
-            columns_ds : $columns_ds,required: false,id_css: 'inm_tipo_cheque_sl_id');
+            columns_ds : $columns_ds,required: false);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);
@@ -894,7 +896,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         $columns_ds = array('bn_cuenta_id','bn_cuenta_descripcion');
         $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'bn_cuenta_id',
             keys_selects:$keys_selects, id_selected:-1, label: 'Cuenta',
-            columns_ds : $columns_ds,required: false,id_css: 'bn_cuenta_sl_id');
+            columns_ds : $columns_ds,required: false);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);
@@ -1126,6 +1128,27 @@ class controlador_inm_ubicacion extends _ctl_base {
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener keys_selects', data:  $keys_selects, header: $header,ws:  $ws);
         }
+
+        $modelo = new inm_tipo_cheque(link: $this->link);
+        $inm_tipo_cheque_id = $this->html->select_catalogo(cols: 6, con_registros: true,
+            id_selected: -1, modelo: $modelo, id_css: 'inm_tipo_cheque_sl_id',
+            label: 'Tipo Cheque', name: 'inm_tipo_cheque_sl_id');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $inm_tipo_cheque_id,header: $header, ws:$ws);
+        }
+
+        $this->inputs->inm_tipo_cheque_sl_id = $inm_tipo_cheque_id;
+        
+       $modelo = new bn_cuenta(link: $this->link);
+        $bn_cuenta_id = $this->html->select_catalogo(cols: 6, con_registros: true,
+            id_selected: -1, modelo: $modelo, id_css: 'bn_cuenta_sl_id',
+            label: 'Tipo Cheque', name: 'bn_cuenta_sl_id');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $bn_cuenta_id,header: $header, ws:$ws);
+        }
+
+        $this->inputs->bn_cuenta_sl_id = $bn_cuenta_id;
+
 
         $keys_selects = (new init())->key_select_txt(cols: 12,key: 'nombre_beneficiario_emision', keys_selects:$keys_selects,
             place_holder: 'Nombre Beneficiario',required: false);

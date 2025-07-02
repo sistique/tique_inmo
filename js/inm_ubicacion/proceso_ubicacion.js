@@ -237,8 +237,8 @@ let cont_cont_cheque_emi = $("#cont_cheque_emi");
 let cont_cont_transfer_emi = $("#cont_transfer_emi");
 let cont_cont_efectivo_emi = $("#cont_efectivo_emi");
 let txt_nombre_beneficiario = $("#nombre_beneficiario_emision");
-let sl_inm_tipo_cheque_id = $("#inm_tipo_cheque_id");
-let sl_bn_cuenta_id = $("#bn_cuenta_id");
+let sl_inm_tipo_cheque_id = $("#inm_tipo_cheque_sl_id");
+let sl_bn_cuenta_id = $("#bn_cuenta_sl_id");
 let txt_numero_cheque = $("#numero_cheque");
 let txt_monto_emision = $("#monto_emision");
 let txt_transferencia = $("#transferencia");
@@ -260,8 +260,13 @@ $(".checkbox_reg").on("change", function() {
             cont_cont_efectivo_emi.hide();
 
             txt_nombre_beneficiario.val($(this).data("nombre_beneficiario"));
-            sl_inm_tipo_cheque_id.val($(this).data("inm_tipo_cheque_id"));
-            sl_bn_cuenta_id.val($(this).data("bn_cuenta_id"));
+
+            sl_inm_tipo_cheque_id.val(String($(this).data("inm_tipo_cheque_id")));
+            sl_inm_tipo_cheque_id.selectpicker('refresh');
+
+            sl_bn_cuenta_id.val(String($(this).data("bn_cuenta_id")));
+            sl_bn_cuenta_id.selectpicker('refresh');
+
             txt_numero_cheque.val($(this).data("numero_cheque"));
             txt_monto_emision.val($(this).data("monto"));
         }else if(movimiento === 'transferencia'){
