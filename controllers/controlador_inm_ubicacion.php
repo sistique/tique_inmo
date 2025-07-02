@@ -1157,6 +1157,14 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $this->inputs->inm_tipo_gasto_sl_id = $inm_tipo_gasto_sl_id;
 
+        $registro_ajustar_id = $this->html->hidden(name:'registro_ajustar_id',value: "");
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $registro_ajustar_id,  header: $header,
+                ws: $ws);
+        }
+
+        $this->inputs->registro_ajustar_id = $registro_ajustar_id;
+
         $keys_selects = (new init())->key_select_txt(cols: 12,key: 'nombre_beneficiario_emision', keys_selects:$keys_selects,
             place_holder: 'Nombre Beneficiario',required: false);
         if(errores::$error){
@@ -1170,7 +1178,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         }
 
         $keys_selects = (new init())->key_select_txt(cols: 12,key: 'monto_emision', keys_selects:$keys_selects,
-            place_holder: 'Monto',required: false, disabled: true);
+            place_holder: 'Monto',required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
@@ -1665,24 +1673,22 @@ class controlador_inm_ubicacion extends _ctl_base {
         $this->link->beginTransaction();
 
         if(isset($_POST['inm_tipo_gasto_sl_id']) && trim($_POST['inm_tipo_gasto_sl_id']) === '1') {
-            $filtro_che['inm_ubicacion.id'] = $this->registro_id;
-            $filtro_che['inm_tipo_cheque.id'] = $_POST['inm_tipo_gasto_sl_id'];
-            $r_cheque = (new inm_cheque(link: $this->link))->filtro_and(filtro: $filtro_che);
+            $r_cheque = (new inm_cheque(link: $this->link))->registro(registro_id: $_POST['registro_ajustar_id']);
             if (errores::$error) {
                 $this->link->rollBack();
                 return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $r_cheque,
                     header: $header, ws: $ws);
             }
 
-            if ($r_cheque->n_registros > 0) {
+            if (count($r_cheque) > 0) {
                 $registro = array();
-                $registro['inm_tipo_cheque_id'] = $_POST['inm_tipo_cheque_id'];
-                $registro['bn_cuenta_id'] = $_POST['bn_cuenta_id'];
+                $registro['inm_tipo_cheque_id'] = $_POST['inm_tipo_cheque_sl_id'];
+                $registro['bn_cuenta_id'] = $_POST['bn_cuenta_sl_id'];
                 $registro['numero_cheque'] = $_POST['numero_cheque'];
-                $registro['monto'] = $_POST['monto'];
-                $registro['nombre_beneficiario'] = $_POST['nombre_beneficiario'];
+                $registro['monto'] = $_POST['monto_emision'];
+                $registro['nombre_beneficiario'] = $_POST['nombre_beneficiario_emision'];
                 $r_inm_cheque = (new inm_cheque(link: $this->link))->modifica_bd(
-                    registro: $registro, id: $r_cheque->registros[0]['inm_cheque_id']);
+                    registro: $registro, id: $_POST['registro_ajustar_id']);
                 if (errores::$error) {
                     $this->link->rollBack();
                     return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_cheque,
@@ -1771,7 +1777,7 @@ class controlador_inm_ubicacion extends _ctl_base {
             }
         }*/
 
-        if(isset($_POST['transferencia']) && trim($_POST['transferencia']) !== '') {
+        if(isset($_POST['inm_tipo_gasto_sl_id']) && trim($_POST['inm_tipo_gasto_sl_id']) === '2') {
             $filtro_transfe['inm_ubicacion.id'] = $this->registro_id;
             $r_transferencia = (new inm_transferencia(link: $this->link))->filtro_and(filtro: $filtro_transfe);
             if (errores::$error) {
@@ -1808,7 +1814,7 @@ class controlador_inm_ubicacion extends _ctl_base {
             }
         }
 
-        if(isset($_POST['efectivo']) && trim($_POST['efectivo']) !== '') {
+        if(isset($_POST['inm_tipo_gasto_sl_id']) && trim($_POST['inm_tipo_gasto_sl_id']) === '3') {
             $filtro_efec['inm_ubicacion.id'] = $this->registro_id;
             $r_efectivo = (new inm_efectivo(link: $this->link))->filtro_and(filtro: $filtro_efec);
             if (errores::$error) {

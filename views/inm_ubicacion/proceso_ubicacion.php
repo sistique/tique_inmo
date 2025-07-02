@@ -509,6 +509,7 @@
                                         </div>
 
                                         <?php echo $controlador->inputs->inm_tipo_gasto_sl_id; ?>
+                                        <?php echo $controlador->inputs->registro_ajustar_id; ?>
 
                                         <div class="control-group btn-alta">
                                             <div class="controls">

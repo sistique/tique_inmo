@@ -245,6 +245,7 @@ let txt_transferencia = $("#transferencia");
 let txt_monto_transferencia = $("#monto_transferencia_emision");
 let txt_efectivo = $("#efectivo_emision");
 let txt_inm_tipo_gasto_sl_id = $("input[name='inm_tipo_gasto_sl_id']");
+let txt_registro_ajustar_id = $("input[name='registro_ajustar_id']");
 
 $(".checkbox_reg").on("change", function() {
     // Desmarca todos los demás checkboxes
@@ -272,6 +273,7 @@ $(".checkbox_reg").on("change", function() {
             txt_monto_emision.val($(this).data("monto"));
 
             txt_inm_tipo_gasto_sl_id.val($(this).data("inm_tipo_gasto_id"));
+            txt_registro_ajustar_id.val(valorSeleccionado);
         }else if(movimiento === 'transferencia'){
             cont_cont_cheque_emi.hide();
             cont_cont_transfer_emi.show();
@@ -283,6 +285,7 @@ $(".checkbox_reg").on("change", function() {
             txt_monto_transferencia.val($(this).data("monto_transferencia"));
 
             txt_inm_tipo_gasto_sl_id.val($(this).data("inm_tipo_gasto_id"));
+            txt_registro_ajustar_id.val(valorSeleccionado);
         }else if(movimiento === 'efectivo'){
             cont_cont_cheque_emi.hide();
             cont_cont_transfer_emi.hide();
@@ -290,12 +293,15 @@ $(".checkbox_reg").on("change", function() {
 
             txt_nombre_beneficiario.val($(this).data("nombre_beneficiario"));
             txt_efectivo.val($(this).data("monto"));
+
             txt_inm_tipo_gasto_sl_id.val($(this).data("inm_tipo_gasto_id"));
+            txt_registro_ajustar_id.val(valorSeleccionado);
         }else{
             cont_cont_cheque_emi.hide();
             cont_cont_transfer_emi.hide();
             cont_cont_efectivo_emi.hide();
             txt_inm_tipo_gasto_sl_id.val("");
+            txt_registro_ajustar_id.val("");
         }
         console.log("Cheque seleccionado: " + valorSeleccionado + " " + movimiento);
     } else {
@@ -303,6 +309,7 @@ $(".checkbox_reg").on("change", function() {
         cont_cont_transfer_emi.hide();
         cont_cont_efectivo_emi.hide();
         txt_inm_tipo_gasto_sl_id.val("");
+        txt_registro_ajustar_id.val("");
         console.log("Ningún cheque seleccionado");
     }
 });
