@@ -66,6 +66,30 @@ class inm_transferencia extends _modelo_parent{
         return $r_alta_bd;
     }
 
+    public function elimina_bd(int $id): array|stdClass
+    {
+        $modelo_inm_rel = new inm_rel_costo_transferencia(link: $this->link);
+        $filtro['inm_transferencia.id'] = $id;
+        $r_rel = $modelo_inm_rel->filtro_and(filtro: $filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener relacion',data:  $r_rel);
+        }
+
+        if($r_rel->n_registros > 0) {
+            $r_elimina = $modelo_inm_rel->elimina_bd(id: $r_rel->registros[0]['inm_rel_costo_transferencia_id']);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al obtener relacion', data: $r_elimina);
+            }
+        }
+
+        $r_elimina_bd = parent::elimina_bd(id:  $id);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al eliminar descripcion',data:  $r_elimina_bd);
+        }
+
+        return $r_elimina_bd;
+    }
+
     public function modifica_bd(array $registro, int $id, bool $reactiva = false, array $keys_integra_ds = array('codigo', 'descripcion')): array|stdClass
     {
         $r_modifica_bd = parent::modifica_bd(registro: $registro,id:  $id,reactiva:  $reactiva,

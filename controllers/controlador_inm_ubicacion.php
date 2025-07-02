@@ -950,11 +950,10 @@ class controlador_inm_ubicacion extends _ctl_base {
         }
 
         $registros = array();
-        $params = array('accion_retorno'=>'documentos','seccion_retorno'=>$this->seccion,
+        $params = array('accion_retorno'=>'proceso_ubicacion','seccion_retorno'=>$this->seccion,
             'id_retorno'=>$this->registro_id);
 
         if(isset($_GET['pestana_general_actual'])){
-            $params['accion_retorno'] = 'proceso_ubicacion';
             $params['pestana_general_actual'] = 'pestanageneral2';
         }
         foreach ($r_inm_cheque->registros as $inm_cheque) {
@@ -981,11 +980,10 @@ class controlador_inm_ubicacion extends _ctl_base {
         }
 
         $registros = array();
-        $params = array('accion_retorno'=>'documentos','seccion_retorno'=>$this->seccion,
+        $params = array('accion_retorno'=>'proceso_ubicacion','seccion_retorno'=>$this->seccion,
             'id_retorno'=>$this->registro_id);
 
         if(isset($_GET['pestana_general_actual'])){
-            $params['accion_retorno'] = 'proceso_ubicacion';
             $params['pestana_general_actual'] = 'pestanageneral2';
         }
         foreach ($r_inm_transferencia->registros as $inm_transferencia) {
@@ -1013,11 +1011,10 @@ class controlador_inm_ubicacion extends _ctl_base {
         }
 
         $registros = array();
-        $params = array('accion_retorno'=>'documentos','seccion_retorno'=>$this->seccion,
+        $params = array('accion_retorno'=>'proceso_ubicacion','seccion_retorno'=>$this->seccion,
             'id_retorno'=>$this->registro_id);
 
         if(isset($_GET['pestana_general_actual'])){
-            $params['accion_retorno'] = 'proceso_ubicacion';
             $params['pestana_general_actual'] = 'pestanageneral2';
         }
         foreach ($r_inm_efectivo->registros as $inm_efectivo) {
@@ -2961,6 +2958,7 @@ class controlador_inm_ubicacion extends _ctl_base {
     {
         $this->link->beginTransaction();
 
+        print_r($_POST)
         if(isset($_POST['inm_tipo_gasto_id']) && trim($_POST['inm_tipo_gasto_id']) === '1') {
             $registro = array();
             $registro['inm_ubicacion_id'] = $this->registro_id;
@@ -3092,7 +3090,7 @@ class controlador_inm_ubicacion extends _ctl_base {
             }
         }
 
-        if(isset($_POST['avanza_etapa'])) {
+        if(isset($_POST['avanza_etapa']) && trim($_POST['avanza_etapa']) !== '') {
             $filtro_exi['inm_ubicacion.id'] = $this->registro_id;
             $filtro_exi['inm_status_ubicacion.id'] = 3;
             $existe = (new inm_bitacora_status_ubicacion(link: $this->link))->existe(filtro: $filtro_exi);
