@@ -1186,7 +1186,7 @@ class controlador_inm_ubicacion extends _ctl_base {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'monto_transferencia', keys_selects:$keys_selects,
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'monto_transferencia_emision', keys_selects:$keys_selects,
             place_holder: 'Monto Transferencia',required: false, disabled: true);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
@@ -1204,7 +1204,7 @@ class controlador_inm_ubicacion extends _ctl_base {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'efectivo', keys_selects:$keys_selects,
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'efectivo_emision', keys_selects:$keys_selects,
             place_holder: 'Efectivo', required: false, disabled: true);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
@@ -1284,6 +1284,9 @@ class controlador_inm_ubicacion extends _ctl_base {
 
             $check = "<input type='checkbox'  class='checkbox_reg' 
                         data-movimiento = 'transferencia'
+                        data-nombre_beneficiario = '$inm_transferencia[inm_transferencia_nombre_beneficiario]'
+                        data-transferencia = '$inm_transferencia[inm_transferencia_transferencia]'
+                        data-monto_transferencia = '$inm_transferencia[inm_transferencia_monto]'
                         name='transferencia-$inm_transferencia[inm_transferencia_id]' value='$inm_transferencia[inm_transferencia_id]'>";
             $inm_transferencia['checkbox'] = $check;
 
@@ -1321,6 +1324,8 @@ class controlador_inm_ubicacion extends _ctl_base {
 
             $check = "<input type='checkbox' class='checkbox_reg'
                         data-movimiento = 'efectivo'
+                        data-nombre_beneficiario = '$inm_efectivo[inm_efectivo_nombre_beneficiario]'
+                        data-monto = '$inm_efectivo[inm_efectivo_monto]'
                         name='efectivo-$inm_efectivo[inm_efectivo_id]' value='$inm_efectivo[inm_efectivo_id]'>";
             $inm_efectivo['checkbox'] = $check;
 
@@ -1463,7 +1468,8 @@ class controlador_inm_ubicacion extends _ctl_base {
             'nivel','recamaras', 'metros_terreno','metros_construccion','adeudo_hipoteca', 'adeudo_predial',
             'cuenta_agua','adeudo_agua', 'adeudo_luz','monto_devolucion','transferencia','monto_transferencia',
             'efectivo','numero_cheque_secundario', 'monto_cheque_secundario','numero_credito',
-            'correo_mi_cuenta_infonavit','password_mi_cuenta_infonavit', 'monto_emision');
+            'correo_mi_cuenta_infonavit','password_mi_cuenta_infonavit', 'monto_emision','monto_transferencia_emision',
+            'efectivo_emision');
         $keys->selects = array();
 
 
