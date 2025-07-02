@@ -955,6 +955,7 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         if(isset($_GET['pestana_general_actual'])){
             $params['pestana_general_actual'] = 'pestanageneral2';
+            $params['pestana_actual'] = 'pestana3';
         }
         foreach ($r_inm_cheque->registros as $inm_cheque) {
             $button = $this->html->button_href(accion: 'elimina_bd', etiqueta: 'Elimina',
@@ -985,6 +986,7 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         if(isset($_GET['pestana_general_actual'])){
             $params['pestana_general_actual'] = 'pestanageneral2';
+            $params['pestana_actual'] = 'pestana3';
         }
         foreach ($r_inm_transferencia->registros as $inm_transferencia) {
             $button = $this->html->button_href(accion: 'elimina_bd', etiqueta: 'Elimina',
@@ -1016,6 +1018,7 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         if(isset($_GET['pestana_general_actual'])){
             $params['pestana_general_actual'] = 'pestanageneral2';
+            $params['pestana_actual'] = 'pestana3';
         }
         foreach ($r_inm_efectivo->registros as $inm_efectivo) {
             $button = $this->html->button_href(accion: 'elimina_bd', etiqueta: 'Elimina',
@@ -2957,7 +2960,7 @@ class controlador_inm_ubicacion extends _ctl_base {
     public function solicitud_de_recurso_bd(bool $header, bool $ws = false)
     {
         $this->link->beginTransaction();
-        
+
         if(isset($_POST['inm_tipo_gasto_id']) && trim($_POST['inm_tipo_gasto_id']) === '1') {
             $registro = array();
             $registro['inm_ubicacion_id'] = $this->registro_id;
