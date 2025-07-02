@@ -2889,7 +2889,7 @@ class html_controler
             extra_params_keys: $params_select->extra_params_keys, filtro: $params_select->filtro,
             key_descripcion_select: $params_select->key_descripcion_select, label: $params_select->label,
             not_in: $params_select->not_in, in: $params_select->in, registros: $params_select->registros,
-            required: $params_select->required);
+            required: $params_select->required,id_css: $params_select->id_css);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al generar select', data: $select);
         }

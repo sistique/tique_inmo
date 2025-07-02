@@ -141,6 +141,7 @@ class params{
         $data->name = $params->name ?? $name;
         $data->registros = $params->registros ?? array();
         $data->modelo_preferido = $params->modelo_preferido ?? true;
+        $data->id_css = $params->id_css ?? "";
 
         $data->extra_params_keys = array();
         if(isset($params->extra_params_keys) ){

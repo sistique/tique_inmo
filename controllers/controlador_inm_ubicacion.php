@@ -885,7 +885,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         $columns_ds = array('inm_tipo_cheque_id','inm_tipo_cheque_descripcion');
         $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_tipo_cheque_id',
             keys_selects:$keys_selects, id_selected:-1, label: 'Tipo Cheque',
-            columns_ds : $columns_ds,required: false);
+            columns_ds : $columns_ds,required: false,id_css: 'inm_tipo_cheque_sl_id');
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);
@@ -894,7 +894,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         $columns_ds = array('bn_cuenta_id','bn_cuenta_descripcion');
         $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'bn_cuenta_id',
             keys_selects:$keys_selects, id_selected:-1, label: 'Cuenta',
-            columns_ds : $columns_ds,required: false);
+            columns_ds : $columns_ds,required: false,id_css: 'bn_cuenta_sl_id');
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);
