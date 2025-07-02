@@ -107,4 +107,33 @@ class inm_rel_costo_transferencia extends _modelo_parent{
         return $r_modifica_bd;
     }*/
 
+    public function elimina_bd(int $id): array|stdClass
+    {
+        $r_costo = $this->registro(registro_id: $id);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener costoacion',data:  $r_costo);
+        }
+
+        $r_elimina_bd = parent::elimina_bd(id:  $id);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al eliminar descripcion',data:  $r_elimina_bd);
+        }
+
+        $modelo_inm_costo = new inm_costo(link: $this->link);
+        $filtro['inm_costo.id'] = $r_costo['inm_costo_id'];
+        $r_rel = $modelo_inm_costo->filtro_and(filtro: $filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener relacion',data:  $r_rel);
+        }
+
+        if($r_rel->n_registros > 0) {
+            $r_elimina = $modelo_inm_costo->elimina_bd(id: $r_rel->registros[0]['inm_costo_id']);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al obtener costoacion', data: $r_elimina);
+            }
+        }
+
+        return $r_elimina_bd;
+    }
+
 }
