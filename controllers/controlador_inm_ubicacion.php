@@ -870,7 +870,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         }
 
         $columns_ds = array('inm_tipo_gasto_id','inm_tipo_gasto_descripcion');
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_tipo_gasto_id',
+        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_tipo_gasto_id',
             keys_selects:$keys_selects, id_selected:-1, label: 'Tipo Gasto',
             columns_ds : $columns_ds);
         if(errores::$error){

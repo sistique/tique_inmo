@@ -394,10 +394,23 @@
 
                                         <div class="control-group btn-alta">
                                             <div class="controls">
-                                                <button type="submit" class="btn btn-success">Avanza Etapa</button><br>
+                                                <button type="submit" class="btn btn-success" value="alta_gasto">
+                                                    Alta
+                                                </button>
+                                                <br>
+                                            </div>
+                                        </div>
+
+                                        <div class="control-group btn-alta">
+                                            <div class="controls">
+                                                <button type="submit" class="btn btn-success" value="avanza_etapa">
+                                                    Avanza Etapa
+                                                </button>
+                                                <br>
                                             </div>
                                         </div>
                                     </form>
+
 
                                     <div class="row">
                                         <div class="col-md-12">
