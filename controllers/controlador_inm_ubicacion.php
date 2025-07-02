@@ -99,6 +99,8 @@ class controlador_inm_ubicacion extends _ctl_base {
     public string $link_documento_bd = '';
     public array $imp_compradores = array();
     public array $cheques = array();
+    public array $transferencias = array();
+    public array $efectivos = array();
     public array $fotos = array();
     public array $etapas = array();
     public array $inm_opiniones_valor = array();
@@ -907,6 +909,37 @@ class controlador_inm_ubicacion extends _ctl_base {
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
         }
+
+        $filtro['inm_ubicacion.id'] = $this->registro_id;
+        $order = array('inm_cheque.fecha_alta'=>'DESC');
+        $r_inm_cheque = (new inm_cheque(link: $this->link))->filtro_and(filtro: $filtro,order: $order);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener etapas', data: $r_inm_cheque,header: $header,
+                ws:  $ws);
+        }
+
+
+        $this->cheques = $r_inm_cheque->registros;
+
+        $filtro['inm_ubicacion.id'] = $this->registro_id;
+        $order = array('inm_transferencia.fecha_alta'=>'DESC');
+        $r_inm_transferencia = (new inm_transferencia(link: $this->link))->filtro_and(filtro: $filtro,order: $order);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener etapas', data: $r_inm_transferencia,header: $header,
+                ws:  $ws);
+        }
+
+        $this->transferencias = $r_inm_transferencia->registros;
+
+        $filtro['inm_ubicacion.id'] = $this->registro_id;
+        $order = array('inm_efectivo.fecha_alta'=>'DESC');
+        $r_inm_efectivo = (new inm_efectivo(link: $this->link))->filtro_and(filtro: $filtro,order: $order);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener etapas', data: $r_inm_efectivo,header: $header,
+                ws:  $ws);
+        }
+
+        $this->efectivos = $r_inm_efectivo->registros;
 
         $params = array('pestana_general_actual' => 'pestanageneral2');
         $link_solicitud_de_recurso_bd = $this->obj_link->link_con_id(accion:'solicitud_de_recurso_bd',
