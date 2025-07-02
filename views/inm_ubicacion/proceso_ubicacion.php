@@ -485,7 +485,7 @@
                                           class="form-additional" enctype="multipart/form-data">
 
                                         <?php echo $controlador->inputs->nombre_beneficiario_emision; ?>
-                                        <div id="cont_cheque">
+                                        <div id="cont_cheque_emi">
                                             <?php echo $controlador->inputs->numero_cheque; ?>
                                             <?php echo $controlador->inputs->monto; ?>
                                         </div>
@@ -493,7 +493,7 @@
                                         <?php //echo $controlador->inputs->numero_cheque_secundario; ?>
                                         <?php //echo $controlador->inputs->monto_cheque_secundario; ?>
 
-                                        <div id="cont_transfer">
+                                        <div id="cont_transfer_emi">
                                             <?php echo $controlador->inputs->transferencia; ?>
                                             <?php echo $controlador->inputs->monto_transferencia; ?>
                                         </div>
@@ -501,7 +501,7 @@
                                         <?php //echo $controlador->inputs->numero_cheque_comision; ?>
                                         <?php //echo $controlador->inputs->monto_comision; ?>
 
-                                        <div id="cont_efectivo">
+                                        <div id="cont_efectivo_emi">
                                             <?php echo $controlador->inputs->efectivo; ?>
                                         </div>
 

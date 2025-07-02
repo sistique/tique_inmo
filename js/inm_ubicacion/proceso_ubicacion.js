@@ -229,12 +229,21 @@ sl_inm_tipo_gasto_id.change(function(){
         cont_cont_transfer.hide();
         cont_cont_efectivo.hide();
     }
-    console.log(inm_tipo_gasto_id);
 });
 
 /***** Emision de Recurso *****/
+$(".checkbox_reg").on("change", function() {
+    // Desmarca todos los demás checkboxes
+    $(".checkbox_reg").not(this).prop("checked", false);
 
-
+    // Si está marcado, obtén su valor
+    if ($(this).is(":checked")) {
+        let valorSeleccionado = $(this).val();
+        console.log("Cheque seleccionado: " + valorSeleccionado);
+    } else {
+        console.log("Ningún cheque seleccionado");
+    }
+});
 
 /***** Modifica ******/
 

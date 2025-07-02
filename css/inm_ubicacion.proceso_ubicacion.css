@@ -10,6 +10,18 @@
     display: none;
 }
 
+#cont_cheque_emi {
+    display: none;
+}
+
+#cont_transfer_emi {
+    display: none;
+}
+
+#cont_efectivo_emi {
+    display: none;
+}
+
 /******* Pestañas Generales ********/
 #pestanasgeneral {
     float: top;
