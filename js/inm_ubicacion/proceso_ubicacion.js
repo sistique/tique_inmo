@@ -244,7 +244,7 @@ let txt_monto_emision = $("#monto_emision");
 let txt_transferencia = $("#transferencia");
 let txt_monto_transferencia = $("#monto_transferencia_emision");
 let txt_efectivo = $("#efectivo_emision");
-let txt_inm_tipo_gasto_sl_id = $("#inm_tipo_gasto_sl_id");
+let txt_inm_tipo_gasto_sl_id = $("input[name='inm_tipo_gasto_sl_id']");
 
 $(".checkbox_reg").on("change", function() {
     // Desmarca todos los demás checkboxes
