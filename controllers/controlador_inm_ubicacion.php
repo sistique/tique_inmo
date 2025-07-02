@@ -1149,6 +1149,13 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $this->inputs->bn_cuenta_sl_id = $bn_cuenta_id;
 
+        $inm_tipo_gasto_sl_id = $this->html->hidden(name:'inm_tipo_gasto_sl_id',value: "");
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $inm_tipo_gasto_sl_id,  header: $header,
+                ws: $ws);
+        }
+
+        $this->inputs->inm_tipo_gasto_sl_id = $inm_tipo_gasto_sl_id;
 
         $keys_selects = (new init())->key_select_txt(cols: 12,key: 'nombre_beneficiario_emision', keys_selects:$keys_selects,
             place_holder: 'Nombre Beneficiario',required: false);
@@ -1248,6 +1255,7 @@ class controlador_inm_ubicacion extends _ctl_base {
                         data-monto = '$inm_cheque[inm_cheque_monto]'
                         data-inm_tipo_cheque_id = '$inm_cheque[inm_tipo_cheque_id]'
                         data-bn_cuenta_id = '$inm_cheque[bn_cuenta_id]'
+                        data-inm_tipo_gasto_id = '1'
                         name='cheque-$inm_cheque[inm_cheque_id]' value='$inm_cheque[inm_cheque_id]'>";
             $inm_cheque['checkbox'] = $check;
 
@@ -1287,6 +1295,7 @@ class controlador_inm_ubicacion extends _ctl_base {
                         data-nombre_beneficiario = '$inm_transferencia[inm_transferencia_nombre_beneficiario]'
                         data-transferencia = '$inm_transferencia[inm_transferencia_transferencia]'
                         data-monto_transferencia = '$inm_transferencia[inm_transferencia_monto]'
+                        data-inm_tipo_gasto_id = '2'
                         name='transferencia-$inm_transferencia[inm_transferencia_id]' value='$inm_transferencia[inm_transferencia_id]'>";
             $inm_transferencia['checkbox'] = $check;
 
@@ -1326,6 +1335,7 @@ class controlador_inm_ubicacion extends _ctl_base {
                         data-movimiento = 'efectivo'
                         data-nombre_beneficiario = '$inm_efectivo[inm_efectivo_nombre_beneficiario]'
                         data-monto = '$inm_efectivo[inm_efectivo_monto]'
+                        data-inm_tipo_gasto_id = '3'
                         name='efectivo-$inm_efectivo[inm_efectivo_id]' value='$inm_efectivo[inm_efectivo_id]'>";
             $inm_efectivo['checkbox'] = $check;
 
@@ -1693,7 +1703,7 @@ class controlador_inm_ubicacion extends _ctl_base {
                 }
             }
         }
-
+/*
         if(isset($_POST['numero_cheque_comision']) && trim($_POST['numero_cheque_comision']) !== '') {
             $filtro_che['inm_ubicacion.id'] = $this->registro_id;
             $filtro_che['inm_tipo_cheque.id'] = 2;
@@ -1772,7 +1782,7 @@ class controlador_inm_ubicacion extends _ctl_base {
                         header: $header, ws: $ws);
                 }
             }
-        }
+        }*/
 
         if(isset($_POST['transferencia']) && trim($_POST['transferencia']) !== '') {
             $filtro_transfe['inm_ubicacion.id'] = $this->registro_id;
@@ -1846,26 +1856,28 @@ class controlador_inm_ubicacion extends _ctl_base {
             }
         }
 
-        $filtro_exi['inm_ubicacion.id'] = $this->registro_id;
-        $filtro_exi['inm_status_ubicacion.id'] = 8;
-        $existe = (new inm_bitacora_status_ubicacion(link: $this->link))->existe(filtro: $filtro_exi);
-        if (errores::$error) {
-            $this->link->rollBack();
-            return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $existe,
-                header: $header, ws: $ws);
-        }
-
-        if(!$existe) {
-            $registro = array();
-            $registro['inm_ubicacion_id'] = $this->registro_id;
-            $registro['inm_status_ubicacion_id'] = 8;
-            $registro['fecha_status'] = date('Y-m-d\TH:i:s');
-            $r_inm_bitacora_status_ubicacion = (new inm_bitacora_status_ubicacion(link: $this->link))->alta_registro(
-                registro: $registro);
+        if(isset($_POST['avanza_etapa']) && trim($_POST['avanza_etapa']) !== '') {
+            $filtro_exi['inm_ubicacion.id'] = $this->registro_id;
+            $filtro_exi['inm_status_ubicacion.id'] = 8;
+            $existe = (new inm_bitacora_status_ubicacion(link: $this->link))->existe(filtro: $filtro_exi);
             if (errores::$error) {
                 $this->link->rollBack();
-                return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_bitacora_status_ubicacion,
+                return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $existe,
                     header: $header, ws: $ws);
+            }
+
+            if (!$existe) {
+                $registro = array();
+                $registro['inm_ubicacion_id'] = $this->registro_id;
+                $registro['inm_status_ubicacion_id'] = 8;
+                $registro['fecha_status'] = date('Y-m-d\TH:i:s');
+                $r_inm_bitacora_status_ubicacion = (new inm_bitacora_status_ubicacion(link: $this->link))->alta_registro(
+                    registro: $registro);
+                if (errores::$error) {
+                    $this->link->rollBack();
+                    return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_bitacora_status_ubicacion,
+                        header: $header, ws: $ws);
+                }
             }
         }
 

@@ -508,6 +508,8 @@
                                             <?php echo $controlador->inputs->efectivo_emision; ?>
                                         </div>
 
+                                        <?php echo $controlador->inputs->inm_tipo_gasto_sl_id; ?>
+
                                         <div class="control-group btn-alta">
                                             <div class="controls">
                                                 <button type="submit" class="btn btn-success" name="alta_gasto" value="alta_gasto">

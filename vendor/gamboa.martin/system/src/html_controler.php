@@ -1198,10 +1198,7 @@ class html_controler
             return $this->error->error(mensaje: 'Error name esta vacio',data:  $data_err, es_final: true);
         }
         $value = trim($value);
-        if($value === ''){
-            return $this->error->error(mensaje: 'Error value esta vacio',data:  $data_err, es_final: true);
-        }
-        
+
         return "<input type='hidden' name='$name' value='$value'>";
     }
 
