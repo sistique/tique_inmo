@@ -422,6 +422,7 @@
                                                         <th>Referencia</th>
                                                         <th>Monto</th>
                                                         <th>Fecha</th>
+                                                        <th>Acciones</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
@@ -437,6 +438,7 @@
                                                             <td><?php echo $cheque['inm_cheque_numero_cheque'] ?></td>
                                                             <td><?php echo $cheque['inm_cheque_monto'] ?></td>
                                                             <td><?php echo $cheque['inm_cheque_fecha_alta'] ?></td>
+                                                            <td><?php echo $cheque['elimina_bd'] ?></td>
                                                         </tr>
                                                     <?php } ?>
                                                     <tr>
@@ -451,6 +453,7 @@
                                                             <td><?php echo $transferencia['inm_transferencia_transferencia'] ?></td>
                                                             <td><?php echo $transferencia['inm_transferencia_monto'] ?></td>
                                                             <td><?php echo $transferencia['inm_transferencia_fecha_alta'] ?></td>
+                                                            <td><?php echo $transferencia['elimina_bd'] ?></td>
                                                         </tr>
                                                     <?php } ?>
                                                     <tr>
@@ -465,6 +468,7 @@
                                                             <td></td>
                                                             <td><?php echo $efectivo['inm_efectivo_monto'] ?></td>
                                                             <td><?php echo $efectivo['inm_efectivo_fecha_alta'] ?></td>
+                                                            <td><?php echo $efectivo['elimina_bd'] ?></td>
                                                         </tr>
                                                     <?php } ?>
                                                     </tbody>

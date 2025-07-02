@@ -949,7 +949,28 @@ class controlador_inm_ubicacion extends _ctl_base {
                 ws:  $ws);
         }
 
-        $this->cheques = $r_inm_cheque->registros;
+        $registros = array();
+        $params = array('accion_retorno'=>'documentos','seccion_retorno'=>$this->seccion,
+            'id_retorno'=>$this->registro_id);
+
+        if(isset($_GET['pestana_general_actual'])){
+            $params['accion_retorno'] = 'proceso_ubicacion';
+            $params['pestana_general_actual'] = 'pestanageneral2';
+        }
+        foreach ($r_inm_cheque->registros as $inm_cheque) {
+            $button = $this->html->button_href(accion: 'elimina_bd', etiqueta: 'Elimina',
+                registro_id: $inm_cheque['inm_cheque_id'], seccion: 'inm_cheque', style: 'danger',
+                params: $params);
+            if(errores::$error){
+                return $this->retorno_error(mensaje: 'Error al integrar button',data:  $button,header: $header,
+                    ws:  $ws);
+            }
+            $inm_cheque['elimina_bd'] = $button;
+
+            $registros[] = $inm_cheque;
+        }
+
+        $this->cheques = $registros;
 
         $filtro['inm_ubicacion.id'] = $this->registro_id;
         $order = array('inm_transferencia.fecha_alta'=>'DESC');
@@ -959,7 +980,29 @@ class controlador_inm_ubicacion extends _ctl_base {
                 ws:  $ws);
         }
 
-        $this->transferencias = $r_inm_transferencia->registros;
+        $registros = array();
+        $params = array('accion_retorno'=>'documentos','seccion_retorno'=>$this->seccion,
+            'id_retorno'=>$this->registro_id);
+
+        if(isset($_GET['pestana_general_actual'])){
+            $params['accion_retorno'] = 'proceso_ubicacion';
+            $params['pestana_general_actual'] = 'pestanageneral2';
+        }
+        foreach ($r_inm_transferencia->registros as $inm_transferencia) {
+            $button = $this->html->button_href(accion: 'elimina_bd', etiqueta: 'Elimina',
+                registro_id: $inm_transferencia['inm_transferencia_id'], seccion: 'inm_transferencia', style: 'danger',
+                params: $params);
+            if(errores::$error){
+                return $this->retorno_error(mensaje: 'Error al integrar button',data:  $button,header: $header,
+                    ws:  $ws);
+            }
+            $inm_transferencia['elimina_bd'] = $button;
+
+            $registros[] = $inm_transferencia;
+        }
+
+
+        $this->transferencias = $registros;
 
         $filtro['inm_ubicacion.id'] = $this->registro_id;
         $order = array('inm_efectivo.fecha_alta'=>'DESC');
@@ -969,11 +1012,32 @@ class controlador_inm_ubicacion extends _ctl_base {
                 ws:  $ws);
         }
 
-        $this->efectivos = $r_inm_efectivo->registros;
+        $registros = array();
+        $params = array('accion_retorno'=>'documentos','seccion_retorno'=>$this->seccion,
+            'id_retorno'=>$this->registro_id);
 
-        $params = array('pestana_general_actual' => 'pestanageneral2');
+        if(isset($_GET['pestana_general_actual'])){
+            $params['accion_retorno'] = 'proceso_ubicacion';
+            $params['pestana_general_actual'] = 'pestanageneral2';
+        }
+        foreach ($r_inm_efectivo->registros as $inm_efectivo) {
+            $button = $this->html->button_href(accion: 'elimina_bd', etiqueta: 'Elimina',
+                registro_id: $inm_efectivo['inm_efectivo_id'], seccion: 'inm_efectivo', style: 'danger',
+                params: $params);
+            if(errores::$error){
+                return $this->retorno_error(mensaje: 'Error al integrar button',data:  $button,header: $header,
+                    ws:  $ws);
+            }
+            $inm_efectivo['elimina_bd'] = $button;
+
+            $registros[] = $inm_efectivo;
+        }
+
+        $this->efectivos = $registros;
+
+        $params_retorno = array('pestana_general_actual' => 'pestanageneral2');
         $link_solicitud_de_recurso_bd = $this->obj_link->link_con_id(accion:'solicitud_de_recurso_bd',
-            link: $this->link,registro_id: $this->registro_id,seccion: 'inm_ubicacion',params: $params);
+            link: $this->link,registro_id: $this->registro_id,seccion: 'inm_ubicacion',params: $params_retorno);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al generar link',data:  $link_solicitud_de_recurso_bd,
                 header: $header,ws:  $ws);
@@ -2897,7 +2961,7 @@ class controlador_inm_ubicacion extends _ctl_base {
     {
         $this->link->beginTransaction();
 
-        if(isset($_POST['monto']) && trim($_POST['monto']) !== '') {
+        if(isset($_POST['inm_tipo_gasto_id']) && trim($_POST['inm_tipo_gasto_id']) === '1') {
             $filtro_che['inm_ubicacion.id'] = $this->registro_id;
             $filtro_che['inm_tipo_cheque.id'] = $_POST['inm_tipo_cheque_id'];
             $r_cheque = (new inm_cheque(link: $this->link))->filtro_and(filtro: $filtro_che);
@@ -2934,7 +2998,7 @@ class controlador_inm_ubicacion extends _ctl_base {
                 }
             }
         }
-
+/*
         if(isset($_POST['monto_comision']) && trim($_POST['monto_comision']) !== '') {
             $filtro_che['inm_ubicacion.id'] = $this->registro_id;
             $filtro_che['inm_tipo_cheque.id'] = $_POST['inm_tipo_cheque_id'];
@@ -2972,7 +3036,9 @@ class controlador_inm_ubicacion extends _ctl_base {
                 }
             }
         }
+*/
 
+        /*
         if(isset($_POST['monto_cheque_secundario']) && trim($_POST['monto_cheque_secundario']) !== '') {
             $filtro_che['inm_ubicacion.id'] = $this->registro_id;
             $filtro_che['inm_tipo_cheque.id'] = $_POST['inm_tipo_cheque_id'];
@@ -3010,8 +3076,8 @@ class controlador_inm_ubicacion extends _ctl_base {
                 }
             }
         }
-
-        if(isset($_POST['monto_transferencia']) && trim($_POST['monto_transferencia']) !== '') {
+*/
+        if(isset($_POST['inm_tipo_gasto_id']) && trim($_POST['inm_tipo_gasto_id']) === '2') {
             $filtro_transfe['inm_ubicacion.id'] = $this->registro_id;
             $r_transferencia = (new inm_transferencia(link: $this->link))->filtro_and(filtro: $filtro_transfe);
             if (errores::$error) {
@@ -3046,7 +3112,7 @@ class controlador_inm_ubicacion extends _ctl_base {
             }
         }
 
-        if(isset($_POST['efectivo']) && trim($_POST['efectivo']) !== '') {
+        if(isset($_POST['inm_tipo_gasto_id']) && trim($_POST['inm_tipo_gasto_id']) === '3') {
             $filtro_efec['inm_ubicacion.id'] = $this->registro_id;
             $r_efectivo = (new inm_efectivo(link: $this->link))->filtro_and(filtro: $filtro_efec);
             if (errores::$error) {
@@ -3081,26 +3147,28 @@ class controlador_inm_ubicacion extends _ctl_base {
             }
         }
 
-        $filtro_exi['inm_ubicacion.id'] = $this->registro_id;
-        $filtro_exi['inm_status_ubicacion.id'] = 3;
-        $existe = (new inm_bitacora_status_ubicacion(link: $this->link))->existe(filtro: $filtro_exi);
-        if (errores::$error) {
-            $this->link->rollBack();
-            return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $existe,
-                header: $header, ws: $ws);
-        }
-
-        if(!$existe) {
-            $registro = array();
-            $registro['inm_ubicacion_id'] = $this->registro_id;
-            $registro['inm_status_ubicacion_id'] = 3;
-            $registro['fecha_status'] = date('Y-m-d\TH:i:s');
-            $r_inm_bitacora_status_ubicacion = (new inm_bitacora_status_ubicacion(link: $this->link))->alta_registro(
-                registro: $registro);
+        if(isset($_POST['avanza_etapa'])) {
+            $filtro_exi['inm_ubicacion.id'] = $this->registro_id;
+            $filtro_exi['inm_status_ubicacion.id'] = 3;
+            $existe = (new inm_bitacora_status_ubicacion(link: $this->link))->existe(filtro: $filtro_exi);
             if (errores::$error) {
                 $this->link->rollBack();
-                return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_bitacora_status_ubicacion,
+                return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $existe,
                     header: $header, ws: $ws);
+            }
+
+            if (!$existe) {
+                $registro = array();
+                $registro['inm_ubicacion_id'] = $this->registro_id;
+                $registro['inm_status_ubicacion_id'] = 3;
+                $registro['fecha_status'] = date('Y-m-d\TH:i:s');
+                $r_inm_bitacora_status_ubicacion = (new inm_bitacora_status_ubicacion(link: $this->link))->alta_registro(
+                    registro: $registro);
+                if (errores::$error) {
+                    $this->link->rollBack();
+                    return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_bitacora_status_ubicacion,
+                        header: $header, ws: $ws);
+                }
             }
         }
 
