@@ -232,14 +232,38 @@ sl_inm_tipo_gasto_id.change(function(){
 });
 
 /***** Emision de Recurso *****/
+
+let cont_cont_cheque_emi = $("#cont_cheque_emi");
+let cont_cont_transfer_emi = $("#cont_transfer_emi");
+let cont_cont_efectivo_emi = $("#cont_efectivo_emi");
+
 $(".checkbox_reg").on("change", function() {
     // Desmarca todos los demás checkboxes
     $(".checkbox_reg").not(this).prop("checked", false);
-
+    let movimiento = '';
     // Si está marcado, obtén su valor
     if ($(this).is(":checked")) {
         let valorSeleccionado = $(this).val();
-        console.log("Cheque seleccionado: " + valorSeleccionado);
+        movimiento = $(this).data("movimiento");
+
+        if(movimiento === 'cheque'){
+            cont_cont_cheque_emi.show();
+            cont_cont_transfer_emi.hide();
+            cont_cont_efectivo_emi.hide();
+        }else if(movimiento === 'transferencia'){
+            cont_cont_cheque_emi.hide();
+            cont_cont_transfer_emi.show();
+            cont_cont_efectivo_emi.hide();
+        }else if(movimiento === 'efectivo'){
+            cont_cont_cheque_emi.hide();
+            cont_cont_transfer_emi.hide();
+            cont_cont_efectivo_emi.show();
+        }else{
+            cont_cont_cheque_emi.hide();
+            cont_cont_transfer_emi.hide();
+            cont_cont_efectivo_emi.hide();
+        }
+        console.log("Cheque seleccionado: " + valorSeleccionado + " " + movimiento);
     } else {
         console.log("Ningún cheque seleccionado");
     }

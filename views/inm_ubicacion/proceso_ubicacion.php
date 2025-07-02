@@ -486,6 +486,9 @@
 
                                         <?php echo $controlador->inputs->nombre_beneficiario_emision; ?>
                                         <div id="cont_cheque_emi">
+                                            <?php echo $controlador->inputs->inm_tipo_cheque_id; ?>
+                                            <?php echo $controlador->inputs->bn_cuenta_id; ?>
+
                                             <?php echo $controlador->inputs->numero_cheque; ?>
                                             <?php echo $controlador->inputs->monto; ?>
                                         </div>

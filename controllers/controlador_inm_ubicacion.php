@@ -1219,6 +1219,12 @@ class controlador_inm_ubicacion extends _ctl_base {
             $inm_cheque['elimina_bd'] = $button;
 
             $check = "<input type='checkbox'  class='checkbox_reg' 
+                        data-movimiento = 'cheque'
+                        data-nombre_beneficiario = '$inm_cheque[inm_cheque_nombre_beneficiario]'
+                        data-numero_cheque = '$inm_cheque[inm_cheque_numero_cheque]'
+                        data-monto = '$inm_cheque[inm_cheque_monto]'
+                        data-inm_tipo_cheque_id = '$inm_cheque[inm_tipo_cheque_id]'
+                        data-bn_cuenta_id = '$inm_cheque[bn_cuenta_id]'
                         name='cheque-$inm_cheque[inm_cheque_id]' value='$inm_cheque[inm_cheque_id]'>";
             $inm_cheque['checkbox'] = $check;
 
@@ -1254,6 +1260,7 @@ class controlador_inm_ubicacion extends _ctl_base {
             $inm_transferencia['elimina_bd'] = $button;
 
             $check = "<input type='checkbox'  class='checkbox_reg' 
+                        data-movimiento = 'transferencia'
                         name='transferencia-$inm_transferencia[inm_transferencia_id]' value='$inm_transferencia[inm_transferencia_id]'>";
             $inm_transferencia['checkbox'] = $check;
 
@@ -1290,6 +1297,7 @@ class controlador_inm_ubicacion extends _ctl_base {
             $inm_efectivo['elimina_bd'] = $button;
 
             $check = "<input type='checkbox' class='checkbox_reg'
+                        data-movimiento = 'efectivo'
                         name='efectivo-$inm_efectivo[inm_efectivo_id]' value='$inm_efectivo[inm_efectivo_id]'>";
             $inm_efectivo['checkbox'] = $check;
 
