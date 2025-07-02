@@ -1058,10 +1058,6 @@ class controlador_inm_ubicacion extends _ctl_base {
                 mensaje: 'Error al obtener registro',data:  $data_row,header: $header,ws: $ws);
         }
 
-        if(!isset($this->row_upd->nombre_beneficiario) || $this->row_upd->nombre_beneficiario === ''){
-            $this->row_upd->nombre_beneficiario = $data_row->inm_ubicacion_razon_social;
-        }
-
         /*$filtro_che['inm_ubicacion.id'] = $this->registro_id;
         $filtro_che['inm_tipo_cheque.id'] = 1;
         $r_cheque = (new inm_cheque(link: $this->link))->filtro_and(filtro: $filtro_che);
@@ -1131,55 +1127,55 @@ class controlador_inm_ubicacion extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al obtener keys_selects', data:  $keys_selects, header: $header,ws:  $ws);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'nombre_beneficiario', keys_selects:$keys_selects,
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'nombre_beneficiario_emision', keys_selects:$keys_selects,
             place_holder: 'Nombre Beneficiario',required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'numero_cheque', keys_selects:$keys_selects,
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'numero_cheque', keys_selects:$keys_selects,
             place_holder: 'No. Cheque',required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'monto', keys_selects:$keys_selects,
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'monto', keys_selects:$keys_selects,
             place_holder: 'Monto',required: false, disabled: true);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'numero_cheque_secundario', keys_selects:$keys_selects,
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'numero_cheque_secundario', keys_selects:$keys_selects,
             place_holder: 'No. Cheque Sec', required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'monto_cheque_secundario', keys_selects:$keys_selects,
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'monto_cheque_secundario', keys_selects:$keys_selects,
             place_holder: 'Monto Secundario',required: false, disabled: true);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'transferencia', keys_selects:$keys_selects,
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'transferencia', keys_selects:$keys_selects,
             place_holder: 'Transferencia',required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'monto_transferencia', keys_selects:$keys_selects,
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'monto_transferencia', keys_selects:$keys_selects,
             place_holder: 'Monto Transferencia',required: false, disabled: true);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'numero_cheque_comision', keys_selects:$keys_selects,
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'numero_cheque_comision', keys_selects:$keys_selects,
             place_holder: 'No. Cheque Comision', required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'monto_comision', keys_selects:$keys_selects,
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'monto_comision', keys_selects:$keys_selects,
             place_holder: 'Monto Comision', required: false, disabled: true);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
@@ -1195,6 +1191,100 @@ class controlador_inm_ubicacion extends _ctl_base {
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
         }
+
+        $filtro['inm_ubicacion.id'] = $this->registro_id;
+        $order = array('inm_cheque.fecha_alta'=>'DESC');
+        $r_inm_cheque = (new inm_cheque(link: $this->link))->filtro_and(filtro: $filtro,order: $order);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener etapas', data: $r_inm_cheque,header: $header,
+                ws:  $ws);
+        }
+
+        $registros = array();
+        $params = array('accion_retorno'=>'proceso_ubicacion','seccion_retorno'=>$this->seccion,
+            'id_retorno'=>$this->registro_id);
+
+        if(isset($_GET['pestana_general_actual'])){
+            $params['pestana_general_actual'] = 'pestanageneral2';
+            $params['pestana_actual'] = 'pestana3';
+        }
+        foreach ($r_inm_cheque->registros as $inm_cheque) {
+            $button = $this->html->button_href(accion: 'elimina_bd', etiqueta: 'Elimina',
+                registro_id: $inm_cheque['inm_cheque_id'], seccion: 'inm_cheque', style: 'danger',
+                params: $params);
+            if(errores::$error){
+                return $this->retorno_error(mensaje: 'Error al integrar button',data:  $button,header: $header,
+                    ws:  $ws);
+            }
+            $inm_cheque['elimina_bd'] = $button;
+
+            $registros[] = $inm_cheque;
+        }
+
+        $this->cheques = $registros;
+
+        $filtro['inm_ubicacion.id'] = $this->registro_id;
+        $order = array('inm_transferencia.fecha_alta'=>'DESC');
+        $r_inm_transferencia = (new inm_transferencia(link: $this->link))->filtro_and(filtro: $filtro,order: $order);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener etapas', data: $r_inm_transferencia,header: $header,
+                ws:  $ws);
+        }
+
+        $registros = array();
+        $params = array('accion_retorno'=>'proceso_ubicacion','seccion_retorno'=>$this->seccion,
+            'id_retorno'=>$this->registro_id);
+
+        if(isset($_GET['pestana_general_actual'])){
+            $params['pestana_general_actual'] = 'pestanageneral2';
+            $params['pestana_actual'] = 'pestana3';
+        }
+        foreach ($r_inm_transferencia->registros as $inm_transferencia) {
+            $button = $this->html->button_href(accion: 'elimina_bd', etiqueta: 'Elimina',
+                registro_id: $inm_transferencia['inm_transferencia_id'], seccion: 'inm_transferencia', style: 'danger',
+                params: $params);
+            if(errores::$error){
+                return $this->retorno_error(mensaje: 'Error al integrar button',data:  $button,header: $header,
+                    ws:  $ws);
+            }
+            $inm_transferencia['elimina_bd'] = $button;
+
+            $registros[] = $inm_transferencia;
+        }
+
+
+        $this->transferencias = $registros;
+
+        $filtro['inm_ubicacion.id'] = $this->registro_id;
+        $order = array('inm_efectivo.fecha_alta'=>'DESC');
+        $r_inm_efectivo = (new inm_efectivo(link: $this->link))->filtro_and(filtro: $filtro,order: $order);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener etapas', data: $r_inm_efectivo,header: $header,
+                ws:  $ws);
+        }
+
+        $registros = array();
+        $params = array('accion_retorno'=>'proceso_ubicacion','seccion_retorno'=>$this->seccion,
+            'id_retorno'=>$this->registro_id);
+
+        if(isset($_GET['pestana_general_actual'])){
+            $params['pestana_general_actual'] = 'pestanageneral2';
+            $params['pestana_actual'] = 'pestana3';
+        }
+        foreach ($r_inm_efectivo->registros as $inm_efectivo) {
+            $button = $this->html->button_href(accion: 'elimina_bd', etiqueta: 'Elimina',
+                registro_id: $inm_efectivo['inm_efectivo_id'], seccion: 'inm_efectivo', style: 'danger',
+                params: $params);
+            if(errores::$error){
+                return $this->retorno_error(mensaje: 'Error al integrar button',data:  $button,header: $header,
+                    ws:  $ws);
+            }
+            $inm_efectivo['elimina_bd'] = $button;
+
+            $registros[] = $inm_efectivo;
+        }
+
+        $this->efectivos = $registros;
 
         $params = array('pestana_general_actual' => 'pestanageneral2');
         $link_emision_de_recurso_bd = $this->obj_link->link_con_id(accion:'emision_de_recurso_bd',
@@ -1324,12 +1414,13 @@ class controlador_inm_ubicacion extends _ctl_base {
     {
         $keys = new stdClass();
         $keys->inputs = array('descripcion', 'manzana', 'lote','costo_directo','numero_exterior','numero_interior',
-            'calle', 'cuenta_predial','codigo','nombre_beneficiario','numero_cheque','monto','numero_cheque_comision',
-            'monto_comision','numero_escritura_poder', 'nombre','apellido_paterno','apellido_materno','nss','curp',
-            'rfc', 'lada_com', 'numero_com', 'cel_com', 'correo_com', 'razon_social','nivel','recamaras',
-            'metros_terreno','metros_construccion','adeudo_hipoteca', 'adeudo_predial','cuenta_agua','adeudo_agua',
-            'adeudo_luz','monto_devolucion','transferencia','monto_transferencia','efectivo','numero_cheque_secundario',
-            'monto_cheque_secundario','numero_credito','correo_mi_cuenta_infonavit','password_mi_cuenta_infonavit');
+            'calle', 'cuenta_predial','codigo','nombre_beneficiario','nombre_beneficiario_emision','numero_cheque',
+            'monto','numero_cheque_comision', 'monto_comision','numero_escritura_poder', 'nombre','apellido_paterno',
+            'apellido_materno','nss','curp', 'rfc', 'lada_com', 'numero_com', 'cel_com', 'correo_com', 'razon_social',
+            'nivel','recamaras', 'metros_terreno','metros_construccion','adeudo_hipoteca', 'adeudo_predial',
+            'cuenta_agua','adeudo_agua', 'adeudo_luz','monto_devolucion','transferencia','monto_transferencia',
+            'efectivo','numero_cheque_secundario', 'monto_cheque_secundario','numero_credito',
+            'correo_mi_cuenta_infonavit','password_mi_cuenta_infonavit');
         $keys->selects = array();
 
 
