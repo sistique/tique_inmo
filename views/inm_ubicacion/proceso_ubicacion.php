@@ -383,6 +383,8 @@
                                     <form method="post" action="<?php echo $controlador->link_solicitud_de_recurso_bd; ?>"
                                           class="form-additional" enctype="multipart/form-data">
 
+                                        <?php echo $controlador->inputs->inm_tipo_gasto_id; ?>
+
                                         <?php echo $controlador->inputs->nombre_beneficiario; ?>
                                         <?php echo $controlador->inputs->inm_tipo_cheque_id; ?>
                                         <?php echo $controlador->inputs->bn_cuenta_id; ?>

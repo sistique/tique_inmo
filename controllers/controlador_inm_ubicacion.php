@@ -869,6 +869,15 @@ class controlador_inm_ubicacion extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al obtener keys_selects', data:  $keys_selects, header: $header,ws:  $ws);
         }
 
+        $columns_ds = array('inm_tipo_gasto_id','inm_tipo_gasto_descripcion');
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_tipo_gasto_id',
+            keys_selects:$keys_selects, id_selected:-1, label: 'Tipo Gasto',
+            columns_ds : $columns_ds);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
+                header: $header,ws:  $ws);
+        }
+
         $columns_ds = array('inm_tipo_cheque_id','inm_tipo_cheque_descripcion');
         $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_tipo_cheque_id',
             keys_selects:$keys_selects, id_selected:-1, label: 'Tipo Cheque',
@@ -1271,6 +1280,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         $init_data['inm_complemento'] = "gamboamartin\\inmuebles";
         $init_data['inm_tipo_credito'] = "gamboamartin\\inmuebles";
         $init_data['inm_tipo_cheque'] = "gamboamartin\\inmuebles";
+        $init_data['inm_tipo_gasto'] = "gamboamartin\\inmuebles";
 
         $campos_view = $this->campos_view_base(init_data: $init_data,keys:  $keys);
 
