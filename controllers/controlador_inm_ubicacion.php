@@ -2957,8 +2957,7 @@ class controlador_inm_ubicacion extends _ctl_base {
     public function solicitud_de_recurso_bd(bool $header, bool $ws = false)
     {
         $this->link->beginTransaction();
-
-        print_r($_POST)
+        
         if(isset($_POST['inm_tipo_gasto_id']) && trim($_POST['inm_tipo_gasto_id']) === '1') {
             $registro = array();
             $registro['inm_ubicacion_id'] = $this->registro_id;
