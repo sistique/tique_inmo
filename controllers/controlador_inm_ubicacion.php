@@ -804,6 +804,10 @@ class controlador_inm_ubicacion extends _ctl_base {
                 mensaje: 'Error al obtener registro',data:  $data_row,header: $header,ws: $ws);
         }
 
+        if(!isset($this->row_upd->nombre_beneficiario) || $this->row_upd->nombre_beneficiario === ''){
+            $this->row_upd->nombre_beneficiario = $data_row->inm_ubicacion_razon_social;
+        }
+        
         /*$filtro_che['inm_ubicacion.id'] = $this->registro_id;
         $filtro_che['inm_tipo_cheque.id'] = 1;
         $r_cheque = (new inm_cheque(link: $this->link))->filtro_and(filtro: $filtro_che);
@@ -988,6 +992,10 @@ class controlador_inm_ubicacion extends _ctl_base {
         if(errores::$error){
             return $this->retorno_error(
                 mensaje: 'Error al obtener registro',data:  $data_row,header: $header,ws: $ws);
+        }
+
+        if(!isset($this->row_upd->nombre_beneficiario) || $this->row_upd->nombre_beneficiario === ''){
+            $this->row_upd->nombre_beneficiario = $data_row->inm_ubicacion_razon_social;
         }
 
         /*$filtro_che['inm_ubicacion.id'] = $this->registro_id;
