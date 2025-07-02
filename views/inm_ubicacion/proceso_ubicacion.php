@@ -490,7 +490,7 @@
                                             <?php echo $controlador->inputs->bn_cuenta_id; ?>
 
                                             <?php echo $controlador->inputs->numero_cheque; ?>
-                                            <?php echo $controlador->inputs->monto; ?>
+                                            <?php echo $controlador->inputs->monto_emision; ?>
                                         </div>
 
                                         <?php //echo $controlador->inputs->numero_cheque_secundario; ?>

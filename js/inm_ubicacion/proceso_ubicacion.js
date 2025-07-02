@@ -236,6 +236,14 @@ sl_inm_tipo_gasto_id.change(function(){
 let cont_cont_cheque_emi = $("#cont_cheque_emi");
 let cont_cont_transfer_emi = $("#cont_transfer_emi");
 let cont_cont_efectivo_emi = $("#cont_efectivo_emi");
+let txt_nombre_beneficiario = $("#nombre_beneficiario_emision");
+let sl_inm_tipo_cheque_id = $("#inm_tipo_cheque_id");
+let sl_bn_cuenta_id = $("#bn_cuenta_id");
+let txt_numero_cheque = $("#numero_cheque");
+let txt_monto_emision = $("#monto_emision");
+let txt_transferencia = $("#transferencia");
+let txt_monto_transferencia = $("#monto_transferencia");
+let txt_efectivo = $("#efectivo");
 
 $(".checkbox_reg").on("change", function() {
     // Desmarca todos los demás checkboxes
@@ -250,6 +258,12 @@ $(".checkbox_reg").on("change", function() {
             cont_cont_cheque_emi.show();
             cont_cont_transfer_emi.hide();
             cont_cont_efectivo_emi.hide();
+
+            txt_nombre_beneficiario.val($(this).data("nombre_beneficiario"));
+            sl_inm_tipo_cheque_id.val($(this).data("inm_tipo_cheque_id"));
+            sl_bn_cuenta_id.val($(this).data("bn_cuenta_id"));
+            txt_numero_cheque.val($(this).data("numero_cheque"));
+            txt_monto_emision.val($(this).data("monto"));
         }else if(movimiento === 'transferencia'){
             cont_cont_cheque_emi.hide();
             cont_cont_transfer_emi.show();

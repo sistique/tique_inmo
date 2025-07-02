@@ -1139,7 +1139,7 @@ class controlador_inm_ubicacion extends _ctl_base {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'monto', keys_selects:$keys_selects,
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'monto_emision', keys_selects:$keys_selects,
             place_holder: 'Monto',required: false, disabled: true);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
@@ -1440,7 +1440,7 @@ class controlador_inm_ubicacion extends _ctl_base {
             'nivel','recamaras', 'metros_terreno','metros_construccion','adeudo_hipoteca', 'adeudo_predial',
             'cuenta_agua','adeudo_agua', 'adeudo_luz','monto_devolucion','transferencia','monto_transferencia',
             'efectivo','numero_cheque_secundario', 'monto_cheque_secundario','numero_credito',
-            'correo_mi_cuenta_infonavit','password_mi_cuenta_infonavit');
+            'correo_mi_cuenta_infonavit','password_mi_cuenta_infonavit', 'monto_emision');
         $keys->selects = array();
 
 
