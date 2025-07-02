@@ -875,25 +875,25 @@ class controlador_inm_ubicacion extends _ctl_base {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'monto', keys_selects:$keys_selects,
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'monto', keys_selects:$keys_selects,
             place_holder: 'Monto',required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'monto_cheque_secundario', keys_selects:$keys_selects,
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'monto_cheque_secundario', keys_selects:$keys_selects,
             place_holder: 'Monto Secundario',required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'monto_transferencia', keys_selects:$keys_selects,
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'monto_transferencia', keys_selects:$keys_selects,
             place_holder: 'Monto Transferencia',required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'monto_comision', keys_selects:$keys_selects,
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'monto_comision', keys_selects:$keys_selects,
             place_holder: 'Monto Comision', required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);

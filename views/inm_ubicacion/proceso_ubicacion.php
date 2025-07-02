@@ -405,14 +405,14 @@
                                                     <tr>
                                                         <th>Id</th>
                                                         <th>Beneficiario</th>
-                                                        <th>No. Cheque</th>
+                                                        <th>Referencia</th>
                                                         <th>Monto</th>
                                                         <th>Fecha</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
                                                     <tr>
-                                                        <td>Cheques</td>
+                                                        <td colspan="5">Cheques</td>
                                                     </tr>
                                                     <?php
                                                     foreach ($controlador->cheques as $cheque){
@@ -426,7 +426,7 @@
                                                         </tr>
                                                     <?php } ?>
                                                     <tr>
-                                                        <td>Transferencias</td>
+                                                        <td colspan="5">Transferencias</td>
                                                     </tr>
                                                     <?php
                                                     foreach ($controlador->transferencias as $transferencia){
@@ -440,7 +440,7 @@
                                                         </tr>
                                                     <?php } ?>
                                                     <tr>
-                                                        <td>Efectivo</td>
+                                                        <td colspan="5">Efectivo</td>
                                                     </tr>
                                                     <?php
                                                     foreach ($controlador->efectivos as $efectivo){
