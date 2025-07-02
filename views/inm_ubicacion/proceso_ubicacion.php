@@ -384,10 +384,10 @@
                                           class="form-additional" enctype="multipart/form-data">
 
                                         <?php echo $controlador->inputs->nombre_beneficiario; ?>
+                                        <?php echo $controlador->inputs->inm_tipo_cheque_id; ?>
+                                        <?php echo $controlador->inputs->bn_cuenta_id; ?>
                                         <?php echo $controlador->inputs->monto; ?>
-                                        <?php echo $controlador->inputs->monto_cheque_secundario; ?>
                                         <?php echo $controlador->inputs->monto_transferencia; ?>
-                                        <?php echo $controlador->inputs->monto_comision; ?>
                                         <?php echo $controlador->inputs->efectivo; ?>
 
                                         <div class="control-group btn-alta">
