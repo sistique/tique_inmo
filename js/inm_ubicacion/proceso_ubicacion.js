@@ -293,6 +293,9 @@ $(".checkbox_reg").on("change", function() {
         }
         console.log("Cheque seleccionado: " + valorSeleccionado + " " + movimiento);
     } else {
+        cont_cont_cheque_emi.hide();
+        cont_cont_transfer_emi.hide();
+        cont_cont_efectivo_emi.hide();
         console.log("Ningún cheque seleccionado");
     }
 });

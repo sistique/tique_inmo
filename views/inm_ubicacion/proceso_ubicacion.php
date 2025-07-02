@@ -511,7 +511,7 @@
                                         <div class="control-group btn-alta">
                                             <div class="controls">
                                                 <button type="submit" class="btn btn-success" name="alta_gasto" value="alta_gasto">
-                                                    Alta
+                                                    Actualiza
                                                 </button>
                                                 <button type="submit" class="btn btn-success" name="avanza_etapa" value="avanza_etapa">
                                                     Avanza Etapa
