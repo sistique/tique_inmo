@@ -4,6 +4,7 @@ namespace gamboamartin\inmuebles\models;
 
 use base\orm\_modelo_parent;
 use gamboamartin\administrador\models\adm_usuario;
+use gamboamartin\comercial\models\com_agente;
 use gamboamartin\comercial\models\com_prospecto;
 use gamboamartin\comercial\models\com_rel_agente;
 use gamboamartin\errores\errores;
@@ -280,6 +281,16 @@ class inm_prospecto extends _modelo_parent{
         $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $this->registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
+        }
+
+        if(!isset($this->registro['com_agente_id'])){
+            $filtro_tipo_prosp['com_tipo_agente.descripcion'] = 'PREDETERMINADO';
+            $r_agente = (new com_agente(link: $this->link))->filtro_and(filtro:$filtro_tipo_prosp);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al maquetar row',data:  $r_agente);
+            }
+
+            $this->registro['com_agente_id'] = $r_agente->registros[0]['com_agente_id'];
         }
 
         $entidades = array('inm_producto_infonavit','inm_attr_tipo_credito','inm_destino_credito',

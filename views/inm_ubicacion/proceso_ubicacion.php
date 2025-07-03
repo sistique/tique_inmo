@@ -639,6 +639,79 @@
                                     </div>
                                 </div>
                                 <div class="conten" id="cpestana7">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="widget widget-box box-container widget-mylistings">
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th>Id</th>
+                                                        <th>Beneficiario</th>
+                                                        <th>Referencia</th>
+                                                        <th>Monto</th>
+                                                        <th>Cuenta Bancaria</th>
+                                                        <th>Fecha</th>
+                                                        <th>Acciones</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr>
+                                                        <td colspan="8">Cheques</td>
+                                                    </tr>
+                                                    <?php
+                                                    foreach ($controlador->cheques as $cheque){
+                                                        ?>
+                                                        <tr>
+                                                            <td><?php echo $cheque['checkbox'] ?></td>
+                                                            <td><?php echo $cheque['inm_cheque_id'] ?></td>
+                                                            <td><?php echo $cheque['inm_cheque_nombre_beneficiario'] ?></td>
+                                                            <td><?php echo $cheque['inm_cheque_numero_cheque'] ?></td>
+                                                            <td><?php echo $cheque['inm_cheque_monto'] ?></td>
+                                                            <td><?php echo $cheque['bn_cuenta_descripcion'] ?></td>
+                                                            <td><?php echo $cheque['inm_cheque_fecha_alta'] ?></td>
+                                                            <td><?php echo $cheque['elimina_bd'] ?></td>
+                                                        </tr>
+                                                    <?php } ?>
+                                                    <tr>
+                                                        <td colspan="8">Transferencias</td>
+                                                    </tr>
+                                                    <?php
+                                                    foreach ($controlador->transferencias as $transferencia){
+                                                        ?>
+                                                        <tr>
+                                                            <td><?php echo $transferencia['checkbox'] ?></td>
+                                                            <td><?php echo $transferencia['inm_transferencia_id'] ?></td>
+                                                            <td><?php echo $transferencia['inm_transferencia_nombre_beneficiario'] ?></td>
+                                                            <td><?php echo $transferencia['inm_transferencia_transferencia'] ?></td>
+                                                            <td><?php echo $transferencia['inm_transferencia_monto'] ?></td>
+                                                            <td></td>
+                                                            <td><?php echo $transferencia['inm_transferencia_fecha_alta'] ?></td>
+                                                            <td><?php echo $transferencia['elimina_bd'] ?></td>
+                                                        </tr>
+                                                    <?php } ?>
+                                                    <tr>
+                                                        <td colspan="8">Efectivo</td>
+                                                    </tr>
+                                                    <?php
+                                                    foreach ($controlador->efectivos as $efectivo){
+                                                        ?>
+                                                        <tr>
+                                                            <td><?php echo $efectivo['checkbox'] ?></td>
+                                                            <td><?php echo $efectivo['inm_efectivo_id'] ?></td>
+                                                            <td><?php echo $efectivo['inm_efectivo_nombre_beneficiario'] ?></td>
+                                                            <td></td>
+                                                            <td><?php echo $efectivo['inm_efectivo_monto'] ?></td>
+                                                            <td></td>
+                                                            <td><?php echo $efectivo['inm_efectivo_fecha_alta'] ?></td>
+                                                            <td><?php echo $efectivo['elimina_bd'] ?></td>
+                                                        </tr>
+                                                    <?php } ?>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <form method="post" action="<?php echo $controlador->link_firmado_bd; ?>"
                                           class="form-additional" enctype="multipart/form-data">
 
