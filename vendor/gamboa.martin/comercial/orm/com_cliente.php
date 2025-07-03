@@ -152,7 +152,7 @@ class com_cliente extends _modelo_parent
 
 
         $this->registro = $this->limpia_campos(registro: $this->registro, campos_limpiar: array('dp_pais_id',
-            'dp_estado_id', 'dp_cp_id', 'dp_cp_id', 'dp_colonia_postal_id', 'es_empleado'));
+            'dp_estado_id', 'dp_cp_id', 'dp_cp_id', 'es_empleado'));
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al limpiar campos', data: $this->registro);
         }
