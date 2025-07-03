@@ -110,7 +110,6 @@ class _com_cliente{
      */
     private function com_cliente_upd(PDO $link, stdClass $registro): array
     {
-
         $keys = array('inm_comprador_nombre','inm_comprador_apellido_paterno');
         $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $registro);
         if(errores::$error){
@@ -125,8 +124,7 @@ class _com_cliente{
         }
         $com_cliente_upd['razon_social'] = $razon_social;
 
-
-        $com_cliente_upd = $this->init_keys_com_cliente(com_cliente_upd: $com_cliente_upd);
+        $com_cliente_upd = $this->init_keys_com_cliente(com_cliente_upd: $com_cliente_upd,registro: $registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener com_cliente_upd',data:  $com_cliente_upd);
         }
@@ -338,7 +336,7 @@ class _com_cliente{
      * @param array $com_cliente_upd Cliente a ajustar
      * @return array
      */
-    private function init_keys_com_cliente(array $com_cliente_upd): array
+    private function init_keys_com_cliente(array $com_cliente_upd, stdClass $registro): array
     {
         $keys_com_cliente = $this->key_com_cliente();
         if(errores::$error){
@@ -346,8 +344,8 @@ class _com_cliente{
         }
 
         foreach ($keys_com_cliente as $key_com_cliente){
-            if(isset($registro[$key_com_cliente])){
-                $com_cliente_upd[$key_com_cliente] = $registro[$key_com_cliente];
+            if(isset($registro->$key_com_cliente)){
+                $com_cliente_upd[$key_com_cliente] = $registro->$key_com_cliente;
             }
         }
 
@@ -443,7 +441,8 @@ class _com_cliente{
     {
         return array('com_tipo_cliente_id','rfc','dp_calle_pertenece_id','numero_exterior',
             'numero_interior','telefono','cat_sat_regimen_fiscal_id','cat_sat_moneda_id','cat_sat_forma_pago_id',
-            'cat_sat_metodo_pago_id','cat_sat_uso_cfdi_id','cat_sat_tipo_persona_id');
+            'cat_sat_metodo_pago_id','cat_sat_uso_cfdi_id','cat_sat_tipo_persona_id','calle',
+            'dp_colonia_postal_id');
     }
 
     private function keys_name_cliente(bool $con_prefijo): stdClass
@@ -485,6 +484,7 @@ class _com_cliente{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener com_cliente_upd',data:  $com_cliente_upd);
         }
+print_r($com_cliente_upd);exit;
         $r_com_cliente = new stdClass();
         if(count($com_cliente_upd) > 0){
 
