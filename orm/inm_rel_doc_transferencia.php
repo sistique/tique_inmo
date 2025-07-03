@@ -10,7 +10,8 @@ class inm_rel_doc_transferencia extends _modelo_parent{
     public function __construct(PDO $link)
     {
         $tabla = 'inm_rel_doc_transferencia';
-        $columnas = array($tabla=>false, 'inm_transferencia' => $tabla, 'inm_doc_ubicacion' => $tabla);
+        $columnas = array($tabla=>false, 'inm_transferencia' => $tabla, 'inm_doc_ubicacion' => $tabla,
+            'doc_documento'=>'inm_doc_ubicacion', 'doc_tipo_documento'=>'doc_documento');
 
         $campos_obligatorios = array();
 
