@@ -135,6 +135,10 @@ class com_cliente extends _modelo_parent
             $es_empleado = $this->registro["es_empleado"];
         }
 
+        if(!isset($this->registro['dp_colonia_postal_id'])){
+            $this->registro['dp_colonia_postal_id'] = 105;
+        }
+
         $dp_colonia_postal_modelo = new dp_colonia_postal(link: $this->link);
         $dp_colonia_postal = $dp_colonia_postal_modelo->registro(registro_id: $this->registro['dp_colonia_postal_id']);
         if (errores::$error) {
