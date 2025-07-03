@@ -672,6 +672,8 @@
                                                             <td><?php echo $cheque['inm_cheque_fecha_alta'] ?></td>
                                                             <td><?php echo $cheque['elimina_bd'] ?></td>
                                                         </tr>
+
+                                                        <?php echo $cheque['documento'] ?>
                                                     <?php } ?>
                                                     <tr>
                                                         <td colspan="8">Transferencias</td>

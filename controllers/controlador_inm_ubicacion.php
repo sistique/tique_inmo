@@ -971,14 +971,14 @@ class controlador_inm_ubicacion extends _ctl_base {
             }
             $inm_cheque['elimina_bd'] = $button;
 
-            $filtro_rel_doc['inm_cheque.id'] = $inm_cheque['inm_cheque_id'];
-            $r_rel_doc_cheque = (new inm_rel_doc_cheque(link: $this->link))->filtro_and(filtro: $filtro_rel_doc);
+            $filtro_rel_doc_che['inm_cheque.id'] = $inm_cheque['inm_cheque_id'];
+            $r_rel_doc_cheque = (new inm_rel_doc_cheque(link: $this->link))->filtro_and(filtro: $filtro_rel_doc_che);
             if (errores::$error) {
                 return $this->retorno_error(mensaje: 'Error al obtener inputs', data: $r_rel_doc_cheque,header: $header,
                     ws:  $ws);
             }
 
-            if($r_rel_doc_cheque->n_documentos > 0){
+            if($r_rel_doc_cheque->n_registros > 0){
                 $button_descarga = $this->html->button_href(accion: 'descarga', etiqueta: 'Descarga',
                     registro_id: $r_rel_doc_cheque->registros[0]['inm_doc_ubicacion_id'],
                     seccion: 'inm_doc_ubicacion', style: 'success');
@@ -1032,7 +1032,7 @@ class controlador_inm_ubicacion extends _ctl_base {
                 </tr>";
             }
 
-            $inm_cheque['documento'] = $button;
+            $inm_cheque['documento'] = $res;
 
             $registros[] = $inm_cheque;
         }
@@ -1065,14 +1065,14 @@ class controlador_inm_ubicacion extends _ctl_base {
             }
             $inm_transferencia['elimina_bd'] = $button;
 
-            $filtro_rel_doc['inm_transferencia.id'] = $inm_transferencia['inm_transferencia_id'];
-            $r_rel_doc_transferencia = (new inm_rel_doc_transferencia(link: $this->link))->filtro_and(filtro: $filtro_rel_doc);
+            $filtro_rel_doc_trns['inm_transferencia.id'] = $inm_transferencia['inm_transferencia_id'];
+            $r_rel_doc_transferencia = (new inm_rel_doc_transferencia(link: $this->link))->filtro_and(filtro: $filtro_rel_doc_trns);
             if (errores::$error) {
                 return $this->retorno_error(mensaje: 'Error al obtener inputs', data: $r_rel_doc_transferencia,header: $header,
                     ws:  $ws);
             }
 
-            if($r_rel_doc_transferencia->n_documentos > 0){
+            if($r_rel_doc_transferencia->n_registros > 0){
                 $button_descarga = $this->html->button_href(accion: 'descarga', etiqueta: 'Descarga',
                     registro_id: $r_rel_doc_transferencia->registros[0]['inm_doc_ubicacion_id'],
                     seccion: 'inm_doc_ubicacion', style: 'success');
@@ -1126,7 +1126,7 @@ class controlador_inm_ubicacion extends _ctl_base {
                 </tr>";
             }
 
-            $inm_transferencia['documento'] = $button;
+            $inm_transferencia['documento'] = $res;
 
             $registros[] = $inm_transferencia;
         }
@@ -1395,14 +1395,14 @@ class controlador_inm_ubicacion extends _ctl_base {
                         name='cheque_id' value='$inm_cheque[inm_cheque_id]'>";
             $inm_cheque['checkbox'] = $check;
 
-            $filtro_rel_doc['inm_cheque.id'] = $inm_cheque['inm_cheque_id'];
-            $r_rel_doc_cheque = (new inm_rel_doc_cheque(link: $this->link))->filtro_and(filtro: $filtro_rel_doc);
+            $filtro_rel_doc_che['inm_cheque.id'] = $inm_cheque['inm_cheque_id'];
+            $r_rel_doc_cheque = (new inm_rel_doc_cheque(link: $this->link))->filtro_and(filtro: $filtro_rel_doc_che);
             if (errores::$error) {
                 return $this->retorno_error(mensaje: 'Error al obtener inputs', data: $r_rel_doc_cheque,header: $header,
                     ws:  $ws);
             }
 
-            if($r_rel_doc_cheque->n_documentos > 0){
+            if($r_rel_doc_cheque->n_registros > 0){
                 $button_descarga = $this->html->button_href(accion: 'descarga', etiqueta: 'Descarga',
                     registro_id: $r_rel_doc_cheque->registros[0]['inm_doc_ubicacion_id'],
                     seccion: 'inm_doc_ubicacion', style: 'success');
@@ -1456,7 +1456,7 @@ class controlador_inm_ubicacion extends _ctl_base {
                 </tr>";
             }
 
-            $inm_cheque['documento'] = $button;
+            $inm_cheque['documento'] = $res;
 
             $registros[] = $inm_cheque;
         }
@@ -1498,14 +1498,14 @@ class controlador_inm_ubicacion extends _ctl_base {
                         name='transferencia_id' value='$inm_transferencia[inm_transferencia_id]'>";
             $inm_transferencia['checkbox'] = $check;
 
-            $filtro_rel_doc['inm_transferencia.id'] = $inm_transferencia['inm_transferencia_id'];
-            $r_rel_doc_transferencia = (new inm_rel_doc_transferencia(link: $this->link))->filtro_and(filtro: $filtro_rel_doc);
+            $filtro_rel_doc_trns['inm_transferencia.id'] = $inm_transferencia['inm_transferencia_id'];
+            $r_rel_doc_transferencia = (new inm_rel_doc_transferencia(link: $this->link))->filtro_and(filtro: $filtro_rel_doc_trns);
             if (errores::$error) {
                 return $this->retorno_error(mensaje: 'Error al obtener inputs', data: $r_rel_doc_transferencia,header: $header,
                     ws:  $ws);
             }
 
-            if($r_rel_doc_transferencia->n_documentos > 0){
+            if($r_rel_doc_transferencia->n_registros > 0){
                 $button_descarga = $this->html->button_href(accion: 'descarga', etiqueta: 'Descarga',
                     registro_id: $r_rel_doc_transferencia->registros[0]['inm_doc_ubicacion_id'],
                     seccion: 'inm_doc_ubicacion', style: 'success');
@@ -1559,7 +1559,7 @@ class controlador_inm_ubicacion extends _ctl_base {
                 </tr>";
             }
 
-            $inm_transferencia['documento'] = $button;
+            $inm_transferencia['documento'] = $res;
 
             $registros[] = $inm_transferencia;
         }
