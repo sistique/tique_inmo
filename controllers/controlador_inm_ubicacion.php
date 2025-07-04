@@ -1439,11 +1439,23 @@ class controlador_inm_ubicacion extends _ctl_base {
                 }
 
                 $res = "<tr>
-                    <td>$button_descarga</td>
-                    <td>$button_vista_previa</td>
-                    <td>$button_descarga_zip</td>
-                    <td>$button_elimina_bd</td>
-                    </tr>";
+                            <td colspan='6'>
+                                <div class='content_btns'>
+                                    <div class='content_btn'>
+                                        $button_descarga
+                                    </div>
+                                    <div class='content_btn'>
+                                        $button_vista_previa
+                                    </div>
+                                    <div class='content_btn'>
+                                        $button_descarga_zip
+                                    </div>
+                                    <div class='content_btn'>
+                                        $button_elimina_bd
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>";
             }else{
                 $name = "documentos_cheques[$inm_cheque[inm_cheque_id]][36][]";
 
@@ -1544,11 +1556,23 @@ class controlador_inm_ubicacion extends _ctl_base {
                 }
 
                 $res = "<tr>
-                    <td>$button_descarga</td>
-                    <td>$button_vista_previa</td>
-                    <td>$button_descarga_zip</td>
-                    <td>$button_elimina_bd</td>
-                    </tr>";
+                            <td colspan='6'>
+                                <div class='content_btns'>
+                                    <div class='content_btn'>
+                                        $button_descarga
+                                    </div>
+                                    <div class='content_btn'>
+                                        $button_vista_previa
+                                    </div>
+                                    <div class='content_btn'>
+                                        $button_descarga_zip
+                                    </div>
+                                    <div class='content_btn'>
+                                        $button_elimina_bd
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>";
             }else{
                 $name = "documentos_transferencias[$inm_transferencia[inm_transferencia_id]][49][]";
                 $button = $this->html->input_file(cols: 12, name: $name, row_upd: $this->row_upd,

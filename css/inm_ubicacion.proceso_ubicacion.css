@@ -22,6 +22,15 @@
     display: none;
 }
 
+.content_btns{
+    display: flex;
+    width: 100%;
+}
+.content_btn{
+    width: 25%;
+    padding: 0 10px;
+}
+
 /******* Pestañas Generales ********/
 #pestanasgeneral {
     float: top;
