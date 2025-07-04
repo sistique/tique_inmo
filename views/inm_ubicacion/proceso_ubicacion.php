@@ -716,13 +716,13 @@
                                         </div>
                                     </form>
 
-                                    <form method="post" action="<?php echo $controlador->link_firmado_bd; ?>"
+                                    <!--<form method="post" action="<?php //echo $controlador->link_firmado_bd; ?>"
                                           class="form-additional" enctype="multipart/form-data">
 
-                                        <?php echo $controlador->inputs->documento_poliza_firmada; ?>
-                                        <?php echo $controlador->inputs->documento_transferencia; ?>
-                                        <?php echo $controlador->inputs->documento_poliza_comision_firmada; ?>
-                                        <?php echo $controlador->inputs->documento_poliza_secundaria_firmada; ?>
+                                        <?php //echo $controlador->inputs->documento_poliza_firmada; ?>
+                                        <?php //echo $controlador->inputs->documento_transferencia; ?>
+                                        <?php //echo $controlador->inputs->documento_poliza_comision_firmada; ?>
+                                        <?php //echo $controlador->inputs->documento_poliza_secundaria_firmada; ?>
 
                                         <div class="control-group btn-alta">
                                             <div class="controls">
@@ -733,82 +733,82 @@
                                     <div class="row buttons-form">
                                         <div class="col-lg-12">
                                             <label class="label-docs">
-                                                <?php echo $controlador->descripcion_poliza_firmada; ?>
+                                                <?php //echo $controlador->descripcion_poliza_firmada; ?>
                                             </label>
                                         </div>
                                         <div class="col-lg-3">
-                                            <?php echo $controlador->button_inm_doc_ubicacion_descarga_firmado; ?>
+                                            <?php //echo $controlador->button_inm_doc_ubicacion_descarga_firmado; ?>
                                         </div>
                                         <div class="col-lg-3">
-                                            <?php echo $controlador->button_inm_doc_ubicacion_vista_previa_firmado; ?>
+                                            <?php //echo $controlador->button_inm_doc_ubicacion_vista_previa_firmado; ?>
                                         </div>
                                         <div class="col-lg-3">
-                                            <?php echo $controlador->button_inm_doc_ubicacion_descarga_zip_firmado; ?>
+                                            <?php //echo $controlador->button_inm_doc_ubicacion_descarga_zip_firmado; ?>
                                         </div>
                                         <div class="col-lg-3">
-                                            <?php echo $controlador->button_inm_doc_ubicacion_elimina_bd_firmado; ?>
+                                            <?php //echo $controlador->button_inm_doc_ubicacion_elimina_bd_firmado; ?>
                                         </div>
                                     </div>
 
                                     <div class="row buttons-form">
                                         <div class="col-lg-12">
                                             <label class="label-docs">
-                                                <?php echo $controlador->descripcion_comprobante_transferencia_firmada; ?>
+                                                <?php //echo $controlador->descripcion_comprobante_transferencia_firmada; ?>
                                             </label>
                                         </div>
                                         <div class="col-lg-3">
-                                            <?php echo $controlador->button_inm_doc_ubicacion_descarga_transferencia_firmada; ?>
+                                            <?php //echo $controlador->button_inm_doc_ubicacion_descarga_transferencia_firmada; ?>
                                         </div>
                                         <div class="col-lg-3">
-                                            <?php echo $controlador->button_inm_doc_ubicacion_vista_previa_transferencia_firmada; ?>
+                                            <?php //echo $controlador->button_inm_doc_ubicacion_vista_previa_transferencia_firmada; ?>
                                         </div>
                                         <div class="col-lg-3">
-                                            <?php echo $controlador->button_inm_doc_ubicacion_descarga_zip_transferencia_firmada; ?>
+                                            <?php //echo $controlador->button_inm_doc_ubicacion_descarga_zip_transferencia_firmada; ?>
                                         </div>
                                         <div class="col-lg-3">
-                                            <?php echo $controlador->button_inm_doc_ubicacion_elimina_bd_transferencia_firmada; ?>
+                                            <?php //echo $controlador->button_inm_doc_ubicacion_elimina_bd_transferencia_firmada; ?>
                                         </div>
                                     </div>
 
                                     <div class="row buttons-form">
                                         <div class="col-lg-12">
                                             <label class="label-docs">
-                                                <?php echo $controlador->descripcion_poliza_comision_firmada; ?>
+                                                <?php //echo $controlador->descripcion_poliza_comision_firmada; ?>
                                             </label>
                                         </div>
                                         <div class="col-lg-3">
-                                            <?php echo $controlador->button_inm_doc_ubicacion_descarga_firmado_comision; ?>
+                                            <?php //echo $controlador->button_inm_doc_ubicacion_descarga_firmado_comision; ?>
                                         </div>
                                         <div class="col-lg-3">
-                                            <?php echo $controlador->button_inm_doc_ubicacion_vista_previa_firmado_comision; ?>
+                                            <?php //echo $controlador->button_inm_doc_ubicacion_vista_previa_firmado_comision; ?>
                                         </div>
                                         <div class="col-lg-3">
-                                            <?php echo $controlador->button_inm_doc_ubicacion_descarga_zip_firmado_comision; ?>
+                                            <?php //echo $controlador->button_inm_doc_ubicacion_descarga_zip_firmado_comision; ?>
                                         </div>
                                         <div class="col-lg-3">
-                                            <?php echo $controlador->button_inm_doc_ubicacion_elimina_bd_firmado_comision; ?>
+                                            <?php //echo $controlador->button_inm_doc_ubicacion_elimina_bd_firmado_comision; ?>
                                         </div>
                                     </div>
 
                                     <div class="row buttons-form">
                                         <div class="col-lg-12">
                                             <label class="label-docs">
-                                                <?php echo $controlador->descripcion_poliza_secundaria_firmada; ?>
+                                                <?php //echo $controlador->descripcion_poliza_secundaria_firmada; ?>
                                             </label>
                                         </div>
                                         <div class="col-lg-3">
-                                            <?php echo $controlador->button_inm_doc_ubicacion_descarga_firmado_poliza_secundaria; ?>
+                                            <?php //echo $controlador->button_inm_doc_ubicacion_descarga_firmado_poliza_secundaria; ?>
                                         </div>
                                         <div class="col-lg-3">
-                                            <?php echo $controlador->button_inm_doc_ubicacion_vista_previa_firmado_poliza_secundaria; ?>
+                                            <?php //echo $controlador->button_inm_doc_ubicacion_vista_previa_firmado_poliza_secundaria; ?>
                                         </div>
                                         <div class="col-lg-3">
-                                            <?php echo $controlador->button_inm_doc_ubicacion_descarga_zip_firmado_poliza_secundaria; ?>
+                                            <?php //echo $controlador->button_inm_doc_ubicacion_descarga_zip_firmado_poliza_secundaria; ?>
                                         </div>
                                         <div class="col-lg-3">
-                                            <?php echo $controlador->button_inm_doc_ubicacion_elimina_bd_firmado_poliza_secundaria; ?>
+                                            <?php //echo $controlador->button_inm_doc_ubicacion_elimina_bd_firmado_poliza_secundaria; ?>
                                         </div>
-                                    </div>
+                                    </div>-->
                                 </div>
                             </div>
                         </div>
