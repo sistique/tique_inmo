@@ -1429,7 +1429,7 @@ class controlador_inm_ubicacion extends _ctl_base {
 
                 $params = array('accion_retorno'=>'proceso_ubicacion','seccion_retorno'=>'inm_ubicacion',
                     'id_retorno'=>$this->registro_id, 'pestana_general_actual' => 'pestanageneral2',
-                    'pestana_actual' => 'pestana2');
+                    'pestana_actual' => 'pestana7');
                 $button_elimina_bd = $this->html->button_href(accion: 'elimina_bd',
                     etiqueta: 'Elimina', registro_id: $r_rel_doc_cheque->registros[0]['inm_rel_doc_cheque_id'],
                     seccion: 'inm_rel_doc_cheque', style: 'danger',params: $params);
@@ -1546,7 +1546,7 @@ class controlador_inm_ubicacion extends _ctl_base {
 
                 $params = array('accion_retorno'=>'proceso_ubicacion','seccion_retorno'=>'inm_ubicacion',
                     'id_retorno'=>$this->registro_id, 'pestana_general_actual' => 'pestanageneral2',
-                    'pestana_actual' => 'pestana2');
+                    'pestana_actual' => 'pestana7');
                 $button_elimina_bd = $this->html->button_href(accion: 'elimina_bd',
                     etiqueta: 'Elimina', registro_id: $r_rel_doc_transferencia->registros[0]['inm_rel_doc_transferencia_id'],
                     seccion: 'inm_rel_doc_transferencia', style: 'danger',params: $params);

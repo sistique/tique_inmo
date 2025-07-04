@@ -68,6 +68,27 @@ class inm_rel_doc_transferencia extends _modelo_parent{
         return $descripcion;
     }
 
+    public function elimina_bd(int $id): array|stdClass
+    {
+        $registro = $this->registro(registro_id: $id);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener registro', data: $registro);
+        }
+
+        $elimina = parent::elimina_bd($id);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al eliminar prospecto documento', data: $elimina);
+        }
+
+        $documento = (new inm_doc_ubicacion(link: $this->link))->elimina_bd(id: $registro['inm_doc_ubicacion_id']);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al eliminar documento', data: $documento);
+        }
+
+        return $elimina;
+    }
+
+
     private function valida_alta_relacion(array $registro){
 
         $keys = array('inm_transferencia_id','inm_doc_ubicacion_id');
