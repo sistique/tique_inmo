@@ -327,6 +327,7 @@ let dp_estado_id = -1;
 let dp_municipio_id = -1;
 let dp_cp_id = -1;
 let dp_colonia_postal_id = -1;
+let sl_conyuge_dp_estado_id = $("#conyuge_dp_estado_id");
 
 let numero_exterior = $("#numero_exterior");
 let numero_interior = $("#numero_interior");
@@ -334,12 +335,35 @@ let manzana = $("#manzana");
 let lote = $("#lote");
 let cuenta_predial = $("#cuenta_predial");
 
-let sl_conyuge_dp_estado_id = $("#conyuge_dp_estado_id");
-sl_conyuge_dp_estado_id.change(function () {
-    conyuge_dp_estado_id = $(this).val();
-    dp_asigna_municipios_conyuge(conyuge_dp_estado_id, '', '#conyuge_dp_municipio_id');
-});
 
+let nombre_ct = $("#nombre");
+let apellido_paterno_ct = $("#apellido_paterno");
+let apellido_materno_ct = $("#apellido_materno");
+let razon_social_ct = $("#razon_social");
+
+let nombre = '';
+let apellido_paterno = '';
+let apellido_materno = '';
+let razon_social = '';
+nombre_ct.change(function() {
+    limpia_txt($(this));
+    nombre = $(this).val().trim();
+    razon_social = nombre+' '+apellido_paterno+' '+apellido_materno;
+    razon_social_ct.val(razon_social.trim());
+
+});
+apellido_paterno_ct.change(function() {
+    limpia_txt($(this));
+    apellido_paterno = $(this).val().trim();
+    razon_social = nombre+' '+apellido_paterno+' '+apellido_materno;
+    razon_social_ct.val(razon_social.trim());
+});
+apellido_materno_ct.change(function() {
+    limpia_txt($(this));
+    apellido_materno = $(this).val().trim();
+    razon_social = nombre+' '+apellido_paterno+' '+apellido_materno;
+    razon_social_ct.val(razon_social.trim());
+});
 
 numero_exterior.change(function(){
     let value = $(this).val().trim().toUpperCase();
@@ -389,6 +413,11 @@ sl_dp_cp_id.change(function(){
 sl_dp_colonia_postal_id.change(function(){
     dp_colonia_postal_id = sl_dp_colonia_postal_id.val();
     dp_asigna_calles_pertenece(dp_colonia_postal_id);
+});
+
+sl_conyuge_dp_estado_id.change(function () {
+    conyuge_dp_estado_id = $(this).val();
+    dp_asigna_municipios_conyuge(conyuge_dp_estado_id, '', '#conyuge_dp_municipio_id');
 });
 
 function dp_asigna_calles_pertenece(dp_colonia_postal_id = '',dp_calle_pertenece_id = ''){
