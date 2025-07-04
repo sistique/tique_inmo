@@ -3469,7 +3469,7 @@ class controlador_inm_ubicacion extends _ctl_base {
             $registro['monto'] = $_POST['monto'];
             $registro['nombre_beneficiario'] = $_POST['nombre_beneficiario'];
             $registro['inm_tipo_cheque_id'] = $_POST['inm_tipo_cheque_id'];
-            $registro['bn_cuenta_id'] = $_POST['bn_cuenta_id'];
+            //$registro['bn_cuenta_id'] = $_POST['bn_cuenta_id'];
             $registro['numero_cheque'] = '';
 
             if(isset($_POST['numero_cheque'])){
