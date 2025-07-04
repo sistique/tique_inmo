@@ -2086,7 +2086,7 @@ class controlador_inm_ubicacion extends _ctl_base {
             }
         }
 
-        if(isset($_POST['inm_tipo_gasto_sl_id']) && trim($_POST['inm_tipo_gasto_sl_id']) === '3') {
+        /*if(isset($_POST['inm_tipo_gasto_sl_id']) && trim($_POST['inm_tipo_gasto_sl_id']) === '3') {
             $r_efectivo = (new inm_efectivo(link: $this->link))->registro(
                 registro_id: $_POST['registro_ajustar_id']);
             if (errores::$error) {
@@ -2106,7 +2106,7 @@ class controlador_inm_ubicacion extends _ctl_base {
                         header: $header, ws: $ws);
                 }
             }
-        }
+        }*/
 
         if(isset($_POST['avanza_etapa']) && trim($_POST['avanza_etapa']) !== '') {
             $filtro_exi['inm_ubicacion.id'] = $this->registro_id;
