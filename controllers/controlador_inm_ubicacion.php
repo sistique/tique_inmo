@@ -1961,8 +1961,10 @@ class controlador_inm_ubicacion extends _ctl_base {
     {
         $this->link->beginTransaction();
 
+        $modelo_cheque = new inm_cheque(link: $this->link);
+        $modelo_transferencia = new inm_transferencia(link: $this->link);
         if(isset($_POST['inm_tipo_gasto_sl_id']) && trim($_POST['inm_tipo_gasto_sl_id']) === '1') {
-            $r_cheque = (new inm_cheque(link: $this->link))->registro(registro_id: $_POST['registro_ajustar_id']);
+            $r_cheque = $modelo_cheque->registro(registro_id: $_POST['registro_ajustar_id']);
             if (errores::$error) {
                 $this->link->rollBack();
                 return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $r_cheque,
@@ -1973,7 +1975,7 @@ class controlador_inm_ubicacion extends _ctl_base {
                 $registro = array();
                 $registro['bn_cuenta_id'] = $_POST['bn_cuenta_sl_id'];
                 $registro['numero_cheque'] = $_POST['numero_cheque'];
-                $r_inm_cheque = (new inm_cheque(link: $this->link))->modifica_bd(
+                $r_inm_cheque = $modelo_cheque->modifica_bd(
                     registro: $registro, id: $_POST['registro_ajustar_id']);
                 if (errores::$error) {
                     $this->link->rollBack();
@@ -2064,7 +2066,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         }*/
         
         if(isset($_POST['inm_tipo_gasto_sl_id']) && trim($_POST['inm_tipo_gasto_sl_id']) === '2') {
-            $r_transferencia = (new inm_transferencia(link: $this->link))->registro(
+            $r_transferencia = $modelo_transferencia->registro(
                 registro_id: $_POST['registro_ajustar_id']);
             if (errores::$error) {
                 $this->link->rollBack();
@@ -2076,7 +2078,7 @@ class controlador_inm_ubicacion extends _ctl_base {
                 $registro = array();
                 $registro['transferencia'] = $_POST['transferencia'];
                 $registro['bn_cuenta_id'] = $_POST['bn_cuenta_sl_trs_id'];
-                $r_inm_transferencia = (new inm_transferencia(link: $this->link))->modifica_bd(
+                $r_inm_transferencia = $modelo_transferencia->modifica_bd(
                     registro: $registro, id: $_POST['registro_ajustar_id']);
                 if (errores::$error) {
                     $this->link->rollBack();
@@ -2109,6 +2111,45 @@ class controlador_inm_ubicacion extends _ctl_base {
         }*/
 
         if(isset($_POST['avanza_etapa']) && trim($_POST['avanza_etapa']) !== '') {
+
+            $filtro_val['inm_ubicacion.id'] = $this->registro_id;
+            $r_cheques = $modelo_cheque->filtro_and(filtro: $filtro_val);
+            if (errores::$error) {
+                $this->link->rollBack();
+                return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $r_cheques,
+                    header: $header, ws: $ws);
+            }
+
+            foreach ($r_cheques->registros AS $cheque){
+                if(!isset($cheque['inm_cheque_numero_cheque']) || trim($cheque['inm_cheque_numero_cheque']) === ''
+                || !isset($cheque['inm_cheque_bn_cuenta_id']) || trim($cheque['inm_cheque_bn_cuenta_id']) === '1'){
+                    $this->link->rollBack();
+                    return $this->retorno_error(
+                        mensaje: 'Error hace falta especificar el numero de cheque o la cuenta del cheque con id:'.
+                        $cheque['inm_cheque_id'], data: $cheque, header: $header, ws: $ws);
+                }
+            }       
+            
+            $r_transferencias = $modelo_transferencia->filtro_and(filtro: $filtro_val);
+            if (errores::$error) {
+                $this->link->rollBack();
+                return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $r_transferencias,
+                    header: $header, ws: $ws);
+            }
+
+            foreach ($r_transferencias->registros AS $transferencia){
+                if(!isset($transferencia['inm_transferencia_transferencia']) ||
+                    trim($transferencia['inm_transferencia_transferencia']) === '' ||
+                    !isset($transferencia['inm_transferencia_bn_cuenta_id']) ||
+                    trim($transferencia['inm_transferencia_bn_cuenta_id']) === '1'){
+                    $this->link->rollBack();
+                    return $this->retorno_error(
+                        mensaje: 'Error hace falta especificar el concepto de transferencia  o la cuenta de la 
+                        transferencia con id:' .$transferencia['inm_transferencia_id'], data: $transferencia,
+                        header: $header, ws: $ws);
+                }
+            }
+            
             $filtro_exi['inm_ubicacion.id'] = $this->registro_id;
             $filtro_exi['inm_status_ubicacion.id'] = 8;
             $existe = (new inm_bitacora_status_ubicacion(link: $this->link))->existe(filtro: $filtro_exi);
