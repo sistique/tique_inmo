@@ -341,10 +341,11 @@ let apellido_paterno_ct = $("#apellido_paterno");
 let apellido_materno_ct = $("#apellido_materno");
 let razon_social_ct = $("#razon_social");
 
-let nombre = '';
-let apellido_paterno = '';
-let apellido_materno = '';
-let razon_social = '';
+let nombre = '' || nombre_ct.val();
+let apellido_paterno = '' || apellido_paterno_ct.val();
+let apellido_materno = '' || apellido_materno_ct.val();
+let razon_social = '' || nombre_ct.val()+' '+apellido_paterno_ct.val()+' '+apellido_materno_ct.val();
+
 nombre_ct.change(function() {
     limpia_txt($(this));
     nombre = $(this).val().trim();
@@ -419,6 +420,16 @@ sl_conyuge_dp_estado_id.change(function () {
     conyuge_dp_estado_id = $(this).val();
     dp_asigna_municipios_conyuge(conyuge_dp_estado_id, '', '#conyuge_dp_municipio_id');
 });
+
+function limpia_txt(container){
+    let value = container.val().trim();
+    value = value.toUpperCase();
+    value = value.replace('  ',' ');
+    value = value.replace('  ',' ');
+    value = value.replace('  ',' ');
+    value = value.replace('  ',' ');
+    container.val(value);
+}
 
 function dp_asigna_calles_pertenece(dp_colonia_postal_id = '',dp_calle_pertenece_id = ''){
 
