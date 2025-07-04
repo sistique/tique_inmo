@@ -1259,8 +1259,8 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $modelo = new inm_tipo_cheque(link: $this->link);
         $inm_tipo_cheque_id = $this->html->select_catalogo(cols: 6, con_registros: true,
-            id_selected: -1, modelo: $modelo, id_css: 'inm_tipo_cheque_sl_id',
-            label: 'Tipo Cheque', name: 'inm_tipo_cheque_sl_id');
+            id_selected: -1, modelo: $modelo, disabled: true,
+            id_css: 'inm_tipo_cheque_sl_id', label: 'Tipo Cheque', name: 'inm_tipo_cheque_sl_id');
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener input',data:  $inm_tipo_cheque_id,header: $header, ws:$ws);
         }
@@ -1301,7 +1301,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         $this->inputs->registro_ajustar_id = $registro_ajustar_id;
 
         $keys_selects = (new init())->key_select_txt(cols: 12,key: 'nombre_beneficiario_emision', keys_selects:$keys_selects,
-            place_holder: 'Nombre Beneficiario',required: false);
+            place_holder: 'Nombre Beneficiario',required: false,disabled: true);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
@@ -1313,31 +1313,31 @@ class controlador_inm_ubicacion extends _ctl_base {
         }
 
         $keys_selects = (new init())->key_select_txt(cols: 12,key: 'monto_emision', keys_selects:$keys_selects,
-            place_holder: 'Monto',required: false);
+            place_holder: 'Monto',required: false,disabled: true);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'numero_cheque_secundario', keys_selects:$keys_selects,
-            place_holder: 'No. Cheque Sec', required: false);
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'numero_cheque_secundario',
+            keys_selects:$keys_selects, place_holder: 'No. Cheque Sec', required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'monto_cheque_secundario', keys_selects:$keys_selects,
-            place_holder: 'Monto Secundario',required: false);
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'monto_cheque_secundario',
+            keys_selects:$keys_selects, place_holder: 'Monto Secundario',required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'transferencia', keys_selects:$keys_selects,
-            place_holder: 'Transferencia',required: false);
+            place_holder: 'Concepto Transferencia',required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'monto_transferencia_emision', keys_selects:$keys_selects,
-            place_holder: 'Monto Transferencia',required: false);
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'monto_transferencia_emision',
+            keys_selects:$keys_selects, place_holder: 'Monto Transferencia',required: false, disabled: true);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
@@ -1355,7 +1355,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         }
 
         $keys_selects = (new init())->key_select_txt(cols: 12,key: 'efectivo_emision', keys_selects:$keys_selects,
-            place_holder: 'Efectivo', required: false);
+            place_holder: 'Efectivo', required: false,disabled: true);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
@@ -1971,11 +1971,8 @@ class controlador_inm_ubicacion extends _ctl_base {
 
             if (count($r_cheque) > 0) {
                 $registro = array();
-                $registro['inm_tipo_cheque_id'] = $_POST['inm_tipo_cheque_sl_id'];
                 $registro['bn_cuenta_id'] = $_POST['bn_cuenta_sl_id'];
                 $registro['numero_cheque'] = $_POST['numero_cheque'];
-                $registro['monto'] = $_POST['monto_emision'];
-                $registro['nombre_beneficiario'] = $_POST['nombre_beneficiario_emision'];
                 $r_inm_cheque = (new inm_cheque(link: $this->link))->modifica_bd(
                     registro: $registro, id: $_POST['registro_ajustar_id']);
                 if (errores::$error) {
@@ -2079,8 +2076,6 @@ class controlador_inm_ubicacion extends _ctl_base {
                 $registro = array();
                 $registro['transferencia'] = $_POST['transferencia'];
                 $registro['bn_cuenta_id'] = $_POST['bn_cuenta_sl_trs_id'];
-                $registro['monto'] = $_POST['monto_transferencia_emision'];
-                $registro['nombre_beneficiario'] = $_POST['nombre_beneficiario_emision'];
                 $r_inm_transferencia = (new inm_transferencia(link: $this->link))->modifica_bd(
                     registro: $registro, id: $_POST['registro_ajustar_id']);
                 if (errores::$error) {
@@ -2103,7 +2098,6 @@ class controlador_inm_ubicacion extends _ctl_base {
             if (count($r_efectivo) > 0) {
                 $registro = array();
                 $registro['monto'] = $_POST['efectivo_emision'];
-                $registro['nombre_beneficiario'] = $_POST['nombre_beneficiario_emision'];
                 $r_inm_efectivo = (new inm_efectivo(link: $this->link))->modifica_bd(
                     registro: $registro, id: $_POST['registro_ajustar_id']);
                 if (errores::$error) {
