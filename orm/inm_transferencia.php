@@ -108,7 +108,7 @@ class inm_transferencia extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al insertar prospecto',data:  $r_rel_costo_transferencia);
         }
 
-        if($r_rel_costo_transferencia->n_registros > 0){
+        /*if($r_rel_costo_transferencia->n_registros > 0){
             $registro_che = array();
             $registro_che['monto'] = $registro['monto'];
             $registro_che['referencia'] = $registro['nombre_beneficiario'];
@@ -117,7 +117,7 @@ class inm_transferencia extends _modelo_parent{
             if (errores::$error) {
                 return $this->error->error(mensaje: 'Error al insertar prospecto',data:  $r_transferencia);
             }
-        }else{
+        }else*/ if($r_rel_costo_transferencia->n_registros <= 0){
             $filtro['inm_transferencia.id'] = $id;
             $r_transferencia_fil = (new inm_transferencia(link: $this->link))->filtro_and(filtro:$filtro);
             if (errores::$error) {

@@ -115,7 +115,7 @@ class inm_cheque extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al insertar prospecto',data:  $r_rel_costo_cheque);
         }
 
-        if($r_rel_costo_cheque->n_registros > 0){
+        /*if($r_rel_costo_cheque->n_registros > 0){
             $registro_che = array();
             $registro_che['monto'] = $registro['monto'];
             $registro_che['referencia'] = $registro['nombre_beneficiario'];
@@ -123,7 +123,7 @@ class inm_cheque extends _modelo_parent{
             if (errores::$error) {
                 return $this->error->error(mensaje: 'Error al insertar prospecto',data:  $r_cheque);
             }
-        }else{
+        }else*/ if($r_rel_costo_cheque->n_registros <= 0){
             $filtro['inm_cheque.id'] = $id;
             $r_cheque_fil = (new inm_cheque(link: $this->link))->filtro_and(filtro:$filtro);
             if (errores::$error) {
