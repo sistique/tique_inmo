@@ -452,7 +452,7 @@
                                                             <td><?php echo $transferencia['inm_transferencia_nombre_beneficiario'] ?></td>
                                                             <td><?php echo $transferencia['inm_transferencia_transferencia'] ?></td>
                                                             <td><?php echo $transferencia['inm_transferencia_monto'] ?></td>
-                                                            <td></td>
+                                                            <td><?php echo $transferencia['bn_cuenta_descripcion'] ?></td>
                                                             <td><?php echo $transferencia['inm_transferencia_fecha_alta'] ?></td>
                                                             <td><?php echo $transferencia['elimina_bd'] ?></td>
                                                         </tr>
@@ -497,6 +497,7 @@
 
                                         <div id="cont_transfer_emi">
                                             <?php echo $controlador->inputs->transferencia; ?>
+                                            <?php echo $controlador->inputs->bn_cuenta_sl_trs_id; ?>
                                             <?php echo $controlador->inputs->monto_transferencia_emision; ?>
                                         </div>
 
@@ -566,7 +567,7 @@
                                                             <td><?php echo $transferencia['inm_transferencia_nombre_beneficiario'] ?></td>
                                                             <td><?php echo $transferencia['inm_transferencia_transferencia'] ?></td>
                                                             <td><?php echo $transferencia['inm_transferencia_monto'] ?></td>
-                                                            <td></td>
+                                                            <td><?php echo $transferencia['bn_cuenta_descripcion'] ?></td>
                                                             <td><?php echo $transferencia['inm_transferencia_fecha_alta'] ?></td>
                                                         </tr>
                                                     <?php } ?>
@@ -679,7 +680,7 @@
                                                                 <td><?php echo $transferencia['inm_transferencia_nombre_beneficiario'] ?></td>
                                                                 <td><?php echo $transferencia['inm_transferencia_transferencia'] ?></td>
                                                                 <td><?php echo $transferencia['inm_transferencia_monto'] ?></td>
-                                                                <td></td>
+                                                                <td><?php echo $transferencia['bn_cuenta_descripcion'] ?></td>
                                                                 <td><?php echo $transferencia['inm_transferencia_fecha_alta'] ?></td>
                                                             </tr>
 

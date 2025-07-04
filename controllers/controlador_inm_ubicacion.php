@@ -1268,14 +1268,21 @@ class controlador_inm_ubicacion extends _ctl_base {
         $this->inputs->inm_tipo_cheque_sl_id = $inm_tipo_cheque_id;
         
        $modelo = new bn_cuenta(link: $this->link);
-        $bn_cuenta_id = $this->html->select_catalogo(cols: 6, con_registros: true,
-            id_selected: -1, modelo: $modelo, id_css: 'bn_cuenta_sl_id',
-            label: 'Tipo Cheque', name: 'bn_cuenta_sl_id');
+        $bn_cuenta_id = $this->html->select_catalogo(cols: 6, con_registros: true, id_selected: -1, modelo: $modelo,
+            id_css: 'bn_cuenta_sl_id', label: 'Cuenta', name: 'bn_cuenta_sl_id');
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener input',data:  $bn_cuenta_id,header: $header, ws:$ws);
         }
 
         $this->inputs->bn_cuenta_sl_id = $bn_cuenta_id;
+
+        $bn_cuenta_id = $this->html->select_catalogo(cols: 6, con_registros: true, id_selected: -1, modelo: $modelo,
+            id_css: 'bn_cuenta_sl_trs_id', label: 'Cuenta', name: 'bn_cuenta_sl_trs_id');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $bn_cuenta_id,header: $header, ws:$ws);
+        }
+
+        $this->inputs->bn_cuenta_sl_trs_id = $bn_cuenta_id;
 
         $inm_tipo_gasto_sl_id = $this->html->hidden(name:'inm_tipo_gasto_sl_id',value: "");
         if(errores::$error){
@@ -1323,7 +1330,7 @@ class controlador_inm_ubicacion extends _ctl_base {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'transferencia', keys_selects:$keys_selects,
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'transferencia', keys_selects:$keys_selects,
             place_holder: 'Transferencia',required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
@@ -1508,6 +1515,7 @@ class controlador_inm_ubicacion extends _ctl_base {
                         data-nombre_beneficiario = '$inm_transferencia[inm_transferencia_nombre_beneficiario]'
                         data-transferencia = '$inm_transferencia[inm_transferencia_transferencia]'
                         data-monto_transferencia = '$inm_transferencia[inm_transferencia_monto]'
+                        data-bn_cuenta_id = '$inm_transferencia[bn_cuenta_id]'
                         data-inm_tipo_gasto_id = '2'
                         name='transferencia_id' value='$inm_transferencia[inm_transferencia_id]'>";
             $inm_transferencia['checkbox'] = $check;
@@ -2070,6 +2078,7 @@ class controlador_inm_ubicacion extends _ctl_base {
             if (count($r_transferencia) > 0) {
                 $registro = array();
                 $registro['transferencia'] = $_POST['transferencia'];
+                $registro['bn_cuenta_id'] = $_POST['bn_cuenta_sl_trs_id'];
                 $registro['monto'] = $_POST['monto_transferencia_emision'];
                 $registro['nombre_beneficiario'] = $_POST['nombre_beneficiario_emision'];
                 $r_inm_transferencia = (new inm_transferencia(link: $this->link))->modifica_bd(

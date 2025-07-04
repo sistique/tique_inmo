@@ -241,6 +241,7 @@ let sl_inm_tipo_cheque_id = $("#inm_tipo_cheque_sl_id");
 let sl_bn_cuenta_id = $("#bn_cuenta_sl_id");
 let txt_numero_cheque = $("#numero_cheque");
 let txt_monto_emision = $("#monto_emision");
+let sl_bn_cuenta_sl_trs_id = $("#bn_cuenta_sl_trs_id");
 let txt_transferencia = $("#transferencia");
 let txt_monto_transferencia = $("#monto_transferencia_emision");
 let txt_efectivo = $("#efectivo_emision");
@@ -280,6 +281,9 @@ $(".checkbox_reg").on("change", function() {
             cont_cont_efectivo_emi.hide();
 
             txt_nombre_beneficiario.val($(this).data("nombre_beneficiario"));
+
+            sl_bn_cuenta_sl_trs_id.val(String($(this).data("bn_cuenta_id")));
+            sl_bn_cuenta_sl_trs_id.selectpicker('refresh');
 
             txt_transferencia.val($(this).data("transferencia"));
             txt_monto_transferencia.val($(this).data("monto_transferencia"));
