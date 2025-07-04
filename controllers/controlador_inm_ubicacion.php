@@ -2608,7 +2608,7 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $this->link->commit();
 
-        $params = array('pestana_general_actual' => 'pestanageneral2');
+        $params = array('pestana_general_actual' => 'pestanageneral2', 'pestana_actual' => 'pestana7');
         $link_proceso_ubicacion = $this->obj_link->link_con_id(
             accion: 'proceso_ubicacion', link: $this->link, registro_id: $this->registro_id, seccion: 'inm_ubicacion',
             params: $params);

@@ -535,12 +535,11 @@
                                                         <th>Monto</th>
                                                         <th>Cuenta Bancaria</th>
                                                         <th>Fecha</th>
-                                                        <th>Acciones</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
                                                     <tr>
-                                                        <td colspan="8">Cheques</td>
+                                                        <td colspan="7">Cheques</td>
                                                     </tr>
                                                     <?php
                                                     foreach ($controlador->cheques as $cheque){
@@ -553,11 +552,10 @@
                                                             <td><?php echo $cheque['inm_cheque_monto'] ?></td>
                                                             <td><?php echo $cheque['bn_cuenta_descripcion'] ?></td>
                                                             <td><?php echo $cheque['inm_cheque_fecha_alta'] ?></td>
-                                                            <td><?php echo $cheque['elimina_bd'] ?></td>
                                                         </tr>
                                                     <?php } ?>
                                                     <tr>
-                                                        <td colspan="8">Transferencias</td>
+                                                        <td colspan="7">Transferencias</td>
                                                     </tr>
                                                     <?php
                                                     foreach ($controlador->transferencias as $transferencia){
@@ -570,11 +568,10 @@
                                                             <td><?php echo $transferencia['inm_transferencia_monto'] ?></td>
                                                             <td></td>
                                                             <td><?php echo $transferencia['inm_transferencia_fecha_alta'] ?></td>
-                                                            <td><?php echo $transferencia['elimina_bd'] ?></td>
                                                         </tr>
                                                     <?php } ?>
                                                     <tr>
-                                                        <td colspan="8">Efectivo</td>
+                                                        <td colspan="7">Efectivo</td>
                                                     </tr>
                                                     <?php
                                                     foreach ($controlador->efectivos as $efectivo){
@@ -587,7 +584,6 @@
                                                             <td><?php echo $efectivo['inm_efectivo_monto'] ?></td>
                                                             <td></td>
                                                             <td><?php echo $efectivo['inm_efectivo_fecha_alta'] ?></td>
-                                                            <td><?php echo $efectivo['elimina_bd'] ?></td>
                                                         </tr>
                                                     <?php } ?>
                                                     </tbody>
