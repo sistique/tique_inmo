@@ -988,7 +988,7 @@ class controlador_inm_ubicacion extends _ctl_base {
                 }
 
                 $button_vista_previa = $this->html->button_href(accion: 'vista_previa',
-                    etiqueta: 'Vista Previa', registro_id: $r_rel_doc_cheque->registros[0]['id'],
+                    etiqueta: 'Vista Previa', registro_id: $r_rel_doc_cheque->registros[0]['inm_doc_ubicacion_id'],
                     seccion: 'inm_doc_ubicacion', style: 'success');
                 if (errores::$error) {
                     return $this->retorno_error(mensaje: 'Error al integrar button',
@@ -996,7 +996,7 @@ class controlador_inm_ubicacion extends _ctl_base {
                 }
 
                 $button_descarga_zip = $this->html->button_href(accion: 'descarga_zip',
-                    etiqueta: 'Descarga ZIP', registro_id: $r_rel_doc_cheque->registros[0]['id'],
+                    etiqueta: 'Descarga ZIP', registro_id: $r_rel_doc_cheque->registros[0]['inm_doc_ubicacion_id'],
                     seccion: 'inm_doc_ubicacion', style: 'success');
                 if (errores::$error) {
                     return $this->retorno_error(mensaje: 'Error al integrar button',
@@ -1082,7 +1082,7 @@ class controlador_inm_ubicacion extends _ctl_base {
                 }
 
                 $button_vista_previa = $this->html->button_href(accion: 'vista_previa',
-                    etiqueta: 'Vista Previa', registro_id: $r_rel_doc_transferencia->registros[0]['id'],
+                    etiqueta: 'Vista Previa', registro_id: $r_rel_doc_transferencia->registros[0]['inm_doc_ubicacion_id'],
                     seccion: 'inm_doc_ubicacion', style: 'success');
                 if (errores::$error) {
                     return $this->retorno_error(mensaje: 'Error al integrar button',
@@ -1090,7 +1090,7 @@ class controlador_inm_ubicacion extends _ctl_base {
                 }
 
                 $button_descarga_zip = $this->html->button_href(accion: 'descarga_zip',
-                    etiqueta: 'Descarga ZIP', registro_id: $r_rel_doc_transferencia->registros[0]['id'],
+                    etiqueta: 'Descarga ZIP', registro_id: $r_rel_doc_transferencia->registros[0]['inm_doc_ubicacion_id'],
                     seccion: 'inm_doc_ubicacion', style: 'success');
                 if (errores::$error) {
                     return $this->retorno_error(mensaje: 'Error al integrar button',
@@ -1412,7 +1412,7 @@ class controlador_inm_ubicacion extends _ctl_base {
                 }
 
                 $button_vista_previa = $this->html->button_href(accion: 'vista_previa',
-                    etiqueta: 'Vista Previa', registro_id: $r_rel_doc_cheque->registros[0]['id'],
+                    etiqueta: 'Vista Previa', registro_id: $r_rel_doc_cheque->registros[0]['inm_doc_ubicacion_id'],
                     seccion: 'inm_doc_ubicacion', style: 'success');
                 if (errores::$error) {
                     return $this->retorno_error(mensaje: 'Error al integrar button',
@@ -1420,7 +1420,7 @@ class controlador_inm_ubicacion extends _ctl_base {
                 }
 
                 $button_descarga_zip = $this->html->button_href(accion: 'descarga_zip',
-                    etiqueta: 'Descarga ZIP', registro_id: $r_rel_doc_cheque->registros[0]['id'],
+                    etiqueta: 'Descarga ZIP', registro_id: $r_rel_doc_cheque->registros[0]['inm_doc_ubicacion_id'],
                     seccion: 'inm_doc_ubicacion', style: 'success');
                 if (errores::$error) {
                     return $this->retorno_error(mensaje: 'Error al integrar button',
@@ -1445,7 +1445,9 @@ class controlador_inm_ubicacion extends _ctl_base {
                     <td>$button_elimina_bd</td>
                     </tr>";
             }else{
-                $button = $this->html->input_file(cols: 12, name: 'documentos[36][]', row_upd: new stdClass(),
+                $name = "documentos_cheques[$inm_cheque[inm_cheque_id]][36][]";
+
+                $button = $this->html->input_file(cols: 12, name: $name, row_upd: $this->row_upd,
                     value_vacio: false, place_holder: 'Subir Documento',required: false, con_label: false);
                 if (errores::$error) {
                     return $this->retorno_error(mensaje: 'Error al obtener inputs', data: $button,header: $header,
@@ -1515,7 +1517,7 @@ class controlador_inm_ubicacion extends _ctl_base {
                 }
 
                 $button_vista_previa = $this->html->button_href(accion: 'vista_previa',
-                    etiqueta: 'Vista Previa', registro_id: $r_rel_doc_transferencia->registros[0]['id'],
+                    etiqueta: 'Vista Previa', registro_id: $r_rel_doc_transferencia->registros[0]['inm_doc_ubicacion_id'],
                     seccion: 'inm_doc_ubicacion', style: 'success');
                 if (errores::$error) {
                     return $this->retorno_error(mensaje: 'Error al integrar button',
@@ -1523,7 +1525,7 @@ class controlador_inm_ubicacion extends _ctl_base {
                 }
 
                 $button_descarga_zip = $this->html->button_href(accion: 'descarga_zip',
-                    etiqueta: 'Descarga ZIP', registro_id: $r_rel_doc_transferencia->registros[0]['id'],
+                    etiqueta: 'Descarga ZIP', registro_id: $r_rel_doc_transferencia->registros[0]['inm_doc_ubicacion_id'],
                     seccion: 'inm_doc_ubicacion', style: 'success');
                 if (errores::$error) {
                     return $this->retorno_error(mensaje: 'Error al integrar button',
@@ -1548,7 +1550,8 @@ class controlador_inm_ubicacion extends _ctl_base {
                     <td>$button_elimina_bd</td>
                     </tr>";
             }else{
-                $button = $this->html->input_file(cols: 12, name: 'documentos[36][]', row_upd: new stdClass(),
+                $name = "documentos_transferencias[$inm_transferencia[inm_transferencia_id]][49][]";
+                $button = $this->html->input_file(cols: 12, name: $name, row_upd: $this->row_upd,
                     value_vacio: false, place_holder: 'Subir Documento',required: false, con_label: false);
                 if (errores::$error) {
                     return $this->retorno_error(mensaje: 'Error al obtener inputs', data: $button,header: $header,
@@ -2391,7 +2394,108 @@ class controlador_inm_ubicacion extends _ctl_base {
                 header: $header, ws: $ws);
         }
 
-        if(!$existe) {
+        $inm_doc_ubicacion =  new inm_doc_ubicacion(link: $this->link);
+
+        $tipos_documento_cheque = array();
+        foreach ($_FILES['documentos_cheques']['name'] AS $costo => $tipo_documento) {
+            foreach ($tipo_documento AS $key => $value) {
+                foreach ($value AS $nombre_documento) {
+                    $tipos_documento_cheque[$costo][$key]['name'] = $nombre_documento;
+                }
+            }
+        }
+
+        foreach ($_FILES['documentos_cheques']['tmp_name'] AS $costo => $tipo_documento) {
+            foreach ($tipo_documento AS $key => $value) {
+                foreach ($value AS $nombre_documento) {
+                    $tipos_documento_cheque[$costo][$key]['tmp_name'] = $nombre_documento;
+                }
+            }
+        }
+
+        $tipos_documento_transferencia = array();
+        foreach ($_FILES['documentos_transferencias']['name'] AS $costo => $tipo_documento) {
+            foreach ($tipo_documento AS $key => $value) {
+                foreach ($value AS $nombre_documento) {
+                    $tipos_documento_transferencia[$costo][$key]['name'] = $nombre_documento;
+                }
+            }
+        }
+
+        foreach ($_FILES['documentos_transferencias']['tmp_name'] AS $costo => $tipo_documento) {
+            foreach ($tipo_documento AS $key => $value) {
+                foreach ($value AS $nombre_documento) {
+                    $tipos_documento_transferencia[$costo][$key]['tmp_name'] = $nombre_documento;
+                }
+            }
+        }
+
+        $r_rel_doc_ubi_che = array();
+        foreach ($tipos_documento_cheque AS $cheque_id => $doc) {
+            $valor_documento = array();
+            foreach ($doc AS $tipo_documento_id => $value) {
+                $valor_documento['name'] = $value['name'];
+                $valor_documento['tmp_name'] = $value['tmp_name'];
+
+                if ($valor_documento['name'] !== '' && $valor_documento['tmp_name'] !== '') {
+                    $registro = array();
+                    $registro['doc_tipo_documento_id'] = $tipo_documento_id;
+                    $registro['inm_ubicacion_id'] = $this->registro_id;
+
+                    $_FILES = array();
+                    $_FILES['documento'] = $valor_documento;
+                    $result = $inm_doc_ubicacion->alta_registro(registro: $registro);
+                    if (errores::$error) {
+                        return $this->retorno_error(mensaje: 'Error al insertar datos', data: $result, header: $header,
+                            ws: $ws);
+                    }
+
+                    $registro_rel = array();
+                    $registro_rel['inm_cheque_id'] = $cheque_id;
+                    $registro_rel['inm_doc_ubicacion_id'] = $result->registro_id;
+                    $r_rel_doc_ubi_che = (new inm_rel_doc_cheque(link: $this->link))->alta_registro(registro: $registro_rel);
+                    if (errores::$error) {
+                        return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_rel_doc_ubi_che,
+                            header: $header, ws: $ws);
+                    }
+                }
+            }
+        }
+
+        $r_rel_doc_ubi_trs = array();
+        foreach ($tipos_documento_transferencia AS $transferencia_id => $doc) {
+            $valor_documento = array();
+            foreach ($doc AS $tipo_documento_id => $value) {
+                $valor_documento['name'] = $value['name'];
+                $valor_documento['tmp_name'] = $value['tmp_name'];
+
+                if ($valor_documento['name'] !== '' && $valor_documento['tmp_name'] !== '') {
+                    $registro = array();
+                    $registro['doc_tipo_documento_id'] = $tipo_documento_id;
+                    $registro['inm_ubicacion_id'] = $this->registro_id;
+
+                    $_FILES = array();
+                    $_FILES['documento'] = $valor_documento;
+                    $result = $inm_doc_ubicacion->alta_registro(registro: $registro);
+                    if (errores::$error) {
+                        return $this->retorno_error(mensaje: 'Error al insertar datos', data: $result, header: $header,
+                            ws: $ws);
+                    }
+
+                    $registro_rel = array();
+                    $registro_rel['inm_transferencia_id'] = $transferencia_id;
+                    $registro_rel['inm_doc_ubicacion_id'] = $result->registro_id;
+                    $r_rel_doc_ubi_trs = (new inm_rel_doc_transferencia(link: $this->link))->alta_registro(registro: $registro_rel);
+                    if (errores::$error) {
+                        return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_rel_doc_ubi_trs,
+                            header: $header, ws: $ws);
+                    }
+                }
+            }
+        }
+
+
+        /*if(!$existe) {
             if(trim($_FILES['poliza_firmada']['name']) !== '') {
                 $_FILES['documento'] = $_FILES['poliza_firmada'];
                 $registro = array();
@@ -2476,7 +2580,7 @@ class controlador_inm_ubicacion extends _ctl_base {
                         header: $header, ws: $ws);
                 }
             }
-        }
+        }*/
 
         $this->link->commit();
 

@@ -709,7 +709,13 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="control-group btn-alta">
+                                            <div class="controls">
+                                                <button type="submit" class="btn btn-success">Avanza Etapa</button><br>
+                                            </div>
+                                        </div>
                                     </form>
+
                                     <form method="post" action="<?php echo $controlador->link_firmado_bd; ?>"
                                           class="form-additional" enctype="multipart/form-data">
 
