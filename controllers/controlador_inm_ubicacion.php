@@ -1028,7 +1028,7 @@ class controlador_inm_ubicacion extends _ctl_base {
                         ws:  $ws);
                 }
                 $res = "<tr>
-                <td colspan='4'>$button</td>
+                <td colspan='6'>$button</td>
                 </tr>";
             }
 
@@ -1122,7 +1122,7 @@ class controlador_inm_ubicacion extends _ctl_base {
                         ws:  $ws);
                 }
                 $res = "<tr>
-                <td colspan='4'>$button</td>
+                <td colspan='6'>$button</td>
                 </tr>";
             }
 
@@ -1452,7 +1452,7 @@ class controlador_inm_ubicacion extends _ctl_base {
                         ws:  $ws);
                 }
                 $res = "<tr>
-                <td colspan='4'>$button</td>
+                <td colspan='6'>$button</td>
                 </tr>";
             }
 
@@ -1555,7 +1555,7 @@ class controlador_inm_ubicacion extends _ctl_base {
                         ws:  $ws);
                 }
                 $res = "<tr>
-                <td colspan='4'>$button</td>
+                <td colspan='6'>$button</td>
                 </tr>";
             }
 
@@ -1831,7 +1831,7 @@ class controlador_inm_ubicacion extends _ctl_base {
             if(isset($docs['subir_documento'])){
                 $res = "<tr>
                 <td>$docs[doc_tipo_documento_descripcion]</td>
-                <td colspan='4'>$docs[subir_documento]</td>
+                <td colspan='6'>$docs[subir_documento]</td>
                 </tr>";
             }
             $temp[] = $res;
