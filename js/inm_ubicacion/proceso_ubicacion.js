@@ -150,13 +150,18 @@ function cambiarPestanna_inicialubicacion(pestannas) {
 }
 
 function cambiarPestanna_inicial(pestannas,pestanna) {
+    let pestanna_ini = pestanna.id;
+    if(pestana_actual !== ''){
+        pestanna_ini = pestana_actual;
+    }
+
     const str = pestanna.id;
     const valor_pestana = parseInt(str.replace("pestana", ""));
 
-    pestanna_act = document.getElementById(pestanna.id);
+    pestanna_act = document.getElementById(pestanna_ini);
     listaPestannas = document.getElementById(pestannas.id);
 
-    cpestanna = document.getElementById('c'+pestanna.id);
+    cpestanna = document.getElementById('c'+pestanna_ini);
     listacPestannas = document.getElementById('contenido'+pestannas.id);
 
     i=0;
@@ -182,6 +187,11 @@ function cambiarPestanna_inicial(pestannas,pestanna) {
         $(cpestanna).css('display','block');
         $(pestanna_act).css('background','#0f7ad5');
         $(pestanna_act).attr('data-pestana', 'true');
+
+        const url = new URL(window.location.href);
+        url.searchParams.set("pestana_actual", pestanna_ini);
+
+        window.history.pushState({}, '', url);
     });
 }
 

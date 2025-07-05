@@ -270,7 +270,7 @@ class controlador_inm_ubicacion extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
         }
 
-        $params = array('pestana_general_actual' => 'pestanageneral2');
+        $params = array('pestana_general_actual' => 'pestanageneral2', 'pestana_actual' => 'pestana2');
         $link_validacion_bd = $this->obj_link->link_con_id(accion:'validacion_bd',
             link: $this->link,registro_id: $this->registro_id,seccion: 'inm_ubicacion',params: $params);
         if(errores::$error){
@@ -1165,7 +1165,7 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $this->efectivos = $registros;
 
-        $params_retorno = array('pestana_general_actual' => 'pestanageneral2');
+        $params_retorno = array('pestana_general_actual' => 'pestanageneral2', 'pestana_actual' => 'pestana3');
         $link_solicitud_de_recurso_bd = $this->obj_link->link_con_id(accion:'solicitud_de_recurso_bd',
             link: $this->link,registro_id: $this->registro_id,seccion: 'inm_ubicacion',params: $params_retorno);
         if(errores::$error){
@@ -1641,7 +1641,7 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $this->efectivos = $registros;
 
-        $params = array('pestana_general_actual' => 'pestanageneral2');
+        $params = array('pestana_general_actual' => 'pestanageneral2','pestana_actual' => 'pestana4');
         $link_emision_de_recurso_bd = $this->obj_link->link_con_id(accion:'emision_de_recurso_bd',
             link: $this->link,registro_id: $this->registro_id,seccion: 'inm_ubicacion',params: $params);
         if(errores::$error){
@@ -1674,7 +1674,7 @@ class controlador_inm_ubicacion extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
         }
 
-        $params = array('pestana_general_actual' => 'pestanageneral2');
+        $params = array('pestana_general_actual' => 'pestanageneral2', 'pestana_actual' => 'pestana5');
         $link_por_firmar_bd = $this->obj_link->link_con_id(accion:'por_firmar_bd',
             link: $this->link,registro_id: $this->registro_id,seccion: 'inm_ubicacion',params: $params);
         if(errores::$error){
@@ -2176,7 +2176,7 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $this->link->commit();
 
-        $params = array('pestana_general_actual' => 'pestanageneral2');
+        $params = array('pestana_general_actual' => 'pestanageneral2','pestana_actual' => 'pestana4');
         $link_proceso_ubicacion = $this->obj_link->link_con_id(
             accion: 'proceso_ubicacion', link: $this->link, registro_id: $this->registro_id, seccion: 'inm_ubicacion',
             params: $params);
@@ -3665,7 +3665,7 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $this->link->commit();
 
-        $params = array('pestana_general_actual' => 'pestanageneral2');
+        $params = array('pestana_general_actual' => 'pestanageneral2', 'pestana_actual' => 'pestana3');
         $link_proceso_ubicacion = $this->obj_link->link_con_id(
             accion: 'proceso_ubicacion', link: $this->link, registro_id: $this->registro_id, seccion: 'inm_ubicacion',
             params: $params);
@@ -3818,7 +3818,7 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $this->link->commit();
 
-        $params = array('pestana_general_actual' => 'pestanageneral2');
+        $params = array('pestana_general_actual' => 'pestanageneral2', 'pestana_actual' => 'pestana5');
         $link_proceso_ubicacion = $this->obj_link->link_con_id(
             accion: 'proceso_ubicacion', link: $this->link, registro_id: $this->registro_id, seccion: 'inm_ubicacion',
             params: $params);
@@ -4080,7 +4080,7 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $this->link->commit();
 
-        $params = array('pestana_general_actual' => 'pestanageneral2');
+        $params = array('pestana_general_actual' => 'pestanageneral2', 'pestana_actual' => 'pestana2');
         $link_proceso_ubicacion = $this->obj_link->link_con_id(
             accion: 'proceso_ubicacion', link: $this->link, registro_id: $this->registro_id, seccion: 'inm_ubicacion',
             params: $params);
