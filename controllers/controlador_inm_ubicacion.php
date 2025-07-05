@@ -404,7 +404,7 @@ class controlador_inm_ubicacion extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
         }
 
-        $params = array('pestana_general_actual' => 'pestanageneral2');
+        $params = array('pestana_general_actual' => 'pestanageneral2','pestana_actual' => 'pestana6');
         $link_firmado_por_aprobar_bd = $this->obj_link->link_con_id(accion:'firmado_por_aprobar_bd',
             link: $this->link,registro_id: $this->registro_id,seccion: 'inm_ubicacion',params: $params);
         if(errores::$error){
@@ -570,7 +570,7 @@ class controlador_inm_ubicacion extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
         }
 
-        $params = array('pestana_general_actual' => 'pestanageneral2');
+        $params = array('pestana_general_actual' => 'pestanageneral2','pestana_actual' => 'pestana7');
         $link_firmado_bd = $this->obj_link->link_con_id(accion:'firmado_bd',
             link: $this->link,registro_id: $this->registro_id,seccion: 'inm_ubicacion',params: $params);
         if(errores::$error){
@@ -2410,7 +2410,7 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $this->link->commit();
 
-        $params = array('pestana_general_actual' => 'pestanageneral2');
+        $params = array('pestana_general_actual' => 'pestanageneral2','pestana_actual' => 'pestana6');
         $link_proceso_ubicacion = $this->obj_link->link_con_id(
             accion: 'proceso_ubicacion', link: $this->link, registro_id: $this->registro_id, seccion: 'inm_ubicacion',
             params: $params);
