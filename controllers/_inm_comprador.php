@@ -170,12 +170,12 @@ class _inm_comprador{
         $headers['3'] = '3. DATOS DE LA VIVIENDA/TERRENO DESTINO DEL CRÉDITO';
         $headers['4'] = '4. DATOS DE LA EMPRESA O PATRÓN';
         $headers['5'] = '5. DATOS DE IDENTIFICACIÓN DEL (DE LA) DERECHOHABIENTE / DATOS QUE SERÁN VALIDADOS';
-        $headers['8'] = '7. REFERENCIAS FAMILIARES DEL (DE LA) DERECHOHABIENTE / DATOS QUE SERÁN VALIDADOS';
-        $headers['13'] = '13. DATOS FISCALES PARA FACTURACION';
-        $headers['14'] = '14. CONTROL INTERNO';
-        $headers['15'] = '15. DATOS CONYUGE';
-        $headers['16'] = '16. BENEFICIARIOS';
-        $headers['17'] = '17. REFERENCIAS';
+        $headers['8'] = '8. REFERENCIAS FAMILIARES DEL (DE LA) DERECHOHABIENTE / DATOS QUE SERÁN VALIDADOS';
+        $headers['9'] = '9. DATOS FISCALES PARA FACTURACION';
+        $headers['10'] = '10. CONTROL INTERNO';
+        $headers['11'] = '11. DATOS CONYUGE';
+        $headers['12'] = '12. BENEFICIARIOS';
+        $headers['13'] = '13. REFERENCIAS';
 
         return $headers;
     }
