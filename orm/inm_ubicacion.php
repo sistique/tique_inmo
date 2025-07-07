@@ -438,6 +438,30 @@ class inm_ubicacion extends _inm_ubicaciones {
 
     }
 
+    final public function get_co_acreditados(int $inm_ubicacion_id): array
+    {
+        if($inm_ubicacion_id <= 0){
+            return $this->error->error(mensaje: 'Error inm_ubicacion_id debe ser mayor a 0',data:  $inm_ubicacion_id);
+        }
+        $filtro['inm_ubicacion.id'] = $inm_ubicacion_id;
+        $r_inm_rel_co_acredit = (new inm_rel_co_acred_ubi(link: $this->link))->filtro_and(filtro: $filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener inm_rel_co_acredit',data:  $r_inm_rel_co_acredit);
+        }
+        $rels = $r_inm_rel_co_acredit->registros;
+        $co_acreditados = array();
+        foreach ($rels as $rel){
+            $co_acreditado = (new inm_rel_co_acred_ubi(link: $this->link))->registro(
+                registro_id: $rel['inm_co_acreditado_id']);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al obtener co_acreditado',data:  $co_acreditado);
+            }
+            $co_acreditados[] = $co_acreditado;
+        }
+        return $co_acreditados;
+
+    }
+
     private function inserta_conyuge(array $conyuge, int $inm_ubicacion_id, PDO $link): array|stdClass
     {
         $keys = array('nombre','apellido_paterno');

@@ -3132,6 +3132,23 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $this->inputs->conyuge = $conyuge;
 
+        $co_acreditados = (new inm_ubicacion(link: $this->link))->get_co_acreditados(inm_ubicacion_id: $this->registro_id);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener co_acreditados',data:  $co_acreditados, header: $header,ws:  $ws);
+        }
+
+        $inm_co_acreditado = new stdClass();
+        if(count($co_acreditados) === 1){
+            $inm_co_acreditado = (object)$co_acreditados[0];
+        }
+
+        $headers = (new _ubicacion())->frontend_co_acreditado(controler: $this,
+            row_upd: $inm_co_acreditado);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al integrar headers',data:  $headers, header: $header,ws:  $ws);
+        }
+
         $fecha_otorgamiento_credito = $this->html->input_fecha(cols: 12, row_upd: $this->row_upd, value_vacio: false,
             name: 'fecha_otorgamiento_credito', place_holder: 'Fecha Otorgamiento Credito',
             required: false, value: $this->row_upd->fecha_otorgamiento_credito);
