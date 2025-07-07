@@ -117,6 +117,9 @@ class controlador_inm_ubicacion extends _ctl_base {
     public array $inm_conf_docs_ubicacion = array();
 
     public string $costo = '0.0';
+
+    public bool $aplica_seccion_co_acreditado = false;
+
     public function __construct(PDO      $link, html $html = new \gamboamartin\template_1\html(),
                                 stdClass $paths_conf = new stdClass())
     {
