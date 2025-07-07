@@ -10,7 +10,13 @@ class inm_co_acreditado_html extends _base {
 
 
 
-
+    private function adeudo_hipoteca(int $cols,  string $entidad, bool $disabled = false,
+                                     string $name = 'adeudo_hipoteca', string $place_holder= 'Adeudo Hipoteca',
+                                     stdClass $row_upd = new stdClass(), bool $value_vacio = false): array|string
+    {
+        return $this->input_text_required(cols: $cols,disabled:  $disabled,name:  $name,
+            place_holder:  $place_holder,row_upd:  $row_upd,value_vacio:  $value_vacio);
+    }
 
 
     private function correo(int $cols,  string $entidad, bool $disabled = false, string $name = 'correo', string $place_holder= 'Correo',
@@ -127,7 +133,7 @@ class inm_co_acreditado_html extends _base {
     private function init_cols(array $cols_css): array
     {
         $cols_6 = array('apellido_materno','apellido_paterno','celular','curp','lada','lada_nep','nombre','nss',
-            'numero','numero_nep','rfc');
+            'numero','numero_nep','rfc', 'numero_credito', 'adeudo_hipoteca');
 
         foreach ($cols_6 as $campo){
             if(!isset($cols_css[$campo])){
@@ -348,6 +354,18 @@ class inm_co_acreditado_html extends _base {
 
     }
 
+
+    private function numero_credito(int $cols,  string $entidad, bool $disabled = false,
+                                    string $name = 'numero_credito', string $place_holder= 'Numero de Credito',
+                                    stdClass $row_upd = new stdClass(), bool $value_vacio = false): array|string
+    {
+        $class_css = array('inm_co_acreditado_numero_credito');
+
+        return $this->input_text(cols: $cols, disabled: $disabled, name: $name, place_holder: $place_holder,
+            row_upd: $row_upd, value_vacio: $value_vacio, class_css: $class_css);
+
+    }
+
     /**
      * Inicializa los parametros para inputs de co acreditado
      * @param array $cols_css Cols cd inputs
@@ -360,7 +378,8 @@ class inm_co_acreditado_html extends _base {
     private function params_inputs(array $cols_css, array $disableds, bool $integra_prefijo, array $names): array|stdClass
     {
         $campos = array('apellido_materno','apellido_paterno','celular','correo','curp','extension_nep','lada',
-            'lada_nep','nombre', 'nombre_empresa_patron','nrp','nss', 'numero','numero_nep','rfc');
+            'lada_nep','nombre', 'nombre_empresa_patron','nrp','nss', 'numero','numero_nep','rfc','numero_credito',
+            'adeudo_hipoteca');
 
         $params = $this->init_params(campos: $campos,cols_css:  $cols_css,disableds:  $disableds,names:  $names);
         if(errores::$error){

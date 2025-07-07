@@ -159,10 +159,11 @@
                                             <?php echo $controlador->inputs->inm_co_acreditado->apellido_paterno; ?>
                                             <?php echo $controlador->inputs->inm_co_acreditado->apellido_materno; ?>
                                             <?php echo $controlador->inputs->inm_co_acreditado->nombre; ?>
+                                            <?php echo $controlador->inputs->inm_co_acreditado->numero_credito; ?>
+                                            <?php echo $controlador->inputs->inm_co_acreditado->adeudo_hipoteca; ?>
                                             <?php echo $controlador->inputs->inm_co_acreditado->lada; ?>
                                             <?php echo $controlador->inputs->inm_co_acreditado->numero; ?>
                                             <?php echo $controlador->inputs->inm_co_acreditado->celular; ?>
-                                            <?php echo $controlador->btn; ?>
                                             <div class="control-group col-sm-6">
                                                 <label class="control-label" for="inm_attr_tipo_credito_id">Genero</label>
                                                 <label class="form-check-label chk">
@@ -177,7 +178,7 @@
                                                 </label>
                                             </div>
                                             <?php echo $controlador->inputs->inm_co_acreditado->correo; ?>
-
+                                            <?php echo $controlador->btn; ?>
                                         </div>
 
                                         <?php echo $controlador->header_frontend->apartado_7; ?>
@@ -186,6 +187,7 @@
                                             <?php echo $controlador->inputs->inm_co_acreditado->nrp; ?>
                                             <?php echo $controlador->inputs->inm_co_acreditado->lada_nep; ?>
                                             <?php echo $controlador->inputs->inm_co_acreditado->numero_nep; ?>
+                                            <?php echo $controlador->btn; ?>
                                         </div>
 
                                     <?php } ?>
@@ -617,7 +619,6 @@
                                                 <?php echo $controlador->inputs->inm_co_acreditado->lada; ?>
                                                 <?php echo $controlador->inputs->inm_co_acreditado->numero; ?>
                                                 <?php echo $controlador->inputs->inm_co_acreditado->celular; ?>
-                                                <?php echo $controlador->btn; ?>
                                                 <div class="control-group col-sm-6">
                                                     <label class="control-label" for="inm_attr_tipo_credito_id">Genero</label>
                                                     <label class="form-check-label chk">
@@ -632,7 +633,7 @@
                                                     </label>
                                                 </div>
                                                 <?php echo $controlador->inputs->inm_co_acreditado->correo; ?>
-
+                                                <?php echo $controlador->btn; ?>
                                             </div>
 
                                             <?php echo $controlador->header_frontend->apartado_7; ?>
@@ -641,8 +642,8 @@
                                                 <?php echo $controlador->inputs->inm_co_acreditado->nrp; ?>
                                                 <?php echo $controlador->inputs->inm_co_acreditado->lada_nep; ?>
                                                 <?php echo $controlador->inputs->inm_co_acreditado->numero_nep; ?>
+                                                <?php echo $controlador->btn; ?>
                                             </div>
-
                                         <?php } ?>
 
 
