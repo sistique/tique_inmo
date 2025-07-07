@@ -426,7 +426,6 @@ let apartado_9 = $("#apartado_9");
 let apartado_10 = $("#apartado_10");
 let apartado_11 = $("#apartado_11");
 let apartado_12 = $("#apartado_12");
-let apartado_13 = $("#apartado_13");
 
 let collapse_a1 = $("#collapse_a1");
 let collapse_a2 = $("#collapse_a2");
@@ -440,7 +439,6 @@ let collapse_a9 = $("#collapse_a9");
 let collapse_a10 = $("#collapse_a10");
 let collapse_a11 = $("#collapse_a11");
 let collapse_a12 = $("#collapse_a12");
-let collapse_a13 = $("#collapse_a13");
 
 let btn_modifica = $("#btn_modifica");
 
@@ -456,8 +454,6 @@ apartado_9.show();
 apartado_10.show();
 apartado_11.show();
 apartado_12.show();
-apartado_13.show();
-
 in_descuento_pension_alimenticia_dh.change(function() {
     let value = $(this).val().trim();
     $(this).val(value);
@@ -764,6 +760,11 @@ collapse_a5.click(function() {
     apartado_5.toggle();
 
 });
+collapse_a8.click(function() {
+    apartado_8.toggle();
+
+});
+
 collapse_a9.click(function() {
     apartado_9.toggle();
 
@@ -781,11 +782,6 @@ collapse_a11.click(function() {
 
 collapse_a12.click(function() {
     apartado_12.toggle();
-
-});
-
-collapse_a13.click(function () {
-    apartado_13.toggle();
 
 });
 
@@ -854,11 +850,6 @@ collapse_a7.click(function() {
 
 });
 
-collapse_a8.click(function() {
-    apartado_8.toggle();
-
-});
-
 
 let todo_aculto = true;
 
@@ -876,7 +867,6 @@ $("#collapse_all").click(function() {
         apartado_10.hide();
         apartado_11.hide();
         apartado_12.hide();
-        apartado_13.hide();
         todo_aculto = false;
     }
     else{
@@ -892,7 +882,6 @@ $("#collapse_all").click(function() {
         apartado_10.show();
         apartado_11.show();
         apartado_12.show();
-        apartado_13.show();
         todo_aculto = true;
     }
 
@@ -911,6 +900,8 @@ btn_modifica.click(function() {
     apartado_8.show();
     apartado_9.show();
     apartado_10.show();
+    apartado_11.show();
+    apartado_12.show();
 
     if(inm_co_acreditado_nss.val() !== ''){
         apartado_6_con_datos = true;

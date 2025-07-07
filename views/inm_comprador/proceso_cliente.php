@@ -191,9 +191,9 @@
                                     <?php } ?>
 
 
-                                    <?php echo $controlador->header_frontend->apartado_13; ?>
+                                    <?php echo $controlador->header_frontend->apartado_8; ?>
 
-                                    <div  id="apartado_13">
+                                    <div  id="apartado_8">
 
                                         <?php echo $controlador->inputs->cat_sat_regimen_fiscal_id; ?>
                                         <?php echo $controlador->inputs->cat_sat_moneda_id; ?>
@@ -206,15 +206,15 @@
 
                                     </div>
 
-                                    <?php echo $controlador->header_frontend->apartado_14; ?>
+                                    <?php echo $controlador->header_frontend->apartado_9; ?>
 
-                                    <div  id="apartado_14">
+                                    <div  id="apartado_9">
                                         <?php echo $controlador->inputs->com_tipo_cliente_id; ?>
                                         <?php echo $controlador->btn; ?>
                                     </div>
 
-                                    <?php echo $controlador->header_frontend->apartado_15; ?>
-                                    <div  id="apartado_15">
+                                    <?php echo $controlador->header_frontend->apartado_10; ?>
+                                    <div  id="apartado_10">
                                         <?php echo $controlador->inputs->conyuge->nombre; ?>
                                         <?php echo $controlador->inputs->conyuge->apellido_paterno; ?>
                                         <?php echo $controlador->inputs->conyuge->apellido_materno; ?>
@@ -230,8 +230,8 @@
                                         <?php echo $controlador->btn; ?>
                                     </div>
 
-                                    <?php echo $controlador->header_frontend->apartado_16; ?>
-                                    <div  id="apartado_16">
+                                    <?php echo $controlador->header_frontend->apartado_11; ?>
+                                    <div  id="apartado_11">
                                         <?php echo $controlador->inputs->beneficiario->inm_tipo_beneficiario_id; ?>
                                         <?php echo $controlador->inputs->beneficiario->inm_parentesco_id; ?>
                                         <?php echo $controlador->inputs->beneficiario->nombre; ?>
@@ -269,8 +269,8 @@
                                     </div>
 
 
-                                    <?php echo $controlador->header_frontend->apartado_17; ?>
-                                    <div  id="apartado_17">
+                                    <?php echo $controlador->header_frontend->apartado_12; ?>
+                                    <div  id="apartado_12">
                                         <?php echo $controlador->inputs->referencia->nombre; ?>
                                         <?php echo $controlador->inputs->referencia->apellido_paterno; ?>
                                         <?php echo $controlador->inputs->referencia->apellido_materno; ?>
@@ -646,9 +646,9 @@
                                         <?php } ?>
 
 
-                                        <?php echo $controlador->header_frontend->apartado_13; ?>
+                                        <?php echo $controlador->header_frontend->apartado_8; ?>
 
-                                        <div  id="apartado_13">
+                                        <div  id="apartado_8">
 
                                             <?php echo $controlador->inputs->cat_sat_regimen_fiscal_id; ?>
                                             <?php echo $controlador->inputs->cat_sat_moneda_id; ?>
@@ -661,15 +661,15 @@
 
                                         </div>
 
-                                        <?php echo $controlador->header_frontend->apartado_14; ?>
+                                        <?php echo $controlador->header_frontend->apartado_9; ?>
 
-                                        <div  id="apartado_14">
+                                        <div  id="apartado_9">
                                             <?php echo $controlador->inputs->com_tipo_cliente_id; ?>
                                             <?php echo $controlador->btn; ?>
                                         </div>
 
-                                        <?php echo $controlador->header_frontend->apartado_15; ?>
-                                        <div  id="apartado_15">
+                                        <?php echo $controlador->header_frontend->apartado_10; ?>
+                                        <div  id="apartado_10">
                                             <?php echo $controlador->inputs->conyuge->nombre; ?>
                                             <?php echo $controlador->inputs->conyuge->apellido_paterno; ?>
                                             <?php echo $controlador->inputs->conyuge->apellido_materno; ?>
@@ -685,8 +685,8 @@
                                             <?php echo $controlador->btn; ?>
                                         </div>
 
-                                        <?php echo $controlador->header_frontend->apartado_16; ?>
-                                        <div  id="apartado_16">
+                                        <?php echo $controlador->header_frontend->apartado_11; ?>
+                                        <div  id="apartado_11">
                                             <?php echo $controlador->inputs->beneficiario->inm_tipo_beneficiario_id; ?>
                                             <?php echo $controlador->inputs->beneficiario->inm_parentesco_id; ?>
                                             <?php echo $controlador->inputs->beneficiario->nombre; ?>
@@ -724,8 +724,8 @@
                                         </div>
 
 
-                                        <?php echo $controlador->header_frontend->apartado_17; ?>
-                                        <div  id="apartado_17">
+                                        <?php echo $controlador->header_frontend->apartado_12; ?>
+                                        <div  id="apartado_12">
                                             <?php echo $controlador->inputs->referencia->nombre; ?>
                                             <?php echo $controlador->inputs->referencia->apellido_paterno; ?>
                                             <?php echo $controlador->inputs->referencia->apellido_materno; ?>
