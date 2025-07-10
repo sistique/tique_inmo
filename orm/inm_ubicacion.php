@@ -349,7 +349,7 @@ class inm_ubicacion extends _inm_ubicaciones {
             }
         }
 
-        $datos = $this->dato(existe: $existe_co_acreditado,key_data:  'inm_co_acreditado');
+        $datos = $this->dato(existe: $existe_co_acreditado,key_data:  'co_acreditado');
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al inicializar datos',data:  $datos);
         }

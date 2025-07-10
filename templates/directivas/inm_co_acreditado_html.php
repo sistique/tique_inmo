@@ -429,10 +429,13 @@ class inm_co_acreditado_html extends _base {
 
         if($integra_prefijo){
             foreach ($params->names as $campo=>$name){
-                $params->names[$campo] = 'inm_co_acreditado_'.$campo;
+                $campo_rename = "co_acreditado[inm_co_acreditado_$campo]";
+                $params->names[$campo] = $campo_rename;
             }
         }
+
         $params->campos = $campos;
+
         return $params;
     }
 

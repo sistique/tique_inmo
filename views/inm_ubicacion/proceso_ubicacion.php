@@ -126,12 +126,12 @@
                                             <div class="control-group col-sm-6">
                                                 <label class="control-label" for="inm_attr_tipo_credito_id">Genero</label>
                                                 <label class="form-check-label chk">
-                                                    <input type="radio" name="inm_co_acreditado_genero" value="M" class="form-check-input" id="genero"
+                                                    <input type="radio" name="co_acreditado[inm_co_acreditado_genero]" value="M" class="form-check-input" id="genero"
                                                            title="Genero" checked>
                                                     M
                                                 </label>
                                                 <label class="form-check-label chk">
-                                                    <input type="radio" name="inm_co_acreditado_genero" value="F" class="form-check-input" id="genero"
+                                                    <input type="radio" name="co_acreditado[inm_co_acreditado_genero]" value="F" class="form-check-input" id="genero"
                                                            title="Genero">
                                                     F
                                                 </label>
