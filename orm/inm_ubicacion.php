@@ -173,6 +173,28 @@ class inm_ubicacion extends _inm_ubicaciones {
         return $data;
     }
 
+    private function ajusta_co_acreditado(stdClass $datos, int $inm_ubicacion_id, PDO $link): array|stdClass
+    {
+        if(!$datos->existe) {
+            $r_inm_rel_co_acreditado_ubicacion_bd = $this->inserta_co_acreditado(co_acreditado: $datos->row,
+                inm_ubicacion_id: $inm_ubicacion_id,link: $link);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al insertar co_acreditado', data: $r_inm_rel_co_acreditado_ubicacion_bd);
+            }
+            $data = $r_inm_rel_co_acreditado_ubicacion_bd;
+        }
+        else{
+            $r_modifica_co_acreditado = $this->modifica_co_acreditado(
+                co_acreditado: $datos->row, inm_ubicacion_id: $inm_ubicacion_id,link: $link);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al modificar co_acreditado', data: $r_modifica_co_acreditado);
+            }
+            $data = $r_modifica_co_acreditado;
+        }
+
+        return $data;
+    }
+
     /**
      * Asigna un precio de venta a un registro de ubicacion
      * @param int $indice Indice de arreglo de ubicaciones
@@ -318,6 +340,23 @@ class inm_ubicacion extends _inm_ubicaciones {
         return $datos;
     }
 
+    public function datos_co_acreditado(PDO $link, int $inm_ubicacion_id): array|stdClass{
+        $existe_co_acreditado = false;
+        if($inm_ubicacion_id > 0) {
+            $existe_co_acreditado = (new inm_ubicacion(link: $link))->existe_co_acreditado(inm_prospecto_id: $inm_ubicacion_id);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al validar si existe co_acreditado', data: $existe_co_acreditado);
+            }
+        }
+
+        $datos = $this->dato(existe: $existe_co_acreditado,key_data:  'inm_co_acreditado');
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al inicializar datos',data:  $datos);
+        }
+
+        return $datos;
+    }
+
     /**
      * Genera la descripcion de una ubicacion
      * @param string $key_entidad_base_id Key de entidad base = inm_ubicacion_id
@@ -412,6 +451,21 @@ class inm_ubicacion extends _inm_ubicaciones {
             return $this->error->error(mensaje: 'Error al validar si existe conyuge',data:  $existe_conyuge);
         }
         return $existe_conyuge;
+    }
+
+    final public function existe_co_acreditado(int $inm_prospecto_id): bool|array
+    {
+        if($inm_prospecto_id <=0){
+            return $this->error->error(mensaje: 'Error inm_ubicacion_id es menor a 0',data:  $inm_prospecto_id);
+        }
+        $filtro = array();
+        $filtro['inm_ubicacion.id'] = $inm_prospecto_id;
+
+        $existe_co_acreditado = (new inm_rel_co_acred_ubi(link: $this->link))->existe(filtro: $filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar si existe co_acreditado',data:  $existe_co_acreditado);
+        }
+        return $existe_co_acreditado;
     }
 
     /**
@@ -532,6 +586,78 @@ class inm_ubicacion extends _inm_ubicaciones {
         $data->r_inm_rel_conyuge_ubicacion_bd = $r_inm_rel_conyuge_ubicacion_bd;
 
         return $data;
+    }   
+    
+    private function inserta_co_acreditado(array $co_acreditado, int $inm_ubicacion_id, PDO $link): array|stdClass
+    {
+        $keys = array('nombre','apellido_paterno');
+        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $co_acreditado);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar co_acreditado',data:  $valida);
+        }
+
+        if(!isset($co_acreditado['dp_municipio_id']) || trim($co_acreditado['dp_municipio_id']) === ''){
+            $filtro_tipo_prosp = array();
+            $filtro_tipo_prosp['dp_municipio.predeterminado'] = 'activo';
+            $r_municipio = (new dp_municipio(link: $this->link))->filtro_and(filtro:$filtro_tipo_prosp);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al maquetar row',data:  $r_municipio);
+            }
+
+            $co_acreditado['dp_municipio_id'] = $r_municipio->registros[0]['dp_municipio_id'];
+        }
+
+        if(!isset($co_acreditado['inm_nacionalidad_id']) || trim($co_acreditado['inm_nacionalidad_id']) === ''){
+            $filtro_tipo_prosp = array();
+            $filtro_tipo_prosp['inm_nacionalidad.predeterminado'] = 'activo';
+            $r_nacionalidad = (new inm_nacionalidad(link: $this->link))->filtro_and(filtro:$filtro_tipo_prosp);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al maquetar row',data:  $r_nacionalidad);
+            }
+
+            $co_acreditado['inm_nacionalidad_id'] = $r_nacionalidad->registros[0]['inm_nacionalidad_id'];
+        }
+
+        if(!isset($co_acreditado['inm_ocupacion_id']) || trim($co_acreditado['inm_ocupacion_id']) === ''){
+            $filtro_tipo_prosp = array();
+            $filtro_tipo_prosp['inm_ocupacion.predeterminado'] = 'activo';
+            $r_ocupacion = (new inm_ocupacion(link: $this->link))->filtro_and(filtro:$filtro_tipo_prosp);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al maquetar row',data:  $r_ocupacion);
+            }
+
+            $co_acreditado['inm_ocupacion_id'] = $r_ocupacion->registros[0]['inm_ocupacion_id'];
+        }
+
+        $keys = array('dp_municipio_id','inm_nacionalidad_id', 'inm_ocupacion_id');
+        $valida = $this->validacion->valida_ids(keys: $keys,registro:  $co_acreditado);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar co_acreditado',data:  $valida);
+        }
+        if($inm_ubicacion_id <= 0){
+            return $this->error->error(mensaje: 'Error inm_ubicacion_id debe ser mayor a 0',data:  $inm_ubicacion_id);
+        }
+
+        $alta_co_acreditado = (new inm_co_acreditado(link: $link))->alta_registro(registro: $co_acreditado);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al insertar co_acreditado', data: $alta_co_acreditado);
+        }
+
+        $inm_rel_co_acreditado_ubicacion_ins['inm_ubicacion_id'] = $inm_ubicacion_id;
+        $inm_rel_co_acreditado_ubicacion_ins['inm_co_acreditado_id'] = $alta_co_acreditado->registro_id;
+
+        $r_inm_rel_co_acreditado_ubicacion_bd = (new inm_rel_co_acreditado_ubicacion(link: $link))->alta_registro(
+            registro: $inm_rel_co_acreditado_ubicacion_ins);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al insertar co_acreditado', data: $r_inm_rel_co_acreditado_ubicacion_bd);
+        }
+
+        $data = new stdClass();
+        $data->alta_co_acreditado = $alta_co_acreditado;
+        $data->inm_rel_co_acreditado_ubicacion_ins = $inm_rel_co_acreditado_ubicacion_ins;
+        $data->r_inm_rel_co_acreditado_ubicacion_bd = $r_inm_rel_co_acreditado_ubicacion_bd;
+
+        return $data;
     }
 
     private function init_post(string $key_data): array
@@ -623,6 +749,38 @@ class inm_ubicacion extends _inm_ubicaciones {
         }
 
         return $inm_conyuge;
+    }
+    
+    final public function inm_co_acreditado(bool $columnas_en_bruto, int $inm_ubicacion_id, PDO $link,
+                                      bool $retorno_obj): array|stdClass
+    {
+        if($inm_ubicacion_id<=0){
+            return $this->error->error(mensaje: 'Error inm_ubicacion_id debe ser mayor a 0', data:  $inm_ubicacion_id);
+        }
+        $filtro = array();
+        $filtro['inm_ubicacion.id'] = $inm_ubicacion_id;
+        $r_inm_rel_co_acred_ubi = (new inm_rel_co_acred_ubi(link: $link))->filtro_and(filtro: $filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener co_acreditado relacion',
+                data:  $r_inm_rel_co_acred_ubi);
+        }
+        if($r_inm_rel_co_acred_ubi->n_registros === 0){
+            return $this->error->error(mensaje: 'Error no existe relacion',data:  $r_inm_rel_co_acred_ubi);
+        }
+        if($r_inm_rel_co_acred_ubi->n_registros > 1){
+            return $this->error->error(mensaje: 'Error de integridad',data:  $r_inm_rel_co_acred_ubi);
+        }
+
+        $inm_rel_co_acred_ubi = $r_inm_rel_co_acred_ubi->registros[0];
+
+        $inm_co_acreditado = (new inm_co_acreditado(link: $link))->registro(
+            registro_id: $inm_rel_co_acred_ubi['inm_co_acreditado_id'],columnas_en_bruto: $columnas_en_bruto,
+            retorno_obj: $retorno_obj);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener co_acreditado',data:  $inm_co_acreditado);
+        }
+
+        return $inm_co_acreditado;
     }
 
     /**
@@ -757,6 +915,31 @@ class inm_ubicacion extends _inm_ubicaciones {
         $data = new stdClass();
         $data->inm_conyuge_previo = $inm_conyuge_previo;
         $data->r_modifica_conyuge = $r_modifica_conyuge;
+
+        return $data;
+    }
+    
+    private function modifica_co_acreditado(array $co_acreditado, int $inm_ubicacion_id, PDO $link): array|stdClass
+    {
+        if($inm_ubicacion_id<=0){
+            return $this->error->error(mensaje: 'Error inm__id debe ser mayor a 0', data:  $inm_ubicacion_id);
+        }
+        $inm_co_acreditado_previo = $this->inm_co_acreditado(columnas_en_bruto: true, inm_ubicacion_id: $inm_ubicacion_id,
+            link: $link, retorno_obj: true);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener co_acreditado', data: $inm_co_acreditado_previo);
+        }
+
+        $inm_co_acreditado_id = $inm_co_acreditado_previo->id;
+
+        $r_modifica_co_acreditado = (new inm_co_acreditado(link: $link))->modifica_bd(registro: $co_acreditado,id: $inm_co_acreditado_id);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al modificar co_acreditado', data: $r_modifica_co_acreditado);
+        }
+
+        $data = new stdClass();
+        $data->inm_co_acreditado_previo = $inm_co_acreditado_previo;
+        $data->r_modifica_co_acreditado = $r_modifica_co_acreditado;
 
         return $data;
     }
@@ -976,6 +1159,22 @@ class inm_ubicacion extends _inm_ubicaciones {
                 return $this->error->error(mensaje: 'Error al insertar conyuge', data: $result_conyuge);
             }
             $datos->result_conyuge = $result_conyuge;
+        }
+        return $datos;
+    }
+
+    public function transacciona_co_acreditado(int $inm_ubicacion_id, PDO $link){
+        $datos = $this->datos_co_acreditado(link: $link,inm_ubicacion_id: $inm_ubicacion_id);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener dato co_acreditado',data:  $datos);
+        }
+
+        if($datos->tiene_dato){
+            $result_co_acreditado = $this->ajusta_co_acreditado(datos: $datos,inm_ubicacion_id: $inm_ubicacion_id,link: $link);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al insertar co_acreditado', data: $result_co_acreditado);
+            }
+            $datos->result_co_acreditado = $result_co_acreditado;
         }
         return $datos;
     }
