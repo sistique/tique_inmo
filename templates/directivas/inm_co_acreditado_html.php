@@ -12,42 +12,44 @@ class inm_co_acreditado_html extends _base {
 
     private function adeudo_hipoteca(int $cols,  string $entidad, bool $disabled = false,
                                      string $name = 'adeudo_hipoteca', string $place_holder= 'Adeudo Hipoteca',
-                                     stdClass $row_upd = new stdClass(), bool $value_vacio = false): array|string
+                                     stdClass $row_upd = new stdClass(), bool $value_vacio = false,
+                                     bool $required = true ): array|string
     {
-        return $this->input_text_required(cols: $cols,disabled:  $disabled,name:  $name,
-            place_holder:  $place_holder,row_upd:  $row_upd,value_vacio:  $value_vacio);
+        return $this->input_text(cols: $cols,disabled:  $disabled,name:  $name,
+            place_holder:  $place_holder,row_upd:  $row_upd,value_vacio:  $value_vacio,required: $required);
     }
 
 
     private function correo(int $cols,  string $entidad, bool $disabled = false, string $name = 'correo', string $place_holder= 'Correo',
-                                  stdClass $row_upd = new stdClass(), bool $value_vacio = false): array|string
+                                  stdClass $row_upd = new stdClass(), bool $value_vacio = false, bool $required = true ): array|string
     {
 
         $regex = $this->validacion->patterns['correo_html_base'];
 
-        return $this->input_text_required(cols: $cols,disabled:  $disabled,name:  $name,
-            place_holder:  $place_holder,row_upd:  $row_upd,value_vacio:  $value_vacio,regex: $regex);
+        return $this->input_text(cols: $cols,disabled:  $disabled,name:  $name,
+            place_holder:  $place_holder,row_upd:  $row_upd,value_vacio:  $value_vacio,regex: $regex,
+            required: $required);
 
     }
     private function curp(int $cols,  string $entidad, bool $disabled = false, string $name = 'curp', string $place_holder= 'CURP',
-                              stdClass $row_upd = new stdClass(), bool $value_vacio = false): array|string
+                              stdClass $row_upd = new stdClass(), bool $value_vacio = false,bool $required = true ): array|string
     {
 
         $regex = $this->validacion->patterns['curp_html'];
         $class_css = array('inm_co_acreditado_curp');
 
         return $this->input_text(cols: $cols, disabled: $disabled, name: $name, place_holder: $place_holder,
-            row_upd: $row_upd, value_vacio: $value_vacio, class_css: $class_css, regex: $regex);
+            row_upd: $row_upd, value_vacio: $value_vacio, class_css: $class_css, regex: $regex,required: $required);
 
     }
 
     private function extension_nep(int $cols,  string $entidad, bool $disabled = false, string $name = 'extension_nep', string $place_holder= 'Extension',
-                                     stdClass $row_upd = new stdClass(), bool $value_vacio = false): array|string
+                                     stdClass $row_upd = new stdClass(), bool $value_vacio = false, bool $required = true): array|string
     {
 
 
-        return $this->input_text_required(cols: $cols,disabled:  $disabled,name:  $name,
-            place_holder:  $place_holder,row_upd:  $row_upd,value_vacio:  $value_vacio);
+        return $this->input_text(cols: $cols,disabled:  $disabled,name:  $name,
+            place_holder:  $place_holder,row_upd:  $row_upd,value_vacio:  $value_vacio, required: $required);
 
     }
 
@@ -62,14 +64,12 @@ class inm_co_acreditado_html extends _base {
     private function genera_inputs(
         string $entidad, stdClass $params, stdClass $row_upd = new stdClass()): array|stdClass
     {
-
         $valida = $this->valida_params(params: $params);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar parametros',data:  $valida);
         }
 
         $inputs = new stdClass();
-
         foreach ($params->campos as $campo){
             $inputs = $this->integra_input(campo: $campo, entidad: $entidad, inputs: $inputs, params: $params,
                 row_upd: $row_upd);
@@ -205,6 +205,9 @@ class inm_co_acreditado_html extends _base {
         if(!isset($params->disableds[$campo])){
             $params->disableds[$campo] = false;
         }
+        if(!isset($params->requireds[$campo])){
+            $params->requireds[$campo] = false;
+        }
         if(!isset($params->names[$campo])){
             $params->names[$campo] = $campo;
         }
@@ -220,7 +223,7 @@ class inm_co_acreditado_html extends _base {
      * @return array|stdClass
      * @version 1.159.1
      */
-    private function init_params(array $campos, array $cols_css, array $disableds, array $names): array|stdClass
+    private function init_params(array $campos, array $cols_css, array $disableds, array $names, array $requireds): array|stdClass
     {
         $cols_css = $this->init_cols(cols_css: $cols_css);
         if(errores::$error){
@@ -234,11 +237,16 @@ class inm_co_acreditado_html extends _base {
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al inicializar disableds',data:  $disableds);
         }
+        $requireds = $this->init_campos_disabled(campos: $campos,datas:  $requireds);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al inicializar disableds',data:  $requireds);
+        }
 
         $data = new stdClass();
         $data->cols = $cols_css;
         $data->names = $names;
         $data->disableds = $disableds;
+        $data->requireds = $requireds;
 
         return $data;
     }
@@ -296,7 +304,7 @@ class inm_co_acreditado_html extends _base {
         }
 
         $input = $this->$campo(cols: $params->cols[$campo], disabled: $params->disableds[$campo], entidad: $entidad,
-            name: $params->names[$campo], row_upd: $row_upd);
+            name: $params->names[$campo], row_upd: $row_upd, required: $params->requireds[$campo]);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al generar input',data:  $input);
         }
@@ -308,13 +316,14 @@ class inm_co_acreditado_html extends _base {
 
 
     private function lada_nep(int $cols,  string $entidad, bool $disabled = false, string $name = 'lada_nep', string $place_holder= 'Lada',
-                               stdClass $row_upd = new stdClass(), bool $value_vacio = false): array|string
+                               stdClass $row_upd = new stdClass(), bool $value_vacio = false, bool $required = true): array|string
     {
 
         $regex = $this->validacion->patterns['lada_html'];
 
-        return $this->input_text_required(cols: $cols,disabled:  $disabled,name:  $name,
-            place_holder:  $place_holder,row_upd:  $row_upd,value_vacio:  $value_vacio,regex: $regex);
+        return $this->input_text(cols: $cols,disabled:  $disabled,name:  $name,
+            place_holder:  $place_holder,row_upd:  $row_upd,value_vacio:  $value_vacio,regex: $regex,
+            required: $required);
 
     }
 
@@ -323,25 +332,25 @@ class inm_co_acreditado_html extends _base {
     private function nombre_empresa_patron(int $cols,  string $entidad, bool $disabled = false, string $name = 'nombre_empresa_patron',
                                                 string $place_holder= 'Nombre Empresa Patron',
                                                 stdClass $row_upd = new stdClass(),
-                                                bool $value_vacio = false): array|string
+                                                bool $value_vacio = false, bool $required = true): array|string
     {
 
 
         $class_css = array('inm_co_acreditado_nombre_empresa_patron');
 
         return $this->input_text(cols: $cols, disabled: $disabled, name: $name, place_holder: $place_holder,
-            row_upd: $row_upd, value_vacio: $value_vacio, class_css: $class_css);
+            row_upd: $row_upd, value_vacio: $value_vacio, class_css: $class_css,required: $required);
 
     }
 
     private function nrp(int $cols,  string $entidad, bool $disabled = false, string $name = 'nrp',
                                                 string $place_holder= 'NRP',
                                                 stdClass $row_upd = new stdClass(),
-                                                bool $value_vacio = false): array|string
+                                                bool $value_vacio = false, bool $required = true): array|string
     {
 
-        return $this->input_text_required(cols: $cols,disabled:  $disabled,name:  $name,
-            place_holder:  $place_holder,row_upd:  $row_upd,value_vacio:  $value_vacio);
+        return $this->input_text(cols: $cols,disabled:  $disabled,name:  $name,
+            place_holder:  $place_holder,row_upd:  $row_upd,value_vacio:  $value_vacio, required: $required);
 
     }
 
@@ -369,26 +378,29 @@ class inm_co_acreditado_html extends _base {
 
 
 
-    private function numero_nep(int $cols,  string $entidad, bool $disabled = false, string $name = 'numero_nep', string $place_holder= 'Numero',
-                                 stdClass $row_upd = new stdClass(), bool $value_vacio = false): array|string
+    private function numero_nep(int $cols,  string $entidad, bool $disabled = false, string $name = 'numero_nep',
+                                string $place_holder= 'Numero', stdClass $row_upd = new stdClass(),
+                                bool $value_vacio = false, bool $required = true): array|string
     {
 
         $regex = $this->validacion->patterns['tel_sin_lada_html'];
 
-        return $this->input_text_required(cols: $cols,disabled:  $disabled,name:  $name,
-            place_holder:  $place_holder,row_upd:  $row_upd,value_vacio:  $value_vacio,regex: $regex);
+        return $this->input_text(cols: $cols,disabled:  $disabled,name:  $name,
+            place_holder:  $place_holder,row_upd:  $row_upd,value_vacio:  $value_vacio,regex: $regex,
+            required: $required);
 
     }
 
 
     private function numero_credito(int $cols,  string $entidad, bool $disabled = false,
                                     string $name = 'numero_credito', string $place_holder= 'Numero de Credito',
-                                    stdClass $row_upd = new stdClass(), bool $value_vacio = false): array|string
+                                    stdClass $row_upd = new stdClass(), bool $value_vacio = false,
+                                    bool $required = true): array|string
     {
         $class_css = array('inm_co_acreditado_numero_credito');
 
         return $this->input_text(cols: $cols, disabled: $disabled, name: $name, place_holder: $place_holder,
-            row_upd: $row_upd, value_vacio: $value_vacio, class_css: $class_css);
+            row_upd: $row_upd, value_vacio: $value_vacio, class_css: $class_css,required: $required);
 
     }
 
@@ -407,7 +419,10 @@ class inm_co_acreditado_html extends _base {
             'lada_nep','nombre', 'nombre_empresa_patron','nrp','nss', 'numero','numero_nep','rfc','numero_credito',
             'adeudo_hipoteca');
 
-        $params = $this->init_params(campos: $campos,cols_css:  $cols_css,disableds:  $disableds,names:  $names);
+        $requireds = array();
+
+        $params = $this->init_params(campos: $campos,cols_css:  $cols_css,disableds:  $disableds,names:  $names,
+            requireds: $requireds);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al inicializar params',data:  $params);
         }
@@ -422,7 +437,7 @@ class inm_co_acreditado_html extends _base {
     }
 
     private function rfc(int $cols,  string $entidad, bool $disabled = false, string $name = 'rfc', string $place_holder= 'RFC',
-                               stdClass $row_upd = new stdClass(), bool $value_vacio = false): array|string
+                               stdClass $row_upd = new stdClass(), bool $value_vacio = false, bool $required = true): array|string
     {
 
         $regex = $this->validacion->patterns['rfc_html'];
@@ -430,7 +445,7 @@ class inm_co_acreditado_html extends _base {
         $class_css = array('inm_co_acreditado_rfc');
 
         return $this->input_text(cols: $cols, disabled: $disabled, name: $name, place_holder: $place_holder,
-            row_upd: $row_upd, value_vacio: $value_vacio, class_css: $class_css, regex: $regex);
+            row_upd: $row_upd, value_vacio: $value_vacio, class_css: $class_css, regex: $regex, required: $required);
 
     }
 
