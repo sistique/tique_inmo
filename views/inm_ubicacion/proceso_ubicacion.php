@@ -35,6 +35,15 @@
                             </div>
                             <div id="contenidopestanasubicacion">
                                 <div class="conten" id="cpestanaubicacion1">
+
+                                    <?php
+                                    $checked_genero_m = 'checked';
+                                    $checked_genero_f = '';
+                                    if($controlador->row_upd->genero_co_acreditado === 'F'){
+                                        $checked_genero_m = '';
+                                        $checked_genero_f = 'checked';
+                                    }
+                                    ?>
                                     <form method="post" action="<?php echo $controlador->link_modifica_bd; ?>" class="form-additional"
                                           enctype="multipart/form-data">
 
@@ -126,13 +135,13 @@
                                             <div class="control-group col-sm-6">
                                                 <label class="control-label" for="inm_attr_tipo_credito_id">Genero</label>
                                                 <label class="form-check-label chk">
-                                                    <input type="radio" name="co_acreditado[inm_co_acreditado_genero]" value="M" class="form-check-input" id="genero"
-                                                           title="Genero" checked>
+                                                    <input type="radio" name="co_acreditado[genero]" value="M" class="form-check-input" id="genero"
+                                                           title="Genero"  <?php echo $checked_genero_m; ?>>
                                                     M
                                                 </label>
                                                 <label class="form-check-label chk">
-                                                    <input type="radio" name="co_acreditado[inm_co_acreditado_genero]" value="F" class="form-check-input" id="genero"
-                                                           title="Genero">
+                                                    <input type="radio" name="co_acreditado[genero]" value="F" class="form-check-input" id="genero"
+                                                           title="Genero"  <?php echo $checked_genero_f; ?>>
                                                     F
                                                 </label>
                                             </div>
