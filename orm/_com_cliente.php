@@ -110,19 +110,15 @@ class _com_cliente{
      */
     private function com_cliente_upd(PDO $link, stdClass $registro): array
     {
-        $keys = array('inm_comprador_nombre','inm_comprador_apellido_paterno');
-        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $registro);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al al validar $registro',data:  $valida);
-        }
-
         $com_cliente_upd = array();
 
-        $razon_social = $this->razon_social(con_prefijo: true, registro: $registro);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al obtener razon_social',data:  $razon_social);
+        if(isset($registro->nombre) && isset($registro->apellido_paterno)) {
+            $razon_social = $this->razon_social(con_prefijo: true, registro: $registro);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al obtener razon_social', data: $razon_social);
+            }
+            $com_cliente_upd['razon_social'] = $razon_social;
         }
-        $com_cliente_upd['razon_social'] = $razon_social;
 
         $com_cliente_upd = $this->init_keys_com_cliente(com_cliente_upd: $com_cliente_upd,registro: $registro);
         if(errores::$error){
@@ -472,14 +468,7 @@ class _com_cliente{
      * @param PDO $link Conexion de base de datos
      * @return array|stdClass
      */
-    final public function modifica_com_cliente(stdClass $inm_comprador, PDO $link): array|stdClass
-    {
-
-        $valida = $this->valida_data_cliente(inm_comprador: $inm_comprador);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al al validar inm_comprador',data:  $valida);
-        }
-
+    final public function modifica_com_cliente(stdClass $inm_comprador, int $inm_comprador_id, PDO $link): array|stdClass{
         $com_cliente_upd = $this->com_cliente_upd(link: $link, registro: $inm_comprador);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener com_cliente_upd',data:  $com_cliente_upd);
@@ -487,9 +476,8 @@ class _com_cliente{
 
         $r_com_cliente = new stdClass();
         if(count($com_cliente_upd) > 0){
-
             $r_com_cliente = $this->actualiza_com_cliente(com_cliente_upd: $com_cliente_upd,
-                inm_comprador_id: $inm_comprador->inm_comprador_id,link: $link);
+                inm_comprador_id: $inm_comprador_id,link: $link);
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error al modificar cliente',data:  $r_com_cliente);
             }
@@ -563,8 +551,6 @@ class _com_cliente{
      */
     private function razon_social(bool $con_prefijo, stdClass $registro): string|array
     {
-
-
         $keys = $this->keys_name_cliente(con_prefijo: $con_prefijo);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener keys',data:  $keys);
@@ -804,11 +790,6 @@ class _com_cliente{
      */
     final public function valida_data_cliente(array|stdClass $inm_comprador): bool|array
     {
-        $keys = array('inm_comprador_nombre','inm_comprador_apellido_paterno','inm_comprador_id');
-        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $inm_comprador);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al al validar inm_comprador',data:  $valida);
-        }
         $keys = array('inm_comprador_id');
         $valida = $this->validacion->valida_ids(keys: $keys,registro:  $inm_comprador);
         if(errores::$error){

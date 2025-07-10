@@ -217,7 +217,7 @@ class _base_comprador{
         $result->data_upd = $data_upd;
 
         $r_com_cliente = (new _com_cliente())->modifica_com_cliente(inm_comprador: (object)$inm_comprador_upd,
-            link: $modelo_inm_comprador->link);
+            inm_comprador_id: $inm_comprador_id, link: $modelo_inm_comprador->link);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al modificar cliente',data:  $r_com_cliente);
         }

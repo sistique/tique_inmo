@@ -82,7 +82,6 @@ class inm_rel_ubi_comp extends _modelo_parent{
         $filtro_exi['inm_status_comprador.id'] = 2;
         $existe = (new inm_bitacora_status_comprador(link: $this->link))->existe(filtro: $filtro_exi);
         if (errores::$error) {
-            $this->link->rollBack();
             return $this->error->error(mensaje: 'Error al obtener datos de bitacora', data: $existe);
         }
 
@@ -94,7 +93,6 @@ class inm_rel_ubi_comp extends _modelo_parent{
             $r_inm_bitacora_status_comprador = (new inm_bitacora_status_comprador(link: $this->link))->alta_registro(
                 registro: $registro_alta);
             if (errores::$error) {
-                $this->link->rollBack();
                 return $this->error->error(mensaje: 'Error al insertar datos', data: $r_inm_bitacora_status_comprador);
             }
         }

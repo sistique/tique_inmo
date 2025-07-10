@@ -895,7 +895,7 @@ class _keys_selects{
      */
     private function keys_disabled(array $keys_selects): array
     {
-        $keys = array('com_tipo_cliente_id','nss','curp','rfc','apellido_paterno','apellido_materno','nombre');
+        $keys = array('com_tipo_cliente_id');
 
         $keys_selects = $this->integra_disableds(keys: $keys,keys_selects:  $keys_selects);
         if(errores::$error){
