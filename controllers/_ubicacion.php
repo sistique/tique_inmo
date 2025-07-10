@@ -23,7 +23,7 @@ class _ubicacion{
     {
         $aplica_seccion_co_acreditado = true;
 
-        if((int)$inm_ubicacion['inm_attr_tipo_credito_id']=== 6 || (int)$inm_ubicacion['inm_attr_tipo_credito_id']=== 8) {
+        if((int)$inm_ubicacion['inm_tipo_credito_muestra_conyuge']=== 'activo') {
             $aplica_seccion_co_acreditado = false;
         }
         return $aplica_seccion_co_acreditado;
@@ -159,7 +159,7 @@ class _ubicacion{
         return $data;
     }
 
-    private function data_co_acreditado(controlador_inm_comprador $controler, int $n_apartado, string $tag_header,
+    private function data_co_acreditado(controlador_inm_ubicacion $controler, int $n_apartado, string $tag_header,
                                         stdClass $row_upd = new stdClass()): array|stdClass
     {
 
@@ -579,7 +579,7 @@ class _ubicacion{
         }
 
         $columns_ds = array('com_agente_descripcion');
-        $tipo_agente = array('ubicacion','PREDETERMINADO');
+        $tipo_agente = array('COMPRADOR','PREDETERMINADO');
         $in['llave'] = 'com_tipo_agente.descripcion';
         $in['values'] = $tipo_agente;
         $keys_selects = $controler->key_select(cols:12, con_registros: true,filtro: array(), key: 'com_agente_id',
