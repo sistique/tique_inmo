@@ -116,7 +116,7 @@ class controlador_inm_tipo_credito extends _ctl_formato {
         if($ws){
             header('Content-Type: application/json');
             try {
-                echo json_encode($r_tipo_credito->registros, JSON_THROW_ON_ERROR);
+                echo json_encode($r_tipo_credito, JSON_THROW_ON_ERROR);
             }
             catch (Throwable $e){
                 return $this->retorno_error(mensaje: 'Error al maquetar estados',data: $e, header: $header, ws: $ws);

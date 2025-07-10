@@ -647,8 +647,8 @@ apartado_2.show();
 apartado_3.show();
 apartado_4.show();
 apartado_5.show();
-apartado_6.show();
-apartado_7.show();
+apartado_6.hide();
+apartado_7.hide();
 apartado_8.show();
 apartado_9.show();
 apartado_10.show();
@@ -1178,6 +1178,92 @@ btn_modifica.click(function() {
 
 });
 
+
+
+let sl_inm_tipo_credito_id = $("#inm_tipo_credito_id");
+let sl_inm_attr_tipo_credito_id = $("#inm_attr_tipo_credito_id");
+
+function inicializa_conyuge(){
+    tipo_credito_id = sl_inm_tipo_credito_id.val();
+
+    $.ajax({
+        type: "POST",
+        data: {'id':tipo_credito_id},
+        url: 'index.php?seccion=inm_tipo_credito&accion=get_tipo_credito&ws=1&session_id='+session_id,
+        success: function(data_r) {
+            if(data_r.inm_tipo_credito_muestra_conyuge === "activo"){
+                apartado_6.toggle();
+                collapse_a6.off("click").click(function () {
+                    apartado_6.toggle();
+                });
+
+                apartado_7.toggle();
+                collapse_a7.off("click").click(function () {
+                    apartado_7.toggle();
+                });
+            }else{
+                apartado_6.hide();
+                collapse_a6.off("click");
+
+                apartado_7.hide();
+                collapse_a7.off("click");
+            }
+        },
+        error: function() {
+            alert("No se ha podido obtener la información");
+        }
+    });
+}
+sl_inm_tipo_credito_id.change(function () {
+    tipo_credito_id = $(this).val();
+
+    $.ajax({
+        type: "POST",
+        data: {'id':tipo_credito_id},
+        url: 'index.php?seccion=inm_tipo_credito&accion=get_attr_tipos_credito&ws=1&session_id='+session_id,
+        success: function(data_r) {
+            sl_inm_attr_tipo_credito_id.empty();
+            integra_new_option('#inm_attr_tipo_credito_id','Seleccione una calle','-1');
+            $.each(data_r.registros, function( index, tipo_credito ) {
+                integra_new_option('#inm_attr_tipo_credito_id',tipo_credito.inm_attr_tipo_credito_descripcion,
+                    tipo_credito.inm_attr_tipo_credito_id);
+            });
+            sl_inm_attr_tipo_credito_id.val('-1');
+            sl_inm_attr_tipo_credito_id.selectpicker('refresh');
+        },
+        error: function() {
+            alert("No se ha podido obtener la información");
+        }
+    });
+
+    $.ajax({
+        type: "POST",
+        data: {'id':tipo_credito_id},
+        url: 'index.php?seccion=inm_tipo_credito&accion=get_tipo_credito&ws=1&session_id='+session_id,
+        success: function(data_r) {
+            if(data_r.inm_tipo_credito_muestra_conyuge === "activo"){
+                apartado_6.toggle();
+                collapse_a6.off("click").click(function () {
+                    apartado_6.toggle();
+                });
+
+                apartado_7.toggle();
+                collapse_a7.off("click").click(function () {
+                    apartado_7.toggle();
+                });
+            }else{
+                apartado_6.hide();
+                collapse_a6.off("click");
+
+                apartado_7.hide();
+                collapse_a7.off("click");
+            }
+        },
+        error: function() {
+            alert("No se ha podido obtener la información");
+        }
+    });
+});
 
 
 apellido_paterno_ct.change(function(){

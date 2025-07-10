@@ -209,7 +209,6 @@ class _base_comprador{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al al validar r_modifica->inm_comprador',data:  $valida);
         }
-
         $result = new stdClass();
         $data_upd = $modelo_inm_comprador->upd_post(id: $inm_comprador_id,r_modifica:  $r_modifica);
         if(errores::$error){

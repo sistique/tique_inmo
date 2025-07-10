@@ -484,7 +484,7 @@ class _com_cliente{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener com_cliente_upd',data:  $com_cliente_upd);
         }
-print_r($com_cliente_upd);exit;
+
         $r_com_cliente = new stdClass();
         if(count($com_cliente_upd) > 0){
 
