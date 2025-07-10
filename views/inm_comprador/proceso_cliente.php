@@ -150,9 +150,6 @@
                                         <?php echo $controlador->btn; ?>
 
                                     </div>
-
-                                    <?php if ($controlador->aplica_seccion_co_acreditado){ ?>
-
                                         <?php echo $controlador->header_frontend->apartado_6; ?>
                                         <div  id="apartado_6">
                                             <?php echo $controlador->inputs->inm_co_acreditado->nss; ?>
@@ -191,9 +188,6 @@
                                             <?php echo $controlador->inputs->inm_co_acreditado->numero_nep; ?>
                                             <?php echo $controlador->btn; ?>
                                         </div>
-
-                                    <?php } ?>
-
 
                                     <?php echo $controlador->header_frontend->apartado_8; ?>
 

@@ -98,13 +98,6 @@ class _inm_comprador{
     }
 
     final public function frontend_co_acreditado(controlador_inm_comprador $controler, stdClass $row_upd = new stdClass()){
-        $aplica_seccion_co_acreditado = $this->aplica_seccion_co_acreditado(inm_comprador: $controler->registro);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al validar co_acreditado',data:  $aplica_seccion_co_acreditado);
-        }
-        $controler->aplica_seccion_co_acreditado = $aplica_seccion_co_acreditado;
-
-
         $headers = $this->get_headers(inm_comprador: $controler->registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar headers',data:  $headers);
@@ -128,17 +121,9 @@ class _inm_comprador{
             return $this->error->error(mensaje: 'Error al integrar headers',data:  $headers);
         }
 
-
-        $aplica_seccion_co_acreditado = $this->aplica_seccion_co_acreditado(inm_comprador: $inm_comprador);
+        $headers = $this->header_co_acreditado(headers: $headers);
         if(errores::$error){
-            return $this->error->error(mensaje: 'Error al validar co_acreditado',data:  $headers);
-        }
-
-        if($aplica_seccion_co_acreditado) {
-            $headers = $this->header_co_acreditado(headers: $headers);
-            if(errores::$error){
-                return $this->error->error(mensaje: 'Error al generar header',data:  $headers);
-            }
+            return $this->error->error(mensaje: 'Error al generar header',data:  $headers);
         }
         return $headers;
     }
