@@ -643,19 +643,19 @@ class inm_ubicacion extends _inm_ubicaciones {
             return $this->error->error(mensaje: 'Error al insertar co_acreditado', data: $alta_co_acreditado);
         }
 
-        $inm_rel_co_acreditado_ubicacion_ins['inm_ubicacion_id'] = $inm_ubicacion_id;
-        $inm_rel_co_acreditado_ubicacion_ins['inm_co_acreditado_id'] = $alta_co_acreditado->registro_id;
+        $inm_rel_co_acred_ubi_ins['inm_ubicacion_id'] = $inm_ubicacion_id;
+        $inm_rel_co_acred_ubi_ins['inm_co_acreditado_id'] = $alta_co_acreditado->registro_id;
 
-        $r_inm_rel_co_acreditado_ubicacion_bd = (new inm_rel_co_acreditado_ubicacion(link: $link))->alta_registro(
-            registro: $inm_rel_co_acreditado_ubicacion_ins);
+        $r_inm_rel_co_acred_ubi_bd = (new inm_rel_co_acred_ubi(link: $link))->alta_registro(
+            registro: $inm_rel_co_acred_ubi_ins);
         if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al insertar co_acreditado', data: $r_inm_rel_co_acreditado_ubicacion_bd);
+            return $this->error->error(mensaje: 'Error al insertar co_acreditado', data: $r_inm_rel_co_acred_ubi_bd);
         }
 
         $data = new stdClass();
         $data->alta_co_acreditado = $alta_co_acreditado;
-        $data->inm_rel_co_acreditado_ubicacion_ins = $inm_rel_co_acreditado_ubicacion_ins;
-        $data->r_inm_rel_co_acreditado_ubicacion_bd = $r_inm_rel_co_acreditado_ubicacion_bd;
+        $data->inm_rel_co_acred_ubi_ins = $inm_rel_co_acred_ubi_ins;
+        $data->r_inm_rel_co_acred_ubi_bd = $r_inm_rel_co_acred_ubi_bd;
 
         return $data;
     }

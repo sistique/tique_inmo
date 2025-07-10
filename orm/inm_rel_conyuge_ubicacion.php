@@ -67,7 +67,7 @@ class inm_rel_conyuge_ubicacion extends _modelo_parent{
             
 
             $r_alta_bd = $this->data_result_transaccion(mensaje: 'Registro insertado con éxito', registro: $data->registro,
-                registro_ejecutado: $this->registro, registro_id: $data->r_registro->registros[0]['inm_rel_co_acred_id'],
+                registro_ejecutado: $this->registro, registro_id: $data->r_registro->registros[0]['inm_rel_conyuge_ubicacion_id'],
                 registro_original: $this->registro, registro_puro: $data->registro_puro,
                 sql: 'Registro existente');
             if(errores::$error){

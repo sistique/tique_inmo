@@ -57,18 +57,16 @@ class inm_rel_co_acred_ubi extends _modelo_parent{
             if (errores::$error) {
                 return $this->error->error(mensaje: 'Error al insertar', data: $r_alta_bd);
             }
-        }
-        else{
+        } else{
 
             $data = $this->inm_rel_co_acred_ubi_filtro(filtro: $filtro);
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error al obtener relacion', data: $data);
             }
-            
 
             $r_alta_bd = $this->data_result_transaccion(mensaje: 'Registro insertado con éxito', registro: $data->registro,
                 registro_ejecutado: $this->registro, registro_id: $data->r_registro->registros[0]['inm_rel_co_acred_ubi_id'],
-                registro_puro: $data->registro_puro,
+                registro_original: $this->registro, registro_puro: $data->registro_puro,
                 sql: 'Registro existente');
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error al maquetar respuesta registro', data: $r_alta_bd);
