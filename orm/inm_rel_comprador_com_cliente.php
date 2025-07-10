@@ -15,7 +15,10 @@ class inm_rel_comprador_com_cliente extends _modelo_parent{
         $tabla = 'inm_rel_comprador_com_cliente';
         $columnas = array($tabla=>false,'inm_comprador'=>$tabla,'com_cliente'=>$tabla,'com_tipo_cliente'=>'com_cliente',
             'dp_colonia_postal'=>'com_cliente', 'dp_cp'=>'dp_colonia_postal','dp_colonia'=>'dp_colonia_postal',
-            'dp_municipio'=>'dp_cp', 'dp_estado'=>'dp_municipio','dp_pais'=>'dp_estado');
+            'dp_municipio'=>'dp_cp', 'dp_estado'=>'dp_municipio','dp_pais'=>'dp_estado',
+            'cat_sat_regimen_fiscal'=>'com_cliente','cat_sat_moneda'=>'com_cliente','cat_sat_forma_pago'=>'com_cliente',
+            'cat_sat_metodo_pago'=>'com_cliente', 'cat_sat_uso_cfdi'=>'com_cliente',
+            'cat_sat_tipo_persona'=>'com_cliente');
 
         $campos_obligatorios = array('inm_comprador_id','com_cliente_id');
 

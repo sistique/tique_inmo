@@ -2768,12 +2768,32 @@ class controlador_inm_comprador extends _ctl_base {
                 mensaje: 'Error al obtener registro',data:  $data_row,header: $header,ws: $ws);
         }
 
+        $filtro['inm_comprador.id']= $this->registro_id;
+        $registro = (new inm_rel_comprador_com_cliente(link: $this->link))->filtro_and(filtro:$filtro);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener registro',data:  $registro,header: $header,ws: $ws);
+        }
+
         if(!isset($this->row_upd->inm_tipo_credito_id)){
             $this->row_upd->inm_tipo_credito_id = $data_row->inm_tipo_credito_id;
         }
 
         if(!isset($this->row_upd->adm_estado_civil_id)){
             $this->row_upd->adm_estado_civil_id = $data_row->adm_estado_civil_id;
+        }
+
+        $keys = array('dp_colonia_postal_id','dp_cp_id','dp_municipio_id','dp_estado_id','dp_pais_id',
+            'cat_sat_regimen_fiscal_id','cat_sat_moneda_id','cat_sat_forma_pago_id','cat_sat_metodo_pago_id',
+            'cat_sat_uso_cfdi_id','cat_sat_tipo_persona_id');
+        foreach ($keys AS $key){
+            $this->row_upd->$key = $registro->registros[0][$key];
+        }
+
+        $keys = array('com_cliente_calle','com_cliente_numero_exterior','com_cliente_numero_interior');
+        foreach ($keys AS $key){
+            $rename = str_replace('com_cliente_','',$key);
+            $this->row_upd->$rename = $registro->registros[0][$key];
         }
 
         $keys_selects = (new _keys_selects())->key_selects_base(controler: $this);
