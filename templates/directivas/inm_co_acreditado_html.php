@@ -100,6 +100,18 @@ class inm_co_acreditado_html extends _base {
         return $data;
     }
 
+    private function init_campo_disabled(string $campo, array $data): array
+    {
+        $campo = trim($campo);
+        if($campo === ''){
+            return $this->error->error(mensaje: 'Error campo esta vacio', data: $campo);
+        }
+        if(isset($data[$campo])){
+            $data[$campo] = $campo;
+        }
+        return $data;
+    }
+
     /**
      * Inicializa los campos de un array de parametros para inputs
      * @param array $campos Campos a inicializar
@@ -116,6 +128,23 @@ class inm_co_acreditado_html extends _base {
             }
 
             $datas = $this->init_campo(campo: $campo, data: $datas);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al inicializar datas', data: $datas);
+            }
+        }
+        return $datas;
+
+    }
+
+    private function init_campos_disabled(array $campos, array $datas): array
+    {
+        foreach ($campos as $campo) {
+            $campo = trim($campo);
+            if($campo === ''){
+                return $this->error->error(mensaje: 'Error campo esta vacio', data: $campo);
+            }
+
+            $datas = $this->init_campo_disabled(campo: $campo, data: $datas);
             if (errores::$error) {
                 return $this->error->error(mensaje: 'Error al inicializar datas', data: $datas);
             }
@@ -201,7 +230,7 @@ class inm_co_acreditado_html extends _base {
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al inicializar names',data:  $names);
         }
-        $disableds = $this->init_campos(campos: $campos,datas:  $disableds);
+        $disableds = $this->init_campos_disabled(campos: $campos,datas:  $disableds);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al inicializar disableds',data:  $disableds);
         }
@@ -229,14 +258,11 @@ class inm_co_acreditado_html extends _base {
                                  array $disableds = array(), array $names = array(),
                                  stdClass $row_upd = new stdClass()): array|stdClass
     {
-
-
         $params = $this->params_inputs(cols_css: $cols_css,disableds: $disableds,integra_prefijo:  $integra_prefijo,
             names: $names);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al inicializar params',data:  $params);
         }
-
 
         $inputs = $this->genera_inputs(entidad: $entidad, params: $params, row_upd: $row_upd);
         if(errores::$error){
