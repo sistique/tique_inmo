@@ -590,13 +590,14 @@ class inm_ubicacion extends _inm_ubicaciones {
     
     private function inserta_co_acreditado(array $co_acreditado, int $inm_ubicacion_id, PDO $link): array|stdClass
     {
+        print_r($co_acreditado);Exit;
         $keys = array('nombre','apellido_paterno');
         $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $co_acreditado);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar co_acreditado',data:  $valida);
         }
 
-        if(!isset($co_acreditado['dp_municipio_id']) || trim($co_acreditado['dp_municipio_id']) === ''){
+        /*if(!isset($co_acreditado['dp_municipio_id']) || trim($co_acreditado['dp_municipio_id']) === ''){
             $filtro_tipo_prosp = array();
             $filtro_tipo_prosp['dp_municipio.predeterminado'] = 'activo';
             $r_municipio = (new dp_municipio(link: $this->link))->filtro_and(filtro:$filtro_tipo_prosp);
@@ -607,33 +608,12 @@ class inm_ubicacion extends _inm_ubicaciones {
             $co_acreditado['dp_municipio_id'] = $r_municipio->registros[0]['dp_municipio_id'];
         }
 
-        if(!isset($co_acreditado['inm_nacionalidad_id']) || trim($co_acreditado['inm_nacionalidad_id']) === ''){
-            $filtro_tipo_prosp = array();
-            $filtro_tipo_prosp['inm_nacionalidad.predeterminado'] = 'activo';
-            $r_nacionalidad = (new inm_nacionalidad(link: $this->link))->filtro_and(filtro:$filtro_tipo_prosp);
-            if(errores::$error){
-                return $this->error->error(mensaje: 'Error al maquetar row',data:  $r_nacionalidad);
-            }
-
-            $co_acreditado['inm_nacionalidad_id'] = $r_nacionalidad->registros[0]['inm_nacionalidad_id'];
-        }
-
-        if(!isset($co_acreditado['inm_ocupacion_id']) || trim($co_acreditado['inm_ocupacion_id']) === ''){
-            $filtro_tipo_prosp = array();
-            $filtro_tipo_prosp['inm_ocupacion.predeterminado'] = 'activo';
-            $r_ocupacion = (new inm_ocupacion(link: $this->link))->filtro_and(filtro:$filtro_tipo_prosp);
-            if(errores::$error){
-                return $this->error->error(mensaje: 'Error al maquetar row',data:  $r_ocupacion);
-            }
-
-            $co_acreditado['inm_ocupacion_id'] = $r_ocupacion->registros[0]['inm_ocupacion_id'];
-        }
-
         $keys = array('dp_municipio_id','inm_nacionalidad_id', 'inm_ocupacion_id');
         $valida = $this->validacion->valida_ids(keys: $keys,registro:  $co_acreditado);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar co_acreditado',data:  $valida);
-        }
+        }*/
+
         if($inm_ubicacion_id <= 0){
             return $this->error->error(mensaje: 'Error inm_ubicacion_id debe ser mayor a 0',data:  $inm_ubicacion_id);
         }
