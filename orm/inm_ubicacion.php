@@ -590,7 +590,6 @@ class inm_ubicacion extends _inm_ubicaciones {
     
     private function inserta_co_acreditado(array $co_acreditado, int $inm_ubicacion_id, PDO $link): array|stdClass
     {
-        print_r($co_acreditado);Exit;
         $keys = array('nombre','apellido_paterno');
         $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $co_acreditado);
         if(errores::$error){
