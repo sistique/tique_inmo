@@ -439,7 +439,7 @@ class _com_cliente{
      */
     private function key_com_cliente(): array
     {
-        return array('com_tipo_cliente_id','rfc','dp_calle_pertenece_id','numero_exterior',
+        return array('com_tipo_cliente_id','rfc','dp_colonia_postal_id','numero_exterior',
             'numero_interior','telefono','cat_sat_regimen_fiscal_id','cat_sat_moneda_id','cat_sat_forma_pago_id',
             'cat_sat_metodo_pago_id','cat_sat_uso_cfdi_id','cat_sat_tipo_persona_id','calle',
             'dp_colonia_postal_id');
