@@ -335,7 +335,7 @@ class _ubicacion{
         $headers['3'] = '3. VIVIENDA';
         $headers['4'] = '4. CREDITO';
         $headers['5'] = '5. ADEUDO';
-        $headers['6'] = '6. CONYUGE';
+        $headers['6'] = '6. CO ACREDITADO';
 
         return $headers;
     }

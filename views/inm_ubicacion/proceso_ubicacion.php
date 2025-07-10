@@ -112,20 +112,51 @@
                                         </div>
                                         <?php echo $controlador->header_frontend->apartado_6; ?>
                                         <div id="apartado_6">
-                                            <?php echo $controlador->inputs->conyuge->nombre; ?>
-                                            <?php echo $controlador->inputs->conyuge->apellido_paterno; ?>
-                                            <?php echo $controlador->inputs->conyuge->apellido_materno; ?>
-                                            <?php echo $controlador->inputs->conyuge->dp_estado_id; ?>
-                                            <?php echo $controlador->inputs->conyuge->dp_municipio_id; ?>
-                                            <?php echo $controlador->inputs->conyuge->fecha_nacimiento; ?>
-                                            <?php echo $controlador->inputs->conyuge->inm_nacionalidad_id; ?>
-                                            <?php echo $controlador->inputs->conyuge->curp; ?>
-                                            <?php echo $controlador->inputs->conyuge->rfc; ?>
-                                            <?php echo $controlador->inputs->conyuge->numero_credito; ?>
-                                            <?php echo $controlador->inputs->conyuge->adeudo_hipoteca; ?>
-                                            <?php echo $controlador->inputs->conyuge->inm_ocupacion_id; ?>
-                                            <?php echo $controlador->inputs->conyuge->telefono_casa; ?>
-                                            <?php echo $controlador->inputs->conyuge->telefono_celular; ?>
+                                            <?php echo $controlador->inputs->inm_co_acreditado->nss; ?>
+                                            <?php echo $controlador->inputs->inm_co_acreditado->curp; ?>
+                                            <?php echo $controlador->inputs->inm_co_acreditado->rfc; ?>
+                                            <?php echo $controlador->inputs->inm_co_acreditado->apellido_paterno; ?>
+                                            <?php echo $controlador->inputs->inm_co_acreditado->apellido_materno; ?>
+                                            <?php echo $controlador->inputs->inm_co_acreditado->nombre; ?>
+                                            <?php echo $controlador->inputs->inm_co_acreditado->numero_credito; ?>
+                                            <?php echo $controlador->inputs->inm_co_acreditado->adeudo_hipoteca; ?>
+                                            <?php echo $controlador->inputs->inm_co_acreditado->lada; ?>
+                                            <?php echo $controlador->inputs->inm_co_acreditado->numero; ?>
+                                            <?php echo $controlador->inputs->inm_co_acreditado->celular; ?>
+                                            <div class="control-group col-sm-6">
+                                                <label class="control-label" for="inm_attr_tipo_credito_id">Genero</label>
+                                                <label class="form-check-label chk">
+                                                    <input type="radio" name="inm_co_acreditado_genero" value="M" class="form-check-input" id="genero"
+                                                           title="Genero" checked>
+                                                    M
+                                                </label>
+                                                <label class="form-check-label chk">
+                                                    <input type="radio" name="inm_co_acreditado_genero" value="F" class="form-check-input" id="genero"
+                                                           title="Genero">
+                                                    F
+                                                </label>
+                                            </div>
+                                            <?php echo $controlador->inputs->inm_co_acreditado->correo; ?>
+
+                                            <?php echo $controlador->inputs->inm_co_acreditado->nombre_empresa_patron; ?>
+                                            <?php echo $controlador->inputs->inm_co_acreditado->nrp; ?>
+                                            <?php echo $controlador->inputs->inm_co_acreditado->lada_nep; ?>
+                                            <?php echo $controlador->inputs->inm_co_acreditado->numero_nep; ?>
+
+                                            <?php //echo $controlador->inputs->conyuge->nombre; ?>
+                                            <?php //echo $controlador->inputs->conyuge->apellido_paterno; ?>
+                                            <?php //echo $controlador->inputs->conyuge->apellido_materno; ?>
+                                            <?php //echo $controlador->inputs->conyuge->dp_estado_id; ?>
+                                            <?php //echo $controlador->inputs->conyuge->dp_municipio_id; ?>
+                                            <?php //echo $controlador->inputs->conyuge->fecha_nacimiento; ?>
+                                            <?php //echo $controlador->inputs->conyuge->inm_nacionalidad_id; ?>
+                                            <?php //echo $controlador->inputs->conyuge->curp; ?>
+                                            <?php //echo $controlador->inputs->conyuge->rfc; ?>
+                                            <?php //echo $controlador->inputs->conyuge->numero_credito; ?>
+                                            <?php //echo $controlador->inputs->conyuge->adeudo_hipoteca; ?>
+                                            <?php //echo $controlador->inputs->conyuge->inm_ocupacion_id; ?>
+                                            <?php //echo $controlador->inputs->conyuge->telefono_casa; ?>
+                                            <?php //echo $controlador->inputs->conyuge->telefono_celular; ?>
                                         </div>
                                         <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
                                     </form>
