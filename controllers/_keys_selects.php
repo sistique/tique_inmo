@@ -1109,7 +1109,7 @@ class _keys_selects{
         }
 
         $columns_ds[] = 'inm_producto_infonavit_descripcion';
-        $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  array(),
+        $keys_selects = $controler->key_select(cols:12, con_registros: true,filtro:  array(),
             key: 'inm_producto_infonavit_id', keys_selects: $keys_selects,
             id_selected: $row_upd->inm_producto_infonavit_id, label: 'Producto', columns_ds: $columns_ds);
 
@@ -1119,17 +1119,31 @@ class _keys_selects{
 
         $columns_ds = array();
         $columns_ds[] = 'inm_tipo_credito_descripcion';
-        $columns_ds[] = 'inm_attr_tipo_credito_descripcion';
         $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  array(),
+            key: 'inm_tipo_credito_id', keys_selects: $keys_selects,
+            id_selected: $row_upd->inm_tipo_credito_id, label: 'Tipo de Credito', columns_ds: $columns_ds);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $con_registros = false;
+        $filtro_tipo_credito = array();
+        if(isset($row_upd->inm_tipo_credito_id) && $row_upd->inm_tipo_credito_id > 0){
+            $con_registros = true;
+            $filtro_tipo_credito['inm_tipo_credito.id'] = $row_upd->inm_tipo_credito_id;
+        }
+
+        $columns_ds = array();
+        $columns_ds[] = 'inm_attr_tipo_credito_descripcion';
+        $keys_selects = $controler->key_select(cols:6, con_registros: $con_registros,filtro:  $filtro_tipo_credito,
             key: 'inm_attr_tipo_credito_id', keys_selects: $keys_selects,
-            id_selected: $row_upd->inm_attr_tipo_credito_id, label: 'Tipo de Credito', columns_ds: $columns_ds);
+            id_selected: $row_upd->inm_attr_tipo_credito_id, label: 'Tipo de Credito Especifico', columns_ds: $columns_ds);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
         $columns_ds = array();
         $columns_ds[] = 'inm_destino_credito_descripcion';
-
         $keys_selects = $controler->key_select(cols:12, con_registros: true,filtro:  array(),
             key: 'inm_destino_credito_id', keys_selects: $keys_selects, id_selected: $row_upd->inm_destino_credito_id,
             label: 'Destino del Credito', columns_ds: $columns_ds);

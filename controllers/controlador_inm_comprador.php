@@ -2160,15 +2160,13 @@ class controlador_inm_comprador extends _ctl_base {
         $init_data['cat_sat_uso_cfdi'] = "gamboamartin\\cat_sat";
         $init_data['com_tipo_cliente'] = "gamboamartin\\comercial";
         $init_data['cat_sat_tipo_persona'] = "gamboamartin\\cat_sat";
-
         $init_data['bn_cuenta'] = "gamboamartin\\banco";
+        $init_data['inm_tipo_credito'] = "gamboamartin\\inmuebles";
 
         $campos_view = $this->campos_view_base(init_data: $init_data,keys:  $keys);
-
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al inicializar campo view',data:  $campos_view);
         }
-
 
         return $campos_view;
     }
@@ -2761,6 +2759,16 @@ class controlador_inm_comprador extends _ctl_base {
         if(errores::$error){
             return $this->retorno_error(
                 mensaje: 'Error al generar salida de template',data:  $r_modifica,header: $header,ws: $ws);
+        }
+
+        $data_row = $this->modelo->registro(registro_id: $this->registro_id,retorno_obj: true);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener registro',data:  $data_row,header: $header,ws: $ws);
+        }
+
+        if(!isset($this->row_upd->inm_tipo_credito_id)){
+            $this->row_upd->inm_tipo_credito_id = $data_row->inm_tipo_credito_id;
         }
 
         $keys_selects = (new _keys_selects())->key_selects_base(controler: $this);
