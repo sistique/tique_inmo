@@ -1109,6 +1109,84 @@ sl_inm_tipo_credito_id.change(function () {
     });
 });
 
+let sl_adm_estado_civil_id = $("#adm_estado_civil_id");
+let sl_inm_estado_civil_id = $("#inm_estado_civil_id");
+
+function inicializa_conyuge(){
+    tipo_credito_id = sl_inm_tipo_credito_id.val();
+
+    $.ajax({
+        type: "POST",
+        data: {'id':tipo_credito_id},
+        url: 'index.php?seccion=inm_tipo_credito&accion=get_tipo_credito&ws=1&session_id='+session_id,
+        success: function(data_r) {
+            if(data_r.inm_tipo_credito_muestra_conyuge === "activo"){
+                apartado_6.toggle();
+                collapse_a6.off("click").click(function () {
+                    apartado_6.toggle();
+                });
+
+                apartado_7.toggle();
+                collapse_a7.off("click").click(function () {
+                    apartado_7.toggle();
+                });
+            }else{
+                apartado_6.hide();
+                collapse_a6.off("click");
+
+                apartado_7.hide();
+                collapse_a7.off("click");
+            }
+        },
+        error: function() {
+            alert("No se ha podido obtener la información");
+        }
+    });
+}
+sl_adm_estado_civil_id.change(function () {
+    estado_civil_id = $(this).val();
+
+    $.ajax({
+        type: "POST",
+        data: {'id':estado_civil_id},
+        url: 'index.php?seccion=inm_estado_civil&accion=get_estados_civiles&ws=1&session_id='+session_id,
+        success: function(data_r) {
+            console.log(data_r);
+            sl_inm_estado_civil_id.empty();
+            integra_new_option('#inm_estado_civil_id','Seleccione una calle','-1');
+            $.each(data_r.registros, function( index, estado_civil ) {
+                integra_new_option('#inm_estado_civil_id',estado_civil.inm_estado_civil_descripcion,
+                    estado_civil.inm_estado_civil_id);
+            });
+            sl_inm_estado_civil_id.val('-1');
+            sl_inm_estado_civil_id.selectpicker('refresh');
+        },
+        error: function() {
+            alert("No se ha podido obtener la información");
+        }
+    });
+
+    $.ajax({
+        type: "POST",
+        data: {'id':estado_civil_id},
+        url: 'index.php?seccion=inm_estado_civil&accion=get_estado_civil&ws=1&session_id='+session_id,
+        success: function(data_r) {
+            if(data_r.inm_estado_civil_muestra_conyuge === "activo"){
+                apartado_10.toggle();
+                collapse_a10.off("click").click(function () {
+                    apartado_10.toggle();
+                });
+            }else{
+                apartado_10.hide();
+                collapse_a10.off("click");
+            }
+        },
+        error: function() {
+            alert("No se ha podido obtener la información");
+        }
+    });
+});
+
 
 apellido_paterno_ct.change(function(){
 

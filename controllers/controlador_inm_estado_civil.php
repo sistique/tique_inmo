@@ -9,6 +9,7 @@
 namespace gamboamartin\inmuebles\controllers;
 
 use base\controller\init;
+use gamboamartin\administrador\models\adm_estado_civil;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_estado_civil_html;
 use gamboamartin\inmuebles\models\inm_estado_civil;
@@ -72,7 +73,58 @@ class controlador_inm_estado_civil extends _ctl_formato {
         return $campos_view;
     }
 
+    public function get_estado_civil(bool $header, bool $ws = false){
+        $r_estado_civil = (new adm_estado_civil(link: $this->link))->registro(registro_id: $_POST['id']);
+        if (errores::$error) {
+            $this->retorno_error(mensaje: 'Error al obtener registro de estado_civil', data: $r_estado_civil,
+                header: $header, ws: $ws);
+        }
 
+        if($header){
+            $retorno = $_SERVER['HTTP_REFERER'];
+            header('Location:'.$retorno);
+            exit;
+        }
+        if($ws){
+            header('Content-Type: application/json');
+            try {
+                echo json_encode($r_estado_civil, JSON_THROW_ON_ERROR);
+            }
+            catch (Throwable $e){
+                return $this->retorno_error(mensaje: 'Error al maquetar estados',data: $e, header: $header, ws: $ws);
+            }
+            exit;
+        }
+
+        return $r_estado_civil;
+    }
+
+    public function get_estados_civiles(bool $header, bool $ws = false){
+        $filtro_estado_civil['adm_estado_civil.id'] =  $_POST['id'];
+        $r_estado_civil = (new inm_estado_civil(link: $this->link))->filtro_and(filtro: $filtro_estado_civil);
+        if (errores::$error) {
+            $this->retorno_error(mensaje: 'Error al obtener registro de estado_civil', data: $r_estado_civil,
+                header: $header, ws: $ws);
+        }
+
+        if($header){
+            $retorno = $_SERVER['HTTP_REFERER'];
+            header('Location:'.$retorno);
+            exit;
+        }
+        if($ws){
+            header('Content-Type: application/json');
+            try {
+                echo json_encode($r_estado_civil, JSON_THROW_ON_ERROR);
+            }
+            catch (Throwable $e){
+                return $this->retorno_error(mensaje: 'Error al maquetar estados',data: $e, header: $header, ws: $ws);
+            }
+            exit;
+        }
+
+        return $r_estado_civil;
+    }
 
     public function modifica(bool $header, bool $ws = false): array|stdClass
     {
