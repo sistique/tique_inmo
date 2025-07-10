@@ -11,6 +11,7 @@ namespace gamboamartin\inmuebles\controllers;
 use base\controller\init;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_tipo_credito_html;
+use gamboamartin\inmuebles\models\inm_attr_tipo_credito;
 use gamboamartin\inmuebles\models\inm_tipo_credito;
 use gamboamartin\system\_ctl_base;
 use gamboamartin\system\links_menu;
@@ -89,6 +90,33 @@ class controlador_inm_tipo_credito extends _ctl_formato {
             header('Content-Type: application/json');
             try {
                 echo json_encode($r_tipo_credito, JSON_THROW_ON_ERROR);
+            }
+            catch (Throwable $e){
+                return $this->retorno_error(mensaje: 'Error al maquetar estados',data: $e, header: $header, ws: $ws);
+            }
+            exit;
+        }
+
+        return $r_tipo_credito;
+    }
+
+    public function get_attr_tipos_credito(bool $header, bool $ws = false){
+        $filtro_tipo_credito['inm_tipo_credito.id'] =  $_POST['id'];
+        $r_tipo_credito = (new inm_attr_tipo_credito(link: $this->link))->filtro_and(filtro: $filtro_tipo_credito);
+        if (errores::$error) {
+            $this->retorno_error(mensaje: 'Error al obtener registro de tipo_credito', data: $r_tipo_credito,
+                header: $header, ws: $ws);
+        }
+
+        if($header){
+            $retorno = $_SERVER['HTTP_REFERER'];
+            header('Location:'.$retorno);
+            exit;
+        }
+        if($ws){
+            header('Content-Type: application/json');
+            try {
+                echo json_encode($r_tipo_credito->registros, JSON_THROW_ON_ERROR);
             }
             catch (Throwable $e){
                 return $this->retorno_error(mensaje: 'Error al maquetar estados',data: $e, header: $header, ws: $ws);
