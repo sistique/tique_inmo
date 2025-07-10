@@ -18,11 +18,11 @@ class inm_comprador extends _modelo_parent{
         $columnas = array($tabla=>false,'inm_producto_infonavit'=>$tabla,'inm_attr_tipo_credito'=>$tabla,
             'inm_tipo_credito'=>'inm_attr_tipo_credito','inm_destino_credito'=>$tabla,'inm_plazo_credito_sc'=>$tabla,
             'inm_tipo_discapacidad'=>$tabla,'inm_persona_discapacidad'=>$tabla,'inm_estado_civil'=>$tabla,
-            'bn_cuenta'=>$tabla,'org_sucursal'=>'bn_cuenta','org_empresa'=>'org_sucursal',
-            'inm_institucion_hipotecaria'=>$tabla,'inm_sindicato'=>$tabla,'inm_nacionalidad'=>$tabla,
-            'inm_ocupacion'=>$tabla, 'com_agente'=>$tabla,'inm_status_comprador' => $tabla,'dp_colonia_postal'=>$tabla,
-            'dp_cp'=>'dp_colonia_postal','dp_colonia'=>'dp_colonia_postal','dp_municipio'=>'dp_cp',
-            'dp_estado'=>'dp_municipio','dp_pais'=>'dp_estado');
+            'adm_estado_civil' => 'inm_estado_civil', 'bn_cuenta'=>$tabla,'org_sucursal'=>'bn_cuenta',
+            'org_empresa'=>'org_sucursal', 'inm_institucion_hipotecaria'=>$tabla,'inm_sindicato'=>$tabla,
+            'inm_nacionalidad'=>$tabla, 'inm_ocupacion'=>$tabla, 'com_agente'=>$tabla,'inm_status_comprador' => $tabla,
+            'dp_colonia_postal'=>$tabla, 'dp_cp'=>'dp_colonia_postal','dp_colonia'=>'dp_colonia_postal',
+            'dp_municipio'=>'dp_cp', 'dp_estado'=>'dp_municipio','dp_pais'=>'dp_estado');
 
         $campos_obligatorios = array('apellido_paterno','bn_cuenta_id','curp', 'descuento_pension_alimenticia_dh',
             'descuento_pension_alimenticia_fc', 'es_segundo_credito', 'inm_attr_tipo_credito_id',

@@ -10,7 +10,7 @@ class inm_estado_civil extends _modelo_parent{
     public function __construct(PDO $link)
     {
         $tabla = 'inm_estado_civil';
-        $columnas = array($tabla=>false);
+        $columnas = array($tabla=>false,'adm_estado_civil'=>$tabla);
 
         $campos_obligatorios = array('x','y');
 

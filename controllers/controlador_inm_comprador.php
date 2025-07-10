@@ -2687,7 +2687,7 @@ class controlador_inm_comprador extends _ctl_base {
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'correo_com',
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'correo_com',
             keys_selects:$keys_selects, place_holder: 'Correo',required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
@@ -2770,6 +2770,10 @@ class controlador_inm_comprador extends _ctl_base {
 
         if(!isset($this->row_upd->inm_tipo_credito_id)){
             $this->row_upd->inm_tipo_credito_id = $data_row->inm_tipo_credito_id;
+        }
+
+        if(!isset($this->row_upd->adm_estado_civil_id)){
+            $this->row_upd->adm_estado_civil_id = $data_row->adm_estado_civil_id;
         }
 
         $keys_selects = (new _keys_selects())->key_selects_base(controler: $this);
