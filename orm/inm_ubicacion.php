@@ -1161,7 +1161,10 @@ class inm_ubicacion extends _inm_ubicaciones {
     private function tiene_dato(array $row): bool
     {
         $tiene_dato = false;
-        foreach ($row as $value){
+        foreach ($row as $key => $value){
+            if($key === 'genero'){
+                $value = '';
+            }
             if($value === null){
                 $value = '';
             }
