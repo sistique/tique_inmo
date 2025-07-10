@@ -113,7 +113,7 @@ class _com_cliente{
         $com_cliente_upd = array();
 
         if(isset($registro->nombre) && isset($registro->apellido_paterno)) {
-            $razon_social = $this->razon_social(con_prefijo: true, registro: $registro);
+            $razon_social = $this->razon_social(con_prefijo: false, registro: $registro);
             if (errores::$error) {
                 return $this->error->error(mensaje: 'Error al obtener razon_social', data: $razon_social);
             }

@@ -710,7 +710,7 @@ class com_cliente extends _modelo_parent
         }
 
         $foraneas['cat_sat_moneda_id'] = new cat_sat_moneda($this->link);
-        $foraneas['dp_calle_pertenece_id'] = new dp_calle_pertenece($this->link);
+        $foraneas['dp_colonia_postal_id'] = new dp_calle_pertenece($this->link);
         $foraneas['cat_sat_regimen_fiscal_id'] = new cat_sat_regimen_fiscal($this->link);
         $foraneas['cat_sat_forma_pago_id'] = new cat_sat_forma_pago($this->link);
         $foraneas['cat_sat_uso_cfdi_id'] = new cat_sat_uso_cfdi($this->link);
@@ -1114,7 +1114,7 @@ class com_cliente extends _modelo_parent
         }
 
         $registro = $this->limpia_campos(registro: $registro, campos_limpiar: array('dp_pais_id', 'dp_estado_id',
-            'dp_cp_id', 'dp_cp_id', 'dp_colonia_postal_id'));
+            'dp_cp_id', 'dp_cp_id'));
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al limpiar campos', data: $registro);
         }
