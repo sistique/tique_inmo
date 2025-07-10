@@ -23,7 +23,8 @@
                     <body onload="javascript:cambiarPestannaGeneral_inicial(pestanasgeneral);
                     javascript:valor_inicial();
                     javascript:cambiarPestanna_inicialcliente(pestanascliente);
-                    javascript:inicializa_conyuge();">
+                    javascript:inicializa_conyuge();
+                    javascript:inicializa_estado_civil();">
                     <div id="contenidopestanasgeneral">
                         <div class="contengeneral" id="cpestanageneral1">
                             <div id="pestanascliente">

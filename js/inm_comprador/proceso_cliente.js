@@ -651,7 +651,7 @@ apartado_6.hide();
 apartado_7.hide();
 apartado_8.show();
 apartado_9.show();
-apartado_10.show();
+apartado_10.hide();
 apartado_11.show();
 apartado_12.show();
 
@@ -1067,7 +1067,7 @@ sl_inm_tipo_credito_id.change(function () {
         url: 'index.php?seccion=inm_tipo_credito&accion=get_attr_tipos_credito&ws=1&session_id='+session_id,
         success: function(data_r) {
             sl_inm_attr_tipo_credito_id.empty();
-            integra_new_option('#inm_attr_tipo_credito_id','Seleccione una calle','-1');
+            integra_new_option('#inm_attr_tipo_credito_id','Seleccione una tipo credito','-1');
             $.each(data_r.registros, function( index, tipo_credito ) {
                 integra_new_option('#inm_attr_tipo_credito_id',tipo_credito.inm_attr_tipo_credito_descripcion,
                     tipo_credito.inm_attr_tipo_credito_id);
@@ -1112,30 +1112,22 @@ sl_inm_tipo_credito_id.change(function () {
 let sl_adm_estado_civil_id = $("#adm_estado_civil_id");
 let sl_inm_estado_civil_id = $("#inm_estado_civil_id");
 
-function inicializa_conyuge(){
-    tipo_credito_id = sl_inm_tipo_credito_id.val();
+function inicializa_estado_civil(){
+    estado_civil_id = sl_adm_estado_civil_id.val();
 
     $.ajax({
         type: "POST",
-        data: {'id':tipo_credito_id},
-        url: 'index.php?seccion=inm_tipo_credito&accion=get_tipo_credito&ws=1&session_id='+session_id,
+        data: {'id':estado_civil_id},
+        url: 'index.php?seccion=inm_estado_civil&accion=get_estado_civil&ws=1&session_id='+session_id,
         success: function(data_r) {
-            if(data_r.inm_tipo_credito_muestra_conyuge === "activo"){
-                apartado_6.toggle();
-                collapse_a6.off("click").click(function () {
-                    apartado_6.toggle();
-                });
-
-                apartado_7.toggle();
-                collapse_a7.off("click").click(function () {
-                    apartado_7.toggle();
+            if(data_r.adm_estado_civil_descripcion === "CASADO"){
+                apartado_10.toggle();
+                collapse_a10.off("click").click(function () {
+                    apartado_10.toggle();
                 });
             }else{
-                apartado_6.hide();
-                collapse_a6.off("click");
-
-                apartado_7.hide();
-                collapse_a7.off("click");
+                apartado_10.hide();
+                collapse_a10.off("click");
             }
         },
         error: function() {
@@ -1151,9 +1143,8 @@ sl_adm_estado_civil_id.change(function () {
         data: {'id':estado_civil_id},
         url: 'index.php?seccion=inm_estado_civil&accion=get_estados_civiles&ws=1&session_id='+session_id,
         success: function(data_r) {
-            console.log(data_r);
             sl_inm_estado_civil_id.empty();
-            integra_new_option('#inm_estado_civil_id','Seleccione una calle','-1');
+            integra_new_option('#inm_estado_civil_id','Seleccione una estado civil','-1');
             $.each(data_r.registros, function( index, estado_civil ) {
                 integra_new_option('#inm_estado_civil_id',estado_civil.inm_estado_civil_descripcion,
                     estado_civil.inm_estado_civil_id);
@@ -1171,7 +1162,7 @@ sl_adm_estado_civil_id.change(function () {
         data: {'id':estado_civil_id},
         url: 'index.php?seccion=inm_estado_civil&accion=get_estado_civil&ws=1&session_id='+session_id,
         success: function(data_r) {
-            if(data_r.inm_estado_civil_muestra_conyuge === "activo"){
+            if(data_r.adm_estado_civil_descripcion === "CASADO"){
                 apartado_10.toggle();
                 collapse_a10.off("click").click(function () {
                     apartado_10.toggle();
