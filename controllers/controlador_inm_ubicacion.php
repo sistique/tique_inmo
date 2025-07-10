@@ -3142,11 +3142,13 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $inm_co_acreditado = new stdClass();
         if(count($co_acreditados) === 1){
-            $inm_co_acreditado = (object)$co_acreditados[0];
+            foreach ($co_acreditados[0] AS $co_acred => $value){
+                $key_co_acred = "co_acreditado[$co_acred]";
+                $inm_co_acreditado->$key_co_acred = $value;
+            }
         }
 
-        $headers = (new _ubicacion())->frontend_co_acreditado(controler: $this,
-            row_upd: $inm_co_acreditado);
+        $headers = (new _ubicacion())->frontend_co_acreditado(controler: $this, row_upd: $inm_co_acreditado);
         if(errores::$error){
             return $this->retorno_error(
                 mensaje: 'Error al integrar headers',data:  $headers, header: $header,ws:  $ws);

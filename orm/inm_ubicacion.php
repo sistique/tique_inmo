@@ -505,8 +505,8 @@ class inm_ubicacion extends _inm_ubicaciones {
         $rels = $r_inm_rel_co_acredit->registros;
         $co_acreditados = array();
         foreach ($rels as $rel){
-            $co_acreditado = (new inm_rel_co_acred_ubi(link: $this->link))->registro(
-                registro_id: $rel['inm_co_acreditado_id']);
+            $co_acreditado = (new inm_co_acreditado(link: $this->link))->registro(
+                registro_id: $rel['inm_co_acreditado_id'],columnas_en_bruto: true);
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error al obtener co_acreditado',data:  $co_acreditado);
             }

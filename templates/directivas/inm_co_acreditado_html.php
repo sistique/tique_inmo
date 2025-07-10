@@ -315,7 +315,7 @@ class inm_co_acreditado_html extends _base {
 
 
 
-    private function lada_nep(int $cols,  string $entidad, bool $disabled = false, string $name = 'lada_nep', string $place_holder= 'Lada',
+    private function lada_nep(int $cols,  string $entidad, bool $disabled = false, string $name = 'lada_nep', string $place_holder= 'Lada Empresa',
                                stdClass $row_upd = new stdClass(), bool $value_vacio = false, bool $required = true): array|string
     {
 
@@ -379,7 +379,7 @@ class inm_co_acreditado_html extends _base {
 
 
     private function numero_nep(int $cols,  string $entidad, bool $disabled = false, string $name = 'numero_nep',
-                                string $place_holder= 'Numero', stdClass $row_upd = new stdClass(),
+                                string $place_holder= 'Numero Empresa', stdClass $row_upd = new stdClass(),
                                 bool $value_vacio = false, bool $required = true): array|string
     {
 
