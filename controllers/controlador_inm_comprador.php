@@ -2161,6 +2161,7 @@ class controlador_inm_comprador extends _ctl_base {
         $init_data['com_tipo_cliente'] = "gamboamartin\\comercial";
         $init_data['cat_sat_tipo_persona'] = "gamboamartin\\cat_sat";
         $init_data['bn_cuenta'] = "gamboamartin\\banco";
+        $init_data['adm_estado_civil'] = "gamboamartin\\administrador";
         $init_data['inm_tipo_credito'] = "gamboamartin\\inmuebles";
 
         $campos_view = $this->campos_view_base(init_data: $init_data,keys:  $keys);

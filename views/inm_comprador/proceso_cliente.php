@@ -140,6 +140,7 @@
                                         </div>
 
                                         <?php echo $controlador->inputs->correo_com; ?>
+                                        <?php echo $controlador->inputs->adm_estado_civil_id; ?>
                                         <?php echo $controlador->inputs->inm_estado_civil_id; ?>
                                         <?php echo $controlador->inputs->dp_estado_nacimiento_id; ?>
                                         <?php echo $controlador->inputs->dp_municipio_nacimiento_id; ?>

@@ -1206,6 +1206,16 @@ class _keys_selects{
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
+        $columns_ds = array();
+        $columns_ds[] = 'adm_estado_civil_descripcion';
+        $keys_selects = $controler->key_select(cols:12, con_registros: true,filtro:  array(),
+            key: 'adm_estado_civil_id', keys_selects: $keys_selects,
+            id_selected: $row_upd->adm_estado_civil_id, label: 'Estado Civil',
+            columns_ds: $columns_ds);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
 
         return $keys_selects;
     }
