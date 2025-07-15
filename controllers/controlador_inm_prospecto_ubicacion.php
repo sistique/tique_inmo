@@ -1725,8 +1725,8 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
 
         $keys_selects = array();
         $keys_selects = (new \gamboamartin\inmuebles\controllers\_inm_prospecto_ubicacion())->integra_keys_selects_comercial(
-            controlador: $this,keys_selects:  $keys_selects);
-        if(errores::$error){
+            controlador: $this, keys_selects: $keys_selects);
+        if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al obtener registro prospecto', data: $keys_selects,
                 header: $header, ws: $ws);
         }
@@ -1770,20 +1770,20 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         }
 
         $keys_selects = $this->key_selects_txt(keys_selects: $keys_selects);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
         $inputs = $this->genera_inputs(keys_selects: $keys_selects);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al obtener inputs',data:  $inputs);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al obtener inputs', data: $inputs);
         }
 
-        $btn_collapse_all = $this->html->button_para_java(id_css: 'collapse_all',style:  'primary',
-            tag:  'Ver/Ocultar Todo');
-        if(errores::$error){
+        $btn_collapse_all = $this->html->button_para_java(id_css: 'collapse_all', style: 'primary',
+            tag: 'Ver/Ocultar Todo');
+        if (errores::$error) {
             return $this->retorno_error(
-                mensaje: 'Error al btn_collapse_all',data:  $btn_collapse_all, header: $header,ws:  $ws);
+                mensaje: 'Error al btn_collapse_all', data: $btn_collapse_all, header: $header, ws: $ws);
         }
 
         $this->buttons['btn_collapse_all'] = $btn_collapse_all;
@@ -1796,30 +1796,39 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         $fecha_otorgamiento_credito = $this->html->input_fecha(cols: 12, row_upd: $this->row_upd, value_vacio: false,
             name: 'fecha_otorgamiento_credito', place_holder: 'Fecha Otorgamiento Credito',
             value: $this->row_upd->fecha_otorgamiento_credito);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $fecha_otorgamiento_credito,header: $header,
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener input', data: $fecha_otorgamiento_credito, header: $header,
                 ws: $ws);
         }
 
         $this->inputs->fecha_otorgamiento_credito = $fecha_otorgamiento_credito;
 
-        $class_upd = '_upd_prospecto_ubicacion';
-        $conyuge = (new _conyuge())->inputs_conyuge(controler: $this,class_upd: $class_upd);
-        if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al obtener conyuge', data: $conyuge,
-                header: $header, ws: $ws);
+        $co_acreditados = (new inm_prospecto_ubicacion(link: $this->link))->get_co_acreditados(
+            inm_prospecto_ubicacion_id: $this->registro_id);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener co_acreditados',data:  $co_acreditados, header: $header,ws:  $ws);
         }
 
-        $this->inputs->conyuge = $conyuge;
+        $inm_co_acreditado = new stdClass();
+        $this->row_upd->genero_co_acreditado = 'M';
+        if(count($co_acreditados) === 1){
+            foreach ($co_acreditados[0] AS $co_acred => $value){
+                $key_co_acred = "co_acreditado[$co_acred]";
+                $inm_co_acreditado->$key_co_acred = $value;
 
-
-        $direccion = (new _direccion())->inputs_direccion(controler: $this);
-        if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al obtener direccion', data: $direccion,
-                header: $header, ws: $ws);
+                if($co_acred === 'genero'){
+                    $this->row_upd->genero_co_acreditado = $value;
+                }
+            }
         }
 
-        $this->inputs->direccion = $direccion;
+        $headers = (new \gamboamartin\inmuebles\controllers\_inm_prospecto_ubicacion())->frontend_co_acreditado(
+            controler: $this, row_upd: $inm_co_acreditado);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al integrar headers',data:  $headers, header: $header,ws:  $ws);
+        }
+
         $this->keys_selects = array_merge($keys_selects, $this->keys_selects);
 
         return $r_modifica;
