@@ -1637,7 +1637,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 12, key: 'adeudo_hipoteca',
+        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'adeudo_hipoteca',
             keys_selects: $keys_selects, place_holder: 'Adeudo Hipoteca', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
@@ -1661,7 +1661,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'adeudo_luz',
+        $keys_selects = (new init())->key_select_txt(cols: 12, key: 'adeudo_luz',
             keys_selects: $keys_selects, place_holder: 'Adeudo Luz', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);

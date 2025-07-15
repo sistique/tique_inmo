@@ -358,7 +358,7 @@ class _inm_prospecto_ubicacion{
         $identificadores['inm_prototipo_id']['columns_ds'] = array('inm_prototipo_descripcion');
         
         $identificadores['inm_tipo_credito_id']['title'] = 'Tipo Credito';
-        $identificadores['inm_tipo_credito_id']['cols'] = 12;
+        $identificadores['inm_tipo_credito_id']['cols'] = 6;
         $identificadores['inm_tipo_credito_id']['disabled'] = false;
         $identificadores['inm_tipo_credito_id']['columns_ds'] = array('inm_tipo_credito_descripcion');
         $identificadores['inm_tipo_credito_id']['required'] = false;
