@@ -27,7 +27,7 @@ class inm_prospecto_ubicacion extends _modelo_parent{
             'com_agente'=>'com_prospecto','com_tipo_prospecto'=>'com_prospecto',
             'com_medio_prospeccion'=>'com_prospecto', 'adm_usuario'=>'com_agente', 'dp_colonia_postal' => $tabla,
             'dp_cp'=>'dp_colonia_postal','dp_colonia'=>'dp_colonia_postal','dp_municipio'=>'dp_cp',
-            'dp_estado'=>'dp_municipio','dp_pais'=>'dp_estado','inm_attr_tipo_credito'=>$tabla);
+            'dp_estado'=>'dp_municipio','dp_pais'=>'dp_estado','inm_tipo_credito'=>$tabla);
 
         $campos_obligatorios = array();
 

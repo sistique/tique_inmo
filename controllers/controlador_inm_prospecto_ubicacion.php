@@ -249,7 +249,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
             'texto_exterior', 'texto_interior', 'documentos', 'receptor', 'asunto', 'mensaje','manzana','lote',
             'cuenta_predial', 'adeudo_hipoteca','adeudo_predial', 'cuenta_agua', 'adeudo_agua',
             'adeudo_luz','monto_devolucion', 'nivel','recamaras','metros_terreno', 'metros_construccion','cp','colonia',
-            'calle');
+            'calle','correo_mi_cuenta_infonavit','password_mi_cuenta_infonavit','numero_credito');
 
         $keys->selects = array();
 
@@ -268,6 +268,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         $init_data['dp_pais'] = "gamboamartin\\direccion_postal";
         $init_data['dp_estado'] = "gamboamartin\\direccion_postal";
         $init_data['dp_municipio'] = "gamboamartin\\direccion_postal";
+        $init_data['inm_tipo_credito'] = "gamboamartin\\inmuebles";
 
         $init_data = (new _base_paquete())->init_data_domicilio(init_data: $init_data);
         if (errores::$error) {
