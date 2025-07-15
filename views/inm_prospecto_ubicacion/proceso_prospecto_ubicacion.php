@@ -19,6 +19,7 @@
                     </div>
                     <body onload="javascript:cambiarPestannaGeneral_inicial(pestanasgeneral);
                     javascript:valor_inicial();
+                    javascript:inicializa_conyuge();
                     javascript:cambiarPestanna_inicialubicacion(pestanasubicacion);">
                     <div id="contenidopestanasgeneral">
                         <div class="contengeneral" id="cpestanageneral1">
