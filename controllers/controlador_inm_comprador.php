@@ -2872,8 +2872,16 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         $inm_co_acreditado = new stdClass();
+        $this->row_upd->genero_co_acreditado = 'M';
         if(count($co_acreditados) === 1){
-            $inm_co_acreditado = (object)$co_acreditados[0];
+            foreach ($co_acreditados[0] AS $co_acred => $value){
+                $key_co_acred = "co_acreditado[$co_acred]";
+                $inm_co_acreditado->$key_co_acred = $value;
+
+                if($co_acred === 'genero'){
+                    $this->row_upd->genero_co_acreditado = $value;
+                }
+            }
         }
 
         $headers = (new \gamboamartin\inmuebles\controllers\_inm_comprador())->frontend_co_acreditado(controler: $this,

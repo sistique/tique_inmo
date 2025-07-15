@@ -37,6 +37,21 @@
                             </div>
                             <div id="contenidopestanascliente">
                                 <div class="conten" id="cpestanacliente1">
+                                    <?php
+                                    $checked_genero_m = 'checked';
+                                    $checked_genero_f = '';
+                                    if($controlador->row_upd->genero === 'F'){
+                                        $checked_genero_m = '';
+                                        $checked_genero_f = 'checked';
+                                    }
+
+                                    $checked_genero_co_m = 'checked';
+                                    $checked_genero_co_f = '';
+                                    if($controlador->row_upd->genero_co_acreditado === 'F'){
+                                        $checked_genero_co_m = '';
+                                        $checked_genero_co_f = 'checked';
+                                    }
+                                    ?>
                                     <form method="post" action="<?php echo $controlador->link_modifica_bd; ?>" class="form-additional"
                                           enctype="multipart/form-data">
                                     <?php echo $controlador->header_frontend->apartado_1; ?>
@@ -48,15 +63,6 @@
                                         <?php echo $controlador->inputs->inm_attr_tipo_credito_id; ?>
                                         <?php echo $controlador->inputs->inm_destino_credito_id; ?>
                                         <?php echo $controlador->inputs->es_segundo_credito; ?>
-
-                                        <?php
-                                        $checked_genero_m = 'checked';
-                                        $checked_genero_f = '';
-                                        if($controlador->row_upd->genero === 'F'){
-                                            $checked_genero_m = '';
-                                            $checked_genero_f = 'checked';
-                                        }
-                                        ?>
                                         <?php echo $controlador->inputs->inm_plazo_credito_sc_id; ?>
                                         <?php echo $controlador->btn; ?>
                                     </div>
@@ -167,13 +173,13 @@
                                             <div class="control-group col-sm-6">
                                                 <label class="control-label" for="inm_attr_tipo_credito_id">Genero</label>
                                                 <label class="form-check-label chk">
-                                                    <input type="radio" name="inm_co_acreditado_genero" value="M" class="form-check-input" id="genero"
-                                                           title="Genero" checked>
+                                                    <input type="radio" name="co_acreditado[genero]" value="M" class="form-check-input" id="genero"
+                                                           title="Genero" <?php echo $checked_genero_co_m; ?>>
                                                     M
                                                 </label>
                                                 <label class="form-check-label chk">
-                                                    <input type="radio" name="inm_co_acreditado_genero" value="F" class="form-check-input" id="genero"
-                                                           title="Genero">
+                                                    <input type="radio" name="co_acreditado[genero]" value="F" class="form-check-input" id="genero"
+                                                           title="Genero" <?php echo $checked_genero_co_f; ?>>
                                                     F
                                                 </label>
                                             </div>
@@ -499,15 +505,6 @@
                                             <?php echo $controlador->inputs->inm_attr_tipo_credito_id; ?>
                                             <?php echo $controlador->inputs->inm_destino_credito_id; ?>
                                             <?php echo $controlador->inputs->es_segundo_credito; ?>
-
-                                            <?php
-                                            $checked_genero_m = 'checked';
-                                            $checked_genero_f = '';
-                                            if($controlador->row_upd->genero === 'F'){
-                                                $checked_genero_m = '';
-                                                $checked_genero_f = 'checked';
-                                            }
-                                            ?>
                                             <?php echo $controlador->inputs->inm_plazo_credito_sc_id; ?>
                                             <?php echo $controlador->btn; ?>
                                         </div>
