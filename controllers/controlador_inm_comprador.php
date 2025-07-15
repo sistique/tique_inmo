@@ -3022,6 +3022,14 @@ class controlador_inm_comprador extends _ctl_base {
                 return $this->retorno_error(mensaje: 'Error al obtener inm_prospecto', data: $inm_prospecto, header: $header, ws: $ws);
             }
 
+            $result_co_acreditado = $this->modelo->transacciona_co_acreditado(inm_comprador_id: $this->registro_id,
+                link: $this->link);
+            if (errores::$error) {
+                $this->link->rollBack();
+                return $this->retorno_error(mensaje: 'Error al modificar inm_prospecto',data:  $result_co_acreditado,
+                    header: $header,ws:  $ws);
+            }
+
             $result_conyuge =  (new _upd_prospecto())->transacciona_conyuge(inm_prospecto_id: $inm_prospecto->inm_prospecto_id,link: $this->link);
             if (errores::$error) {
                 $this->link->rollBack();

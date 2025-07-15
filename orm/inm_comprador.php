@@ -202,6 +202,27 @@ class inm_comprador extends _modelo_parent{
 
     }
 
+    private function ajusta_co_acreditado(stdClass $datos, int $inm_comprador_id, PDO $link): array|stdClass
+    {
+        if(!$datos->existe) {
+            $r_inm_rel_co_acreditado_comprador_bd = $this->inserta_co_acreditado(co_acreditado: $datos->row,
+                inm_comprador_id: $inm_comprador_id,link: $link);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al insertar co_acreditado', data: $r_inm_rel_co_acreditado_comprador_bd);
+            }
+            $data = $r_inm_rel_co_acreditado_comprador_bd;
+        }
+        else{
+            $r_modifica_co_acreditado = $this->modifica_co_acreditado(
+                co_acreditado: $datos->row, inm_comprador_id: $inm_comprador_id,link: $link);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al modificar co_acreditado', data: $r_modifica_co_acreditado);
+            }
+            $data = $r_modifica_co_acreditado;
+        }
+
+        return $data;
+    }
 
     /**
      * Asigna un co acreditado a un comprador
@@ -312,6 +333,46 @@ class inm_comprador extends _modelo_parent{
 
     }
 
+    final public function dato(bool $existe, string $key_data): array|stdClass
+    {
+        $key_data = trim($key_data);
+        if($key_data === ''){
+            return $this->error->error(mensaje: 'Error key_data esta vacio',data:  $key_data);
+        }
+
+        $row = $this->init_post(key_data: $key_data);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al inicializar row',data:  $row);
+        }
+
+        $tiene_dato = $this->tiene_dato(row: $row);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar si tiene dato tiene_dato',data:  $tiene_dato);
+        }
+        $datos = new stdClass();
+        $datos->existe = $existe;
+        $datos->row = $row;
+        $datos->tiene_dato = $tiene_dato;
+        return $datos;
+    }
+
+    public function datos_co_acreditado(PDO $link, int $inm_comprador_id): array|stdClass{
+        $existe_co_acreditado = false;
+        if($inm_comprador_id > 0) {
+            $existe_co_acreditado = (new inm_comprador(link: $link))->existe_co_acreditado(inm_comprador_id: $inm_comprador_id);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al validar si existe co_acreditado', data: $existe_co_acreditado);
+            }
+        }
+
+        $datos = $this->dato(existe: $existe_co_acreditado,key_data:  'co_acreditado');
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al inicializar datos',data:  $datos);
+        }
+
+        return $datos;
+    }
+
     /**
      * Elimina todas las relaciones de comprador y con ella a si misma
      * @relaciones inm_rel_comprador_com_cliente, inm_comprador_etapa, inm_referencia, inm_rel_co_acred,
@@ -368,6 +429,21 @@ class inm_comprador extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al eliminar registro de comprador',data:  $r_elimina_bd);
         }
         return $r_elimina_bd;
+    }
+
+    final public function existe_co_acreditado(int $inm_comprador_id): bool|array
+    {
+        if($inm_comprador_id <=0){
+            return $this->error->error(mensaje: 'Error inm_comprador_id es menor a 0',data:  $inm_comprador_id);
+        }
+        $filtro = array();
+        $filtro['inm_comprador.id'] = $inm_comprador_id;
+
+        $existe_co_acreditado = (new inm_rel_co_acred(link: $this->link))->existe(filtro: $filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar si existe co_acreditado',data:  $existe_co_acreditado);
+        }
+        return $existe_co_acreditado;
     }
 
     /**
@@ -450,6 +526,89 @@ class inm_comprador extends _modelo_parent{
 
     }
 
+    private function init_post(string $key_data): array
+    {
+        $key_data = trim($key_data);
+        if($key_data === ''){
+            return $this->error->error(mensaje: 'Error key_data esta vacio',data:  $key_data);
+        }
+        $data = array();
+        if(isset($_POST[$key_data])){
+            $data = $_POST[$key_data];
+            if(is_string($data)){
+                return $this->error->error(mensaje: 'Error POST '.$key_data.' debe ser un array',data:  $data);
+            }
+            unset($_POST[$key_data]);
+        }
+        return $data;
+    }
+
+    private function inserta_co_acreditado(array $co_acreditado, int $inm_comprador_id, PDO $link): array|stdClass
+    {
+        $keys = array('nombre','apellido_paterno');
+        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $co_acreditado);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar co_acreditado',data:  $valida);
+        }
+
+        if($inm_comprador_id <= 0){
+            return $this->error->error(mensaje: 'Error inm_comprador_id debe ser mayor a 0',data:  $inm_comprador_id);
+        }
+
+        $alta_co_acreditado = (new inm_co_acreditado(link: $link))->alta_registro(registro: $co_acreditado);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al insertar co_acreditado', data: $alta_co_acreditado);
+        }
+
+        $inm_rel_co_acred_ins['inm_comprador_id'] = $inm_comprador_id;
+        $inm_rel_co_acred_ins['inm_co_acreditado_id'] = $alta_co_acreditado->registro_id;
+
+        $r_inm_rel_co_acred_bd = (new inm_rel_co_acred(link: $link))->alta_registro(
+            registro: $inm_rel_co_acred_ins);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al insertar co_acreditado', data: $r_inm_rel_co_acred_bd);
+        }
+
+        $data = new stdClass();
+        $data->alta_co_acreditado = $alta_co_acreditado;
+        $data->inm_rel_co_acred_ins = $inm_rel_co_acred_ins;
+        $data->r_inm_rel_co_acred_bd = $r_inm_rel_co_acred_bd;
+
+        return $data;
+    }
+
+    final public function inm_co_acreditado(bool $columnas_en_bruto, int $inm_comprador_id, PDO $link,
+                                            bool $retorno_obj): array|stdClass
+    {
+        if($inm_comprador_id<=0){
+            return $this->error->error(mensaje: 'Error inm_comprador_id debe ser mayor a 0', data:  $inm_comprador_id);
+        }
+        $filtro = array();
+        $filtro['inm_comprador.id'] = $inm_comprador_id;
+        $r_inm_rel_co_acred = (new inm_rel_co_acred(link: $link))->filtro_and(filtro: $filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener co_acreditado relacion',
+                data:  $r_inm_rel_co_acred);
+        }
+        if($r_inm_rel_co_acred->n_registros === 0){
+            return $this->error->error(mensaje: 'Error no existe relacion',data:  $r_inm_rel_co_acred);
+        }
+        if($r_inm_rel_co_acred->n_registros > 1){
+            return $this->error->error(mensaje: 'Error de integridad',data:  $r_inm_rel_co_acred);
+        }
+
+        $inm_rel_co_acred = $r_inm_rel_co_acred->registros[0];
+
+        $inm_co_acreditado = (new inm_co_acreditado(link: $link))->registro(
+            registro_id: $inm_rel_co_acred['inm_co_acreditado_id'],columnas_en_bruto: $columnas_en_bruto,
+            retorno_obj: $retorno_obj);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener co_acreditado',data:  $inm_co_acreditado);
+        }
+
+        return $inm_co_acreditado;
+    }
+
     final public function inm_prospecto(int $inm_comprador_id){
 
         $filtro['inm_comprador.id'] = $inm_comprador_id;
@@ -478,6 +637,32 @@ class inm_comprador extends _modelo_parent{
         return $inm_prospecto;
 
     }
+
+    private function modifica_co_acreditado(array $co_acreditado, int $inm_comprador_id, PDO $link): array|stdClass
+    {
+        if($inm_comprador_id<=0){
+            return $this->error->error(mensaje: 'Error inm__id debe ser mayor a 0', data:  $inm_comprador_id);
+        }
+        $inm_co_acreditado_previo = $this->inm_co_acreditado(columnas_en_bruto: true, inm_comprador_id: $inm_comprador_id,
+            link: $link, retorno_obj: true);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener co_acreditado', data: $inm_co_acreditado_previo);
+        }
+
+        $inm_co_acreditado_id = $inm_co_acreditado_previo->id;
+
+        $r_modifica_co_acreditado = (new inm_co_acreditado(link: $link))->modifica_bd(registro: $co_acreditado,id: $inm_co_acreditado_id);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al modificar co_acreditado', data: $r_modifica_co_acreditado);
+        }
+
+        $data = new stdClass();
+        $data->inm_co_acreditado_previo = $inm_co_acreditado_previo;
+        $data->r_modifica_co_acreditado = $r_modifica_co_acreditado;
+
+        return $data;
+    }
+
 
     /**
      * Modifica un registro de tipo comprador, ademas inserta si existe un co acreditado, la relacion y si existe
@@ -573,6 +758,22 @@ class inm_comprador extends _modelo_parent{
 
         return $r_inm_bitacora_comprador->registros;
     }
+
+    public function transacciona_co_acreditado(int $inm_comprador_id, PDO $link){
+        $datos = $this->datos_co_acreditado(link: $link,inm_comprador_id: $inm_comprador_id);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener dato co_acreditado',data:  $datos);
+        }
+
+        if($datos->tiene_dato){
+            $result_co_acreditado = $this->ajusta_co_acreditado(datos: $datos,inm_comprador_id: $inm_comprador_id,link: $link);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al insertar co_acreditado', data: $result_co_acreditado);
+            }
+            $datos->result_co_acreditado = $result_co_acreditado;
+        }
+        return $datos;
+    }
     
     final public function tiene_cliente(int $inm_comprador_id):bool
     {
@@ -584,6 +785,26 @@ class inm_comprador extends _modelo_parent{
         return $existe;
 
     }
+
+    private function tiene_dato(array $row): bool
+    {
+        $tiene_dato = false;
+        foreach ($row as $key => $value){
+            if($key === 'genero'){
+                $value = '';
+            }
+            if($value === null){
+                $value = '';
+            }
+            $value = trim($value);
+            if($value!==''){
+                $tiene_dato = true;
+                break;
+            }
+        }
+        return $tiene_dato;
+    }
+
 
     final public function tiene_prospecto(int $inm_comprador_id){
         $filtro['inm_comprador.id'] = $inm_comprador_id;
