@@ -1712,6 +1712,24 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
 
         $keys_selects['correo_empresa']->regex = $this->validacion->patterns['correo_html5'];
 
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'numero_credito', keys_selects: $keys_selects,
+            place_holder: 'Numero Credito',required: false);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'correo_mi_cuenta_infonavit', keys_selects: $keys_selects,
+            place_holder: 'Correo Infonavit',required: false);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'password_mi_cuenta_infonavit', keys_selects: $keys_selects,
+            place_holder: 'Contraseña Infonavit',required: false);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
         return $keys_selects;
     }
 

@@ -243,10 +243,14 @@ class _inm_prospecto_ubicacion{
             if(isset($data['columns_ds'])){
                 $columns_ds = $data['columns_ds'];
             }
+            $required = true;
+            if(isset($data['required'])){
+                $required = $data['required'];
+            }
 
             $keys_selects = $controlador->key_select(cols: $cols, con_registros: $con_registros, filtro: $filtro,
                 key: $identificador, keys_selects: $keys_selects, id_selected: $id_selected, label: $title,
-                columns_ds: $columns_ds, disabled: $disabled);
+                columns_ds: $columns_ds, disabled: $disabled, required: $required);
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
             }
@@ -353,6 +357,12 @@ class _inm_prospecto_ubicacion{
         $identificadores['inm_prototipo_id']['disabled'] = false;
         $identificadores['inm_prototipo_id']['columns_ds'] = array('inm_prototipo_descripcion');
         
+        $identificadores['inm_tipo_credito_id']['title'] = 'Tipo Credito';
+        $identificadores['inm_tipo_credito_id']['cols'] = 12;
+        $identificadores['inm_tipo_credito_id']['disabled'] = false;
+        $identificadores['inm_tipo_credito_id']['columns_ds'] = array('inm_tipo_credito_descripcion');
+        $identificadores['inm_tipo_credito_id']['required'] = false;
+
         $identificadores['inm_complemento_id']['title'] = 'Complemento';
         $identificadores['inm_complemento_id']['cols'] = 12;
         $identificadores['inm_complemento_id']['disabled'] = false;
