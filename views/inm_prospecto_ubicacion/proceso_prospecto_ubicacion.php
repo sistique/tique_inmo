@@ -129,9 +129,9 @@
                                                         <?php echo $controlador->inputs->inm_co_acreditado->nss; ?>
                                                         <?php echo $controlador->inputs->inm_co_acreditado->curp; ?>
                                                         <?php echo $controlador->inputs->inm_co_acreditado->rfc; ?>
+                                                        <?php echo $controlador->inputs->inm_co_acreditado->nombre; ?>
                                                         <?php echo $controlador->inputs->inm_co_acreditado->apellido_paterno; ?>
                                                         <?php echo $controlador->inputs->inm_co_acreditado->apellido_materno; ?>
-                                                        <?php echo $controlador->inputs->inm_co_acreditado->nombre; ?>
                                                         <?php echo $controlador->inputs->inm_co_acreditado->numero_credito; ?>
                                                         <?php echo $controlador->inputs->inm_co_acreditado->adeudo_hipoteca; ?>
                                                         <?php echo $controlador->inputs->inm_co_acreditado->lada; ?>
