@@ -494,7 +494,7 @@ class inm_comprador extends _modelo_parent{
         $co_acreditados = array();
         foreach ($rels as $rel){
             $co_acreditado = (new inm_co_acreditado(link: $this->link))->registro(
-                registro_id: $rel['inm_co_acreditado_id']);
+                registro_id: $rel['inm_co_acreditado_id'],columnas_en_bruto: true);
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error al obtener co_acreditado',data:  $co_acreditado);
             }
