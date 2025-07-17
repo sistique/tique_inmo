@@ -12,7 +12,9 @@ class inm_rel_referencia_comprador extends _modelo_parent{
     public function __construct(PDO $link)
     {
         $tabla = 'inm_rel_referencia_comprador';
-        $columnas = array($tabla=>false,'inm_referencia'=>$tabla,'inm_comprador'=>$tabla);
+        $columnas = array($tabla=>false,'inm_referencia'=>$tabla,'inm_comprador'=>$tabla,
+            'inm_parentesco'=>'inm_referencia', 'dp_colonia_postal'=>'inm_referencia', 'dp_municipio'=>'dp_cp',
+            'dp_estado'=>'dp_municipio','dp_pais'=>'dp_estado', 'dp_colonia'=>'dp_colonia_postal');
 
         $campos_obligatorios = array('inm_comprador_id');
 

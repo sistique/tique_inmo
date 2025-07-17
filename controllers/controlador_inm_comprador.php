@@ -3247,7 +3247,7 @@ class controlador_inm_comprador extends _ctl_base {
                     header: $header, ws: $ws);
             }
 
-            $result_referencia = (new _upd_prospecto())->transacciona_referencia(inm_prospecto_id:  $inm_prospecto->inm_prospecto_id,link: $this->link);
+            $result_referencia = $this->modelo->transacciona_referencia(inm_comprador_id: $this->registro_id,link: $this->link);
             if (errores::$error) {
                 return $this->retorno_error(mensaje: 'Error al insertar referencia', data: $result_referencia,
                     header: $header, ws: $ws);

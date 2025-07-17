@@ -213,6 +213,18 @@ class inm_comprador extends _modelo_parent{
 
         return $datos;
     }
+    
+    private function ajusta_referencia(stdClass $datos, int $inm_comprador_id, PDO $link){
+
+        $r_inm_referencia_bd = $this->inserta_referencia(referencia: $datos->row,
+            inm_comprador_id: $inm_comprador_id,link: $link);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al insertar r_inm_referencia_bd', data: $r_inm_referencia_bd);
+        }
+        $datos = $r_inm_referencia_bd;
+
+        return $datos;
+    }
 
     private function ajusta_co_acreditado(stdClass $datos, int $inm_comprador_id, PDO $link): array|stdClass
     {
@@ -711,6 +723,41 @@ class inm_comprador extends _modelo_parent{
         return $data;
     }
 
+
+    private function inserta_referencia(array $referencia, int $inm_comprador_id, PDO $link): array|stdClass
+    {
+        $keys = array('nombre','apellido_paterno');
+        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $referencia);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar referencia',data:  $valida);
+        }
+
+        if($inm_comprador_id <= 0){
+            return $this->error->error(mensaje: 'Error inm_comprador_id debe ser mayor a 0',data:  $inm_comprador_id);
+        }
+
+        $alta_referencia = (new inm_referencia(link: $link))->alta_registro(registro: $referencia);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al insertar referencia', data: $alta_referencia);
+        }
+
+        $inm_rel_referencia_ins['inm_comprador_id'] = $inm_comprador_id;
+        $inm_rel_referencia_ins['inm_referencia_id'] = $alta_referencia->registro_id;
+
+        $r_inm_rel_referencia_bd = (new inm_rel_referencia_comprador(link: $link))->alta_registro(
+            registro: $inm_rel_referencia_ins);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al insertar referencia', data: $r_inm_rel_referencia_bd);
+        }
+
+        $data = new stdClass();
+        $data->alta_referencia = $alta_referencia;
+        $data->inm_rel_referencia_ins = $inm_rel_referencia_ins;
+        $data->r_inm_rel_referencia_bd = $r_inm_rel_referencia_bd;
+
+        return $data;
+    }
+
     final public function inm_co_acreditado(bool $columnas_en_bruto, int $inm_comprador_id, PDO $link,
                                             bool $retorno_obj): array|stdClass
     {
@@ -996,6 +1043,23 @@ class inm_comprador extends _modelo_parent{
             }
             $datos->result_conyuge = $result_conyuge;
         }
+        return $datos;
+    }
+
+    final public function transacciona_referencia(int $inm_comprador_id, PDO $link){
+        $datos = $this->dato(existe: false,key_data:  'referencia');
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al inicializar datos',data:  $datos);
+        }
+
+        if($datos->tiene_dato){
+            $result_referencia = $this->ajusta_referencia(datos: $datos,inm_comprador_id: $inm_comprador_id,link: $link);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al insertar referencia', data: $result_referencia);
+            }
+            $datos->result_referencia = $result_referencia;
+        }
+        
         return $datos;
     }
     
