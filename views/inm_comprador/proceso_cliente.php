@@ -286,8 +286,9 @@
                                         <?php echo $controlador->inputs->referencia->dp_municipio_id; ?>
                                         <?php echo $controlador->inputs->referencia->dp_cp_id; ?>
                                         <?php echo $controlador->inputs->referencia->dp_colonia_postal_id; ?>
-                                        <?php echo $controlador->inputs->referencia->dp_calle_pertenece_id; ?>
-                                        <?php echo $controlador->inputs->referencia->numero_dom; ?>
+                                        <?php echo $controlador->inputs->referencia->calle; ?>
+                                        <?php echo $controlador->inputs->referencia->numero_exterior; ?>
+                                        <?php echo $controlador->inputs->referencia->numero_interior; ?>
                                         <?php echo $controlador->inputs->referencia->inm_parentesco_id; ?>
                                         <div class="col-md-12 table-responsive">
                                             <table class="table table-striped">

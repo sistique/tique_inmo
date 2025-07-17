@@ -97,6 +97,27 @@ class _base extends html_controler{
             return $this->error->error(mensaje: 'Error al obtener celular',data:  $celular);
         }
         $inm_referencia->celular = $celular;
+        
+        $calle = $this->calle(cols: 6, entidad: 'inm_referencia', disabled: true,
+            name: 'inm_referencia_calle_'.$indice, row_upd: $row_upd);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener calle',data:  $calle);
+        }
+        $inm_referencia->calle = $calle;
+        
+        $numero_exterior = $this->numero_exterior(cols: 6, entidad: 'inm_referencia', disabled: true,
+            name: 'inm_referencia_numero_exterior_'.$indice, row_upd: $row_upd);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener numero_exterior',data:  $numero_exterior);
+        }
+        $inm_referencia->numero_exterior = $numero_exterior;
+       
+        $numero_interior = $this->numero_interior(cols: 6, entidad: 'inm_referencia', disabled: true,
+            name: 'inm_referencia_numero_interior_'.$indice, row_upd: $row_upd);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener numero_interior',data:  $numero_interior);
+        }
+        $inm_referencia->numero_interior = $numero_interior;
 
         if(!isset($inm_referencia_data['dp_pais_id'])){
             $inm_referencia_data['dp_pais_id'] = 151;
@@ -512,6 +533,42 @@ class _base extends html_controler{
     {
 
         $class_css = array($entidad.'_numero_dom');
+
+        return $this->input_text(cols: $cols, disabled: $disabled, name: $name, place_holder: $place_holder,
+            row_upd: $row_upd, value_vacio: $value_vacio, class_css: $class_css, required: $required);
+
+    }
+    
+    final protected function calle(int $cols,  string $entidad, bool $disabled = false, string $name = 'calle',
+                                    string $place_holder= 'Calle', bool $required = false,
+                                    stdClass $row_upd = new stdClass(), bool $value_vacio = false): array|string
+    {
+
+        $class_css = array($entidad.'_calle');
+
+        return $this->input_text(cols: $cols, disabled: $disabled, name: $name, place_holder: $place_holder,
+            row_upd: $row_upd, value_vacio: $value_vacio, class_css: $class_css, required: $required);
+
+    }    
+    
+    final protected function numero_exterior(int $cols,  string $entidad, bool $disabled = false, string $name = 'numero_exterior',
+                                    string $place_holder= 'Numero Exterior', bool $required = false,
+                                    stdClass $row_upd = new stdClass(), bool $value_vacio = false): array|string
+    {
+
+        $class_css = array($entidad.'_numero_exterior');
+
+        return $this->input_text(cols: $cols, disabled: $disabled, name: $name, place_holder: $place_holder,
+            row_upd: $row_upd, value_vacio: $value_vacio, class_css: $class_css, required: $required);
+
+    }    
+    
+    final protected function numero_interior(int $cols,  string $entidad, bool $disabled = false, string $name = 'numero_interior',
+                                    string $place_holder= 'Numero Interior', bool $required = false,
+                                    stdClass $row_upd = new stdClass(), bool $value_vacio = false): array|string
+    {
+
+        $class_css = array($entidad.'_numero_interior');
 
         return $this->input_text(cols: $cols, disabled: $disabled, name: $name, place_holder: $place_holder,
             row_upd: $row_upd, value_vacio: $value_vacio, class_css: $class_css, required: $required);

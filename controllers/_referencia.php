@@ -33,6 +33,9 @@ class _referencia{
         $row_upd->numero = '';
         $row_upd->celular = '';
         $row_upd->numero_dom = '';
+        $row_upd->calle = '';
+        $row_upd->numero_exterior = '';
+        $row_upd->numero_interior = '';
 
         $nombre = $controler->html->input_text(cols: 12, disabled: false, name: 'referencia[nombre]', place_holder: 'Nombre',
             row_upd: $row_upd, value_vacio: false, class_css: array('referencia_nombre'), required: false, value: $row_upd->nombre);
@@ -95,6 +98,33 @@ class _referencia{
         }
 
         $referencia->numero_dom = $numero_dom;
+        
+        $calle = $controler->html->input_text(cols: 12, disabled: false, name: 'referencia[calle]',
+            place_holder: 'Calle', row_upd: $row_upd, value_vacio: false, class_css: array('referencia_calle'),
+            required: false, value: $row_upd->calle);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener input',data:  $calle);
+        }
+
+        $referencia->calle = $calle;
+
+        $numero_exterior = $controler->html->input_text(cols: 6, disabled: false, name: 'referencia[numero_exterior]',
+            place_holder: 'Numero Exterior', row_upd: $row_upd, value_vacio: false, class_css: array('referencia_numero_exterior'),
+            required: false, value: $row_upd->numero_exterior);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener input',data:  $numero_exterior);
+        }
+
+        $referencia->numero_exterior = $numero_exterior;
+
+        $numero_interior = $controler->html->input_text(cols: 6, disabled: false, name: 'referencia[numero_interior]',
+            place_holder: 'Numero Interior', row_upd: $row_upd, value_vacio: false, class_css: array('referencia_numero_interior'),
+            required: false, value: $row_upd->numero_interior);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener input',data:  $numero_interior);
+        }
+
+        $referencia->numero_interior = $numero_interior;
 
 
         $modelo = new inm_parentesco(link: $controler->link);
