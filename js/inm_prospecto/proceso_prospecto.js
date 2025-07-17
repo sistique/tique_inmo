@@ -513,6 +513,31 @@ $("#collapse_all").click(function() {
 
 });
 
+let sl_inm_tipo_credito_id = $("#inm_tipo_credito_id");
+let sl_inm_attr_tipo_credito_id = $("#inm_attr_tipo_credito_id");
+sl_inm_tipo_credito_id.change(function () {
+    tipo_credito_id = $(this).val();
+
+    $.ajax({
+        type: "POST",
+        data: {'id':tipo_credito_id},
+        url: 'index.php?seccion=inm_tipo_credito&accion=get_attr_tipos_credito&ws=1&session_id='+session_id,
+        success: function(data_r) {
+            sl_inm_attr_tipo_credito_id.empty();
+            integra_new_option('#inm_attr_tipo_credito_id','Seleccione una tipo credito','-1');
+            $.each(data_r.registros, function( index, tipo_credito ) {
+                integra_new_option('#inm_attr_tipo_credito_id',tipo_credito.inm_attr_tipo_credito_descripcion,
+                    tipo_credito.inm_attr_tipo_credito_id);
+            });
+            sl_inm_attr_tipo_credito_id.val('-1');
+            sl_inm_attr_tipo_credito_id.selectpicker('refresh');
+        },
+        error: function() {
+            alert("No se ha podido obtener la información");
+        }
+    });
+});
+
 /***** Modal Documentos *****/
 
 var modal = document.getElementById("myModal");
