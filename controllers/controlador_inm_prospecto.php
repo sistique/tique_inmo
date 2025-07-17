@@ -38,7 +38,7 @@ use gamboamartin\inmuebles\models\inm_conf_institucion_campo;
 use gamboamartin\inmuebles\models\inm_doc_comprador;
 use gamboamartin\inmuebles\models\inm_doc_prospecto;
 use gamboamartin\inmuebles\models\inm_prospecto;
-use gamboamartin\inmuebles\models\inm_referencia_prospecto;
+use gamboamartin\inmuebles\models\inm_rel_referencia_prospecto;
 use gamboamartin\inmuebles\models\inm_status_prospecto;
 use gamboamartin\inmuebles\models\inm_tipo_beneficiario;
 use gamboamartin\plugins\exportador;
@@ -1621,7 +1621,7 @@ class controlador_inm_prospecto extends _ctl_formato
         }
         $this->inputs->referencia = $referencia;
 
-        $r_inm_referencia_prospecto = (new inm_referencia_prospecto(link: $this->link))->filtro_and(filtro: $filtro);
+        $r_inm_referencia_prospecto = (new inm_rel_referencia_prospecto(link: $this->link))->filtro_and(filtro: $filtro);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al obtener referencia_prospectos', data: $r_inm_referencia_prospecto,
                 header: $header, ws: $ws);

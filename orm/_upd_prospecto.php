@@ -260,7 +260,7 @@ class _upd_prospecto{
         }
         $referencia['inm_prospecto_id'] = $inm_prospecto_id;
 
-        $alta_referencia= (new inm_referencia_prospecto(link: $link))->alta_registro(registro: $referencia);
+        $alta_referencia= (new inm_rel_referencia_prospecto(link: $link))->alta_registro(registro: $referencia);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al insertar alta_referencia', data: $alta_referencia);
         }

@@ -442,7 +442,7 @@ class inm_prospecto extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al eliminar inm_beneficiario',
                 data:  $del);
         }
-        $del = (new inm_referencia_prospecto(link: $this->link))->elimina_con_filtro_and(filtro:$filtro);
+        $del = (new inm_rel_referencia_prospecto(link: $this->link))->elimina_con_filtro_and(filtro:$filtro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al eliminar inm_referencia_prospecto',
                 data:  $del);
@@ -575,7 +575,7 @@ class inm_prospecto extends _modelo_parent{
 
     final public function inm_referencias(int $inm_prospecto_id){
         $filtro['inm_prospecto.id'] = $inm_prospecto_id;
-        $r_inm_referencia_prospecto = (new inm_referencia_prospecto(link: $this->link))->filtro_and(filtro: $filtro);
+        $r_inm_referencia_prospecto = (new inm_rel_referencia_prospecto(link: $this->link))->filtro_and(filtro: $filtro);
         if(errores::$error){
             return$this->error->error(mensaje: 'Error al obtener r_inm_referencia_prospecto', data: $r_inm_referencia_prospecto);
         }

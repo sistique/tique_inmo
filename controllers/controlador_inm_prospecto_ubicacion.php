@@ -34,7 +34,7 @@ use gamboamartin\inmuebles\models\inm_doc_prospecto_ubicacion;
 use gamboamartin\inmuebles\models\inm_doc_ubicacion;
 use gamboamartin\inmuebles\models\inm_prospecto;
 use gamboamartin\inmuebles\models\inm_prospecto_ubicacion;
-use gamboamartin\inmuebles\models\inm_referencia_prospecto;
+use gamboamartin\inmuebles\models\inm_rel_referencia_prospecto;
 use gamboamartin\inmuebles\models\inm_rel_co_acred_prosp_ubi;
 use gamboamartin\inmuebles\models\inm_rel_co_acred_ubi;
 use gamboamartin\inmuebles\models\inm_rel_conyuge_prospecto_ubicacion;

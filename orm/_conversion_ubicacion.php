@@ -297,7 +297,7 @@ class _conversion_ubicacion{
         }
 
         $filtro['inm_prospecto.id'] = $inm_prospecto_id;
-        $inm_referencia_prospecto = (new inm_referencia_prospecto(link: $link))->filtro_and(filtro: $filtro);
+        $inm_referencia_prospecto = (new inm_rel_referencia_prospecto(link: $link))->filtro_and(filtro: $filtro);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al obtener prospecto', data: $inm_referencia_prospecto);
         }

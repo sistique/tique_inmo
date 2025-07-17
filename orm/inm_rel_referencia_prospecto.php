@@ -8,7 +8,7 @@ use PDO;
 use stdClass;
 
 
-class inm_referencia_prospecto extends _modelo_parent{
+class inm_rel_referencia_prospecto extends _modelo_parent{
     public function __construct(PDO $link)
     {
         $tabla = 'inm_referencia_prospecto';

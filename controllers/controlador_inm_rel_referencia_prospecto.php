@@ -9,21 +9,21 @@
 namespace gamboamartin\inmuebles\controllers;
 
 use gamboamartin\errores\errores;
-use gamboamartin\inmuebles\html\inm_referencia_prospecto_html;
-use gamboamartin\inmuebles\models\inm_referencia_prospecto;
+use gamboamartin\inmuebles\html\inm_rel_referencia_prospecto_html;
+use gamboamartin\inmuebles\models\inm_rel_referencia_prospecto;
 use gamboamartin\system\_ctl_base;
 use gamboamartin\system\links_menu;
 use gamboamartin\template\html;
 use PDO;
 use stdClass;
 
-class controlador_inm_referencia_prospecto extends _ctl_base {
+class controlador_inm_rel_referencia_prospecto extends _ctl_base {
 
     public function __construct(PDO      $link, html $html = new \gamboamartin\template_1\html(),
                                 stdClass $paths_conf = new stdClass())
     {
-        $modelo = new inm_referencia_prospecto(link: $link);
-        $html_ = new inm_referencia_prospecto_html(html: $html);
+        $modelo = new inm_rel_referencia_prospecto(link: $link);
+        $html_ = new inm_rel_referencia_prospecto_html(html: $html);
         $obj_link = new links_menu(link: $link, registro_id:  $this->registro_id);
 
         $datatables = $this->init_datatable();

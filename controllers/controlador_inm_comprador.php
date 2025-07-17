@@ -32,7 +32,7 @@ use gamboamartin\inmuebles\models\inm_firma;
 use gamboamartin\inmuebles\models\inm_nacionalidad;
 use gamboamartin\inmuebles\models\inm_ocupacion;
 use gamboamartin\inmuebles\models\inm_referencia;
-use gamboamartin\inmuebles\models\inm_referencia_prospecto;
+use gamboamartin\inmuebles\models\inm_rel_referencia_prospecto;
 use gamboamartin\inmuebles\models\inm_rel_cliente_valuador;
 use gamboamartin\inmuebles\models\inm_rel_comprador_com_cliente;
 use gamboamartin\inmuebles\models\inm_rel_ubi_comp;
@@ -3180,7 +3180,7 @@ class controlador_inm_comprador extends _ctl_base {
         }
         $this->inputs->referencia = $referencia;
 
-        $r_inm_referencia_prospecto = (new inm_referencia_prospecto(link: $this->link))->filtro_and(filtro: $filtro_ben);
+        $r_inm_referencia_prospecto = (new inm_rel_referencia_prospecto(link: $this->link))->filtro_and(filtro: $filtro_ben);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener referencia_prospectos',data:  $r_inm_referencia_prospecto,
                 header: $header,ws:  $ws);
