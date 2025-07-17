@@ -12,18 +12,15 @@ class inm_rel_referencia_comprador extends _modelo_parent{
     public function __construct(PDO $link)
     {
         $tabla = 'inm_rel_referencia_comprador';
-        $columnas = array($tabla=>false,'inm_comprador'=>$tabla,'dp_calle_pertenece'=>$tabla,
-            'inm_parentesco'=>$tabla);
+        $columnas = array($tabla=>false,'inm_referencia'=>$tabla,'inm_comprador'=>$tabla);
 
-        $campos_obligatorios = array('inm_comprador_id','dp_calle_pertenece_id','inm_parentesco_id','apellido_paterno',
-            'nombre','lada','numero','celular','numero_dom');
+        $campos_obligatorios = array('inm_comprador_id');
 
         $columnas_extra= array();
 
         $renombres = array();
 
-        $atributos_criticos = array('inm_comprador_id','dp_calle_pertenece_id','inm_parentesco_id','apellido_paterno',
-            'apellido_materno','nombre','lada','numero','celular','numero_dom');
+        $atributos_criticos = array('inm_comprador_id');
 
         parent::__construct(link: $link, tabla: $tabla, campos_obligatorios: $campos_obligatorios,
             columnas: $columnas, columnas_extra: $columnas_extra, renombres: $renombres,
@@ -36,7 +33,7 @@ class inm_rel_referencia_comprador extends _modelo_parent{
     public function alta_bd(array $keys_integra_ds = array('codigo', 'descripcion')): array|stdClass
     {
 
-        $keys = array('inm_comprador_id','dp_calle_pertenece_id','inm_parentesco_id');
+        $keys = array('inm_comprador_id');
         $valida = $this->validacion->valida_ids(keys: $keys,registro:  $this->registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
@@ -64,10 +61,6 @@ class inm_rel_referencia_comprador extends _modelo_parent{
     private function descripcion(array $registro): string
     {
         $descripcion = $registro['inm_comprador_id'];
-        $descripcion .= ' '.$registro['dp_calle_pertenece_id'];
-        $descripcion .= ' '.$registro['inm_parentesco_id'];
-        $descripcion .= ' '.$registro['nombre'];
-        $descripcion .= ' '.$registro['apellido_paterno'];
 
         return $descripcion;
     }

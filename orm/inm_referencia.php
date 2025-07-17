@@ -12,19 +12,18 @@ class inm_referencia extends _modelo_parent{
     public function __construct(PDO $link)
     {
         $tabla = 'inm_referencia';
-        $columnas = array($tabla=>false, 'inm_parentesco'=>$tabla, 'inm_comprador'=>$tabla, 'dp_calle_pertenece'=>$tabla,
-            'dp_colonia_postal'=>'dp_calle_pertenece','dp_cp'=>'dp_colonia_postal','dp_municipio'=>'dp_cp',
-            'dp_estado'=>'dp_municipio','dp_pais'=>'dp_estado','dp_colonia'=>'dp_colonia_postal',
-            'dp_calle'=>'dp_calle_pertenece');
+        $columnas = array($tabla=>false, 'inm_parentesco'=>$tabla, 'dp_colonia_postal'=>$tabla,
+            'dp_municipio'=>'dp_cp', 'dp_estado'=>'dp_municipio','dp_pais'=>'dp_estado',
+            'dp_colonia'=>'dp_colonia_postal');
 
-        $campos_obligatorios = array('inm_comprador_id','apellido_paterno', 'nombre','lada', 'numero', 'celular',
-            'dp_calle_pertenece_id','numero_dom','inm_parentesco_id');
+        $campos_obligatorios = array('apellido_paterno', 'nombre','lada', 'numero', 'celular',
+            'dp_colonia_postal_id','inm_parentesco_id');
 
         $columnas_extra= array();
         $renombres= array();
 
-        $atributos_criticos = array('inm_comprador_id','apellido_paterno','apellido_materno', 'nombre','lada',
-            'numero', 'celular','dp_calle_pertenece_id','inm_parentesco_id','numero_dom');
+        $atributos_criticos = array('apellido_paterno','apellido_materno', 'nombre','lada',
+            'numero', 'celular','dp_colonia_postal_id','inm_parentesco_id');
 
         $tipo_campos['lada'] = 'lada';
         $tipo_campos['numero'] = 'tel_sin_lada';
@@ -104,7 +103,7 @@ class inm_referencia extends _modelo_parent{
         $filtro = array();
         $filtro['inm_comprador.id'] = $inm_comprador_id;
 
-        $r_inm_referencia = $this->filtro_and(filtro:$filtro);
+        $r_inm_referencia = (new inm_rel_referencia_comprador(link: $this->link))->filtro_and(filtro:$filtro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener r_inm_referencia',data:  $r_inm_referencia);
         }
@@ -116,7 +115,7 @@ class inm_referencia extends _modelo_parent{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar $registro',data: $valida);
         }
-        $keys = array('inm_comprador_id','dp_calle_pertenece_id');
+        $keys = array('dp_colonia_postal_id');
         $valida = $this->validacion->valida_ids(keys: $keys,registro:  $registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar $registro',data: $valida);

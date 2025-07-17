@@ -32,6 +32,8 @@ use gamboamartin\inmuebles\models\inm_firma;
 use gamboamartin\inmuebles\models\inm_nacionalidad;
 use gamboamartin\inmuebles\models\inm_ocupacion;
 use gamboamartin\inmuebles\models\inm_referencia;
+use gamboamartin\inmuebles\models\inm_rel_beneficiario_comprador;
+use gamboamartin\inmuebles\models\inm_rel_referencia_comprador;
 use gamboamartin\inmuebles\models\inm_rel_referencia_prospecto;
 use gamboamartin\inmuebles\models\inm_rel_cliente_valuador;
 use gamboamartin\inmuebles\models\inm_rel_comprador_com_cliente;
@@ -3148,8 +3150,8 @@ class controlador_inm_comprador extends _ctl_base {
 
         $this->inputs->beneficiario = $beneficiario;
 
-        $filtro_ben['inm_prospecto.id'] = $inm_prospecto_id;
-        $r_inm_beneficiario = (new inm_beneficiario(link: $this->link))->filtro_and(filtro: $filtro_ben);
+        $filtro_ben['inm_comprador.id'] = $this->registro_id;
+        $r_inm_beneficiario = (new inm_rel_beneficiario_comprador(link: $this->link))->filtro_and(filtro: $filtro_ben);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener beneficiarios',data:  $r_inm_beneficiario,
                 header: $header,ws:  $ws);
@@ -3180,7 +3182,7 @@ class controlador_inm_comprador extends _ctl_base {
         }
         $this->inputs->referencia = $referencia;
 
-        $r_inm_referencia_prospecto = (new inm_rel_referencia_prospecto(link: $this->link))->filtro_and(filtro: $filtro_ben);
+        $r_inm_referencia_prospecto = (new inm_rel_referencia_comprador(link: $this->link))->filtro_and(filtro: $filtro_ben);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener referencia_prospectos',data:  $r_inm_referencia_prospecto,
                 header: $header,ws:  $ws);
