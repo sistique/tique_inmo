@@ -223,6 +223,28 @@ class inm_comprador extends _modelo_parent{
 
         return $data;
     }
+    
+    private function ajusta_conyuge(stdClass $datos, int $inm_comprador_id, PDO $link): array|stdClass
+    {
+        if(!$datos->existe) {
+            $r_inm_rel_conyuge_comprador_bd = $this->inserta_conyuge(conyuge: $datos->row,
+                inm_comprador_id: $inm_comprador_id,link: $link);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al insertar conyuge', data: $r_inm_rel_conyuge_comprador_bd);
+            }
+            $data = $r_inm_rel_conyuge_comprador_bd;
+        }
+        else{
+            $r_modifica_conyuge = $this->modifica_conyuge(
+                conyuge: $datos->row, inm_comprador_id: $inm_comprador_id,link: $link);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al modificar conyuge', data: $r_modifica_conyuge);
+            }
+            $data = $r_modifica_conyuge;
+        }
+
+        return $data;
+    }
 
     /**
      * Asigna un co acreditado a un comprador
@@ -373,6 +395,23 @@ class inm_comprador extends _modelo_parent{
         return $datos;
     }
 
+    public function datos_conyuge(PDO $link, int $inm_comprador_id): array|stdClass{
+        $existe_conyuge = false;
+        if($inm_comprador_id > 0) {
+            $existe_conyuge = (new inm_comprador(link: $link))->existe_conyuge(inm_comprador_id: $inm_comprador_id);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al validar si existe conyuge', data: $existe_conyuge);
+            }
+        }
+
+        $datos = $this->dato(existe: $existe_conyuge,key_data:  'conyuge');
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al inicializar datos',data:  $datos);
+        }
+
+        return $datos;
+    }
+
     /**
      * Elimina todas las relaciones de comprador y con ella a si misma
      * @relaciones inm_rel_comprador_com_cliente, inm_comprador_etapa, inm_referencia, inm_rel_co_acred,
@@ -444,6 +483,21 @@ class inm_comprador extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al validar si existe co_acreditado',data:  $existe_co_acreditado);
         }
         return $existe_co_acreditado;
+    }
+
+    final public function existe_conyuge(int $inm_comprador_id): bool|array
+    {
+        if($inm_comprador_id <=0){
+            return $this->error->error(mensaje: 'Error inm_comprador_id es menor a 0',data:  $inm_comprador_id);
+        }
+        $filtro = array();
+        $filtro['inm_comprador.id'] = $inm_comprador_id;
+
+        $existe_conyuge = (new inm_rel_conyuge_comprador(link: $this->link))->existe(filtro: $filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar si existe conyuge',data:  $existe_conyuge);
+        }
+        return $existe_conyuge;
     }
 
     /**
@@ -576,6 +630,40 @@ class inm_comprador extends _modelo_parent{
 
         return $data;
     }
+    
+    private function inserta_conyuge(array $conyuge, int $inm_comprador_id, PDO $link): array|stdClass
+    {
+        $keys = array('nombre','apellido_paterno');
+        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $conyuge);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar conyuge',data:  $valida);
+        }
+
+        if($inm_comprador_id <= 0){
+            return $this->error->error(mensaje: 'Error inm_comprador_id debe ser mayor a 0',data:  $inm_comprador_id);
+        }
+
+        $alta_conyuge = (new inm_conyuge(link: $link))->alta_registro(registro: $conyuge);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al insertar conyuge', data: $alta_conyuge);
+        }
+
+        $inm_rel_conyuge_ins['inm_comprador_id'] = $inm_comprador_id;
+        $inm_rel_conyuge_ins['inm_conyuge_id'] = $alta_conyuge->registro_id;
+
+        $r_inm_rel_conyuge_bd = (new inm_rel_conyuge_comprador(link: $link))->alta_registro(
+            registro: $inm_rel_conyuge_ins);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al insertar conyuge', data: $r_inm_rel_conyuge_bd);
+        }
+
+        $data = new stdClass();
+        $data->alta_conyuge = $alta_conyuge;
+        $data->inm_rel_conyuge_ins = $inm_rel_conyuge_ins;
+        $data->r_inm_rel_conyuge_bd = $r_inm_rel_conyuge_bd;
+
+        return $data;
+    }
 
     final public function inm_co_acreditado(bool $columnas_en_bruto, int $inm_comprador_id, PDO $link,
                                             bool $retorno_obj): array|stdClass
@@ -607,6 +695,38 @@ class inm_comprador extends _modelo_parent{
         }
 
         return $inm_co_acreditado;
+    }
+
+    final public function inm_conyuge(bool $columnas_en_bruto, int $inm_comprador_id, PDO $link,
+                                            bool $retorno_obj): array|stdClass
+    {
+        if($inm_comprador_id<=0){
+            return $this->error->error(mensaje: 'Error inm_comprador_id debe ser mayor a 0', data:  $inm_comprador_id);
+        }
+        $filtro = array();
+        $filtro['inm_comprador.id'] = $inm_comprador_id;
+        $r_inm_rel_conyuge = (new inm_rel_conyuge_comprador(link: $link))->filtro_and(filtro: $filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener conyuge relacion',
+                data:  $r_inm_rel_conyuge);
+        }
+        if($r_inm_rel_conyuge->n_registros === 0){
+            return $this->error->error(mensaje: 'Error no existe relacion',data:  $r_inm_rel_conyuge);
+        }
+        if($r_inm_rel_conyuge->n_registros > 1){
+            return $this->error->error(mensaje: 'Error de integridad',data:  $r_inm_rel_conyuge);
+        }
+
+        $inm_rel_conyuge = $r_inm_rel_conyuge->registros[0];
+
+        $inm_conyuge = (new inm_conyuge(link: $link))->registro(
+            registro_id: $inm_rel_conyuge['inm_conyuge_id'],columnas_en_bruto: $columnas_en_bruto,
+            retorno_obj: $retorno_obj);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener conyuge',data:  $inm_conyuge);
+        }
+
+        return $inm_conyuge;
     }
 
     final public function inm_prospecto(int $inm_comprador_id){
@@ -659,6 +779,31 @@ class inm_comprador extends _modelo_parent{
         $data = new stdClass();
         $data->inm_co_acreditado_previo = $inm_co_acreditado_previo;
         $data->r_modifica_co_acreditado = $r_modifica_co_acreditado;
+
+        return $data;
+    }
+
+    private function modifica_conyuge(array $conyuge, int $inm_comprador_id, PDO $link): array|stdClass
+    {
+        if($inm_comprador_id<=0){
+            return $this->error->error(mensaje: 'Error inm__id debe ser mayor a 0', data:  $inm_comprador_id);
+        }
+        $inm_conyuge_previo = $this->inm_conyuge(columnas_en_bruto: true, inm_comprador_id: $inm_comprador_id,
+            link: $link, retorno_obj: true);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener conyuge', data: $inm_conyuge_previo);
+        }
+
+        $inm_conyuge_id = $inm_conyuge_previo->id;
+
+        $r_modifica_conyuge = (new inm_conyuge(link: $link))->modifica_bd(registro: $conyuge,id: $inm_conyuge_id);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al modificar conyuge', data: $r_modifica_conyuge);
+        }
+
+        $data = new stdClass();
+        $data->inm_conyuge_previo = $inm_conyuge_previo;
+        $data->r_modifica_conyuge = $r_modifica_conyuge;
 
         return $data;
     }
@@ -771,6 +916,22 @@ class inm_comprador extends _modelo_parent{
                 return $this->error->error(mensaje: 'Error al insertar co_acreditado', data: $result_co_acreditado);
             }
             $datos->result_co_acreditado = $result_co_acreditado;
+        }
+        return $datos;
+    }
+
+    public function transacciona_conyuge(int $inm_comprador_id, PDO $link){
+        $datos = $this->datos_conyuge(link: $link,inm_comprador_id: $inm_comprador_id);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener dato conyuge',data:  $datos);
+        }
+
+        if($datos->tiene_dato){
+            $result_conyuge = $this->ajusta_conyuge(datos: $datos,inm_comprador_id: $inm_comprador_id,link: $link);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al insertar conyuge', data: $result_conyuge);
+            }
+            $datos->result_conyuge = $result_conyuge;
         }
         return $datos;
     }

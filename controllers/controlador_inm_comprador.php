@@ -3038,7 +3038,7 @@ class controlador_inm_comprador extends _ctl_base {
                     header: $header,ws:  $ws);
             }
 
-            $result_conyuge =  (new _upd_prospecto())->transacciona_conyuge(inm_prospecto_id: $inm_prospecto->inm_prospecto_id,link: $this->link);
+            $result_conyuge =  $this->modelo->transacciona_conyuge(inm_comprador_id: $this->registro_id,link: $this->link);
             if (errores::$error) {
                 $this->link->rollBack();
                 return $this->retorno_error(mensaje: 'Error al insertar conyuge', data: $result_conyuge,
