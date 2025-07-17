@@ -130,7 +130,7 @@ class _referencia{
         $modelo = new inm_parentesco(link: $controler->link);
         $inm_parentesco_id = $controler->html->select_catalogo(cols: 12, con_registros: true,
             id_selected: $row_upd->inm_parentesco_id, modelo: $modelo,class_css: array('referencia_inm_parentesco_id'),
-            label: 'Parentesco', name: 'referencia[inm_parentesco_id]');
+            label: 'Parentesco', name: 'referencia[inm_parentesco_id]', required: true);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener input',data:  $inm_parentesco_id);
         }
@@ -171,7 +171,8 @@ class _referencia{
         $modelo = new dp_colonia_postal(link: $controler->link);
         $dp_colonia_postal_id = $controler->html->select_catalogo(cols: 6, con_registros: false,
             id_selected: $row_upd->dp_colonia_postal_id, modelo: $modelo, columns_ds: array('dp_colonia_descripcion'),
-            id_css: 'referencia_dp_colonia_postal_id', label: 'Colonia', name: 'referencia[dp_colonia_postal_id]');
+            id_css: 'referencia_dp_colonia_postal_id', label: 'Colonia', name: 'referencia[dp_colonia_postal_id]',
+            required: true);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener input',data:  $dp_colonia_postal_id);
         }
