@@ -13,17 +13,16 @@ class inm_referencia extends _modelo_parent{
     {
         $tabla = 'inm_referencia';
         $columnas = array($tabla=>false, 'inm_parentesco'=>$tabla, 'dp_colonia_postal'=>$tabla,
-            'dp_municipio'=>'dp_cp', 'dp_estado'=>'dp_municipio','dp_pais'=>'dp_estado',
+            'dp_cp'=>'dp_colonia_postal', 'dp_municipio'=>'dp_cp', 'dp_estado'=>'dp_municipio','dp_pais'=>'dp_estado',
             'dp_colonia'=>'dp_colonia_postal');
 
-        $campos_obligatorios = array('apellido_paterno', 'nombre','lada', 'numero', 'celular',
+        $campos_obligatorios = array('apellido_paterno', 'nombre',
             'dp_colonia_postal_id','inm_parentesco_id');
 
         $columnas_extra= array();
         $renombres= array();
 
-        $atributos_criticos = array('apellido_paterno','apellido_materno', 'nombre','lada',
-            'numero', 'celular','dp_colonia_postal_id','inm_parentesco_id');
+        $atributos_criticos = array('apellido_paterno', 'nombre','dp_colonia_postal_id','inm_parentesco_id');
 
         $tipo_campos['lada'] = 'lada';
         $tipo_campos['numero'] = 'tel_sin_lada';
@@ -121,25 +120,27 @@ class inm_referencia extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al validar $registro',data: $valida);
         }
 
-        $keys = array('lada','numero','celular','numero_dom');
-        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $registro);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al validar $registro',data: $valida);
+        if(isset($registro['lada']) && trim($registro['lada']) !== '') {
+            $valida = $this->validacion->valida_lada(lada: $registro['lada']);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al validar lada', data: $valida);
+            }
         }
 
-        $valida = $this->validacion->valida_lada(lada: $registro['lada']);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al validar lada',data: $valida);
+        if(isset($registro['numero']) && trim($registro['numero']) !== '') {
+            $valida = $this->validacion->valida_numero_sin_lada(tel: $registro['numero']);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al validar numero', data: $valida);
+            }
         }
 
-        $valida = $this->validacion->valida_numero_sin_lada(tel: $registro['numero']);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al validar numero',data: $valida);
+        if(isset($registro['celular']) && trim($registro['celular']) !== '') {
+            $valida = $this->validacion->valida_numero_tel_mx(tel: $registro['celular']);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al validar celular', data: $valida);
+            }
         }
-        $valida = $this->validacion->valida_numero_tel_mx(tel: $registro['celular']);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al validar celular',data: $valida);
-        }
+
         return true;
     }
 
