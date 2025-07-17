@@ -1570,8 +1570,7 @@ class controlador_inm_prospecto extends _ctl_formato
         $this->inputs->direccion = $direccion;
 
         $filtro['inm_prospecto.id'] = $this->registro_id;
-
-        $r_inm_beneficiario = (new inm_beneficiario(link: $this->link))->filtro_and(filtro: $filtro);
+        $r_inm_beneficiario = (new inm_rel_referencia_prospecto(link: $this->link))->filtro_and(filtro: $filtro);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al obtener beneficiarios', data: $r_inm_beneficiario,
                 header: $header, ws: $ws);
