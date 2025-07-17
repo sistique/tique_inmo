@@ -298,14 +298,6 @@
                             </div>
                             <div id="contenidopestanas">
                                 <div class="conten" id="cpestana1">
-                                    <?php
-                                    $checked_genero_m = 'checked';
-                                    $checked_genero_f = '';
-                                    if($controlador->row_upd->genero_co_acreditado === 'F'){
-                                        $checked_genero_m = '';
-                                        $checked_genero_f = 'checked';
-                                    }
-                                    ?>
                                     <form method="post" action="<?php echo $controlador->link_modifica_bd; ?>" class="form-additional"
                                           enctype="multipart/form-data">
 
@@ -386,9 +378,9 @@
                                             <?php echo $controlador->inputs->inm_co_acreditado->nss; ?>
                                             <?php echo $controlador->inputs->inm_co_acreditado->curp; ?>
                                             <?php echo $controlador->inputs->inm_co_acreditado->rfc; ?>
+                                            <?php echo $controlador->inputs->inm_co_acreditado->nombre; ?>
                                             <?php echo $controlador->inputs->inm_co_acreditado->apellido_paterno; ?>
                                             <?php echo $controlador->inputs->inm_co_acreditado->apellido_materno; ?>
-                                            <?php echo $controlador->inputs->inm_co_acreditado->nombre; ?>
                                             <?php echo $controlador->inputs->inm_co_acreditado->numero_credito; ?>
                                             <?php echo $controlador->inputs->inm_co_acreditado->adeudo_hipoteca; ?>
                                             <?php echo $controlador->inputs->inm_co_acreditado->lada; ?>
@@ -430,7 +422,8 @@
                                             <?php //echo $controlador->inputs->conyuge->telefono_celular; ?>
                                         </div>
                                         <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
-                                    </form>                                </div>
+                                    </form>
+                                </div>
                                 <div class="conten" id="cpestana2">
                                     <form method="post" action="<?php echo $controlador->link_validacion_bd; ?>"
                                           class="form-additional" enctype="multipart/form-data">
