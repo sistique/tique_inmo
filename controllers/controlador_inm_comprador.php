@@ -3241,7 +3241,7 @@ class controlador_inm_comprador extends _ctl_base {
                     header: $header, ws: $ws);
             }
 
-            $result_beneficiario = (new _upd_prospecto())->transacciona_beneficiario(inm_prospecto_id: $inm_prospecto->inm_prospecto_id,link: $this->link);
+            $result_beneficiario = $this->modelo->transacciona_beneficiario(inm_comprador_id: $this->registro_id,link: $this->link);
             if (errores::$error) {
                 return $this->retorno_error(mensaje: 'Error al insertar beneficiario', data: $result_beneficiario,
                     header: $header, ws: $ws);

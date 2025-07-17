@@ -202,6 +202,18 @@ class inm_comprador extends _modelo_parent{
 
     }
 
+    private function ajusta_beneficiario(stdClass $datos, int $inm_comprador_id, PDO $link){
+
+        $r_inm_beneficiario_bd = $this->inserta_beneficiario(beneficiario: $datos->row,
+            inm_comprador_id: $inm_comprador_id,link: $link);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al insertar r_inm_beneficiario_bd', data: $r_inm_beneficiario_bd);
+        }
+        $datos = $r_inm_beneficiario_bd;
+
+        return $datos;
+    }
+
     private function ajusta_co_acreditado(stdClass $datos, int $inm_comprador_id, PDO $link): array|stdClass
     {
         if(!$datos->existe) {
@@ -597,6 +609,40 @@ class inm_comprador extends _modelo_parent{
         return $data;
     }
 
+    private function inserta_beneficiario(array $beneficiario, int $inm_comprador_id, PDO $link): array|stdClass
+    {
+        $keys = array('nombre','apellido_paterno');
+        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $beneficiario);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar beneficiario',data:  $valida);
+        }
+
+        if($inm_comprador_id <= 0){
+            return $this->error->error(mensaje: 'Error inm_comprador_id debe ser mayor a 0',data:  $inm_comprador_id);
+        }
+
+        $alta_beneficiario = (new inm_beneficiario(link: $link))->alta_registro(registro: $beneficiario);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al insertar beneficiario', data: $alta_beneficiario);
+        }
+
+        $inm_rel_beneficiario_ins['inm_comprador_id'] = $inm_comprador_id;
+        $inm_rel_beneficiario_ins['inm_beneficiario_id'] = $alta_beneficiario->registro_id;
+
+        $r_inm_rel_beneficiario_bd = (new inm_rel_beneficiario_comprador(link: $link))->alta_registro(
+            registro: $inm_rel_beneficiario_ins);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al insertar beneficiario', data: $r_inm_rel_beneficiario_bd);
+        }
+
+        $data = new stdClass();
+        $data->alta_beneficiario = $alta_beneficiario;
+        $data->inm_rel_beneficiario_ins = $inm_rel_beneficiario_ins;
+        $data->r_inm_rel_beneficiario_bd = $r_inm_rel_beneficiario_bd;
+
+        return $data;
+    }
+
     private function inserta_co_acreditado(array $co_acreditado, int $inm_comprador_id, PDO $link): array|stdClass
     {
         $keys = array('nombre','apellido_paterno');
@@ -904,6 +950,23 @@ class inm_comprador extends _modelo_parent{
         return $r_inm_bitacora_comprador->registros;
     }
 
+    final public function transacciona_beneficiario(int $inm_comprador_id, PDO $link){
+        $datos = $this->dato(existe: false,key_data:  'beneficiario');
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al inicializar datos',data:  $datos);
+        }
+
+        if($datos->tiene_dato){
+            $result_beneficiario = $this->ajusta_beneficiario(datos: $datos,inm_comprador_id: $inm_comprador_id,link: $link);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al insertar beneficiario', data: $result_beneficiario);
+            }
+            $datos->result_beneficiario = $result_beneficiario;
+        }
+
+        return $datos;
+    }
+    
     public function transacciona_co_acreditado(int $inm_comprador_id, PDO $link){
         $datos = $this->datos_co_acreditado(link: $link,inm_comprador_id: $inm_comprador_id);
         if(errores::$error){
