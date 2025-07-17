@@ -826,10 +826,12 @@ class inm_prospecto extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al insertar conyuge', data: $result_conyuge);
         }
 
-        $result_beneficiario = (new _upd_prospecto())->transacciona_beneficiario(inm_prospecto_id: $inm_prospecto_id,link: $this->link);
+        $result_beneficiario = (new _upd_prospecto())->transacciona_beneficiario(inm_prospecto_id: $inm_prospecto_id,
+            link: $this->link);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al insertar beneficiario', data: $result_beneficiario);
         }
+
         $result_referencia = (new _upd_prospecto())->transacciona_referencia(inm_prospecto_id: $inm_prospecto_id,link: $this->link);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al insertar referencia', data: $result_referencia);

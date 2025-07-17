@@ -115,28 +115,34 @@ class _upd_prospecto{
 
     public function inserta_beneficiario(array $beneficiario, int $inm_prospecto_id, PDO $link): array|stdClass
     {
-        $keys = array('nombre','apellido_paterno','inm_tipo_beneficiario_id','inm_parentesco_id');
+        $keys = array('nombre','apellido_paterno');
         $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $beneficiario);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar conyuge',data:  $valida);
         }
-        $keys = array('inm_tipo_beneficiario_id','inm_parentesco_id');
-        $valida = $this->validacion->valida_ids(keys: $keys,registro:  $beneficiario);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al validar beneficiario',data:  $valida);
-        }
+
         if($inm_prospecto_id <= 0){
             return $this->error->error(mensaje: 'Error inm_prospecto_id debe ser mayor a 0',data:  $inm_prospecto_id);
         }
-        $beneficiario['inm_prospecto_id'] = $inm_prospecto_id;
 
-        $alta_beneficiario= (new inm_beneficiario(link: $link))->alta_registro(registro: $beneficiario);
+        $alta_beneficiario = (new inm_beneficiario(link: $link))->alta_registro(registro: $beneficiario);
         if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al insertar alta_beneficiario', data: $alta_beneficiario);
+            return $this->error->error(mensaje: 'Error al insertar beneficiario', data: $alta_beneficiario);
+        }
+
+        $inm_rel_beneficiario_ins['inm_prospecto_id'] = $inm_prospecto_id;
+        $inm_rel_beneficiario_ins['inm_beneficiario_id'] = $alta_beneficiario->registro_id;
+
+        $r_inm_rel_beneficiario_bd = (new inm_rel_beneficiario_prospecto(link: $link))->alta_registro(
+            registro: $inm_rel_beneficiario_ins);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al insertar beneficiario', data: $r_inm_rel_beneficiario_bd);
         }
 
         $data = new stdClass();
-        $data->alta_conyuge = $alta_beneficiario;
+        $data->alta_beneficiario = $alta_beneficiario;
+        $data->inm_rel_beneficiario_ins = $inm_rel_beneficiario_ins;
+        $data->r_inm_rel_beneficiario_bd = $r_inm_rel_beneficiario_bd;
 
         return $data;
     }
@@ -202,17 +208,12 @@ class _upd_prospecto{
      */
     private function inserta_conyuge(array $conyuge, int $inm_prospecto_id, PDO $link): array|stdClass
     {
-        $keys = array('nombre','apellido_paterno','curp','rfc','dp_municipio_id','inm_nacionalidad_id',
-            'inm_ocupacion_id','telefono_casa','telefono_celular','fecha_nacimiento');
+        $keys = array('nombre','apellido_paterno');
         $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $conyuge);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar conyuge',data:  $valida);
         }
-        $keys = array('dp_municipio_id','inm_nacionalidad_id', 'inm_ocupacion_id');
-        $valida = $this->validacion->valida_ids(keys: $keys,registro:  $conyuge);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al validar conyuge',data:  $valida);
-        }
+
         if($inm_prospecto_id <= 0){
             return $this->error->error(mensaje: 'Error inm_prospecto_id debe ser mayor a 0',data:  $inm_prospecto_id);
         }
@@ -224,7 +225,6 @@ class _upd_prospecto{
 
         $inm_rel_conyuge_prospecto_ins = (new _inm_prospecto())->inm_rel_conyuge_prospecto_ins(
             inm_conyuge_id: $alta_conyuge->registro_id, inm_prospecto_id: $inm_prospecto_id);
-
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al maquetar conyuge relacion',
                 data: $inm_rel_conyuge_prospecto_ins);
@@ -235,6 +235,7 @@ class _upd_prospecto{
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al insertar conyuge', data: $r_inm_rel_conyuge_prospecto_bd);
         }
+
         $data = new stdClass();
         $data->alta_conyuge = $alta_conyuge;
         $data->inm_rel_conyuge_prospecto_ins = $inm_rel_conyuge_prospecto_ins;

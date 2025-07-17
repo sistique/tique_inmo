@@ -12,7 +12,8 @@ class inm_rel_beneficiario_prospecto extends _modelo_parent{
     public function __construct(PDO $link)
     {
         $tabla = 'inm_rel_beneficiario_prospecto';
-        $columnas = array($tabla=>false,'inm_prospecto'=>$tabla,'inm_beneficiario'=>$tabla);
+        $columnas = array($tabla=>false,'inm_prospecto'=>$tabla,'inm_beneficiario'=>$tabla,
+            'inm_tipo_beneficiario'=>'inm_beneficiario', 'inm_parentesco'=>'inm_beneficiario');
 
         $campos_obligatorios = array('inm_prospecto_id','inm_beneficiario_id');
 
