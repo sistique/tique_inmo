@@ -14,7 +14,7 @@ class inm_co_acreditado extends _modelo_parent{
         $tabla = 'inm_co_acreditado';
         $columnas = array($tabla=>false);
 
-        $campos_obligatorios = array('nss', 'apellido_paterno','nombre');
+        $campos_obligatorios = array('apellido_paterno','nombre');
 
         $columnas_extra= array();
         $renombres= array();
@@ -120,17 +120,13 @@ class inm_co_acreditado extends _modelo_parent{
      */
     final public function valida_alta(array $inm_co_acreditado): bool|array
     {
-        $keys = array('nss');
-        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $inm_co_acreditado);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
-        }
-
-        $keys_val = array('nss');
-        foreach ($keys_val as $key){
-            $valida = $this->validacion->valida_pattern($key, $inm_co_acreditado[$key]);
-            if(!$valida){
-                return $this->error->error(mensaje: 'Error al validar '.$key,data:  $this->validacion->patterns[$key]);
+        if(isset($inm_co_acreditado['nss']) && trim($inm_co_acreditado['nss']) !== '') {
+            $keys_val = array('nss');
+            foreach ($keys_val as $key) {
+                $valida = $this->validacion->valida_pattern($key, $inm_co_acreditado[$key]);
+                if (!$valida) {
+                    return $this->error->error(mensaje: 'Error al validar ' . $key, data: $this->validacion->patterns[$key]);
+                }
             }
         }
 
@@ -160,14 +156,14 @@ class inm_co_acreditado extends _modelo_parent{
      */
     final public function valida_data_alta(array $inm_co_acreditado): true|array
     {
-        $keys = array('nombre','apellido_paterno','nss');
+        $keys = array('nombre','apellido_paterno');
         $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $inm_co_acreditado,
             valida_vacio: false);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
         }
 
-        $keys = array('nombre','apellido_paterno','nss');
+        $keys = array('nombre','apellido_paterno');
         $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $inm_co_acreditado);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);

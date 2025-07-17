@@ -27,7 +27,7 @@ class _base_paquete{
         if(is_object($registro)){
             $registro = (array)$registro;
         }
-        $keys = array('nombre','apellido_paterno','nss');
+        $keys = array('nombre','apellido_paterno');
         $valida = (new validacion())->valida_existencia_keys(keys: $keys,registro:  $registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
@@ -41,6 +41,9 @@ class _base_paquete{
         }
         if(!isset($registro['rfc'])){
             $registro['rfc'] = '';
+        }
+        if(!isset($registro['nss'])){
+            $registro['nss'] = '';
         }
         $descripcion = $registro['nombre'];
         $descripcion .= ' '.$registro['apellido_paterno'];
