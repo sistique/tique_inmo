@@ -246,29 +246,34 @@ class _upd_prospecto{
 
     public function inserta_referencia(array $referencia, int $inm_prospecto_id, PDO $link): array|stdClass
     {
-        $keys = array('nombre','apellido_paterno','dp_calle_pertenece_id','inm_parentesco_id');
+        $keys = array('nombre','apellido_paterno');
         $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $referencia);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar referencia',data:  $valida);
         }
-        $keys = array('dp_calle_pertenece_id','inm_parentesco_id');
-        $valida = $this->validacion->valida_ids(keys: $keys,registro:  $referencia);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al validar beneficiario',data:  $valida);
-        }
+
         if($inm_prospecto_id <= 0){
             return $this->error->error(mensaje: 'Error inm_prospecto_id debe ser mayor a 0',data:  $inm_prospecto_id);
         }
-        $referencia['inm_prospecto_id'] = $inm_prospecto_id;
 
-        $alta_referencia= (new inm_rel_referencia_prospecto(link: $link))->alta_registro(registro: $referencia);
+        $alta_referencia = (new inm_referencia(link: $link))->alta_registro(registro: $referencia);
         if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al insertar alta_referencia', data: $alta_referencia);
+            return $this->error->error(mensaje: 'Error al insertar referencia', data: $alta_referencia);
+        }
+
+        $inm_rel_referencia_ins['inm_prospecto_id'] = $inm_prospecto_id;
+        $inm_rel_referencia_ins['inm_referencia_id'] = $alta_referencia->registro_id;
+
+        $r_inm_rel_referencia_bd = (new inm_rel_referencia_prospecto(link: $link))->alta_registro(
+            registro: $inm_rel_referencia_ins);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al insertar referencia', data: $r_inm_rel_referencia_bd);
         }
 
         $data = new stdClass();
         $data->alta_referencia = $alta_referencia;
-
+        $data->inm_rel_referencia_ins = $inm_rel_referencia_ins;
+        $data->r_inm_rel_referencia_bd = $r_inm_rel_referencia_bd;
 
         return $data;
     }

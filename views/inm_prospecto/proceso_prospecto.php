@@ -18,7 +18,6 @@
                         </ul>
                     </div>
                     <body onload="javascript:cambiarPestannaGeneral_inicial(pestanasgeneral);
-                    javascript:valor_inicial();
                     javascript:cambiarPestanna_inicialprospecto(pestanasprospecto);">
                     <div id="contenidopestanasgeneral">
                         <div class="contengeneral" id="cpestanageneral1">
@@ -251,8 +250,9 @@
                                                         <?php echo $controlador->inputs->referencia->dp_municipio_id; ?>
                                                         <?php echo $controlador->inputs->referencia->dp_cp_id; ?>
                                                         <?php echo $controlador->inputs->referencia->dp_colonia_postal_id; ?>
-                                                        <?php echo $controlador->inputs->referencia->dp_calle_pertenece_id; ?>
-                                                        <?php echo $controlador->inputs->referencia->numero_dom; ?>
+                                                        <?php echo $controlador->inputs->referencia->calle; ?>
+                                                        <?php echo $controlador->inputs->referencia->numero_exterior; ?>
+                                                        <?php echo $controlador->inputs->referencia->numero_interior; ?>
                                                         <?php echo $controlador->inputs->referencia->inm_parentesco_id; ?>
                                                         <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
 
@@ -272,12 +272,12 @@
                                                                 <tbody>
                                                                 <?php foreach ($controlador->referencias as $referencia) { ?>
                                                                     <tr>
-                                                                        <td><?php echo $referencia['inm_referencia_prospecto_id']; ?></td>
-                                                                        <td><?php echo $referencia['inm_referencia_prospecto_nombre']; ?></td>
-                                                                        <td><?php echo $referencia['inm_referencia_prospecto_apellido_paterno']; ?></td>
-                                                                        <td><?php echo $referencia['inm_referencia_prospecto_apellido_materno']; ?></td>
+                                                                        <td><?php echo $referencia['inm_referencia_id']; ?></td>
+                                                                        <td><?php echo $referencia['inm_referencia_nombre']; ?></td>
+                                                                        <td><?php echo $referencia['inm_referencia_apellido_paterno']; ?></td>
+                                                                        <td><?php echo $referencia['inm_referencia_apellido_materno']; ?></td>
                                                                         <td><?php echo $referencia['inm_parentesco_descripcion']; ?></td>
-                                                                        <td><?php echo $referencia['inm_referencia_prospecto_celular']; ?></td>
+                                                                        <td><?php echo $referencia['inm_referencia_celular']; ?></td>
                                                                         <td><?php echo $referencia['btn_del']; ?></td>
                                                                     </tr>
                                                                 <?php } ?>
