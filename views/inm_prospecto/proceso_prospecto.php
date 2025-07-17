@@ -128,6 +128,7 @@
                                                     <div id="apartado_4">
                                                         <?php echo $controlador->inputs->inm_institucion_hipotecaria_id; ?>
                                                         <?php echo $controlador->inputs->inm_producto_infonavit_id; ?>
+                                                        <?php echo $controlador->inputs->inm_tipo_credito_id; ?>
                                                         <?php echo $controlador->inputs->inm_attr_tipo_credito_id; ?>
                                                         <?php echo $controlador->inputs->inm_destino_credito_id; ?>
                                                         <?php echo $controlador->inputs->es_segundo_credito; ?>

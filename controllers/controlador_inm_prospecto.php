@@ -275,6 +275,7 @@ class controlador_inm_prospecto extends _ctl_formato
 
         $init_data['inm_institucion_hipotecaria'] = "gamboamartin\\inmuebles";
         $init_data['inm_producto_infonavit'] = "gamboamartin\\inmuebles";
+        $init_data['inm_tipo_credito'] = "gamboamartin\\inmuebles";
         $init_data['inm_attr_tipo_credito'] = "gamboamartin\\inmuebles";
         $init_data['inm_destino_credito'] = "gamboamartin\\inmuebles";
         $init_data['inm_plazo_credito_sc'] = "gamboamartin\\inmuebles";
@@ -1434,15 +1435,19 @@ class controlador_inm_prospecto extends _ctl_formato
                 mensaje: 'Error al generar salida de template', data: $r_modifica, header: $header, ws: $ws);
         }
 
-        $data = (new \gamboamartin\inmuebles\controllers\_inm_prospecto())->inputs_base(controlador: $this);
-        if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al integrar datos para front', data: $data,
-                header: $header, ws: $ws);
-        }
-
         $registro_prospecto = (new inm_prospecto(link: $this->link))->registro(registro_id: $this->registro_id);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al obtener registro prospecto', data: $registro_prospecto,
+                header: $header, ws: $ws);
+        }
+
+        if(!isset($this->row_upd->inm_tipo_credito_id)){
+            $this->row_upd->inm_tipo_credito_id = $registro_prospecto['inm_tipo_credito_id'];
+        }
+
+        $data = (new \gamboamartin\inmuebles\controllers\_inm_prospecto())->inputs_base(controlador: $this);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al integrar datos para front', data: $data,
                 header: $header, ws: $ws);
         }
 

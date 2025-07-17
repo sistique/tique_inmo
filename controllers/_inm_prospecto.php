@@ -188,8 +188,12 @@ class _inm_prospecto{
             if(isset($data['columns_ds'])){
                 $columns_ds = $data['columns_ds'];
             }
+            $con_registros = true;
+            if(isset($data['con_registros'])){
+                $con_registros = $data['con_registros'];
+            }
 
-            $keys_selects = $controlador->key_select(cols: $cols, con_registros: true, filtro: $filtro,
+            $keys_selects = $controlador->key_select(cols: $cols, con_registros: $con_registros, filtro: $filtro,
                 key: $identificador, keys_selects: $keys_selects, id_selected: $id_selected, label: $title,
                 columns_ds: $columns_ds, disabled: $disabled);
             if(errores::$error){
@@ -354,20 +358,35 @@ class _inm_prospecto{
             return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
         }
 
+        $con_registros = false;
+        $filtro_tipo_credito = array();
+        if(isset($controlador->row_upd->inm_tipo_credito_id) && $controlador->row_upd->inm_tipo_credito_id > 0){
+            $con_registros = true;
+            $filtro_tipo_credito['inm_tipo_credito.id'] = $controlador->row_upd->inm_tipo_credito_id;
+        }
+
+
         $identificadores['inm_institucion_hipotecaria_id']['title'] = 'Institucion Hipotecaria';
         $identificadores['inm_institucion_hipotecaria_id']['cols'] = 12;
         $identificadores['inm_institucion_hipotecaria_id']['disabled'] = false;
         $identificadores['inm_institucion_hipotecaria_id']['columns_ds'] = array('inm_institucion_hipotecaria_descripcion');
 
         $identificadores['inm_producto_infonavit_id']['title'] = 'Producto Infonavit';
-        $identificadores['inm_producto_infonavit_id']['cols'] = 6;
+        $identificadores['inm_producto_infonavit_id']['cols'] = 12;
         $identificadores['inm_producto_infonavit_id']['disabled'] = false;
         $identificadores['inm_producto_infonavit_id']['columns_ds'] = array('inm_producto_infonavit_descripcion');
 
-        $identificadores['inm_attr_tipo_credito_id']['title'] = 'Tipo de Credito';
+        $identificadores['inm_tipo_credito_id']['title'] = 'Tipo de Credito';
+        $identificadores['inm_tipo_credito_id']['cols'] = 6;
+        $identificadores['inm_tipo_credito_id']['disabled'] = false;
+        $identificadores['inm_tipo_credito_id']['columns_ds'] = array('inm_tipo_credito_descripcion');
+        
+        $identificadores['inm_attr_tipo_credito_id']['title'] = 'Tipo de Credito Especifico';
         $identificadores['inm_attr_tipo_credito_id']['cols'] = 6;
         $identificadores['inm_attr_tipo_credito_id']['disabled'] = false;
         $identificadores['inm_attr_tipo_credito_id']['columns_ds'] = array('inm_attr_tipo_credito_descripcion');
+        $identificadores['inm_attr_tipo_credito_id']['con_registros'] = $con_registros;
+        $identificadores['inm_attr_tipo_credito_id']['filtro'] = $filtro_tipo_credito;
 
         $identificadores['inm_destino_credito_id']['title'] = 'Destino de Credito';
         $identificadores['inm_destino_credito_id']['cols'] = 12;
@@ -380,7 +399,7 @@ class _inm_prospecto{
         $identificadores['inm_tipo_discapacidad_id']['columns_ds'] = array('inm_tipo_discapacidad_descripcion');
 
         $identificadores['inm_persona_discapacidad_id']['title'] = 'Persona de Discapacidad';
-        $identificadores['inm_persona_discapacidad_id']['cols'] = 6;
+        $identificadores['inm_persona_discapacidad_id']['cols'] = 12;
         $identificadores['inm_persona_discapacidad_id']['disabled'] = false;
         $identificadores['inm_persona_discapacidad_id']['columns_ds'] = array('inm_persona_discapacidad_descripcion');
 
