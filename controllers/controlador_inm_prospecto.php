@@ -275,6 +275,8 @@ class controlador_inm_prospecto extends _ctl_formato
 
         $init_data['inm_institucion_hipotecaria'] = "gamboamartin\\inmuebles";
         $init_data['inm_producto_infonavit'] = "gamboamartin\\inmuebles";
+        $init_data['adm_estado_civil'] = "gamboamartin\\administrador";
+        $init_data['inm_estado_civil'] = "gamboamartin\\inmuebles";
         $init_data['inm_tipo_credito'] = "gamboamartin\\inmuebles";
         $init_data['inm_attr_tipo_credito'] = "gamboamartin\\inmuebles";
         $init_data['inm_destino_credito'] = "gamboamartin\\inmuebles";
@@ -1248,13 +1250,13 @@ class controlador_inm_prospecto extends _ctl_formato
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 12, key: 'lada_nep',
+        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'lada_nep',
             keys_selects: $keys_selects, place_holder: 'Lada Tel Empresa', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 12, key: 'numero_nep',
+        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'numero_nep',
             keys_selects: $keys_selects, place_holder: 'Numero Tel Empresa', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
@@ -1368,7 +1370,7 @@ class controlador_inm_prospecto extends _ctl_formato
         }
         $keys_selects['telefono_casa']->regex = $this->validacion->patterns['telefono_mx_html'];
 
-        $keys_selects = (new init())->key_select_txt(cols: 12, key: 'correo_empresa',
+        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'correo_empresa',
             keys_selects: $keys_selects, place_holder: 'Correo Empresa', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);

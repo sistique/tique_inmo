@@ -50,6 +50,8 @@
                                                         <?php echo $controlador->inputs->curp; ?>
                                                         <?php echo $controlador->inputs->rfc; ?>
                                                         <?php echo $controlador->inputs->fecha_nacimiento; ?>
+                                                        <?php echo $controlador->inputs->adm_estado_civil_id; ?>
+                                                        <?php echo $controlador->inputs->inm_estado_civil_id; ?>
                                                         <?php echo $controlador->inputs->dp_estado_nacimiento_id; ?>
                                                         <?php echo $controlador->inputs->dp_municipio_nacimiento_id; ?>
                                                         <?php echo $controlador->inputs->inm_nacionalidad_id; ?>
@@ -175,8 +177,8 @@
                                                         <?php echo $controlador->inputs->extension_nep; ?>
                                                         <?php echo $controlador->inputs->inm_sindicato_id; ?>
                                                         <?php echo $controlador->inputs->correo_empresa; ?>
-                                                        <?php echo $controlador->inputs->direccion_empresa; ?>
                                                         <?php echo $controlador->inputs->area_empresa; ?>
+                                                        <?php echo $controlador->inputs->direccion_empresa; ?>
                                                         <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
 
                                                     </div>
