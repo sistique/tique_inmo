@@ -18,7 +18,8 @@
                         </ul>
                     </div>
                     <body onload="javascript:cambiarPestannaGeneral_inicial(pestanasgeneral);
-                    javascript:cambiarPestanna_inicialprospecto(pestanasprospecto);">
+                    javascript:cambiarPestanna_inicialprospecto(pestanasprospecto);
+                    javascript:inicializa_estado_civil();">
                     <div id="contenidopestanasgeneral">
                         <div class="contengeneral" id="cpestanageneral1">
                             <div id="pestanasprospecto">

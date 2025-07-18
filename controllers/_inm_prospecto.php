@@ -420,8 +420,17 @@ class _inm_prospecto{
      * Genera los identificadores para creacion de keys selects
      * @return array
      */
-    private function identificadores_personal(): array
+    private function identificadores_personal(controlador_inm_prospecto $controlador): array
     {
+
+        $con_registros = false;
+        $filtro_tipo_credito = array();
+        if(isset($controlador->row_upd->adm_estado_civil_id) && $controlador->row_upd->adm_estado_civil_id > 0){
+            $con_registros = true;
+            $filtro_tipo_credito['adm_estado_civil.id'] = $controlador->row_upd->adm_estado_civil_id;
+        }
+
+
         $identificadores['inm_sindicato_id']['title'] = 'Sindicato';
         $identificadores['inm_sindicato_id']['cols'] = 12;
         $identificadores['inm_sindicato_id']['disabled'] = false;
@@ -446,6 +455,8 @@ class _inm_prospecto{
         $identificadores['inm_estado_civil_id']['cols'] = 6;
         $identificadores['inm_estado_civil_id']['disabled'] = false;
         $identificadores['inm_estado_civil_id']['columns_ds'] = array('inm_estado_civil_descripcion');
+        $identificadores['inm_estado_civil_id']['con_registro'] = $con_registros;
+        $identificadores['inm_estado_civil_id']['filtro'] = $filtro_tipo_credito;
         return $identificadores;
     }
 
@@ -773,7 +784,7 @@ class _inm_prospecto{
     private function keys_selects_personal(controlador_inm_prospecto $controlador, array $keys_selects): array
     {
 
-        $identificadores = $this->identificadores_personal();
+        $identificadores = $this->identificadores_personal(controlador: $controlador);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar identificadores',data:  $identificadores);
         }

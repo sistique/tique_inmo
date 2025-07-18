@@ -1447,6 +1447,10 @@ class controlador_inm_prospecto extends _ctl_formato
             $this->row_upd->inm_tipo_credito_id = $registro_prospecto['inm_tipo_credito_id'];
         }
 
+        if(!isset($this->row_upd->adm_estado_civil_id)){
+            $this->row_upd->adm_estado_civil_id = $registro_prospecto['adm_estado_civil_id'];
+        }
+
         $data = (new \gamboamartin\inmuebles\controllers\_inm_prospecto())->inputs_base(controlador: $this);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al integrar datos para front', data: $data,

@@ -1011,10 +1011,10 @@ $("#collapse_all").click(function() {
         apartado_3.show();
         apartado_4.show();
         apartado_5.show();
-        apartado_9.show();
         apartado_6.show();
         apartado_7.show();
         apartado_8.show();
+        apartado_9.show();
         apartado_10.show();
         apartado_11.show();
         apartado_12.show();
