@@ -24,7 +24,7 @@ if (!$data) {
 
 try {
     $modelo_checada = new inm_checada(link: $link);
-    
+
     $r_alta_bd = $modelo_checada->alta_registro(registro: $data);
     if (errores::$error) {
         http_response_code(500);
