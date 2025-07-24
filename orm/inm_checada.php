@@ -147,7 +147,7 @@ class inm_checada extends _modelo_parent{
 
     public function marca_inasistencia(): array|stdClass
     {
-        $filtro_politica['inm_status_asistencia.descripcion'] = array('descripcion' => 'INASISTENCIA');
+        $filtro_politica['inm_status_asistencia.descripcion'] = 'INASISTENCIA';
 
         $filtro_rango[date('H:i:s')]['valor1'] = 'inm_politica_asistencia.hora_inicio';
         $filtro_rango[date('H:i:s')]['valor2'] = 'inm_politica_asistencia.hora_fin';
@@ -160,7 +160,7 @@ class inm_checada extends _modelo_parent{
         }
 
         if($r_politica_asistencia->n_registros <= 0){
-            return array();
+            return array('Mensaje'=>'No existe politica de asistencia');
         }
 
         $registros_empleados = (new inm_empleado(link:$this->link))->registros_activos();
@@ -183,7 +183,6 @@ class inm_checada extends _modelo_parent{
 
         $r_altas = array();
         foreach ($registros_empleados as $registro_empleado) {
-
             $filtro_horarios['inm_horario.id'] = $registro_empleado['inm_horario_id'];
             $filtro_horarios['inm_dia_semana.descripcion'] = $dia_semana;
             $filtro_horarios['inm_horario_diario.status'] = 'activo';

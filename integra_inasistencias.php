@@ -12,8 +12,11 @@ use gamboamartin\inmuebles\models\inm_checada;
 $con = new conexion();
 $link = conexion::$link;
 
-$guarda = (new inm_checada(link: $link))->marca_inasistencia();
+$modelo_inm_checada = new inm_checada(link: $link);
+$guarda = $modelo_inm_checada->marca_inasistencia();
 if (errores::$error) {
-    return $this->error->error('Error al guardar archivo', $guarda);
+    return $modelo_inm_checada->error->error('Error al guardar archivo', $guarda);
 }
+
+print_r($guarda);
 exit;
