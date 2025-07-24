@@ -113,10 +113,8 @@ class inm_checada extends _modelo_parent{
         $filtro_rango[date('H:i:s')]['valor2'] = 'inm_politica_asistencia.hora_fin';
         $filtro_rango[date('H:i:s')]['valor_campo'] = true;
 
-        $order = array('inm_politica_asistencia.hora_inicio'=>'DESC');
-
         $r_politica_asistencia = (new inm_politica_asistencia(link:$this->link))->filtro_and(filtro: $filtro_politica,
-            filtro_rango: $filtro_rango, limit: 1, order: $order);
+            filtro_rango: $filtro_rango, limit: 1);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al obtener politicas', data: $r_politica_asistencia);
         }
