@@ -3,8 +3,11 @@
 namespace gamboamartin\inmuebles\models;
 
 use base\orm\_modelo_parent;
+use DateTime;
 use gamboamartin\errores\errores;
+use IntlDateFormatter;
 use PDO;
+use stdClass;
 
 
 class inm_checada extends _modelo_parent{
@@ -100,5 +103,93 @@ class inm_checada extends _modelo_parent{
         }
 
         return $r_alta_bd;
+    }
+
+    public function marca_inasistencia(): array|stdClass
+    {
+        $filtro_politica['inm_status_asistencia.descripcion'] = array('descripcion' => 'INASISTENCIA');
+
+        $filtro_rango[date('H:i:s')]['valor1'] = 'inm_politica_asistencia.hora_inicio';
+        $filtro_rango[date('H:i:s')]['valor2'] = 'inm_politica_asistencia.hora_fin';
+        $filtro_rango[date('H:i:s')]['valor_campo'] = true;
+
+        $order = array('inm_politica_asistencia.hora_inicio'=>'DESC');
+
+        $r_politica_asistencia = (new inm_politica_asistencia(link:$this->link))->filtro_and(filtro: $filtro_politica,
+            filtro_rango: $filtro_rango, limit: 1, order: $order);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener politicas', data: $r_politica_asistencia);
+        }
+
+        if($r_politica_asistencia->n_registros <= 0){
+            return array();
+        }
+
+        $registros_empleados = (new inm_empleado(link:$this->link))->registros_activos();
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al insertar checada', data: $registros_empleados);
+        }
+
+        $r_altas = array();
+        foreach ($registros_empleados as $registro_empleado) {
+            $fecha = date('Y-m-d');
+
+            $fmt = new IntlDateFormatter(
+                'es_MX',
+                IntlDateFormatter::FULL,
+                IntlDateFormatter::NONE,
+                null,
+                null,
+                'EEEE'
+            );
+
+            $dia_semana = mb_strtoupper($fmt->format(new DateTime($fecha)), 'UTF-8');
+
+            $filtro_horarios['inm_horario.id'] = $registro_empleado['inm_horario_id'];
+            $filtro_horarios['inm_dia_semana.descripcion'] = $dia_semana;
+            $filtro_horarios['inm_horario_diario.status'] = 'activo';
+            $r_horarios = (new inm_horario_diario(link:$this->link))->filtro_and(filtro: $filtro_horarios);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al insertar checada', data: $r_horarios);
+            }
+
+            if($r_horarios->n_registros > 0){
+                $filtro['inm_checada.fecha'] = $fecha;
+                $filtro['inm_empleado.id'] = $registro_empleado['inm_empleado_id'];
+                $r_checada = $this->filtro_and(filtro: $filtro);
+                if (errores::$error) {
+                    return $this->error->error(mensaje: 'Error al insertar checada', data: $r_checada);
+                }
+
+                if($r_checada->n_registros <= 0) {
+                    $status = (new inm_status_asistencia(link:$this->link))->filtro_and(filtro:['descripcion' => 'INASISTENCIA']);
+                    if (errores::$error) {
+                        return $this->error->error(mensaje: 'Error al insertar checada', data: $status);
+                    }
+
+                    $tipo = (new inm_tipo_checada(link:$this->link))->filtro_and(filtro: ['descripcion' => 'ENTRADA']);
+                    if (errores::$error) {
+                        return $this->error->error(mensaje: 'Error al insertar checada', data: $tipo);
+                    }
+
+                    $registro = array(
+                        'inm_empleado_id' => $registro_empleado['inm_empleado_id'],
+                        'fecha' => $fecha,
+                        'hora' => date('H:i:s'),
+                        'inm_status_asistencia_id' => $status->registros[0]['inm_status_asistencia_id'],
+                        'inm_tipo_checada_id' => $tipo->registros[0]['inm_tipo_checada_id']
+                    );
+
+                    $r_alta_bd = $this->alta_registro(registro: $registro);
+                    if (errores::$error) {
+                        return $this->error->error(mensaje: 'Error al insertar checada', data: $r_alta_bd);
+                    }
+
+                    $r_altas[] = $r_alta_bd;
+                }
+            }
+        }
+
+        return $r_altas;
     }
 }
