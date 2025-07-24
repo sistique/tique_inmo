@@ -49,6 +49,46 @@ class inm_checada extends _modelo_parent{
             $this->registro['inm_tipo_checada_id'] = 1;
         }
 
+        if (!isset($this->registro['minutos_retraso'])) {
+            $this->registro['minutos_retraso'] = 0;
+
+            $registro_empleado = (new inm_empleado(link: $this->link))->registro(
+                registro_id: $this->registro['inm_empleado_id']);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al insertar checada', data: $registro_empleado);
+            }
+
+            $fmt = new IntlDateFormatter(
+                'es_MX',
+                IntlDateFormatter::FULL,
+                IntlDateFormatter::NONE,
+                null,
+                null,
+                'EEEE'
+            );
+
+            $dia_semana = mb_strtoupper($fmt->format(new DateTime($this->registro['fecha'])), 'UTF-8');
+
+            $filtro_horarios['inm_horario.id'] = $registro_empleado['inm_horario_id'];
+            $filtro_horarios['inm_dia_semana.descripcion'] = $dia_semana;
+            $filtro_horarios['inm_horario_diario.status'] = 'activo';
+            $r_horarios = (new inm_horario_diario(link:$this->link))->filtro_and(filtro: $filtro_horarios);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al insertar checada', data: $r_horarios);
+            }
+
+            if($r_horarios->n_registros > 0) {
+                $hora_entrada = new DateTime($r_horarios->registros[0]['inm_horario_diario_hora_entrada']);
+                $hora_actual = new DateTime($this->registro['hora']);
+
+                if($hora_actual > $hora_entrada) {
+                    $diferencia = $hora_entrada->diff($hora_actual);
+                    $minutos_retraso = ($diferencia->h * 60) + $diferencia->i;
+                    $this->registro['minutos_retraso'] = $minutos_retraso;
+                }
+            }
+        }
+
         if (!isset($this->registro['inm_status_asistencia_id'])) {
             if($this->registro['inm_tipo_checada_id'] === 1){
                 $filtro_rango[$this->registro['hora']]['valor1'] = 'inm_politica_asistencia.hora_inicio';
