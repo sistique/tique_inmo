@@ -168,20 +168,21 @@ class inm_checada extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al insertar checada', data: $registros_empleados);
         }
 
+        $fecha = date('Y-m-d');
+
+        $fmt = new IntlDateFormatter(
+            'es_MX',
+            IntlDateFormatter::FULL,
+            IntlDateFormatter::NONE,
+            null,
+            null,
+            'EEEE'
+        );
+
+        $dia_semana = mb_strtoupper($fmt->format(new DateTime($fecha)), 'UTF-8');
+
         $r_altas = array();
         foreach ($registros_empleados as $registro_empleado) {
-            $fecha = date('Y-m-d');
-
-            $fmt = new IntlDateFormatter(
-                'es_MX',
-                IntlDateFormatter::FULL,
-                IntlDateFormatter::NONE,
-                null,
-                null,
-                'EEEE'
-            );
-
-            $dia_semana = mb_strtoupper($fmt->format(new DateTime($fecha)), 'UTF-8');
 
             $filtro_horarios['inm_horario.id'] = $registro_empleado['inm_horario_id'];
             $filtro_horarios['inm_dia_semana.descripcion'] = $dia_semana;
@@ -199,32 +200,66 @@ class inm_checada extends _modelo_parent{
                     return $this->error->error(mensaje: 'Error al insertar checada', data: $r_checada);
                 }
 
-                if($r_checada->n_registros <= 0) {
-                    $status = (new inm_status_asistencia(link:$this->link))->filtro_and(filtro:['descripcion' => 'INASISTENCIA']);
+                if ($r_checada->n_registros > 0) {
+                    continue;
+                }
+
+                $filtro_excepcion = [
+                    'inm_excepcion_asistencia.inm_empleado_id' => $registro_empleado['inm_empleado_id'],
+                    'inm_excepcion_asistencia.status' => 'activo'
+                ];
+
+                $filtro_rango_excep[$fecha]['valor1'] = 'inm_excepcion_asistencia.fecha_inicio';
+                $filtro_rango_excep[$fecha]['valor2'] = 'inm_excepcion_asistencia.fecha_fin';
+                $filtro_rango_excep[$fecha]['valor_campo'] = true;
+
+                $r_excepcion = (new inm_excepcion_asistencia(link:$this->link))->filtro_and(filtro: $filtro_excepcion,
+                    filtro_rango: $filtro_rango_excep);
+                if (errores::$error) {
+                    return $this->error->error(mensaje: 'Error al verificar excepciones', data: $r_excepcion);
+                }
+
+                $tipo = (new inm_tipo_checada(link:$this->link))->filtro_and(filtro: ['descripcion' => 'ENTRADA']);
+                if (errores::$error) {
+                    return $this->error->error(mensaje: 'Error al obtener tipo checada', data: $tipo);
+                }
+
+                if ($r_excepcion->n_registros > 0) {
+                    $status = (new inm_status_asistencia(link:$this->link))->filtro_and(filtro: ['descripcion' => 'EN TIEMPO']);
                     if (errores::$error) {
-                        return $this->error->error(mensaje: 'Error al insertar checada', data: $status);
+                        return $this->error->error(mensaje: 'Error al obtener status asistencia EN TIEMPO', data: $status);
                     }
 
-                    $tipo = (new inm_tipo_checada(link:$this->link))->filtro_and(filtro: ['descripcion' => 'ENTRADA']);
+                    $registro = [
+                        'inm_empleado_id' => $registro_empleado['inm_empleado_id'],
+                        'fecha' => $fecha,
+                        'hora' => '09:00:00',
+                        'inm_status_asistencia_id' => $status->registros[0]['inm_status_asistencia_id'],
+                        'inm_tipo_checada_id' => $tipo->registros[0]['inm_tipo_checada_id'],
+                        'observaciones' => 'Checada generada por excepción de asistencia'
+                    ];
+                } else {
+                    $status = (new inm_status_asistencia(link:$this->link))->filtro_and(filtro: ['descripcion' => 'INASISTENCIA']);
                     if (errores::$error) {
-                        return $this->error->error(mensaje: 'Error al insertar checada', data: $tipo);
+                        return $this->error->error(mensaje: 'Error al obtener status asistencia INASISTENCIA', data: $status);
                     }
 
-                    $registro = array(
+                    $registro = [
                         'inm_empleado_id' => $registro_empleado['inm_empleado_id'],
                         'fecha' => $fecha,
                         'hora' => date('H:i:s'),
                         'inm_status_asistencia_id' => $status->registros[0]['inm_status_asistencia_id'],
-                        'inm_tipo_checada_id' => $tipo->registros[0]['inm_tipo_checada_id']
-                    );
-
-                    $r_alta_bd = $this->alta_registro(registro: $registro);
-                    if (errores::$error) {
-                        return $this->error->error(mensaje: 'Error al insertar checada', data: $r_alta_bd);
-                    }
-
-                    $r_altas[] = $r_alta_bd;
+                        'inm_tipo_checada_id' => $tipo->registros[0]['inm_tipo_checada_id'],
+                        'observaciones' => 'Checada generada automáticamente por inasistencia'
+                    ];
                 }
+
+                $r_alta_bd = $this->alta_registro(registro: $registro);
+                if (errores::$error) {
+                    return $this->error->error(mensaje: 'Error al insertar checada', data: $r_alta_bd);
+                }
+
+                $r_altas[] = $r_alta_bd;
             }
         }
 
