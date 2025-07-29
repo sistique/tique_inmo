@@ -9,7 +9,6 @@ use base\conexion;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\models\inm_checada;
 
-echo json_encode(["error" => "Error"]); exit;
 header("Content-Type: application/json");
 
 $con = new conexion();
