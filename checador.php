@@ -1,8 +1,14 @@
-<?php
+<?
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 header("Content-Type: application/json");
+
+// Responder OPTIONS para preflight
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    http_response_code(204);
+    exit;
+}
 
 require "init.php";
 require 'vendor/autoload.php';
@@ -31,10 +37,11 @@ try {
     if (errores::$error) {
         http_response_code(500);
         echo json_encode(["error" => $r_alta_bd]);
+        exit;
     }
     echo json_encode(["status" => $r_alta_bd]);
 
 } catch (PDOException $e) {
     http_response_code(500);
-    echo json_encode(["error" => $e]);
+    echo json_encode(["error" => $e->getMessage()]);
 }
