@@ -49,7 +49,6 @@ class inm_checada extends _modelo_parent{
             $this->registro['inm_tipo_checada_id'] = 1;
         }
 
-        return $this->registro;
         if (!isset($this->registro['minutos_retraso'])) {
             $this->registro['minutos_retraso'] = 0;
 
@@ -92,14 +91,14 @@ class inm_checada extends _modelo_parent{
 
         if (!isset($this->registro['inm_status_asistencia_id'])) {
             if($this->registro['inm_tipo_checada_id'] === 1){
-                $filtro_rango[$this->registro['hora']]['valor1'] = 'inm_politica_asistencia.hora_inicio';
-                $filtro_rango[$this->registro['hora']]['valor2'] = 'inm_politica_asistencia.hora_fin';
-                $filtro_rango[$this->registro['hora']]['valor_campo'] = true;
+                $filtro_rango_poli[$this->registro['hora']]['valor1'] = 'inm_politica_asistencia.hora_inicio';
+                $filtro_rango_poli[$this->registro['hora']]['valor2'] = 'inm_politica_asistencia.hora_fin';
+                $filtro_rango_poli[$this->registro['hora']]['valor_campo'] = true;
 
                 $order = array('inm_politica_asistencia.hora_inicio'=>'DESC');
 
                 $r_politica_asistencia = (new inm_politica_asistencia(link:$this->link))->filtro_and(
-                    filtro_rango: $filtro_rango, limit: 1, order: $order);
+                    filtro_rango: $filtro_rango_poli, limit: 1, order: $order);
                 if (errores::$error) {
                     return $this->error->error(mensaje: 'Error al obtener politicas', data: $r_politica_asistencia);
                 }
@@ -117,14 +116,14 @@ class inm_checada extends _modelo_parent{
         }
 
         if (!isset($this->registro['inm_periodo_asistencia_id'])) {
-            $filtro_rango[$this->registro['fecha']]['valor1'] = 'inm_periodo_asistencia.fecha_inicio';
-            $filtro_rango[$this->registro['fecha']]['valor2'] = 'inm_periodo_asistencia.fecha_fin';
-            $filtro_rango[$this->registro['fecha']]['valor_campo'] = true;
+            $filtro_rango_peri[$this->registro['fecha']]['valor1'] = 'inm_periodo_asistencia.fecha_inicio';
+            $filtro_rango_peri[$this->registro['fecha']]['valor2'] = 'inm_periodo_asistencia.fecha_fin';
+            $filtro_rango_peri[$this->registro['fecha']]['valor_campo'] = true;
 
             $order = array('inm_periodo_asistencia.fecha_inicio'=>'DESC');
 
             $r_periodo_asistencia = (new inm_periodo_asistencia(link:$this->link))->filtro_and(
-                filtro_rango: $filtro_rango, limit: 1, order: $order);
+                filtro_rango: $filtro_rango_peri, limit: 1, order: $order);
             if (errores::$error) {
                 return $this->error->error(mensaje: 'Error al obtener periodos', data: $r_periodo_asistencia);
             }
