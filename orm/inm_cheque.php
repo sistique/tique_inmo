@@ -162,4 +162,21 @@ class inm_cheque extends _modelo_parent{
         return $r_modifica_bd;
     }
 
+    final public function data_pdf(int $registro_id): array|stdClass
+    {
+        if($registro_id<=0){
+            return $this->error->error(mensaje: 'Error al registro_id debe ser mayor a 0',
+                data: $registro_id);
+        }
+        $inm_cheque = $this->registro(registro_id: $registro_id);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener cheque', data: $inm_cheque);
+        }
+
+
+        $data = new stdClass();
+        $data->inm_cheque = $inm_cheque;
+
+        return $data;
+    }
 }
