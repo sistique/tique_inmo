@@ -24,15 +24,15 @@ if (!$data) {
 }
 
 try {
-    /*$modelo_checada = new inm_checada(link: $link);
+    $modelo_checada = new inm_checada(link: $link);
 
     $r_alta_bd = $modelo_checada->alta_registro(registro: $data);
     if (errores::$error) {
         http_response_code(500);
         echo json_encode(["error" => $r_alta_bd]);
-    }*/
+    }
 
-    echo json_encode(["status" => "ok"]);
+    echo json_encode(["status" => $r_alta_bd]);
 
 } catch (PDOException $e) {
     http_response_code(500);
