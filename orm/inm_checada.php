@@ -33,8 +33,13 @@ class inm_checada extends _modelo_parent{
     public function alta_bd(array $keys_integra_ds = array('codigo', 'descripcion')): array|stdClass
     {
 
+        if (!isset($this->registro['inm_tipo_checada_id'])) {
+            $this->registro['inm_tipo_checada_id'] = 1;
+        }
+        
         $filtro_validacion['inm_checada.fecha'] = $this->registro['fecha'];
         $filtro_validacion['inm_empleado.id'] = $this->registro['inm_empleado_id'];
+        $filtro_validacion['inm_tipo_checada.id'] = $this->registro['inm_tipo_checada_id'];
         $r_checada = $this->filtro_and(filtro: $filtro_validacion);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al insertar checada', data: $r_checada);
@@ -57,9 +62,6 @@ class inm_checada extends _modelo_parent{
             $this->registro['codigo'] = $descripcion;
         }
 
-        if (!isset($this->registro['inm_tipo_checada_id'])) {
-            $this->registro['inm_tipo_checada_id'] = 1;
-        }
 
         if (!isset($this->registro['minutos_retraso'])) {
             $this->registro['minutos_retraso'] = 0;
