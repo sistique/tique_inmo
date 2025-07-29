@@ -14,7 +14,6 @@ header("Content-Type: application/json");
 $con = new conexion();
 $link = conexion::$link;
 
-
 $data = json_decode(file_get_contents("php://input"), true);
 
 if (!$data) {
@@ -31,12 +30,9 @@ try {
         http_response_code(500);
         echo json_encode(["error" => $r_alta_bd]);
     }
-
     echo json_encode(["status" => $r_alta_bd]);
 
 } catch (PDOException $e) {
     http_response_code(500);
-    echo json_encode(["error" => "Error"]);
-
-    //echo json_encode(["error" => $e->getMessage()]);
+    echo json_encode(["error" => $e]);
 }
