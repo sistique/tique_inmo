@@ -1,13 +1,16 @@
 <?php
 
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
+header("Content-Type: application/json");
+
 require "init.php";
 require 'vendor/autoload.php';
 
 use base\conexion;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\models\inm_empleado;
-
-header("Content-Type: application/json");
 
 $con = new conexion();
 $link = conexion::$link;
