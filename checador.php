@@ -9,10 +9,12 @@ use base\conexion;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\models\inm_checada;
 
+echo json_encode(["error" => "Error"]); exit;
 header("Content-Type: application/json");
 
 $con = new conexion();
 $link = conexion::$link;
+
 
 $data = json_decode(file_get_contents("php://input"), true);
 
@@ -23,17 +25,19 @@ if (!$data) {
 }
 
 try {
-    $modelo_checada = new inm_checada(link: $link);
+    /*$modelo_checada = new inm_checada(link: $link);
 
     $r_alta_bd = $modelo_checada->alta_registro(registro: $data);
     if (errores::$error) {
         http_response_code(500);
         echo json_encode(["error" => $r_alta_bd]);
-    }
+    }*/
 
     echo json_encode(["status" => "ok"]);
 
 } catch (PDOException $e) {
     http_response_code(500);
-    echo json_encode(["error" => $e->getMessage()]);
+    echo json_encode(["error" => "Error"]);
+
+    //echo json_encode(["error" => $e->getMessage()]);
 }
