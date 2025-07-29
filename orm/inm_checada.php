@@ -30,8 +30,20 @@ class inm_checada extends _modelo_parent{
     }
 
 
-    public function alta_bd(array $keys_integra_ds = array('codigo', 'descripcion')): array|\stdClass
+    public function alta_bd(array $keys_integra_ds = array('codigo', 'descripcion')): array|stdClass
     {
+
+        $filtro_validacion['inm_checada.fecha'] = $this->registro['fecha'];
+        $filtro_validacion['inm_empleado.id'] = $this->registro['inm_empleado_id'];
+        $r_checada = $this->filtro_and(filtro: $filtro_validacion);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al insertar checada', data: $r_checada);
+        }
+
+        if ($r_checada->n_registros > 0) {
+            return array('mensaje'=>'Checada ya registrada');
+        }
+
         if (!isset($this->registro['descripcion'])) {
             $descripcion = $this->registro['inm_empleado_id'];
             $descripcion .= ' ' . $this->registro['fecha'];
