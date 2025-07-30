@@ -973,6 +973,15 @@ class controlador_inm_ubicacion extends _ctl_base {
                     ws:  $ws);
             }
             $inm_cheque['elimina_bd'] = $button;
+            
+            $button = $this->html->button_href(accion: 'solicitud_gasto', etiqueta: 'Solicitud de Gasto',
+                registro_id: $inm_cheque['inm_cheque_id'], seccion: 'inm_cheque', style: 'info',
+                params: $params);
+            if(errores::$error){
+                return $this->retorno_error(mensaje: 'Error al integrar button',data:  $button,header: $header,
+                    ws:  $ws);
+            }
+            $inm_cheque['solicitud_gasto'] = $button;
 
             $filtro_rel_doc_che['inm_cheque.id'] = $inm_cheque['inm_cheque_id'];
             $r_rel_doc_cheque = (new inm_rel_doc_cheque(link: $this->link))->filtro_and(filtro: $filtro_rel_doc_che);
@@ -1393,6 +1402,15 @@ class controlador_inm_ubicacion extends _ctl_base {
                     ws:  $ws);
             }
             $inm_cheque['elimina_bd'] = $button;
+
+            $button = $this->html->button_href(accion: 'solicitud_gasto', etiqueta: 'Solicitud de Gasto',
+                registro_id: $inm_cheque['inm_cheque_id'], seccion: 'inm_cheque', style: 'info  ',
+                params: $params);
+            if(errores::$error){
+                return $this->retorno_error(mensaje: 'Error al integrar button',data:  $button,header: $header,
+                    ws:  $ws);
+            }
+            $inm_cheque['solicitud_gasto'] = $button;
 
             $check = "<input type='checkbox'  class='checkbox_reg' 
                         data-movimiento = 'cheque'

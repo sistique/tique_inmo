@@ -612,6 +612,7 @@ class _pdf{
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al agregar template', data: $pdf);
         }
+
         $pdf->SetFont('Arial', 'B', 15);
         $pdf->SetTextColor(0, 0, 0);
 

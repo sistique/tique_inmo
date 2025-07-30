@@ -494,7 +494,8 @@
                                                         <th>Monto</th>
                                                         <th>Cuenta Bancaria</th>
                                                         <th>Fecha</th>
-                                                        <th>Acciones</th>
+                                                        <th>Solicitud de Gasto</th>
+                                                        <th>Elimina</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
@@ -511,6 +512,7 @@
                                                             <td><?php echo $cheque['inm_cheque_monto'] ?></td>
                                                             <td><?php echo $cheque['bn_cuenta_descripcion'] ?></td>
                                                             <td><?php echo $cheque['inm_cheque_fecha_alta'] ?></td>
+                                                            <td><?php echo $cheque['solicitud_gasto'] ?></td>
                                                             <td><?php echo $cheque['elimina_bd'] ?></td>
                                                         </tr>
                                                     <?php } ?>
