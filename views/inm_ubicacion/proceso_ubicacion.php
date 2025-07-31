@@ -529,6 +529,7 @@
                                                             <td><?php echo $transferencia['inm_transferencia_monto'] ?></td>
                                                             <td><?php echo $transferencia['bn_cuenta_descripcion'] ?></td>
                                                             <td><?php echo $transferencia['inm_transferencia_fecha_alta'] ?></td>
+                                                            <td><?php echo $transferencia['solicitud_gasto'] ?></td>
                                                             <td><?php echo $transferencia['elimina_bd'] ?></td>
                                                         </tr>
                                                     <?php } ?>
@@ -545,6 +546,7 @@
                                                             <td><?php echo $efectivo['inm_efectivo_monto'] ?></td>
                                                             <td></td>
                                                             <td><?php echo $efectivo['inm_efectivo_fecha_alta'] ?></td>
+                                                            <td><?php echo $efectivo['solicitud_gasto'] ?></td>
                                                             <td><?php echo $efectivo['elimina_bd'] ?></td>
                                                         </tr>
                                                     <?php } ?>

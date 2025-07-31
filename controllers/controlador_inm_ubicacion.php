@@ -1531,6 +1531,15 @@ class controlador_inm_ubicacion extends _ctl_base {
             }
             $inm_transferencia['elimina_bd'] = $button;
 
+            $button = $this->html->button_href(accion: 'solicitud_gasto', etiqueta: 'Solicitud de Gasto',
+                registro_id: $inm_transferencia['inm_transferencia_id'], seccion: 'inm_transferencia', style: 'info  ',
+                params: $params);
+            if(errores::$error){
+                return $this->retorno_error(mensaje: 'Error al integrar button',data:  $button,header: $header,
+                    ws:  $ws);
+            }
+            $inm_transferencia['solicitud_gasto'] = $button;
+
             $check = "<input type='checkbox'  class='checkbox_reg' 
                         data-movimiento = 'transferencia'
                         data-nombre_beneficiario = '$inm_transferencia[inm_transferencia_nombre_beneficiario]'
@@ -1648,6 +1657,15 @@ class controlador_inm_ubicacion extends _ctl_base {
                     ws:  $ws);
             }
             $inm_efectivo['elimina_bd'] = $button;
+
+            $button = $this->html->button_href(accion: 'solicitud_gasto', etiqueta: 'Solicitud de Gasto',
+                registro_id: $inm_efectivo['inm_efectivo_id'], seccion: 'inm_efectivo', style: 'info  ',
+                params: $params);
+            if(errores::$error){
+                return $this->retorno_error(mensaje: 'Error al integrar button',data:  $button,header: $header,
+                    ws:  $ws);
+            }
+            $inm_efectivo['solicitud_gasto'] = $button;
 
             $check = "<input type='checkbox' class='checkbox_reg'
                         data-movimiento = 'efectivo'

@@ -204,6 +204,9 @@ class _pdf{
     
     private function apartado_gasto_1(stdClass $data, modelo $modelo): Fpdi|array
     {
+        $texto = '$' . number_format($data->inm_cheque['inm_cheque_monto'], 2,
+                '.', ',');
+
         $this->pdf->SetFont('Arial', '', 10);
 
         $this->pdf->SetXY(75.5,46.5);
@@ -215,6 +218,7 @@ class _pdf{
         $this->pdf->SetXY(195.5,46.5);
         $this->pdf->MultiCell(9.5,5.5, "X",0,'C');
 
+        $this->pdf->SetFont('Arial', '', 9);
         $this->pdf->SetXY(44.5,52.5);
         $this->pdf->MultiCell(38,5,  date("d-m-Y"),0,'C');
 
@@ -224,9 +228,7 @@ class _pdf{
             0,'C');
 
         $this->pdf->SetXY(44.5, 63.5);
-        $this->pdf->MultiCell(38,5,
-            mb_convert_encoding((string)$data->inm_cheque['inm_cheque_monto'], 'ISO-8859-1', 'UTF-8'),
-            0,'C');
+        $this->pdf->MultiCell(38,5, $texto,0,'C');
 
         $this->pdf->SetXY(44.5, 70);
         $this->pdf->MultiCell(160.5,5,
@@ -248,9 +250,7 @@ class _pdf{
         $this->pdf->MultiCell(21, 4.5,"1", 0,'C');
 
         $this->pdf->SetXY(103.5, 94);
-        $this->pdf->MultiCell(37.5, 4.5,
-            mb_convert_encoding((string)$data->inm_cheque['inm_cheque_monto'], 'ISO-8859-1', 'UTF-8'),
-            0,'C');
+        $this->pdf->MultiCell(37.5, 4.5,$texto,0,'C');
 
         $this->pdf->SetXY(141, 94);
         $this->pdf->MultiCell(63.5, 4.5,
@@ -258,9 +258,7 @@ class _pdf{
             0,'C');
 
         $this->pdf->SetXY(103.5, 127.1);
-        $this->pdf->MultiCell(37.5, 4.5,
-            mb_convert_encoding((string)$data->inm_cheque['inm_cheque_monto'], 'ISO-8859-1', 'UTF-8'),
-            0,'C');
+        $this->pdf->MultiCell(37.5, 4.5, $texto,0,'C');
 
         $this->pdf->SetFont('Arial', '', 8.5);
 

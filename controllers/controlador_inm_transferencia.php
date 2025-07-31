@@ -14,6 +14,7 @@ use gamboamartin\inmuebles\models\inm_transferencia;
 use gamboamartin\system\links_menu;
 use gamboamartin\template\html;
 use PDO;
+use setasign\Fpdi\Fpdi;
 use stdClass;
 
 class controlador_inm_transferencia extends _ctl_formato {
@@ -90,5 +91,17 @@ class controlador_inm_transferencia extends _ctl_formato {
         return $datatables;
     }
 
+    public function solicitud_gasto(bool $header, bool $ws = false){
+        $pdf = new Fpdi();
+        $_pdf = new _pdf(pdf: $pdf);
+
+        $pdf_exe = $_pdf->solicitud_gasto(registro_id: $this->registro_id,path_base:  $this->path_base,
+            modelo:  $this->modelo);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf_exe, header: $header, ws: $ws);
+        }
+
+        exit;
+    }
 
 }
