@@ -207,63 +207,68 @@ class _pdf{
         $this->pdf->SetFont('Arial', '', 10);
 
         $this->pdf->SetXY(75.5,46.5);
-        $this->pdf->MultiCell(7,5.5, "X",1,'C');
+        $this->pdf->MultiCell(7,5.5, "X",0,'C');
 
         $this->pdf->SetXY(134,46.5);
-        $this->pdf->MultiCell(7,5.5, "X",1,'C');
+        $this->pdf->MultiCell(7,5.5, "X",0,'C');
 
         $this->pdf->SetXY(195.5,46.5);
-        $this->pdf->MultiCell(9.5,5.5, "X",1,'C');
+        $this->pdf->MultiCell(9.5,5.5, "X",0,'C');
 
         $this->pdf->SetXY(44.5,52.5);
-        $this->pdf->MultiCell(38,5,  date("d-m-Y"),1,'C');
+        $this->pdf->MultiCell(38,5,  date("d-m-Y"),0,'C');
 
         $this->pdf->SetXY(44.5,58);
         $this->pdf->MultiCell(160.5,5,
             mb_convert_encoding((string)$data->inm_cheque['inm_cheque_nombre_beneficiario'], 'ISO-8859-1', 'UTF-8'),
-            1,'C');
+            0,'C');
 
         $this->pdf->SetXY(44.5, 63.5);
         $this->pdf->MultiCell(38,5,
             mb_convert_encoding((string)$data->inm_cheque['inm_cheque_monto'], 'ISO-8859-1', 'UTF-8'),
-            1,'C');
+            0,'C');
 
         $this->pdf->SetXY(44.5, 70);
         $this->pdf->MultiCell(160.5,5,
             mb_convert_encoding((string)$data->inm_cheque['inm_tipo_cheque_descripcion']." - ".
                 (string)$data->inm_cheque['inm_cheque_numero_cheque'], 'ISO-8859-1', 'UTF-8'),
-            1,'C');
+            0,'C');
 
         $this->pdf->SetXY(164.7,79);
-        $this->pdf->MultiCell(40,5, "COMERCIAL",1,'C');
+        $this->pdf->MultiCell(40,5, "COMERCIAL",0,'C');
 
         $this->pdf->SetFont('Arial', '', 7);
 
         $this->pdf->SetXY(11, 94);
         $this->pdf->MultiCell(71.5, 4.5,
             mb_convert_encoding((string)$data->inm_cheque['inm_ubicacion_ubicacion'], 'ISO-8859-1', 'UTF-8'),
-            1,'L');
+            0,'L');
 
         $this->pdf->SetXY(82.5, 94);
-        $this->pdf->MultiCell(21, 4.5,"1", 1,'C');
+        $this->pdf->MultiCell(21, 4.5,"1", 0,'C');
 
         $this->pdf->SetXY(103.5, 94);
         $this->pdf->MultiCell(37.5, 4.5,
             mb_convert_encoding((string)$data->inm_cheque['inm_cheque_monto'], 'ISO-8859-1', 'UTF-8'),
-            1,'C');
+            0,'C');
+
+        $this->pdf->SetXY(141, 94);
+        $this->pdf->MultiCell(63.5, 4.5,
+            mb_convert_encoding((string)$data->inm_cheque['bn_cuenta_descripcion'], 'ISO-8859-1', 'UTF-8'),
+            0,'C');
 
         $this->pdf->SetXY(103.5, 127.1);
         $this->pdf->MultiCell(37.5, 4.5,
             mb_convert_encoding((string)$data->inm_cheque['inm_cheque_monto'], 'ISO-8859-1', 'UTF-8'),
-            1,'C');
+            0,'C');
 
         $this->pdf->SetFont('Arial', '', 8.5);
 
         $this->pdf->SetXY(34.5, 154);
-        $this->pdf->MultiCell(50.5,5, "ERIKA CRUZ", 1,'C');
+        $this->pdf->MultiCell(50.5,5, "ERIKA CRUZ", 0,'C');
 
         $this->pdf->SetXY(132.5, 154);
-        $this->pdf->MultiCell(50.5,5, "MAURICIO HERNANDEZ", 1,'C');
+        $this->pdf->MultiCell(50.5,5, "MAURICIO HERNANDEZ", 0,'C');
 
         /*$pdf_exe = $this->write(valor: $data->inm_cheque['inm_cheque_monto'], x: , y: 97);
         if (errores::$error) {
