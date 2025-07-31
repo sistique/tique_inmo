@@ -204,126 +204,73 @@ class _pdf{
     
     private function apartado_gasto_1(stdClass $data, modelo $modelo): Fpdi|array
     {
-        $valida = (new valida())->valida_existencia_keys(keys: array('inm_comprador'), registro: $data);
-        if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al validar datos', data: $valida);
-        }
-        if (!is_array($data->inm_comprador)) {
-            return $this->error->error(mensaje: 'Error $data->inm_comprador no es un array', data: $data);
-        }
+        $this->pdf->SetFont('Arial', '', 10);
 
-        $this->pdf->SetFont('Arial', 'B', 10);
+        $this->pdf->SetXY(75.5,46.5);
+        $this->pdf->MultiCell(7,5.5, "X",1,'C');
 
-        $pdf = array();
+        $this->pdf->SetXY(134,46.5);
+        $this->pdf->MultiCell(7,5.5, "X",1,'C');
 
-        $keys_cliente = array();
-        $keys_cliente[1] = array('x' => 75.4, 'y' => 38);
-        $keys_cliente[3] = array('x' => 103.7, 'y' => 38);
-        $keys_cliente[4] = array('x' => 152.8, 'y' => 38);
-        $keys_cliente[5] = array('x' => 192.4, 'yX' => 38);
-        $keys_cliente[6] = array('x' => 75.5, 'y' => 38);
-        $keys_cliente[7] = array('x' => 152.8, 'y' => 38);
+        $this->pdf->SetXY(195.5,46.5);
+        $this->pdf->MultiCell(9.5,5.5, "X",1,'C');
 
-        foreach ($keys_cliente as $key => $valor) {
-            if ((int)$key === (int)$data->inm_comprador['inm_destino_credito_id']) {
-                $pdf[] = $this->write(valor: 'X', x: $valor['x'], y: $valor['y']);
-                if (errores::$error) {
-                    return $this->error->error(mensaje: 'Error al escribir en pdf', data: $pdf);
-                }
-            }
-        }
+        $this->pdf->SetXY(44.5,52.5);
+        $this->pdf->MultiCell(38,5,  date("d-m-Y"),1,'C');
 
-        $keys_comprador['inm_comprador_nss'] = array('x' => 90, 'y' => 52);
-        $keys_comprador['inm_comprador_apellido_paterno'] = array('x' => 17, 'y' => 58);
-        $keys_comprador['inm_comprador_apellido_materno'] = array('x' => 17, 'y' => 64);
-        $keys_comprador['inm_comprador_nombre'] = array('x' => 17, 'y' => 69.5);
-        $keys_comprador['inm_comprador_lada_com'] = array('x' => 125, 'y' => 90);
-        $keys_comprador['inm_comprador_numero_com'] = array('x' => 138, 'y' => 90);
-        foreach ($keys_comprador as $key => $valor) {
-            $pdf[] = $this->write(valor: $data->inm_comprador[$key], x: $valor['x'], y: $valor['y']);
-            if (errores::$error) {
-                return $this->error->error(mensaje: 'Error al escribir en pdf', data: $pdf);
-            }
-        }
+        $this->pdf->SetXY(44.5,58);
+        $this->pdf->MultiCell(160.5,5,
+            mb_convert_encoding((string)$data->inm_cheque['inm_cheque_nombre_beneficiario'], 'ISO-8859-1', 'UTF-8'),
+            1,'C');
 
-        $domicilio = $this->domicilio(data: $data);
-        if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al obtener domicilio', data: $domicilio);
-        }
+        $this->pdf->SetXY(44.5, 63.5);
+        $this->pdf->MultiCell(38,5,
+            mb_convert_encoding((string)$data->inm_cheque['inm_cheque_monto'], 'ISO-8859-1', 'UTF-8'),
+            1,'C');
 
-        $pdf_exe = $this->write(valor: $domicilio, x: 17, y: 78.5);
-        if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al escribir domicilio', data: $pdf_exe);
-        }
+        $this->pdf->SetXY(44.5, 70);
+        $this->pdf->MultiCell(160.5,5,
+            mb_convert_encoding((string)$data->inm_cheque['inm_tipo_cheque_descripcion']." - ".
+                (string)$data->inm_cheque['inm_cheque_numero_cheque'], 'ISO-8859-1', 'UTF-8'),
+            1,'C');
 
-        $pdf_exe = $this->write(valor: $data->inm_comprador['dp_colonia_descripcion'], x: 17, y: 84);
-        if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al escribir domicilio', data: $pdf_exe);
-        }
+        $this->pdf->SetXY(164.7,79);
+        $this->pdf->MultiCell(40,5, "COMERCIAL",1,'C');
 
-        $pdf_exe = $this->write(valor: $data->inm_comprador['dp_municipio_descripcion'], x: 110, y: 84);
-        if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al escribir domicilio', data: $pdf_exe);
-        }
+        $this->pdf->SetFont('Arial', '', 7);
 
-        $pdf_exe = $this->write(valor: $data->inm_comprador['dp_estado_descripcion'], x: 17, y: 90);
-        if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al escribir domicilio', data: $pdf_exe);
-        }
+        $this->pdf->SetXY(11, 94);
+        $this->pdf->MultiCell(71.5, 4.5,
+            mb_convert_encoding((string)$data->inm_cheque['inm_ubicacion_ubicacion'], 'ISO-8859-1', 'UTF-8'),
+            1,'L');
 
-        $pdf_exe = $this->write(valor: $data->inm_comprador['dp_cp_descripcion'], x: 83, y: 90);
+        $this->pdf->SetXY(82.5, 94);
+        $this->pdf->MultiCell(21, 4.5,"1", 1,'C');
+
+        $this->pdf->SetXY(103.5, 94);
+        $this->pdf->MultiCell(37.5, 4.5,
+            mb_convert_encoding((string)$data->inm_cheque['inm_cheque_monto'], 'ISO-8859-1', 'UTF-8'),
+            1,'C');
+
+        $this->pdf->SetXY(103.5, 127.1);
+        $this->pdf->MultiCell(37.5, 4.5,
+            mb_convert_encoding((string)$data->inm_cheque['inm_cheque_monto'], 'ISO-8859-1', 'UTF-8'),
+            1,'C');
+
+        $this->pdf->SetFont('Arial', '', 8.5);
+
+        $this->pdf->SetXY(34.5, 154);
+        $this->pdf->MultiCell(50.5,5, "ERIKA CRUZ", 1,'C');
+
+        $this->pdf->SetXY(132.5, 154);
+        $this->pdf->MultiCell(50.5,5, "MAURICIO HERNANDEZ", 1,'C');
+
+        /*$pdf_exe = $this->write(valor: $data->inm_cheque['inm_cheque_monto'], x: , y: 97);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al escribir domicilio', data: $pdf_exe);
-        }
+        }*/
 
-
-        $keys_ubicacion['dp_calle_ubicacion_descripcion'] = array('x' => 17, 'y' => 158);
-        $keys_ubicacion['inm_ubicacion_numero_exterior'] = array('x' => 17, 'y' => 164);
-        $keys_ubicacion['inm_ubicacion_numero_interior'] = array('x' => 31.5, 'y' => 164);
-        $keys_ubicacion['inm_ubicacion_lote'] = array('x' => 46, 'y' => 164);
-        $keys_ubicacion['inm_ubicacion_manzana'] = array('x' => 61.5, 'y' => 164);
-        $keys_ubicacion['dp_colonia_ubicacion_descripcion'] = array('x' => 81, 'y' => 164);
-        $keys_ubicacion['dp_estado_ubicacion_descripcion'] = array('x' => 17, 'y' => 170);
-        $keys_ubicacion['dp_municipio_ubicacion_descripcion'] = array('x' => 100, 'y' => 170);
-        $keys_ubicacion['dp_cp_ubicacion_descripcion'] = array('x' => 173, 'y' => 170);
-
-        foreach ($keys_ubicacion as $key => $valor) {
-            $pdf[] = $this->write(valor: $data->imp_rel_ubi_comp[$key], x: $valor['x'], y: $valor['y']);
-            if (errores::$error) {
-                return $this->error->error(mensaje: 'Error al escribir en pdf', data: $pdf);
-            }
-        }
-
-        $ciudad = $this->ciudad(data: $data);
-        if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al obtener ciudad', data: $ciudad);
-        }
-
-        $write = $this->write(valor: $ciudad, x:36,y: 229);
-        if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
-        }
-
-        $write = $this->write(valor: ((int)date('d')), x:115,y: 229);
-        if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
-        }
-
-        $mes_letra = $modelo->mes['espaniol'][date('m')]['nombre'];
-
-        $write = $this->write(valor: $mes_letra, x:128,y: 229);
-        if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
-        }
-
-        $year = $modelo->year['espaniol'][date('Y')]['abreviado'];
-
-        $write = $this->write(valor: $year, x:178.5,y: 229);
-        if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
-        }
-
-        return $pdf;
+        return $this->pdf;
     }
 
     /**

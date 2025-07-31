@@ -11,9 +11,17 @@ class inm_cheque extends _modelo_parent{
     public function __construct(PDO $link)
     {
         $tabla = 'inm_cheque';
-        $columnas = array($tabla=>false,'inm_ubicacion'=>$tabla, 'inm_tipo_cheque'=>$tabla,'bn_cuenta'=>$tabla);
+        $columnas = array($tabla=>false,'inm_ubicacion'=>$tabla, 'inm_tipo_cheque'=>$tabla,'bn_cuenta'=>$tabla,
+            'dp_colonia_postal'=>'inm_ubicacion', 'dp_cp'=>'dp_colonia_postal','dp_colonia'=>'dp_colonia_postal',
+            'dp_municipio'=>'dp_cp', 'dp_estado'=>'dp_municipio','dp_pais'=>'dp_estado');
+
 
         $columnas_extra= array();
+        $sql = "(CONCAT_WS(' ', inm_ubicacion.calle, inm_ubicacion.numero_exterior, 
+        inm_ubicacion.numero_interior, dp_colonia.descripcion, dp_municipio.descripcion))";
+
+        $columnas_extra['inm_ubicacion_ubicacion'] = $sql;
+
         $renombres= array();
 
 
