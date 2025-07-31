@@ -11,9 +11,15 @@ class inm_transferencia extends _modelo_parent{
     public function __construct(PDO $link)
     {
         $tabla = 'inm_transferencia';
-        $columnas = array($tabla=>false,'inm_ubicacion'=>$tabla,'bn_cuenta'=>$tabla);
+        $columnas = array($tabla=>false,'inm_ubicacion'=>$tabla,'bn_cuenta'=>$tabla,
+            'dp_colonia_postal'=>'inm_ubicacion', 'dp_cp'=>'dp_colonia_postal','dp_colonia'=>'dp_colonia_postal',
+            'dp_municipio'=>'dp_cp', 'dp_estado'=>'dp_municipio','dp_pais'=>'dp_estado');
 
         $columnas_extra= array();
+        $sql = "(CONCAT_WS(' ', inm_ubicacion.calle, inm_ubicacion.numero_exterior, 
+        inm_ubicacion.numero_interior, dp_colonia.descripcion, dp_municipio.descripcion))";
+
+        $columnas_extra['inm_ubicacion_ubicacion'] = $sql;
         $renombres= array();
 
 
@@ -68,6 +74,24 @@ class inm_transferencia extends _modelo_parent{
         }
 
         return $r_alta_bd;
+    }
+
+    final public function data_pdf(int $registro_id): array|stdClass
+    {
+        if($registro_id<=0){
+            return $this->error->error(mensaje: 'Error al registro_id debe ser mayor a 0',
+                data: $registro_id);
+        }
+        $inm_transferencia = $this->registro(registro_id: $registro_id);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener transferencia', data: $inm_transferencia);
+        }
+
+
+        $data = new stdClass();
+        $data->inm_transferencia = $inm_transferencia;
+
+        return $data;
     }
 
     public function elimina_bd(int $id): array|stdClass
