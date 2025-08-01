@@ -28,7 +28,7 @@ class inm_checada extends _modelo_parent{
                  LEFT JOIN inm_dia_semana 
                    ON inm_dia_semana.id = inm_horario_diario.inm_dia_semana_id 
                  WHERE inm_dia_semana.descripcion = UPPER(DAYNAME(inm_checada.fecha)) AND inm_horario_diario.inm_horario_id = inm_horario.id
-                ) ";
+                )";
 
         $columnas_extra['inm_checada_hora_esperada'] = $sql;
         $renombres= array();

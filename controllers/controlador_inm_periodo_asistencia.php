@@ -260,23 +260,18 @@ class controlador_inm_periodo_asistencia extends _ctl_formato {
                 ws: $ws);
         }
 
-        $ths[] = array('etiqueta'=>'ID', 'campo'=>'inm_periodo_asistencia_fecha_inicio');
-        $ths[] = array('etiqueta'=>'ID', 'campo'=>'inm_periodo_asistencia_fecha_fin');
-        $ths[] = array('etiqueta'=>'ID', 'campo'=>'inm_empleado_razon_social');
-        $ths[] = array('etiqueta'=>'ID', 'campo'=>'inm_checada_fecha');
-        $ths[] = array('etiqueta'=>'ID', 'campo'=>'inm_checada_dia');
-        $ths[] = array('etiqueta'=>'ID', 'campo'=>'inm_checada_hora_esperada');
-        $ths[] = array('etiqueta'=>'ID', 'campo'=>'inm_checada_hora');
-        $ths[] = array('etiqueta'=>'ID', 'campo'=>'inm_checada_minutos_retraso');
-        $ths[] = array('etiqueta'=>'ID', 'campo'=>'inm_status_asistencia_descripcion');
-
-        $keys = array();
-        foreach ($ths as $data_th) {
-            $keys[] = $data_th['campo'];
-        }
+        $ths[] = array('etiqueta'=>'Inicio Semana', 'campo'=>'inm_periodo_asistencia_fecha_inicio');
+        $ths[] = array('etiqueta'=>'Fin Semana', 'campo'=>'inm_periodo_asistencia_fecha_fin');
+        $ths[] = array('etiqueta'=>'Empleado', 'campo'=>'inm_empleado_razon_social');
+        $ths[] = array('etiqueta'=>'Fecha', 'campo'=>'inm_checada_fecha');
+        $ths[] = array('etiqueta'=>'Dia', 'campo'=>'inm_checada_dia');
+        $ths[] = array('etiqueta'=>'Hora Esperada', 'campo'=>'inm_checada_hora_esperada');
+        $ths[] = array('etiqueta'=>'Hora de Entrada', 'campo'=>'inm_checada_hora');
+        $ths[] = array('etiqueta'=>'Minutos de Retraso', 'campo'=>'inm_checada_minutos_retraso');
+        $ths[] = array('etiqueta'=>'Estatus', 'campo'=>'inm_status_asistencia_descripcion');
 
         $keys_hojas['Checadas'] = new stdClass();
-        $keys_hojas['Checadas']->keys = $keys;
+        $keys_hojas['Checadas']->keys = $ths;
         $keys_hojas['Checadas']->registros = $registros->registros;
 
         $xls = (new exportador())->genera_xls(header: $header, name: $this->seccion, nombre_hojas: $nombre_hojas,

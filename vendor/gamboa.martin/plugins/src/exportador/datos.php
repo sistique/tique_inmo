@@ -56,8 +56,7 @@ class datos{
             $fila = 2;
             $i = 0; //columna
             foreach ($keys_sum as $key){
-
-                $key = trim($key);
+                $key = trim($key['etiqueta']);
                 if($key === ''){
                     return $this->error->error('Error key esta vacio', $key);
                 }
@@ -81,8 +80,7 @@ class datos{
         $i = 0; //columna
 
         foreach($keys as $key){
-
-            $key = trim($key);
+            $key = trim($key['etiqueta']);
             if($key === ''){
                 return $this->error->error('Error key esta vacio', $key);
             }
@@ -245,9 +243,9 @@ class datos{
         $i=0;
         $data=array();
         foreach($keys as $campo){
-            $llenado = $this->llena_datos_xls(campo: $campo, columnas: $columnas,estilo_contenido: $estilo_contenido,
-                estilos: $estilos, fila: $fila, index:  $index, libro: $libro, numero_columna:$i,
-                path_base: $path_base, registro: $registro, color_contenido: $color_contenido);
+            $llenado = $this->llena_datos_xls(campo: $campo['campo'], columnas: $columnas,
+                estilo_contenido: $estilo_contenido, estilos: $estilos, fila: $fila, index:  $index, libro: $libro,
+                numero_columna:$i, path_base: $path_base, registro: $registro, color_contenido: $color_contenido);
             if(errores::$error){
                 return $this->error->error('Error al aplicar $llenado',$llenado);
             }
