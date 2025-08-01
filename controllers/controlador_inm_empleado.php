@@ -191,10 +191,11 @@ class controlador_inm_empleado extends _ctl_formato {
         }
 
         $keys_selects = (new init())->key_select_txt(cols: 12,key: 'razon_social',
-            keys_selects: $keys_selects, place_holder: 'Razon Social', required: false);
+            keys_selects: $keys_selects, place_holder: 'Razon Social', required: false, disabled: true);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
+
         $base = $this->base_upd(keys_selects: $keys_selects, params: array(),params_ajustados: array());
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
