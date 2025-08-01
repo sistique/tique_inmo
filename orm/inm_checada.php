@@ -16,9 +16,12 @@ class inm_checada extends _modelo_parent{
     {
         $tabla = 'inm_checada';
         $columnas = array($tabla=>false,'inm_empleado'=>$tabla,'inm_status_asistencia'=>$tabla,
-            'inm_periodo_asistencia'=>$tabla,'inm_tipo_checada'=>$tabla);
+            'inm_periodo_asistencia'=>$tabla,'inm_tipo_checada'=>$tabla, 'inm_horario' => 'inm_empleado');
 
         $columnas_extra= array();
+        $sql = "(UPPER(DAYNAME(inm_checada.fecha)))";
+
+        $columnas_extra['inm_checada_dia'] = $sql;
         $renombres= array();
 
 
