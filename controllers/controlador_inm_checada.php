@@ -46,7 +46,7 @@ class controlador_inm_checada extends _ctl_formato {
 
         $keys_selects = array();
 
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_empleado_id',
+        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_empleado_id',
             keys_selects: $keys_selects, id_selected: -1, label: 'Empleado');
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);

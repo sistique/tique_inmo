@@ -130,13 +130,19 @@ class inm_checada extends _modelo_parent{
         }
 
         if (!isset($this->registro['inm_periodo_asistencia_id'])) {
+            $registro_empleado = (new inm_empleado(link: $this->link))->registro(
+                registro_id: $this->registro['inm_empleado_id']);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al insertar checada', data: $registro_empleado);
+            }
+
             $filtro_rango_peri[$this->registro['fecha']]['valor1'] = 'inm_periodo_asistencia.fecha_inicio';
             $filtro_rango_peri[$this->registro['fecha']]['valor2'] = 'inm_periodo_asistencia.fecha_fin';
             $filtro_rango_peri[$this->registro['fecha']]['valor_campo'] = true;
 
             $order = array('inm_periodo_asistencia.fecha_inicio'=>'DESC');
-
-            $r_periodo_asistencia = (new inm_periodo_asistencia(link:$this->link))->filtro_and(
+            $filtro_peri['inm_horario.id'] = $registro_empleado['inm_horario_id'];
+            $r_periodo_asistencia = (new inm_periodo_asistencia(link:$this->link))->filtro_and(filtro: $filtro_peri,
                 filtro_rango: $filtro_rango_peri, limit: 1, order: $order);
             if (errores::$error) {
                 return $this->error->error(mensaje: 'Error al obtener periodos', data: $r_periodo_asistencia);
