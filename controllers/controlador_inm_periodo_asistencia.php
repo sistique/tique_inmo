@@ -253,7 +253,6 @@ class controlador_inm_periodo_asistencia extends _ctl_formato {
         $this->link->beginTransaction();
 
         $nombre_hojas = array('Checadas');
-        $keys_hojas = array();
 
         $registros = $this->result_checadas();
         if (errores::$error) {
@@ -266,7 +265,7 @@ class controlador_inm_periodo_asistencia extends _ctl_formato {
         $ths[] = array('etiqueta'=>'ID', 'campo'=>'inm_empleado_razon_social');
         $ths[] = array('etiqueta'=>'ID', 'campo'=>'inm_checada_fecha');
         $ths[] = array('etiqueta'=>'ID', 'campo'=>'inm_checada_dia');
-        $ths[] = array('etiqueta'=>'ID', 'campo'=>'inm_horario_diario_hora_entrada');
+        $ths[] = array('etiqueta'=>'ID', 'campo'=>'inm_checada_hora_esperada');
         $ths[] = array('etiqueta'=>'ID', 'campo'=>'inm_checada_hora');
         $ths[] = array('etiqueta'=>'ID', 'campo'=>'inm_checada_minutos_retraso');
         $ths[] = array('etiqueta'=>'ID', 'campo'=>'inm_status_asistencia_descripcion');
@@ -276,10 +275,9 @@ class controlador_inm_periodo_asistencia extends _ctl_formato {
             $keys[] = $data_th['campo'];
         }
 
-        $nombre_hojas[] = 'Registros';
-        $keys_hojas['Registros'] = new stdClass();
-        $keys_hojas['Registros']->keys = $keys;
-        $keys_hojas['Registros']->registros = $registros;
+        $keys_hojas['Checadas'] = new stdClass();
+        $keys_hojas['Checadas']->keys = $keys;
+        $keys_hojas['Checadas']->registros = $registros->registros;
 
         $xls = (new exportador())->genera_xls(header: $header, name: $this->seccion, nombre_hojas: $nombre_hojas,
             keys_hojas: $keys_hojas, path_base: $this->path_base);
