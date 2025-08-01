@@ -22,7 +22,7 @@ class inm_empleado extends _modelo_parent{
             renombres: $renombres);
 
         $this->NAMESPACE = __NAMESPACE__;
-        $this->etiqueta = 'Status Comprador';
+        $this->etiqueta = 'Empleado';
     }
 
 

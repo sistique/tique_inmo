@@ -207,14 +207,14 @@ class controlador_inm_checada extends _ctl_formato {
     private function init_datatable(): stdClass
     {
         $columns["inm_checada_id"]["titulo"] = "Id";
-        $columns["inm_empleado_descripcion"]["titulo"] = "Empleado";
+        $columns["inm_empleado_razon_social"]["titulo"] = "Empleado";
         $columns["inm_checada_fecha"]["titulo"] = "Fecha";
         $columns["inm_checada_hora"]["titulo"] = "hora";
         $columns["inm_periodo_asistencia_descripcion"]["titulo"] = "Periodo";
         $columns["inm_tipo_checada_descripcion"]["titulo"] = "Tipo Checada";
         $columns["inm_status_asistencia_descripcion"]["titulo"] = "Status Asistencia";
 
-        $filtro = array("inm_checada.id","inm_empleado.descripcion",'inm_tipo_checada.descripcion');
+        $filtro = array("inm_checada.id","inm_empleado.razon_social",'inm_tipo_checada.descripcion');
 
         $datatables = new stdClass();
         $datatables->columns = $columns;
