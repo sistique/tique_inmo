@@ -46,15 +46,29 @@ class controlador_inm_checada extends _ctl_formato {
 
         $keys_selects = array();
 
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'Empleado',
-            keys_selects: $keys_selects, id_selected: -1, label: 'empleado');
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_empleado_id',
+            keys_selects: $keys_selects, id_selected: -1, label: 'Empleado');
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
         $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(),
-            key: 'inm_inm_status_asistencia_id', keys_selects: $keys_selects, id_selected: -1,
+            key: 'inm_status_asistencia_id', keys_selects: $keys_selects, id_selected: -1,
             label: 'Status Asistencia');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(),
+            key: 'inm_periodo_asistencia_id', keys_selects: $keys_selects, id_selected: -1,
+            label: 'Periodo Asistencia');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(),
+            key: 'inm_tipo_checada_id', keys_selects: $keys_selects, id_selected: -1,
+            label: 'Tipo Checada');
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
@@ -67,6 +81,7 @@ class controlador_inm_checada extends _ctl_formato {
 
         $this->row_upd->fecha = date('Y-m-d');
         $this->row_upd->hora = date('H:i:s');
+        $this->row_upd->observaciones = date('H:i:s');
 
         $fecha = $this->html->input_fecha(cols: 6, row_upd: $this->row_upd, value_vacio: false,
             place_holder: 'Fecha Asistencia', value: $this->row_upd->fecha);
@@ -83,6 +98,14 @@ class controlador_inm_checada extends _ctl_formato {
                 mensaje: 'Error al obtener input hora',data:  $hora, header: $header,ws:  $ws);
         }
         $this->inputs->hora = $hora;
+        
+        $observaciones = $this->html->textarea(cols: 12, row_upd: $this->row_upd, value_vacio: false,
+            place_holder: 'Observaciones', value: $this->row_upd->observaciones);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener input observaciones',data:  $observaciones, header: $header,ws:  $ws);
+        }
+        $this->inputs->observaciones = $observaciones;
 
         return $r_alta;
     }
@@ -137,6 +160,22 @@ class controlador_inm_checada extends _ctl_formato {
             return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
         }
 
+        $fecha = $this->html->input_fecha(cols: 6, row_upd: $this->row_upd, value_vacio: false,
+            place_holder: 'Fecha Asistencia', value: $this->row_upd->fecha);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener input fecha',data:  $fecha, header: $header,ws:  $ws);
+        }
+        $this->inputs->fecha = $fecha;
+
+        $hora = $this->html->input_hora(cols: 6, row_upd: $this->row_upd, value_vacio: false,
+            place_holder: 'Hora Asistencia', value: $this->row_upd->hora);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener input hora',data:  $hora, header: $header,ws:  $ws);
+        }
+        $this->inputs->hora = $hora;
+
         return $r_modifica;
     }
 
@@ -147,9 +186,14 @@ class controlador_inm_checada extends _ctl_formato {
     private function init_datatable(): stdClass
     {
         $columns["inm_checada_id"]["titulo"] = "Id";
-        $columns["inm_checada_descripcion"]["titulo"] = "Descripcion";
+        $columns["inm_empleado_descripcion"]["titulo"] = "Empleado";
+        $columns["inm_checada_fecha"]["titulo"] = "Fecha";
+        $columns["inm_checada_hora"]["titulo"] = "hora";
+        $columns["inm_periodo_asistencia_descripcion"]["titulo"] = "Periodo";
+        $columns["inm_tipo_checada_descripcion"]["titulo"] = "Tipo Checada";
+        $columns["inm_status_asistencia_descripcion"]["titulo"] = "Status Asistencia";
 
-        $filtro = array("inm_checada.id","inm_checada.descripcion");
+        $filtro = array("inm_checada.id","inm_empleado.descripcion",'inm_tipo_checada.descripcion');
 
         $datatables = new stdClass();
         $datatables->columns = $columns;
