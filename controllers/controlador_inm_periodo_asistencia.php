@@ -260,6 +260,11 @@ class controlador_inm_periodo_asistencia extends _ctl_formato {
                 ws: $ws);
         }
 
+        $nombre = 'Reporte Periodo Inicial: '. $_POST['fecha_inicio'];
+        $nombre .= ' - Periodo Final: ' . $_POST['fecha_fin'];
+
+        if($registros->n_registros <= 0)
+
         $ths[] = array('etiqueta'=>'Inicio Semana', 'campo'=>'inm_periodo_asistencia_fecha_inicio');
         $ths[] = array('etiqueta'=>'Fin Semana', 'campo'=>'inm_periodo_asistencia_fecha_fin');
         $ths[] = array('etiqueta'=>'Empleado', 'campo'=>'inm_empleado_razon_social');
@@ -274,7 +279,7 @@ class controlador_inm_periodo_asistencia extends _ctl_formato {
         $keys_hojas['Checadas']->keys = $ths;
         $keys_hojas['Checadas']->registros = $registros->registros;
 
-        $xls = (new exportador())->genera_xls(header: $header, name: $this->seccion, nombre_hojas: $nombre_hojas,
+        $xls = (new exportador())->genera_xls(header: $header, name: $nombre, nombre_hojas: $nombre_hojas,
             keys_hojas: $keys_hojas, path_base: $this->path_base);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al obtener xls', data: $xls, header: $header, ws: $ws);
@@ -304,6 +309,13 @@ class controlador_inm_periodo_asistencia extends _ctl_formato {
 
         $nombre_hojas = array('Checadas');
 
+        $r_periodo_asistencia = $this->modelo->registro(registro_id: $this->registro_id);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al obtener prospecto_ubicacions', data: $r_periodo_asistencia);
+        }
+
+        $nombre = $r_periodo_asistencia['inm_periodo_asistencia_descripcion'];
+
         $filtro['inm_periodo_asistencia.id'] = $this->registro_id;
         $result = (new inm_checada(link: $this->link))->filtro_and(filtro: $filtro);
         if (errores::$error) {
@@ -324,7 +336,7 @@ class controlador_inm_periodo_asistencia extends _ctl_formato {
         $keys_hojas['Checadas']->keys = $ths;
         $keys_hojas['Checadas']->registros = $result->registros;
 
-        $xls = (new exportador())->genera_xls(header: $header, name: $this->seccion, nombre_hojas: $nombre_hojas,
+        $xls = (new exportador())->genera_xls(header: $header, name: $nombre, nombre_hojas: $nombre_hojas,
             keys_hojas: $keys_hojas, path_base: $this->path_base);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al obtener xls', data: $xls, header: $header, ws: $ws);
