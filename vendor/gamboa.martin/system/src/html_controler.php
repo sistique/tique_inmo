@@ -1541,6 +1541,32 @@ class html_controler
         return $div;
     }
 
+    public function input_hora(int $cols, stdClass $row_upd, bool $value_vacio, bool $disabled = false,
+                                string $name ='hora', string $place_holder = 'Hora', bool $required = true,
+                                mixed $value = null): array|string
+    {
+
+        if($cols<=0){
+            return $this->error->error(mensaje: 'Error cold debe ser mayor a 0', data: $cols, es_final: true );
+        }
+        if($cols>=13){
+            return $this->error->error(mensaje: 'Error cold debe ser menor o igual a  12', data: $cols, es_final: true);
+        }
+
+        $html =$this->directivas->input_hora_required(disabled: $disabled, name: $name, place_holder: $place_holder,
+            row_upd: $row_upd, value_vacio: $value_vacio, required: $required, value: $value);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al generar input', data: $html);
+        }
+
+        $div = $this->directivas->html->div_group(cols: $cols,html:  $html);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al integrar div', data: $div);
+        }
+
+        return $div;
+    }
+
     /**
      * Genera un input de tipo ID
      * @param int $cols Columnas en css

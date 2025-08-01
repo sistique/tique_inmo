@@ -1396,6 +1396,28 @@ class html{
         return $html;
     }
 
+    public function hora(bool $disabled, string $id_css, string $name, string $place_holder, bool $required,
+                          mixed $value): array|string
+     {
+
+        $valida = $this->valida_params_txt(id_css: $id_css,name:  $name,place_holder:  $place_holder);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar datos', data: $valida);
+        }
+        $params = $this->params_txt(disabled: $disabled,id_css:  $id_css,name:  $name,place_holder:  $place_holder,
+            required:  $required);
+
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al generar parametros', data: $params);
+        }
+
+        $type = 'time';
+
+        $html = "<input type='$type' name='$params->name' value='$value' |class| $params->disabled $params->required ";
+        $html.= "id='$params->id_css' placeholder='$params->place_holder' step='1' min='00:00:00' max='23:59:59'/>";
+        return $html;
+    }
+
     /**
      * Genera un input de tipo file
      * @param bool $disabled attr disabled

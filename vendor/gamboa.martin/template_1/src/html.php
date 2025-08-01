@@ -119,6 +119,19 @@ class html extends \gamboamartin\template\html {
         return str_replace('|class|', "class='form-control'", $html);
     }
 
+    public function hora(bool $disabled, string $id_css, string $name, string $place_holder, bool $required,
+                         mixed $value): string|array
+    {
+
+        $html = parent::hora(disabled:$disabled,id_css:  $id_css,name:  $name,place_holder:  $place_holder,
+            required:  $required,value:  $value);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al generar html', data: $html);
+        }
+
+        return str_replace('|class|', "class='form-control'", $html);
+    }
+
     
 
     /**
