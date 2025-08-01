@@ -79,44 +79,46 @@ class inm_empleado extends _modelo_parent{
     public function modifica_bd(array $registro, int $id, bool $reactiva = false,
                                 array $keys_integra_ds = array('codigo', 'descripcion')): array|stdClass
     {
-        $keys = array('adm_usuario_id','inm_horario_id');
-        $valida = $this->validacion->valida_ids(keys: $keys,registro:  $registro);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
-        }
-
-        $keys = array('nombre','apellido_paterno');
-        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $registro);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
-        }
-
-        if (!isset($registro['descripcion'])) {
-            $descripcion = $registro['adm_usuario_id'];
-            $descripcion .= ' - ' .  $registro['inm_horario_id'];
-            $descripcion .= ' - ' .  $registro['nombre'];
-            $descripcion .= ' ' .  $registro['apellido_paterno'];
-            $registro['descripcion'] = $descripcion;
-        }
-
-        if (!isset( $registro['razon_social'])) {
-            $razon_social = $registro['nombre'];
-            $razon_social .= ' ' . $registro['apellido_paterno'];
-            if(isset($registro['apellido_materno'])  && trim($registro['apellido_materno'])!==''){
-                $razon_social .= ' ' . $registro['apellido_materno'];
+        if(!isset($registro['status'])){
+            $keys = array('adm_usuario_id', 'inm_horario_id');
+            $valida = $this->validacion->valida_ids(keys: $keys, registro: $registro);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al validar registro', data: $valida);
             }
-            $registro['razon_social'] = $razon_social;
-        }
 
-        if (!isset( $registro['descripcion_select'])) {
-            $descripcion_select = $registro['razon_social'];
-            $registro['descripcion_select'] = $descripcion_select;
-        }
+            $keys = array('nombre', 'apellido_paterno');
+            $valida = $this->validacion->valida_existencia_keys(keys: $keys, registro: $registro);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al validar registro', data: $valida);
+            }
 
-        if (!isset($registro['codigo'])) {
-            $codigo = $registro['descripcion'];
-            $codigo .= ' ' . rand(10000,99999);
-            $registro['codigo'] = $codigo;
+            if (!isset($registro['descripcion'])) {
+                $descripcion = $registro['adm_usuario_id'];
+                $descripcion .= ' - ' . $registro['inm_horario_id'];
+                $descripcion .= ' - ' . $registro['nombre'];
+                $descripcion .= ' ' . $registro['apellido_paterno'];
+                $registro['descripcion'] = $descripcion;
+            }
+
+            if (!isset($registro['razon_social'])) {
+                $razon_social = $registro['nombre'];
+                $razon_social .= ' ' . $registro['apellido_paterno'];
+                if (isset($registro['apellido_materno']) && trim($registro['apellido_materno']) !== '') {
+                    $razon_social .= ' ' . $registro['apellido_materno'];
+                }
+                $registro['razon_social'] = $razon_social;
+            }
+
+            if (!isset($registro['descripcion_select'])) {
+                $descripcion_select = $registro['razon_social'];
+                $registro['descripcion_select'] = $descripcion_select;
+            }
+
+            if (!isset($registro['codigo'])) {
+                $codigo = $registro['descripcion'];
+                $codigo .= ' ' . rand(10000, 99999);
+                $registro['codigo'] = $codigo;
+            }
         }
 
         $r_modifica_bd = parent::modifica_bd(registro: $registro,id:  $id, reactiva: $reactiva,
