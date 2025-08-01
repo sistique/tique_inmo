@@ -37,6 +37,12 @@ class inm_periodo_asistencia extends _modelo_parent{
             $descripcion .= ' - Periodo Final: ' .  $this->registro['fecha_fin'];
             $this->registro['descripcion'] = $descripcion;
         }
+        
+        if (!isset( $this->registro['descripcion_select'])) {
+            $descripcion_select = 'Periodo Inicial: '. $this->registro['fecha_inicio'];
+            $descripcion_select .= ' - Periodo Final: ' .  $this->registro['fecha_fin'];
+            $this->registro['descripcion_select'] = $descripcion_select;
+        }
 
         if (!isset($this->registro['codigo'])) {
             $codigo = $this->registro['descripcion'];
@@ -65,6 +71,12 @@ class inm_periodo_asistencia extends _modelo_parent{
             $descripcion = 'Periodo Inicial: '.$registro['fecha_inicio'];
             $descripcion .= ' - Periodo Final: ' . $registro['fecha_fin'];
             $registro['descripcion'] = $descripcion;
+        }
+
+        if (!isset( $registro['descripcion_select'])) {
+            $descripcion_select = 'Periodo Inicial: '. $registro['fecha_inicio'];
+            $descripcion_select .= ' - Periodo Final: ' .  $registro['fecha_fin'];
+            $registro['descripcion_select'] = $descripcion_select;
         }
 
         if (!isset($registro['codigo'])) {

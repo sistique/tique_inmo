@@ -100,7 +100,7 @@ class controlador_inm_checada extends _ctl_formato {
         $this->inputs->hora = $hora;
         
         $observaciones = $this->html->textarea(cols: 12, row_upd: $this->row_upd, value_vacio: false,
-            place_holder: 'Observaciones', value: $this->row_upd->observaciones);
+            place_holder: 'Observaciones', required: false, value: $this->row_upd->observaciones);
         if(errores::$error){
             return $this->retorno_error(
                 mensaje: 'Error al obtener input observaciones',data:  $observaciones, header: $header,ws:  $ws);
@@ -141,20 +141,33 @@ class controlador_inm_checada extends _ctl_formato {
         }
         $keys_selects = array();
 
-        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_empleado_id',
-            keys_selects: $keys_selects, id_selected: $this->row_upd->inm_empleado_id, label: 'empleado');
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_empleado_id',
+            keys_selects: $keys_selects, id_selected: $this->row_upd->inm_empleado_id, label: 'Empleado');
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_inm_status_asistencia_id',
-            keys_selects: $keys_selects, id_selected: $this->row_upd->inm_inm_status_asistencia_id, label: 'inm_status_asistencia');
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(),
+            key: 'inm_status_asistencia_id', keys_selects: $keys_selects,
+            id_selected: $this->row_upd->inm_status_asistencia_id, label: 'Status Asistencia');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+        
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(),
+            key: 'inm_periodo_asistencia_id', keys_selects: $keys_selects,
+            id_selected: $this->row_upd->inm_periodo_asistencia_id, label: 'Periodo Asistencia');
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(),
+            key: 'inm_tipo_checada_id', keys_selects: $keys_selects,
+            id_selected: $this->row_upd->inm_tipo_checada_id, label: 'Tipo Checada');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
 
-        $keys_selects = array();
         $base = $this->base_upd(keys_selects: $keys_selects, params: array(),params_ajustados: array());
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
@@ -175,6 +188,14 @@ class controlador_inm_checada extends _ctl_formato {
                 mensaje: 'Error al obtener input hora',data:  $hora, header: $header,ws:  $ws);
         }
         $this->inputs->hora = $hora;
+
+        $observaciones = $this->html->textarea(cols: 12, row_upd: $this->row_upd, value_vacio: false,
+            place_holder: 'Observaciones', required: false, value: $this->row_upd->observaciones);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener input observaciones',data:  $observaciones, header: $header,ws:  $ws);
+        }
+        $this->inputs->observaciones = $observaciones;
 
         return $r_modifica;
     }

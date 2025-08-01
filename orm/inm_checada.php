@@ -58,10 +58,10 @@ class inm_checada extends _modelo_parent{
 
         if (!isset($this->registro['codigo'])) {
             $descripcion = $this->registro['inm_empleado_id'];
-            $descripcion .= ' ' . $this->registro['fecha'] . rand();
+            $descripcion .= ' ' . $this->registro['fecha'];
+            $descripcion .= ' ' . $this->registro['hora'] . rand();
             $this->registro['codigo'] = $descripcion;
         }
-
 
         if (!isset($this->registro['minutos_retraso'])) {
             $this->registro['minutos_retraso'] = 0;
