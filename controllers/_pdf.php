@@ -205,51 +205,64 @@ class _pdf{
     private function apartado_gasto_1(stdClass $data, modelo $modelo): Fpdi|array{
         $this->pdf->SetFont('Arial', '', 10);
 
-        if($modelo->tabla === 'inm_cheque'){
-            $this->pdf->SetXY(75.5,46.5);
-            $this->pdf->MultiCell(7,5.5, "X",0,'C');
+        $tipo_operacion = '';
+        if($_GET['seccion_retorno'] === 'inm_ubicacion'){
+            $tipo_operacion = 'ADQUISICION';
+        }else{
+            $tipo_operacion = 'COMPRAVENTA';
+        }
+
+        if($modelo->tabla === 'inm_cheque') {
+
+            $this->pdf->SetXY(75.5, 46.5);
+            $this->pdf->MultiCell(7, 5.5, "X", 0, 'C',);
 
             $texto = '$' . number_format($data->inm_cheque['inm_cheque_monto'], 2,
                     '.', ',');
 
             $this->pdf->SetFont('Arial', '', 9);
-            $this->pdf->SetXY(44.5,52.5);
-            $this->pdf->MultiCell(38,5,  date("d-m-Y"),0,'C');
+            $this->pdf->SetXY(44.5, 52.5);
+            $this->pdf->MultiCell(38, 5, date("d-m-Y"), 0, 'C');
 
-            $this->pdf->SetXY(44.5,58);
-            $this->pdf->MultiCell(160.5,5,
+            $this->pdf->SetXY(44.5, 58);
+            $this->pdf->MultiCell(160.5, 5,
                 mb_convert_encoding((string)$data->inm_cheque['inm_cheque_nombre_beneficiario'], 'ISO-8859-1', 'UTF-8'),
-                0,'C');
+                0, 'C');
 
             $this->pdf->SetXY(44.5, 63.5);
-            $this->pdf->MultiCell(38,5, $texto,0,'C');
+            $this->pdf->MultiCell(38, 5, $texto, 0, 'C');
 
             $this->pdf->SetXY(44.5, 70);
-            $this->pdf->MultiCell(160.5,5,
-                mb_convert_encoding((string)$data->inm_cheque['inm_tipo_cheque_descripcion']." - ".
+            $this->pdf->MultiCell(160.5, 5,
+                mb_convert_encoding((string)$data->inm_cheque['inm_tipo_cheque_descripcion'] . " " . $tipo_operacion . " - " .
                     (string)$data->inm_cheque['inm_cheque_numero_cheque'], 'ISO-8859-1', 'UTF-8'),
-                0,'C');
+                0, 'C');
 
-            $this->pdf->SetXY(164.7,79);
-            $this->pdf->MultiCell(40,5, "COMERCIAL",0,'C');
+            $this->pdf->SetXY(164.7, 79);
+            $this->pdf->MultiCell(40, 5, mb_convert_encoding("TITULACIÓN", 'ISO-8859-1', 'UTF-8'), 0, 'C');
 
             $this->pdf->SetFont('Arial', '', 7);
 
-            $this->pdf->SetXY(11, 94);
-            $this->pdf->MultiCell(71.5, 4.5,
+            $this->pdf->SetXY(11, 93.8);
+            $y = $this->pdf->GetY();
+
+            $this->pdf->SetFillColor(255, 255, 255);
+            $this->pdf->MultiCell(71.43, 4.75,
                 mb_convert_encoding((string)$data->inm_cheque['inm_ubicacion_ubicacion'], 'ISO-8859-1', 'UTF-8'),
-                0,'L');
+                1, 'J', true);
 
-            $this->pdf->SetXY(82.5, 94);
-            $this->pdf->MultiCell(21, 4.5,"1", 0,'C');
+            $altura_total = $this->pdf->GetY() - $y;
 
-            $this->pdf->SetXY(103.5, 94);
-            $this->pdf->MultiCell(37.5, 4.5,$texto,0,'C');
+            $this->pdf->SetXY(82.5, 93.8);
+            $this->pdf->MultiCell(20.8, $altura_total, "1", 1, 'C', true);
 
-            $this->pdf->SetXY(141, 94);
-            $this->pdf->MultiCell(63.5, 4.5,
+            $this->pdf->SetXY(103.35, 93.8);
+            $this->pdf->MultiCell(37.7, $altura_total, $texto, 1, 'C', true);
+
+            $this->pdf->SetXY(141.12, 93.8);
+            $this->pdf->MultiCell(63.5, $altura_total,
                 mb_convert_encoding((string)$data->inm_cheque['bn_cuenta_descripcion'], 'ISO-8859-1', 'UTF-8'),
-                0,'C');
+                1,'C',true);
 
             $this->pdf->SetXY(103.5, 127.1);
             $this->pdf->MultiCell(37.5, 4.5, $texto,0,'C');
@@ -266,7 +279,7 @@ class _pdf{
     
             $this->pdf->SetXY(44.5,58);
             $this->pdf->MultiCell(160.5,5,
-                mb_convert_encoding((string)$data->inm_transferencia['inm_transferencia_nombre_beneficiario'], 'ISO-8859-1', 'UTF-8'),
+                mb_convert_encoding($tipo_operacion." ".$data->inm_transferencia['inm_transferencia_nombre_beneficiario'], 'ISO-8859-1', 'UTF-8'),
                 0,'C');
     
             $this->pdf->SetXY(44.5, 63.5);
@@ -278,26 +291,31 @@ class _pdf{
                 0,'C');
     
             $this->pdf->SetXY(164.7,79);
-            $this->pdf->MultiCell(40,5, "COMERCIAL",0,'C');
-    
+            $this->pdf->MultiCell(40,5, mb_convert_encoding("TITULACIÓN", 'ISO-8859-1', 'UTF-8'),0,'C');
+
             $this->pdf->SetFont('Arial', '', 7);
-    
-            $this->pdf->SetXY(11, 94);
-            $this->pdf->MultiCell(71.5, 4.5,
+
+            $this->pdf->SetXY(11, 93.8);
+            $y = $this->pdf->GetY();
+
+            $this->pdf->SetFillColor(255, 255, 255);
+            $this->pdf->MultiCell(71.43, 4.75,
                 mb_convert_encoding((string)$data->inm_transferencia['inm_ubicacion_ubicacion'], 'ISO-8859-1', 'UTF-8'),
-                0,'L');
-    
-            $this->pdf->SetXY(82.5, 94);
-            $this->pdf->MultiCell(21, 4.5,"1", 0,'C');
-    
-            $this->pdf->SetXY(103.5, 94);
-            $this->pdf->MultiCell(37.5, 4.5,$texto,0,'C');
-    
-            $this->pdf->SetXY(141, 94);
-            $this->pdf->MultiCell(63.5, 4.5,
+                1, 'J', true);
+
+            $altura_total = $this->pdf->GetY() - $y;
+
+            $this->pdf->SetXY(82.5, 93.8);
+            $this->pdf->MultiCell(20.8, $altura_total, "1", 1, 'C', true);
+
+            $this->pdf->SetXY(103.35, 93.8);
+            $this->pdf->MultiCell(37.7, $altura_total, $texto, 1, 'C', true);
+
+            $this->pdf->SetXY(141.12, 93.8);
+            $this->pdf->MultiCell(63.5, $altura_total,
                 mb_convert_encoding((string)$data->inm_transferencia['bn_cuenta_descripcion'], 'ISO-8859-1', 'UTF-8'),
-                0,'C');
-    
+                1,'C',true);
+
             $this->pdf->SetXY(103.5, 127.1);
             $this->pdf->MultiCell(37.5, 4.5, $texto,0,'C');
         }else{
@@ -325,25 +343,30 @@ class _pdf{
                 0,'C');
 
             $this->pdf->SetXY(164.7,79);
-            $this->pdf->MultiCell(40,5, "COMERCIAL",0,'C');
+            $this->pdf->MultiCell(40,5, mb_convert_encoding("TITULACIÓN", 'ISO-8859-1', 'UTF-8'),0,'C');
 
             $this->pdf->SetFont('Arial', '', 7);
 
-            $this->pdf->SetXY(11, 94);
-            $this->pdf->MultiCell(71.5, 4.5,
+            $this->pdf->SetXY(11, 93.8);
+            $y = $this->pdf->GetY();
+
+            $this->pdf->SetFillColor(255, 255, 255);
+            $this->pdf->MultiCell(71.43, 4.75,
                 mb_convert_encoding((string)$data->inm_efectivo['inm_ubicacion_ubicacion'], 'ISO-8859-1', 'UTF-8'),
-                0,'L');
+                1, 'J', true);
 
-            $this->pdf->SetXY(82.5, 94);
-            $this->pdf->MultiCell(21, 4.5,"1", 0,'C');
+            $altura_total = $this->pdf->GetY() - $y;
 
-            $this->pdf->SetXY(103.5, 94);
-            $this->pdf->MultiCell(37.5, 4.5,$texto,0,'C');
+            $this->pdf->SetXY(82.5, 93.8);
+            $this->pdf->MultiCell(20.8, $altura_total, "1", 1, 'C', true);
 
-            $this->pdf->SetXY(141, 94);
-            $this->pdf->MultiCell(63.5, 4.5,
+            $this->pdf->SetXY(103.35, 93.8);
+            $this->pdf->MultiCell(37.7, $altura_total, $texto, 1, 'C', true);
+
+            $this->pdf->SetXY(141.12, 93.8);
+            $this->pdf->MultiCell(63.5, $altura_total,
                 mb_convert_encoding("", 'ISO-8859-1', 'UTF-8'),
-                0,'C');
+                1,'C',true);
 
             $this->pdf->SetXY(103.5, 127.1);
             $this->pdf->MultiCell(37.5, 4.5, $texto,0,'C');
