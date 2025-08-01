@@ -11,7 +11,7 @@ class inm_periodo_asistencia extends _modelo_parent{
     public function __construct(PDO $link)
     {
         $tabla = 'inm_periodo_asistencia';
-        $columnas = array($tabla=>false);
+        $columnas = array($tabla=>false,'inm_horario' => $tabla);
 
         $columnas_extra= array();
         $renombres= array();
@@ -26,20 +26,34 @@ class inm_periodo_asistencia extends _modelo_parent{
 
     public function alta_bd(array $keys_integra_ds = array('codigo', 'descripcion')): array|stdClass
     {
+        $keys = array('inm_horario_id');
+        $valida = $this->validacion->valida_existencia_keys(keys:  $keys, registro: $this->registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
+        }
+
+        $registro_horario = (new inm_horario(link: $this->link))->registro(
+            registro_id: $this->registro['inm_horario_id']);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar registro',data:  $registro_horario);
+        }
+
         $keys = array('fecha_inicio','fecha_fin');
         $valida = $this->validacion->fechas_in_array(data: $this->registro,keys:  $keys);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
         }
 
-        if (!isset( $this->registro['descripcion'])) {
-            $descripcion = 'Periodo Inicial: '. $this->registro['fecha_inicio'];
+        if (!isset($this->registro['descripcion'])) {
+            $descripcion = $registro_horario['inm_horario_descripcion'];
+            $descripcion .= ' - Periodo Inicial: '. $this->registro['fecha_inicio'];
             $descripcion .= ' - Periodo Final: ' .  $this->registro['fecha_fin'];
             $this->registro['descripcion'] = $descripcion;
         }
         
         if (!isset( $this->registro['descripcion_select'])) {
-            $descripcion_select = 'Periodo Inicial: '. $this->registro['fecha_inicio'];
+            $descripcion_select = $registro_horario['inm_horario_descripcion'];
+            $descripcion_select .= ' - Periodo Inicial: '. $this->registro['fecha_inicio'];
             $descripcion_select .= ' - Periodo Final: ' .  $this->registro['fecha_fin'];
             $this->registro['descripcion_select'] = $descripcion_select;
         }
@@ -61,28 +75,44 @@ class inm_periodo_asistencia extends _modelo_parent{
     public function modifica_bd(array $registro, int $id, bool $reactiva = false,
                                 array $keys_integra_ds = array('codigo', 'descripcion')): array|stdClass
     {
-        $keys = array('fecha_inicio','fecha_fin');
-        $valida = $this->validacion->fechas_in_array(data: $registro,keys:  $keys);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
-        }
-        
-        if (!isset($registro['descripcion'])) {
-            $descripcion = 'Periodo Inicial: '.$registro['fecha_inicio'];
-            $descripcion .= ' - Periodo Final: ' . $registro['fecha_fin'];
-            $registro['descripcion'] = $descripcion;
-        }
+        if(!isset($registro['status'])){
+            $keys = array('inm_horario_id');
+            $valida = $this->validacion->valida_existencia_keys(keys:  $keys, registro: $registro);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
+            }
 
-        if (!isset( $registro['descripcion_select'])) {
-            $descripcion_select = 'Periodo Inicial: '. $registro['fecha_inicio'];
-            $descripcion_select .= ' - Periodo Final: ' .  $registro['fecha_fin'];
-            $registro['descripcion_select'] = $descripcion_select;
-        }
+            $registro_horario = (new inm_horario(link: $this->link))->registro(
+                registro_id: $registro['inm_horario_id']);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al validar registro',data:  $registro_horario);
+            }
 
-        if (!isset($registro['codigo'])) {
-            $codigo = $registro['descripcion'];
-            $codigo .= ' ' . rand(10000,99999);
-            $registro['codigo'] = $codigo;
+            $keys = array('fecha_inicio','fecha_fin');
+            $valida = $this->validacion->fechas_in_array(data: $registro,keys:  $keys);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
+            }
+
+            if (!isset($registro['descripcion'])) {
+                $descripcion = $registro_horario['inm_horario_descripcion'];
+                $descripcion .= ' - Periodo Inicial: '. $registro['fecha_inicio'];
+                $descripcion .= ' - Periodo Final: ' .  $registro['fecha_fin'];
+                $registro['descripcion'] = $descripcion;
+            }
+
+            if (!isset( $registro['descripcion_select'])) {
+                $descripcion_select = $registro_horario['inm_horario_descripcion'];
+                $descripcion_select .= ' - Periodo Inicial: '. $registro['fecha_inicio'];
+                $descripcion_select .= ' - Periodo Final: ' .  $registro['fecha_fin'];
+                $registro['descripcion_select'] = $descripcion_select;
+            }
+
+            if (!isset($registro['codigo'])) {
+                $codigo = $registro['descripcion'];
+                $codigo .= ' ' . rand(10000,99999);
+                $registro['codigo'] = $codigo;
+            }
         }
 
         $r_modifica_bd = parent::modifica_bd(registro: $registro,id:  $id, reactiva: $reactiva,
