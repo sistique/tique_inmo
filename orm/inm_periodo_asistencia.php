@@ -27,15 +27,36 @@ class inm_periodo_asistencia extends _modelo_parent{
     public function alta_bd(array $keys_integra_ds = array('codigo', 'descripcion')): array|stdClass
     {
         $keys = array('inm_horario_id');
-        $valida = $this->validacion->valida_existencia_keys(keys:  $keys, registro: $this->registro);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
+        $valida = $this->validacion->valida_existencia_keys(keys: $keys, registro: $this->registro);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al validar registro', data: $valida);
         }
 
         $registro_horario = (new inm_horario(link: $this->link))->registro(
             registro_id: $this->registro['inm_horario_id']);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al validar registro',data:  $registro_horario);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al validar registro', data: $registro_horario);
+        }
+
+        $filtro['inm_horario.id'] = $this->registro['inm_horario_id'];
+        $filtro_especial[0][(string)$this->registro['fecha_inicio']]['operador'] = '<=';
+        $filtro_especial[0][(string)$this->registro['fecha_inicio']]['valor'] = 'inm_periodo_asistencia.fecha_fin';
+        $filtro_especial[0][(string)$this->registro['fecha_inicio']]['comparacion'] = 'AND';
+        $filtro_especial[0][(string)$this->registro['fecha_inicio']]['valor_es_campo'] = true;
+
+        $filtro_especial[1][(string)$this->registro['fecha_fin']]['operador'] = '>=';
+        $filtro_especial[1][(string)$this->registro['fecha_fin']]['valor'] = 'inm_periodo_asistencia.fecha_inicio';
+        $filtro_especial[1][(string)$this->registro['fecha_fin']]['comparacion'] = 'AND';
+        $filtro_especial[1][(string)$this->registro['fecha_fin']]['valor_es_campo'] = true;
+        $r_filtro_periodo = $this->filtro_and(filtro: $filtro, filtro_especial: $filtro_especial);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al validar registro', data: $valida);
+        }
+
+        if ($r_filtro_periodo->n_registros > 0) {
+            return $this->error->error(mensaje: 'Error ya existe un periodo del horario ' .
+                $registro_horario['inm_horario_descripcion'] .
+                ' que entra en el mismo rengo de fechas que se intenta insertar', data: $valida);
         }
 
         $keys = array('fecha_inicio','fecha_fin');
