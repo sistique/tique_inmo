@@ -9,6 +9,7 @@ use gamboamartin\notificaciones\models\not_emisor;
 use gamboamartin\notificaciones\models\not_mensaje;
 use gamboamartin\notificaciones\models\not_receptor;
 use gamboamartin\notificaciones\models\not_rel_mensaje;
+use gamboamartin\validacion\validacion;
 use PDO;
 use stdClass;
 
@@ -25,6 +26,17 @@ class _email
     public function __construct(PDO $link)
     {
         $this->link = $link;
+    }
+
+    private function asunto_reporte_asistencia(stdClass $row_entidad): string|array
+    {
+        $keys = array('org_empresa_razon_social','org_empresa_rfc');
+        $valida = (new validacion())->valida_existencia_keys(keys: $keys,registro:  $row_entidad);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al validar row_entidad',data:  $valida);
+        }
+
+        return " Reporte Asistencia - $row_entidad->inm_periodo_asistencia_descripcion ";
     }
 
     public function correo_validacion(string $correo, modelo $modelo, string $campo): array|stdClass
@@ -46,6 +58,26 @@ class _email
         return $datos;
     }
 
+    private function data_email_reporte_asistencia(stdClass $row_entidad): array|stdClass
+    {
+        $asunto = $this->asunto_reporte_asistencia(row_entidad: $row_entidad);
+        if (errores::$error) {
+            return (new errores())->error(mensaje: 'Error al generar asunto', data: $asunto);
+
+        }
+
+        $mensaje = $this->mensaje_reporte_asistencia(asunto: $asunto);
+        if (errores::$error) {
+            return (new errores())->error(mensaje: 'Error al generar asunto', data: $asunto);
+        }
+
+        $data = new stdClass();
+        $data->asunto = $asunto;
+        $data->mensaje = $mensaje;
+
+        return $data;
+    }
+
     public function emisor(string $correo): array
     {
         $datos = $this->correo_validacion(correo: $correo, modelo: (new not_emisor(link: $this->link)), campo: 'emisor');
@@ -60,6 +92,69 @@ class _email
         }
 
         return $datos->registros[0];
+    }
+
+    private function genera_not_mensaje_reporte_asistencia_ins( PDO $link, stdClass $row_entidad): array
+    {
+        $data_mensaje = $this->data_email_reporte_asistencia(row_entidad: $row_entidad);
+        if (errores::$error) {
+            return (new errores())->error(mensaje: 'Error al generar asunto', data: $data_mensaje);
+        }
+
+        $not_emisor = $this->not_emisor(link: $link);
+        if (errores::$error) {
+            return (new errores())->error(mensaje: 'Error al obtener emisor', data: $not_emisor);
+        }
+
+        $not_mensaje_ins = $this->not_mensaje_ins(data_mensaje: $data_mensaje,not_emisor:  $not_emisor);
+        if (errores::$error) {
+            return (new errores())->error(mensaje: 'Error al obtener emisor', data: $not_emisor);
+        }
+        return $not_mensaje_ins;
+    }
+
+    private function inserta_mensaje(PDO $link, stdClass $row_entidad){
+        $not_mensaje_ins = $this->genera_not_mensaje_reporte_asistencia_ins(link: $link, row_entidad: $row_entidad);
+        if (errores::$error) {
+            return (new errores())->error(mensaje: 'Error al obtener emisor', data: $not_mensaje_ins);
+        }
+
+        $r_not_mensaje = (new not_mensaje(link: $link))->alta_registro(registro: $not_mensaje_ins);
+        if (errores::$error) {
+            return (new errores())->error(mensaje: 'Error al insertar mensaje', data: $r_not_mensaje);
+        }
+
+        $key_entidad_id = 'inm_notificacion_periodo_id';
+
+        $fc_notificacion_ins[$key_entidad_id] = $row_entidad->$key_entidad_id;
+        $fc_notificacion_ins['not_mensaje_id'] = $r_not_mensaje->registro_id;
+
+        $r_fc_notificacion = (new inm_notificacion_periodo(link: $link))->alta_registro(registro: $fc_notificacion_ins);
+        if (errores::$error) {
+            return (new errores())->error(mensaje: 'Error al insertar fc_notificacion_ins', data: $r_fc_notificacion);
+        }
+
+        return $r_not_mensaje->registro_id;
+    }
+
+    private function not_emisor(PDO $link){
+        $not_emisores = (new not_emisor(link: $link))->registros_activos();
+        if (errores::$error) {
+            return (new errores())->error(mensaje: 'Error al obtener emisor', data: $not_emisores);
+        }
+        $n_emisores = count($not_emisores);
+        $indice = mt_rand(0,$n_emisores-1);
+
+        return $not_emisores[$indice];
+    }
+
+    private function not_mensaje_ins(stdClass $data_mensaje, array $not_emisor): array
+    {
+        $not_mensaje_ins['asunto'] =  $data_mensaje->asunto;
+        $not_mensaje_ins['mensaje'] =  $data_mensaje->mensaje;
+        $not_mensaje_ins['not_emisor_id'] =  $not_emisor['not_emisor_id'];
+
+        return $not_mensaje_ins;
     }
 
     public function receptor(string $correo): array
@@ -105,6 +200,11 @@ class _email
         }
 
         return (new not_mensaje(link: $this->link))->registro(registro_id: $alta_not_mensaje->registro_id);
+    }
+
+    private function mensaje_reporte_asistencia(string $asunto): string
+    {
+        return "Buen día se envia $asunto";
     }
 
     public function mensaje_receptor(int $mensaje, int $receptor): array
