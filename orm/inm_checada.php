@@ -5,6 +5,7 @@ namespace gamboamartin\inmuebles\models;
 use base\orm\_modelo_parent;
 use DateTime;
 use gamboamartin\errores\errores;
+use gamboamartin\plugins\exportador;
 use IntlDateFormatter;
 use PDO;
 use stdClass;
@@ -295,5 +296,44 @@ class inm_checada extends _modelo_parent{
         }
 
         return $r_altas;
+    }
+
+    public function genera_reporte(string $path_base){
+        $nombre_hojas = array('Checadas');
+
+        $r_periodo_asistencia = $this->registro(registro_id: $this->registro_id);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener prospecto_ubicacions', data: $r_periodo_asistencia);
+        }
+
+        $nombre = $r_periodo_asistencia['inm_periodo_asistencia_descripcion'];
+
+        $filtro['inm_periodo_asistencia.id'] = $this->registro_id;
+        $result = (new inm_checada(link: $this->link))->filtro_and(filtro: $filtro);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener prospecto_ubicacions', data: $result);
+        }
+
+        $ths[] = array('etiqueta'=>'Inicio Semana', 'campo'=>'inm_periodo_asistencia_fecha_inicio');
+        $ths[] = array('etiqueta'=>'Fin Semana', 'campo'=>'inm_periodo_asistencia_fecha_fin');
+        $ths[] = array('etiqueta'=>'Empleado', 'campo'=>'inm_empleado_razon_social');
+        $ths[] = array('etiqueta'=>'Fecha', 'campo'=>'inm_checada_fecha');
+        $ths[] = array('etiqueta'=>'Dia', 'campo'=>'inm_checada_dia');
+        $ths[] = array('etiqueta'=>'Hora Esperada', 'campo'=>'inm_checada_hora_esperada');
+        $ths[] = array('etiqueta'=>'Hora de Entrada', 'campo'=>'inm_checada_hora');
+        $ths[] = array('etiqueta'=>'Minutos de Retraso', 'campo'=>'inm_checada_minutos_retraso');
+        $ths[] = array('etiqueta'=>'Estatus', 'campo'=>'inm_status_asistencia_descripcion');
+
+        $keys_hojas['Checadas'] = new stdClass();
+        $keys_hojas['Checadas']->keys = $ths;
+        $keys_hojas['Checadas']->registros = $result->registros;
+
+        $xls = (new exportador())->genera_xls(header: false, name: $nombre, nombre_hojas: $nombre_hojas,
+            keys_hojas: $keys_hojas, path_base: $path_base);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener xls', data: $xls);
+        }
+
+        return $xls;
     }
 }

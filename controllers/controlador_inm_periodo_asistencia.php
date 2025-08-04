@@ -9,10 +9,13 @@
 namespace gamboamartin\inmuebles\controllers;
 
 use base\controller\init;
+use config\generales;
+use gamboamartin\documento\models\doc_tipo_documento;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_periodo_asistencia_html;
 use gamboamartin\inmuebles\models\inm_checada;
 use gamboamartin\inmuebles\models\inm_cheque;
+use gamboamartin\inmuebles\models\inm_doc_periodo_asistencia;
 use gamboamartin\inmuebles\models\inm_periodo_asistencia;
 use gamboamartin\plugins\exportador;
 use gamboamartin\system\_ctl_base;
@@ -389,6 +392,54 @@ class controlador_inm_periodo_asistencia extends _ctl_formato {
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al obtener prospecto_ubicacions', data: $result);
         }
+
+        return $result;
+    }
+
+    public function envia_reporte(bool $header, bool $ws = false): array|stdClass
+    {
+        $this->link->beginTransaction();
+
+        $filtro_tipo['doc_tipo_documento.descripcion'] = "REPORTE ASISTENCIA";
+        $r_tipo_documento = (new doc_tipo_documento(link: $this->link))->filtro_and(filtro: $filtro_tipo);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener tipo documento', data: $r_tipo_documento,
+                header: $header, ws: $ws);
+        }
+
+        if($r_tipo_documento->n_registros <= 0){
+            return $this->retorno_error(mensaje: 'Error no existe tipo de documento valido', data: $r_tipo_documento,
+                header: $header, ws: $ws);
+        }
+
+        $result = (new inm_checada(link: $this->link))->genera_reporte(path_base: $this->path_base);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener xls', data: $result, header: $header, ws: $ws);
+        }
+
+        $decoded_data = base64_decode($result);
+        $file_path = $this->path_base."archivos/temporales/reporte_asistencia.xlsx";
+        file_put_contents($file_path, $decoded_data);
+
+        $_FILES['documento'] = [
+            'name' => basename($file_path),
+            'type' => mime_content_type($file_path),
+            'tmp_name' => $file_path,
+            'error' => 0,
+            'size' => filesize($file_path)
+        ];
+
+        $registro_doc['inm_periodo_asistencia_id'] = $this->registro_id;
+        $registro_doc['doc_tipo_documento_id'] = $r_tipo_documento->registros[0]['doc_tipo_documento_id'];
+
+        $r_inm_doc_periodo_asistencia = (new inm_doc_periodo_asistencia(link:$this->link))->alta_registro(registro: $registro_doc);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al convertir en cliente', data: $r_inm_doc_periodo_asistencia,
+                header: true, ws: false, class: __CLASS__, file: __FILE__, function: __FILE__, line: __LINE__);
+        }
+
+        $this->link->commit();
 
         return $result;
     }
