@@ -13,6 +13,7 @@ use config\generales;
 use gamboamartin\documento\models\doc_tipo_documento;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_periodo_asistencia_html;
+use gamboamartin\inmuebles\models\_email;
 use gamboamartin\inmuebles\models\inm_checada;
 use gamboamartin\inmuebles\models\inm_cheque;
 use gamboamartin\inmuebles\models\inm_doc_periodo_asistencia;
@@ -412,6 +413,11 @@ class controlador_inm_periodo_asistencia extends _ctl_formato {
                 header: $header, ws: $ws);
         }
 
+        $r_periodo_asistencia = (new inm_periodo_asistencia(link: $this->link))->registro(registro_id: $this->registro_id);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al obtener prospecto_ubicacions', data: $r_periodo_asistencia);
+        }
+
         $result = (new inm_checada(link: $this->link))->genera_reporte(path_base: $this->path_base, registro_id: $this->registro_id);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al obtener xls', data: $result, header: $header, ws: $ws);
@@ -420,7 +426,20 @@ class controlador_inm_periodo_asistencia extends _ctl_formato {
         $decoded_data = base64_decode($result);
         $file_path = $this->path_base."archivos/temporales/reporte_asistencia.xlsx";
         file_put_contents($file_path, $decoded_data);
-        exit;
+
+        $inserta_notificacion = (new _email(link: $this->link))->inserta_mensaje(link: $this->link,
+            row_entidad: $r_periodo_asistencia);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al insertar notificacion',data:  $inserta_notificacion,
+                header: $header,ws:$ws);
+        }
+
+        $envia = (new _email(link: $this->link))->notifica(not_mensaje_id: $inserta_notificacion,link: $this->link);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al insertar notificacion',data:  $envia,
+                header: $header,ws:$ws);
+        }
+
         $this->link->commit();
 
         return $result;

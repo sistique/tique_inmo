@@ -4,6 +4,7 @@ namespace gamboamartin\inmuebles\models;
 
 use base\orm\modelo;
 use gamboamartin\errores\errores;
+use gamboamartin\notificaciones\mail\_mail;
 use gamboamartin\notificaciones\models\not_adjunto;
 use gamboamartin\notificaciones\models\not_emisor;
 use gamboamartin\notificaciones\models\not_mensaje;
@@ -113,7 +114,27 @@ class _email
         return $not_mensaje_ins;
     }
 
-    private function inserta_mensaje(PDO $link, stdClass $row_entidad){
+    public function inserta_adjunto(int $doc_documento_id, stdClass $row_entidad, int $not_mensaje_id, PDO $link){
+
+        $not_adjunto_ins['not_mensaje_id'] = $not_mensaje_id;
+        $not_adjunto_ins['doc_documento_id'] = $doc['doc_documento_id'];
+        $not_adjunto_ins['descripcion'] = '.'.date('YmdHis').mt_rand(10000,99999).
+            '.'.$doc['doc_extension_descripcion'];
+
+        $not_adjunto_ins['name_out'] =  $doc['doc_documento_name_out'];
+        if($doc['doc_tipo_documento_descripcion'] !=='ADJUNTO') {
+            $not_adjunto_ins['name_out'] = '.' . $doc['doc_extension_descripcion'];
+        }
+
+        $r_not_adjunto = (new not_adjunto(link: $link))->alta_registro(registro: $not_adjunto_ins);
+        if (errores::$error) {
+            return (new errores())->error(mensaje: 'Error al insertar adjunto', data: $r_not_adjunto);
+        }
+
+        return $r_not_adjunto;
+    }
+
+    public function inserta_mensaje(PDO $link, stdClass $row_entidad){
         $not_mensaje_ins = $this->genera_not_mensaje_reporte_asistencia_ins(link: $link, row_entidad: $row_entidad);
         if (errores::$error) {
             return (new errores())->error(mensaje: 'Error al obtener emisor', data: $not_mensaje_ins);
@@ -135,6 +156,28 @@ class _email
         }
 
         return $r_not_mensaje->registro_id;
+    }
+
+    public function notifica(int $not_mensaje_id, PDO $link, array $cc = array(), array $cco = array()){
+        $not_mensaje = (new not_mensaje(link: $link))->registro(registro_id: $not_mensaje_id);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al obtener mensaje',data:  $not_mensaje);
+        }
+
+        $filtro['not_mensaje.id'] = $not_mensaje_id;
+        $r_not_adjunto = (new not_adjunto(link: $this->link))->filtro_and(filtro: $filtro);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al obtener adjuntos', data: $r_not_adjunto);
+        }
+
+        $adjuntos = $r_not_adjunto->registros;
+
+        $mail = (new _mail())->envia(mensaje: $not_mensaje, adjuntos: $adjuntos,cc: $cc, cco: $cco);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al enviar mensaje',data:  $mail);
+        }
+
+        return $mail;
     }
 
     private function not_emisor(PDO $link){
