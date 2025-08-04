@@ -2342,13 +2342,13 @@ class controlador_inm_ubicacion extends _ctl_base {
         $ths[] = array('etiqueta'=>'Agente', 'campo'=>'com_agente_descripcion');
         $ths[] = array('etiqueta'=>'Status ubicacion', 'campo'=>'inm_status_ubicacion_descripcion');
 
-        $keys = array();
+        /*$keys = array();
         foreach ($ths as $data_th) {
             $keys[] = $data_th['campo'];
-        }
+        }*/
 
         $keys_hojas['Ubicaciones'] = new stdClass();
-        $keys_hojas['Ubicaciones']->keys = $keys;
+        $keys_hojas['Ubicaciones']->keys = $ths;
         $keys_hojas['Ubicaciones']->registros = $registros->registros;
 
 

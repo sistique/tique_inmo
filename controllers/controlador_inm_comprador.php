@@ -2487,21 +2487,21 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         $ths[] = array('etiqueta'=>'ID', 'campo'=>'inm_comprador_id');
-        $ths[] = array('etiqueta'=>'comprador', 'campo'=>'inm_comprador_razon_social');
-        $ths[] = array('etiqueta'=>'comprador', 'campo'=>'inm_ubicacion_completa');
+        $ths[] = array('etiqueta'=>'Cliente', 'campo'=>'inm_comprador_razon_social');
+        $ths[] = array('etiqueta'=>'Ubicacion', 'campo'=>'inm_ubicacion_completa');
         $ths[] = array('etiqueta'=>'Agente', 'campo'=>'com_agente_descripcion');
-        $ths[] = array('etiqueta'=>'Status comprador', 'campo'=>'inm_comprador_nss');
-        $ths[] = array('etiqueta'=>'Status comprador', 'campo'=>'inm_comprador_password_mi_cuenta_infonavit');
-        $ths[] = array('etiqueta'=>'Status comprador', 'campo'=>'inm_comprador_numero_credito');
-        $ths[] = array('etiqueta'=>'Status comprador', 'campo'=>'inm_status_comprador_descripcion');
+        $ths[] = array('etiqueta'=>'NSS', 'campo'=>'inm_comprador_nss');
+        $ths[] = array('etiqueta'=>'Mi Cuenta Infonavit', 'campo'=>'inm_comprador_password_mi_cuenta_infonavit');
+        $ths[] = array('etiqueta'=>'Numero Credito', 'campo'=>'inm_comprador_numero_credito');
+        $ths[] = array('etiqueta'=>'Status Cliente', 'campo'=>'inm_status_comprador_descripcion');
 
-        $keys = array();
+        /*$keys = array();
         foreach ($ths as $data_th) {
             $keys[] = $data_th['campo'];
-        }
+        }*/
 
         $keys_hojas['Clientes'] = new stdClass();
-        $keys_hojas['Clientes']->keys = $keys;
+        $keys_hojas['Clientes']->keys = $ths;
         $keys_hojas['Clientes']->registros = $registros->registros;
 
         $moneda = array();
