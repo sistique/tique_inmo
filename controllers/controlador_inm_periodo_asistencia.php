@@ -396,7 +396,7 @@ class controlador_inm_periodo_asistencia extends _ctl_formato {
         return $result;
     }
 
-    public function envia_reporte(bool $header, bool $ws = false): array|stdClass
+    public function envia_reporte(bool $header, bool $ws = false): array|stdClass|string
     {
         $this->link->beginTransaction();
 
@@ -412,7 +412,7 @@ class controlador_inm_periodo_asistencia extends _ctl_formato {
                 header: $header, ws: $ws);
         }
 
-        $result = (new inm_checada(link: $this->link))->genera_reporte(path_base: $this->path_base);
+        $result = (new inm_checada(link: $this->link))->genera_reporte(path_base: $this->path_base, registro_id: $this->registro_id);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al obtener xls', data: $result, header: $header, ws: $ws);
         }
@@ -420,25 +420,7 @@ class controlador_inm_periodo_asistencia extends _ctl_formato {
         $decoded_data = base64_decode($result);
         $file_path = $this->path_base."archivos/temporales/reporte_asistencia.xlsx";
         file_put_contents($file_path, $decoded_data);
-
-        $_FILES['documento'] = [
-            'name' => basename($file_path),
-            'type' => mime_content_type($file_path),
-            'tmp_name' => $file_path,
-            'error' => 0,
-            'size' => filesize($file_path)
-        ];
-
-        $registro_doc['inm_periodo_asistencia_id'] = $this->registro_id;
-        $registro_doc['doc_tipo_documento_id'] = $r_tipo_documento->registros[0]['doc_tipo_documento_id'];
-
-        $r_inm_doc_periodo_asistencia = (new inm_doc_periodo_asistencia(link:$this->link))->alta_registro(registro: $registro_doc);
-        if (errores::$error) {
-            $this->link->rollBack();
-            return $this->retorno_error(mensaje: 'Error al convertir en cliente', data: $r_inm_doc_periodo_asistencia,
-                header: true, ws: false, class: __CLASS__, file: __FILE__, function: __FILE__, line: __LINE__);
-        }
-
+        exit;
         $this->link->commit();
 
         return $result;

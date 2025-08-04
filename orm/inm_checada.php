@@ -298,17 +298,17 @@ class inm_checada extends _modelo_parent{
         return $r_altas;
     }
 
-    public function genera_reporte(string $path_base){
+    public function genera_reporte(string $path_base, int $registro_id){
         $nombre_hojas = array('Checadas');
 
-        $r_periodo_asistencia = $this->registro(registro_id: $this->registro_id);
+        $r_periodo_asistencia = (new inm_periodo_asistencia(link: $this->link))->registro(registro_id: $registro_id);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al obtener prospecto_ubicacions', data: $r_periodo_asistencia);
         }
 
         $nombre = $r_periodo_asistencia['inm_periodo_asistencia_descripcion'];
 
-        $filtro['inm_periodo_asistencia.id'] = $this->registro_id;
+        $filtro['inm_periodo_asistencia.id'] = $registro_id;
         $result = (new inm_checada(link: $this->link))->filtro_and(filtro: $filtro);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al obtener prospecto_ubicacions', data: $result);
