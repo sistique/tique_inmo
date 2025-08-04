@@ -114,7 +114,7 @@ class _email
         return $not_mensaje_ins;
     }
 
-    public function inserta_adjunto(int $doc_documento_id, stdClass $row_entidad, int $not_mensaje_id, PDO $link){
+    public function inserta_adjunto(array $doc, int $not_mensaje_id, PDO $link){
 
         $not_adjunto_ins['not_mensaje_id'] = $not_mensaje_id;
         $not_adjunto_ins['doc_documento_id'] = $doc['doc_documento_id'];

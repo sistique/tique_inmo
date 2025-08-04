@@ -427,12 +427,38 @@ class controlador_inm_periodo_asistencia extends _ctl_formato {
         $file_path = $this->path_base."archivos/temporales/reporte_asistencia.xlsx";
         file_put_contents($file_path, $decoded_data);
 
+        $_FILES['documento'] = [
+            'name' => basename($file_path),
+            'type' => mime_content_type($file_path),
+            'tmp_name' => $file_path,
+            'error' => 0,
+            'size' => filesize($file_path)
+        ];
+
+        $registro_doc['inm_periodo_asistencia_id'] = $this->registro_id;
+        $registro_doc['doc_tipo_documento_id'] = $r_tipo_documento->registros[0]['doc_tipo_documento_id'];
+
+        $r_inm_doc_periodo_asistencia = (new inm_doc_periodo_asistencia(link:$this->link))->alta_registro(registro: $registro_doc);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al convertir en cliente', data: $r_inm_doc_periodo_asistencia,
+                header: true, ws: false, class: __CLASS__, file: __FILE__, function: __FILE__, line: __LINE__);
+        }
+
         $inserta_notificacion = (new _email(link: $this->link))->inserta_mensaje(link: $this->link,
             row_entidad: $r_periodo_asistencia);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al insertar notificacion',data:  $inserta_notificacion,
                 header: $header,ws:$ws);
         }
+
+        $inserta_adjunto = (new _email(link: $this->link))->inserta_adjunto(
+            doc: $r_inm_doc_periodo_asistencia->registro, not_mensaje_id: $inserta_notificacion, link: $this->link);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al insertar notificacion',data:  $inserta_adjunto,
+                header: $header,ws:$ws);
+        }
+
 
         $envia = (new _email(link: $this->link))->notifica(not_mensaje_id: $inserta_notificacion,link: $this->link);
         if(errores::$error){
