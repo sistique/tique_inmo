@@ -459,7 +459,6 @@ class controlador_inm_periodo_asistencia extends _ctl_formato {
                 header: $header,ws:$ws);
         }
 
-
         $envia = (new _email(link: $this->link))->notifica(not_mensaje_id: $inserta_notificacion,link: $this->link);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al insertar notificacion',data:  $envia,
