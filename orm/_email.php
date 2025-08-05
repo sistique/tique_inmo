@@ -145,7 +145,7 @@ class _email
             return (new errores())->error(mensaje: 'Error al insertar mensaje', data: $r_not_mensaje);
         }
 
-        $key_entidad_id = 'inm_notificacion_periodo_id';
+        $key_entidad_id = 'inm_periodo_asistencia_id';
 
         $fc_notificacion_ins[$key_entidad_id] = $row_entidad->$key_entidad_id;
         $fc_notificacion_ins['not_mensaje_id'] = $r_not_mensaje->registro_id;
@@ -157,6 +157,8 @@ class _email
 
         return $r_not_mensaje->registro_id;
     }
+
+
 
     public function notifica(int $not_mensaje_id, PDO $link, array $cc = array(), array $cco = array()){
         $not_mensaje = (new not_mensaje(link: $link))->registro(registro_id: $not_mensaje_id);
