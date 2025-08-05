@@ -153,6 +153,7 @@ class _com_cliente{
 
         $com_cliente_data['razon_social'] = trim($razon_social);
         $com_cliente_data['rfc'] = $registro['rfc'];
+        $com_cliente_data['calle'] = $registro['calle'];
         $com_cliente_data['numero_exterior'] = $registro['numero_exterior'];
         $com_cliente_data['numero_interior'] = $numero_interior;
         $com_cliente_data['telefono'] = $telefono;
@@ -166,6 +167,8 @@ class _com_cliente{
         $com_cliente_data['cat_sat_tipo_persona_id'] = $registro['cat_sat_tipo_persona_id'];
         $com_cliente_data['cat_sat_tipo_de_comprobante_id'] = 1;
         $com_cliente_data['dp_municipio_id'] = $registro['dp_municipio_id'];
+        $com_cliente_data['dp_colonia_postal_id'] = $registro['dp_colonia_postal_id'];
+
         return $com_cliente_data;
     }
 

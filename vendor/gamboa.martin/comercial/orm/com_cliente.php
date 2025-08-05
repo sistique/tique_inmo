@@ -72,13 +72,13 @@ class com_cliente extends _modelo_parent
 
     private function ajusta_key_dom(string $key_dom, array $registro)
     {
-        $dp_calle_pertenece = (new dp_calle_pertenece(link: $this->link))->registro(
-            registro_id: $registro['dp_calle_pertenece_id']);
+        $dp_colonia_postal = (new dp_colonia_postal(link: $this->link))->registro(
+            registro_id: $registro['dp_colonia_postal_id']);
         if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al obtener calle', data: $dp_calle_pertenece);
+            return $this->error->error(mensaje: 'Error al obtener calle', data: $dp_colonia_postal);
         }
 
-        $registro = $this->integra_key_dom_faltante(dp_calle_pertenece: $dp_calle_pertenece, key_dom: $key_dom, registro: $registro);
+        $registro = $this->integra_key_dom_faltante(dp_colonia_postal: $dp_colonia_postal, key_dom: $key_dom, registro: $registro);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al integrar key_dom', data: $registro);
         }
@@ -88,7 +88,7 @@ class com_cliente extends _modelo_parent
 
     private function ajusta_keys_dom(array $registro)
     {
-        $keys_dom = array('pais', 'estado', 'municipio', 'colonia', 'calle', 'cp');
+        $keys_dom = array('pais', 'estado', 'municipio', 'colonia', 'cp');
 
         foreach ($keys_dom as $key_dom) {
 
@@ -981,17 +981,17 @@ class com_cliente extends _modelo_parent
         return $com_conf_tipo_doc_cliente;
     }
 
-    private function integra_key_dom(array $dp_calle_pertenece, string $key_dom, array $registro): array
+    private function integra_key_dom(array $dp_colonia_postal, string $key_dom, array $registro): array
     {
-        $registro[$key_dom] = $dp_calle_pertenece['dp_' . $key_dom . '_descripcion'];
+        $registro[$key_dom] = $dp_colonia_postal['dp_' . $key_dom . '_descripcion'];
         return $registro;
 
     }
 
-    private function integra_key_dom_faltante(array $dp_calle_pertenece, string $key_dom, array $registro)
+    private function integra_key_dom_faltante(array $dp_colonia_postal, string $key_dom, array $registro)
     {
         if (!isset($registro[$key_dom])) {
-            $registro = $this->integra_key_dom(dp_calle_pertenece: $dp_calle_pertenece, key_dom: $key_dom, registro: $registro);
+            $registro = $this->integra_key_dom(dp_colonia_postal: $dp_colonia_postal, key_dom: $key_dom, registro: $registro);
             if (errores::$error) {
                 return $this->error->error(mensaje: 'Error al integrar key_dom', data: $registro);
             }

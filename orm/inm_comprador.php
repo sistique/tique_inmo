@@ -112,7 +112,7 @@ class inm_comprador extends _modelo_parent{
      */
     public function alta_bd(array $keys_integra_ds = array('codigo', 'descripcion')): array|stdClass
     {
-        if(!isset($registro['dp_colonia_postal_id']) || (string)$registro['dp_colonia_postal_id'] === '-1'){
+        if(!isset($this->registro['dp_colonia_postal_id']) || (string)$this->registro['dp_colonia_postal_id'] === '-1'){
             $this->registro['dp_colonia_postal_id'] = 105;
         }
 
