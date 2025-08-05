@@ -420,12 +420,14 @@ class _keys_selects{
     {
 
         $entidades_pref[] = 'inm_producto_infonavit';
+        $entidades_pref[] = 'inm_tipo_credito';
         $entidades_pref[] = 'inm_attr_tipo_credito';
         $entidades_pref[] = 'inm_destino_credito';
         $entidades_pref[] = 'inm_plazo_credito_sc';
         $entidades_pref[] = 'inm_tipo_discapacidad';
         $entidades_pref[] = 'inm_persona_discapacidad';
         $entidades_pref[] = 'inm_institucion_hipotecaria';
+        $entidades_pref[] = 'adm_estado_civil';
 
         foreach ($entidades_pref as $entidad){
             $entidad_id = $modelo->id_preferido_detalle(entidad_preferida: $entidad);

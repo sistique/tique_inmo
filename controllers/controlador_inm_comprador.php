@@ -2141,6 +2141,7 @@ class controlador_inm_comprador extends _ctl_base {
 
         $init_data = array();
         $init_data['inm_producto_infonavit'] = "gamboamartin\\inmuebles";
+        $init_data['inm_tipo_credito'] = "gamboamartin\\inmuebles";
         $init_data['inm_attr_tipo_credito'] = "gamboamartin\\inmuebles";
         $init_data['inm_destino_credito'] = "gamboamartin\\inmuebles";
         $init_data['inm_plazo_credito_sc'] = "gamboamartin\\inmuebles";
@@ -2153,6 +2154,7 @@ class controlador_inm_comprador extends _ctl_base {
         $init_data['inm_ocupacion'] = "gamboamartin\\inmuebles";
         $init_data['inm_valuador'] = "gamboamartin\\inmuebles";
         $init_data['com_cliente'] = "gamboamartin\\comercial";
+        $init_data['adm_estado_civil'] = "gamboamartin\\administrador";
 
         $init_data = (new _base_paquete())->init_data_domicilio(init_data: $init_data);
         if(errores::$error){
