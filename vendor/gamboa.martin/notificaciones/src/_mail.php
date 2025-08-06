@@ -1,6 +1,9 @@
 <?php
 namespace gamboamartin\notificaciones\mail;
+use config\generales;
 use gamboamartin\errores\errores;
+use gamboamartin\inmuebles\models\_dropbox;
+use gamboamartin\inmuebles\models\inm_dropbox_ruta;
 use PHPMailer\PHPMailer\PHPMailer;
 use stdClass;
 use Throwable;
@@ -14,7 +17,8 @@ class _mail{
      * @param array $cco
      * @return array|PHPMailer
      */
-    final public function envia(stdClass $mensaje, array $adjuntos = array(), array $cc = array(), array $cco = array()): array|PHPMailer
+    final public function envia(stdClass $mensaje, array $adjuntos = array(), array $cc = array(),
+                                array $cco = array(), PDO $link): array|PHPMailer
     {
 
         try {
@@ -35,8 +39,29 @@ class _mail{
             $mail->AltBody = $mensaje->not_mensaje_mensaje;
             $mail->CharSet = 'UTF-8';
             $mail->Encoding = 'base64';
-            foreach ($adjuntos as $adjunto ){
+            foreach ($adjuntos as $adjunto){
                 $path =  $adjunto['doc_documento_ruta_absoluta'];
+
+                if((new generales())->guarda_archivo_dropbox) {
+                    $filtro_drop['doc_documento.id'] = $adjunto['doc_documento_id'];
+                    $r_inm_dropbox_ruta = (new inm_dropbox_ruta($link))->filtro_and(filtro: $filtro_drop);
+                    if(errores::$error){
+                        return (new errores())->error(mensaje: 'Error al obtener adjuntos', data: $r_inm_dropbox_ruta);
+                    }
+
+                    if($r_inm_dropbox_ruta->n_registros > 0) {
+                        $reg = $r_inm_dropbox_ruta->registros[0];
+                        $guarda = (new _dropbox(link: $this->link))->preview(
+                            dropbox_id: $reg['inm_dropbox_ruta_id_dropbox'], extencion: $reg['doc_extension_descripcion']);
+                        if (errores::$error) {
+                            return $this->retorno_error('Error al guardar archivo', $guarda, header: $header,
+                                ws: $ws);
+                        }
+
+                        $path = (new generales())->path_base . $guarda->ruta_archivo;
+                    }
+                }
+
                 $name =  $adjunto['not_adjunto_name_out'];
                 $mail->AddAttachment($path, $name);
             }

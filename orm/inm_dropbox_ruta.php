@@ -12,7 +12,7 @@ class inm_dropbox_ruta extends _modelo_parent{
     public function __construct(PDO $link)
     {
         $tabla = 'inm_dropbox_ruta';
-        $columnas = array($tabla=>false,'doc_documento'=>$tabla);
+        $columnas = array($tabla=>false,'doc_documento'=>$tabla,'doc_extension'=>'doc_documento');
 
         $campos_obligatorios = array();
 
