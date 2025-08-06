@@ -123,7 +123,7 @@ class _email
 
         $not_adjunto_ins['name_out'] = $doc['inm_periodo_asistencia_descripcion'];
         if($doc['doc_tipo_documento_descripcion'] !=='ADJUNTO') {
-            $not_adjunto_ins['name_out'] = '.' . $doc['inm_periodo_asistencia_descripcion'];
+            $not_adjunto_ins['name_out'] = $doc['inm_periodo_asistencia_descripcion'];
         }
 
         $r_not_adjunto = (new not_adjunto(link: $link))->alta_registro(registro: $not_adjunto_ins);
