@@ -369,7 +369,6 @@ class inm_checada extends _modelo_parent{
                         return $this->error->error(mensaje: 'Error al obtener tipo checada', data: $registro);
                     }
 
-                    print_r($registro);exit;
                     $r_alta_bd = $this->alta_registro(registro: $registro);
                     if (errores::$error) {
                         return $this->error->error(mensaje: 'Error al insertar checada', data: $r_alta_bd);
