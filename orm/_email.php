@@ -172,7 +172,7 @@ class _email
 
 
 
-    public function notifica(array $not_mensaje, PDO $link, array $cc = array(), array $cco = array()){
+    public function notifica(array|stdClass $not_mensaje, PDO $link, array $cc = array(), array $cco = array()){
         if(!is_object($not_mensaje)){
             $not_mensaje = (object)$not_mensaje;
         }
