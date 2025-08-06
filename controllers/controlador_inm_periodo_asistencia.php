@@ -474,7 +474,7 @@ class controlador_inm_periodo_asistencia extends _ctl_formato {
 
         $envios = array();
         foreach ($r_not_rel_mensaje->registros as $not_rel_mensaje){
-            $envios[] = (new _email(link: $this->link))->notifica(not_mensaje_id: $inserta_notificacion,link: $this->link);
+            $envios[] = (new _email(link: $this->link))->notifica(not_mensaje: $not_rel_mensaje,link: $this->link);
             if(errores::$error){
                 $this->link->rollBack();
                 return $this->retorno_error(mensaje: 'Error al insertar notificacion',data:  $envios,

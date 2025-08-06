@@ -175,21 +175,14 @@ class _email
 
 
 
-    public function notifica(int $not_mensaje_id, PDO $link, array $cc = array(), array $cco = array()){
-        $not_mensaje = (new not_mensaje(link: $link))->registro(registro_id: $not_mensaje_id);
-        if(errores::$error){
-            return (new errores())->error(mensaje: 'Error al obtener mensaje',data:  $not_mensaje);
-        }
-
-        $filtro['not_mensaje.id'] = $not_mensaje_id;
-        $r_not_adjunto = (new not_adjunto(link: $this->link))->filtro_and(filtro: $filtro);
+    public function notifica(stdClass $not_mensaje, PDO $link, array $cc = array(), array $cco = array()){
+        $filtro['not_mensaje.id'] = $not_mensaje->not_mensaje_id;
+        $r_not_adjunto = (new not_adjunto(link: $link))->filtro_and(filtro: $filtro,);
         if(errores::$error){
             return (new errores())->error(mensaje: 'Error al obtener adjuntos', data: $r_not_adjunto);
         }
 
-        $adjuntos = $r_not_adjunto->registros;
-
-        $mail = (new _mail())->envia(mensaje: $not_mensaje, adjuntos: $adjuntos,cc: $cc, cco: $cco);
+        $mail = (new _mail())->envia(mensaje: $not_mensaje, adjuntos: $r_not_adjunto->registros,cc: $cc, cco: $cco);
         if(errores::$error){
             return (new errores())->error(mensaje: 'Error al enviar mensaje',data:  $mail);
         }
