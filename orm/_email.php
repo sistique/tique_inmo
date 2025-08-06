@@ -183,7 +183,8 @@ class _email
             return (new errores())->error(mensaje: 'Error al obtener adjuntos', data: $r_not_adjunto);
         }
 
-        $mail = (new _mail())->envia(mensaje: $not_mensaje, adjuntos: $r_not_adjunto->registros,cc: $cc, cco: $cco);
+        $mail = (new _mail())->envia(mensaje: $not_mensaje, link: $link, adjuntos: $r_not_adjunto->registros, cc: $cc,
+            cco: $cco);
         if(errores::$error){
             return (new errores())->error(mensaje: 'Error al enviar mensaje',data:  $mail);
         }

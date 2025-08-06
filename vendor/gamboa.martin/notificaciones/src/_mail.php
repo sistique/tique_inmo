@@ -7,6 +7,7 @@ use gamboamartin\inmuebles\models\inm_dropbox_ruta;
 use PHPMailer\PHPMailer\PHPMailer;
 use stdClass;
 use Throwable;
+use PDO;
 
 class _mail{
     /**
@@ -17,8 +18,8 @@ class _mail{
      * @param array $cco
      * @return array|PHPMailer
      */
-    final public function envia(stdClass $mensaje, array $adjuntos = array(), array $cc = array(),
-                                array $cco = array(), PDO $link): array|PHPMailer
+    final public function envia(stdClass $mensaje, PDO $link, array $adjuntos = array(), array $cc = array(),
+                                array $cco = array()): array|PHPMailer
     {
 
         try {
@@ -51,7 +52,7 @@ class _mail{
 
                     if($r_inm_dropbox_ruta->n_registros > 0) {
                         $reg = $r_inm_dropbox_ruta->registros[0];
-                        $guarda = (new _dropbox(link: $this->link))->preview(
+                        $guarda = (new _dropbox(link: $link))->preview(
                             dropbox_id: $reg['inm_dropbox_ruta_id_dropbox'], extencion: $reg['doc_extension_descripcion']);
                         if (errores::$error) {
                             return $this->retorno_error('Error al guardar archivo', $guarda, header: $header,
