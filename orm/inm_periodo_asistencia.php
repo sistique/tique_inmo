@@ -164,7 +164,7 @@ class inm_periodo_asistencia extends _modelo_parent{
             }
         }
 
-        $registro_mod['inm_periodo_asistencia.enviado'] = 'activo';
+        $registro_mod['enviado'] = 'activo';
         $r_inm_periodo_asistencia = (new inm_periodo_asistencia(link: $this->link))->modifica_bd(
             registro: $registro_mod,id: $registro_id);
         if(errores::$error){
@@ -177,7 +177,7 @@ class inm_periodo_asistencia extends _modelo_parent{
     public function modifica_bd(array $registro, int $id, bool $reactiva = false,
                                 array $keys_integra_ds = array('codigo', 'descripcion')): array|stdClass
     {
-        if(!isset($registro['status'])){
+        if(!isset($registro['status']) && !isset($registro['enviado'])){
             $keys = array('inm_horario_id');
             $valida = $this->validacion->valida_existencia_keys(keys:  $keys, registro: $registro);
             if(errores::$error){
