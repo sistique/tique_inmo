@@ -25,7 +25,7 @@ if (errores::$error) {
 
 $return = array();
 foreach ($r_periodos->registros AS $registro){
-    $return = $modelo_inm_periodo_asistencia->envia_reporte(registro_id: $registro['inm_periodo_asistencia']);
+    $return = $modelo_inm_periodo_asistencia->envia_reporte(registro_id: $registro['inm_periodo_asistencia_id']);
     if (errores::$error) {
         return $modelo_inm_periodo_asistencia->error->error('Error al guardar archivo', $return);
     }
