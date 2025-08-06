@@ -76,6 +76,7 @@ class controlador_inm_periodo_asistencia extends _ctl_formato {
 
         $this->row_upd->fecha_inicio = date('Y-m-d');
         $this->row_upd->fecha_fin = date('Y-m-d');
+        $this->row_upd->fecha_envio = date('Y-m-d');
 
         $fecha = $this->html->input_fecha(cols: 6, row_upd: $this->row_upd, value_vacio: false, name: "fecha_inicio",
             place_holder: 'Fecha Inicio', value: $this->row_upd->fecha_inicio);
@@ -93,13 +94,21 @@ class controlador_inm_periodo_asistencia extends _ctl_formato {
         }
         $this->inputs->fecha_fin = $fecha;
 
+        $fecha = $this->html->input_fecha(cols: 6, row_upd: $this->row_upd, value_vacio: false, name: "fecha_envio",
+            place_holder: 'Fecha Envio', value: $this->row_upd->fecha_envio);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener input fecha',data:  $fecha, header: $header,ws:  $ws);
+        }
+        $this->inputs->fecha_envio = $fecha;
+
         return $r_alta;
     }
 
     protected function campos_view(): array
     {
         $keys = new stdClass();
-        $keys->inputs = array('descripcion');
+        $keys->inputs = array('descripcion','enviado');
         $keys->selects = array();
 
         $init_data = array();
@@ -172,6 +181,14 @@ class controlador_inm_periodo_asistencia extends _ctl_formato {
         }
         $this->inputs->fecha_fin = $fecha;
 
+        $fecha = $this->html->input_fecha(cols: 6, row_upd: $this->row_upd, value_vacio: false, name: "fecha_envio",
+            place_holder: 'Fecha Envio', value: $this->row_upd->fecha_envio);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener input fecha',data:  $fecha, header: $header,ws:  $ws);
+        }
+        $this->inputs->fecha_envio = $fecha;
+
         return $r_modifica;
     }
 
@@ -183,6 +200,7 @@ class controlador_inm_periodo_asistencia extends _ctl_formato {
     {
         $columns["inm_periodo_asistencia_id"]["titulo"] = "Id";
         $columns["inm_periodo_asistencia_descripcion"]["titulo"] = "Descripcion";
+        $columns["inm_periodo_asistencia_enviado"]["titulo"] = "Enviado";
 
         $filtro = array("inm_periodo_asistencia.id","inm_periodo_asistencia.descripcion");
 
