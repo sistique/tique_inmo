@@ -362,12 +362,14 @@ class inm_checada extends _modelo_parent{
 
                     $registro = $this->generar_asistencias(
                         inm_empleado_id: $registro_empleado['inm_empleado_id'], fecha: $fecha,
-                        fechaInicio: $r_periodo_asistencia->registros[0]['inm_periodo_asistencia_fecha_inicio'],
-                        horaEntrada: $r_horarios->registros[0]['inm_horario_diario_hora_entrada']);
+                        fecha_inicio: $r_periodo_asistencia->registros[0]['inm_periodo_asistencia_fecha_inicio'],
+                        fecha_fin: $r_periodo_asistencia->registros[0]['inm_periodo_asistencia_fecha_fin'],
+                        hora_entrada: $r_horarios->registros[0]['inm_horario_diario_hora_entrada']);
                     if (errores::$error) {
                         return $this->error->error(mensaje: 'Error al obtener tipo checada', data: $registro);
                     }
 
+                    print_r($registro);exit;
                     $r_alta_bd = $this->alta_registro(registro: $registro);
                     if (errores::$error) {
                         return $this->error->error(mensaje: 'Error al insertar checada', data: $r_alta_bd);
@@ -384,23 +386,23 @@ class inm_checada extends _modelo_parent{
     /**
      * @throws \DateMalformedStringException
      */
-    function generar_asistencias($inm_empleado_id, $fecha, $fechaInicio, $horaEntrada = "09:00:00",
-                                 $porcInasistencias = 8, $porcRetardos = 10)
+    function generar_asistencias($inm_empleado_id, $fecha, $fecha_inicio, $fecha_fin, $hora_entrada = "09:00:00",
+                                 $porc_inasistencias = 8, $porc_retardos = 10)
     {
-        $hoy = new DateTime($fecha);
-        $inicio = new DateTime($fechaInicio);
+        $inicio = new DateTime($fecha_inicio);
+        $fin = new DateTime($fecha_fin);
 
-        $diasLaborales = $inicio->diff($hoy)->days + 1;
+        $diasLaborales = $inicio->diff($fin)->days + 1;
 
-        $filtro_especial[0][$fechaInicio]['operador'] = '<=';
-        $filtro_especial[0][$fechaInicio]['valor'] = 'inm_checada.fecha';
-        $filtro_especial[0][$fechaInicio]['comparacion'] = 'AND';
-        $filtro_especial[0][$fechaInicio]['valor_es_campo'] = true;
+        $filtro_especial[0][$fecha_inicio]['operador'] = '<=';
+        $filtro_especial[0][$fecha_inicio]['valor'] = 'inm_checada.fecha';
+        $filtro_especial[0][$fecha_inicio]['comparacion'] = 'AND';
+        $filtro_especial[0][$fecha_inicio]['valor_es_campo'] = true;
 
-        $filtro_especial[1][$fecha]['operador'] = '>=';
-        $filtro_especial[1][$fecha]['valor'] = 'inm_checada.fecha';
-        $filtro_especial[1][$fecha]['comparacion'] = 'AND';
-        $filtro_especial[1][$fecha]['valor_es_campo'] = true;
+        $filtro_especial[1][$fecha_fin]['operador'] = '>=';
+        $filtro_especial[1][$fecha_fin]['valor'] = 'inm_checada.fecha';
+        $filtro_especial[1][$fecha_fin]['comparacion'] = 'AND';
+        $filtro_especial[1][$fecha_fin]['valor_es_campo'] = true;
 
         $order = array('inm_checada.fecha'=>'DESC');
 
@@ -430,28 +432,28 @@ class inm_checada extends _modelo_parent{
             $faltasExistentes = $r_checada->n_registros;
         }
 
-        $maxFaltas = ceil($diasLaborales * $porcInasistencias / 100);
-        $maxRetardos = ceil($diasLaborales * $porcRetardos / 100);
+        $maxFaltas = max(1, floor($diasLaborales * $porc_inasistencias / 100));
+        $maxRetardos = max(1, floor($diasLaborales * $porc_retardos / 100));
 
-        if ($faltasExistentes < $maxFaltas && mt_rand(1, 100) <= $porcInasistencias) {
+        if ($faltasExistentes < $maxFaltas && mt_rand(1, 100) <= $porc_inasistencias) {
             $hora = date('H:i:s');
-        } else if ($retardosExistentes < $maxRetardos && mt_rand(1, 100) <= $porcRetardos) {
+        } else if ($retardosExistentes < $maxRetardos && mt_rand(1, 100) <= $porc_retardos) {
             $min = mt_rand(15, 60);
             $seg = mt_rand(1, 59);
-            $hora = (new DateTime($horaEntrada))->modify("+{$min} minutes")->modify("+{$seg} seconds")->format('H:i:s');
+            $hora = (new DateTime($hora_entrada))->modify("+{$min} minutes")
+                ->modify("+{$seg} seconds")->format('H:i:s');
         } else {
             $min = mt_rand(0, 15);
             $seg = mt_rand(0, 59);
-            $hora = (new DateTime($horaEntrada))->modify("+{$min} minutes")->modify("+{$seg} seconds")->format('H:i:s');
+            $hora = (new DateTime($hora_entrada))->modify("+{$min} minutes")
+                ->modify("+{$seg} seconds")->format('H:i:s');
         }
 
-        $asistencias = [
+        return [
             'inm_empleado_id' => $inm_empleado_id,
             'fecha'           => $fecha,
             'hora'            => $hora,
         ];
-
-        return $asistencias;
     }
 
     public function genera_reporte(string $path_base, int $registro_id){
