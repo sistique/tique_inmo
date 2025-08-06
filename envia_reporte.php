@@ -30,7 +30,6 @@ foreach ($r_periodos->registros AS $registro){
     $return = $controlador_inm_periodo_asistencia->envia_reporte(header: false);
     if (errores::$error) {
         return $modelo_inm_periodo_asistencia->error->error('Error al guardar archivo', $return);
-
     }
 }
 
