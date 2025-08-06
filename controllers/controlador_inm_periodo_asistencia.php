@@ -418,6 +418,7 @@ class controlador_inm_periodo_asistencia extends _ctl_formato {
 
         $r_periodo_asistencia = (new inm_periodo_asistencia(link: $this->link))->registro(registro_id: $this->registro_id);
         if (errores::$error) {
+            $this->link->rollBack();
             return $this->retorno_error(mensaje: 'Error al obtener xls', data: $r_periodo_asistencia, header: $header, ws: $ws);
         }
 
@@ -468,6 +469,7 @@ class controlador_inm_periodo_asistencia extends _ctl_formato {
         $filtro['not_mensaje.id'] = $inserta_notificacion;
         $r_not_rel_mensaje =  (new not_rel_mensaje(link: $this->link))->filtro_and(filtro: $filtro);
         if(errores::$error){
+            $this->link->rollBack();
             return $this->retorno_error(mensaje: 'Error al obtener mensajes',data:  $r_not_rel_mensaje,
                 header: $header,ws:$ws);
         }
