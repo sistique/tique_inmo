@@ -420,95 +420,10 @@ class controlador_inm_periodo_asistencia extends _ctl_formato {
     {
         $this->link->beginTransaction();
 
-        $filtro_tipo['doc_tipo_documento.descripcion'] = "REPORTE ASISTENCIA";
-        $r_tipo_documento = (new doc_tipo_documento(link: $this->link))->filtro_and(filtro: $filtro_tipo);
-        if (errores::$error) {
-            $this->link->rollBack();
-            return $this->retorno_error(mensaje: 'Error al obtener tipo documento', data: $r_tipo_documento,
-                header: $header, ws: $ws);
-        }
-
-        if($r_tipo_documento->n_registros <= 0){
-            $this->link->rollBack();
-            return $this->retorno_error(mensaje: 'Error no existe tipo de documento valido', data: $r_tipo_documento,
-                header: $header, ws: $ws);
-        }
-
-        $r_periodo_asistencia = (new inm_periodo_asistencia(link: $this->link))->registro(registro_id: $this->registro_id);
+        $r_periodo_asistencia = (new inm_periodo_asistencia(link: $this->link))->envia_reporte(registro_id: $this->registro_id);
         if (errores::$error) {
             $this->link->rollBack();
             return $this->retorno_error(mensaje: 'Error al obtener xls', data: $r_periodo_asistencia, header: $header, ws: $ws);
-        }
-
-        $result = (new inm_checada(link: $this->link))->genera_reporte(path_base: $this->path_base, registro_id: $this->registro_id);
-        if (errores::$error) {
-            $this->link->rollBack();
-            return $this->retorno_error(mensaje: 'Error al obtener xls', data: $result, header: $header, ws: $ws);
-        }
-
-        $decoded_data = base64_decode($result);
-        $file_path = $this->path_base."archivos/temporales/reporte_asistencia.xlsx";
-        file_put_contents($file_path, $decoded_data);
-
-        $_FILES['documento'] = [
-            'name' => basename($file_path),
-            'type' => mime_content_type($file_path),
-            'tmp_name' => $file_path,
-            'error' => 0,
-            'size' => filesize($file_path)
-        ];
-
-        $registro_doc['inm_periodo_asistencia_id'] = $this->registro_id;
-        $registro_doc['doc_tipo_documento_id'] = $r_tipo_documento->registros[0]['doc_tipo_documento_id'];
-
-        $r_inm_doc_periodo_asistencia = (new inm_doc_periodo_asistencia(link:$this->link))->alta_registro(registro: $registro_doc);
-        if (errores::$error) {
-            $this->link->rollBack();
-            return $this->retorno_error(mensaje: 'Error al convertir en cliente', data: $r_inm_doc_periodo_asistencia,
-                header: true, ws: false, class: __CLASS__, file: __FILE__, function: __FILE__, line: __LINE__);
-        }
-
-        $inserta_notificacion = (new _email(link: $this->link))->inserta_mensaje(link: $this->link,
-            row_entidad: $r_periodo_asistencia);
-        if(errores::$error){
-            $this->link->rollBack();
-            return $this->retorno_error(mensaje: 'Error al insertar notificacion',data:  $inserta_notificacion,
-                header: $header,ws:$ws);
-        }
-
-        $inserta_adjunto = (new _email(link: $this->link))->inserta_adjunto(
-            doc: $r_inm_doc_periodo_asistencia->registro, not_mensaje_id: $inserta_notificacion, link: $this->link);
-        if(errores::$error){
-            $this->link->rollBack();
-            return $this->retorno_error(mensaje: 'Error al insertar notificacion',data:  $inserta_adjunto,
-                header: $header,ws:$ws);
-        }
-
-        $filtro['not_mensaje.id'] = $inserta_notificacion;
-        $r_not_rel_mensaje =  (new not_rel_mensaje(link: $this->link))->filtro_and(filtro: $filtro);
-        if(errores::$error){
-            $this->link->rollBack();
-            return $this->retorno_error(mensaje: 'Error al obtener mensajes',data:  $r_not_rel_mensaje,
-                header: $header,ws:$ws);
-        }
-
-        $envios = array();
-        foreach ($r_not_rel_mensaje->registros as $not_rel_mensaje){
-            $envios[] = (new _email(link: $this->link))->notifica(not_mensaje: $not_rel_mensaje,link: $this->link);
-            if(errores::$error){
-                $this->link->rollBack();
-                return $this->retorno_error(mensaje: 'Error al insertar notificacion',data:  $envios,
-                    header: $header,ws:$ws);
-            }
-        }
-
-        $registro_mod['inm_periodo_asistencia.enviado'] = 'activo';
-        $r_inm_periodo_asistencia = (new inm_periodo_asistencia(link: $this->link))->modifica_bd(
-            registro: $registro_mod,id: $this->registro_id);
-        if(errores::$error){
-            $this->link->rollBack();
-            return $this->retorno_error(mensaje: 'Error al insertar notificacion',data:  $r_inm_periodo_asistencia,
-                header: $header,ws:$ws);
         }
 
         $this->link->commit();
@@ -525,7 +440,7 @@ class controlador_inm_periodo_asistencia extends _ctl_formato {
             exit;
         }
 
-        return $result;
+        return $r_periodo_asistencia;
     }
 
 }
