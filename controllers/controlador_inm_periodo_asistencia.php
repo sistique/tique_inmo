@@ -94,7 +94,7 @@ class controlador_inm_periodo_asistencia extends _ctl_formato {
         }
         $this->inputs->fecha_fin = $fecha;
 
-        $fecha = $this->html->input_fecha(cols: 6, row_upd: $this->row_upd, value_vacio: false, name: "fecha_envio",
+        $fecha = $this->html->input_fecha(cols: 12, row_upd: $this->row_upd, value_vacio: false, name: "fecha_envio",
             place_holder: 'Fecha Envio', value: $this->row_upd->fecha_envio);
         if(errores::$error){
             return $this->retorno_error(
@@ -181,7 +181,7 @@ class controlador_inm_periodo_asistencia extends _ctl_formato {
         }
         $this->inputs->fecha_fin = $fecha;
 
-        $fecha = $this->html->input_fecha(cols: 6, row_upd: $this->row_upd, value_vacio: false, name: "fecha_envio",
+        $fecha = $this->html->input_fecha(cols: 12, row_upd: $this->row_upd, value_vacio: false, name: "fecha_envio",
             place_holder: 'Fecha Envio', value: $this->row_upd->fecha_envio);
         if(errores::$error){
             return $this->retorno_error(
