@@ -118,12 +118,12 @@ class _email
 
         $not_adjunto_ins['not_mensaje_id'] = $not_mensaje_id;
         $not_adjunto_ins['doc_documento_id'] = $doc['doc_documento_id'];
-        $not_adjunto_ins['descripcion'] = '.'.date('YmdHis').mt_rand(10000,99999).
-            '.'.$doc['doc_extension_descripcion'];
+        $not_adjunto_ins['descripcion'] = $doc['inm_periodo_asistencia_descripcion'].'.'.
+            date('YmdHis').mt_rand(10000,99999). '.'.$doc['doc_extension_descripcion'];
 
-        $not_adjunto_ins['name_out'] =  $doc['doc_documento_name_out'];
+        $not_adjunto_ins['name_out'] = $doc['inm_periodo_asistencia_descripcion'];
         if($doc['doc_tipo_documento_descripcion'] !=='ADJUNTO') {
-            $not_adjunto_ins['name_out'] = '.' . $doc['doc_extension_descripcion'];
+            $not_adjunto_ins['name_out'] = '.' . $doc['inm_periodo_asistencia_descripcion'];
         }
 
         $r_not_adjunto = (new not_adjunto(link: $link))->alta_registro(registro: $not_adjunto_ins);
