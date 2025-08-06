@@ -171,7 +171,7 @@ class inm_periodo_asistencia extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al insertar notificacion',data:  $r_inm_periodo_asistencia);
         }
 
-        return $result;
+        return $envios;
     }
 
     public function modifica_bd(array $registro, int $id, bool $reactiva = false,
