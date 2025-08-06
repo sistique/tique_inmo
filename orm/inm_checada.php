@@ -298,6 +298,159 @@ class inm_checada extends _modelo_parent{
         return $r_altas;
     }
 
+    /**
+     * @throws \DateMalformedStringException
+     */
+    public function inserta_auto(): array|stdClass{
+        $registros_empleados = (new inm_empleado(link:$this->link))->registros_activos();
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al insertar checada', data: $registros_empleados);
+        }
+
+        $fecha = date('Y-m-d');
+
+        $fmt = new IntlDateFormatter(
+            'es_MX',
+            IntlDateFormatter::FULL,
+            IntlDateFormatter::NONE,
+            null,
+            null,
+            'EEEE'
+        );
+
+        $dia_semana = mb_strtoupper($fmt->format(new DateTime($fecha)), 'UTF-8');
+
+        $r_altas = array();
+        foreach ($registros_empleados as $registro_empleado) {
+            if($registro_empleado['inm_empleado_calcula'] === 'activo'){
+                $filtro_horarios['inm_horario.id'] = $registro_empleado['inm_horario_id'];
+                $filtro_horarios['inm_dia_semana.descripcion'] = $dia_semana;
+                $filtro_horarios['inm_horario_diario.status'] = 'activo';
+                $r_horarios = (new inm_horario_diario(link:$this->link))->filtro_and(filtro: $filtro_horarios);
+                if (errores::$error) {
+                    return $this->error->error(mensaje: 'Error al insertar checada', data: $r_horarios);
+                }
+
+                if($r_horarios->n_registros > 0){
+                    $filtro['inm_checada.fecha'] = $fecha;
+                    $filtro['inm_empleado.id'] = $registro_empleado['inm_empleado_id'];
+                    $r_checada = $this->filtro_and(filtro: $filtro);
+                    if (errores::$error) {
+                        return $this->error->error(mensaje: 'Error al insertar checada', data: $r_checada);
+                    }
+
+                    if ($r_checada->n_registros > 0) {
+                        continue;
+                    }
+
+                    $filtro_rango_peri[$fecha]['valor1'] = 'inm_periodo_asistencia.fecha_inicio';
+                    $filtro_rango_peri[$fecha]['valor2'] = 'inm_periodo_asistencia.fecha_fin';
+                    $filtro_rango_peri[$fecha]['valor_campo'] = true;
+
+                    $order = array('inm_periodo_asistencia.fecha_inicio'=>'DESC');
+                    $filtro_peri['inm_horario.id'] = $registro_empleado['inm_horario_id'];
+                    $r_periodo_asistencia = (new inm_periodo_asistencia(link:$this->link))->filtro_and(filtro: $filtro_peri,
+                        filtro_rango: $filtro_rango_peri, limit: 1, order: $order);
+                    if (errores::$error) {
+                        return $this->error->error(mensaje: 'Error al obtener periodos', data: $r_periodo_asistencia);
+                    }
+
+                    if($r_periodo_asistencia->n_registros <= 0){
+                        return $this->error->error(mensaje: 'Error no existe periodo de asistencia',
+                            data: $r_periodo_asistencia);
+                    }
+
+                    $registro = $this->generar_asistencias(
+                        inm_empleado_id: $registro_empleado['inm_empleado_id'], fecha: $fecha,
+                        fechaInicio: $r_periodo_asistencia->registros[0]['inm_periodo_asistencia_fecha_inicio'],
+                        horaEntrada: $r_horarios->registros[0]['inm_horario_diario_hora_entrada']);
+                    if (errores::$error) {
+                        return $this->error->error(mensaje: 'Error al obtener tipo checada', data: $registro);
+                    }
+
+                    $r_alta_bd = $this->alta_registro(registro: $registro);
+                    if (errores::$error) {
+                        return $this->error->error(mensaje: 'Error al insertar checada', data: $r_alta_bd);
+                    }
+
+                    $r_altas[] = $r_alta_bd;
+                }
+            }
+        }
+
+        return $r_altas;
+    }
+
+    function generar_asistencias($inm_empleado_id, $fecha, $fechaInicio, $horaEntrada = "09:00:00",
+                                 $porcInasistencias = 5, $porcRetardos = 10)
+    {
+        $hoy = new DateTime($fecha);
+        $inicio = new DateTime($fechaInicio);
+
+        $diasLaborales = $inicio->diff($hoy)->days + 1;
+
+        $filtro_especial[0][$fechaInicio]['operador'] = '<=';
+        $filtro_especial[0][$fechaInicio]['valor'] = 'inm_checada.fecha';
+        $filtro_especial[0][$fechaInicio]['comparacion'] = 'AND';
+        $filtro_especial[0][$fechaInicio]['valor_es_campo'] = true;
+
+        $filtro_especial[1][$fecha]['operador'] = '>=';
+        $filtro_especial[1][$fecha]['valor'] = 'inm_checada.fecha';
+        $filtro_especial[1][$fecha]['comparacion'] = 'AND';
+        $filtro_especial[1][$fecha]['valor_es_campo'] = true;
+
+        $order = array('inm_checada.fecha'=>'DESC');
+
+        $filtro_che['inm_empleado.id'] = $inm_empleado_id;
+        $filtro_che['inm_tipo_checada.id'] = 1;
+        $filtro_che['inm_status_asistencia.id'] = 2;
+        $r_checada = (new inm_checada(link:$this->link))->filtro_and(filtro: $filtro_che,
+            filtro_especial: $filtro_especial, order: $order);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener periodos', data: $r_checada);
+        }
+
+        $retardosExistentes = 0;
+        if($r_checada->n_registros > 0){
+            $retardosExistentes = $r_checada->n_registros;
+        }
+
+        $filtro_che['inm_status_asistencia.id'] = 3;
+        $r_checada = (new inm_checada(link:$this->link))->filtro_and(filtro: $filtro_che,
+            filtro_especial: $filtro_especial, order: $order);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener periodos', data: $r_checada);
+        }
+
+        $faltasExistentes = 0;
+        if($r_checada->n_registros > 0){
+            $faltasExistentes = $r_checada->n_registros;
+        }
+
+        $maxFaltas = floor($diasLaborales * $porcInasistencias / 100);
+        $maxRetardos = floor($diasLaborales * $porcRetardos / 100);
+
+        if ($faltasExistentes < $maxFaltas && mt_rand(1, 100) <= $porcInasistencias) {
+            $hora = date('H:i:s');
+        } elseif ($retardosExistentes < $maxRetardos && mt_rand(1, 100) <= $porcRetardos) {
+            $min = mt_rand(15, 60);
+            $seg = mt_rand(1, 59);
+            $hora = (new DateTime($horaEntrada))->modify("+{$min} minutes")->modify("+{$seg} seconds")->format('H:i:s');
+        } else {
+            $min = mt_rand(0, 15);
+            $seg = mt_rand(0, 59);
+            $hora = (new DateTime($horaEntrada))->modify("+{$min} minutes")->modify("+{$seg} seconds")->format('H:i:s');
+        }
+
+        $asistencias = [
+            'inm_empleado_id' => $inm_empleado_id,
+            'fecha'           => $fecha,
+            'hora'            => $hora,
+        ];
+
+        return $asistencias;
+    }
+
     public function genera_reporte(string $path_base, int $registro_id){
         $nombre_hojas = array('Checadas');
 

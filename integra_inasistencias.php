@@ -13,6 +13,15 @@ $con = new conexion();
 $link = conexion::$link;
 
 $modelo_inm_checada = new inm_checada(link: $link);
+try {
+    $guarda = $modelo_inm_checada->inserta_auto();
+    if (errores::$error) {
+        return $modelo_inm_checada->error->error('Error al guardar archivo', $guarda);
+    }
+} catch (DateMalformedStringException $e) {
+    return $modelo_inm_checada->error->error('Error al guardar archivo', $e);
+}
+
 $guarda = $modelo_inm_checada->marca_inasistencia();
 if (errores::$error) {
     return $modelo_inm_checada->error->error('Error al guardar archivo', $guarda);
