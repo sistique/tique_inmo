@@ -502,7 +502,28 @@ class controlador_inm_periodo_asistencia extends _ctl_formato {
             }
         }
 
+        $registro_mod['inm_periodo_asistencia.enviado'] = 'activo';
+        $r_inm_periodo_asistencia = (new inm_periodo_asistencia(link: $this->link))->modifica_bd(
+            registro: $registro_mod,id: $this->registro_id);
+        if(errores::$error){
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al insertar notificacion',data:  $r_inm_periodo_asistencia,
+                header: $header,ws:$ws);
+        }
+
         $this->link->commit();
+
+        $link_integra_relacion_bd = $this->obj_link->link_sin_id(accion: 'lista', link: $this->link,
+            seccion: 'inm_periodo_asistencia');
+        if (errores::$error) {
+            $this->retorno_error(mensaje: 'Error al generar link', data: $link_integra_relacion_bd, header: $header,
+                ws: $ws);
+        }
+
+        if($header) {
+            header('Location:' . $link_integra_relacion_bd);
+            exit;
+        }
 
         return $result;
     }
