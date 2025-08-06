@@ -29,15 +29,15 @@ class _email
         $this->link = $link;
     }
 
-    private function asunto_reporte_asistencia(stdClass $row_entidad): string|array
+    private function asunto_reporte_asistencia(array $row_entidad): string|array
     {
-        $keys = array('org_empresa_razon_social','org_empresa_rfc');
+        $keys = array('inm_periodo_asistencia_descripcion');
         $valida = (new validacion())->valida_existencia_keys(keys: $keys,registro:  $row_entidad);
         if(errores::$error){
             return (new errores())->error(mensaje: 'Error al validar row_entidad',data:  $valida);
         }
 
-        return " Reporte Asistencia - $row_entidad->inm_periodo_asistencia_descripcion ";
+        return " Reporte Asistencia - $row_entidad[inm_periodo_asistencia_descripcion] ";
     }
 
     public function correo_validacion(string $correo, modelo $modelo, string $campo): array|stdClass
@@ -59,7 +59,7 @@ class _email
         return $datos;
     }
 
-    private function data_email_reporte_asistencia(stdClass $row_entidad): array|stdClass
+    private function data_email_reporte_asistencia(array $row_entidad): array|stdClass
     {
         $asunto = $this->asunto_reporte_asistencia(row_entidad: $row_entidad);
         if (errores::$error) {
@@ -95,7 +95,7 @@ class _email
         return $datos->registros[0];
     }
 
-    private function genera_not_mensaje_reporte_asistencia_ins( PDO $link, stdClass $row_entidad): array
+    private function genera_not_mensaje_reporte_asistencia_ins(PDO $link, array $row_entidad): array
     {
         $data_mensaje = $this->data_email_reporte_asistencia(row_entidad: $row_entidad);
         if (errores::$error) {
@@ -134,7 +134,7 @@ class _email
         return $r_not_adjunto;
     }
 
-    public function inserta_mensaje(PDO $link, stdClass $row_entidad){
+    public function inserta_mensaje(PDO $link, array $row_entidad){
         $not_mensaje_ins = $this->genera_not_mensaje_reporte_asistencia_ins(link: $link, row_entidad: $row_entidad);
         if (errores::$error) {
             return (new errores())->error(mensaje: 'Error al obtener emisor', data: $not_mensaje_ins);
@@ -145,11 +145,8 @@ class _email
             return (new errores())->error(mensaje: 'Error al insertar mensaje', data: $r_not_mensaje);
         }
 
-        $key_entidad_id = 'inm_periodo_asistencia_id';
-
-        $fc_notificacion_ins[$key_entidad_id] = $row_entidad->$key_entidad_id;
+        $fc_notificacion_ins['inm_periodo_asistencia_id'] = $row_entidad['inm_periodo_asistencia_id'];
         $fc_notificacion_ins['not_mensaje_id'] = $r_not_mensaje->registro_id;
-
         $r_fc_notificacion = (new inm_notificacion_periodo(link: $link))->alta_registro(registro: $fc_notificacion_ins);
         if (errores::$error) {
             return (new errores())->error(mensaje: 'Error al insertar fc_notificacion_ins', data: $r_fc_notificacion);
@@ -175,7 +172,11 @@ class _email
 
 
 
-    public function notifica(stdClass $not_mensaje, PDO $link, array $cc = array(), array $cco = array()){
+    public function notifica(array $not_mensaje, PDO $link, array $cc = array(), array $cco = array()){
+        if(!is_object($not_mensaje)){
+            $not_mensaje = (object)$not_mensaje;
+        }
+
         $filtro['not_mensaje.id'] = $not_mensaje->not_mensaje_id;
         $r_not_adjunto = (new not_adjunto(link: $link))->filtro_and(filtro: $filtro,);
         if(errores::$error){

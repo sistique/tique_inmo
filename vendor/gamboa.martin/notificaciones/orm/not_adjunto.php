@@ -3,6 +3,7 @@ namespace gamboamartin\notificaciones\models;
 
 use base\orm\_modelo_parent_sin_codigo;
 
+use config\generales;
 use gamboamartin\documento\models\doc_documento;
 use gamboamartin\errores\errores;
 use PDO;
@@ -43,8 +44,10 @@ class not_adjunto extends _modelo_parent_sin_codigo {
             return $this->error->error(mensaje: 'Error al obtener doc_documento',data: $doc_documento);
         }
 
-        if(!file_exists($doc_documento['doc_documento_ruta_absoluta'])){
-            return $this->error->error(mensaje: 'Error el documento no existe',data: $doc_documento);
+        if(!(new generales())->guarda_archivo_dropbox) {
+            if (!file_exists($doc_documento['doc_documento_ruta_absoluta'])) {
+                return $this->error->error(mensaje: 'Error el documento no existe', data: $doc_documento);
+            }
         }
 
         if(!isset($this->registro['descripcion'])){

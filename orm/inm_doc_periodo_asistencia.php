@@ -42,23 +42,6 @@ class inm_doc_periodo_asistencia extends _modelo_parent{
         $registro_doc['doc_tipo_documento_id'] = $this->registro['doc_tipo_documento_id'];
         $file = $_FILES['documento'];
 
-        /*$confs = (new inm_conf_docs_comprador(link: $this->link))->registros();
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al obtener configuraciones',data:  $confs);
-        }
-
-        $es_tipo_valido = false;
-        foreach ($confs as $conf){
-            if((int)$conf['doc_tipo_documento_id'] === (int)$this->registro['doc_tipo_documento_id']){
-                $es_tipo_valido = true;
-                break;
-            }
-        }
-
-        if(!$es_tipo_valido){
-            return $this->error->error(mensaje: 'Error el documento no es valido para la configuracion',data:  $confs);
-        }*/
-
         if((new generales())->guarda_archivo_dropbox) {
             $registro_doc['ruta_relativa'] = 'inm_periodo_asistencia/'.$this->registro['inm_periodo_asistencia_id'].'/';
         }
@@ -81,86 +64,6 @@ class inm_doc_periodo_asistencia extends _modelo_parent{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al insertar',data:  $r_alta_bd);
         }
-
-        /*$inm_periodo_asistencia = (new inm_periodo_asistencia(link: $this->link))->registro(registro_id: $this->registro_id);
-        if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al obtener inm_periodo_asistencia', data: $inm_periodo_asistencia,
-                header: $header, ws: $ws);
-        }
-
-        $inm_conf_docs_comprador = (new inm_conf_docs_comprador(link: $this->link))->filtro_and(
-            columnas: ['doc_tipo_documento_id'],
-            filtro: array('inm_attr_tipo_credito_id' => $inm_periodo_asistencia['inm_attr_tipo_credito_id']));
-        if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al obtener inm_conf_docs_comprador', data: $inm_conf_docs_comprador,
-                header: $header, ws: $ws);
-        }
-
-        $doc_ids = array_map(function ($registro) {
-            return $registro['doc_tipo_documento_id'];
-        }, $inm_conf_docs_comprador->registros);
-
-        $inm_conf_docs_comprador = (new _doctos())->documentos_de_comprador(
-            inm_periodo_asistencia_id: $this->registro['inm_periodo_asistencia_id'],link:  $this->link,todos: false);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al obtener configuraciones de documentos',data:  $inm_conf_docs_comprador);
-        }
-
-
-
-        $inm_docs_comprador = $this->inm_docs_comprador(inm_periodo_asistencia_id: $this->registro['inm_periodo_asistencia_id'],
-            tipos_documentos: array());
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al obtener documentos',data:  $inm_docs_comprador);
-        }
-
-
-        $existen_todos = true;
-        $existen_algunos = false;
-        foreach ($inm_conf_docs_comprador as $doc_tipo_documento){
-            $existe = false;
-            foreach ($inm_docs_comprador as $inm_doc_periodo_asistencia){
-                if($doc_tipo_documento['doc_tipo_documento_id'] === $inm_doc_periodo_asistencia['doc_tipo_documento_id']){
-                    $existe = true;
-                    $existen_algunos = true;
-                    break;
-                }
-            }
-            if(!$existe){
-                $existen_todos = false;
-            }
-        }
-
-        if(!$existen_todos && $existen_algunos){
-            $existen_algunos = true;
-        }
-        if($existen_todos && $existen_algunos){
-            $existen_algunos = false;
-        }
-
-
-        if($existen_algunos ){
-
-            $pr_comprador_proceso_ins['inm_periodo_asistencia_id'] = $this->registro['inm_periodo_asistencia_id'];
-            $pr_comprador_proceso_ins['pr_sub_proceso_id'] = 4;
-            $pr_comprador_proceso_ins['fecha'] = date('Y-m-d');
-            $r_alta_proceso = (new inm_periodo_asistencia_proceso(link: $this->link))->alta_registro(registro: $pr_comprador_proceso_ins);
-            if(errores::$error){
-                return $this->error->error(mensaje: 'Error al insertar etapa',data:  $r_alta_proceso);
-            }
-        }
-
-        if($existen_todos){
-
-            $pr_comprador_proceso_ins['inm_periodo_asistencia_id'] = $this->registro['inm_periodo_asistencia_id'];
-            $pr_comprador_proceso_ins['pr_sub_proceso_id'] = 5;
-            $pr_comprador_proceso_ins['fecha'] = date('Y-m-d');
-            $r_alta_proceso = (new inm_periodo_asistencia_proceso(link: $this->link))->alta_registro(registro: $pr_comprador_proceso_ins);
-            if(errores::$error){
-                return $this->error->error(mensaje: 'Error al insertar etapa',data:  $r_alta_proceso);
-            }
-        }
-*/
 
         return $r_alta_bd;
     }
