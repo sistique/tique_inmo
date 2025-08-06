@@ -18,6 +18,7 @@ use gamboamartin\inmuebles\models\inm_checada;
 use gamboamartin\inmuebles\models\inm_cheque;
 use gamboamartin\inmuebles\models\inm_doc_periodo_asistencia;
 use gamboamartin\inmuebles\models\inm_periodo_asistencia;
+use gamboamartin\notificaciones\models\not_rel_mensaje;
 use gamboamartin\plugins\exportador;
 use gamboamartin\system\_ctl_base;
 use gamboamartin\system\links_menu;
@@ -464,40 +465,21 @@ class controlador_inm_periodo_asistencia extends _ctl_formato {
                 header: $header,ws:$ws);
         }
 
-        /*$r_not_rel_mensaje = $this->inserta_rels_mesajes(link: $link,modelo_email:  $modelo_email,
-            name_entidad_modelo:  $modelo_entidad->tabla,not_mensaje_id:  $not_mensaje_id,
-            registro_entidad_id: $registro_entidad_id);
-        if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al insertar relacion de mensaje', data: $r_not_rel_mensaje);
-        }*/
-
-        $filtro['not_mensaje.id'] = $not_mensaje_id;
+        $filtro['not_mensaje.id'] = $inserta_notificacion;
         $r_not_rel_mensaje =  (new not_rel_mensaje(link: $this->link))->filtro_and(filtro: $filtro);
         if(errores::$error){
-            return $this->error->error(mensaje: 'Error al obtener mensajes',data:  $r_not_rel_mensaje);
+            return $this->retorno_error(mensaje: 'Error al obtener mensajes',data:  $r_not_rel_mensaje,
+                header: $header,ws:$ws);
         }
 
         $envios = array();
-        $not_rel_mensajes = $r_not_rel_mensaje->registros;
-        foreach ($not_rel_mensajes as $not_rel_mensaje){
-            /**
-             * REFACTORIZAR CON ATTR EN DATABASE
-             */
-            if($not_rel_mensaje['not_rel_mensaje_etapa'] === 'ALTA'){
-                $mail = (new not_rel_mensaje(link: $this->link))->envia_mensaje($not_rel_mensaje['not_rel_mensaje_id'],
-                    cc: $cc, cco: $cco);
-                if(errores::$error){
-                    return $this->error->error(mensaje: 'Error al enviar mensaje',data:  $mail);
-                }
-                $envios[] = $mail;
+        foreach ($r_not_rel_mensaje->registros as $not_rel_mensaje){
+            $envios[] = (new _email(link: $this->link))->notifica(not_mensaje_id: $inserta_notificacion,link: $this->link);
+            if(errores::$error){
+                $this->link->rollBack();
+                return $this->retorno_error(mensaje: 'Error al insertar notificacion',data:  $envios,
+                    header: $header,ws:$ws);
             }
-        }
-
-        $envia = (new _email(link: $this->link))->notifica(not_mensaje_id: $inserta_notificacion,link: $this->link);
-        if(errores::$error){
-            $this->link->rollBack();
-            return $this->retorno_error(mensaje: 'Error al insertar notificacion',data:  $envia,
-                header: $header,ws:$ws);
         }
 
         $this->link->commit();

@@ -155,6 +155,21 @@ class _email
             return (new errores())->error(mensaje: 'Error al insertar fc_notificacion_ins', data: $r_fc_notificacion);
         }
 
+        $filtro_recep['not_receptor.envio_asistencia'] = 'activo';
+        $r_receptores = (new not_receptor(link: $link))->filtro_and(filtro: $filtro_recep);
+        if (errores::$error) {
+            return (new errores())->error(mensaje: 'Error al insertar fc_notificacion_ins', data: $r_receptores);
+        }
+
+        foreach ($r_receptores->registros as $registro) {
+            $registro_rel['not_mensaje_id'] =  $r_not_mensaje->registro_id;
+            $registro_rel['not_receptor_id'] = $registro['not_receptor_id'];
+            $r_not_rel_mensaje = (new not_rel_mensaje(link: $link))->alta_registro(registro: $registro_rel);
+            if (errores::$error) {
+                return (new errores())->error(mensaje: 'Error al insertar fc_notificacion_ins', data: $r_not_rel_mensaje);
+            }
+        }
+
         return $r_not_mensaje->registro_id;
     }
 
