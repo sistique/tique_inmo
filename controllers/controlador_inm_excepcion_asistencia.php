@@ -43,12 +43,44 @@ class controlador_inm_excepcion_asistencia extends _ctl_formato {
             return $this->retorno_error(
                 mensaje: 'Error al inicializar alta',data:  $r_alta, header: $header,ws:  $ws);
         }
+
         $keys_selects = array();
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_tipo_excepcion_id',
+            keys_selects: $keys_selects, id_selected: -1, label: 'Tipo Excepcion');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_empleado_id',
+            keys_selects: $keys_selects, id_selected: -1, label: 'Empleado');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
         $inputs = $this->inputs(keys_selects: $keys_selects);
         if(errores::$error){
             return $this->retorno_error(
                 mensaje: 'Error al obtener inputs',data:  $inputs, header: $header,ws:  $ws);
         }
+
+        $this->row_upd->fecha_inicio = date('Y-m-d');
+        $this->row_upd->fecha_fin = date('Y-m-d');
+
+        $fecha = $this->html->input_fecha(cols: 6, row_upd: $this->row_upd, value_vacio: false, name: "fecha_inicio",
+            place_holder: 'Fecha Inicio', value: $this->row_upd->fecha_inicio);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener input fecha',data:  $fecha, header: $header,ws:  $ws);
+        }
+        $this->inputs->fecha_inicio = $fecha;
+
+        $fecha = $this->html->input_fecha(cols: 6, row_upd: $this->row_upd, value_vacio: false, name: "fecha_fin",
+            place_holder: 'Fecha Fin', value: $this->row_upd->fecha_fin);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener input fecha',data:  $fecha, header: $header,ws:  $ws);
+        }
+        $this->inputs->fecha_fin = $fecha;
 
         return $r_alta;
     }
@@ -60,8 +92,9 @@ class controlador_inm_excepcion_asistencia extends _ctl_formato {
         $keys->selects = array();
 
         $init_data = array();
+        $init_data['inm_tipo_excepcion'] = "gamboamartin\\inmuebles";
+        $init_data['inm_empleado'] = "gamboamartin\\inmuebles";
         $campos_view = $this->campos_view_base(init_data: $init_data,keys:  $keys);
-
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al inicializar campo view',data:  $campos_view);
         }
@@ -82,10 +115,39 @@ class controlador_inm_excepcion_asistencia extends _ctl_formato {
         }
 
         $keys_selects = array();
+
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_tipo_excepcion_id',
+            keys_selects: $keys_selects, id_selected: $this->row_upd->inm_tipo_excepcion_id, label: 'Tipo Excepcion');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_empleado_id',
+            keys_selects: $keys_selects,id_selected: $this->row_upd->inm_empleado_id, label: 'Empledo');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
         $base = $this->base_upd(keys_selects: $keys_selects, params: array(),params_ajustados: array());
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
         }
+
+        $fecha = $this->html->input_fecha(cols: 6, row_upd: $this->row_upd, value_vacio: false, name: "fecha_inicio",
+            place_holder: 'Fecha Inicio', value: $this->row_upd->fecha_inicio);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener input fecha',data:  $fecha, header: $header,ws:  $ws);
+        }
+        $this->inputs->fecha_inicio = $fecha;
+
+        $fecha = $this->html->input_fecha(cols: 6, row_upd: $this->row_upd, value_vacio: false, name: "fecha_fin",
+            place_holder: 'Fecha Fin', value: $this->row_upd->fecha_fin);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener input fecha',data:  $fecha, header: $header,ws:  $ws);
+        }
+        $this->inputs->fecha_fin = $fecha;
 
         return $r_modifica;
     }
