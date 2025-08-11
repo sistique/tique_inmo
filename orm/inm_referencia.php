@@ -108,6 +108,22 @@ class inm_referencia extends _modelo_parent{
         return $descripcion;
     }
 
+    public function elimina_bd(int $id): array|stdClass
+    {
+        $documento_etapa = (new inm_rel_referencia_comprador(link: $this->link))->elimina_con_filtro_and(
+            filtro: array('inm_referencia_id' => $id));
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al eliminar documento etapa', data: $documento_etapa);
+        }
+
+        $elimina = parent::elimina_bd($id);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al eliminar prospecto documento', data: $elimina);
+        }
+
+        return $elimina;
+    }
+
     /**
      * Obtiene las referencias basadas en un comprador
      * @param int $inm_comprador_id Identificador de comprador
