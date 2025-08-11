@@ -78,8 +78,8 @@ class controlador_inm_referencia extends _ctl_base {
     protected function campos_view(): array
     {
         $keys = new stdClass();
-        $keys->inputs = array('apellido_paterno', 'apellido_materno', 'nombre',
-            'lada','numero','celular','numero_dom');
+        $keys->inputs = array('apellido_paterno', 'apellido_materno', 'nombre', 'lada','numero','celular',
+            'calle','numero_exterior','numero_interior');
         $keys->selects = array();
 
 
@@ -92,10 +92,9 @@ class controlador_inm_referencia extends _ctl_base {
         $init_data['dp_cp'] = "gamboamartin\\direccion_postal";
         $init_data['dp_colonia_postal'] = "gamboamartin\\direccion_postal";
         $init_data['dp_calle_pertenece'] = "gamboamartin\\direccion_postal";
-
+        $init_data['inm_parentesco'] = "gamboamartin\\inmuebles";
 
         $campos_view = $this->campos_view_base(init_data: $init_data,keys:  $keys);
-
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al inicializar campo view',data:  $campos_view);
         }
@@ -118,8 +117,20 @@ class controlador_inm_referencia extends _ctl_base {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'numero_dom',
-            keys_selects:$keys_selects, place_holder: 'Numero Dom');
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'calle',
+            keys_selects:$keys_selects, place_holder: 'Calle',required: false);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+        
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'numero_exterior',
+            keys_selects:$keys_selects, place_holder: 'Numero Exterior',required: false);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+        
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'numero_interior',
+            keys_selects:$keys_selects, place_holder: 'Numero Interior',required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
@@ -157,12 +168,16 @@ class controlador_inm_referencia extends _ctl_base {
                 header: $header,ws:  $ws);
         }
 
-
-
         $columns_ds = array('inm_comprador_nombre','inm_comprador_apellido_paterno','inm_comprador_apellido_materno');
         $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_comprador_id',
             keys_selects: $keys_selects, id_selected: $this->row_upd->inm_comprador_id, label: 'Comprador',
             columns_ds : $columns_ds);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+        
+        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_parentesco_id',
+            keys_selects: $keys_selects, id_selected: $this->row_upd->inm_parentesco_id, label: 'Comprador');
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }

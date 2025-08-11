@@ -866,21 +866,21 @@ class _keys_selects{
 
     final public function keys_contacto(array $keys_selects){
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'lada',
-            keys_selects:$keys_selects, place_holder: 'Lada');
+            keys_selects:$keys_selects, place_holder: 'Lada',required: false);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
         $keys_selects['lada']->regex = $this->validacion->patterns['lada_html'];
 
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'numero',
-            keys_selects:$keys_selects, place_holder: 'Numero');
+            keys_selects:$keys_selects, place_holder: 'Numero',required: false);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
         $keys_selects['numero']->regex = $this->validacion->patterns['tel_sin_lada_html'];
 
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'celular',
-            keys_selects:$keys_selects, place_holder: 'Celular');
+            keys_selects:$keys_selects, place_holder: 'Celular',required: false);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
@@ -940,7 +940,7 @@ class _keys_selects{
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'apellido_materno',
-            keys_selects:$keys_selects, place_holder: 'Apellido Materno');
+            keys_selects:$keys_selects, place_holder: 'Apellido Materno',required: false);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
