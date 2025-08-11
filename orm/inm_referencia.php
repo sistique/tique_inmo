@@ -20,6 +20,16 @@ class inm_referencia extends _modelo_parent{
             'dp_colonia_postal_id','inm_parentesco_id');
 
         $columnas_extra= array();
+
+        $sql = "(SELECT
+                    inm_rel_referencia_comprador.inm_comprador_id
+                FROM
+                    inm_rel_referencia_comprador
+                    WHERE inm_rel_referencia_comprador.inm_referencia_id = inm_referencia.id
+                )";
+
+        $columnas_extra['inm_comprador_id'] = $sql;
+
         $renombres= array();
 
         $atributos_criticos = array('apellido_paterno', 'nombre','dp_colonia_postal_id','inm_parentesco_id');

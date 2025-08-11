@@ -269,6 +269,7 @@
                 <th>AM</th>
                 <th>Parentesto</th>
                 <th>Celular</th>
+                <th>Modifica</th>
                 <th>Elimina</th>
             </tr>
             </thead>
@@ -281,6 +282,7 @@
                     <td><?php echo $referencia['inm_referencia_apellido_materno']; ?></td>
                     <td><?php echo $referencia['inm_parentesco_descripcion']; ?></td>
                     <td><?php echo $referencia['inm_referencia_celular']; ?></td>
+                    <td><?php echo $referencia['btn_mod']; ?></td>
                     <td><?php echo $referencia['btn_del']; ?></td>
                 </tr>
             <?php } ?>

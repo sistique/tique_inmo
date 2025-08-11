@@ -43,6 +43,14 @@ class _inm_comprador{
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error al obtener beneficiarios link del',data:  $datas);
             }
+            
+            $datas = $this->integra_button_mod(
+                controlador: $controlador, data: $data,datas:  $datas,indice:  $indice,params:  $params,seccion_exe:  $seccion_exe);
+
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al obtener beneficiarios link mod',data:  $datas);
+            }
+
         }
         return $datas;
 
@@ -60,6 +68,22 @@ class _inm_comprador{
         $datas[$indice]['btn_del'] = $btn_del;
         return $datas;
     }
+
+    private function integra_button_mod(controlador_inm_prospecto $controlador, array $data, array $datas,
+                                        int $indice, array $params, string $seccion_exe){
+        $key_id = $seccion_exe.'_id';
+        $btn_mod = $controlador->html->button_href(accion: 'modifica',etiqueta: 'Modifica',
+            registro_id:  $data[$key_id],seccion: $seccion_exe,style: 'warning',
+            params: $params);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener link_mod',data:  $btn_mod);
+        }
+        $datas[$indice]['btn_mod'] = $btn_mod;
+        return $datas;
+    }
+
+
+    /**
     /**
      * @param controlador_inm_comprador $controler
      * @param int $n_apartado
