@@ -17,7 +17,24 @@ class inm_beneficiario extends _modelo_parent{
         $campos_obligatorios = array('inm_tipo_beneficiario_id','inm_parentesco_id');
 
         $columnas_extra= array();
+        $sql = "(SELECT
+                    IFNULL(inm_rel_beneficiario_comprador.inm_comprador_id, -1)
+                FROM
+                    inm_rel_beneficiario_comprador
+                    WHERE inm_rel_beneficiario_comprador.inm_beneficiario_id = inm_beneficiario.id
+                )";
 
+        $columnas_extra['inm_comprador_id'] = $sql;
+
+        $sql = "(SELECT
+                    IFNULL(inm_rel_beneficiario_prospecto.inm_prospecto_id, -1)
+                FROM
+                    inm_rel_beneficiario_prospecto
+                    WHERE inm_rel_beneficiario_prospecto.inm_beneficiario_id = inm_beneficiario.id
+                )";
+
+        $columnas_extra['inm_prospecto_id'] = $sql;
+        
         $renombres = array();
 
         $atributos_criticos = array('inm_tipo_beneficiario_id','inm_parentesco_id');
@@ -55,6 +72,22 @@ class inm_beneficiario extends _modelo_parent{
 
         return $r_alta_bd;
 
+    }
+
+    public function elimina_bd(int $id): array|stdClass
+    {
+        $documento_etapa = (new inm_rel_beneficiario_comprador(link: $this->link))->elimina_con_filtro_and(
+            filtro: array('inm_beneficiario_id' => $id));
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al eliminar documento etapa', data: $documento_etapa);
+        }
+
+        $elimina = parent::elimina_bd($id);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al eliminar prospecto documento', data: $elimina);
+        }
+
+        return $elimina;
     }
 
 }
