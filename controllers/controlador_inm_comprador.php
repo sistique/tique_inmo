@@ -3144,7 +3144,12 @@ class controlador_inm_comprador extends _ctl_base {
                 header: $header,ws:  $ws);
         }
 
-        $params = (new \gamboamartin\inmuebles\controllers\_inm_comprador())->params_btn(accion_retorno: __FUNCTION__,
+        $accion_retorno = __FUNCTION__;
+        if(isset($_GET['accion']) && $_GET['accion'] == 'proceso_cliente') {
+            $accion_retorno = 'proceso_cliente';
+        }
+
+        $params = (new \gamboamartin\inmuebles\controllers\_inm_comprador())->params_btn(accion_retorno: $accion_retorno,
             registro_id:  $this->registro_id,seccion_retorno:  $this->tabla);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener params',data:  $params,
@@ -3175,7 +3180,7 @@ class controlador_inm_comprador extends _ctl_base {
                 header: $header,ws:  $ws);
         }
 
-        $params = (new \gamboamartin\inmuebles\controllers\_inm_comprador())->params_btn(accion_retorno: __FUNCTION__,
+        $params = (new \gamboamartin\inmuebles\controllers\_inm_comprador())->params_btn(accion_retorno: $accion_retorno,
             registro_id:  $this->registro_id,seccion_retorno:  $this->tabla);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener params',data:  $params,

@@ -20,6 +20,7 @@
                     <?php echo $controlador->inputs->inm_prospecto_ubicacion_id; ?>
                     <?php echo $controlador->inputs->doc_tipo_documento_id; ?>
                     <?php echo $controlador->inputs->documento; ?>
+
                     <?php echo $controlador->inputs->btn_action_next; ?>
                     <?php echo $controlador->inputs->id_retorno; ?>
                     <?php echo $controlador->inputs->seccion_retorno; ?>

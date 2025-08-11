@@ -516,6 +516,31 @@ class actions{
         return $link;
     }
 
+    final public function retorno_modifica_bd(PDO $link, int $registro_id, string $seccion, string $siguiente_view,
+                                          array $params = array(), bool $valida_permiso = false): array|string
+    {
+        $seccion = trim($seccion);
+        if ($seccion === '') {
+            return $this->error->error(mensaje: 'Error la seccion esta vacia', data: $seccion);
+        }
+
+        $siguiente_view = trim($siguiente_view);
+        if ($siguiente_view === '') {
+            $siguiente_view = 'modifica';
+        }
+
+        $link = (new links_menu(link: $link, registro_id: $registro_id))->link_con_id(
+            accion: $siguiente_view, link: $link, registro_id: $registro_id, seccion: $seccion, params: $params,
+            valida_permiso: $valida_permiso
+        );
+
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al generar link', data: $link);
+        }
+
+        return $link;
+    }
+
 
     /**
      * REG

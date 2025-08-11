@@ -18,4 +18,8 @@
 <?php echo $controlador->inputs->numero_exterior; ?>
 <?php echo $controlador->inputs->numero_interior; ?>
 
+<?php echo $controlador->inputs->btn_action_next; ?>
+<?php echo $controlador->inputs->id_retorno; ?>
+<?php echo $controlador->inputs->seccion_retorno; ?>
+
 <?php include (new views())->ruta_templates.'botons/submit/modifica_bd.php';?>
