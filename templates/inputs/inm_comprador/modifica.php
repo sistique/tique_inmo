@@ -13,14 +13,22 @@
 <?php echo $controlador->inputs->inm_destino_credito_id; ?>
 <?php echo $controlador->inputs->es_segundo_credito; ?>
 
-<?php
-$checked_genero_m = 'checked';
-$checked_genero_f = '';
-if($controlador->row_upd->genero === 'F'){
-    $checked_genero_m = '';
-    $checked_genero_f = 'checked';
-}
-?>
+        <?php
+        $checked_genero_m = 'checked';
+        $checked_genero_f = '';
+        if($controlador->row_upd->genero === 'F'){
+            $checked_genero_m = '';
+            $checked_genero_f = 'checked';
+        }
+
+        $checked_genero_co_m = 'checked';
+        $checked_genero_co_f = '';
+        if($controlador->row_upd->genero_co_acreditado === 'F'){
+            $checked_genero_co_m = '';
+            $checked_genero_co_f = 'checked';
+        }
+        ?>
+
 <?php echo $controlador->inputs->inm_plazo_credito_sc_id; ?>
         <?php echo $controlador->btn; ?>
     </div>
@@ -117,34 +125,35 @@ if($controlador->row_upd->genero === 'F'){
 
     </div>
 
-<?php if ($controlador->aplica_seccion_co_acreditado){ ?>
-
 <?php echo $controlador->header_frontend->apartado_6; ?>
 <div  id="apartado_6">
     <?php echo $controlador->inputs->inm_co_acreditado->nss; ?>
     <?php echo $controlador->inputs->inm_co_acreditado->curp; ?>
     <?php echo $controlador->inputs->inm_co_acreditado->rfc; ?>
+    <?php echo $controlador->inputs->inm_co_acreditado->nombre; ?>
     <?php echo $controlador->inputs->inm_co_acreditado->apellido_paterno; ?>
     <?php echo $controlador->inputs->inm_co_acreditado->apellido_materno; ?>
-    <?php echo $controlador->inputs->inm_co_acreditado->nombre; ?>
+    <?php echo $controlador->inputs->inm_co_acreditado->numero_credito; ?>
+    <?php echo $controlador->inputs->inm_co_acreditado->adeudo_hipoteca; ?>
     <?php echo $controlador->inputs->inm_co_acreditado->lada; ?>
     <?php echo $controlador->inputs->inm_co_acreditado->numero; ?>
     <?php echo $controlador->inputs->inm_co_acreditado->celular; ?>
-    <?php echo $controlador->btn; ?>
     <div class="control-group col-sm-6">
         <label class="control-label" for="inm_attr_tipo_credito_id">Genero</label>
         <label class="form-check-label chk">
-            <input type="radio" name="inm_co_acreditado_genero" value="M" class="form-check-input" id="genero"
-                   title="Genero" checked>
+            <input type="radio" name="co_acreditado[genero]" value="M" class="form-check-input" id="genero"
+                   title="Genero" <?php echo $checked_genero_co_m; ?>>
             M
         </label>
         <label class="form-check-label chk">
-            <input type="radio" name="inm_co_acreditado_genero" value="F" class="form-check-input" id="genero"
-                   title="Genero">
+            <input type="radio" name="co_acreditado[genero]" value="F" class="form-check-input" id="genero"
+                   title="Genero" <?php echo $checked_genero_co_f; ?>>
             F
         </label>
     </div>
     <?php echo $controlador->inputs->inm_co_acreditado->correo; ?>
+
+    <?php echo $controlador->btn; ?>
 
 </div>
 
@@ -154,10 +163,8 @@ if($controlador->row_upd->genero === 'F'){
     <?php echo $controlador->inputs->inm_co_acreditado->nrp; ?>
     <?php echo $controlador->inputs->inm_co_acreditado->lada_nep; ?>
     <?php echo $controlador->inputs->inm_co_acreditado->numero_nep; ?>
+    <?php echo $controlador->btn; ?>
 </div>
-
-<?php } ?>
-
 
 <?php echo $controlador->header_frontend->apartado_8; ?>
 
@@ -248,8 +255,9 @@ if($controlador->row_upd->genero === 'F'){
     <?php echo $controlador->inputs->referencia->dp_municipio_id; ?>
     <?php echo $controlador->inputs->referencia->dp_cp_id; ?>
     <?php echo $controlador->inputs->referencia->dp_colonia_postal_id; ?>
-    <?php echo $controlador->inputs->referencia->dp_calle_pertenece_id; ?>
-    <?php echo $controlador->inputs->referencia->numero_dom; ?>
+    <?php echo $controlador->inputs->referencia->calle; ?>
+    <?php echo $controlador->inputs->referencia->numero_exterior; ?>
+    <?php echo $controlador->inputs->referencia->numero_interior; ?>
     <?php echo $controlador->inputs->referencia->inm_parentesco_id; ?>
     <div class="col-md-12 table-responsive">
         <table class="table table-striped">
@@ -267,12 +275,12 @@ if($controlador->row_upd->genero === 'F'){
             <tbody>
             <?php foreach ($controlador->referencias as $referencia){ ?>
                 <tr>
-                    <td><?php echo $referencia['inm_referencia_prospecto_id']; ?></td>
-                    <td><?php echo $referencia['inm_referencia_prospecto_nombre']; ?></td>
-                    <td><?php echo $referencia['inm_referencia_prospecto_apellido_paterno']; ?></td>
-                    <td><?php echo $referencia['inm_referencia_prospecto_apellido_materno']; ?></td>
+                    <td><?php echo $referencia['inm_referencia_id']; ?></td>
+                    <td><?php echo $referencia['inm_referencia_nombre']; ?></td>
+                    <td><?php echo $referencia['inm_referencia_apellido_paterno']; ?></td>
+                    <td><?php echo $referencia['inm_referencia_apellido_materno']; ?></td>
                     <td><?php echo $referencia['inm_parentesco_descripcion']; ?></td>
-                    <td><?php echo $referencia['inm_referencia_prospecto_celular']; ?></td>
+                    <td><?php echo $referencia['inm_referencia_celular']; ?></td>
                     <td><?php echo $referencia['btn_del']; ?></td>
                 </tr>
             <?php } ?>
