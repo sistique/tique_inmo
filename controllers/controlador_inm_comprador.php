@@ -3050,21 +3050,6 @@ class controlador_inm_comprador extends _ctl_base {
 
         $this->buttons['btn_collapse_all'] = $btn_collapse_all;
 
-        $inm_referencias = (new inm_referencia(link: $this->link))->inm_referencias(inm_comprador_id: $this->registro_id);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener inm_referencias',data:  $inm_referencias, header: $header,ws:  $ws);
-        }
-
-        $this->inm_referencias = $inm_referencias;
-
-        $inm_referencias_html = (new inm_referencia_html(html: $this->html_base))->inm_referencias(
-            inm_referencias_data: $inm_referencias,link: $this->link);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al integrar referencia',data:  $inm_referencias_html, header: $header,ws:  $ws);
-        }
-
-        $this->inputs->inm_referencias = $inm_referencias_html;
-
         $co_acreditados = (new inm_comprador(link: $this->link))->get_co_acreditados(inm_comprador_id: $this->registro_id);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener co_acreditados',data:  $co_acreditados, header: $header,ws:  $ws);

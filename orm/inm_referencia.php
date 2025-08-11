@@ -39,18 +39,29 @@ class inm_referencia extends _modelo_parent{
     public function alta_bd(array $keys_integra_ds = array('codigo', 'descripcion')): array|stdClass
     {
 
+        if(!isset($this->registro['dp_colonia_postal_id']) || (string)$this->registro['dp_colonia_postal_id'] === '-1'
+            || trim($this->registro['dp_colonia_postal_id']) === ''){
+            $this->registro['dp_colonia_postal_id'] = 105;
+        }
+
         $valida = $this->valida_alta_referencia(registro: $this->registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar $registro',data: $valida);
         }
 
         if(!isset($this->registro['descripcion'])){
-            $descripcion = $this->descripcion(registro: $this->registro );
+            $descripcion = $this->descripcion(registro: $this->registro);
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error al obtener descripcion',data:  $descripcion);
             }
 
             $this->registro['descripcion'] = $descripcion;
+        }
+
+        if (!isset( $this->registro['codigo'])) {
+            $codigo =  $this->registro['descripcion'];
+            $codigo .= ' ' . rand(10000,99999);
+            $this->registro['codigo'] = $codigo;
         }
 
 

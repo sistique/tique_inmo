@@ -171,8 +171,7 @@ class _referencia{
         $modelo = new dp_colonia_postal(link: $controler->link);
         $dp_colonia_postal_id = $controler->html->select_catalogo(cols: 6, con_registros: false,
             id_selected: $row_upd->dp_colonia_postal_id, modelo: $modelo, columns_ds: array('dp_colonia_descripcion'),
-            id_css: 'referencia_dp_colonia_postal_id', label: 'Colonia', name: 'referencia[dp_colonia_postal_id]',
-            required: true);
+            id_css: 'referencia_dp_colonia_postal_id', label: 'Colonia', name: 'referencia[dp_colonia_postal_id]');
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener input',data:  $dp_colonia_postal_id);
         }
