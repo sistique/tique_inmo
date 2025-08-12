@@ -30,14 +30,14 @@ class inm_referencia extends _modelo_parent{
 
         $columnas_extra['inm_comprador_id'] = $sql;
 
-        $sql = "(SELECT
+        /*$sql = "(SELECT
                    IFNULL(inm_rel_referencia_comprador.inm_prospecto_id, -1)
                 FROM
                     inm_rel_referencia_prospecto
                     WHERE inm_rel_referencia_prospecto.inm_referencia_id = inm_referencia.id
                 )";
 
-        $columnas_extra['inm_prospecto_id'] = $sql;
+        $columnas_extra['inm_prospecto_id'] = $sql;*/
 
         $renombres= array();
 
