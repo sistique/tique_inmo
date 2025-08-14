@@ -222,8 +222,7 @@ class controlador_inm_factura_compra extends _ctl_base {
      */
     public function inserta_producto_bd(bool $header, bool $ws = false):array|stdClass
     {
-        print_r($_FILES);exit;
-        $xmlString = file_get_contents('ruta/a/tu/archivo.xml'); // O coloca tu XML como string directamente
+        $xmlString = file_get_contents($_FILES['xml_factura']['tmp_name']);
 
         $xml = new SimpleXMLElement($xmlString);
         $namespaces = $xml->getNamespaces(true);
@@ -238,50 +237,54 @@ class controlador_inm_factura_compra extends _ctl_base {
         $result = [];
 
         foreach ($conceptosXml as $concepto) {
+            $attrs = $concepto->attributes();
+
             $conceptoData = [
-                'ClaveProdServ' => (string)$concepto['ClaveProdServ'],
-                'Cantidad' => (string)$concepto['Cantidad'],
-                'ClaveUnidad' => (string)$concepto['ClaveUnidad'],
-                'Unidad' => (string)$concepto['Unidad'],
-                'Descripcion' => (string)$concepto['Descripcion'],
-                'ValorUnitario' => (string)$concepto['ValorUnitario'],
-                'Importe' => (string)$concepto['Importe'],
-                'ObjetoImp' => (string)$concepto['ObjetoImp'],
+                'ClaveProdServ' => (string)$attrs['ClaveProdServ'],
+                'NoIdentificacion' => (string)$attrs['NoIdentificacion'],
+                'Cantidad' => (string)$attrs['Cantidad'],
+                'ClaveUnidad' => (string)$attrs['ClaveUnidad'],
+                'Unidad' => (string)$attrs['Unidad'],
+                'Descripcion' => (string)$attrs['Descripcion'],
+                'ValorUnitario' => (string)$attrs['ValorUnitario'],
+                'Importe' => (string)$attrs['Importe'],
+                'ObjetoImp' => (string)$attrs['ObjetoImp'],
                 'Impuestos' => [
                     'Traslados' => [],
                     'Retenciones' => []
                 ]
             ];
 
-            /*if (isset($concepto->Impuestos)) {
-                $impuestos = $concepto->Impuestos->children($namespaces['cfdi']);
-
-                // Traslados
-                if (isset($impuestos->Traslados)) {
-                    foreach ($impuestos->Traslados->children($namespaces['cfdi']) as $traslado) {
+            $impuestosNode = $concepto->children($namespaces['cfdi'])->Impuestos;
+            if ($impuestosNode) {
+                $trasladosNode = $impuestosNode->children($namespaces['cfdi'])->Traslados;
+                if ($trasladosNode) {
+                    foreach ($trasladosNode->children($namespaces['cfdi']) as $traslado) {
+                        $tAttrs = $traslado->attributes();
                         $conceptoData['Impuestos']['Traslados'][] = [
-                            'Base' => (string)$traslado['Base'],
-                            'Impuesto' => (string)$traslado['Impuesto'],
-                            'TipoFactor' => (string)$traslado['TipoFactor'],
-                            'TasaOCuota' => (string)$traslado['TasaOCuota'],
-                            'Importe' => (string)$traslado['Importe']
+                            'Base' => (string)$tAttrs['Base'],
+                            'Impuesto' => (string)$tAttrs['Impuesto'],
+                            'TipoFactor' => (string)$tAttrs['TipoFactor'],
+                            'TasaOCuota' => (string)$tAttrs['TasaOCuota'],
+                            'Importe' => (string)$tAttrs['Importe']
                         ];
                     }
                 }
 
-                // Retenciones
-                if (isset($impuestos->Retenciones)) {
-                    foreach ($impuestos->Retenciones->children($namespaces['cfdi']) as $retencion) {
+                $retencionesNode = $impuestosNode->children($namespaces['cfdi'])->Retenciones;
+                if ($retencionesNode) {
+                    foreach ($retencionesNode->children($namespaces['cfdi']) as $retencion) {
+                        $rAttrs = $retencion->attributes();
                         $conceptoData['Impuestos']['Retenciones'][] = [
-                            'Base' => (string)$retencion['Base'],
-                            'Impuesto' => (string)$retencion['Impuesto'],
-                            'TipoFactor' => (string)$retencion['TipoFactor'],
-                            'TasaOCuota' => (string)$retencion['TasaOCuota'],
-                            'Importe' => (string)$retencion['Importe']
+                            'Base' => (string)$rAttrs['Base'],
+                            'Impuesto' => (string)$rAttrs['Impuesto'],
+                            'TipoFactor' => (string)$rAttrs['TipoFactor'],
+                            'TasaOCuota' => (string)$rAttrs['TasaOCuota'],
+                            'Importe' => (string)$rAttrs['Importe']
                         ];
                     }
                 }
-            }*/
+            }
 
             $result[] = $conceptoData;
         }
