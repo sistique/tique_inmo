@@ -11,7 +11,7 @@
                     <form method="post" action="<?php echo $controlador->link_inserta_producto_bd; ?>" class="form-additional">
                         <?php include (new views())->ruta_templates."head/subtitulo.php"; ?>
 
-                        <?php echo $controlador->inputs->inm_empleado_id; ?>
+                        <?php echo $controlador->inputs->gt_proveedor_id; ?>
                         <?php echo $controlador->inputs->documento_xml_factura; ?>
 
                         <div class="controls">
