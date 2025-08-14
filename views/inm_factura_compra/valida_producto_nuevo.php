@@ -21,7 +21,6 @@
                     <table class="table table-striped">
                         <thead>
                         <tr>
-                            <th>Numero Identificacion</th>
                             <th>Clave Producto</th>
                             <th>Producto</th>
                             <th>Clave Unidad</th>
@@ -39,7 +38,6 @@
                         foreach ($controlador->registros_concepto as $concepto){
                             ?>
                             <tr>
-                                <td><?php echo $concepto['NoIdentificacion'] ?></td>
                                 <td><?php echo $concepto['ClaveProdServ'] ?></td>
                                 <td><?php echo $concepto['Descripcion'] ?></td>
                                 <td><?php echo $concepto['ClaveUnidad'] ?></td>
