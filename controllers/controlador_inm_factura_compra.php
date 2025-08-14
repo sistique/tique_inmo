@@ -9,9 +9,11 @@
 namespace gamboamartin\inmuebles\controllers;
 
 use base\controller\init;
+use gamboamartin\cat_sat\models\cat_sat_unidad;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_factura_compra_html;
 use gamboamartin\inmuebles\models\inm_factura_compra;
+use gamboamartin\inmuebles\models\inm_producto;
 use gamboamartin\system\_ctl_base;
 use gamboamartin\system\links_menu;
 use gamboamartin\template\html;
@@ -22,6 +24,8 @@ use stdClass;
 class controlador_inm_factura_compra extends _ctl_base {
 
     public string $link_inserta_producto_bd = '';
+    public string $link_valida_producto_nuevo = '';
+    public array $registros_concepto = array();
 
     public function __construct(PDO      $link, html $html = new \gamboamartin\template_1\html(),
                                 stdClass $paths_conf = new stdClass())
@@ -169,6 +173,15 @@ class controlador_inm_factura_compra extends _ctl_base {
 
         $this->link_inserta_producto_bd = $link;
 
+        $link = $this->obj_link->get_link(seccion: "inm_factura_compra", accion: "valida_producto_nuevo");
+        if (errores::$error) {
+            $error = $this->errores->error(mensaje: 'Error al recuperar link modifica_direccion', data: $link);
+            print_r($error);
+            exit;
+        }
+
+        $this->link_valida_producto_nuevo = $link;
+
         return $link;
     }
 
@@ -216,12 +229,38 @@ class controlador_inm_factura_compra extends _ctl_base {
         return $inputs;
     }
 
-
-    /**
-     * @throws \Exception
-     */
-    public function inserta_producto_bd(bool $header, bool $ws = false):array|stdClass
+    public function valida_producto_nuevo(bool $header, bool $ws = false):array|stdClass
     {
+
+        $r_alta = $this->init_alta();
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al inicializar alta',data:  $r_alta, header: $header,ws:  $ws);
+        }
+
+        $r_factura_compra = (new inm_factura_compra(link: $this->link))->registro(registro_id: $this->registro_id);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener factura compra',data:  $r_factura_compra,
+                header: $header,ws:  $ws);
+        }
+
+        $keys_selects = array();
+        $columns_ds = array('gt_proveedor_razon_social');
+        $filtro['gt_proveedor.id'] = $r_factura_compra['gt_proveedor_id'];
+        $keys_selects = $this->key_select(cols: 12, con_registros: true, filtro: $filtro, key: 'gt_proveedor_id',
+            keys_selects: $keys_selects, id_selected: $r_factura_compra['gt_proveedor_id'], label: 'Proveedor',
+            columns_ds: $columns_ds, disabled: true, required: false);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
+                header: $header,ws:  $ws);
+        }
+
+        $inputs = $this->inputs(keys_selects: $keys_selects);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener inputs',data:  $inputs, header: $header,ws:  $ws);
+        }
+
         $xmlString = file_get_contents($_FILES['xml_factura']['tmp_name']);
 
         $xml = new SimpleXMLElement($xmlString);
@@ -248,7 +287,6 @@ class controlador_inm_factura_compra extends _ctl_base {
                 'Descripcion' => (string)$attrs['Descripcion'],
                 'ValorUnitario' => (string)$attrs['ValorUnitario'],
                 'Importe' => (string)$attrs['Importe'],
-                'ObjetoImp' => (string)$attrs['ObjetoImp'],
                 'Impuestos' => [
                     'Traslados' => [],
                     'Retenciones' => []
@@ -256,6 +294,9 @@ class controlador_inm_factura_compra extends _ctl_base {
             ];
 
             $impuestosNode = $concepto->children($namespaces['cfdi'])->Impuestos;
+            $monto_traslado = 0;
+            $monto_retenido = 0;
+
             if ($impuestosNode) {
                 $trasladosNode = $impuestosNode->children($namespaces['cfdi'])->Traslados;
                 if ($trasladosNode) {
@@ -268,6 +309,7 @@ class controlador_inm_factura_compra extends _ctl_base {
                             'TasaOCuota' => (string)$tAttrs['TasaOCuota'],
                             'Importe' => (string)$tAttrs['Importe']
                         ];
+                        $monto_traslado += (float)$tAttrs['Importe'];
                     }
                 }
 
@@ -282,12 +324,89 @@ class controlador_inm_factura_compra extends _ctl_base {
                             'TasaOCuota' => (string)$rAttrs['TasaOCuota'],
                             'Importe' => (string)$rAttrs['Importe']
                         ];
+                        $monto_retenido += (float)$rAttrs['Importe'];
                     }
                 }
             }
 
+            $conceptoData['Total'] = $conceptoData['Importe'] + $monto_traslado - $monto_retenido;
+
+            $filtro_prod['cat_sat_cve_prod.codigo'] = $concepto['ClaveProdServ'];
+            $filtro_prod['inm_producto.descripcion'] = $concepto['Descripcion'];
+            $r_producto = (new inm_producto(link: $this->link))->filtro_and(filtro: $filtro_prod);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al generar producto', data: $r_producto, header: $header,
+                    ws: $ws);
+            }
+
+            $conceptoData['btn_producto'] = '';
+            if($r_producto->n_registros <= 0){
+                $button = $this->html->button_href(accion: 'alta_bd', etiqueta: 'Inserta Producto',
+                    registro_id: -1, seccion: 'inm_producto', style: 'success');
+                if(errores::$error){
+                    return $this->retorno_error(mensaje: 'Error al generar producto', data: $button, header: $header,
+                        ws: $ws);
+                }
+                $conceptoData['btn_producto'] = $button;
+            }
+
             $result[] = $conceptoData;
         }
+
+        $this->registros_concepto = $result;
+
+
+        /*print_r($result);
+        $res = array();
+        foreach ($result as $concepto) {
+
+
+            $filtro_unidad['cat_sat_unidad.codigo'] = $concepto['ClaveUnidad'];
+            $r_unidad = (new cat_sat_unidad(link: $this->link))->filtro_and(filtro: $filtro_unidad);
+            if (errores::$error) {
+                $this->retorno_error(mensaje: 'Error al generar unidad', data: $r_unidad, header: $header,
+                    ws: $ws);
+            }
+
+            $res['cantidad'] = $concepto['Cantidad'];
+            $res['precio_unitario'] = $concepto['ValorUnitario'];
+            $res['subtotal'] = $concepto['Importe'];
+            $res['unidad'] = $r_unidad['descripcion'];
+
+            $res['inm_producto_id'] = 'Sin ID';
+            $res['existe'] = 'No Existe';
+            $res['descripcion'] = $concepto['Descripcion'];
+            if($r_producto->n_registros > 0){
+                $res['precio_unitario'] =  $r_producto->registros[0]['precio_unitario'];
+                $res['inm_producto_id'] = $r_producto->registros[0]['inm_producto_id'];
+                $res['existe'] = 'Existe';
+                $res['descripcion'] = $r_producto->registros[0]['inm_producto_descripcion'];
+            }
+        }*/
+
+        return $result;
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function inserta_producto_bd(bool $header, bool $ws = false):array|stdClass
+    {
+
+
+        $link_valida_producto_nuevo = $this->obj_link->link_sin_id(accion: 'valida_producto_nuevo', link: $this->link,
+            seccion: 'inm_factura_compra');
+        if (errores::$error) {
+            $this->retorno_error(mensaje: 'Error al generar link', data: $link_valida_producto_nuevo, header: $header,
+                ws: $ws);
+        }
+print_r($_POST);
+print_r($link_valida_producto_nuevo);
+        if(count($result) > 0) {
+            header('Location:' . $link_valida_producto_nuevo);
+            exit;
+        }
+
 
         return $result;
     }
