@@ -13,6 +13,7 @@ use gamboamartin\cat_sat\models\cat_sat_cve_prod;
 use gamboamartin\cat_sat\models\cat_sat_unidad;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_factura_compra_html;
+use gamboamartin\inmuebles\models\inm_detalle_factura_compra;
 use gamboamartin\inmuebles\models\inm_factura_compra;
 use gamboamartin\inmuebles\models\inm_producto;
 use gamboamartin\system\_ctl_base;
@@ -375,9 +376,7 @@ class controlador_inm_factura_compra extends _ctl_base {
      */
     public function inserta_producto_bd(bool $header, bool $ws = false):array|stdClass
     {
-
         foreach ($this->registros_concepto as $concepto) {
-
             $filtro_prod['cat_sat_cve_prod.codigo'] = $concepto['ClaveProdServ'];
             $filtro_prod['inm_producto.descripcion'] = $concepto['Descripcion'];
             $r_producto = (new inm_producto(link: $this->link))->filtro_and(filtro: $filtro_prod);
@@ -420,8 +419,8 @@ class controlador_inm_factura_compra extends _ctl_base {
                 $registro_prod['cantidad_actual'] = $concepto['Cantidad'];
                 $r_inm_producto = (new inm_producto(link: $this->link))->alta_registro(registro: $registro_prod);
                 if (errores::$error) {
-                    return $this->retorno_error(mensaje: 'Error al generar link', data: $r_inm_producto, header: $header,
-                        ws: $ws);
+                    return $this->retorno_error(mensaje: 'Error al generar link', data: $r_inm_producto,
+                        header: $header, ws: $ws);
                 }
                 $inm_producto_id = $r_inm_producto->registro_id;
             }
@@ -434,23 +433,15 @@ class controlador_inm_factura_compra extends _ctl_base {
             $registro['trasladado'] = $concepto['Trasladado'];
             $registro['retenido'] = $concepto['Retenido'];
             $registro['total'] = $concepto['Total'];
-            $r_inm_producto = (new inm_producto(link: $this->link))->alta_registro(registro: $registro);
+            $r_inm_detalle_factura_compra = (new inm_detalle_factura_compra(link: $this->link))->alta_registro(
+                registro: $registro);
             if (errores::$error) {
-                return $this->retorno_error(mensaje: 'Error al generar link', data: $r_inm_producto, header: $header,
-                            ws: $ws);
+                return $this->retorno_error(mensaje: 'Error al generar link', data: $r_inm_detalle_factura_compra,
+                    header: $header, ws: $ws);
             }
         }
-        $link_valida_producto_nuevo = $this->obj_link->link_sin_id(accion: 'valida_producto_nuevo', link: $this->link,
-            seccion: 'inm_factura_compra');
-        if (errores::$error) {
-            $this->retorno_error(mensaje: 'Error al generar link', data: $link_valida_producto_nuevo, header: $header,
-                ws: $ws);
-        }
-print_r($_POST);
-print_r($link_valida_producto_nuevo);
 
-
-        return $_POST;
+        return $this->registros_concepto;
     }
 
     protected function key_selects_txt(array $keys_selects): array
