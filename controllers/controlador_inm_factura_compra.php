@@ -21,6 +21,8 @@ use stdClass;
 
 class controlador_inm_factura_compra extends _ctl_base {
 
+    public string $link_inserta_producto_bd = '';
+
     public function __construct(PDO      $link, html $html = new \gamboamartin\template_1\html(),
                                 stdClass $paths_conf = new stdClass())
     {
@@ -63,6 +65,7 @@ class controlador_inm_factura_compra extends _ctl_base {
         $keys->selects = array();
 
         $init_data = array();
+        $init_data['gt_proveedor'] = "gamboamartin\\inmuebles";
         $campos_view = $this->campos_view_base(init_data: $init_data,keys:  $keys);
 
         if(errores::$error){
@@ -111,10 +114,69 @@ class controlador_inm_factura_compra extends _ctl_base {
         return $datatables;
     }
 
+    protected function init_links(): array|string
+    {
+        $links = $this->obj_link->genera_links(controler: $this);
+        if (errores::$error) {
+            $error = $this->errores->error(mensaje: 'Error al generar links', data: $links);
+            print_r($error);
+            exit;
+        }
+
+        $link = $this->obj_link->get_link(seccion: "inm_factura_compra", accion: "inserta_producto_bd");
+        if (errores::$error) {
+            $error = $this->errores->error(mensaje: 'Error al recuperar link modifica_direccion', data: $link);
+            print_r($error);
+            exit;
+        }
+        $this->link_inserta_producto_bd = $link;
+
+        return $link;
+    }
+
+
+    public function inserta_producto(bool $header, bool $ws = false): array|stdClass
+    {
+        $r_alta = $this->init_alta();
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al inicializar alta',data:  $r_alta, header: $header,ws:  $ws);
+        }
+
+        $keys_selects = array();
+        $columns_ds = array('gt_proveedor_razon_social');
+        $filtro['gt_proveedor.id'] = $this->row_upd->gt_proveedor_id;
+        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  $filtro, key: 'gt_proveedor_id',
+            keys_selects:$keys_selects, id_selected: $this->row_upd->gt_proveedor_id, label: 'Proveedor',
+            columns_ds : $columns_ds,required: false);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
+                header: $header,ws:  $ws);
+        }
+
+        $inputs = $this->inputs(keys_selects: $keys_selects);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener inputs',data:  $inputs, header: $header,ws:  $ws);
+        }
+
+        $documento_xml_factura = $this->html->input_file(cols: 12,name: 'xml_factura',row_upd:  new stdClass(),value_vacio:  false,
+            place_holder: 'XML Factura', required: false);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener inputs',data:  $documento_xml_factura, header: $header,ws:  $ws);
+        }
+
+        $this->inputs->documento_xml_factura = $documento_xml_factura;
+
+        return $inputs;
+    }
+
+
     /**
      * @throws \Exception
      */
-    public function inserta_producto(bool $header, bool $ws = false):array|stdClass
+    public function inserta_producto_bd(bool $header, bool $ws = false):array|stdClass
     {
         $xmlString = file_get_contents('ruta/a/tu/archivo.xml'); // O coloca tu XML como string directamente
 
