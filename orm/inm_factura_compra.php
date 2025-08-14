@@ -4,6 +4,7 @@ namespace gamboamartin\inmuebles\models;
 
 use base\orm\_modelo_parent;
 use gamboamartin\errores\errores;
+use gamboamartin\gastos\models\gt_proveedor;
 use PDO;
 use stdClass;
 
@@ -32,14 +33,20 @@ class inm_factura_compra extends _modelo_parent{
 
     public function alta_bd(array $keys_integra_ds = array('codigo', 'descripcion')): array|stdClass
     {
+
+        $r_proveedor = (new gt_proveedor(link: $this->link))->registro(registro_id: $this->registro['gt_proveedor_id']);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al insertar prospecto', data: $r_proveedor);
+        }
+
         if (!isset($this->registro['descripcion'])) {
-            $descripcion = $this->registro['gt_proveedor_id'];
+            $descripcion = $r_proveedor['gt_proveedor_razon_social'];
             $descripcion .= ' ' . $this->registro['fecha'];
             $this->registro['descripcion'] = $descripcion;
         }
 
         if (!isset($this->registro['codigo'])) {
-            $descripcion = $this->registro['gt_proveedor_id'];
+            $descripcion = $r_proveedor['gt_proveedor_razon_social'];
             $descripcion .= ' ' . $this->registro['fecha'] . rand();
             $this->registro['codigo'] = $descripcion;
         }
@@ -55,15 +62,20 @@ class inm_factura_compra extends _modelo_parent{
     public function modifica_bd(array $registro, int $id, bool $reactiva = false,
                                 array $keys_integra_ds = array('codigo', 'descripcion')): array|stdClass
     {
+        $r_proveedor = (new gt_proveedor(link: $this->link))->registro(registro_id: $registro['gt_proveedor_id']);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al insertar prospecto', data: $r_proveedor);
+        }
+
         if(!isset($registro['status'])){
             if (!isset($registro['descripcion'])) {
-                $descripcion = $registro['gt_proveedor_id'];
+                $descripcion = $r_proveedor['gt_proveedor_razon_social'];
                 $descripcion .= ' ' . $registro['fecha'];
                 $registro['descripcion'] = $descripcion;
             }
 
             if (!isset($registro['codigo'])) {
-                $descripcion = $registro['gt_proveedor_id'];
+                $descripcion = $r_proveedor['gt_proveedor_razon_social'];
                 $descripcion .= ' ' . $registro['fecha'] . rand();
                 $registro['codigo'] = $descripcion;
             }

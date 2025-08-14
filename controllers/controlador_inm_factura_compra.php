@@ -49,11 +49,27 @@ class controlador_inm_factura_compra extends _ctl_base {
                 mensaje: 'Error al inicializar alta',data:  $r_alta, header: $header,ws:  $ws);
         }
         $keys_selects = array();
+        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'gt_proveedor_id',
+            keys_selects: $keys_selects, id_selected: -1, label: 'Proveedor');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
         $inputs = $this->inputs(keys_selects: $keys_selects);
         if(errores::$error){
             return $this->retorno_error(
                 mensaje: 'Error al obtener inputs',data:  $inputs, header: $header,ws:  $ws);
         }
+
+        $this->row_upd->fecha = date('Y-m-d');
+
+        $fecha = $this->html->input_fecha(cols: 12, row_upd: $this->row_upd, value_vacio: false,
+            value: $this->row_upd->fecha);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener input fecha',data:  $fecha, header: $header,ws:  $ws);
+        }
+        $this->inputs->fecha = $fecha;
 
         return $r_alta;
     }
@@ -65,7 +81,7 @@ class controlador_inm_factura_compra extends _ctl_base {
         $keys->selects = array();
 
         $init_data = array();
-        $init_data['gt_proveedor'] = "gamboamartin\\inmuebles";
+        $init_data['gt_proveedor'] = "gamboamartin\\gastos";
         $campos_view = $this->campos_view_base(init_data: $init_data,keys:  $keys);
 
         if(errores::$error){
@@ -88,10 +104,24 @@ class controlador_inm_factura_compra extends _ctl_base {
         }
 
         $keys_selects = array();
+        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'gt_proveedor_id',
+            keys_selects: $keys_selects, id_selected: $this->row_upd->gt_proveedor_id, label: 'Proveedor');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
         $base = $this->base_upd(keys_selects: $keys_selects, params: array(),params_ajustados: array());
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
         }
+
+        $fecha = $this->html->input_fecha(cols: 12, row_upd: $this->row_upd, value_vacio: false,
+            value: $this->row_upd->fecha);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener input fecha',data:  $fecha, header: $header,ws:  $ws);
+        }
+        $this->inputs->fecha = $fecha;
 
         return $r_modifica;
     }
