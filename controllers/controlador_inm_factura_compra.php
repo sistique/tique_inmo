@@ -9,6 +9,7 @@
 namespace gamboamartin\inmuebles\controllers;
 
 use base\controller\init;
+use gamboamartin\cat_sat\models\cat_sat_cve_prod;
 use gamboamartin\cat_sat\models\cat_sat_unidad;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_factura_compra_html;
@@ -331,7 +332,7 @@ class controlador_inm_factura_compra extends _ctl_base {
 
             $conceptoData['Total'] = $conceptoData['Importe'] + $conceptoData['Trasladado'] - $conceptoData['Retenido'];
 
-            $filtro_prod['cat_sat_cve_prod.codigo'] = $attrs['ClaveProdServ'];
+            /*$filtro_prod['cat_sat_cve_prod.codigo'] = $attrs['ClaveProdServ'];
             $filtro_prod['inm_producto.descripcion'] = $attrs['Descripcion'];
             $r_producto = (new inm_producto(link: $this->link))->filtro_and(filtro: $filtro_prod);
             if (errores::$error) {
@@ -348,7 +349,7 @@ class controlador_inm_factura_compra extends _ctl_base {
                         ws: $ws);
                 }
                 $conceptoData['btn_producto'] = $button;
-            }
+            }*/
 
             $filtro_unidad['cat_sat_unidad.codigo'] = $attrs['ClaveUnidad'];
             $r_unidad = (new cat_sat_unidad(link: $this->link))->filtro_and(filtro: $filtro_unidad);
@@ -356,7 +357,7 @@ class controlador_inm_factura_compra extends _ctl_base {
                 return $this->retorno_error(mensaje: 'Error al generar unidad', data: $r_unidad, header: $header,
                     ws: $ws);
             }
-            
+
             if($r_unidad->n_registros > 0){
                 $conceptoData['Unidad'] = $r_unidad->registros[0]['cat_sat_unidad_descripcion'];
             }
@@ -365,35 +366,6 @@ class controlador_inm_factura_compra extends _ctl_base {
         }
 
         $this->registros_concepto = $result;
-
-
-        /*print_r($result);
-        $res = array();
-        foreach ($result as $concepto) {
-
-
-            $filtro_unidad['cat_sat_unidad.codigo'] = $concepto['ClaveUnidad'];
-            $r_unidad = (new cat_sat_unidad(link: $this->link))->filtro_and(filtro: $filtro_unidad);
-            if (errores::$error) {
-                $this->retorno_error(mensaje: 'Error al generar unidad', data: $r_unidad, header: $header,
-                    ws: $ws);
-            }
-
-            $res['cantidad'] = $concepto['Cantidad'];
-            $res['precio_unitario'] = $concepto['ValorUnitario'];
-            $res['subtotal'] = $concepto['Importe'];
-            $res['unidad'] = $r_unidad['descripcion'];
-
-            $res['inm_producto_id'] = 'Sin ID';
-            $res['existe'] = 'No Existe';
-            $res['descripcion'] = $concepto['Descripcion'];
-            if($r_producto->n_registros > 0){
-                $res['precio_unitario'] =  $r_producto->registros[0]['precio_unitario'];
-                $res['inm_producto_id'] = $r_producto->registros[0]['inm_producto_id'];
-                $res['existe'] = 'Existe';
-                $res['descripcion'] = $r_producto->registros[0]['inm_producto_descripcion'];
-            }
-        }*/
 
         return $result;
     }
@@ -404,7 +376,70 @@ class controlador_inm_factura_compra extends _ctl_base {
     public function inserta_producto_bd(bool $header, bool $ws = false):array|stdClass
     {
 
+        foreach ($this->registros_concepto as $concepto) {
 
+            $filtro_prod['cat_sat_cve_prod.codigo'] = $concepto['ClaveProdServ'];
+            $filtro_prod['inm_producto.descripcion'] = $concepto['Descripcion'];
+            $r_producto = (new inm_producto(link: $this->link))->filtro_and(filtro: $filtro_prod);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al generar producto', data: $r_producto, header: $header,
+                    ws: $ws);
+            }
+
+            if($r_producto->n_registros > 0){
+                $inm_producto_id = $r_producto->registro[0]['inm_producto_id'];
+            }else{
+                $filtro_unidad['cat_sat_unidad.codigo'] = $concepto['ClaveUnidad'];
+                $r_unidad = (new cat_sat_unidad(link: $this->link))->filtro_and(filtro: $filtro_unidad);
+                if (errores::$error) {
+                    return $this->retorno_error(mensaje: 'Error al generar unidad', data: $r_unidad, header: $header,
+                        ws: $ws);
+                }
+
+                $inm_unidad_id = -0;
+                if($r_unidad->n_registros > 0){
+                    $inm_unidad_id = $r_unidad->registros[0]['cat_sat_unidad_descripcion'];
+                }
+                
+                $filtro_cve_prod['cat_sat_cve_prod.codigo'] = $concepto['Clavecve_prod'];
+                $r_cve_prod = (new cat_sat_cve_prod(link: $this->link))->filtro_and(filtro: $filtro_cve_prod);
+                if (errores::$error) {
+                    return $this->retorno_error(mensaje: 'Error al generar cve_prod', data: $r_cve_prod, header: $header,
+                        ws: $ws);
+                }
+
+                $inm_cve_prod_id = -0;
+                if($r_cve_prod->n_registros > 0){
+                    $inm_cve_prod_id = $r_cve_prod->registros[0]['cat_sat_cve_prod_descripcion'];
+                }
+
+                $registro_prod['inm_unidad_id'] = $inm_unidad_id;
+                $registro_prod['cat_sat_cve_prod_id'] = $inm_cve_prod_id;
+                $registro_prod['descripcion'] = $concepto['Descripcion'];
+                $registro_prod['costo_promedio'] = $concepto['ValorUnitario'];
+                $registro_prod['cantidad_actual'] = $concepto['Cantidad'];
+                $r_inm_producto = (new inm_producto(link: $this->link))->alta_registro(registro: $registro_prod);
+                if (errores::$error) {
+                    return $this->retorno_error(mensaje: 'Error al generar link', data: $r_inm_producto, header: $header,
+                        ws: $ws);
+                }
+                $inm_producto_id = $r_inm_producto->registro_id;
+            }
+
+            $registro['inm_factura_compra_id'] = $this->registro_id;
+            $registro['inm_producto_id'] = $inm_producto_id;
+            $registro['cantidad'] = $concepto['Cantidad'];
+            $registro['valor_unitario'] = $concepto['ValorUnitario'];
+            $registro['subtotal'] = $concepto['Importe'];
+            $registro['trasladado'] = $concepto['Trasladado'];
+            $registro['retenido'] = $concepto['Retenido'];
+            $registro['total'] = $concepto['Total'];
+            $r_inm_producto = (new inm_producto(link: $this->link))->alta_registro(registro: $registro);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al generar link', data: $r_inm_producto, header: $header,
+                            ws: $ws);
+            }
+        }
         $link_valida_producto_nuevo = $this->obj_link->link_sin_id(accion: 'valida_producto_nuevo', link: $this->link,
             seccion: 'inm_factura_compra');
         if (errores::$error) {
