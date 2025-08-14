@@ -39,6 +39,13 @@ class controlador_inm_factura_compra extends _ctl_base {
 
         parent::__construct(html:$html_, link: $link,modelo:  $modelo, obj_link: $obj_link, datatables: $datatables,
             paths_conf: $paths_conf);
+
+        $init_links = $this->init_links();
+        if (errores::$error) {
+            $error = $this->errores->error(mensaje: 'Error al inicializar links', data: $init_links);
+            print_r($error);
+            die('Error');
+        }
     }
 
     public function alta(bool $header, bool $ws = false): array|string
@@ -159,6 +166,7 @@ class controlador_inm_factura_compra extends _ctl_base {
             print_r($error);
             exit;
         }
+
         $this->link_inserta_producto_bd = $link;
 
         return $link;
@@ -173,12 +181,18 @@ class controlador_inm_factura_compra extends _ctl_base {
                 mensaje: 'Error al inicializar alta',data:  $r_alta, header: $header,ws:  $ws);
         }
 
+        $r_factura_compra = (new inm_factura_compra(link: $this->link))->registro(registro_id: $this->registro_id);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener factura compra',data:  $r_factura_compra,
+                header: $header,ws:  $ws);
+        }
+
         $keys_selects = array();
         $columns_ds = array('gt_proveedor_razon_social');
-        $filtro['gt_proveedor.id'] = $this->row_upd->gt_proveedor_id;
-        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  $filtro, key: 'gt_proveedor_id',
-            keys_selects:$keys_selects, id_selected: $this->row_upd->gt_proveedor_id, label: 'Proveedor',
-            columns_ds : $columns_ds,required: false);
+        $filtro['gt_proveedor.id'] = $r_factura_compra['gt_proveedor_id'];
+        $keys_selects = $this->key_select(cols: 12, con_registros: true, filtro: $filtro, key: 'gt_proveedor_id',
+            keys_selects: $keys_selects, id_selected: $r_factura_compra['gt_proveedor_id'], label: 'Proveedor',
+            columns_ds: $columns_ds, disabled: true, required: false);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);
@@ -208,6 +222,7 @@ class controlador_inm_factura_compra extends _ctl_base {
      */
     public function inserta_producto_bd(bool $header, bool $ws = false):array|stdClass
     {
+        print_r($_FILES);exit;
         $xmlString = file_get_contents('ruta/a/tu/archivo.xml'); // O coloca tu XML como string directamente
 
         $xml = new SimpleXMLElement($xmlString);
