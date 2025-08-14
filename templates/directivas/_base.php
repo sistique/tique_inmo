@@ -441,7 +441,7 @@ class _base extends html_controler{
             return $this->error->error(mensaje: 'Error al obtener inputs',data:  $inputs);
         }
 
-        $radios = (new _inm_comprador())->radios(checked_default_cd: 1, checked_default_esc: 2, controler: $controler);
+        $radios = (new _inm_comprador())->radios(checked_default_cd: 2, checked_default_esc: 2, controler: $controler);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar radios',data:  $radios);
         }
