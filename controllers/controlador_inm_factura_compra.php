@@ -16,6 +16,7 @@ use gamboamartin\system\_ctl_base;
 use gamboamartin\system\links_menu;
 use gamboamartin\template\html;
 use PDO;
+use SimpleXMLElement;
 use stdClass;
 
 class controlador_inm_factura_compra extends _ctl_base {
@@ -108,6 +109,77 @@ class controlador_inm_factura_compra extends _ctl_base {
         $datatables->filtro = $filtro;
 
         return $datatables;
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function inserta_producto(bool $header, bool $ws = false):array|stdClass
+    {
+        $xmlString = file_get_contents('ruta/a/tu/archivo.xml'); // O coloca tu XML como string directamente
+
+        $xml = new SimpleXMLElement($xmlString);
+        $namespaces = $xml->getNamespaces(true);
+
+        if(!isset($namespaces["cfdi"])){
+            return $this->retorno_error(
+                mensaje: 'Error no existe apartado cfdi en el xml',data:  $namespaces, header: $header,ws:  $ws);
+        }
+
+        $conceptosXml = $xml->children($namespaces['cfdi'])->Conceptos->children($namespaces['cfdi'])->Concepto;
+
+        $result = [];
+
+        foreach ($conceptosXml as $concepto) {
+            $conceptoData = [
+                'ClaveProdServ' => (string)$concepto['ClaveProdServ'],
+                'Cantidad' => (string)$concepto['Cantidad'],
+                'ClaveUnidad' => (string)$concepto['ClaveUnidad'],
+                'Unidad' => (string)$concepto['Unidad'],
+                'Descripcion' => (string)$concepto['Descripcion'],
+                'ValorUnitario' => (string)$concepto['ValorUnitario'],
+                'Importe' => (string)$concepto['Importe'],
+                'ObjetoImp' => (string)$concepto['ObjetoImp'],
+                'Impuestos' => [
+                    'Traslados' => [],
+                    'Retenciones' => []
+                ]
+            ];
+
+            /*if (isset($concepto->Impuestos)) {
+                $impuestos = $concepto->Impuestos->children($namespaces['cfdi']);
+
+                // Traslados
+                if (isset($impuestos->Traslados)) {
+                    foreach ($impuestos->Traslados->children($namespaces['cfdi']) as $traslado) {
+                        $conceptoData['Impuestos']['Traslados'][] = [
+                            'Base' => (string)$traslado['Base'],
+                            'Impuesto' => (string)$traslado['Impuesto'],
+                            'TipoFactor' => (string)$traslado['TipoFactor'],
+                            'TasaOCuota' => (string)$traslado['TasaOCuota'],
+                            'Importe' => (string)$traslado['Importe']
+                        ];
+                    }
+                }
+
+                // Retenciones
+                if (isset($impuestos->Retenciones)) {
+                    foreach ($impuestos->Retenciones->children($namespaces['cfdi']) as $retencion) {
+                        $conceptoData['Impuestos']['Retenciones'][] = [
+                            'Base' => (string)$retencion['Base'],
+                            'Impuesto' => (string)$retencion['Impuesto'],
+                            'TipoFactor' => (string)$retencion['TipoFactor'],
+                            'TasaOCuota' => (string)$retencion['TasaOCuota'],
+                            'Importe' => (string)$retencion['Importe']
+                        ];
+                    }
+                }
+            }*/
+
+            $result[] = $conceptoData;
+        }
+
+        return $result;
     }
 
     protected function key_selects_txt(array $keys_selects): array
