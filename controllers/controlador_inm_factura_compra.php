@@ -294,8 +294,8 @@ class controlador_inm_factura_compra extends _ctl_base {
             ];
 
             $impuestosNode = $concepto->children($namespaces['cfdi'])->Impuestos;
-            $monto_traslado = 0;
-            $monto_retenido = 0;
+            $conceptoData['Trasladado'] = 0;
+            $conceptoData['Retenido'] = 0;
 
             if ($impuestosNode) {
                 $trasladosNode = $impuestosNode->children($namespaces['cfdi'])->Traslados;
@@ -309,7 +309,7 @@ class controlador_inm_factura_compra extends _ctl_base {
                             'TasaOCuota' => (string)$tAttrs['TasaOCuota'],
                             'Importe' => (string)$tAttrs['Importe']
                         ];
-                        $monto_traslado += (float)$tAttrs['Importe'];
+                        $conceptoData['Trasladado'] += (float)$tAttrs['Importe'];
                     }
                 }
 
@@ -324,15 +324,15 @@ class controlador_inm_factura_compra extends _ctl_base {
                             'TasaOCuota' => (string)$rAttrs['TasaOCuota'],
                             'Importe' => (string)$rAttrs['Importe']
                         ];
-                        $monto_retenido += (float)$rAttrs['Importe'];
+                        $conceptoData['Retenido'] += (float)$rAttrs['Importe'];
                     }
                 }
             }
 
-            $conceptoData['Total'] = $conceptoData['Importe'] + $monto_traslado - $monto_retenido;
+            $conceptoData['Total'] = $conceptoData['Importe'] + $conceptoData['Trasladado'] - $conceptoData['Retenido'];
 
-            $filtro_prod['cat_sat_cve_prod.codigo'] = $concepto['ClaveProdServ'];
-            $filtro_prod['inm_producto.descripcion'] = $concepto['Descripcion'];
+            $filtro_prod['cat_sat_cve_prod.codigo'] = $attrs['ClaveProdServ'];
+            $filtro_prod['inm_producto.descripcion'] = $attrs['Descripcion'];
             $r_producto = (new inm_producto(link: $this->link))->filtro_and(filtro: $filtro_prod);
             if (errores::$error) {
                 return $this->retorno_error(mensaje: 'Error al generar producto', data: $r_producto, header: $header,
@@ -348,6 +348,17 @@ class controlador_inm_factura_compra extends _ctl_base {
                         ws: $ws);
                 }
                 $conceptoData['btn_producto'] = $button;
+            }
+
+            $filtro_unidad['cat_sat_unidad.codigo'] = $attrs['ClaveUnidad'];
+            $r_unidad = (new cat_sat_unidad(link: $this->link))->filtro_and(filtro: $filtro_unidad);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al generar unidad', data: $r_unidad, header: $header,
+                    ws: $ws);
+            }
+            
+            if($r_unidad->n_registros > 0){
+                $conceptoData['Unidad'] = $r_unidad->registros[0]['cat_sat_unidad_descripcion'];
             }
 
             $result[] = $conceptoData;
@@ -402,13 +413,9 @@ class controlador_inm_factura_compra extends _ctl_base {
         }
 print_r($_POST);
 print_r($link_valida_producto_nuevo);
-        if(count($result) > 0) {
-            header('Location:' . $link_valida_producto_nuevo);
-            exit;
-        }
 
 
-        return $result;
+        return $_POST;
     }
 
     protected function key_selects_txt(array $keys_selects): array

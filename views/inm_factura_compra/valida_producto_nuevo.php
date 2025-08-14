@@ -24,13 +24,14 @@
                             <th>Numero Identificacion</th>
                             <th>Clave Producto</th>
                             <th>Producto</th>
-                            <th>Cantidad</th>
                             <th>Clave Unidad</th>
                             <th>Unidad</th>
+                            <th>Cantidad</th>
                             <th>Valor Unitario</th>
                             <th>Subtotal</th>
+                            <th>Trasladado</th>
+                            <th>Retenido</th>
                             <th>Total</th>
-                            <th>btn_producto</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -41,13 +42,14 @@
                                 <td><?php echo $concepto['NoIdentificacion'] ?></td>
                                 <td><?php echo $concepto['ClaveProdServ'] ?></td>
                                 <td><?php echo $concepto['Descripcion'] ?></td>
-                                <td><?php echo $concepto['Cantidad'] ?></td>
                                 <td><?php echo $concepto['ClaveUnidad'] ?></td>
                                 <td><?php echo $concepto['Unidad'] ?></td>
+                                <td><?php echo $concepto['Cantidad'] ?></td>
                                 <td><?php echo $concepto['ValorUnitario'] ?></td>
                                 <td><?php echo $concepto['Importe'] ?></td>
+                                <td><?php echo $concepto['Trasladado'] ?></td>
+                                <td><?php echo $concepto['Retenido'] ?></td>
                                 <td><?php echo $concepto['Total'] ?></td>
-                                <td><?php echo $concepto['btn_producto'] ?></td>
                             </tr>
                         <?php } ?>
                         </tbody>
