@@ -72,7 +72,23 @@ class controlador_inm_producto extends _ctl_base {
         return $campos_view;
     }
 
+    public function get_productos(bool $header, bool $ws = false): array
+    {
+        $inm_producto = (new inm_producto(link: $this->link))->registros();
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al integrar buttons', data: $inm_producto,
+                header: $header, ws: $ws);
+        }
 
+        $salida['draw'] = count($inm_producto);
+        $salida['recordsTotal'] = count($inm_producto);
+        $salida['recordsFiltered'] = count($inm_producto);
+        $salida['data'] = $inm_producto;
+
+        header('Content-Type: application/json');
+        echo json_encode($salida);
+        exit;
+    }
 
     public function modifica(bool $header, bool $ws = false): array|stdClass
     {
