@@ -13,8 +13,12 @@
 
                         <?php echo $controlador->inputs->gt_proveedor_id; ?>
 
-                        <div class="controls">
-                            <button type="submit" class="btn btn-success" name="btn_action_next">Inserta Producto</button><br>
+                        <div class="control-group btn-alta">
+                            <div class="controls">
+                                <button type="submit" class="btn btn-success" name="btn_action_next">Inserta Producto</button>
+                                <button type="submit" class="btn btn-success" name="btn_action_next" title="Vista Previa">Asigna Productos</button>
+                                <br>
+                            </div>
                         </div>
                     </form>
                     <br>
@@ -57,3 +61,10 @@
         </div>
     </div>
 </main>
+
+<dialog id="myModal">
+    <span class="close-btn" id="closeModalBtn">&times;</span>
+    <h2>Selecciona Productos</h2>
+    <div class="content">
+    </div>
+</dialog>

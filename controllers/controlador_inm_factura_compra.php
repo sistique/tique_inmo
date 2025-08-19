@@ -22,9 +22,9 @@ use gamboamartin\template\html;
 use PDO;
 use SimpleXMLElement;
 use stdClass;
+use Throwable;
 
 class controlador_inm_factura_compra extends _ctl_base {
-
     public string $link_inserta_producto_bd = '';
     public string $link_valida_producto_nuevo = '';
     public array $registros_concepto = array();
@@ -333,25 +333,6 @@ class controlador_inm_factura_compra extends _ctl_base {
 
             $conceptoData['Total'] = $conceptoData['Importe'] + $conceptoData['Trasladado'] - $conceptoData['Retenido'];
 
-            /*$filtro_prod['cat_sat_cve_prod.codigo'] = $attrs['ClaveProdServ'];
-            $filtro_prod['inm_producto.descripcion'] = $attrs['Descripcion'];
-            $r_producto = (new inm_producto(link: $this->link))->filtro_and(filtro: $filtro_prod);
-            if (errores::$error) {
-                return $this->retorno_error(mensaje: 'Error al generar producto', data: $r_producto, header: $header,
-                    ws: $ws);
-            }
-
-            $conceptoData['btn_producto'] = '';
-            if($r_producto->n_registros <= 0){
-                $button = $this->html->button_href(accion: 'alta_bd', etiqueta: 'Inserta Producto',
-                    registro_id: -1, seccion: 'inm_producto', style: 'success');
-                if(errores::$error){
-                    return $this->retorno_error(mensaje: 'Error al generar producto', data: $button, header: $header,
-                        ws: $ws);
-                }
-                $conceptoData['btn_producto'] = $button;
-            }*/
-
             $filtro_unidad['cat_sat_unidad.codigo'] = $attrs['ClaveUnidad'];
             $r_unidad = (new cat_sat_unidad(link: $this->link))->filtro_and(filtro: $filtro_unidad);
             if (errores::$error) {
@@ -370,6 +351,27 @@ class controlador_inm_factura_compra extends _ctl_base {
 
         return $result;
     }
+
+    public function obten_productos(bool $header, bool $ws = false){
+        if($header){
+            $retorno = $_SERVER['HTTP_REFERER'];
+            header('Location:'.$retorno);
+            exit;
+        }
+        if($ws){
+            header('Content-Type: application/json');
+            try {
+                echo json_encode($this->registros_concepto, JSON_THROW_ON_ERROR);
+            }
+            catch (Throwable $e){
+                return $this->retorno_error(mensaje: 'Error al maquetar estados',data: $e, header: $header, ws: $ws);
+            }
+            exit;
+        }
+
+        return $this->registros_concepto;
+    }
+
 
     /**
      * @throws \Exception
