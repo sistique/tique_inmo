@@ -291,7 +291,17 @@ class controlador_inm_factura_compra extends _ctl_base {
         return $this->registros_concepto;
     }
 
+    /**
+     * @throws \Exception
+     */
     public function obten_productos(bool $header, bool $ws = false){
+        $this->registros_concepto = (new inm_factura_compra(link: $this->link))->obten_registros_xml(
+            inm_factura_compra_id: $this->registro_id);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al generar unidad', data: $this->registros_concepto, header: $header,
+                ws: $ws);
+        }
+
         if($header){
             $retorno = $_SERVER['HTTP_REFERER'];
             header('Location:'.$retorno);

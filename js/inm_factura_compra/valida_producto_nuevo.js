@@ -1,13 +1,13 @@
+let url = getAbsolutePath();
 let registro_id = getParameterByName('registro_id');
 let session_id = getParameterByName('session_id');
 
 var modal = document.getElementById("myModal");
 var closeBtn = document.getElementById("closeModalBtn");
-let inm_doc_ubicacion_id = '';
 $(document).on("click", "button[title='Vista Previa']", function (event) {
     event.preventDefault();
     //var url = $(this).attr("href");
-    var url = 'index.php?seccion=inm_factura_compra&accion=obten_productos&ws=1&session_id='+session_id;
+    var url = 'index.php?seccion=inm_factura_compra&accion=obten_productos&ws=1&registro_id='+registro_id+'&session_id='+session_id;
 
     var loaderOverlay = $('<div class="loader-overlay"><div class="loader"></div></div>');
     $('body').append(loaderOverlay);
@@ -17,7 +17,6 @@ $(document).on("click", "button[title='Vista Previa']", function (event) {
         type: 'GET',
         success: function (data) {
 
-            console.log(data);
         var tempDiv = $("<div>").html(data);
         var inputdoc = tempDiv.find('[name="inm_doc_ubicacion_id"]');
         var viewContent = tempDiv.find(".view");
