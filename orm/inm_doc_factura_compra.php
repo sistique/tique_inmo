@@ -125,7 +125,8 @@ class inm_doc_factura_compra extends _modelo_parent{
     public function obten_documento(int $inm_factura_compra_id)
     {
         $filtro['inm_factura_compra.id'] = $inm_factura_compra_id;
-        $r_inm_factura_compra = $this->filtro_and(filtro: $filtro);
+        $order = array('inm_factura_compra.id'=>'DESC');
+        $r_inm_factura_compra = $this->filtro_and(filtro: $filtro, order: $order);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al obtener documentos', data: $r_inm_factura_compra);
         }
