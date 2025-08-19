@@ -364,7 +364,7 @@ const seleccionar_tabla = (identificador, datatable, input_producto, callback) =
  */
 const table = (seccion, columns, filtros = [], extra_join = [], columnDefsCallback = null,
                selectsActive = false, accion = "data_ajax", extra_params = {},
-               options= {paging: true, info: true, searching: true}) => {
+               options= {paging: true, info: true, searching: true}, selectsMultiple = true) => {
 
     let $columnDefs = columnDefs_callback_default(seccion, columns);
 
@@ -375,7 +375,7 @@ const table = (seccion, columns, filtros = [], extra_join = [], columnDefsCallba
     const ruta_load = get_url(seccion, accion, extra_params);
 
     let _columns = check_column(columns, selectsActive);
-    let _checks = check(selectsActive);
+    let _checks = check(selectsMultiple);
 
     return new DataTable(`#table-${seccion}`, {
         dom: 'Bfrtip',

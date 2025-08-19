@@ -55,7 +55,7 @@ $(document).ready(function () {
 
     $('#limpiar').on('click', function () {
         $('.filtros-avanzados input').val('');
-        $('.filtros-avanzados select').val('').trigger('change');;
+        $('.filtros-avanzados select').val('').trigger('change');
         $('.filtros-avanzados li').remove();
         $('#limpiar').prop('disabled', true);
 

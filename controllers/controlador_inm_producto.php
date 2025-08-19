@@ -80,6 +80,8 @@ class controlador_inm_producto extends _ctl_base {
                 header: $header, ws: $ws);
         }
 
+        $inm_producto[] = array('inm_producto_id' => '-1', 'inm_producto_descripcion' => 'SIN PRODUCTO');
+
         $salida['draw'] = count($inm_producto);
         $salida['recordsTotal'] = count($inm_producto);
         $salida['recordsFiltered'] = count($inm_producto);

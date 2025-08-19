@@ -7,6 +7,8 @@ var closeBtn = document.getElementById("closeModalBtn");
 $(document).on("click", "button[title='Vista Previa']", function (event) {
     event.preventDefault();
     //var url = $(this).attr("href");
+    $('#table-inm_producto thead input').prop('disabled', true).hide();
+
     var url = 'index.php?seccion=inm_factura_compra&accion=obten_productos&ws=1&registro_id='+registro_id+'&session_id='+session_id;
 
     var loaderOverlay = $('<div class="loader-overlay"><div class="loader"></div></div>');
@@ -23,7 +25,7 @@ $(document).on("click", "button[title='Vista Previa']", function (event) {
 
             /*$("#myModal .content").html(inputdoc);
             $("#myModal .content").html(viewContent);*/
-            $("#myModal .content").html('');
+            //$("#myModal .content").html('');
             $("#myModal .content").append(inputdoc);
             $("#myModal .content").append(viewContent);
             modal.showModal();
@@ -35,30 +37,14 @@ $(document).on("click", "button[title='Vista Previa']", function (event) {
             loaderOverlay.remove();
         }
     });
-
-    url = 'index.php?seccion=inm_producto&accion=get_productos&ws=1&registro_id='+registro_id+'&session_id='+session_id;
-    $.ajax({
-        url: url,
-        type: 'GET',
-        success: function (data) {
-            console.log(data);
-        },
-        error: function () {
-            $("#myModal .content").html("<p>Error al cargar el contenido.</p>");
-            modal.showModal();
-            loaderOverlay.remove();
-        }
-    });
 });
 
 closeBtn.onclick = function () {
-    $("#myModal .content").empty();
     modal.close();
 }
 
 modal.addEventListener('click', function (event) {
     if (event.target === modal) {
-        $("#myModal .content").empty();
         modal.close();
     }
 });
@@ -79,5 +65,15 @@ const columns_tipos_documentos = [
 
 const options = {paging: false, info: false, searching: false}
 
-const table_tipos_documentos = table('inm_producto', columns_tipos_documentos, [], [], function () {
-    }, true, "get_productos", {registro_id: registro_id}, options);
+const table_tipos_documentos = table('inm_producto', columns_tipos_documentos, [], [],
+    function (seccion, columns) {
+        return [
+            {
+                targets: 0,
+                orderable: false,
+                render: function (data, type, row, meta) {
+                    return '<input type="checkbox" class="dt-checkboxes" value="'+data.inm_producto_id+'">';
+                }
+            }
+        ];
+    }/*function (){}*/, true, "get_productos", {registro_id: registro_id}, options,false);
