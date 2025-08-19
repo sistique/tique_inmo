@@ -55,8 +55,7 @@ class _mail{
                         $guarda = (new _dropbox(link: $link))->preview(
                             dropbox_id: $reg['inm_dropbox_ruta_id_dropbox'], extencion: $reg['doc_extension_descripcion']);
                         if (errores::$error) {
-                            return $this->retorno_error('Error al guardar archivo', $guarda, header: $header,
-                                ws: $ws);
+                            return (new errores())->error(mensaje: 'Error al obtener adjuntos', data: $guarda);
                         }
 
                         $path = (new generales())->path_base . $guarda->ruta_archivo;

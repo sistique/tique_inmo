@@ -9,11 +9,15 @@
 namespace gamboamartin\inmuebles\controllers;
 
 use base\controller\init;
+use config\generales;
 use gamboamartin\cat_sat\models\cat_sat_cve_prod;
 use gamboamartin\cat_sat\models\cat_sat_unidad;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_factura_compra_html;
+use gamboamartin\inmuebles\models\_dropbox;
 use gamboamartin\inmuebles\models\inm_detalle_factura_compra;
+use gamboamartin\inmuebles\models\inm_doc_factura_compra;
+use gamboamartin\inmuebles\models\inm_dropbox_ruta;
 use gamboamartin\inmuebles\models\inm_factura_compra;
 use gamboamartin\inmuebles\models\inm_producto;
 use gamboamartin\system\_ctl_base;
@@ -231,6 +235,9 @@ class controlador_inm_factura_compra extends _ctl_base {
         return $inputs;
     }
 
+    /**
+     * @throws \Exception
+     */
     public function valida_producto_nuevo(bool $header, bool $ws = false):array|stdClass
     {
 
@@ -263,93 +270,25 @@ class controlador_inm_factura_compra extends _ctl_base {
                 mensaje: 'Error al obtener inputs',data:  $inputs, header: $header,ws:  $ws);
         }
 
-        $xmlString = file_get_contents($_FILES['xml_factura']['tmp_name']);
+        $_FILES['documento'] = $_FILES['xml_factura'];
 
-        $xml = new SimpleXMLElement($xmlString);
-        $namespaces = $xml->getNamespaces(true);
+        $registro_doc['inm_factura_compra_id'] = $this->registro_id;
+        $registro_doc['doc_tipo_documento_id'] = '52';
 
-        if(!isset($namespaces["cfdi"])){
-            return $this->retorno_error(
-                mensaje: 'Error no existe apartado cfdi en el xml',data:  $namespaces, header: $header,ws:  $ws);
+        $r_inm_doc_factura_compra = (new inm_doc_factura_compra(link:$this->link))->alta_registro(registro: $registro_doc);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al convertir en cliente', data: $r_inm_doc_factura_compra,
+                    header: $header,ws:  $ws);
         }
 
-        $conceptosXml = $xml->children($namespaces['cfdi'])->Conceptos->children($namespaces['cfdi'])->Concepto;
-
-        $result = [];
-
-        foreach ($conceptosXml as $concepto) {
-            $attrs = $concepto->attributes();
-
-            $conceptoData = [
-                'ClaveProdServ' => (string)$attrs['ClaveProdServ'],
-                'NoIdentificacion' => (string)$attrs['NoIdentificacion'],
-                'Cantidad' => (string)$attrs['Cantidad'],
-                'ClaveUnidad' => (string)$attrs['ClaveUnidad'],
-                'Unidad' => (string)$attrs['Unidad'],
-                'Descripcion' => (string)$attrs['Descripcion'],
-                'ValorUnitario' => (string)$attrs['ValorUnitario'],
-                'Importe' => (string)$attrs['Importe'],
-                'Impuestos' => [
-                    'Traslados' => [],
-                    'Retenciones' => []
-                ]
-            ];
-
-            $impuestosNode = $concepto->children($namespaces['cfdi'])->Impuestos;
-            $conceptoData['Trasladado'] = 0;
-            $conceptoData['Retenido'] = 0;
-
-            if ($impuestosNode) {
-                $trasladosNode = $impuestosNode->children($namespaces['cfdi'])->Traslados;
-                if ($trasladosNode) {
-                    foreach ($trasladosNode->children($namespaces['cfdi']) as $traslado) {
-                        $tAttrs = $traslado->attributes();
-                        $conceptoData['Impuestos']['Traslados'][] = [
-                            'Base' => (string)$tAttrs['Base'],
-                            'Impuesto' => (string)$tAttrs['Impuesto'],
-                            'TipoFactor' => (string)$tAttrs['TipoFactor'],
-                            'TasaOCuota' => (string)$tAttrs['TasaOCuota'],
-                            'Importe' => (string)$tAttrs['Importe']
-                        ];
-                        $conceptoData['Trasladado'] += (float)$tAttrs['Importe'];
-                    }
-                }
-
-                $retencionesNode = $impuestosNode->children($namespaces['cfdi'])->Retenciones;
-                if ($retencionesNode) {
-                    foreach ($retencionesNode->children($namespaces['cfdi']) as $retencion) {
-                        $rAttrs = $retencion->attributes();
-                        $conceptoData['Impuestos']['Retenciones'][] = [
-                            'Base' => (string)$rAttrs['Base'],
-                            'Impuesto' => (string)$rAttrs['Impuesto'],
-                            'TipoFactor' => (string)$rAttrs['TipoFactor'],
-                            'TasaOCuota' => (string)$rAttrs['TasaOCuota'],
-                            'Importe' => (string)$rAttrs['Importe']
-                        ];
-                        $conceptoData['Retenido'] += (float)$rAttrs['Importe'];
-                    }
-                }
-            }
-
-            $conceptoData['Total'] = $conceptoData['Importe'] + $conceptoData['Trasladado'] - $conceptoData['Retenido'];
-
-            $filtro_unidad['cat_sat_unidad.codigo'] = $attrs['ClaveUnidad'];
-            $r_unidad = (new cat_sat_unidad(link: $this->link))->filtro_and(filtro: $filtro_unidad);
-            if (errores::$error) {
-                return $this->retorno_error(mensaje: 'Error al generar unidad', data: $r_unidad, header: $header,
-                    ws: $ws);
-            }
-
-            if($r_unidad->n_registros > 0){
-                $conceptoData['Unidad'] = $r_unidad->registros[0]['cat_sat_unidad_descripcion'];
-            }
-
-            $result[] = $conceptoData;
+        $this->registros_concepto = (new inm_factura_compra(link: $this->link))->obten_registros_xml(
+            inm_factura_compra_id: $this->registro_id);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al generar unidad', data: $this->registros_concepto, header: $header,
+                ws: $ws);
         }
 
-        $this->registros_concepto = $result;
-
-        return $result;
+        return $this->registros_concepto;
     }
 
     public function obten_productos(bool $header, bool $ws = false){

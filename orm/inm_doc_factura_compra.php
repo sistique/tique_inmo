@@ -122,4 +122,40 @@ class inm_doc_factura_compra extends _modelo_parent{
         return $r_inm_doc_prospecto->registros;
     }
 
+    public function obten_documento(int $inm_factura_compra_id)
+    {
+        $filtro['inm_factura_compra.id'] = $inm_factura_compra_id;
+        $r_inm_factura_compra = $this->filtro_and(filtro: $filtro);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener documentos', data: $r_inm_factura_compra);
+        }
+
+        if($r_inm_factura_compra->n_registros <= 0){
+            return $this->error->error(mensaje: 'Error al obtener documentos', data: $r_inm_factura_compra);
+        }
+
+        $path = $r_inm_factura_compra->registros[0]['doc_documento_ruta_absoluta'];
+
+        if((new generales())->guarda_archivo_dropbox) {
+            $filtro_drop['doc_documento.id'] = $r_inm_factura_compra->registros[0]['doc_documento_id'];
+            $r_inm_dropbox_ruta = (new inm_dropbox_ruta(link: $this->link))->filtro_and(filtro: $filtro_drop);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al obtener documentos', data: $r_inm_dropbox_ruta);
+            }
+
+            if($r_inm_dropbox_ruta->n_registros > 0) {
+                $reg = $r_inm_dropbox_ruta->registros[0];
+                $guarda = (new _dropbox(link: $this->link))->preview(
+                    dropbox_id: $reg['inm_dropbox_ruta_id_dropbox'], extencion: $reg['doc_extension_descripcion']);
+                if (errores::$error) {
+                    return $this->error->error(mensaje: 'Error al obtener documentos', data: $guarda);
+                }
+
+                $path = (new generales())->path_base . $guarda->ruta_archivo;
+            }
+        }
+
+        return $path;
+    }
+
 }
