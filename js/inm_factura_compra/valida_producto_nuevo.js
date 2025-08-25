@@ -2,10 +2,71 @@ let url = getAbsolutePath();
 let registro_id = getParameterByName('registro_id');
 let session_id = getParameterByName('session_id');
 
+let productos_xml = [];
+$(document).ready(function () {
+    var url = 'index.php?seccion=inm_factura_compra&accion=obten_productos&ws=1&registro_id='+registro_id+'&session_id='+session_id;
+
+    $.ajax({
+        url: url,
+        type: 'GET',
+        success: function (data) {
+            productos_xml = data;
+            console.log(productos_xml);
+        },
+        error: function () {
+            console.log('Error al obtener productos');
+        }
+    });
+});
+
+function valores_formulario_producto(producto) {
+    let producto_descrip = "Clave SAT: " + producto.ClaveProdServ
+        + " - Descripcion: " + producto.Descripcion
+        + " - Unidad: " + producto.Unidad;
+    $('#producto').val(producto_descrip);
+
+    let url_uni = get_url("cat_sat_unidad", "get_unidad", {cat_sat_unidad_codigo: producto.ClaveUnidad });
+    get_data(url_uni, function (data_tp) {
+        $('#cat_sat_unidad_id').val(data_tp.cat_sat_unidad_id);
+        $('#cat_sat_unidad_id').selectpicker('refresh');
+    });
+
+    $('#descripcion_producto').val(producto.Descripcion);
+    $('#cat_sat_cve_prod_codigo').val(producto.ClaveProdServ);
+    $('#costo_promedio').val(producto.ValorUnitario);
+    $('#cantidad_actual').val(producto.Cantidad);
+}
+
 var modal = document.getElementById("myModal");
 var closeBtn = document.getElementById("closeModalBtn");
 
+var loaderOverlay = $('<div class="loader-overlay"><div class="loader"></div></div>');
+
 $(document).on("click", "button[title='Vista Previa']", function (event) {
+    event.preventDefault();
+    $('#table-inm_producto thead input').prop('disabled', true).hide();
+    $('body').append(loaderOverlay);
+
+    modal.showModal();
+    loaderOverlay.remove();
+});
+
+function abrir_modal(indice){
+    $('#table-inm_producto thead input').prop('disabled', true).hide();
+    $('body').append(loaderOverlay);
+
+    modal.showModal();
+    loaderOverlay.remove();
+
+    productos_xml.forEach(function(producto) {
+        if(producto.indice === indice){
+            valores_formulario_producto(producto);
+        }
+    });
+}
+
+
+/*$(document).on("click", "button[title='Vista Previa']", function (event) {
     event.preventDefault();
     //var url = $(this).attr("href");
     $('#table-inm_producto thead input').prop('disabled', true).hide();
@@ -25,7 +86,7 @@ $(document).on("click", "button[title='Vista Previa']", function (event) {
                 + " - Unidad: " + producto.Unidad;
                 $('#producto').val(producto_descrip);
 
-                let url_uni = get_url("cat_sat_unidad", "get_unidad", {cat_sat_unidad_codigo: data.ClaveUnidad });
+                let url_uni = get_url("cat_sat_unidad", "get_unidad", {cat_sat_unidad_codigo: producto.ClaveUnidad });
                 get_data(url_uni, function (data_tp) {
                     $('#cat_sat_unidad_id').val(data_tp.cat_sat_unidad_id);
                     $('#cat_sat_unidad_id').selectpicker('refresh');
@@ -46,7 +107,7 @@ $(document).on("click", "button[title='Vista Previa']", function (event) {
             loaderOverlay.remove();
         }
     });
-});
+});*/
 
 closeBtn.onclick = function () {
     modal.close();

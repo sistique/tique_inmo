@@ -114,7 +114,7 @@ class inm_factura_compra extends _modelo_parent{
         $conceptosXml = $xml->children($namespaces['cfdi'])->Conceptos->children($namespaces['cfdi'])->Concepto;
 
         $result = [];
-
+        $inicio = 0;
         foreach ($conceptosXml as $concepto) {
             $attrs = $concepto->attributes();
 
@@ -181,6 +181,9 @@ class inm_factura_compra extends _modelo_parent{
             if($r_unidad->n_registros > 0){
                 $conceptoData['Unidad'] = $r_unidad->registros[0]['cat_sat_unidad_descripcion'];
             }
+
+            $inicio++;
+            $conceptoData['indice'] = $inicio;
 
             $result[] = $conceptoData;
         }

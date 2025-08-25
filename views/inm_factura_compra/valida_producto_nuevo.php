@@ -80,6 +80,21 @@ echo "<style>
     background: #4CAE4C;
 }
 
+.asignar {
+    background: #5cb85c;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s;
+}
+
+.asignar:hover {
+    background: #4CAE4C;
+}
+
 #limpiar {
     background: #dc3545;
     color: white;
@@ -179,6 +194,8 @@ echo "<style>
                             <th>Trasladado</th>
                             <th>Retenido</th>
                             <th>Total</th>
+                            <th>Por Asignar</th>
+                            <th>Asignar</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -196,6 +213,8 @@ echo "<style>
                                 <td><?php echo $concepto['Trasladado'] ?></td>
                                 <td><?php echo $concepto['Retenido'] ?></td>
                                 <td><?php echo $concepto['Total'] ?></td>
+                                <td id="por_asignar-<?php echo $concepto['indice'] ?>"></td>
+                                <td><a class="asignar" href='javascript:abrir_modal(<?php echo $concepto['indice'] ?>);' id="producto_id-<?php echo $concepto['indice'] ?>" value="<?php echo $concepto['indice'] ?>">Asignar</a></td>
                             </tr>
                         <?php } ?>
                         </tbody>
