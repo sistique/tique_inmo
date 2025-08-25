@@ -56,12 +56,29 @@ $(document).on("click", "button[title='Vista Previa']", function (event) {
     modal.showModal();
     loaderOverlay.remove();
 
-    /*
+    let ultimo_indice = 0;
+    if (asignaciones.length > 0) {
+        let maxItem = asignaciones.reduce((max, item) =>
+            (parseInt(item.producto_xml) > parseInt(max.producto_xml) ? item : max)
+        );
+
+        ultimo_indice =  maxItem.producto_xml;
+    }
+
+    ultimo_indice = ultimo_indice + 1;
+
     productos_xml.forEach(function(producto) {
-        if(producto.indice === indice){
+        if(producto.indice === ultimo_indice){
             valores_formulario_producto(producto);
+            producto_xml_actual = ultimo_indice;
         }
-    });*/
+    });
+
+    $('input[name="producto"]:checked').prop('checked', false);
+
+    currentPage = 1; // Reiniciar a la primera página
+    renderTable(currentPage);
+    renderPagination();
 });
 
 
@@ -77,11 +94,14 @@ $('#asignar').on('click', function () {
     if (existente) {
         existente.inm_producto_id = chk.value;
     } else {
+        $('#por_asignar-' + producto_xml_actual).text('Asignado a Producto ID: ' + chk.value);
+
         asignaciones.push({
             inm_producto_id: chk.value,
             producto_xml: producto_xml_actual
         });
     }
+
     console.log(asignaciones);
 });
 
