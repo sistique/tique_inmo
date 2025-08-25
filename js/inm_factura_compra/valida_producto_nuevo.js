@@ -5,8 +5,6 @@ let session_id = getParameterByName('session_id');
 var modal = document.getElementById("myModal");
 var closeBtn = document.getElementById("closeModalBtn");
 
-let url_unidad = get_url("inm_unidad", "get_productos", {registro_id: registro_id});
-
 $(document).on("click", "button[title='Vista Previa']", function (event) {
     event.preventDefault();
     //var url = $(this).attr("href");
@@ -27,28 +25,13 @@ $(document).on("click", "button[title='Vista Previa']", function (event) {
                 + " - Unidad: " + producto.Unidad;
                 $('#producto').val(producto_descrip);
 
-                let filtro_inm_unidad = {
-                    filtro: {},
-                    extra_join: []
-                };
-
-                filtro_inm_unidad.filtro['inm_unidad_codigo'] = producto.ClaveUnidad;
-
-                let cat_sat_unidad_id = -1;
-                $.ajax({
-                    url: url_unidad,
-                    type: 'POST',
-                    data: { filtros: filtro_inm_unidad },
-                    success: function (data) {
-                        cat_sat_unidad_id = data;
-                    },
-                    error: function () {
-                        console.log('error');
-                    }
+                let url_uni = get_url("cat_sat_unidad", "get_unidad", {cat_sat_unidad_codigo: data.ClaveUnidad });
+                get_data(url_uni, function (data_tp) {
+                    $('#cat_sat_unidad_id').val(data_tp.cat_sat_unidad_id);
+                    $('#cat_sat_unidad_id').selectpicker('refresh');
                 });
 
                 $('#descripcion_producto').val(producto.Descripcion);
-                $('#cat_sat_unidad_id').val(cat_sat_unidad_id);
                 $('#cat_sat_cve_prod_codigo').val(producto.ClaveProdServ);
                 $('#costo_promedio').val(producto.ValorUnitario);
                 $('#cantidad_actual').val(producto.Cantidad);
