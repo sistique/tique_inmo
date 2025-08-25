@@ -32,6 +32,24 @@ echo "<style>
     width: 100%;
 }
 
+.descripcion_producto {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.descripcion_producto label {
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+.descripcion_producto input {
+    padding: 6px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+}
+
 #filtrar {
     background: #007bff;
     color: white;
@@ -176,6 +194,14 @@ echo "<style>
     </div>
 
     <h2>Selecciona Productos</h2>
+
+    <div class="row">
+        <div class="descripcion_producto col-lg-12">
+            <label for="producto">Producto</label>
+            <input name="producto" type="text" id="producto" disabled>
+        </div>
+    </div>
+
     <div class="content">
         <div class="row">
             <div class="col-lg-12 table-responsive">
@@ -183,13 +209,13 @@ echo "<style>
                     <div class="filtros-avanzados">
                         <div class="filtro-grupo col-md-12">
                             <div class="col-md-6">
-                                <label for="agente">ID</label>
+                                <label for="inm_producto_id">ID</label>
                                 <input type="text" id="inm_producto_id" data-tipo="filtro" data-filtro_campo="inm_producto.id"
                                        placeholder="Ej: 1">
                             </div>
 
                             <div class="col-md-6">
-                                <label for="descripcion">Descripcion</label>
+                                <label for="inm_producto_descripcion">Descripcion</label>
                                 <input type="text" id="inm_producto_descripcion" data-tipo="filtro" data-filtro_campo="inm_producto.descripcion"
                                        placeholder="Ej: TUBERIA">
                             </div>

@@ -18,16 +18,18 @@ $(document).on("click", "button[title='Vista Previa']", function (event) {
         url: url,
         type: 'GET',
         success: function (data) {
-            var tempDiv = $("<div>").html(data);
+            data.forEach(function(producto) {
+                let producto_descrip = producto.ClaveProdServ + " " + producto.Descripcion;
+                $('#producto').val(producto_descrip);
+            });
+
+            /*var tempDiv = $("<div>").html(data);
             var inputdoc = tempDiv.find('[name="inm_doc_ubicacion_id"]');
             var viewContent = tempDiv.find(".view");
             inm_doc_ubicacion_id = inputdoc.val();
 
-            /*$("#myModal .content").html(inputdoc);
-            $("#myModal .content").html(viewContent);*/
-            //$("#myModal .content").html('');
             $("#myModal .content").append(inputdoc);
-            $("#myModal .content").append(viewContent);
+            $("#myModal .content").append(viewContent);*/
             modal.showModal();
             loaderOverlay.remove();
         },
