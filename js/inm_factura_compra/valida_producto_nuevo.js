@@ -4,6 +4,7 @@ let session_id = getParameterByName('session_id');
 
 let productos_xml = [];
 let productos = [];
+let productos_completos = [];
 
 let asignaciones = [];
 
@@ -77,8 +78,8 @@ $(document).on("click", "button[title='Vista Previa']", function (event) {
     $('input[name="producto"]:checked').prop('checked', false);
 
     currentPage = 1;
-    renderTable(currentPage);
-    renderPagination();
+    renderTable_productos_completos(currentPage);
+    renderPagination_productos_completos();
 });
 
 
@@ -117,6 +118,11 @@ function abrir_modal(indice){
     modal.showModal();
     loaderOverlay.remove();
 
+    $('.filtros-avanzados input').val('');
+    $('.filtros-avanzados select').val('').trigger('change');
+    $('.filtros-avanzados li').remove();
+    $('#limpiar').prop('disabled', true);
+
     productos_xml.forEach(function(producto) {
         if(producto.indice === indice){
             valores_formulario_producto(producto);
@@ -127,8 +133,8 @@ function abrir_modal(indice){
     $('input[name="producto"]:checked').prop('checked', false);
 
     currentPage = 1;
-    renderTable(currentPage);
-    renderPagination();
+    renderTable_productos_completos(currentPage);
+    renderPagination_productos_completos();
 }
 
 
@@ -268,12 +274,88 @@ function renderPagination() {
     });
 }
 
+function renderTable_productos_completos(page) {
+    let tbody = $('.productos tbody');
+    tbody.empty();
+
+    let start = (page - 1) * rowsPerPage;
+    let end = start + rowsPerPage;
+
+    let pageItems = productos_completos.slice(start, end);
+
+    pageItems.forEach(function(producto) {
+        let tr = $('<tr>');
+        let checkbox = $('<input name="producto" type="checkbox" class="producto-checkbox">')
+            .val(producto.inm_producto_id);
+
+        let existente = asignaciones.find(item =>
+            item.producto_xml === producto_xml_actual &&
+            item.inm_producto_id === producto.inm_producto_id
+        );
+
+        if (existente) {
+            checkbox.prop("checked", true);
+        }
+
+        tr.append($('<td>').append(checkbox));
+        tr.append($('<td>').text(producto.inm_producto_id));
+        tr.append($('<td>').text(producto.inm_producto_descripcion));
+        tbody.append(tr);
+    });
+
+    $('.producto-checkbox').on('change', function() {
+        if ($(this).is(':checked')) {
+            $('.producto-checkbox').not(this).prop('checked', false);
+            if ($(this).val() === '-1') {
+                $('.content_alta').show();
+            }
+        }else{
+            $('.content_alta').hide();
+            if ($(this).val() === '-1') {
+                $('.content_alta').hide();
+            }
+        }
+    });
+}
+
+function renderPagination_productos_completos() {
+    let totalPages = Math.ceil(productos_completos.length / rowsPerPage);
+    let pagination = $('#pagination');
+    pagination.empty();
+
+    for (let i = 1; i <= totalPages; i++) {
+        let btn = $('<button>')
+            .text(i)
+            .addClass('page-btn btn btn-sm btn-primary mx-1')
+            .attr('data-page', i);
+
+        if (i === currentPage) {
+            btn.addClass('active');
+        }
+
+        pagination.append(btn);
+    }
+
+    $('.page-btn').on('click', function() {
+        let chk = document.querySelector('input[name="producto"]:checked');
+        if (chk) {
+            $(chk).prop("checked", false);
+            $('.content_alta').hide();
+        }
+
+        currentPage = parseInt($(this).attr('data-page'));
+        renderTable_productos_completos(currentPage);
+        renderPagination_productos_completos();
+    });
+}
+
 $.ajax({
     url: url_prd,
     type: 'POST',
     data: { filtros: filtro_inm_producto },
     success: function (data) {
         productos = data;
+        productos_completos = data;
         currentPage = 1;
         renderTable(currentPage);
         renderPagination();
@@ -321,6 +403,8 @@ $('#filtrar').on('click', function () {
         }
     });
 
+    $('.content_alta').hide();
+
     $('#filtrar').prop('disabled', false);
     $('#limpiar').prop('disabled', false);
 });
@@ -346,4 +430,6 @@ $('#limpiar').on('click', function () {
             console.log('error');
         }
     });
+
+    $('.content_alta').hide();
 });
