@@ -40,14 +40,20 @@ class inm_producto extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al insertar prospecto', data: $r_cat_sat_unidad);
         }
 
-        $r_cat_sat_cve_prod = (new cat_sat_cve_prod(link: $this->link))->registro(
-            registro_id: $this->registro['cat_sat_cve_prod_id']);
+        $filtro['cat_sat_cve_prod.codigo'] = $this->registro['cat_sat_cve_prod_codigo'];
+        $r_cat_sat_cve_prod = (new cat_sat_cve_prod(link: $this->link))->filtro_and(filtro: $filtro);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al insertar prospecto', data: $r_cat_sat_cve_prod);
         }
 
+        if ($r_cat_sat_cve_prod->n_registros <= 0) {
+            return $this->error->error(mensaje: 'Error al insertar prospecto', data: $r_cat_sat_cve_prod);
+        }
+
+        $this->registro['cat_sat_cve_prod_id'] = $r_cat_sat_cve_prod->registros[0]['cat_sat_cve_prod_id'];
+
         if (!isset($this->registro['descripcion'])) {
-            $descripcion = $r_cat_sat_cve_prod['cat_sat_cve_prod_descricion'];
+            $descripcion = $r_cat_sat_cve_prod->registros[0]['cat_sat_cve_prod_descricion'];
             $descripcion .= ' '. $r_cat_sat_unidad['cat_sat_unidad_descripcion'];
             $this->registro['descripcion'] = $descripcion;
         }
