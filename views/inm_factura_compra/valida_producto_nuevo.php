@@ -18,7 +18,6 @@ echo "<style>
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    margin-top: 15px;
 }
 
 .filtro-grupo label {
@@ -88,11 +87,19 @@ echo "<style>
 
 #myModal{
     width: 100%;
-    height: 70%;
+    height: 80%;
 }
 
 #table-inm_producto{
     width: 100% !important;
+}
+
+.close-btn{
+    font-size: x-large;
+}
+
+.content_close{
+    text-align: right;
 }
 
 </style>";
@@ -162,7 +169,12 @@ echo "<style>
 </main>
 
 <dialog id="myModal">
-    <span class="close-btn" id="closeModalBtn">&times;</span>
+    <div class="row">
+        <div class="col-lg-12 content_close">
+            <span class="close-btn" id="closeModalBtn">&times;</span>
+        </div>
+    </div>
+
     <h2>Selecciona Productos</h2>
     <div class="content">
         <div class="row">
@@ -190,7 +202,7 @@ echo "<style>
                         </div>
                     </div>
                 </div>
-                <table class="productos table table-striped">
+                <table class="table table-striped productos">
                     <thead>
                     <tr>
                         <th></th>
@@ -198,9 +210,12 @@ echo "<style>
                         <th>Descripcion</th>
                     </tr>
                     </thead>
-                    <tbody>
-                    </tbody>
+                    <tbody></tbody>
                 </table>
+
+                <!-- Paginador -->
+                <div id="pagination" class="mt-3"></div>
+
             </div>
         </div>
     </div>

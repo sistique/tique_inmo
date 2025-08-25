@@ -54,36 +54,82 @@ modal.addEventListener('click', function (event) {
 let filtro_inm_producto = [];
 let url_prd = get_url("inm_producto", "get_productos", {registro_id: registro_id});
 
+let productos = []; // Guardar todos los productos
+let currentPage = 1;
+let rowsPerPage = 7;
+
+function renderTable(page) {
+    let tbody = $('.productos tbody');
+    tbody.empty();
+
+    // Calcular inicio y fin
+    let start = (page - 1) * rowsPerPage;
+    let end = start + rowsPerPage;
+
+    // Obtener registros de esta página
+    let pageItems = productos.slice(start, end);
+
+    pageItems.forEach(function(producto) {
+        let tr = $('<tr>');
+        let checkbox = $('<input name="producto" type="checkbox" class="producto-checkbox">')
+            .val(producto.inm_producto_id);
+
+        tr.append($('<td>').append(checkbox));
+        tr.append($('<td>').text(producto.inm_producto_id));
+        tr.append($('<td>').text(producto.inm_producto_descripcion));
+        tbody.append(tr);
+    });
+
+    // Validar solo un checkbox activo
+    $('.producto-checkbox').on('change', function() {
+        if ($(this).is(':checked')) {
+            $('.producto-checkbox').not(this).prop('checked', false);
+        }
+    });
+}
+
+function renderPagination() {
+    let totalPages = Math.ceil(productos.length / rowsPerPage);
+    let pagination = $('#pagination');
+    pagination.empty();
+
+    for (let i = 1; i <= totalPages; i++) {
+        let btn = $('<button>')
+            .text(i)
+            .addClass('page-btn btn btn-sm btn-primary mx-1')
+            .attr('data-page', i);
+
+        if (i === currentPage) {
+            btn.addClass('active');
+        }
+
+        pagination.append(btn);
+    }
+
+    // Evento cambio de página
+    $('.page-btn').on('click', function() {
+        currentPage = parseInt($(this).attr('data-page'));
+        renderTable(currentPage);
+        renderPagination();
+    });
+}
+
+// Cargar con AJAX
 $.ajax({
     url: url_prd,
     type: 'POST',
-    data: {filtros: filtro_inm_producto},
+    data: { filtros: filtro_inm_producto },
     success: function (data) {
-        let tbody = $('.productos tbody');
-        tbody.empty();
-
-        data.forEach(function(producto) {
-            let tr = $('<tr>');
-            let checkbox = $('<input name="producto" type="checkbox" class="producto-checkbox">')
-                .val(producto.inm_producto_id);
-
-            tr.append($('<td>').append(checkbox));
-            tr.append($('<td>').text(producto.inm_producto_id));
-            tr.append($('<td>').text(producto.inm_producto_descripcion));
-            tbody.append(tr);
-        });
-
-        $('.producto-checkbox').on('change', function() {
-            if ($(this).is(':checked')) {
-                // Desmarcar todos los demás
-                $('.producto-checkbox').not(this).prop('checked', false);
-            }
-        });
+        productos = data; // Guardar todos los productos
+        currentPage = 1; // Reiniciar a la primera página
+        renderTable(currentPage);
+        renderPagination();
     },
     error: function () {
         console.log('error');
     }
 });
+
 
 /***** Filtros *****/
 
@@ -107,32 +153,15 @@ $('#filtrar').on('click', function () {
         filtro_inm_producto.filtro['inm_producto_descripcion'] = producto_descripcion;
     }
 
-
     $.ajax({
         url: url_prd,
         type: 'POST',
-        data: {filtros: filtro_inm_producto},
+        data: { filtros: filtro_inm_producto },
         success: function (data) {
-            let tbody = $('.productos tbody');
-            tbody.empty();
-
-            data.forEach(function(producto) {
-                let tr = $('<tr>');
-                let checkbox = $('<input name="producto" type="checkbox" class="producto-checkbox">')
-                    .val(producto.inm_producto_id);
-
-                tr.append($('<td>').append(checkbox));
-                tr.append($('<td>').text(producto.inm_producto_id));
-                tr.append($('<td>').text(producto.inm_producto_descripcion));
-                tbody.append(tr);
-            });
-
-            $('.producto-checkbox').on('change', function() {
-                if ($(this).is(':checked')) {
-                    // Desmarcar todos los demás
-                    $('.producto-checkbox').not(this).prop('checked', false);
-                }
-            });
+            productos = data; // Guardar todos los productos
+            currentPage = 1; // Reiniciar a la primera página
+            renderTable(currentPage);
+            renderPagination();
         },
         error: function () {
             console.log('error');
@@ -153,28 +182,12 @@ $('#limpiar').on('click', function () {
     $.ajax({
         url: url_prd,
         type: 'POST',
-        data: {filtros: filtro_inm_producto},
+        data: { filtros: filtro_inm_producto },
         success: function (data) {
-            let tbody = $('.productos tbody');
-            tbody.empty();
-
-            data.forEach(function(producto) {
-                let tr = $('<tr>');
-                let checkbox = $('<input name="producto" type="checkbox" class="producto-checkbox">')
-                    .val(producto.inm_producto_id);
-
-                tr.append($('<td>').append(checkbox));
-                tr.append($('<td>').text(producto.inm_producto_id));
-                tr.append($('<td>').text(producto.inm_producto_descripcion));
-                tbody.append(tr);
-            });
-
-            $('.producto-checkbox').on('change', function() {
-                if ($(this).is(':checked')) {
-                    // Desmarcar todos los demás
-                    $('.producto-checkbox').not(this).prop('checked', false);
-                }
-            });
+            productos = data; // Guardar todos los productos
+            currentPage = 1; // Reiniciar a la primera página
+            renderTable(currentPage);
+            renderPagination();
         },
         error: function () {
             console.log('error');
