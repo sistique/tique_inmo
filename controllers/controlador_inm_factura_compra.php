@@ -94,11 +94,13 @@ class controlador_inm_factura_compra extends _ctl_base {
     protected function campos_view(): array
     {
         $keys = new stdClass();
-        $keys->inputs = array('descripcion');
+        $keys->inputs = array('descripcion','descripcion_producto','cantidad_actual','costo_promedio',
+            'cat_sat_cve_prod_codigo');
         $keys->selects = array();
 
         $init_data = array();
         $init_data['gt_proveedor'] = "gamboamartin\\gastos";
+        $init_data['cat_sat_unidad'] = "gamboamartin\\cat_sat";
         $campos_view = $this->campos_view_base(init_data: $init_data,keys:  $keys);
 
         if(errores::$error){
@@ -264,6 +266,12 @@ class controlador_inm_factura_compra extends _ctl_base {
                 header: $header,ws:  $ws);
         }
 
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'cat_sat_unidad_id',
+            keys_selects: $keys_selects, id_selected: -1, label: 'Unidad');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
         $inputs = $this->inputs(keys_selects: $keys_selects);
         if(errores::$error){
             return $this->retorno_error(
@@ -397,14 +405,35 @@ class controlador_inm_factura_compra extends _ctl_base {
 
     protected function key_selects_txt(array $keys_selects): array
     {
-
-
         $keys_selects = (new init())->key_select_txt(cols: 12,key: 'descripcion',
             keys_selects:$keys_selects, place_holder: 'Descripcion');
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'descripcion_producto',
+            keys_selects:$keys_selects, place_holder: 'Descripcion');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'costo_promedio',
+            keys_selects:$keys_selects, place_holder: 'Costo Promedio');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'cantidad_actual',
+            keys_selects:$keys_selects, place_holder: 'Cantidad Actual');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'cat_sat_cve_prod_codigo',
+            keys_selects:$keys_selects, place_holder: 'Clave Producto');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
 
         return $keys_selects;
     }

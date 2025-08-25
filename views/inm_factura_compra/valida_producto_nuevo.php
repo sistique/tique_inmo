@@ -136,6 +136,10 @@ echo "<style>
     text-align: right;
 }
 
+.content_alta{
+    /*display: none;*/
+}
+
 </style>";
 ?>
 
@@ -259,6 +263,19 @@ echo "<style>
                 <div id="pagination" class="mt-3"></div>
                 <br>
                 <button id="asignar">Asignar</button>
+                <div class="form-main" id="form">
+                    <div class="col-lg-12 content_alta">
+                        <form enctype="multipart/form-data" method="post" class="form-additional" action="<?php echo $controlador->link_inserta_producto_bd; ?>" class="form-additional">
+                            <?php echo $controlador->inputs->descripcion_producto; ?>
+                            <?php echo $controlador->inputs->cat_sat_unidad_id; ?>
+                            <?php echo $controlador->inputs->cat_sat_cve_prod_codigo; ?>
+                            <?php echo $controlador->inputs->costo_promedio; ?>
+                            <?php echo $controlador->inputs->cantidad_actual; ?>
+
+                            <?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

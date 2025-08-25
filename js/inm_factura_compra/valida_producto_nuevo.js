@@ -4,6 +4,9 @@ let session_id = getParameterByName('session_id');
 
 var modal = document.getElementById("myModal");
 var closeBtn = document.getElementById("closeModalBtn");
+
+let url_unidad = get_url("inm_unidad", "get_productos", {registro_id: registro_id});
+
 $(document).on("click", "button[title='Vista Previa']", function (event) {
     event.preventDefault();
     //var url = $(this).attr("href");
@@ -23,15 +26,34 @@ $(document).on("click", "button[title='Vista Previa']", function (event) {
                 + " - Descripcion: " + producto.Descripcion
                 + " - Unidad: " + producto.Unidad;
                 $('#producto').val(producto_descrip);
+
+                let filtro_inm_unidad = {
+                    filtro: {},
+                    extra_join: []
+                };
+
+                filtro_inm_unidad.filtro['inm_unidad_codigo'] = producto.ClaveUnidad;
+
+                let cat_sat_unidad_id = -1;
+                $.ajax({
+                    url: url_unidad,
+                    type: 'POST',
+                    data: { filtros: filtro_inm_unidad },
+                    success: function (data) {
+                        cat_sat_unidad_id = data;
+                    },
+                    error: function () {
+                        console.log('error');
+                    }
+                });
+
+                $('#descripcion_producto').val(producto.Descripcion);
+                $('#cat_sat_unidad_id').val(cat_sat_unidad_id);
+                $('#cat_sat_cve_prod_codigo').val(producto.ClaveProdServ);
+                $('#costo_promedio').val(producto.ValorUnitario);
+                $('#cantidad_actual').val(producto.Cantidad);
             });
 
-            /*var tempDiv = $("<div>").html(data);
-            var inputdoc = tempDiv.find('[name="inm_doc_ubicacion_id"]');
-            var viewContent = tempDiv.find(".view");
-            inm_doc_ubicacion_id = inputdoc.val();
-
-            $("#myModal .content").append(inputdoc);
-            $("#myModal .content").append(viewContent);*/
             modal.showModal();
             loaderOverlay.remove();
         },
