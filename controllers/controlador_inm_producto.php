@@ -83,6 +83,8 @@ class controlador_inm_producto extends _ctl_base {
     public function get_productos(bool $header, bool $ws = false): array
     {
         $filtro = array();
+        $filtro_especial = array();
+
         $filtro['inm_producto.status'] = 'activo';
         if(isset($_POST['filtros'])){
             $f = $_POST['filtros']['filtro'];
@@ -91,11 +93,14 @@ class controlador_inm_producto extends _ctl_base {
             }
 
             if (isset($f['inm_producto_descripcion'])) {
-                $filtro['inm_producto.descripcion'] = $f['inm_producto_descripcion'];
+                $filtro_especial[0]['inm_producto.descripcion']['operador'] = 'LIKE';
+                $filtro_especial[0]['inm_producto.descripcion']['valor'] = '%'.$f['inm_producto_descripcion'].'%';
+                $filtro_especial[0]['inm_producto.descripcion']['comparacion'] = 'AND';
             }
         }
 
-        $inm_producto = (new inm_producto(link: $this->link))->filtro_and(filtro: $filtro);
+        $inm_producto = (new inm_producto(link: $this->link))->filtro_and(filtro: $filtro,
+            filtro_especial: $filtro_especial);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al integrar buttons', data: $inm_producto,
                 header: $header, ws: $ws);

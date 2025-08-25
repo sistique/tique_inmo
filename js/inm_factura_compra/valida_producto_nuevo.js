@@ -107,25 +107,38 @@ $('#filtrar').on('click', function () {
         filtro_inm_producto.filtro['inm_producto_descripcion'] = producto_descripcion;
     }
 
-    /*let url = get_url("inm_producto", "get_productos", {registro_id: registro_id});
 
     $.ajax({
         url: url,
         type: 'POST',
         data: {filtros: filtro_inm_producto},
         success: function (data) {
-            console.log(data);
+            let tbody = $('.productos tbody');
+            tbody.empty();
+
+            data.forEach(function(producto) {
+                let tr = $('<tr>');
+                let checkbox = $('<input name="producto" type="checkbox" class="producto-checkbox">')
+                    .val(producto.inm_producto_id);
+
+                tr.append($('<td>').append(checkbox));
+                tr.append($('<td>').text(producto.inm_producto_id));
+                tr.append($('<td>').text(producto.inm_producto_descripcion));
+                tbody.append(tr);
+            });
+
+            $('.producto-checkbox').on('change', function() {
+                if ($(this).is(':checked')) {
+                    // Desmarcar todos los demás
+                    $('.producto-checkbox').not(this).prop('checked', false);
+                }
+            });
         },
         error: function () {
             console.log('error');
         }
-    });*/
+    });
 
-    table_tipos_documentos.settings()[0].ajax.data = function (d) {
-        d.filtros = filtro_inm_producto;
-    };
-
-    table_tipos_documentos.ajax.reload(null, false); // false mantiene la paginación
     $('#filtrar').prop('disabled', false);
     $('#limpiar').prop('disabled', false);
 });
@@ -136,8 +149,35 @@ $('#limpiar').on('click', function () {
     $('.filtros-avanzados li').remove();
     $('#limpiar').prop('disabled', true);
 
-    if (filtro_aplicado) {
-        table_tipos_documentos.ajax.reload();
-        filtro_aplicado = false;
-    }
+    filtro_inm_producto = [];
+    $.ajax({
+        url: url,
+        type: 'POST',
+        data: {filtros: filtro_inm_producto},
+        success: function (data) {
+            let tbody = $('.productos tbody');
+            tbody.empty();
+
+            data.forEach(function(producto) {
+                let tr = $('<tr>');
+                let checkbox = $('<input name="producto" type="checkbox" class="producto-checkbox">')
+                    .val(producto.inm_producto_id);
+
+                tr.append($('<td>').append(checkbox));
+                tr.append($('<td>').text(producto.inm_producto_id));
+                tr.append($('<td>').text(producto.inm_producto_descripcion));
+                tbody.append(tr);
+            });
+
+            $('.producto-checkbox').on('change', function() {
+                if ($(this).is(':checked')) {
+                    // Desmarcar todos los demás
+                    $('.producto-checkbox').not(this).prop('checked', false);
+                }
+            });
+        },
+        error: function () {
+            console.log('error');
+        }
+    });
 });

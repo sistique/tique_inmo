@@ -182,6 +182,9 @@ echo "<style>
                                        placeholder="Ej: TUBERIA">
                             </div>
                             <br>
+                            <br>
+                            <br>
+                            <br>
                             <button id="filtrar">Filtrar</button>
                             <button id="limpiar">Limpiar</button>
                         </div>
