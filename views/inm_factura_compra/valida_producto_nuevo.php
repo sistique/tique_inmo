@@ -167,26 +167,37 @@ echo "<style>
     <div class="content">
         <div class="row">
             <div class="col-lg-12 table-responsive">
-                <div class="filtros-avanzados">
-                    <div class="filtro-grupo col-md-12">
-                        <div class="col-md-6">
-                            <label for="agente">Agente</label>
-                            <input type="text" id="agente" data-tipo="filtro" data-filtro_campo="com_agente.descripcion"
-                                   placeholder="Ej: JUAN PEREZ">
-                        </div>
+                <div class="contenedor_completo">
+                    <div class="filtros-avanzados">
+                        <div class="filtro-grupo col-md-12">
+                            <div class="col-md-6">
+                                <label for="agente">ID</label>
+                                <input type="text" id="inm_producto_id" data-tipo="filtro" data-filtro_campo="inm_producto.id"
+                                       placeholder="Ej: 1">
+                            </div>
 
-                        <div class="col-md-6">
-                            <label for="predial">Predial</label>
-                            <input type="text" id="predial" data-tipo="filtro" data-filtro_campo="inm_ubicacion.cuenta_predial"
-                                   placeholder="Ej: 9999999999">
+                            <div class="col-md-6">
+                                <label for="descripcion">Descripcion</label>
+                                <input type="text" id="inm_producto_descripcion" data-tipo="filtro" data-filtro_campo="inm_producto.descripcion"
+                                       placeholder="Ej: TUBERIA">
+                            </div>
+                            <br>
+                            <button id="filtrar">Filtrar</button>
+                            <button id="limpiar">Limpiar</button>
                         </div>
                     </div>
                 </div>
-                <div class="filtro-grupo col-md-12">
-                    <button id="filtrar">Filtrar</button>
-                    <button id="limpiar">Limpiar</button>
-                </div>
-                <table id="table-inm_producto" class="table mb-0 table-striped table-sm "></table>
+                <table class="productos table table-striped">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th>ID</th>
+                        <th>Descripcion</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

@@ -51,29 +51,93 @@ modal.addEventListener('click', function (event) {
 
 
 /***** Productos *****/
+let filtro_inm_producto = [];
+url = get_url("inm_producto", "get_productos", {registro_id: registro_id});
 
-const columns_tipos_documentos = [
-    {
-        title: "ID",
-        data: "inm_producto_id"
-    },
-    {
-        title: "Descripcion",
-        data: "inm_producto_descripcion"
-    }
-];
+$.ajax({
+    url: url,
+    type: 'POST',
+    data: {filtros: filtro_inm_producto},
+    success: function (data) {
+        let tbody = $('.productos tbody');
+        tbody.empty();
 
-const options = {paging: false, info: false, searching: false}
+        data.forEach(function(producto) {
+            let tr = $('<tr>');
+            let checkbox = $('<input name="producto" type="checkbox" class="producto-checkbox">')
+                .val(producto.inm_producto_id);
 
-const table_tipos_documentos = table('inm_producto', columns_tipos_documentos, [], [],
-    function (seccion, columns) {
-        return [
-            {
-                targets: 0,
-                orderable: false,
-                render: function (data, type, row, meta) {
-                    return '<input type="checkbox" class="dt-checkboxes" value="'+data.inm_producto_id+'">';
-                }
+            tr.append($('<td>').append(checkbox));
+            tr.append($('<td>').text(producto.inm_producto_id));
+            tr.append($('<td>').text(producto.inm_producto_descripcion));
+            tbody.append(tr);
+        });
+
+        $('.producto-checkbox').on('change', function() {
+            if ($(this).is(':checked')) {
+                // Desmarcar todos los demás
+                $('.producto-checkbox').not(this).prop('checked', false);
             }
-        ];
-    }/*function (){}*/, true, "get_productos", {registro_id: registro_id}, options,false);
+        });
+    },
+    error: function () {
+        console.log('error');
+    }
+});
+
+/***** Filtros *****/
+
+var filtro_aplicado = false;
+
+$('#limpiar').prop('disabled', true);
+$('#filtrar').on('click', function () {
+    let producto_id = $('#inm_producto_id').val();
+    let producto_descripcion = $('#inm_producto_descripcion').val();
+
+    filtro_inm_producto = {
+        filtro: {},
+        extra_join: []
+    };
+
+    if (producto_id) {
+        filtro_inm_producto.filtro['inm_producto_id'] = producto_id;
+    }
+
+    if (producto_descripcion) {
+        filtro_inm_producto.filtro['inm_producto_descripcion'] = producto_descripcion;
+    }
+
+    /*let url = get_url("inm_producto", "get_productos", {registro_id: registro_id});
+
+    $.ajax({
+        url: url,
+        type: 'POST',
+        data: {filtros: filtro_inm_producto},
+        success: function (data) {
+            console.log(data);
+        },
+        error: function () {
+            console.log('error');
+        }
+    });*/
+
+    table_tipos_documentos.settings()[0].ajax.data = function (d) {
+        d.filtros = filtro_inm_producto;
+    };
+
+    table_tipos_documentos.ajax.reload(null, false); // false mantiene la paginación
+    $('#filtrar').prop('disabled', false);
+    $('#limpiar').prop('disabled', false);
+});
+
+$('#limpiar').on('click', function () {
+    $('.filtros-avanzados input').val('');
+    $('.filtros-avanzados select').val('').trigger('change');
+    $('.filtros-avanzados li').remove();
+    $('#limpiar').prop('disabled', true);
+
+    if (filtro_aplicado) {
+        table_tipos_documentos.ajax.reload();
+        filtro_aplicado = false;
+    }
+});
