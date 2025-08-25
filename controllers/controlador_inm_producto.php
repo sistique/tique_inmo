@@ -108,7 +108,7 @@ class controlador_inm_producto extends _ctl_base {
 
         $registros = $inm_producto->registros;
 
-        $registros[] = array('inm_producto_id' => '-1', 'inm_producto_descripcion' => 'SIN PRODUCTO');
+        $registros[] = array('inm_producto_id' => '-1', 'inm_producto_descripcion' => 'NO EXISTE PRODUCTO');
 
         header('Content-Type: application/json');
         echo json_encode($registros);
