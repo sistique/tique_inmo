@@ -3,6 +3,12 @@ let registro_id = getParameterByName('registro_id');
 let session_id = getParameterByName('session_id');
 
 let productos_xml = [];
+let productos = []; // Guardar todos los productos
+
+let asignaciones = [];
+
+let producto_xml_actual = 0;
+
 $(document).ready(function () {
     var url = 'index.php?seccion=inm_factura_compra&accion=obten_productos&ws=1&registro_id='+registro_id+'&session_id='+session_id;
 
@@ -49,7 +55,37 @@ $(document).on("click", "button[title='Vista Previa']", function (event) {
 
     modal.showModal();
     loaderOverlay.remove();
+
+    /*
+    productos_xml.forEach(function(producto) {
+        if(producto.indice === indice){
+            valores_formulario_producto(producto);
+        }
+    });*/
 });
+
+
+$('#asignar').on('click', function () {
+    let chk = document.querySelector('input[name="producto"]:checked');
+    if (!chk) {
+        alert("Debes seleccionar un producto.");
+        return;
+    }
+
+    let existente = asignaciones.find(item => item.producto_xml === producto_xml_actual);
+
+    if (existente) {
+        existente.inm_producto_id = chk.value;
+    } else {
+        asignaciones.push({
+            inm_producto_id: chk.value,
+            producto_xml: producto_xml_actual
+        });
+    }
+    console.log(asignaciones);
+});
+
+
 
 function abrir_modal(indice){
     $('#table-inm_producto thead input').prop('disabled', true).hide();
@@ -63,6 +99,13 @@ function abrir_modal(indice){
             valores_formulario_producto(producto);
         }
     });
+    producto_xml_actual = indice;
+
+    $('input[name="producto"]:checked').prop('checked', false);
+
+    currentPage = 1; // Reiniciar a la primera página
+    renderTable(currentPage);
+    renderPagination();
 }
 
 
@@ -124,7 +167,6 @@ modal.addEventListener('click', function (event) {
 let filtro_inm_producto = [];
 let url_prd = get_url("inm_producto", "get_productos", {registro_id: registro_id});
 
-let productos = []; // Guardar todos los productos
 let currentPage = 1;
 let rowsPerPage = 5;
 
@@ -143,6 +185,15 @@ function renderTable(page) {
         let tr = $('<tr>');
         let checkbox = $('<input name="producto" type="checkbox" class="producto-checkbox">')
             .val(producto.inm_producto_id);
+
+        let existente = asignaciones.find(item =>
+            item.producto_xml === producto_xml_actual &&
+            item.inm_producto_id === producto.inm_producto_id
+        );
+
+        if (existente) {
+            checkbox.prop("checked", true);
+        }
 
         tr.append($('<td>').append(checkbox));
         tr.append($('<td>').text(producto.inm_producto_id));
