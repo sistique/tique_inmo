@@ -52,10 +52,10 @@ modal.addEventListener('click', function (event) {
 
 /***** Productos *****/
 let filtro_inm_producto = [];
-url = get_url("inm_producto", "get_productos", {registro_id: registro_id});
+let url_prd = get_url("inm_producto", "get_productos", {registro_id: registro_id});
 
 $.ajax({
-    url: url,
+    url: url_prd,
     type: 'POST',
     data: {filtros: filtro_inm_producto},
     success: function (data) {
@@ -109,7 +109,7 @@ $('#filtrar').on('click', function () {
 
 
     $.ajax({
-        url: url,
+        url: url_prd,
         type: 'POST',
         data: {filtros: filtro_inm_producto},
         success: function (data) {
@@ -151,7 +151,7 @@ $('#limpiar').on('click', function () {
 
     filtro_inm_producto = [];
     $.ajax({
-        url: url,
+        url: url_prd,
         type: 'POST',
         data: {filtros: filtro_inm_producto},
         success: function (data) {
