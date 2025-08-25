@@ -64,6 +64,22 @@ echo "<style>
 #filtrar:hover {
     background: #0056b3;
 }
+
+#asignar {
+    background: #5cb85c;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s;
+}
+
+#asignar:hover {
+    background: #4CAE4C;
+}
+
 #limpiar {
     background: #dc3545;
     color: white;
@@ -241,7 +257,8 @@ echo "<style>
 
                 <!-- Paginador -->
                 <div id="pagination" class="mt-3"></div>
-
+                <br>
+                <button id="asignar">Asignar</button>
             </div>
         </div>
     </div>

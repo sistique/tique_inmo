@@ -19,7 +19,9 @@ $(document).on("click", "button[title='Vista Previa']", function (event) {
         type: 'GET',
         success: function (data) {
             data.forEach(function(producto) {
-                let producto_descrip = producto.ClaveProdServ + " " + producto.Descripcion;
+                let producto_descrip = "Clave SAT: " + producto.ClaveProdServ
+                + " - Descripcion: " + producto.Descripcion
+                + " - Unidad: " + producto.Unidad;
                 $('#producto').val(producto_descrip);
             });
 
@@ -58,7 +60,7 @@ let url_prd = get_url("inm_producto", "get_productos", {registro_id: registro_id
 
 let productos = []; // Guardar todos los productos
 let currentPage = 1;
-let rowsPerPage = 7;
+let rowsPerPage = 5;
 
 function renderTable(page) {
     let tbody = $('.productos tbody');
