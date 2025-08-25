@@ -152,7 +152,7 @@ echo "<style>
 }
 
 .content_alta{
-    /*display: none;*/
+    display: none;
 }
 
 </style>";
@@ -284,7 +284,10 @@ echo "<style>
                 <button id="asignar">Asignar</button>
                 <div class="form-main" id="form">
                     <div class="col-lg-12 content_alta">
-                        <form enctype="multipart/form-data" method="post" class="form-additional" action="<?php echo $controlador->link_inserta_producto_bd; ?>" class="form-additional">
+                        <form enctype="multipart/form-data" method="post" class="form-additional" class="form-additional">
+                            <div class="widget-header">
+                                <h2>Alta Producto</h2>
+                            </div>
                             <?php echo $controlador->inputs->descripcion_producto; ?>
                             <?php echo $controlador->inputs->cat_sat_unidad_id; ?>
                             <?php echo $controlador->inputs->cat_sat_cve_prod_codigo; ?>

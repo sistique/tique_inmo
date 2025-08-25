@@ -3,7 +3,7 @@ let registro_id = getParameterByName('registro_id');
 let session_id = getParameterByName('session_id');
 
 let productos_xml = [];
-let productos = []; // Guardar todos los productos
+let productos = [];
 
 let asignaciones = [];
 
@@ -76,7 +76,7 @@ $(document).on("click", "button[title='Vista Previa']", function (event) {
 
     $('input[name="producto"]:checked').prop('checked', false);
 
-    currentPage = 1; // Reiniciar a la primera página
+    currentPage = 1;
     renderTable(currentPage);
     renderPagination();
 });
@@ -86,6 +86,11 @@ $('#asignar').on('click', function () {
     let chk = document.querySelector('input[name="producto"]:checked');
     if (!chk) {
         alert("Debes seleccionar un producto.");
+        return;
+    }
+
+    if (chk.value === '-1') {
+        alert("No existe el producto seleccionado.");
         return;
     }
 
@@ -105,8 +110,6 @@ $('#asignar').on('click', function () {
     console.log(asignaciones);
 });
 
-
-
 function abrir_modal(indice){
     $('#table-inm_producto thead input').prop('disabled', true).hide();
     $('body').append(loaderOverlay);
@@ -123,7 +126,7 @@ function abrir_modal(indice){
 
     $('input[name="producto"]:checked').prop('checked', false);
 
-    currentPage = 1; // Reiniciar a la primera página
+    currentPage = 1;
     renderTable(currentPage);
     renderPagination();
 }
@@ -194,11 +197,9 @@ function renderTable(page) {
     let tbody = $('.productos tbody');
     tbody.empty();
 
-    // Calcular inicio y fin
     let start = (page - 1) * rowsPerPage;
     let end = start + rowsPerPage;
 
-    // Obtener registros de esta página
     let pageItems = productos.slice(start, end);
 
     pageItems.forEach(function(producto) {
@@ -221,10 +222,17 @@ function renderTable(page) {
         tbody.append(tr);
     });
 
-    // Validar solo un checkbox activo
     $('.producto-checkbox').on('change', function() {
         if ($(this).is(':checked')) {
             $('.producto-checkbox').not(this).prop('checked', false);
+            if ($(this).val() === '-1') {
+                $('.content_alta').show();
+            }
+        }else{
+            $('.content_alta').hide();
+            if ($(this).val() === '-1') {
+                $('.content_alta').hide();
+            }
         }
     });
 }
@@ -247,22 +255,26 @@ function renderPagination() {
         pagination.append(btn);
     }
 
-    // Evento cambio de página
     $('.page-btn').on('click', function() {
+        let chk = document.querySelector('input[name="producto"]:checked');
+        if (chk) {
+            $(chk).prop("checked", false);
+            $('.content_alta').hide();
+        }
+
         currentPage = parseInt($(this).attr('data-page'));
         renderTable(currentPage);
         renderPagination();
     });
 }
 
-// Cargar con AJAX
 $.ajax({
     url: url_prd,
     type: 'POST',
     data: { filtros: filtro_inm_producto },
     success: function (data) {
-        productos = data; // Guardar todos los productos
-        currentPage = 1; // Reiniciar a la primera página
+        productos = data;
+        currentPage = 1;
         renderTable(currentPage);
         renderPagination();
     },
@@ -299,8 +311,8 @@ $('#filtrar').on('click', function () {
         type: 'POST',
         data: { filtros: filtro_inm_producto },
         success: function (data) {
-            productos = data; // Guardar todos los productos
-            currentPage = 1; // Reiniciar a la primera página
+            productos = data;
+            currentPage = 1;
             renderTable(currentPage);
             renderPagination();
         },
@@ -325,8 +337,8 @@ $('#limpiar').on('click', function () {
         type: 'POST',
         data: { filtros: filtro_inm_producto },
         success: function (data) {
-            productos = data; // Guardar todos los productos
-            currentPage = 1; // Reiniciar a la primera página
+            productos = data;
+            currentPage = 1;
             renderTable(currentPage);
             renderPagination();
         },
