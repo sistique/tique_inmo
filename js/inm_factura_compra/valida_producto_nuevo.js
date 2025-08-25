@@ -122,6 +122,7 @@ function abrir_modal(indice){
     $('.filtros-avanzados select').val('').trigger('change');
     $('.filtros-avanzados li').remove();
     $('#limpiar').prop('disabled', true);
+    $('.content_alta').hide();
 
     productos_xml.forEach(function(producto) {
         if(producto.indice === indice){
