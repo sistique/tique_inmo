@@ -266,9 +266,13 @@ echo "<style>
     <h2>Selecciona Productos</h2>
 
     <div class="row">
-        <div class="descripcion_producto col-lg-12">
+        <div class="descripcion_producto col-lg-6">
             <label for="producto">Producto</label>
             <input name="producto" type="text" id="producto" disabled>
+        </div>
+        <div class="descripcion_producto col-lg-6">
+            <label for="producto_asignado">Producto Asignado</label>
+            <input name="producto_asignado" type="text" id="producto_asignado" disabled>
         </div>
     </div>
 
