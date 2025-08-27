@@ -196,6 +196,17 @@ function abrir_modal(indice){
     renderPagination_productos_completos();
 }
 
+$('#anterior').on('click', function() {
+    if (producto_xml_actual > 0) {
+        abrir_modal(producto_xml_actual - 1);
+    }
+});
+
+$('#siguiente').on('click', function() {
+    if (producto_xml_actual < productos_xml.length - 1) {
+        abrir_modal(producto_xml_actual + 1);
+    }
+});
 
 /*$(document).on("click", "button[title='Vista Previa']", function (event) {
     event.preventDefault();

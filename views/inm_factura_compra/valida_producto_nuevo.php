@@ -80,7 +80,7 @@ echo "<style>
     background: #4CAE4C;
 }
 
-.asignar {
+#siguiente {
     background: #5cb85c;
     color: white;
     border: none;
@@ -89,6 +89,37 @@ echo "<style>
     cursor: pointer;
     font-weight: bold;
     transition: background 0.3s;
+}
+
+#siguiente:hover {
+    background: #4CAE4C;
+}
+
+#anterior {
+    background: #5cb85c;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s;
+}
+
+#anterior:hover {
+    background: #4CAE4C;
+}
+
+.asignar {
+    background: #5cb85c;
+    color: white !important;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s;
+    text-decoration: none !important;
 }
 
 .asignar:hover {
@@ -214,7 +245,7 @@ echo "<style>
                                 <td><?php echo $concepto['Retenido'] ?></td>
                                 <td><?php echo $concepto['Total'] ?></td>
                                 <td id="por_asignar-<?php echo $concepto['indice'] ?>"></td>
-                                <td><a class="asignar" href='javascript:abrir_modal(<?php echo $concepto['indice'] ?>);' id="producto_id-<?php echo $concepto['indice'] ?>" value="<?php echo $concepto['indice'] ?>">Asignar</a></td>
+                                <td><a class="asignar  text-white text-decoration-none" href='javascript:abrir_modal(<?php echo $concepto['indice'] ?>);' id="producto_id-<?php echo $concepto['indice'] ?>" value="<?php echo $concepto['indice'] ?>">Asignar</a></td>
                             </tr>
                         <?php } ?>
                         </tbody>
@@ -281,7 +312,9 @@ echo "<style>
                 <!-- Paginador -->
                 <div id="pagination" class="mt-3"></div>
                 <br>
+                <button id="anterior">Anterior</button>
                 <button id="asignar">Asignar</button>
+                <button id="siguiente">Siguiente</button>
                 <div class="form-main" id="form">
                     <div class="col-lg-12 content_alta">
                         <div class="form-additional">
