@@ -29,6 +29,7 @@ use stdClass;
 use Throwable;
 
 class controlador_inm_factura_compra extends _ctl_base {
+    public string $link_inserta_detalle_bd = '';
     public string $link_inserta_producto_bd = '';
     public string $link_valida_producto_nuevo = '';
     public array $registros_concepto = array();
@@ -180,6 +181,15 @@ class controlador_inm_factura_compra extends _ctl_base {
         }
 
         $this->link_inserta_producto_bd = $link;
+
+        $link = $this->obj_link->get_link(seccion: "inm_factura_compra", accion: "inserta_detalle_bd");
+        if (errores::$error) {
+            $error = $this->errores->error(mensaje: 'Error al recuperar link modifica_direccion', data: $link);
+            print_r($error);
+            exit;
+        }
+
+        $this->link_inserta_detalle_bd = $link;
 
         $link = $this->obj_link->get_link(seccion: "inm_factura_compra", accion: "valida_producto_nuevo");
         if (errores::$error) {
@@ -402,6 +412,48 @@ class controlador_inm_factura_compra extends _ctl_base {
 
         return $this->registros_concepto;
     }*/
+
+    /**
+     * @throws \Exception
+     */
+    public function inserta_detalle_bd(bool $header, bool $ws = false):array|stdClass
+    {
+        if(!isset($_POST['asignaciones'])){
+            return $this->retorno_error(mensaje: 'Error al obtener registro para alta', data: $_POST,
+                header: $header, ws: $ws);
+        }
+
+        $r_result = array();
+        foreach ($_POST['asignaciones'] as $asignacion) {
+            $registro = $asignacion;
+            $r_inm_detalle_factura_compra = (new inm_detalle_factura_compra(link: $this->link))->alta_registro(
+                registro: $registro);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al generar link', data: $r_inm_detalle_factura_compra,
+                    header: $header, ws: $ws);
+            }
+
+            $r_result[] = $r_inm_detalle_factura_compra;
+        }
+
+        if($header){
+            $retorno = $_SERVER['HTTP_REFERER'];
+            header('Location:'.$retorno);
+            exit;
+        }
+        if($ws){
+            header('Content-Type: application/json');
+            try {
+                echo json_encode($r_result, JSON_THROW_ON_ERROR);
+            }
+            catch (Throwable $e){
+                return $this->retorno_error(mensaje: 'Error al maquetar estados',data: $e, header: $header, ws: $ws);
+            }
+            exit;
+        }
+
+        return $r_result;
+    }
 
     /**
      * @throws \Exception

@@ -198,7 +198,7 @@ echo "<style>
                 <?php include (new views())->ruta_templates."mensajes.php"; ?>
 
                 <div class="widget  widget-box box-container form-main widget-form-cart" id="form">
-                    <form enctype="multipart/form-data" method="post" action="<?php echo $controlador->link_inserta_producto_bd; ?>" class="form-additional">
+                    <form enctype="multipart/form-data" method="post" action="<?php echo $controlador->link_inserta_detalle_bd; ?>" class="form-additional">
                         <?php include (new views())->ruta_templates."head/subtitulo.php"; ?>
 
                         <?php echo $controlador->inputs->gt_proveedor_id; ?>
