@@ -6,6 +6,9 @@ let productos_xml = [];
 let productos = [];
 let productos_completos = [];
 
+let filtro_inm_producto = [];
+let url_prd = get_url("inm_producto", "get_productos", {registro_id: registro_id});
+
 let asignaciones = [];
 
 let producto_xml_actual = 0;
@@ -110,15 +113,13 @@ $('#asignar').on('click', function () {
         alert("Se asigno con existo.");
         return;
     }
-
-    console.log(asignaciones);
 });
 
 $('#alta_producto').on('click', function () {
 
     let url_alta_prd = get_url("inm_factura_compra", "inserta_producto_bd", {registro_id: registro_id});
 
-    let registro = [];
+    let registro = {};
     registro['descripcion'] = $('#descripcion_producto').val();
     registro['cat_sat_unidad_id'] = $('#cat_sat_unidad_id').val();
     registro['cat_sat_cve_prod_codigo'] = $('#cat_sat_cve_prod_codigo').val();
@@ -130,7 +131,38 @@ $('#alta_producto').on('click', function () {
         type: 'POST',
         data: {registro: registro},
         success: function (data) {
-            console.log(data);
+
+            let str = data.registro_id;
+            if(typeof str === 'number'){
+                str = String(data.registro_id);
+            }
+            $('#por_asignar-' + producto_xml_actual).text('Asignado a Producto ID: ' + str);
+
+            asignaciones.push({
+                inm_producto_id: str,
+                producto_xml: producto_xml_actual
+            });
+
+            filtro_inm_producto = [];
+            $.ajax({
+                url: url_prd,
+                type: 'POST',
+                data: { filtros: filtro_inm_producto },
+                success: function (data) {
+                    productos = data;
+                    productos_completos = data;
+                    currentPage = 1;
+                    renderTable(currentPage);
+                    renderPagination();
+                },
+                error: function () {
+                    console.log('error');
+                }
+            });
+
+            alert("Se asigno con existo.");
+            return;
+
         },
         error: function () {
             console.log('error');
@@ -221,9 +253,6 @@ modal.addEventListener('click', function (event) {
 
 
 /***** Productos *****/
-let filtro_inm_producto = [];
-let url_prd = get_url("inm_producto", "get_productos", {registro_id: registro_id});
-
 let currentPage = 1;
 let rowsPerPage = 5;
 
@@ -321,6 +350,7 @@ function renderTable_productos_completos(page) {
             item.inm_producto_id === producto.inm_producto_id
         );
 
+        console.log(existente);
         if (existente) {
             checkbox.prop("checked", true);
         }
