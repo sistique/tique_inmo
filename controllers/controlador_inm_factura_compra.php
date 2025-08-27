@@ -333,7 +333,7 @@ class controlador_inm_factura_compra extends _ctl_base {
     /**
      * @throws \Exception
      */
-    public function inserta_producto_bd(bool $header, bool $ws = false):array|stdClass
+    /*public function inserta_producto_bd(bool $header, bool $ws = false):array|stdClass
     {
         foreach ($this->registros_concepto as $concepto) {
             $filtro_prod['cat_sat_cve_prod.codigo'] = $concepto['ClaveProdServ'];
@@ -401,6 +401,43 @@ class controlador_inm_factura_compra extends _ctl_base {
         }
 
         return $this->registros_concepto;
+    }*/
+
+    /**
+     * @throws \Exception
+     */
+    public function inserta_producto_bd(bool $header, bool $ws = false):array|stdClass
+    {
+        if(!isset($_POST['registro'])){
+            return $this->retorno_error(mensaje: 'Error al obtener registro para alta', data: $_POST,
+                header: $header, ws: $ws);
+        }
+
+        $registro = $_POST['registro'];
+        $r_inm_producto = (new inm_producto(link: $this->link))->alta_registro(
+            registro: $registro);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al generar link', data: $r_inm_producto,
+                header: $header, ws: $ws);
+        }
+
+        if($header){
+            $retorno = $_SERVER['HTTP_REFERER'];
+            header('Location:'.$retorno);
+            exit;
+        }
+        if($ws){
+            header('Content-Type: application/json');
+            try {
+                echo json_encode($r_inm_producto, JSON_THROW_ON_ERROR);
+            }
+            catch (Throwable $e){
+                return $this->retorno_error(mensaje: 'Error al maquetar estados',data: $e, header: $header, ws: $ws);
+            }
+            exit;
+        }
+
+        return $r_inm_producto;
     }
 
     protected function key_selects_txt(array $keys_selects): array

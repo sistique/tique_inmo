@@ -106,9 +106,36 @@ $('#asignar').on('click', function () {
             inm_producto_id: chk.value,
             producto_xml: producto_xml_actual
         });
+
+        alert("Se asigno con existo.");
+        return;
     }
 
     console.log(asignaciones);
+});
+
+$('#alta_producto').on('click', function () {
+
+    let url_alta_prd = get_url("inm_factura_compra", "inserta_producto_bd", {registro_id: registro_id});
+
+    let registro = [];
+    registro['descripcion'] = $('#descripcion_producto').val();
+    registro['cat_sat_unidad_id'] = $('#cat_sat_unidad_id').val();
+    registro['cat_sat_cve_prod_codigo'] = $('#cat_sat_cve_prod_codigo').val();
+    registro['costo_promedio'] = $('#costo_promedio').val();
+    registro['cantidad_actual'] = $('#cantidad_actual').val();
+
+    $.ajax({
+        url: url_alta_prd,
+        type: 'POST',
+        data: {registro: registro},
+        success: function (data) {
+            console.log(data);
+        },
+        error: function () {
+            console.log('error');
+        }
+    });
 });
 
 function abrir_modal(indice){

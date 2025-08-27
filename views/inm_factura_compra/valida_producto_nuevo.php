@@ -284,7 +284,7 @@ echo "<style>
                 <button id="asignar">Asignar</button>
                 <div class="form-main" id="form">
                     <div class="col-lg-12 content_alta">
-                        <form enctype="multipart/form-data" method="post" class="form-additional" class="form-additional">
+                        <div class="form-additional">
                             <div class="widget-header">
                                 <h2>Alta Producto</h2>
                             </div>
@@ -294,8 +294,12 @@ echo "<style>
                             <?php echo $controlador->inputs->costo_promedio; ?>
                             <?php echo $controlador->inputs->cantidad_actual; ?>
 
-                            <?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
-                        </form>
+                            <div class="control-group btn-alta">
+                                <div class="controls">
+                                    <button id="alta_producto" type="submit" class="btn btn-success" >Alta</button><br>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
