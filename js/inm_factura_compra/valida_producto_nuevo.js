@@ -21,7 +21,6 @@ $(document).ready(function () {
         type: 'GET',
         success: function (data) {
             productos_xml = data;
-            console.log(productos_xml);
         },
         error: function () {
             console.log('Error al obtener productos');
@@ -350,7 +349,6 @@ function renderTable_productos_completos(page) {
             item.inm_producto_id === producto.inm_producto_id
         );
 
-        console.log(existente);
         if (existente) {
             checkbox.prop("checked", true);
         }
