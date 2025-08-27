@@ -203,6 +203,9 @@ echo "<style>
 
                         <?php echo $controlador->inputs->gt_proveedor_id; ?>
 
+                        <div id="content_form_productos">
+
+                        </div>
                         <div class="control-group btn-alta">
                             <div class="controls">
                                 <button type="submit" class="btn btn-success" name="btn_action_next">Inserta Producto</button>

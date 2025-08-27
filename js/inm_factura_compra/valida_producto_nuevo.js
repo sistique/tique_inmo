@@ -97,23 +97,78 @@ $('#asignar').on('click', function () {
         return;
     }
 
+    let existente_prd_xml = productos_xml.find(item => item.indice === producto_xml_actual);
+    if (!existente_prd_xml) return;
+
     let existente = asignaciones.find(item => item.producto_xml === producto_xml_actual);
 
     if (existente) {
         existente.inm_producto_id = chk.value;
 
-        alert("Se asigno con existo.");
-        return;
+        $(`#content_form_productos input[data-xml="${producto_xml_actual}"][name$="[inm_producto_id]"]`).val(chk.value);
+
+        $('#por_asignar-' + producto_xml_actual).text('Reasignado a Producto ID: ' + chk.value);
+        alert("Se actualizó la asignación.");
     } else {
-        $('#por_asignar-' + producto_xml_actual).text('Asignado a Producto ID: ' + chk.value);
+        let div = $('#content_form_productos');
+        let index = asignaciones.length;
+
+        div.append($('<input>', {
+            type: "hidden",
+            name: `asignaciones[${index}][inm_factura_compra_id]`,
+            value: registro_id,
+            "data-xml": producto_xml_actual
+        }));
+        div.append($('<input>', {
+            type: "hidden",
+            name: `asignaciones[${index}][inm_producto_id]`,
+            value: chk.value,
+            "data-xml": producto_xml_actual
+        }));
+        div.append($('<input>', {
+            type: "hidden",
+            name: `asignaciones[${index}][cantidad]`,
+            value: existente_prd_xml.Cantidad,
+            "data-xml": producto_xml_actual
+        }));
+        div.append($('<input>', {
+            type: "hidden",
+            name: `asignaciones[${index}][valor_unitario]`,
+            value: existente_prd_xml.ValorUnitario,
+            "data-xml": producto_xml_actual
+        }));
+        div.append($('<input>', {
+            type: "hidden",
+            name: `asignaciones[${index}][subtotal]`,
+            value: existente_prd_xml.Importe,
+            "data-xml": producto_xml_actual
+        }));
+        div.append($('<input>', {
+            type: "hidden",
+            name: `asignaciones[${index}][trasladado]`,
+            value: existente_prd_xml.Trasladado,
+            "data-xml": producto_xml_actual
+        }));
+        div.append($('<input>', {
+            type: "hidden",
+            name: `asignaciones[${index}][retenido]`,
+            value: existente_prd_xml.Retenido,
+            "data-xml": producto_xml_actual
+        }));
+        div.append($('<input>', {
+            type: "hidden",
+            name: `asignaciones[${index}][total]`,
+            value: existente_prd_xml.Total,
+            "data-xml": producto_xml_actual
+        }));
 
         asignaciones.push({
-            inm_producto_id: chk.value,
-            producto_xml: producto_xml_actual
+            producto_xml: producto_xml_actual,
+            inm_producto_id: chk.value
         });
 
-        alert("Se asigno con existo.");
-        return;
+        $('#por_asignar-' + producto_xml_actual).text('Asignado a Producto ID: ' + chk.value);
+        alert("Se asignó con éxito.");
     }
 });
 
@@ -138,6 +193,61 @@ $('#alta_producto').on('click', function () {
             if(typeof str === 'number'){
                 str = String(data.registro_id);
             }
+
+            let existente_prd_xml = productos_xml.find(item => item.indice === producto_xml_actual);
+
+            let div = $('#content_form_productos');
+            let index = asignaciones.length;
+
+            div.append($('<input>', {
+                type: "hidden",
+                name: `asignaciones[${index}][inm_factura_compra_id]`,
+                value: registro_id,
+                "data-xml": producto_xml_actual
+            }));
+            div.append($('<input>', {
+                type: "hidden",
+                name: `asignaciones[${index}][inm_producto_id]`,
+                value: str,
+                "data-xml": producto_xml_actual
+            }));
+            div.append($('<input>', {
+                type: "hidden",
+                name: `asignaciones[${index}][cantidad]`,
+                value: existente_prd_xml.Cantidad,
+                "data-xml": producto_xml_actual
+            }));
+            div.append($('<input>', {
+                type: "hidden",
+                name: `asignaciones[${index}][valor_unitario]`,
+                value: existente_prd_xml.ValorUnitario,
+                "data-xml": producto_xml_actual
+            }));
+            div.append($('<input>', {
+                type: "hidden",
+                name: `asignaciones[${index}][subtotal]`,
+                value: existente_prd_xml.Importe,
+                "data-xml": producto_xml_actual
+            }));
+            div.append($('<input>', {
+                type: "hidden",
+                name: `asignaciones[${index}][trasladado]`,
+                value: existente_prd_xml.Trasladado,
+                "data-xml": producto_xml_actual
+            }));
+            div.append($('<input>', {
+                type: "hidden",
+                name: `asignaciones[${index}][retenido]`,
+                value: existente_prd_xml.Retenido,
+                "data-xml": producto_xml_actual
+            }));
+            div.append($('<input>', {
+                type: "hidden",
+                name: `asignaciones[${index}][total]`,
+                value: existente_prd_xml.Total,
+                "data-xml": producto_xml_actual
+            }));
+
             $('#por_asignar-' + producto_xml_actual).text('Asignado a Producto ID: ' + str);
 
             asignaciones.push({
@@ -340,6 +450,7 @@ function renderTable(page) {
                 $('.content_alta').show();
             }
         }else{
+            $('#producto_asignado').val('');
             $('.content_alta').hide();
             if ($(this).val() === '-1') {
                 $('.content_alta').hide();
@@ -369,6 +480,7 @@ function renderPagination() {
     $('.page-btn').on('click', function() {
         let chk = document.querySelector('input[name="producto"]:checked');
         if (chk) {
+            $('#producto_asignado').val('');
             $(chk).prop("checked", false);
             $('.content_alta').hide();
         }
@@ -424,6 +536,7 @@ function renderTable_productos_completos(page) {
                 $('.content_alta').show();
             }
         }else{
+            $('#producto_asignado').val('');
             $('.content_alta').hide();
             if ($(this).val() === '-1') {
                 $('.content_alta').hide();
@@ -453,6 +566,7 @@ function renderPagination_productos_completos() {
     $('.page-btn').on('click', function() {
         let chk = document.querySelector('input[name="producto"]:checked');
         if (chk) {
+            $('#producto_asignado').val('');
             $(chk).prop("checked", false);
             $('.content_alta').hide();
         }
