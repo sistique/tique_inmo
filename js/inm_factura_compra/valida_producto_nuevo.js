@@ -101,6 +101,9 @@ $('#asignar').on('click', function () {
 
     if (existente) {
         existente.inm_producto_id = chk.value;
+
+        alert("Se asigno con existo.");
+        return;
     } else {
         $('#por_asignar-' + producto_xml_actual).text('Asignado a Producto ID: ' + chk.value);
 
@@ -142,15 +145,6 @@ $('#alta_producto').on('click', function () {
                 producto_xml: producto_xml_actual
             });
 
-            $('#producto_asignado').val('');
-            let existente_prod = productos_completos.find(item =>
-                item.inm_producto_id === str
-            );
-
-            if(existente_prod){
-                $('#producto_asignado').val(existente_prod.inm_producto_descripcion);
-            }
-
             filtro_inm_producto = [];
             $.ajax({
                 url: url_prd,
@@ -167,6 +161,21 @@ $('#alta_producto').on('click', function () {
                     console.log('error');
                 }
             });
+
+            $('#producto_asignado').val('');
+            console.log(productos_completos);
+            console.log(str);
+            let existente_prod = productos_completos.find(item =>
+                item.inm_producto_id === str
+            );
+
+            console.log(existente_prod);
+
+            if(existente_prod){
+                $('#producto_asignado').val(existente_prod.inm_producto_descripcion);
+            }
+
+            $('.content_alta').hide();
 
             alert("Se asigno con existo.");
             return;
