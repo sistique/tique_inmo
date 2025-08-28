@@ -72,8 +72,10 @@ class inm_detalle_factura_compra extends _modelo_parent{
             $registro_mod['costo_promedio'] = $monto_total / $r_detalle_factura_compra->n_registros;
         }
 
+        $registro_mod['cat_sat_unidad_id'] = $r_inm_producto['cat_sat_unidad_id'];
+        $registro_mod['cat_sat_cve_prod_codigo'] = $r_inm_producto['cat_sat_cve_prod_codigo'];
         $registro_mod['cantidad_actual'] = $this->registro['cantidad'] +
-            $r_inm_producto->registros[0]['inm_producto_cantidad'];
+            $r_inm_producto['inm_producto_cantidad_actual'];
         $r_modifica = (new inm_producto(link: $this->link))->modifica_bd(registro: $registro_mod,
             id: $this->registro['inm_producto_id']);
         if (errores::$error) {

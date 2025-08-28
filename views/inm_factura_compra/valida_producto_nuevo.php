@@ -203,6 +203,10 @@ echo "<style>
 
                         <?php echo $controlador->inputs->gt_proveedor_id; ?>
 
+                        <?php echo $controlador->inputs->btn_action_next; ?>
+                        <?php echo $controlador->inputs->id_retorno; ?>
+                        <?php echo $controlador->inputs->seccion_retorno; ?>
+
                         <div id="content_form_productos">
 
                         </div>
