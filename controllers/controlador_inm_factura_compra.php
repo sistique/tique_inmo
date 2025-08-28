@@ -460,7 +460,12 @@ class controlador_inm_factura_compra extends _ctl_base {
         }
 
         if($header){
-            $retorno = $_SERVER['HTTP_REFERER'];
+            $retorno = $this->obj_link->link_sin_id(
+                accion: 'lista', link: $this->link, seccion: 'inm_factura_compra');
+            if (errores::$error) {
+                $this->retorno_error(mensaje: 'Error al generar link', data: $retorno, header: $header, ws: $ws);
+            }
+
             header('Location:'.$retorno);
             exit;
         }
