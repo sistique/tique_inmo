@@ -186,6 +186,12 @@ echo "<style>
     display: none;
 }
 
+.btn-insert{
+    pointer-events: none;
+    opacity: 0.9;
+    cursor: not-allowed;
+}
+
 </style>";
 ?>
 
@@ -212,7 +218,7 @@ echo "<style>
                         </div>
                         <div class="control-group btn-alta">
                             <div class="controls">
-                                <button type="submit" class="btn btn-success" name="btn_action_next">Inserta Producto</button>
+                                <button type="submit" class="btn btn-success btn-insert" name="btn_action_next">Inserta Producto</button>
                                 <button type="submit" class="btn btn-success" name="btn_action_next" title="Vista Previa">Asigna Productos</button>
                                 <br>
                             </div>

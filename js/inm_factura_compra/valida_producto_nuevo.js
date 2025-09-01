@@ -170,6 +170,24 @@ $('#asignar').on('click', function () {
         $('#por_asignar-' + producto_xml_actual).text('Asignado a Producto ID: ' + chk.value);
         alert("Se asignó con éxito.");
     }
+
+    let todos_asignados = productos_xml.every(prod =>
+        asignaciones.some(asig => asig.producto_xml === prod.indice && asig.inm_producto_id)
+    );
+
+    if (todos_asignados) {
+        $('.btn-insert').css({
+            "pointer-events": "auto",
+            "opacity": "1",
+            "cursor": "pointer"
+        });
+    } else {
+        $('.btn-insert').css({
+            "pointer-events": "none",
+            "opacity": "0.9",
+            "cursor": "not-allowed"
+        });
+    }
 });
 
 $('#alta_producto').on('click', function () {
@@ -282,6 +300,24 @@ $('#alta_producto').on('click', function () {
             });
 
             $('.content_alta').hide();
+
+            let todos_asignados = productos_xml.every(prod =>
+                asignaciones.some(asig => asig.producto_xml === prod.indice && asig.inm_producto_id)
+            );
+
+            if (todos_asignados) {
+                $('.btn-insert').css({
+                    "pointer-events": "auto",
+                    "opacity": "1",
+                    "cursor": "pointer"
+                });
+            } else {
+                $('.btn-insert').css({
+                    "pointer-events": "none",
+                    "opacity": "0.9",
+                    "cursor": "not-allowed"
+                });
+            }
 
             alert("Se asigno con existo.");
             return;
