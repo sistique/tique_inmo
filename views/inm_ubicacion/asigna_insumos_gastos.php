@@ -226,6 +226,7 @@ echo "<style>
                         <table class="table table-striped inm_detalle_factura_compra">
                             <thead>
                             <tr>
+                                <th></th>
                                 <th>Producto</th>
                                 <th>Cantidad</th>
                                 <th>Valor Unitario</th>
