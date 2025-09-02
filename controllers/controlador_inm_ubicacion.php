@@ -25,6 +25,7 @@ use gamboamartin\inmuebles\models\inm_cheque;
 use gamboamartin\inmuebles\models\inm_conf_docs_ubicacion;
 use gamboamartin\inmuebles\models\inm_doc_ubicacion;
 use gamboamartin\inmuebles\models\inm_efectivo;
+use gamboamartin\inmuebles\models\inm_factura_compra;
 use gamboamartin\inmuebles\models\inm_nacionalidad;
 use gamboamartin\inmuebles\models\inm_ocupacion;
 use gamboamartin\inmuebles\models\inm_poder;
@@ -58,6 +59,7 @@ class controlador_inm_ubicacion extends _ctl_base {
     public string $link_firmado_por_aprobar_bd = '';
     public string $link_firmado_bd = '';
     public string $link_inm_doc_ubicacion_alta_bd = '';
+    public string $link_asigna_insumos_gastos_bd = '';
 
     /*  */
     public string $button_inm_doc_ubicacion_descarga = '';
@@ -211,6 +213,38 @@ class controlador_inm_ubicacion extends _ctl_base {
         }
 
         return $base_data->base_html->r_modifica;
+    }
+
+
+    final public function asigna_insumos_gastos(bool $header, bool $ws = false): array|stdClass
+    {
+        $keys_selects = array();
+
+        $columns_ds = array('inm_factura_compra_id','gt_proveedor_razon_social','inm_factura_compra_fecha');
+        $keys_selects = $this->key_select(cols: 6, con_registros: true, filtro: array(), key: 'inm_factura_compra_id',
+            keys_selects: $keys_selects, id_selected: -1, label: 'Factura Compra',
+            columns_ds: $columns_ds, disabled: true, required: false);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
+                header: $header,ws:  $ws);
+        }
+
+        $base = $this->base_upd(keys_selects: $keys_selects, params: array(),params_ajustados: array());
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
+        }
+
+        $params = array('pestana_general_actual' => 'pestanageneral2', 'pestana_actual' => 'pestana5');
+        $link_asigna_insumos_gastos_bd = $this->obj_link->link_con_id(accion:'asigna_insumos_gastos_bd',
+            link: $this->link,registro_id: $this->registro_id,seccion: 'inm_ubicacion',params: $params);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al generar link',data:  $link_asigna_insumos_gastos_bd,
+                header: $header,ws:  $ws);
+        }
+
+        $this->link_asigna_insumos_gastos_bd = $link_asigna_insumos_gastos_bd;
+
+        return $this->registro;
     }
 
     /**
@@ -1838,6 +1872,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         $init_data['inm_tipo_credito'] = "gamboamartin\\inmuebles";
         $init_data['inm_tipo_cheque'] = "gamboamartin\\inmuebles";
         $init_data['inm_tipo_gasto'] = "gamboamartin\\inmuebles";
+        $init_data['inm_factura_compra'] = "gamboamartin\\inmuebles";
 
         $campos_view = $this->campos_view_base(init_data: $init_data,keys:  $keys);
 
