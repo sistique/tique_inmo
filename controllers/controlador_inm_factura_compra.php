@@ -33,6 +33,7 @@ class controlador_inm_factura_compra extends _ctl_base {
     public string $link_inserta_producto_bd = '';
     public string $link_valida_producto_nuevo = '';
     public array $registros_concepto = array();
+    public array $productos_factura = array();
 
     public function __construct(PDO      $link, html $html = new \gamboamartin\template_1\html(),
                                 stdClass $paths_conf = new stdClass())
@@ -246,6 +247,86 @@ class controlador_inm_factura_compra extends _ctl_base {
 
         return $inputs;
     }
+
+    public function productos_factura(bool $header, bool $ws = false):array|stdClass
+    {
+
+        $r_alta = $this->init_alta();
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al inicializar alta',data:  $r_alta, header: $header,ws:  $ws);
+        }
+
+        $r_factura_compra = (new inm_factura_compra(link: $this->link))->registro(registro_id: $this->registro_id);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener factura compra',data:  $r_factura_compra,
+                header: $header,ws:  $ws);
+        }
+
+        $filtro_deta['inm_factura_compra.id'] = $this->registro_id;
+        $r_inm_detalle_factura = (new inm_detalle_factura_compra(link: $this->link))->filtro_and(filtro: $filtro_deta);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener factura compra',data:  $r_inm_detalle_factura,
+                header: $header,ws:  $ws);
+        }
+
+        $this->productos_factura = $r_inm_detalle_factura->registros;
+
+        $keys_selects = array();
+        $columns_ds = array('gt_proveedor_razon_social');
+        $filtro['gt_proveedor.id'] = $r_factura_compra['gt_proveedor_id'];
+        $keys_selects = $this->key_select(cols: 6, con_registros: true, filtro: $filtro, key: 'gt_proveedor_id',
+            keys_selects: $keys_selects, id_selected: $r_factura_compra['gt_proveedor_id'], label: 'Proveedor',
+            columns_ds: $columns_ds, disabled: true, required: false);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
+                header: $header,ws:  $ws);
+        }
+
+
+        $this->row_upd->fecha = $r_factura_compra['inm_factura_compra_fecha'];
+
+        $fecha = $this->html->input_fecha(cols: 6, row_upd: $this->row_upd, value_vacio: false,
+            place_holder: 'Fecha Factura', value: $this->row_upd->fecha);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener input fecha',data:  $fecha, header: $header,ws:  $ws);
+        }
+        $this->inputs->fecha = $fecha;
+
+        $inputs = $this->inputs(keys_selects: $keys_selects);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener inputs',data:  $inputs, header: $header,ws:  $ws);
+        }
+
+
+        $retorno = 'lista';
+        $btn_action_next = $this->html->hidden('btn_action_next', value: $retorno);
+        if (errores::$error) {
+            return $this->retorno_error(
+                mensaje: 'Error al generar btn_action_next', data: $btn_action_next, header: $header, ws: $ws);
+        }
+
+        $id_retorno = $this->html->hidden('id_retorno', value: -1);
+        if (errores::$error) {
+            return $this->retorno_error(
+                mensaje: 'Error al generar btn_action_next', data: $btn_action_next, header: $header, ws: $ws);
+        }
+
+        $seccion_retorno = $this->html->hidden('seccion_retorno', value: $this->seccion);
+        if (errores::$error) {
+            return $this->retorno_error(
+                mensaje: 'Error al generar btn_action_next', data: $btn_action_next, header: $header, ws: $ws);
+        }
+
+        $this->inputs->btn_action_next = $btn_action_next;
+        $this->inputs->id_retorno = $id_retorno;
+        $this->inputs->seccion_retorno = $seccion_retorno;
+
+        return $this->registros_concepto;
+    }
+
 
     /**
      * @throws \Exception
