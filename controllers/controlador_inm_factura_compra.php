@@ -637,4 +637,31 @@ class controlador_inm_factura_compra extends _ctl_base {
     }
 
 
+    public function get_detalles(bool $header, bool $ws = false): array
+    {
+        $filtro = array();
+        $filtro_especial = array();
+
+        $filtro['inm_detalle_factura_compra.status'] = 'activo';
+        if(isset($_POST['filtros'])){
+            $f = $_POST['filtros']['filtro'];
+            if (isset($f['inm_factura_compra_id'])) {
+                $filtro['inm_factura_compra.id'] = $f['inm_factura_compra_id'];
+            }
+        }
+
+        $inm_detalle_factura_compra = (new inm_detalle_factura_compra(link: $this->link))->filtro_and(filtro: $filtro,
+            filtro_especial: $filtro_especial);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al integrar buttons', data: $inm_detalle_factura_compra,
+                header: $header, ws: $ws);
+        }
+
+        $registros = $inm_detalle_factura_compra->registros;
+
+        header('Content-Type: application/json');
+        echo json_encode($registros);
+        exit;
+    }
+
 }

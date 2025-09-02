@@ -223,7 +223,7 @@ echo "<style>
                             </div>
                         </div>
 
-                        <table class="table table-striped">
+                        <table class="table table-striped inm_detalle_factura_compra">
                             <thead>
                             <tr>
                                 <th>Producto</th>
