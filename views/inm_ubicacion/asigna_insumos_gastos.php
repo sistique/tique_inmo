@@ -207,6 +207,7 @@ echo "<style>
                     <form enctype="multipart/form-data" method="post"  action="<?php echo $controlador->link_asigna_insumos_gastos_bd; ?>" class="form-additional">
                         <?php include (new views())->ruta_templates."head/subtitulo.php"; ?>
 
+                        <?php echo $controlador->inputs->inm_ubicacion_seleccionado_id; ?>
                         <?php echo $controlador->inputs->inm_factura_compra_id; ?>
 
                         <?php echo $controlador->inputs->btn_action_next; ?>
@@ -218,38 +219,27 @@ echo "<style>
                         </div>
                         <div class="control-group btn-alta">
                             <div class="controls">
+                                <button type="submit" class="btn btn-success btn-insert" name="btn_action_next">Asigna Insumos</button>
                             </div>
                         </div>
+
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>Producto</th>
+                                <th>Cantidad</th>
+                                <th>Valor Unitario</th>
+                                <th>Subtotal</th>
+                                <th>Traslado</th>
+                                <th>Retenido</th>
+                                <th>Total</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
                     </form>
                     <br>
-                    <table class="table table-striped">
-                        <thead>
-                        <tr>
-                            <th>Producto</th>
-                            <th>Cantidad</th>
-                            <th>Valor Unitario</th>
-                            <th>Subtotal</th>
-                            <th>Traslado</th>
-                            <th>Retenido</th>
-                            <th>Total</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <?php
-                        foreach ($controlador->productos_factura as $detalle){
-                            ?>
-                            <tr>
-                                <td><?php echo $detalle['inm_producto_descripcion'] ?></td>
-                                <td><?php echo $detalle['inm_detalle_factura_compra_cantidad'] ?></td>
-                                <td><?php echo $detalle['inm_detalle_factura_compra_valor_unitario'] ?></td>
-                                <td><?php echo $detalle['inm_detalle_factura_compra_subtotal'] ?></td>
-                                <td><?php echo $detalle['inm_detalle_factura_compra_trasladado'] ?></td>
-                                <td><?php echo $detalle['inm_detalle_factura_compra_retenido'] ?></td>
-                                <td><?php echo $detalle['inm_detalle_factura_compra_total'] ?></td>
-                            </tr>
-                        <?php } ?>
-                        </tbody>
-                    </table>
                 </div>
             </div>
         </div>
