@@ -152,22 +152,34 @@ class _pdf{
             return $this->error->error(mensaje: 'Error al escribir domicilio', data: $pdf_exe);
         }
 
+        /*$keys_comprador['org_empresa_razon_social']= array('x'=>17,'y'=>131);
+        $keys_comprador['org_empresa_rfc']= array('x'=>23,'y'=>138);
+        $write = $this->write_data(keys: $keys_comprador,row:  $data->inm_comprador);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
+        }*/
 
-        $keys_ubicacion['dp_calle_ubicacion_descripcion'] = array('x' => 17, 'y' => 158);
+        $keys_ubicacion['inm_ubicacion_apellido_paterno'] = array('x' => 17, 'y' => 105);
+        $keys_ubicacion['inm_ubicacion_apellido_materno'] = array('x' => 17, 'y' => 111);
+        $keys_ubicacion['inm_ubicacion_nombre'] = array('x' => 17, 'y' => 117);
+        $keys_ubicacion['inm_ubicacion_rfc'] = array('x' => 23, 'y' => 123);
+        $keys_ubicacion['inm_ubicacion_lada_com'] = array('x' => 125, 'y' => 133);
+        $keys_ubicacion['inm_ubicacion_numero_com'] = array('x' => 138, 'y' => 133);
+
+
+        $keys_ubicacion['inm_ubicacion_calle'] = array('x' => 17, 'y' => 158);
         $keys_ubicacion['inm_ubicacion_numero_exterior'] = array('x' => 17, 'y' => 164);
         $keys_ubicacion['inm_ubicacion_numero_interior'] = array('x' => 31.5, 'y' => 164);
         $keys_ubicacion['inm_ubicacion_lote'] = array('x' => 46, 'y' => 164);
         $keys_ubicacion['inm_ubicacion_manzana'] = array('x' => 61.5, 'y' => 164);
-        $keys_ubicacion['dp_colonia_ubicacion_descripcion'] = array('x' => 81, 'y' => 164);
-        $keys_ubicacion['dp_estado_ubicacion_descripcion'] = array('x' => 17, 'y' => 170);
-        $keys_ubicacion['dp_municipio_ubicacion_descripcion'] = array('x' => 100, 'y' => 170);
-        $keys_ubicacion['dp_cp_ubicacion_descripcion'] = array('x' => 173, 'y' => 170);
+        $keys_ubicacion['dp_colonia_descripcion'] = array('x' => 81, 'y' => 164);
+        $keys_ubicacion['dp_estado_descripcion'] = array('x' => 17, 'y' => 170);
+        $keys_ubicacion['dp_municipio_descripcion'] = array('x' => 100, 'y' => 170);
+        $keys_ubicacion['dp_cp_descripcion'] = array('x' => 173, 'y' => 170);
 
-        foreach ($keys_ubicacion as $key => $valor) {
-            $pdf[] = $this->write(valor: $data->imp_rel_ubi_comp[$key], x: $valor['x'], y: $valor['y']);
-            if (errores::$error) {
-                return $this->error->error(mensaje: 'Error al escribir en pdf', data: $pdf);
-            }
+        $write = $this->write_data(keys: $keys_ubicacion,row:  $data->imp_rel_ubi_comp);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
         }
 
         $ciudad = $this->ciudad(data: $data);
@@ -649,7 +661,7 @@ class _pdf{
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al agregar template', data: $pdf);
         }
-        $pdf->SetFont('Arial', 'B', 15);
+        $pdf->SetFont('Arial', 'B', 10);
         $pdf->SetTextColor(0, 0, 0);
 
         $pdf_exe = $this->hoja_avaluo_1(data: $data,modelo: $modelo);
