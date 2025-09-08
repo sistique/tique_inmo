@@ -97,4 +97,32 @@ class inm_rel_cliente_valuador extends _modelo_parent{
 
     }
 
+    final public function inm_rel_cliente_valuador(int $inm_comprador_id): array
+    {
+        if($inm_comprador_id <= 0){
+            return $this->error->error(mensaje: 'Error inm_comprador_id es menor a 0', data:  $inm_comprador_id);
+        }
+
+        $filtro['inm_comprador.id'] = $inm_comprador_id;
+
+        $r_inm_rel_cliente_valuador= $this->filtro_and(filtro:$filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener inm_rel_cliente_valuador',
+                data:  $r_inm_rel_cliente_valuador);
+        }
+
+        if($r_inm_rel_cliente_valuador->n_registros === 0){
+            return $this->error->error(
+                mensaje: 'Error el valuador no esta asignado',data:  $r_inm_rel_cliente_valuador);
+        }
+
+        if($r_inm_rel_cliente_valuador->n_registros > 1){
+            return $this->error->error(
+                mensaje: 'Error existe mas de un valuador asignado',
+                data:  $r_inm_rel_cliente_valuador);
+        }
+
+        return $r_inm_rel_cliente_valuador->registros[0];
+    }
+
 }

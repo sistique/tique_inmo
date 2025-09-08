@@ -6,6 +6,7 @@ use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\models\inm_cheque;
 use gamboamartin\inmuebles\models\inm_co_acreditado;
 use gamboamartin\inmuebles\models\inm_comprador;
+use gamboamartin\inmuebles\models\inm_rel_cliente_valuador;
 use gamboamartin\js_base\valida;
 use PDO;
 use setasign\Fpdi\Fpdi;
@@ -903,7 +904,22 @@ class _pdf{
         return $pdf_exe;
     }
 
-    private function hojas_avaluo(stdClass $data, modelo $modelo, string $path_base){
+    private function hojas_avaluo_fajardo(stdClass $data, modelo $modelo, string $path_base){
+        $pdf_exe = $this->genera_hoja_avaluo_1(data: $data,modelo: $modelo,path_base: $path_base);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $pdf_exe);
+        }
+
+        $pdf_exe = $this->add_template(file_plantilla: 'templates/solicitud_avaluo.pdf',page:  2,
+            path_base:  $path_base,plantilla_cargada:  false);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al agregar template', data: $pdf_exe);
+        }
+
+        return $pdf_exe;
+    }
+
+    private function hojas_avaluo_osvaldo(stdClass $data, modelo $modelo, string $path_base){
         $pdf_exe = $this->genera_hoja_avaluo_1(data: $data,modelo: $modelo,path_base: $path_base);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al escribir en pdf', data: $pdf_exe);
@@ -1018,11 +1034,23 @@ class _pdf{
             return $this->error->error(mensaje: 'Error al obtener datos', data: $data);
         }
 
-        $pdf_exe = $this->hojas_avaluo(data: $data, modelo: $modelo, path_base: $path_base);
+        $inm_rel_cliente_valuador = (new inm_rel_cliente_valuador(link: $modelo->link))
+            ->inm_rel_cliente_valuador(inm_comprador_id: $inm_comprador_id);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener inm_rel_cliente_valuador',
+                data: $inm_rel_cliente_valuador);
+        }
+
+        $data->inm_rel_cliente_valuador = $inm_rel_cliente_valuador;
+
+        $funcion = 'hojas_avaluo_'.$data->inm_rel_cliente_valuador['inm_valuador_alias'];
+
+        $pdf_exe = $this->$funcion(data: $data, modelo: $modelo, path_base: $path_base);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al escribir en pdf', data: $pdf_exe);
         }
         $this->pdf->Output('solicitud_avaluo.pdf', 'I');
+
         return $this->pdf;
     }
 
