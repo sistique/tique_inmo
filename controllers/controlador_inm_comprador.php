@@ -172,6 +172,9 @@ class controlador_inm_comprador extends _ctl_base {
     /* BOTON DE DESCARGA SOLICITUD INFONAVIT */
     public string $button_solicitud_infonavit = '';
 
+    /* BOTON DE DESCARGA SOLICITUD AVALUO */
+    public string $button_solicitud_avaluo = '';
+
     public inm_comprador_html $html_entidad;
 
     public stdClass $header_frontend;
@@ -2022,6 +2025,18 @@ class controlador_inm_comprador extends _ctl_base {
                 header: $header,ws:  $ws);
         }
         $this->inm_clientes_valuadores = (array)$inm_clientes_valuadores->registros;*/
+
+        $button_solicitud_avaluo = $this->html->button_href(accion: 'solicitud_avaluo',
+            etiqueta: 'Solicitud Avaluo', registro_id: $this->registro_id, seccion: 'inm_comprador',
+            style: 'success');
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al integrar button',
+                data: $button_solicitud_avaluo, header: $header, ws: $ws);
+        }
+
+        $this->button_solicitud_avaluo = $button_solicitud_avaluo;
+
+
         $this->keys_selects = array_merge($keys_selects, $this->keys_selects);
 
         return $base;

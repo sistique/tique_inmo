@@ -857,6 +857,11 @@
 
                                         <?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
                                     </form>
+                                    <div class="row buttons-form">
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_solicitud_avaluo; ?>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="conten" id="cpestana4">
                                     <form method="post" action="<?php echo $controlador->link_inm_avaluo_alta_bd; ?>"
