@@ -1362,7 +1362,7 @@ class _pdf{
                 return $this->error->error(mensaje: 'Error al validar coordenadas', data: $valida);
             }
 
-            if(!isset($row[$key])){
+            if(!isset($row[$key]) || trim($row[$key]) === 'PREDETERMINADO' || trim($row[$key]) === 'PRED'){
                 $row[$key] = '';
             }
 

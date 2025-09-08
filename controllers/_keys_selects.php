@@ -1003,15 +1003,15 @@ class _keys_selects{
 
     final public function keys_referencias(): array
     {
-
         $keys_referencias['inm_referencia_apellido_paterno']= array('x'=>16,'y'=>177);
         $keys_referencias['inm_referencia_apellido_materno']= array('x'=>16,'y'=>183.5);
         $keys_referencias['inm_referencia_nombre']= array('x'=>16,'y'=>191);
         $keys_referencias['inm_referencia_lada']= array('x'=>27,'y'=>199.5);
         $keys_referencias['inm_referencia_numero']= array('x'=>40,'y'=>199.5);
-        $keys_referencias['inm_referencia_celular']= array('x'=>27,'y'=>206);
-        $keys_referencias['dp_calle_descripcion']= array('x'=>16,'y'=>212);
-        $keys_referencias['inm_referencia_numero_dom']= array('x'=>16,'y'=>217);
+        $keys_referencias['inm_referencia_celular']= array('x'=>27,'y'=>205);
+        $keys_referencias['inm_referencia_calle']= array('x'=>16,'y'=>212);
+        $keys_referencias['inm_referencia_numero_exterior']= array('x'=>16,'y'=>217);
+        $keys_referencias['inm_referencia_numero_interior']= array('x'=>29,'y'=>217);
         $keys_referencias['dp_colonia_descripcion']= array('x'=>16,'y'=>226);
         $keys_referencias['dp_estado_descripcion']= array('x'=>16,'y'=>234);
         $keys_referencias['dp_municipio_descripcion']= array('x'=>16,'y'=>244);
@@ -1025,14 +1025,15 @@ class _keys_selects{
         $keys_referencias['inm_referencia_apellido_materno']= array('x'=>110,'y'=>183.5);
         $keys_referencias['inm_referencia_nombre']= array('x'=>110,'y'=>191);
         $keys_referencias['inm_referencia_lada']= array('x'=>121,'y'=>199.5);
-        $keys_referencias['inm_referencia_numero']= array('x'=>121,'y'=>199.5);
-        $keys_referencias['inm_referencia_celular']= array('x'=>134,'y'=>206);
-        $keys_referencias['dp_calle_descripcion']= array('x'=>110,'y'=>212);
-        $keys_referencias['inm_referencia_numero_dom']= array('x'=>110,'y'=>218);
+        $keys_referencias['inm_referencia_numero']= array('x'=>134,'y'=>199.5);
+        $keys_referencias['inm_referencia_celular']= array('x'=>121,'y'=>206);
+        $keys_referencias['inm_referencia_calle']= array('x'=>110,'y'=>212);
+        $keys_referencias['inm_referencia_numero_exterior']= array('x'=>110,'y'=>218);
+        $keys_referencias['inm_referencia_numero_interior']= array('x'=>123,'y'=>218);
         $keys_referencias['dp_colonia_descripcion']= array('x'=>110,'y'=>225);
         $keys_referencias['dp_estado_descripcion']= array('x'=>110,'y'=>237);
         $keys_referencias['dp_municipio_descripcion']= array('x'=>110,'y'=>245);
-        $keys_referencias['dp_cp_descripcion']= array('x'=>178,'y'=>245);
+        $keys_referencias['dp_cp_descripcion']= array('x'=>175,'y'=>245);
         return $keys_referencias;
     }
 
