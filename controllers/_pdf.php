@@ -113,7 +113,8 @@ class _pdf{
         $keys_comprador['inm_comprador_nss'] = array('x' => 20, 'y' => 59);
         $keys_comprador['inm_comprador_apellido_paterno'] = array('x' => 20, 'y' => 43);
         $keys_comprador['inm_comprador_apellido_materno'] = array('x' => 120, 'y' => 43);
-        $keys_comprador['inm_comprador_nombre'] = array('x' => 20, 'y' => 50);
+        $keys_comprador['inm_comprador_nombre'] = array('x' => 20, 'y' => 51);
+        $keys_comprador['inm_comprador_curp'] = array('x' => 120, 'y' => 59);
         $keys_comprador['inm_comprador_lada_com'] = array('x' => 20, 'y' => 90);
         $keys_comprador['inm_comprador_numero_com'] = array('x' => 30, 'y' => 90);
         foreach ($keys_comprador as $key => $valor) {
@@ -121,6 +122,11 @@ class _pdf{
             if (errores::$error) {
                 return $this->error->error(mensaje: 'Error al escribir en pdf', data: $pdf);
             }
+        }
+
+        $pdf_exe = $this->write(valor: $data->com_cliente['com_cliente_rfc'], x: 120, y: 51);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir rfc', data: $pdf_exe);
         }
 
         $pdf_exe = $this->write(valor: $data->com_cliente['com_cliente_calle'], x: 20, y: 67);
@@ -197,6 +203,9 @@ class _pdf{
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
         }
+
+        $this->pdf->SetFillColor(255, 255, 255);
+        $this->pdf->Rect(182, 254.8, 14, 5, 'F');
 
         $write = $this->write(valor: date('Y'), x:182,y: 258);
         if (errores::$error) {
