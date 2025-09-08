@@ -612,10 +612,10 @@ class _pdf{
             return $this->error->error(mensaje: 'Error al validar datos', data: $valida);
         }
 
-        $x = 46.5;
-        $y = 91.5;
+        $x = 47.3;
+        $y = 91.3;
         if ($data->inm_comprador['inm_comprador_es_segundo_credito'] === 'SI') {
-            $x = 31.5;
+            $x = 32.1;
         }
 
         $pdf = $this->write( valor: 'X', x: $x, y: $y);
@@ -632,7 +632,7 @@ class _pdf{
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al agregar template', data: $pdf);
         }
-        $pdf->SetFont('Arial', 'B', 15);
+        $pdf->SetFont('Arial', 'B', 10);
         $pdf->SetTextColor(0, 0, 0);
 
         $pdf_exe = $this->hoja_1(data: $data);
