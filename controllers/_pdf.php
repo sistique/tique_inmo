@@ -461,7 +461,6 @@ class _pdf{
             return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
         }
 
-
         $condiciones = array();
         $condiciones['SI'] = 84;
 
@@ -476,12 +475,10 @@ class _pdf{
             return $this->error->error(mensaje: 'Error al escribir en pdf', data: $pdf);
         }
 
-
         $condiciones = array();
         $condiciones[3] = 67;
         $condiciones[4] = 114;
         $condiciones[5] = 163;
-
 
         $coord = $this->x_y_compare(condiciones: $condiciones,key:  'inm_destino_credito_id',
             row:  $data->inm_comprador, x_init:  21.5, y_init: 224.5);
@@ -964,7 +961,7 @@ class _pdf{
         $keys_comprador = array();
         $keys_comprador['org_empresa_razon_social']= array('x'=>16,'y'=>37);
         $keys_comprador['org_empresa_rfc']= array('x'=>22,'y'=>57);
-        $keys_comprador['bn_cuenta_descripcion']= array('x'=>16,'y'=>85);
+        $keys_comprador['bn_cuenta_clabe']= array('x'=>16,'y'=>85);
         return $keys_comprador;
     }
 
@@ -975,15 +972,15 @@ class _pdf{
      */
     private function keys_ubicacion(): array
     {
-        $keys_ubicacion['dp_calle_ubicacion_descripcion']= array('x'=>15.5,'y'=>164);
+        $keys_ubicacion['inm_ubicacion_calle']= array('x'=>15.5,'y'=>164);
         $keys_ubicacion['inm_ubicacion_numero_exterior']= array('x'=>15.5,'y'=>170);
         $keys_ubicacion['inm_ubicacion_numero_interior']= array('x'=>31,'y'=>170);
         $keys_ubicacion['inm_ubicacion_lote']= array('x'=>46,'y'=>170);
         $keys_ubicacion['inm_ubicacion_manzana']= array('x'=>61,'y'=>170);
-        $keys_ubicacion['dp_colonia_ubicacion_descripcion']= array('x'=>81,'y'=>170);
-        $keys_ubicacion['dp_estado_ubicacion_descripcion']= array('x'=>15.5,'y'=>176);
-        $keys_ubicacion['dp_municipio_ubicacion_descripcion']= array('x'=>100,'y'=>176);
-        $keys_ubicacion['dp_cp_ubicacion_descripcion']= array('x'=>173,'y'=>176);
+        $keys_ubicacion['dp_colonia_descripcion']= array('x'=>81,'y'=>170);
+        $keys_ubicacion['dp_estado_descripcion']= array('x'=>15.5,'y'=>176);
+        $keys_ubicacion['dp_municipio_descripcion']= array('x'=>100,'y'=>176);
+        $keys_ubicacion['dp_cp_descripcion']= array('x'=>173,'y'=>176);
         return $keys_ubicacion;
     }
 
@@ -1506,8 +1503,12 @@ class _pdf{
         $x = $row[$key_x];
         $y = $row[$key_y];
 
+        $valor = 'X';
+        if(!isset($row[$name_entidad.'_descripcion']) || trim($row[$name_entidad.'_descripcion']) === 'NO APLICA'){
+            $valor = '';
+        }
 
-        $result = $this->write(valor: 'X',x: $x, y: $y);
+        $result = $this->write(valor: $valor,x: $x, y: $y);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al escribir en pdf',data:  $result);
         }

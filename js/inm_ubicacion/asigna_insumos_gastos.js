@@ -26,7 +26,7 @@ $('#inm_factura_compra_id').change(function(){
                 if (Array.isArray(data)) {
                     data.forEach(function (detalle) {
                         let tr = $('<tr>');
-                        let checkbox = $('<input name="producto" type="checkbox" class="producto-checkbox">')
+                        let checkbox = $('<input name="inm_detalle_factura_compra_id[]" type="checkbox" class="producto-checkbox">')
                             .val(detalle.inm_detalle_factura_compra_id);
 
                         tr.append($('<td>').append(checkbox));

@@ -288,6 +288,52 @@ class controlador_inm_ubicacion extends _ctl_base {
         return $this->registro;
     }
 
+    public function asigna_insumos_gastos_bd(bool $header, bool $ws = false):array|stdClass
+    {
+        print_r($_POST);exit;
+        if(!isset($_POST['inm_detalle_factura_compra_id'])){
+            return $this->retorno_error(mensaje: 'Error al obtener registro para alta', data: $_POST,
+                header: $header, ws: $ws);
+        }
+
+        $r_result = array();
+        foreach ($_POST['inm_detalle_factura_compra_id'] as $asignacion) {
+            $registro = $asignacion;
+                $r_inm_detalle_factura_compra = (new inm_detalle_factura_compra(link: $this->link))->alta_registro(
+                registro: $registro);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al generar link', data: $r_inm_detalle_factura_compra,
+                    header: $header, ws: $ws);
+            }
+
+            $r_result[] = $r_inm_detalle_factura_compra;
+        }
+
+        if($header){
+            $retorno = $this->obj_link->link_sin_id(
+                accion: 'lista', link: $this->link, seccion: 'inm_factura_compra');
+            if (errores::$error) {
+                $this->retorno_error(mensaje: 'Error al generar link', data: $retorno, header: $header, ws: $ws);
+            }
+
+            header('Location:'.$retorno);
+            exit;
+        }
+        if($ws){
+            header('Content-Type: application/json');
+            try {
+                echo json_encode($r_result, JSON_THROW_ON_ERROR);
+            }
+            catch (Throwable $e){
+                return $this->retorno_error(mensaje: 'Error al maquetar estados',data: $e, header: $header, ws: $ws);
+            }
+            exit;
+        }
+
+        return $r_result;
+    }
+
+
     /**
      * Vista para asignacion de costo
      * @param bool $header Retorna datos via WEB

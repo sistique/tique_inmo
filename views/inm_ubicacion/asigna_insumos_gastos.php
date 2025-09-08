@@ -186,12 +186,6 @@ echo "<style>
     display: none;
 }
 
-.btn-insert{
-    pointer-events: none;
-    opacity: 0.9;
-    cursor: not-allowed;
-}
-
 </style>";
 ?>
 
