@@ -128,9 +128,9 @@ class _inm_comprador{
             $checked_default_esc = 2;
         }
 
-        $checked_default_cd = 2;
+        $checked_default_cd = 1;
         if($controler->row_upd->con_discapacidad === 'NO'){
-            $checked_default_cd = 1;
+            $checked_default_cd = 2;
         }
 
         $data = new stdClass();
@@ -424,6 +424,15 @@ class _inm_comprador{
         if($checked_default_esc > 2){
             return $this->error->error(mensaje: 'Error checked_default debe ser menor a 3', data: $checked_default_esc);
         }
+
+        if($checked_default_cd <=0){
+            return $this->error->error(mensaje: 'Error checked_default debe ser mayor a 0',
+                data: $checked_default_cd);
+        }
+        if($checked_default_cd > 2){
+            return $this->error->error(mensaje: 'Error checked_default debe ser menor a 3', data: $checked_default_cd);
+        }
+
         if(is_array($controler->inputs)){
             return $this->error->error(mensaje: 'Error controler->inputs no esta inicializado',
                 data: $controler->inputs);
@@ -431,7 +440,6 @@ class _inm_comprador{
 
         $es_segundo_credito = $controler->html->directivas->input_radio_doble(campo: 'es_segundo_credito',
             checked_default: $checked_default_esc,tag: 'Es Segundo Credito', val_1: 'SI',val_2: 'NO');
-
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener es_segundo_credito',data:  $es_segundo_credito);
         }
@@ -439,12 +447,9 @@ class _inm_comprador{
 
         $con_discapacidad = $controler->html->directivas->input_radio_doble(campo: 'con_discapacidad',
             checked_default: $checked_default_cd,tag: 'Con Discapacidad', val_1: 'SI',val_2: 'NO');
-
-
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener con_discapacidad',data:  $con_discapacidad);
         }
-
         $controler->inputs->con_discapacidad = $con_discapacidad;
 
         return $controler->inputs;
@@ -478,6 +483,7 @@ class _inm_comprador{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar radios',data:  $radios);
         }
+
         return $radios;
     }
 

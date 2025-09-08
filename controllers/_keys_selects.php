@@ -1187,7 +1187,7 @@ class _keys_selects{
         $columns_ds[] = 'inm_tipo_discapacidad_descripcion';
 
         $disabled = false;
-        if((int)$row_upd->inm_tipo_discapacidad_id === 5){
+        if($row_upd->con_discapacidad === 'NO'){
             $disabled = true;
         }
 
@@ -1203,7 +1203,7 @@ class _keys_selects{
         $columns_ds[] = 'inm_persona_discapacidad_descripcion';
 
         $disabled = false;
-        if((int)$row_upd->inm_persona_discapacidad_id === 6){
+        if($row_upd->con_discapacidad === 'NO'){
             $disabled = true;
         }
 
