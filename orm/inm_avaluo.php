@@ -98,6 +98,14 @@ class inm_avaluo extends _modelo_parent{
             $this->registro['descripcion'] = $descripcion;
         }
 
+        if(!isset($this->registro['costo_avaluo'])){
+            $this->registro['costo_avaluo'] = 0;
+        }
+
+        if(!isset($this->registro['fecha_solicitud'])){
+            $this->registro['fecha_solicitud'] = date('Y-m-d');
+        }
+
         $filtro['inm_comprador.id'] = $this->registro['inm_comprador_id'];
         $resultado = $this->filtro_and(filtro: $filtro);
         if(errores::$error){
