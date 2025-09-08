@@ -1700,7 +1700,7 @@ class controlador_inm_comprador extends _ctl_base {
 
                 $button_inm_doc_ubicacion_escritura_descarga = $this->html->button_href(accion: 'descarga',
                     etiqueta: 'Descarga', registro_id: $r_inm_doc_ubicacion_reg->registros[0]['inm_doc_ubicacion_id'],
-                    seccion: 'inm_doc_ubicacion_escritura', style: 'success');
+                    seccion: 'inm_doc_ubicacion', style: 'success');
                 if (errores::$error) {
                     return $this->retorno_error(mensaje: 'Error al integrar button',
                         data: $button_inm_doc_ubicacion_escritura_descarga, header: $header, ws: $ws);
@@ -1710,7 +1710,7 @@ class controlador_inm_comprador extends _ctl_base {
 
                 $button_inm_doc_ubicacion_escritura_vista_previa = $this->html->button_href(accion: 'vista_previa',
                     etiqueta: 'Vista Previa', registro_id: $r_inm_doc_ubicacion_reg->registros[0]['inm_doc_ubicacion_id'],
-                    seccion: 'inm_doc_ubicacion_escritura', style: 'success');
+                    seccion: 'inm_doc_ubicacion', style: 'success');
                 if (errores::$error) {
                     return $this->retorno_error(mensaje: 'Error al integrar button',
                         data: $button_inm_doc_ubicacion_escritura_vista_previa, header: $header, ws: $ws);
@@ -1720,7 +1720,7 @@ class controlador_inm_comprador extends _ctl_base {
 
                 $button_inm_doc_ubicacion_escritura_descarga_zip = $this->html->button_href(accion: 'descarga_zip',
                     etiqueta: 'Descarga ZIP', registro_id: $r_inm_doc_ubicacion_reg->registros[0]['inm_doc_ubicacion_id'],
-                    seccion: 'inm_doc_ubicacion_escritura', style: 'success');
+                    seccion: 'inm_doc_ubicacion', style: 'success');
                 if (errores::$error) {
                     return $this->retorno_error(mensaje: 'Error al integrar button',
                         data: $button_inm_doc_ubicacion_escritura_descarga_zip, header: $header, ws: $ws);
@@ -1733,7 +1733,7 @@ class controlador_inm_comprador extends _ctl_base {
                     'pestana_actual' => 'pestana4');
                 $button_inm_doc_ubicacion_escritura_elimina_bd = $this->html->button_href(accion: 'elimina_bd',
                     etiqueta: 'Elimina', registro_id: $r_inm_doc_ubicacion_reg->registros[0]['inm_doc_ubicacion_id'],
-                    seccion: 'inm_doc_ubicacion_escritura', style: 'danger', params: $params);
+                    seccion: 'inm_doc_ubicacion', style: 'danger', params: $params);
                 if (errores::$error) {
                     return $this->retorno_error(mensaje: 'Error al integrar button',
                         data: $button_inm_doc_ubicacion_escritura_elimina_bd, header: $header, ws: $ws);
