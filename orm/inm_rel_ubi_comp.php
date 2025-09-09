@@ -16,7 +16,7 @@ class inm_rel_ubi_comp extends _modelo_parent{
         $columnas = array($tabla=>false,'inm_comprador'=>$tabla,'inm_ubicacion'=>$tabla,
             'dp_colonia_postal'=>'inm_ubicacion', 'dp_cp'=>'dp_colonia_postal','dp_colonia'=>'dp_colonia_postal',
             'dp_municipio'=>'dp_cp', 'dp_estado'=>'dp_municipio','dp_pais'=>'dp_estado',
-            'inm_status_ubicacion' => 'inm_ubicacion');
+            'inm_status_ubicacion' => 'inm_ubicacion','inm_tipo_vivienda'=>'inm_ubicacion');
 
         $campos_obligatorios = array('inm_comprador_id','inm_ubicacion_id','precio_operacion');
 

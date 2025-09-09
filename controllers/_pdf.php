@@ -173,23 +173,44 @@ class _pdf{
 
         $keys_ubicacion['inm_ubicacion_razon_social'] = array('x' => 20, 'y' => 107);
         $keys_ubicacion['inm_ubicacion_rfc'] = array('x' => 20, 'y' => 115);
+        $keys_ubicacion['inm_ubicacion_curp'] = array('x' => 120, 'y' => 115);
         $keys_ubicacion['inm_ubicacion_lada_com'] = array('x' => 120, 'y' => 174);
         $keys_ubicacion['inm_ubicacion_numero_com'] = array('x' => 130, 'y' => 174);
-
 
         $keys_ubicacion['inm_ubicacion_calle'] = array('x' => 20, 'y' => 174);
         $keys_ubicacion['inm_ubicacion_numero_exterior'] = array('x' => 20, 'y' => 182);
         $keys_ubicacion['inm_ubicacion_numero_interior'] = array('x' => 120, 'y' => 182);
-        $keys_ubicacion['inm_ubicacion_lote'] = array('x' => 120, 'y' => 214);
-        $keys_ubicacion['inm_ubicacion_manzana'] = array('x' => 20, 'y' => 222);
         $keys_ubicacion['dp_colonia_descripcion'] = array('x' => 20, 'y' => 198);
         $keys_ubicacion['dp_estado_descripcion'] = array('x' => 120, 'y' => 206);
         $keys_ubicacion['dp_municipio_descripcion'] = array('x' => 20, 'y' => 206);
         $keys_ubicacion['dp_cp_descripcion'] = array('x' => 120, 'y' => 198);
 
+        $keys_ubicacion['inm_ubicacion_entre_calle_1'] = array('x' => 20, 'y' => 190);
+        $keys_ubicacion['inm_ubicacion_entre_calle_2'] = array('x' => 120, 'y' => 190);
+        $keys_ubicacion['inm_ubicacion_lote'] = array('x' => 120, 'y' => 214);
+        $keys_ubicacion['inm_ubicacion_nivel'] = array('x' => 142, 'y' => 214);
+        $keys_ubicacion['inm_ubicacion_entrada'] = array('x' => 164, 'y' => 214);
+        $keys_ubicacion['inm_ubicacion_manzana'] = array('x' => 20, 'y' => 222);
+        $keys_ubicacion['inm_ubicacion_supermanzana'] = array('x' => 47, 'y' => 222);
+        $keys_ubicacion['inm_ubicacion_edificio'] = array('x' => 80, 'y' => 222);
+        $keys_ubicacion['inm_ubicacion_condominio'] = array('x' => 20, 'y' => 230);
+
+        $keys_ubicacion['inm_ubicacion_numero_notaria'] = array('x' => 175, 'y' => 225);
+        $keys_ubicacion['inm_ubicacion_nombre_notario'] = array('x' => 120, 'y' => 230);
+        $keys_ubicacion['inm_ubicacion_plaza_notaria'] = array('x' => 20, 'y' => 237);
+        $keys_ubicacion['inm_ubicacion_numero_escritura'] = array('x' => 120, 'y' => 237);
+        $keys_ubicacion['inm_ubicacion_libro'] = array('x' => 142, 'y' => 237);
+        $keys_ubicacion['inm_ubicacion_volumen'] = array('x' => 164, 'y' => 237);
+
         $write = $this->write_data(keys: $keys_ubicacion,row:  $data->imp_rel_ubi_comp);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
+        }
+
+        $pdf_exe = $this->write(valor: 'X', x: $data->imp_rel_ubi_comp['inm_tipo_vivienda_x'],
+            y: $data->imp_rel_ubi_comp['inm_tipo_vivienda_y']);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir domicilio', data: $pdf_exe);
         }
 
         $write = $this->write(valor: ((int)date('d')), x:105,y: 258);
