@@ -139,7 +139,7 @@ class _pdf{
             return $this->error->error(mensaje: 'Error al escribir domicilio', data: $pdf_exe);
         }
 
-        $pdf_exe = $this->write(valor: $data->com_cliente['com_cliente_numero_interior'], x: 163, y: 67);
+        $pdf_exe = $this->write(valor: $data->com_cliente['com_cliente_numero_interior'], x: 160, y: 67);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al escribir domicilio', data: $pdf_exe);
         }
@@ -174,8 +174,18 @@ class _pdf{
         $keys_ubicacion['inm_ubicacion_razon_social'] = array('x' => 20, 'y' => 107);
         $keys_ubicacion['inm_ubicacion_rfc'] = array('x' => 20, 'y' => 115);
         $keys_ubicacion['inm_ubicacion_curp'] = array('x' => 120, 'y' => 115);
+
+        $keys_ubicacion['inm_ubicacion_calle_domicilio'] = array('x' => 20, 'y' => 123);
+        $keys_ubicacion['inm_ubicacion_numero_exterior_domicilio'] = array('x' => 120, 'y' => 123);
+        $keys_ubicacion['inm_ubicacion_numero_interior_domicilio'] = array('x' => 160, 'y' => 123);
+        $keys_ubicacion['dp_cp_domicilio_descripcion'] = array('x' => 20, 'y' => 131);
+        $keys_ubicacion['dp_colonia_domicilio_descripcion'] = array('x' => 120, 'y' => 131);
+        $keys_ubicacion['dp_estado_domicilio_descripcion'] = array('x' => 120, 'y' => 139);
+        $keys_ubicacion['dp_municipio_domicilio_descripcion'] = array('x' => 20, 'y' => 139);
+
+        /*$keys_ubicacion['inm_ubicacion_correo_com'] = array('x' => 20, 'y' => 154);
         $keys_ubicacion['inm_ubicacion_lada_com'] = array('x' => 120, 'y' => 174);
-        $keys_ubicacion['inm_ubicacion_numero_com'] = array('x' => 130, 'y' => 174);
+        $keys_ubicacion['inm_ubicacion_numero_com'] = array('x' => 130, 'y' => 174);*/
 
         $keys_ubicacion['inm_ubicacion_calle'] = array('x' => 20, 'y' => 174);
         $keys_ubicacion['inm_ubicacion_numero_exterior'] = array('x' => 20, 'y' => 182);
@@ -207,10 +217,13 @@ class _pdf{
             return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
         }
 
-        $pdf_exe = $this->write(valor: 'X', x: $data->imp_rel_ubi_comp['inm_tipo_vivienda_x'],
-            y: $data->imp_rel_ubi_comp['inm_tipo_vivienda_y']);
-        if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al escribir domicilio', data: $pdf_exe);
+        if(isset($data->imp_rel_ubi_comp['inm_tipo_vivienda_id']) &&
+            trim($data->imp_rel_ubi_comp['inm_tipo_vivienda_id']) !== '') {
+            $pdf_exe = $this->write(valor: 'X', x: $data->imp_rel_ubi_comp['inm_tipo_vivienda_x'],
+                y: $data->imp_rel_ubi_comp['inm_tipo_vivienda_y']);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al escribir domicilio', data: $pdf_exe);
+            }
         }
 
         $write = $this->write(valor: ((int)date('d')), x:105,y: 258);
