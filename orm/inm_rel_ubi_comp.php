@@ -246,8 +246,43 @@ class inm_rel_ubi_comp extends _modelo_parent{
         }
 
         $filtro['inm_comprador.id'] = $inm_comprador_id;
+        $extra_join['dp_colonia_postal'] = array(
+            'key' => 'id',
+            'enlace' => 'inm_ubicacion',
+            'key_enlace' => 'dp_colonia_postal_domicilio_id',
+            'renombre' => 'dp_colonia_postal_domicilio');
 
-        $r_imp_rel_ubi_comp = $this->filtro_and(filtro:$filtro);
+        $extra_join['dp_cp'] = array(
+            'key' => 'id',
+            'enlace' => 'dp_colonia_postal_domicilio',
+            'key_enlace' => 'dp_cp_id',
+            'renombre' => 'dp_cp_domicilio');
+        
+        $extra_join['dp_colonia'] = array(
+            'key' => 'id',
+            'enlace' => 'dp_colonia_postal_domicilio',
+            'key_enlace' => 'dp_colonia_id',
+            'renombre' => 'dp_colonia_domicilio');
+
+        $extra_join['dp_municipio'] = array(
+            'key' => 'id',
+            'enlace' => 'dp_cp_domicilio',
+            'key_enlace' => 'dp_municipio_id',
+            'renombre' => 'dp_municipio_domicilio');
+        
+        $extra_join['dp_estado'] = array(
+            'key' => 'id',
+            'enlace' => 'dp_municipio_domicilio',
+            'key_enlace' => 'dp_estado_id',
+            'renombre' => 'dp_estado_domicilio');
+        
+        $extra_join['dp_pais'] = array(
+            'key' => 'id',
+            'enlace' => 'dp_estado_domicilio',
+            'key_enlace' => 'dp_pais_id',
+            'renombre' => 'dp_pais_domicilio');
+
+        $r_imp_rel_ubi_comp = $this->filtro_and(extra_join: $extra_join, filtro: $filtro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener r_imp_rel_ubi_comp',data:  $r_imp_rel_ubi_comp);
         }
