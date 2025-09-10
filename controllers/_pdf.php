@@ -337,6 +337,10 @@ class _pdf{
         $keys_ubicacion['inm_ubicacion_lada_com'] = array('x' => 125, 'y' => 133);
         $keys_ubicacion['inm_ubicacion_numero_com'] = array('x' => 138, 'y' => 133);
 
+        $keys_ubicacion['dp_cp_domicilio_descripcion'] = array('x' => 173, 'y' => 125.5);
+        $keys_ubicacion['dp_colonia_domicilio_descripcion'] = array('x' => 107, 'y' => 113.8);
+        $keys_ubicacion['dp_estado_domicilio_descripcion'] = array('x' => 107, 'y' => 125.5);
+        $keys_ubicacion['dp_municipio_domicilio_descripcion'] = array('x' => 107, 'y' => 119.5);
 
         $keys_ubicacion['inm_ubicacion_calle'] = array('x' => 17, 'y' => 158);
         $keys_ubicacion['inm_ubicacion_numero_exterior'] = array('x' => 17, 'y' => 164);
@@ -349,6 +353,16 @@ class _pdf{
         $keys_ubicacion['dp_cp_descripcion'] = array('x' => 173, 'y' => 170);
 
         $write = $this->write_data(keys: $keys_ubicacion,row:  $data->imp_rel_ubi_comp);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
+        }
+
+        $domicilio_ubicacion = $this->domicilio_ubicacion(data: $data);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener domicilio_ubicacion', data: $domicilio_ubicacion);
+        }
+
+        $write = $this->write(valor: $domicilio_ubicacion, x:107,y: 108);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
         }
@@ -740,6 +754,15 @@ class _pdf{
     {
         $domicilio = $data->com_cliente['com_cliente_calle'].' '.$data->com_cliente['com_cliente_numero_exterior'];
         $domicilio .= $data->com_cliente['com_cliente_numero_interior'];
+
+        return $domicilio;
+    }
+
+    private function domicilio_ubicacion(stdClass $data): string
+    {
+        $domicilio = $data->imp_rel_ubi_comp['inm_ubicacion_calle_domicilio'] . ' ';
+        $domicilio .= $data->imp_rel_ubi_comp['inm_ubicacion_numero_exterior_domicilio']. ' ';
+        $domicilio .= $data->imp_rel_ubi_comp['inm_ubicacion_numero_interior_domicilio'];
 
         return $domicilio;
     }
