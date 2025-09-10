@@ -2150,7 +2150,7 @@ class controlador_inm_comprador extends _ctl_base {
             'nombre_empresa_patron','nrp_nep','lada_nep','numero_nep','extension_nep','lada_com','numero_com',
             'cel_com','genero','correo_com','sub_cuenta','monto_final','descuento','puntos', 'telefono_casa',
             'correo_empresa','mts_construidos','mts_terrenos','metros_construidos','metros_terreno', 'valor_avaluo',
-            'numero_escritura','isr');
+            'numero_escritura','isr','con_discapacidad');
         $keys->selects = array();
 
 

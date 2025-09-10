@@ -556,6 +556,7 @@ class _inm_comprador{
         $controler->row_upd->monto_final = 0;
         $controler->row_upd->descuento = 0;
         $controler->row_upd->puntos = 0;
+        $controler->row_upd->con_discapacidad = 'NO';
         return $controler->row_upd;
     }
 
