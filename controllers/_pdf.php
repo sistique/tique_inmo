@@ -344,13 +344,13 @@ class _pdf{
 
         $keys_ubicacion['inm_ubicacion_calle'] = array('x' => 17, 'y' => 158);
         $keys_ubicacion['inm_ubicacion_numero_exterior'] = array('x' => 17, 'y' => 164);
-        $keys_ubicacion['inm_ubicacion_numero_interior'] = array('x' => 31.5, 'y' => 164);
+        $keys_ubicacion['inm_ubicacion_numero_interior'] = array('x' => 32.5, 'y' => 164);
         $keys_ubicacion['inm_ubicacion_lote'] = array('x' => 46, 'y' => 164);
-        $keys_ubicacion['inm_ubicacion_manzana'] = array('x' => 61.5, 'y' => 164);
-        $keys_ubicacion['dp_colonia_descripcion'] = array('x' => 81, 'y' => 164);
-        $keys_ubicacion['dp_estado_descripcion'] = array('x' => 17, 'y' => 170);
-        $keys_ubicacion['dp_municipio_descripcion'] = array('x' => 100, 'y' => 170);
-        $keys_ubicacion['dp_cp_descripcion'] = array('x' => 173, 'y' => 170);
+        $keys_ubicacion['inm_ubicacion_manzana'] = array('x' => 63, 'y' => 164);
+        $keys_ubicacion['dp_colonia_descripcion'] = array('x' => 82, 'y' => 164);
+        $keys_ubicacion['dp_estado_descripcion'] = array('x' => 101, 'y' => 170);
+        $keys_ubicacion['dp_municipio_descripcion'] = array('x' => 17, 'y' => 170);
+        $keys_ubicacion['dp_cp_descripcion'] = array('x' => 174, 'y' => 170);
 
         $write = $this->write_data(keys: $keys_ubicacion,row:  $data->imp_rel_ubi_comp);
         if (errores::$error) {
