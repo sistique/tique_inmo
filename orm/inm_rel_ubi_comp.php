@@ -97,10 +97,10 @@ class inm_rel_ubi_comp extends _modelo_parent{
             }
         }
 
-        $etapas = $this->inserta_etapas(function: __FUNCTION__,registro: $this->registro);
+        /*$etapas = $this->inserta_etapas(function: __FUNCTION__,registro: $this->registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al insertar etapas', data: $etapas);
-        }
+        }*/
 
         return $r_alta_bd;
     }

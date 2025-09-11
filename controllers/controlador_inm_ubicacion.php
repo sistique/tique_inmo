@@ -11,6 +11,8 @@ namespace gamboamartin\inmuebles\controllers;
 use base\controller\init;
 use config\generales;
 use gamboamartin\banco\models\bn_cuenta;
+use gamboamartin\direccion_postal\models\dp_colonia_postal;
+use gamboamartin\direccion_postal\models\dp_cp;
 use gamboamartin\direccion_postal\models\dp_estado;
 use gamboamartin\direccion_postal\models\dp_municipio;
 use gamboamartin\documento\models\doc_tipo_documento;
@@ -1936,7 +1938,7 @@ class controlador_inm_ubicacion extends _ctl_base {
             'cuenta_agua','adeudo_agua', 'adeudo_luz','monto_devolucion','transferencia','monto_transferencia',
             'efectivo','numero_cheque_secundario', 'monto_cheque_secundario','numero_credito',
             'correo_mi_cuenta_infonavit','password_mi_cuenta_infonavit', 'monto_emision','monto_transferencia_emision',
-            'efectivo_emision');
+            'efectivo_emision','numero_exterior_domicilio','numero_interior_domicilio', 'calle_domicilio');
         $keys->selects = array();
 
 
@@ -3274,16 +3276,108 @@ class controlador_inm_ubicacion extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al generar headers', data: $headers, header: $header, ws: $ws);
         }
 
-        $data_row = $this->modelo->registro(registro_id: $this->registro_id,retorno_obj: true);
+        $filtro_ubi['inm_ubicacion.id'] = $this->registro_id;
+
+        $extra_join['dp_colonia_postal'] = array(
+            'key' => 'id',
+            'enlace' => 'inm_ubicacion',
+            'key_enlace' => 'dp_colonia_postal_domicilio_id',
+            'renombre' => 'dp_colonia_postal_domicilio');
+
+        $extra_join['dp_cp'] = array(
+            'key' => 'id',
+            'enlace' => 'dp_colonia_postal_domicilio',
+            'key_enlace' => 'dp_cp_id',
+            'renombre' => 'dp_cp_domicilio');
+
+        $extra_join['dp_colonia'] = array(
+            'key' => 'id',
+            'enlace' => 'dp_colonia_postal_domicilio',
+            'key_enlace' => 'dp_colonia_id',
+            'renombre' => 'dp_colonia_domicilio');
+
+        $extra_join['dp_municipio'] = array(
+            'key' => 'id',
+            'enlace' => 'dp_cp_domicilio',
+            'key_enlace' => 'dp_municipio_id',
+            'renombre' => 'dp_municipio_domicilio');
+
+        $extra_join['dp_estado'] = array(
+            'key' => 'id',
+            'enlace' => 'dp_municipio_domicilio',
+            'key_enlace' => 'dp_estado_id',
+            'renombre' => 'dp_estado_domicilio');
+
+        $extra_join['dp_pais'] = array(
+            'key' => 'id',
+            'enlace' => 'dp_estado_domicilio',
+            'key_enlace' => 'dp_pais_id',
+            'renombre' => 'dp_pais_domicilio');
+
+        $data_row = $this->modelo->filtro_and(extra_join: $extra_join, filtro: $filtro_ubi,);
         if(errores::$error){
             return $this->retorno_error(
                 mensaje: 'Error al obtener registro',data:  $data_row,header: $header,ws: $ws);
         }
 
+        $data_row = $data_row->registros_obj[0];
+
         $keys_selects = (new _ubicacion())->keys_selects_base(controler: $this,data_row:  $data_row, disableds: array());
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener keys_selects', data:  $keys_selects, header: $header,ws:  $ws);
         }
+
+        $modelo = new dp_estado(link: $this->link);
+        $columns_ds = array('dp_estado_descripcion');
+        $dp_estado_domicilio_id = $this->html->select_catalogo(cols: 6, con_registros: true,
+            id_selected: $data_row->dp_estado_domicilio_id, modelo: $modelo,
+            columns_ds: $columns_ds, id_css: 'dp_estado_domicilio_id',
+            label: 'Estado Domicilio', name: 'dp_estado_domicilio_id]');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $dp_estado_domicilio_id,header: $header,
+                ws:$ws);
+        }
+
+        $this->inputs->dp_estado_domicilio_id = $dp_estado_domicilio_id;
+        
+        $modelo = new dp_municipio(link: $this->link);
+        $columns_ds = array('dp_municipio_descripcion');
+        $dp_municipio_domicilio_id = $this->html->select_catalogo(cols: 6, con_registros: true,
+            id_selected: $data_row->dp_municipio_domicilio_id, modelo: $modelo,
+            columns_ds: $columns_ds, id_css: 'dp_municipio_domicilio_id',
+            label: 'Municipio Domicilio', name: 'dp_municipio_domicilio_id]');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $dp_municipio_domicilio_id,header: $header,
+                ws:$ws);
+        }
+
+        $this->inputs->dp_municipio_domicilio_id = $dp_municipio_domicilio_id;
+                
+        $modelo = new dp_cp(link: $this->link);
+        $columns_ds = array('dp_cp_descripcion');
+        $dp_cp_domicilio_id = $this->html->select_catalogo(cols: 6, con_registros: true,
+            id_selected: $data_row->dp_cp_domicilio_id, modelo: $modelo,
+            columns_ds: $columns_ds, id_css: 'dp_cp_domicilio_id',
+            label: 'CP Domicilio', name: 'dp_cp_domicilio_id]');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $dp_cp_domicilio_id,header: $header,
+                ws:$ws);
+        }
+
+        $this->inputs->dp_cp_domicilio_id = $dp_cp_domicilio_id;
+        
+        $modelo = new dp_colonia_postal(link: $this->link);
+        $columns_ds = array('dp_colonia_descripcion');
+        $dp_colonia_postal_domicilio_id = $this->html->select_catalogo(cols: 6, con_registros: true,
+            id_selected: $data_row->dp_colonia_postal_domicilio_id, modelo: $modelo,
+            columns_ds: $columns_ds, id_css: 'dp_colonia_postal_domicilio_id',
+            label: 'Colonia Domicilio', name: 'dp_colonia_postal_domicilio_id]');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $dp_colonia_postal_domicilio_id,header: $header,
+                ws:$ws);
+        }
+
+        $this->inputs->dp_colonia_postal_domicilio_id = $dp_colonia_postal_domicilio_id;
 
         $conyuge = $this->inputs_conyuge(header: $header, controler: $this, ws: $ws);
         if (errores::$error) {
@@ -3461,6 +3555,24 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $keys_selects = (new init())->key_select_txt(cols: 12, key: 'rfc',
             keys_selects: $keys_selects, place_holder: 'RFC', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 12, key: 'calle_domicilio',
+            keys_selects: $keys_selects, place_holder: 'Calle Domicilio', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+        
+        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'numero_exterior_domicilio',
+            keys_selects: $keys_selects, place_holder: 'Numero Exterior Domicilio', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }     
+        
+        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'numero_interior_domicilio',
+            keys_selects: $keys_selects, place_holder: 'Numero Interior Domicilio', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
