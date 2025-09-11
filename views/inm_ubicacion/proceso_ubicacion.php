@@ -950,7 +950,7 @@
     </div>
 </dialog>
 
-<div id="myModal" class="modal">
+<div id="myModalImg" class="modal">
     <div class="modal-content">
         <span class="close-button">&times;</span>
         <img class="imagen_modal">

@@ -2837,6 +2837,13 @@ class controlador_inm_ubicacion extends _ctl_base {
 
     final public function fotografias(bool $header, bool $ws = false): array|stdClass
     {
+        if(isset($_GET['accion']) && $_GET['accion'] == 'fotografias') {
+            $template = $this->modifica(header: false);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al integrar base', data: $template, header: $header, ws: $ws);
+            }
+        }
+
         $filtro['inm_conf_docs_ubicacion.es_foto'] = 'activo';
         $inm_conf_docs_ubicacion = (new inm_conf_docs_ubicacion(link: $this->link))->filtro_and(
             columnas: ['doc_tipo_documento_id','doc_tipo_documento_descripcion'], filtro: $filtro);
