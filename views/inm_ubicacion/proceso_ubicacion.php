@@ -56,6 +56,13 @@
                                             <?php echo $controlador->inputs->nss; ?>
                                             <?php echo $controlador->inputs->curp; ?>
                                             <?php echo $controlador->inputs->rfc; ?>
+                                            <?php echo $controlador->inputs->dp_estado_domicilio_id; ?>
+                                            <?php echo $controlador->inputs->dp_municipio_domicilio_id; ?>
+                                            <?php echo $controlador->inputs->dp_cp_domicilio_id; ?>
+                                            <?php echo $controlador->inputs->dp_colonia_postal_domicilio_id; ?>
+                                            <?php echo $controlador->inputs->calle_domicilio; ?>
+                                            <?php echo $controlador->inputs->numero_exterior_domicilio; ?>
+                                            <?php echo $controlador->inputs->numero_interior_domicilio; ?>
                                             <?php //cho $controlador->inputs->observaciones; ?>
                                             <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
 
@@ -310,6 +317,13 @@
                                             <?php echo $controlador->inputs->nss; ?>
                                             <?php echo $controlador->inputs->curp; ?>
                                             <?php echo $controlador->inputs->rfc; ?>
+                                            <?php echo $controlador->inputs->dp_estado_domicilio_id; ?>
+                                            <?php echo $controlador->inputs->dp_municipio_domicilio_id; ?>
+                                            <?php echo $controlador->inputs->dp_cp_domicilio_id; ?>
+                                            <?php echo $controlador->inputs->dp_colonia_postal_domicilio_id; ?>
+                                            <?php echo $controlador->inputs->calle_domicilio; ?>
+                                            <?php echo $controlador->inputs->numero_exterior_domicilio; ?>
+                                            <?php echo $controlador->inputs->numero_interior_domicilio; ?>
                                             <?php //cho $controlador->inputs->observaciones; ?>
                                             <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
 
