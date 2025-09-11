@@ -1938,7 +1938,9 @@ class controlador_inm_ubicacion extends _ctl_base {
             'cuenta_agua','adeudo_agua', 'adeudo_luz','monto_devolucion','transferencia','monto_transferencia',
             'efectivo','numero_cheque_secundario', 'monto_cheque_secundario','numero_credito',
             'correo_mi_cuenta_infonavit','password_mi_cuenta_infonavit', 'monto_emision','monto_transferencia_emision',
-            'efectivo_emision','numero_exterior_domicilio','numero_interior_domicilio', 'calle_domicilio');
+            'efectivo_emision','numero_exterior_domicilio','numero_interior_domicilio', 'calle_domicilio',
+            'numero_notaria','nombre_notario','plaza_notaria','numero_escritura','libro','volumen','entre_calle_1',
+            'entre_calle_2','entrada','supermanzana','edificio','condominio','etapa');
         $keys->selects = array();
 
 
@@ -1962,6 +1964,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         $init_data['inm_tipo_cheque'] = "gamboamartin\\inmuebles";
         $init_data['inm_tipo_gasto'] = "gamboamartin\\inmuebles";
         $init_data['inm_factura_compra'] = "gamboamartin\\inmuebles";
+        $init_data['inm_tipo_vivienda'] = "gamboamartin\\inmuebles";
 
         $campos_view = $this->campos_view_base(init_data: $init_data,keys:  $keys);
 
@@ -3594,6 +3597,84 @@ class controlador_inm_ubicacion extends _ctl_base {
         
         $keys_selects = (new init())->key_select_txt(cols: 6, key: 'numero_interior_domicilio',
             keys_selects: $keys_selects, place_holder: 'Numero Interior Domicilio', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'nombre_notario',
+            keys_selects: $keys_selects, place_holder: 'Nombre Notario', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'numero_notaria',
+            keys_selects: $keys_selects, place_holder: 'Numero Notaria', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'plaza_notaria',
+            keys_selects: $keys_selects, place_holder: 'Plaza Notaria', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'numero_escritura',
+            keys_selects: $keys_selects, place_holder: 'Numero Escritura', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'libro',
+            keys_selects: $keys_selects, place_holder: 'Libro', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 12, key: 'volumen',
+            keys_selects: $keys_selects, place_holder: 'Volumen', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'entre_calle_1',
+            keys_selects: $keys_selects, place_holder: 'Entre Calle 1', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'entre_calle_2',
+            keys_selects: $keys_selects, place_holder: 'Entre Calle 2', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'entrada',
+            keys_selects: $keys_selects, place_holder: 'Entrada', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'supermanzana',
+            keys_selects: $keys_selects, place_holder: 'Supermanzana', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'edificio',
+            keys_selects: $keys_selects, place_holder: 'Edificio', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'condominio',
+            keys_selects: $keys_selects, place_holder: 'Condominio', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'etapa',
+            keys_selects: $keys_selects, place_holder: 'Etapa', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }

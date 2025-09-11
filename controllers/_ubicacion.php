@@ -591,15 +591,24 @@ class _ubicacion{
         $keys_selects['com_agente_id']->required = false;
 
         $columns_ds = array('inm_estado_vivienda_descripcion');
-        $keys_selects = $controler->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_estado_vivienda_id',
+        $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_estado_vivienda_id',
             keys_selects: $keys_selects, id_selected: $data_row->inm_estado_vivienda_id, label: 'Estado Vivienda', columns_ds : $columns_ds);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
         $keys_selects['inm_estado_vivienda_id']->required = false;
+        
+        $columns_ds = array('inm_tipo_vivienda_descripcion');
+        $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_tipo_vivienda_id',
+            keys_selects: $keys_selects, id_selected: $data_row->inm_tipo_vivienda_id, label: 'Tipo Vivienda',
+            columns_ds : $columns_ds);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+        $keys_selects['inm_tipo_vivienda_id']->required = false;
 
         $columns_ds = array('inm_prototipo_descripcion');
-        $keys_selects = $controler->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_prototipo_id',
+        $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_prototipo_id',
             keys_selects: $keys_selects, id_selected: $data_row->inm_prototipo_id, label: 'Prototipo', columns_ds : $columns_ds);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
@@ -607,7 +616,7 @@ class _ubicacion{
         $keys_selects['inm_prototipo_id']->required = false;
 
         $columns_ds = array('inm_complemento_descripcion');
-        $keys_selects = $controler->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_complemento_id',
+        $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_complemento_id',
             keys_selects: $keys_selects, id_selected: $data_row->inm_complemento_id, label: 'Complemento',
             columns_ds : $columns_ds);
         if(errores::$error){
