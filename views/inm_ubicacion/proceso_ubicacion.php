@@ -395,7 +395,7 @@
                                             <?php echo $controlador->inputs->numero_escritura; ?>
                                             <?php echo $controlador->inputs->libro; ?>
                                             <?php echo $controlador->inputs->volumen; ?>
-                                            
+
                                             <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
                                         </div>
 
