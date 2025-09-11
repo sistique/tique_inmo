@@ -324,7 +324,7 @@ class com_sucursal extends modelo
      * @return array
      */
     final public function maqueta_data(
-        string $calle, string $codigo, string $colonia, int $cp, string $nombre_contacto, int $com_cliente_id,
+        string $calle, string $codigo, string $colonia, string $cp, string $nombre_contacto, int $com_cliente_id,
         string $telefono, int $dp_municipio_id, string $numero_exterior, string $numero_interior,
         bool $es_empleado = false): array
     {
