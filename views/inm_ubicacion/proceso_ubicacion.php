@@ -88,16 +88,34 @@
                                             <?php echo $controlador->inputs->calle; ?>
                                             <?php echo $controlador->inputs->numero_exterior; ?>
                                             <?php echo $controlador->inputs->numero_interior; ?>
+                                            <?php echo $controlador->inputs->entre_calle_1; ?>
+                                            <?php echo $controlador->inputs->entre_calle_2; ?>
 
+                                            <?php echo $controlador->inputs->inm_tipo_vivienda_id; ?>
                                             <?php echo $controlador->inputs->inm_estado_vivienda_id; ?>
                                             <?php echo $controlador->inputs->inm_prototipo_id; ?>
                                             <?php echo $controlador->inputs->inm_complemento_id; ?>
-                                            <?php echo $controlador->inputs->manzana; ?>
+
                                             <?php echo $controlador->inputs->lote; ?>
                                             <?php echo $controlador->inputs->nivel; ?>
+                                            <?php echo $controlador->inputs->entrada; ?>
+
+                                            <?php echo $controlador->inputs->manzana; ?>
+                                            <?php echo $controlador->inputs->supermanzana; ?>
+                                            <?php echo $controlador->inputs->edificio; ?>
+                                            <?php echo $controlador->inputs->condominio; ?>
+                                            <?php echo $controlador->inputs->etapa; ?>
+
                                             <?php echo $controlador->inputs->recamaras; ?>
                                             <?php echo $controlador->inputs->metros_terreno; ?>
                                             <?php echo $controlador->inputs->metros_construccion; ?>
+
+                                            <?php echo $controlador->inputs->numero_notaria; ?>
+                                            <?php echo $controlador->inputs->nombre_notario; ?>
+                                            <?php echo $controlador->inputs->plaza_notaria; ?>
+                                            <?php echo $controlador->inputs->numero_escritura; ?>
+                                            <?php echo $controlador->inputs->libro; ?>
+                                            <?php echo $controlador->inputs->volumen; ?>
 
                                             <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
                                         </div>
@@ -349,17 +367,35 @@
                                             <?php echo $controlador->inputs->calle; ?>
                                             <?php echo $controlador->inputs->numero_exterior; ?>
                                             <?php echo $controlador->inputs->numero_interior; ?>
+                                            <?php echo $controlador->inputs->entre_calle_1; ?>
+                                            <?php echo $controlador->inputs->entre_calle_2; ?>
 
+                                            <?php echo $controlador->inputs->inm_tipo_vivienda_id; ?>
                                             <?php echo $controlador->inputs->inm_estado_vivienda_id; ?>
                                             <?php echo $controlador->inputs->inm_prototipo_id; ?>
                                             <?php echo $controlador->inputs->inm_complemento_id; ?>
-                                            <?php echo $controlador->inputs->manzana; ?>
+
                                             <?php echo $controlador->inputs->lote; ?>
                                             <?php echo $controlador->inputs->nivel; ?>
+                                            <?php echo $controlador->inputs->entrada; ?>
+
+                                            <?php echo $controlador->inputs->manzana; ?>
+                                            <?php echo $controlador->inputs->supermanzana; ?>
+                                            <?php echo $controlador->inputs->edificio; ?>
+                                            <?php echo $controlador->inputs->condominio; ?>
+                                            <?php echo $controlador->inputs->etapa; ?>
+
                                             <?php echo $controlador->inputs->recamaras; ?>
                                             <?php echo $controlador->inputs->metros_terreno; ?>
                                             <?php echo $controlador->inputs->metros_construccion; ?>
 
+                                            <?php echo $controlador->inputs->numero_notaria; ?>
+                                            <?php echo $controlador->inputs->nombre_notario; ?>
+                                            <?php echo $controlador->inputs->plaza_notaria; ?>
+                                            <?php echo $controlador->inputs->numero_escritura; ?>
+                                            <?php echo $controlador->inputs->libro; ?>
+                                            <?php echo $controlador->inputs->volumen; ?>
+                                            
                                             <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
                                         </div>
 
