@@ -362,6 +362,8 @@ class _inm_comprador{
         }
 
         $filtro['inm_conf_docs_comprador.es_foto'] = 'inactivo';
+        $filtro['inm_conf_docs_comprador.con_conyuge'] = 'inactivo';
+        $filtro['inm_conf_docs_comprador.con_co_acreditado'] = 'inactivo';
         $inm_conf_docs_prospecto = (new inm_conf_docs_comprador(link: $controler->link))->filtro_and(
             columnas: ['doc_tipo_documento_id'],filtro: $filtro);
         if(errores::$error){
