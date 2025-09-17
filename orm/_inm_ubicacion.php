@@ -332,6 +332,8 @@ class _inm_ubicacion{
         }
 
         $filtro['inm_conf_docs_ubicacion.es_foto'] = 'inactivo';
+        $filtro['inm_conf_docs_ubicacion.con_conyuge'] = 'inactivo';
+        $filtro['inm_conf_docs_ubicacion.con_co_acreditado'] = 'inactivo';
         $inm_conf_docs_prospecto = (new inm_conf_docs_ubicacion(link: $controler->link))->filtro_and(
             columnas: ['doc_tipo_documento_id'],filtro: $filtro);
         if(errores::$error){
@@ -341,6 +343,50 @@ class _inm_ubicacion{
         $doc_ids = array_map(function($registro) {
             return $registro['doc_tipo_documento_id'];
         }, $inm_conf_docs_prospecto->registros);
+
+        $existe_conyuge = (new inm_rel_conyuge_ubicacion(link: $controler->link))->existe(
+            filtro: array('inm_ubicacion.id' => $controler->registro_id));
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener inm_conf_docs_prospecto',data:  $existe_conyuge);
+        }
+
+        if($existe_conyuge){
+            $filtro_conyuge['inm_conf_docs_ubicacion.con_conyuge'] = 'activo';
+            $inm_conf_docs_conyuge = (new inm_conf_docs_ubicacion(link: $controler->link))->filtro_and(
+                columnas: ['doc_tipo_documento_id'],filtro: $filtro_conyuge);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al obtener inm_conf_docs_co_acred',
+                    data:  $inm_conf_docs_conyuge);
+            }
+
+            $doc_conyuge_ids = array_map(function($registro) {
+                return $registro['doc_tipo_documento_id'];
+            }, $inm_conf_docs_conyuge->registros);
+
+            $doc_ids = array_merge($doc_ids, $doc_conyuge_ids);
+        }
+
+        $existe_co_acred = (new inm_rel_co_acred_ubi(link: $controler->link))->existe(
+            filtro: array('inm_ubicacion.id' => $controler->registro_id));
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener inm_conf_docs_prospecto',data:  $existe_co_acred);
+        }
+
+        if($existe_co_acred){
+            $filtro_co_acred['inm_conf_docs_ubicacion.con_co_acreditado'] = 'activo';
+            $inm_conf_docs_co_acred = (new inm_conf_docs_ubicacion(link: $controler->link))->filtro_and(
+                columnas: ['doc_tipo_documento_id'],filtro: $filtro_co_acred);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al obtener inm_conf_docs_co_acred',
+                    data:  $inm_conf_docs_co_acred);
+            }
+
+            $doc_co_acred_ids = array_map(function($registro) {
+                return $registro['doc_tipo_documento_id'];
+            }, $inm_conf_docs_co_acred->registros);
+
+            $doc_ids = array_merge($doc_ids, $doc_co_acred_ids);
+        }
 
         if (count($doc_ids) <= 0) {
             return array();
