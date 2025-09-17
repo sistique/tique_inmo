@@ -209,6 +209,8 @@ class controlador_inm_comprador extends _ctl_base {
 
         $this->header_frontend = new stdClass();
 
+        $this->lista_get_data = true;
+
         $link_exportar_xls = $this->obj_link->link_con_id(accion: 'exportar_xls',link: $this->link,
             registro_id:  $this->registro_id,seccion:  $this->tabla);
         if (errores::$error) {
