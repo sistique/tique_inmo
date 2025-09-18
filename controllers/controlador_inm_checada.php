@@ -216,7 +216,8 @@ class controlador_inm_checada extends _ctl_formato {
         $columns["inm_tipo_checada_descripcion"]["titulo"] = "Tipo Checada";
         $columns["inm_status_asistencia_descripcion"]["titulo"] = "Status Asistencia";
 
-        $filtro = array("inm_checada.id","inm_empleado.razon_social",'inm_tipo_checada.descripcion');
+        $filtro = array("inm_checada.id","inm_empleado.razon_social",'inm_tipo_checada.descripcion',
+            'inm_status_asistencia.descripcion');
 
         $datatables = new stdClass();
         $datatables->columns = $columns;
