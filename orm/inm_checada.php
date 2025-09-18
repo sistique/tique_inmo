@@ -389,7 +389,7 @@ class inm_checada extends _modelo_parent{
      * @throws \DateMalformedStringException
      */
     function generar_asistencias($inm_empleado_id, $fecha, $fecha_inicio, $fecha_fin, $hora_entrada = "09:00:00",
-                                 $porc_inasistencias = 3, $porc_retardos = 10)
+                                 $porc_inasistencias = 2, $porc_retardos = 10)
     {
         $inicio = new DateTime($fecha_inicio);
         $fin = new DateTime($fecha_fin);
@@ -445,9 +445,12 @@ class inm_checada extends _modelo_parent{
         $maxRetardos = max(1, ceil($diasTotal * $porc_retardos / 100));
 
         if ($faltasExistentes < $maxFaltas && mt_rand(1, 100) <= $porc_inasistencias_real) {
-            $hora = date('H:i:s');
+            $min = mt_rand(45, 60);
+            $seg = mt_rand(1, 59);
+            $hora = (new DateTime($hora_entrada))->modify("+{$min} minutes")
+                ->modify("+{$seg} seconds")->format('H:i:s');
         } else if ($retardosExistentes < $maxRetardos && mt_rand(1, 100) <= $porc_retardos_real) {
-            $min = mt_rand(15, 60);
+            $min = mt_rand(15, 45);
             $seg = mt_rand(1, 59);
             $hora = (new DateTime($hora_entrada))->modify("+{$min} minutes")
                 ->modify("+{$seg} seconds")->format('H:i:s');

@@ -32,6 +32,8 @@ class controlador_inm_checada extends _ctl_formato {
             die('Error');
         }
 
+        $this->lista_get_data = true;
+
         parent::__construct(html:$html_, link: $link,modelo:  $modelo, obj_link: $obj_link, datatables: $datatables,
             paths_conf: $paths_conf);
     }
