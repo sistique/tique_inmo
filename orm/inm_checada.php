@@ -276,10 +276,15 @@ class inm_checada extends _modelo_parent{
                         return $this->error->error(mensaje: 'Error al obtener status asistencia INASISTENCIA', data: $status);
                     }
 
+                    $min = mt_rand(45, 60);
+                    $seg = mt_rand(1, 59);
+                    $hora = (new DateTime('09:00:00'))->modify("+{$min} minutes")
+                        ->modify("+{$seg} seconds")->format('H:i:s');
+
                     $registro = [
                         'inm_empleado_id' => $registro_empleado['inm_empleado_id'],
                         'fecha' => $fecha,
-                        'hora' => date('H:i:s'),
+                        'hora' => $hora,
                         'inm_status_asistencia_id' => $status->registros[0]['inm_status_asistencia_id'],
                         'inm_tipo_checada_id' => $tipo->registros[0]['inm_tipo_checada_id'],
                         'observaciones' => 'Checada generada automáticamente por inasistencia'
@@ -389,7 +394,7 @@ class inm_checada extends _modelo_parent{
      * @throws \DateMalformedStringException
      */
     function generar_asistencias($inm_empleado_id, $fecha, $fecha_inicio, $fecha_fin, $hora_entrada = "09:00:00",
-                                 $porc_inasistencias = 2, $porc_retardos = 10)
+                                 $porc_inasistencias = 2, $porc_retardos = 5)
     {
         $inicio = new DateTime($fecha_inicio);
         $fin = new DateTime($fecha_fin);
