@@ -31,6 +31,7 @@ use gamboamartin\inmuebles\models\inm_factura_compra;
 use gamboamartin\inmuebles\models\inm_nacionalidad;
 use gamboamartin\inmuebles\models\inm_ocupacion;
 use gamboamartin\inmuebles\models\inm_poder;
+use gamboamartin\inmuebles\models\inm_rel_cheque_ubicacion;
 use gamboamartin\inmuebles\models\inm_rel_doc_cheque;
 use gamboamartin\inmuebles\models\inm_rel_doc_transferencia;
 use gamboamartin\inmuebles\models\inm_status_ubicacion;
@@ -1073,7 +1074,7 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $filtro['inm_ubicacion.id'] = $this->registro_id;
         $order = array('inm_cheque.fecha_alta'=>'DESC');
-        $r_inm_cheque = (new inm_cheque(link: $this->link))->filtro_and(filtro: $filtro,order: $order);
+        $r_inm_cheque = (new inm_rel_cheque_ubicacion(link: $this->link))->filtro_and(filtro: $filtro,order: $order);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener etapas', data: $r_inm_cheque,header: $header,
                 ws:  $ws);
@@ -1502,7 +1503,7 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $filtro['inm_ubicacion.id'] = $this->registro_id;
         $order = array('inm_cheque.fecha_alta'=>'DESC');
-        $r_inm_cheque = (new inm_cheque(link: $this->link))->filtro_and(filtro: $filtro,order: $order);
+        $r_inm_cheque = (new inm_rel_cheque_ubicacion(link: $this->link))->filtro_and(filtro: $filtro,order: $order);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener etapas', data: $r_inm_cheque,header: $header,
                 ws:  $ws);
@@ -3927,14 +3928,13 @@ class controlador_inm_ubicacion extends _ctl_base {
             $registro['monto'] = $_POST['monto'];
             $registro['nombre_beneficiario'] = $_POST['nombre_beneficiario'];
             $registro['inm_tipo_cheque_id'] = $_POST['inm_tipo_cheque_id'];
-            //$registro['bn_cuenta_id'] = $_POST['bn_cuenta_id'];
             $registro['numero_cheque'] = '';
 
             if(isset($_POST['numero_cheque'])){
                 $registro['numero_cheque'] = $_POST['numero_cheque'];
             }
 
-            $r_inm_cheque = (new inm_cheque(link: $this->link))->alta_registro(registro: $registro);
+            $r_inm_cheque = (new inm_rel_cheque_ubicacion(link: $this->link))->alta_registro(registro: $registro);
             if (errores::$error) {
                 $this->link->rollBack();
                 return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_cheque,
