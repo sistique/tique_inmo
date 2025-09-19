@@ -42,7 +42,7 @@ class inm_rel_cheque_ubicacion extends _modelo_parent{
         if(!isset($this->registro['inm_cheque_id'])) {
             $registro_cheque = array();
 
-            $registro_cheque['inm_ubicacion_id'] = $this->registro['inm_ubicacion_id'];
+            //$registro_cheque['inm_ubicacion_id'] = $this->registro['inm_ubicacion_id'];
             $registro_cheque['monto'] = $this->registro['monto'];
             $registro_cheque['nombre_beneficiario'] = $this->registro['nombre_beneficiario'];
             $registro_cheque['inm_tipo_cheque_id'] = $this->registro['inm_tipo_cheque_id'];
@@ -58,6 +58,33 @@ class inm_rel_cheque_ubicacion extends _modelo_parent{
             }
 
             $this->registro['inm_cheque_id'] = $r_inm_cheque->registro_id;
+
+            $registro = array();
+            $registro['inm_ubicacion_id'] = $this->registro['inm_ubicacion_id'];
+            $registro['monto'] = $this->registro['monto'];
+            $registro['fecha'] = date('Y-m-d');
+            $registro['referencia'] = $this->registro['nombre_beneficiario'];
+
+            if(trim($this->registro['inm_tipo_cheque_id']) === "1"){
+                $registro['inm_concepto_id'] = 19;
+            }else if(trim($this->registro['inm_tipo_cheque_id']) === "2"){
+                $registro['inm_concepto_id'] = 36;
+            }else if(trim($this->registro['inm_tipo_cheque_id']) === "3"){
+                $registro['inm_concepto_id'] = 19;
+            }
+
+            $r_inm_costo = (new inm_costo(link: $this->link))->alta_registro(registro: $registro);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al insertar prospecto',data:  $r_inm_costo);
+            }
+
+            $registro = array();
+            $registro['inm_costo_id'] = $r_inm_costo->registro_id;
+            $registro['inm_cheque_id'] = $r_inm_cheque->registro_id;
+            $r_rel_costo_cheque = (new inm_rel_costo_cheque(link: $this->link))->alta_registro(registro: $registro);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al insertar prospecto',data:  $r_rel_costo_cheque);
+            }
 
             unset($this->registro['monto'], $this->registro['nombre_beneficiario'],
                 $this->registro['inm_tipo_cheque_id'], $this->registro['numero_cheque']);

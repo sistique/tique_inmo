@@ -603,7 +603,7 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $filtro_che['inm_ubicacion.id'] = $this->registro_id;
         $filtro_che['inm_tipo_cheque.id'] = 1;
-        $r_cheque = (new inm_cheque(link: $this->link))->filtro_and(filtro: $filtro_che);
+        $r_cheque = (new inm_rel_cheque_ubicacion(link: $this->link))->filtro_and(filtro: $filtro_che);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $r_cheque,
                 header: $header, ws: $ws);
@@ -642,7 +642,7 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $filtro_che['inm_ubicacion.id'] = $this->registro_id;
         $filtro_che['inm_tipo_cheque.id'] = 2;
-        $r_cheque = (new inm_cheque(link: $this->link))->filtro_and(filtro: $filtro_che);
+        $r_cheque = (new inm_rel_cheque_ubicacion(link: $this->link))->filtro_and(filtro: $filtro_che);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $r_cheque,
                 header: $header, ws: $ws);
@@ -662,7 +662,7 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $filtro_che['inm_ubicacion.id'] = $this->registro_id;
         $filtro_che['inm_tipo_cheque.id'] = 3;
-        $r_cheque = (new inm_cheque(link: $this->link))->filtro_and(filtro: $filtro_che);
+        $r_cheque = (new inm_rel_cheque_ubicacion(link: $this->link))->filtro_and(filtro: $filtro_che);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $r_cheque,
                 header: $header, ws: $ws);
