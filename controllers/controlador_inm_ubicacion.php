@@ -34,6 +34,7 @@ use gamboamartin\inmuebles\models\inm_poder;
 use gamboamartin\inmuebles\models\inm_rel_cheque_ubicacion;
 use gamboamartin\inmuebles\models\inm_rel_doc_cheque;
 use gamboamartin\inmuebles\models\inm_rel_doc_transferencia;
+use gamboamartin\inmuebles\models\inm_rel_efectivo_ubicacion;
 use gamboamartin\inmuebles\models\inm_rel_transferencia_ubicacion;
 use gamboamartin\inmuebles\models\inm_status_ubicacion;
 use gamboamartin\inmuebles\models\inm_tipo_cheque;
@@ -1273,7 +1274,7 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $filtro['inm_ubicacion.id'] = $this->registro_id;
         $order = array('inm_efectivo.fecha_alta'=>'DESC');
-        $r_inm_efectivo = (new inm_efectivo(link: $this->link))->filtro_and(filtro: $filtro,order: $order);
+        $r_inm_efectivo = (new inm_rel_efectivo_ubicacion(link: $this->link))->filtro_and(filtro: $filtro,order: $order);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener etapas', data: $r_inm_efectivo,header: $header,
                 ws:  $ws);
@@ -1759,7 +1760,7 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $filtro['inm_ubicacion.id'] = $this->registro_id;
         $order = array('inm_efectivo.fecha_alta'=>'DESC');
-        $r_inm_efectivo = (new inm_efectivo(link: $this->link))->filtro_and(filtro: $filtro,order: $order);
+        $r_inm_efectivo = (new inm_rel_efectivo_ubicacion(link: $this->link))->filtro_and(filtro: $filtro,order: $order);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener etapas', data: $r_inm_efectivo,header: $header,
                 ws:  $ws);
@@ -4044,7 +4045,7 @@ class controlador_inm_ubicacion extends _ctl_base {
             $registro['inm_ubicacion_id'] = $this->registro_id;
             $registro['monto'] = $_POST['efectivo'];
             $registro['nombre_beneficiario'] = $_POST['nombre_beneficiario'];
-            $r_inm_efectivo = (new inm_efectivo(link: $this->link))->alta_registro(
+            $r_inm_efectivo = (new inm_rel_efectivo_ubicacion(link: $this->link))->alta_registro(
                 registro: $registro);
             if (errores::$error) {
                 $this->link->rollBack();
