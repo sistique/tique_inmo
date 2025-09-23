@@ -39,6 +39,7 @@ class inm_rel_cheque_comprador extends _modelo_parent{
             $registro_cheque['monto'] = $this->registro['monto'];
             $registro_cheque['nombre_beneficiario'] = $this->registro['nombre_beneficiario'];
             $registro_cheque['inm_tipo_cheque_id'] = $this->registro['inm_tipo_cheque_id'];
+            $registro_cheque['bn_cuenta_id'] = $this->registro['bn_cuenta_id'];
             $registro_cheque['numero_cheque'] = '';
 
             if (isset($this->registro['numero_cheque'])) {

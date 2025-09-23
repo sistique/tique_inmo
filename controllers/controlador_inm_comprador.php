@@ -36,6 +36,7 @@ use gamboamartin\inmuebles\models\inm_referencia;
 use gamboamartin\inmuebles\models\inm_rel_beneficiario_comprador;
 use gamboamartin\inmuebles\models\inm_rel_cheque_comprador;
 use gamboamartin\inmuebles\models\inm_rel_doc_cheque;
+use gamboamartin\inmuebles\models\inm_rel_doc_transferencia;
 use gamboamartin\inmuebles\models\inm_rel_efectivo_comprador;
 use gamboamartin\inmuebles\models\inm_rel_referencia_comprador;
 use gamboamartin\inmuebles\models\inm_rel_referencia_prospecto;
@@ -1633,6 +1634,101 @@ class controlador_inm_comprador extends _ctl_base {
 
         $this->cheques = $registros;
 
+        $filtro['inm_comprador.id'] = $this->registro_id;
+        $order = array('inm_transferencia.fecha_alta'=>'DESC');
+        $r_inm_transferencia = (new inm_rel_transferencia_comprador(link: $this->link))->filtro_and(filtro: $filtro,order: $order);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener etapas', data: $r_inm_transferencia,header: $header,
+                ws:  $ws);
+        }
+
+        $registros = array();
+        $params = array('accion_retorno'=>'proceso_comprador','seccion_retorno'=>$this->seccion,
+            'id_retorno'=>$this->registro_id);
+
+        if(isset($_GET['pestana_general_actual'])){
+            $params['pestana_general_actual'] = 'pestanageneral2';
+            $params['pestana_actual'] = 'pestana3';
+        }
+        foreach ($r_inm_transferencia->registros as $inm_transferencia) {
+            $button = $this->html->button_href(accion: 'elimina_bd', etiqueta: 'Elimina',
+                registro_id: $inm_transferencia['inm_transferencia_id'], seccion: 'inm_transferencia', style: 'danger',
+                params: $params);
+            if(errores::$error){
+                return $this->retorno_error(mensaje: 'Error al integrar button',data:  $button,header: $header,
+                    ws:  $ws);
+            }
+            $inm_transferencia['elimina_bd'] = $button;
+
+            $filtro_rel_doc_trns['inm_transferencia.id'] = $inm_transferencia['inm_transferencia_id'];
+            $r_rel_doc_transferencia = (new inm_rel_doc_transferencia(link: $this->link))->filtro_and(filtro: $filtro_rel_doc_trns);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al obtener inputs', data: $r_rel_doc_transferencia,header: $header,
+                    ws:  $ws);
+            }
+
+            if($r_rel_doc_transferencia->n_registros > 0){
+                $button_descarga = $this->html->button_href(accion: 'descarga', etiqueta: 'Descarga',
+                    registro_id: $r_rel_doc_transferencia->registros[0]['inm_doc_comprador_id'],
+                    seccion: 'inm_doc_comprador', style: 'success');
+                if (errores::$error) {
+                    return $this->retorno_error(mensaje: 'Error al integrar button',
+                        data: $button_descarga, header: $header, ws: $ws);
+                }
+
+                $button_vista_previa = $this->html->button_href(accion: 'vista_previa',
+                    etiqueta: 'Vista Previa', registro_id: $r_rel_doc_transferencia->registros[0]['inm_doc_comprador_id'],
+                    seccion: 'inm_doc_comprador', style: 'success');
+                if (errores::$error) {
+                    return $this->retorno_error(mensaje: 'Error al integrar button',
+                        data: $button_vista_previa, header: $header, ws: $ws);
+                }
+
+                $button_descarga_zip = $this->html->button_href(accion: 'descarga_zip',
+                    etiqueta: 'Descarga ZIP', registro_id: $r_rel_doc_transferencia->registros[0]['inm_doc_comprador_id'],
+                    seccion: 'inm_doc_comprador', style: 'success');
+                if (errores::$error) {
+                    return $this->retorno_error(mensaje: 'Error al integrar button',
+                        data: $button_descarga_zip, header: $header, ws: $ws);
+                }
+
+                $params = array('accion_retorno'=>'proceso_comprador','seccion_retorno'=>'inm_comprador',
+                    'id_retorno'=>$this->registro_id, 'pestana_general_actual' => 'pestanageneral2',
+                    'pestana_actual' => 'pestana2');
+                $button_elimina_bd = $this->html->button_href(accion: 'elimina_bd',
+                    etiqueta: 'Elimina', registro_id: $r_rel_doc_transferencia->registros[0]['inm_rel_doc_transferencia_id'],
+                    seccion: 'inm_rel_doc_transferencia', style: 'danger',params: $params);
+                if (errores::$error) {
+                    return $this->retorno_error(mensaje: 'Error al integrar button', data: $button_elimina_bd,
+                        header: $header, ws: $ws);
+                }
+
+                $res = "<tr>
+                    <td>$button_descarga</td>
+                    <td>$button_vista_previa</td>
+                    <td>$button_descarga_zip</td>
+                    <td>$button_elimina_bd</td>
+                    </tr>";
+            }else{
+                $button = $this->html->input_file(cols: 12, name: 'documentos[36][]', row_upd: new stdClass(),
+                    value_vacio: false, place_holder: 'Subir Documento',required: false, con_label: false);
+                if (errores::$error) {
+                    return $this->retorno_error(mensaje: 'Error al obtener inputs', data: $button,header: $header,
+                        ws:  $ws);
+                }
+                $res = "<tr>
+                <td colspan='6'>$button</td>
+                </tr>";
+            }
+
+            $inm_transferencia['documento'] = $res;
+
+            $registros[] = $inm_transferencia;
+        }
+
+
+        $this->transferencias = $registros;
+
         $inm_comprador_id = $this->html->hidden(name:'inm_comprador_id',value: $this->registro_id);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al in_registro_id',data:  $inm_comprador_id,
@@ -2516,10 +2612,10 @@ class controlador_inm_comprador extends _ctl_base {
             $registro['nombre_beneficiario'] = $_POST['nombre_beneficiario'];
             $registro['bn_cuenta_id'] = $_POST['bn_cuenta_sl_trs_id'];
 
-            $registro['numero_transferencia'] = '';
+            $registro['transferencia'] = '';
 
             if(isset($_POST['transferencia'])){
-                $registro['numero_transferencia'] = $_POST['transferencia'];
+                $registro['transferencia'] = $_POST['transferencia'];
             }
             $r_inm_transferencia = (new inm_rel_transferencia_comprador(link: $this->link))->alta_registro(
                 registro: $registro);
