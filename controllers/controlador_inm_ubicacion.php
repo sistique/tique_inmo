@@ -34,6 +34,7 @@ use gamboamartin\inmuebles\models\inm_poder;
 use gamboamartin\inmuebles\models\inm_rel_cheque_ubicacion;
 use gamboamartin\inmuebles\models\inm_rel_doc_cheque;
 use gamboamartin\inmuebles\models\inm_rel_doc_transferencia;
+use gamboamartin\inmuebles\models\inm_rel_transferencia_ubicacion;
 use gamboamartin\inmuebles\models\inm_status_ubicacion;
 use gamboamartin\inmuebles\models\inm_tipo_cheque;
 use gamboamartin\inmuebles\models\inm_transferencia;
@@ -622,7 +623,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         $this->inputs->documento_poliza_firmada = $documento_poliza_firmada;
 
         $filtro_transfer['inm_ubicacion.id'] = $this->registro_id;
-        $r_transferencia = (new inm_transferencia(link: $this->link))->filtro_and(filtro: $filtro_transfer);
+        $r_transferencia = (new inm_rel_transferencia_ubicacion(link: $this->link))->filtro_and(filtro: $filtro_transfer);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $r_transferencia,
                 header: $header, ws: $ws);
@@ -1177,7 +1178,7 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $filtro['inm_ubicacion.id'] = $this->registro_id;
         $order = array('inm_transferencia.fecha_alta'=>'DESC');
-        $r_inm_transferencia = (new inm_transferencia(link: $this->link))->filtro_and(filtro: $filtro,order: $order);
+        $r_inm_transferencia = (new inm_rel_transferencia_ubicacion(link: $this->link))->filtro_and(filtro: $filtro,order: $order);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener etapas', data: $r_inm_transferencia,header: $header,
                 ws:  $ws);
@@ -1631,7 +1632,7 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $filtro['inm_ubicacion.id'] = $this->registro_id;
         $order = array('inm_transferencia.fecha_alta'=>'DESC');
-        $r_inm_transferencia = (new inm_transferencia(link: $this->link))->filtro_and(filtro: $filtro,order: $order);
+        $r_inm_transferencia = (new inm_rel_transferencia_ubicacion(link: $this->link))->filtro_and(filtro: $filtro,order: $order);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener etapas', data: $r_inm_transferencia,header: $header,
                 ws:  $ws);
@@ -4029,7 +4030,7 @@ class controlador_inm_ubicacion extends _ctl_base {
             if(isset($_POST['transferencia'])){
                 $registro['numero_transferencia'] = $_POST['transferencia'];
             }
-            $r_inm_transferencia = (new inm_transferencia(link: $this->link))->alta_registro(
+            $r_inm_transferencia = (new inm_rel_transferencia_ubicacion(link: $this->link))->alta_registro(
                 registro: $registro);
             if (errores::$error) {
                 $this->link->rollBack();

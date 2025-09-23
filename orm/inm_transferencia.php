@@ -11,17 +11,10 @@ class inm_transferencia extends _modelo_parent{
     public function __construct(PDO $link)
     {
         $tabla = 'inm_transferencia';
-        $columnas = array($tabla=>false,'inm_ubicacion'=>$tabla,'bn_cuenta'=>$tabla,
-            'dp_colonia_postal'=>'inm_ubicacion', 'dp_cp'=>'dp_colonia_postal','dp_colonia'=>'dp_colonia_postal',
-            'dp_municipio'=>'dp_cp', 'dp_estado'=>'dp_municipio','dp_pais'=>'dp_estado');
+        $columnas = array($tabla=>false,'bn_cuenta'=>$tabla);
 
         $columnas_extra= array();
-        $sql = "(CONCAT_WS(' ', inm_ubicacion.calle, inm_ubicacion.numero_exterior, 
-        inm_ubicacion.numero_interior, dp_colonia.descripcion, dp_municipio.descripcion))";
-
-        $columnas_extra['inm_ubicacion_ubicacion'] = $sql;
         $renombres= array();
-
 
         parent::__construct(link: $link, tabla: $tabla, columnas: $columnas, columnas_extra: $columnas_extra,
             renombres: $renombres);
@@ -33,13 +26,13 @@ class inm_transferencia extends _modelo_parent{
     public function alta_bd(array $keys_integra_ds = array('codigo', 'descripcion')): array|stdClass
     {
         if(!isset($this->registro['descripcion'])){
-            $descripcion = $this->registro['inm_ubicacion_id'];
+            $descripcion = $this->registro['nombre_beneficiario'];
             $descripcion .= ' '.$this->registro['numero_transferencia'];
             $this->registro['descripcion'] = $descripcion;
         }
 
         if(!isset($this->registro['codigo'])){
-            $descripcion = $this->registro['inm_ubicacion_id'];
+            $descripcion = $this->registro['nombre_beneficiario'];
             $descripcion .= ' '.$this->registro['numero_transferencia'] . rand();
             $this->registro['codigo'] = $descripcion;
         }
@@ -53,26 +46,6 @@ class inm_transferencia extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al insertar prospecto',data:  $r_alta_bd);
         }
 
-        $registro = array();
-        $registro['inm_ubicacion_id'] = $this->registro['inm_ubicacion_id'];
-        $registro['monto'] = $this->registro['monto'];
-        $registro['fecha'] = date('Y-m-d');
-        $registro['referencia'] = $this->registro['nombre_beneficiario'];
-        $registro['inm_concepto_id'] = 19;
-
-        $r_inm_costo = (new inm_costo(link: $this->link))->alta_registro(registro: $registro);
-        if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al insertar prospecto',data:  $r_inm_costo);
-        }
-
-        $registro = array();
-        $registro['inm_costo_id'] = $r_inm_costo->registro_id;
-        $registro['inm_transferencia_id'] = $r_alta_bd->registro_id;
-        $r_rel_costo_transferencia = (new inm_rel_costo_transferencia(link: $this->link))->alta_registro(registro: $registro);
-        if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al insertar prospecto',data:  $r_rel_costo_transferencia);
-        }
-
         return $r_alta_bd;
     }
 
@@ -82,20 +55,36 @@ class inm_transferencia extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al registro_id debe ser mayor a 0',
                 data: $registro_id);
         }
-        $inm_transferencia = $this->registro(registro_id: $registro_id);
+
+        $filtro['inm_transferencia.id'] = $registro_id;
+        $inm_transferencia = (new inm_rel_transferencia_ubicacion(link: $this->link))->filtro_and(filtro: $filtro);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al obtener transferencia', data: $inm_transferencia);
         }
 
 
         $data = new stdClass();
-        $data->inm_transferencia = $inm_transferencia;
+        $data->inm_transferencia = $inm_transferencia->registros[0];
 
         return $data;
     }
 
     public function elimina_bd(int $id): array|stdClass
     {
+        $modelo_inm_rel = new inm_rel_transferencia_ubicacion(link: $this->link);
+        $filtro['inm_transferencia.id'] = $id;
+        $r_rel = $modelo_inm_rel->filtro_and(filtro: $filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener relacion',data:  $r_rel);
+        }
+
+        if($r_rel->n_registros > 0) {
+            $r_elimina = $modelo_inm_rel->elimina_bd(id: $r_rel->registros[0]['inm_rel_transferencia_ubicacion_id']);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al obtener relacion', data: $r_elimina);
+            }
+        }
+        
         $modelo_inm_rel = new inm_rel_costo_transferencia(link: $this->link);
         $filtro['inm_transferencia.id'] = $id;
         $r_rel = $modelo_inm_rel->filtro_and(filtro: $filtro);
@@ -143,7 +132,7 @@ class inm_transferencia extends _modelo_parent{
             }
         }else*/ if($r_rel_costo_transferencia->n_registros <= 0){
             $filtro['inm_transferencia.id'] = $id;
-            $r_transferencia_fil = (new inm_transferencia(link: $this->link))->filtro_and(filtro:$filtro);
+            $r_transferencia_fil = (new inm_rel_transferencia_ubicacion(link: $this->link))->filtro_and(filtro:$filtro);
             if (errores::$error) {
                 return $this->error->error(mensaje: 'Error al insertar prospecto',data:  $r_transferencia_fil);
             }
