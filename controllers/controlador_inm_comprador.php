@@ -36,10 +36,12 @@ use gamboamartin\inmuebles\models\inm_referencia;
 use gamboamartin\inmuebles\models\inm_rel_beneficiario_comprador;
 use gamboamartin\inmuebles\models\inm_rel_cheque_comprador;
 use gamboamartin\inmuebles\models\inm_rel_doc_cheque;
+use gamboamartin\inmuebles\models\inm_rel_efectivo_comprador;
 use gamboamartin\inmuebles\models\inm_rel_referencia_comprador;
 use gamboamartin\inmuebles\models\inm_rel_referencia_prospecto;
 use gamboamartin\inmuebles\models\inm_rel_cliente_valuador;
 use gamboamartin\inmuebles\models\inm_rel_comprador_com_cliente;
+use gamboamartin\inmuebles\models\inm_rel_transferencia_comprador;
 use gamboamartin\inmuebles\models\inm_rel_ubi_comp;
 use gamboamartin\inmuebles\models\inm_status_comprador;
 use gamboamartin\inmuebles\models\inm_status_prospecto;
@@ -2486,26 +2488,84 @@ class controlador_inm_comprador extends _ctl_base {
     {
         $this->link->beginTransaction();
 
-        $filtro_exi['inm_comprador.id'] = $this->registro_id;
-        $filtro_exi['inm_status_comprador.id'] = 10;
-        $existe = (new inm_bitacora_status_comprador(link: $this->link))->existe(filtro: $filtro_exi);
-        if (errores::$error) {
-            $this->link->rollBack();
-            return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $existe,
-                header: $header, ws: $ws);
-        }
-
-        if(!$existe) {
+        if(isset($_POST['inm_tipo_gasto_id']) && trim($_POST['inm_tipo_gasto_id']) === '1') {
             $registro = array();
             $registro['inm_comprador_id'] = $this->registro_id;
-            $registro['inm_status_comprador_id'] = 10;
-            $registro['fecha_status'] = date('Y-m-d\TH:i:s');
-            $r_inm_bitacora_status_comprador = (new inm_bitacora_status_comprador(link: $this->link))->alta_registro(
+            $registro['monto'] = $_POST['monto'];
+            $registro['nombre_beneficiario'] = $_POST['nombre_beneficiario'];
+            $registro['inm_tipo_cheque_id'] = $_POST['inm_tipo_cheque_id'];
+            $registro['bn_cuenta_id'] = $_POST['bn_cuenta_sl_id'];
+            $registro['numero_cheque'] = '';
+
+            if(isset($_POST['numero_cheque'])){
+                $registro['numero_cheque'] = $_POST['numero_cheque'];
+            }
+
+            $r_inm_cheque = (new inm_rel_cheque_comprador(link: $this->link))->alta_registro(registro: $registro);
+            if (errores::$error) {
+                $this->link->rollBack();
+                return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_cheque,
+                    header: $header, ws: $ws);
+            }
+        }
+
+        if(isset($_POST['inm_tipo_gasto_id']) && trim($_POST['inm_tipo_gasto_id']) === '2') {
+            $registro = array();
+            $registro['inm_comprador_id'] = $this->registro_id;
+            $registro['monto'] = $_POST['monto_transferencia'];
+            $registro['nombre_beneficiario'] = $_POST['nombre_beneficiario'];
+            $registro['bn_cuenta_id'] = $_POST['bn_cuenta_sl_trs_id'];
+
+            $registro['numero_transferencia'] = '';
+
+            if(isset($_POST['transferencia'])){
+                $registro['numero_transferencia'] = $_POST['transferencia'];
+            }
+            $r_inm_transferencia = (new inm_rel_transferencia_comprador(link: $this->link))->alta_registro(
                 registro: $registro);
             if (errores::$error) {
                 $this->link->rollBack();
-                return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_bitacora_status_comprador,
+                return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_transferencia,
                     header: $header, ws: $ws);
+            }
+        }
+
+        if(isset($_POST['inm_tipo_gasto_id']) && trim($_POST['inm_tipo_gasto_id']) === '3') {
+            $registro = array();
+            $registro['inm_comprador_id'] = $this->registro_id;
+            $registro['monto'] = $_POST['efectivo'];
+            $registro['nombre_beneficiario'] = $_POST['nombre_beneficiario'];
+            $r_inm_efectivo = (new inm_rel_efectivo_comprador(link: $this->link))->alta_registro(
+                registro: $registro);
+            if (errores::$error) {
+                $this->link->rollBack();
+                return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_efectivo,
+                    header: $header, ws: $ws);
+            }
+        }
+
+        if(isset($_POST['avanza_etapa']) && trim($_POST['avanza_etapa']) !== '') {
+            $filtro_exi['inm_comprador.id'] = $this->registro_id;
+            $filtro_exi['inm_status_comprador.id'] = 10;
+            $existe = (new inm_bitacora_status_comprador(link: $this->link))->existe(filtro: $filtro_exi);
+            if (errores::$error) {
+                $this->link->rollBack();
+                return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $existe,
+                    header: $header, ws: $ws);
+            }
+
+            if (!$existe) {
+                $registro = array();
+                $registro['inm_comprador_id'] = $this->registro_id;
+                $registro['inm_status_comprador_id'] = 10;
+                $registro['fecha_status'] = date('Y-m-d\TH:i:s');
+                $r_inm_bitacora_status_comprador = (new inm_bitacora_status_comprador(link: $this->link))->alta_registro(
+                    registro: $registro);
+                if (errores::$error) {
+                    $this->link->rollBack();
+                    return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_bitacora_status_comprador,
+                        header: $header, ws: $ws);
+                }
             }
         }
 
