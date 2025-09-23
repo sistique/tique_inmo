@@ -32,8 +32,8 @@ use gamboamartin\inmuebles\models\inm_nacionalidad;
 use gamboamartin\inmuebles\models\inm_ocupacion;
 use gamboamartin\inmuebles\models\inm_poder;
 use gamboamartin\inmuebles\models\inm_rel_cheque_ubicacion;
-use gamboamartin\inmuebles\models\inm_rel_doc_cheque;
-use gamboamartin\inmuebles\models\inm_rel_doc_transferencia;
+use gamboamartin\inmuebles\models\inm_rel_doc_cheque_ubicacion;
+use gamboamartin\inmuebles\models\inm_rel_doc_transferencia_ubicacion;
 use gamboamartin\inmuebles\models\inm_rel_efectivo_ubicacion;
 use gamboamartin\inmuebles\models\inm_rel_transferencia_ubicacion;
 use gamboamartin\inmuebles\models\inm_status_ubicacion;
@@ -1110,7 +1110,7 @@ class controlador_inm_ubicacion extends _ctl_base {
             $inm_cheque['solicitud_gasto'] = $button;
 
             $filtro_rel_doc_che['inm_cheque.id'] = $inm_cheque['inm_cheque_id'];
-            $r_rel_doc_cheque = (new inm_rel_doc_cheque(link: $this->link))->filtro_and(filtro: $filtro_rel_doc_che);
+            $r_rel_doc_cheque = (new inm_rel_doc_cheque_ubicacion(link: $this->link))->filtro_and(filtro: $filtro_rel_doc_che);
             if (errores::$error) {
                 return $this->retorno_error(mensaje: 'Error al obtener inputs', data: $r_rel_doc_cheque,header: $header,
                     ws:  $ws);
@@ -1145,8 +1145,8 @@ class controlador_inm_ubicacion extends _ctl_base {
                     'id_retorno'=>$this->registro_id, 'pestana_general_actual' => 'pestanageneral2',
                     'pestana_actual' => 'pestana2');
                 $button_elimina_bd = $this->html->button_href(accion: 'elimina_bd',
-                    etiqueta: 'Elimina', registro_id: $r_rel_doc_cheque->registros[0]['inm_rel_doc_cheque_id'],
-                    seccion: 'inm_rel_doc_cheque', style: 'danger',params: $params);
+                    etiqueta: 'Elimina', registro_id: $r_rel_doc_cheque->registros[0]['inm_rel_doc_cheque_ubicacion_id'],
+                    seccion: 'inm_rel_doc_cheque_ubicacion', style: 'danger',params: $params);
                 if (errores::$error) {
                     return $this->retorno_error(mensaje: 'Error al integrar button', data: $button_elimina_bd,
                         header: $header, ws: $ws);
@@ -1204,7 +1204,7 @@ class controlador_inm_ubicacion extends _ctl_base {
             $inm_transferencia['elimina_bd'] = $button;
 
             $filtro_rel_doc_trns['inm_transferencia.id'] = $inm_transferencia['inm_transferencia_id'];
-            $r_rel_doc_transferencia = (new inm_rel_doc_transferencia(link: $this->link))->filtro_and(filtro: $filtro_rel_doc_trns);
+            $r_rel_doc_transferencia = (new inm_rel_doc_transferencia_ubicacion(link: $this->link))->filtro_and(filtro: $filtro_rel_doc_trns);
             if (errores::$error) {
                 return $this->retorno_error(mensaje: 'Error al obtener inputs', data: $r_rel_doc_transferencia,header: $header,
                     ws:  $ws);
@@ -1239,8 +1239,8 @@ class controlador_inm_ubicacion extends _ctl_base {
                     'id_retorno'=>$this->registro_id, 'pestana_general_actual' => 'pestanageneral2',
                     'pestana_actual' => 'pestana2');
                 $button_elimina_bd = $this->html->button_href(accion: 'elimina_bd',
-                    etiqueta: 'Elimina', registro_id: $r_rel_doc_transferencia->registros[0]['inm_rel_doc_transferencia_id'],
-                    seccion: 'inm_rel_doc_transferencia', style: 'danger',params: $params);
+                    etiqueta: 'Elimina', registro_id: $r_rel_doc_transferencia->registros[0]['inm_rel_doc_transferencia_ubicacion_id'],
+                    seccion: 'inm_rel_doc_transferencia_ubicacion', style: 'danger',params: $params);
                 if (errores::$error) {
                     return $this->retorno_error(mensaje: 'Error al integrar button', data: $button_elimina_bd,
                         header: $header, ws: $ws);
@@ -1550,7 +1550,7 @@ class controlador_inm_ubicacion extends _ctl_base {
             $inm_cheque['checkbox'] = $check;
 
             $filtro_rel_doc_che['inm_cheque.id'] = $inm_cheque['inm_cheque_id'];
-            $r_rel_doc_cheque = (new inm_rel_doc_cheque(link: $this->link))->filtro_and(filtro: $filtro_rel_doc_che);
+            $r_rel_doc_cheque = (new inm_rel_doc_cheque_ubicacion(link: $this->link))->filtro_and(filtro: $filtro_rel_doc_che);
             if (errores::$error) {
                 return $this->retorno_error(mensaje: 'Error al obtener inputs', data: $r_rel_doc_cheque,header: $header,
                     ws:  $ws);
@@ -1585,8 +1585,8 @@ class controlador_inm_ubicacion extends _ctl_base {
                     'id_retorno'=>$this->registro_id, 'pestana_general_actual' => 'pestanageneral2',
                     'pestana_actual' => 'pestana7');
                 $button_elimina_bd = $this->html->button_href(accion: 'elimina_bd',
-                    etiqueta: 'Elimina', registro_id: $r_rel_doc_cheque->registros[0]['inm_rel_doc_cheque_id'],
-                    seccion: 'inm_rel_doc_cheque', style: 'danger',params: $params);
+                    etiqueta: 'Elimina', registro_id: $r_rel_doc_cheque->registros[0]['inm_rel_doc_cheque_ubicacion_id'],
+                    seccion: 'inm_rel_doc_cheque_ubicacion', style: 'danger',params: $params);
                 if (errores::$error) {
                     return $this->retorno_error(mensaje: 'Error al integrar button', data: $button_elimina_bd,
                         header: $header, ws: $ws);
@@ -1677,7 +1677,7 @@ class controlador_inm_ubicacion extends _ctl_base {
             $inm_transferencia['checkbox'] = $check;
 
             $filtro_rel_doc_trns['inm_transferencia.id'] = $inm_transferencia['inm_transferencia_id'];
-            $r_rel_doc_transferencia = (new inm_rel_doc_transferencia(link: $this->link))->filtro_and(filtro: $filtro_rel_doc_trns);
+            $r_rel_doc_transferencia = (new inm_rel_doc_transferencia_ubicacion(link: $this->link))->filtro_and(filtro: $filtro_rel_doc_trns);
             if (errores::$error) {
                 return $this->retorno_error(mensaje: 'Error al obtener inputs', data: $r_rel_doc_transferencia,header: $header,
                     ws:  $ws);
@@ -1712,8 +1712,8 @@ class controlador_inm_ubicacion extends _ctl_base {
                     'id_retorno'=>$this->registro_id, 'pestana_general_actual' => 'pestanageneral2',
                     'pestana_actual' => 'pestana7');
                 $button_elimina_bd = $this->html->button_href(accion: 'elimina_bd',
-                    etiqueta: 'Elimina', registro_id: $r_rel_doc_transferencia->registros[0]['inm_rel_doc_transferencia_id'],
-                    seccion: 'inm_rel_doc_transferencia', style: 'danger',params: $params);
+                    etiqueta: 'Elimina', registro_id: $r_rel_doc_transferencia->registros[0]['inm_rel_doc_transferencia_ubicacion_id'],
+                    seccion: 'inm_rel_doc_transferencia_ubicacion', style: 'danger',params: $params);
                 if (errores::$error) {
                     return $this->retorno_error(mensaje: 'Error al integrar button', data: $button_elimina_bd,
                         header: $header, ws: $ws);
@@ -2690,7 +2690,7 @@ class controlador_inm_ubicacion extends _ctl_base {
                     $registro_rel = array();
                     $registro_rel['inm_cheque_id'] = $cheque_id;
                     $registro_rel['inm_doc_ubicacion_id'] = $result->registro_id;
-                    $r_rel_doc_ubi_che = (new inm_rel_doc_cheque(link: $this->link))->alta_registro(registro: $registro_rel);
+                    $r_rel_doc_ubi_che = (new inm_rel_doc_cheque_ubicacion(link: $this->link))->alta_registro(registro: $registro_rel);
                     if (errores::$error) {
                         return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_rel_doc_ubi_che,
                             header: $header, ws: $ws);
@@ -2722,7 +2722,7 @@ class controlador_inm_ubicacion extends _ctl_base {
                     $registro_rel = array();
                     $registro_rel['inm_transferencia_id'] = $transferencia_id;
                     $registro_rel['inm_doc_ubicacion_id'] = $result->registro_id;
-                    $r_rel_doc_ubi_trs = (new inm_rel_doc_transferencia(link: $this->link))->alta_registro(registro: $registro_rel);
+                    $r_rel_doc_ubi_trs = (new inm_rel_doc_transferencia_ubicacion(link: $this->link))->alta_registro(registro: $registro_rel);
                     if (errores::$error) {
                         return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_rel_doc_ubi_trs,
                             header: $header, ws: $ws);
