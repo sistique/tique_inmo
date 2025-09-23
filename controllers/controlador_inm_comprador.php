@@ -1643,12 +1643,12 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         $registros = array();
-        $params = array('accion_retorno'=>'proceso_comprador','seccion_retorno'=>$this->seccion,
+        $params = array('accion_retorno'=>'proceso_cliente','seccion_retorno'=>$this->seccion,
             'id_retorno'=>$this->registro_id);
 
         if(isset($_GET['pestana_general_actual'])){
             $params['pestana_general_actual'] = 'pestanageneral2';
-            $params['pestana_actual'] = 'pestana3';
+            $params['pestana_actual'] = 'pestana10';
         }
         foreach ($r_inm_transferencia->registros as $inm_transferencia) {
             $button = $this->html->button_href(accion: 'elimina_bd', etiqueta: 'Elimina',
@@ -1728,6 +1728,38 @@ class controlador_inm_comprador extends _ctl_base {
 
 
         $this->transferencias = $registros;
+
+
+        $filtro['inm_comprador.id'] = $this->registro_id;
+        $order = array('inm_efectivo.fecha_alta'=>'DESC');
+        $r_inm_efectivo = (new inm_rel_efectivo_comprador(link: $this->link))->filtro_and(filtro: $filtro,order: $order);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener etapas', data: $r_inm_efectivo,header: $header,
+                ws:  $ws);
+        }
+
+        $registros = array();
+        $params = array('accion_retorno'=>'proceso_cliente','seccion_retorno'=>$this->seccion,
+            'id_retorno'=>$this->registro_id);
+
+        if(isset($_GET['pestana_general_actual'])){
+            $params['pestana_general_actual'] = 'pestanageneral2';
+            $params['pestana_actual'] = 'pestana10';
+        }
+        foreach ($r_inm_efectivo->registros as $inm_efectivo) {
+            $button = $this->html->button_href(accion: 'elimina_bd', etiqueta: 'Elimina',
+                registro_id: $inm_efectivo['inm_efectivo_id'], seccion: 'inm_efectivo', style: 'danger',
+                params: $params);
+            if(errores::$error){
+                return $this->retorno_error(mensaje: 'Error al integrar button',data:  $button,header: $header,
+                    ws:  $ws);
+            }
+            $inm_efectivo['elimina_bd'] = $button;
+
+            $registros[] = $inm_efectivo;
+        }
+
+        $this->efectivos = $registros;
 
         $inm_comprador_id = $this->html->hidden(name:'inm_comprador_id',value: $this->registro_id);
         if(errores::$error){
