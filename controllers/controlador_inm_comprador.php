@@ -9,6 +9,7 @@
 namespace gamboamartin\inmuebles\controllers;
 
 use base\controller\init;
+use gamboamartin\banco\models\bn_cuenta;
 use gamboamartin\direccion_postal\models\dp_estado;
 use gamboamartin\direccion_postal\models\dp_municipio;
 use gamboamartin\errores\errores;
@@ -33,6 +34,8 @@ use gamboamartin\inmuebles\models\inm_nacionalidad;
 use gamboamartin\inmuebles\models\inm_ocupacion;
 use gamboamartin\inmuebles\models\inm_referencia;
 use gamboamartin\inmuebles\models\inm_rel_beneficiario_comprador;
+use gamboamartin\inmuebles\models\inm_rel_cheque_comprador;
+use gamboamartin\inmuebles\models\inm_rel_doc_cheque;
 use gamboamartin\inmuebles\models\inm_rel_referencia_comprador;
 use gamboamartin\inmuebles\models\inm_rel_referencia_prospecto;
 use gamboamartin\inmuebles\models\inm_rel_cliente_valuador;
@@ -59,6 +62,10 @@ class controlador_inm_comprador extends _ctl_base {
     public array $inm_co_acreditados = array();
     public array $inm_conf_docs_comprador = array();
     public array $etapas = array();
+
+    public array $cheques = array();
+    public array $transferencias = array();
+    public array $efectivos = array();
 
     public string $link_documento_bd ='';
     public string $link_exportar_xls ='';
@@ -1397,16 +1404,232 @@ class controlador_inm_comprador extends _ctl_base {
                 mensaje: 'Error al obtener registro',data:  $registro,header: $header,ws: $ws);
         }
 
+        if(!isset($this->row_upd->nombre_beneficiario) || $this->row_upd->nombre_beneficiario === ''){
+            $this->row_upd->nombre_beneficiario = $registro->registros[0]['com_cliente_razon_social'];
+        }
+
         $keys_selects = (new _keys_selects())->key_selects_asigna_ubicacion(controler: $this);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);
         }
 
+        $columns_ds = array('inm_tipo_gasto_id','inm_tipo_gasto_descripcion');
+        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_tipo_gasto_id',
+            keys_selects:$keys_selects, id_selected:-1, label: 'Tipo Gasto',
+            columns_ds : $columns_ds,required: false);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
+                header: $header,ws:  $ws);
+        }
+
+        $columns_ds = array('inm_tipo_cheque_id','inm_tipo_cheque_descripcion');
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_tipo_cheque_id',
+            keys_selects:$keys_selects, id_selected:-1, label: 'Tipo Cheque',
+            columns_ds : $columns_ds,required: false);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
+                header: $header,ws:  $ws);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'nombre_beneficiario', keys_selects:$keys_selects,
+            place_holder: 'Nombre Beneficiario',required: false);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'monto', keys_selects:$keys_selects,
+            place_holder: 'Monto',required: false);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'monto_cheque_secundario', keys_selects:$keys_selects,
+            place_holder: 'Monto Secundario',required: false);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'monto_transferencia', keys_selects:$keys_selects,
+            place_holder: 'Monto Transferencia',required: false);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'monto_comision', keys_selects:$keys_selects,
+            place_holder: 'Monto Comision', required: false);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'efectivo', keys_selects:$keys_selects,
+            place_holder: 'Efectivo', required: false);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'numero_cheque', keys_selects:$keys_selects,
+            place_holder: 'Numero Cheque', required: false);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'transferencia', keys_selects:$keys_selects,
+            place_holder: 'Concepto Transferencia', required: false);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
         $base = $this->base_upd(keys_selects: $keys_selects, params: array(),params_ajustados: array());
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
         }
+
+        $modelo = new bn_cuenta(link: $this->link);
+        $bn_cuenta_id = $this->html->select_catalogo(cols: 6, con_registros: true, id_selected: -1, modelo: $modelo,
+            id_css: 'bn_cuenta_sl_id', label: 'Cuenta', name: 'bn_cuenta_sl_id');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $bn_cuenta_id,header: $header, ws:$ws);
+        }
+
+        $this->inputs->bn_cuenta_sl_id = $bn_cuenta_id;
+
+        $bn_cuenta_id = $this->html->select_catalogo(cols: 6, con_registros: true, id_selected: -1, modelo: $modelo,
+            id_css: 'bn_cuenta_sl_trs_id', label: 'Cuenta', name: 'bn_cuenta_sl_trs_id');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $bn_cuenta_id,header: $header, ws:$ws);
+        }
+
+        $this->inputs->bn_cuenta_sl_trs_id = $bn_cuenta_id;
+
+        $filtro['inm_comprador.id'] = $this->registro_id;
+        $order = array('inm_cheque.fecha_alta'=>'DESC');
+        $r_inm_cheque = (new inm_rel_cheque_comprador(link: $this->link))->filtro_and(filtro: $filtro,order: $order);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener etapas', data: $r_inm_cheque,header: $header,
+                ws:  $ws);
+        }
+
+        $registros = array();
+        $params = array('accion_retorno'=>'proceso_cliente','seccion_retorno'=>$this->seccion,
+            'id_retorno'=>$this->registro_id);
+
+        if(isset($_GET['pestana_general_actual'])){
+            $params['pestana_general_actual'] = 'pestanageneral2';
+            $params['pestana_actual'] = 'pestana10';
+        }
+
+        foreach ($r_inm_cheque->registros as $inm_cheque) {
+            $button = $this->html->button_href(accion: 'elimina_bd', etiqueta: 'Elimina',
+                registro_id: $inm_cheque['inm_cheque_id'], seccion: 'inm_cheque', style: 'danger',
+                params: $params);
+            if(errores::$error){
+                return $this->retorno_error(mensaje: 'Error al integrar button',data:  $button,header: $header,
+                    ws:  $ws);
+            }
+            $inm_cheque['elimina_bd'] = $button;
+
+            $button = $this->html->button_href(accion: 'solicitud_gasto', etiqueta: 'Solicitud de Gasto',
+                registro_id: $inm_cheque['inm_cheque_id'], seccion: 'inm_cheque', style: 'info  ',
+                params: $params);
+            if(errores::$error){
+                return $this->retorno_error(mensaje: 'Error al integrar button',data:  $button,header: $header,
+                    ws:  $ws);
+            }
+            $inm_cheque['solicitud_gasto'] = $button;
+
+            $check = "<input type='checkbox'  class='checkbox_reg' 
+                        data-movimiento = 'cheque'
+                        data-nombre_beneficiario = '$inm_cheque[inm_cheque_nombre_beneficiario]'
+                        data-numero_cheque = '$inm_cheque[inm_cheque_numero_cheque]'
+                        data-monto = '$inm_cheque[inm_cheque_monto]'
+                        data-inm_tipo_cheque_id = '$inm_cheque[inm_tipo_cheque_id]'
+                        data-bn_cuenta_id = '$inm_cheque[bn_cuenta_id]'
+                        data-inm_tipo_gasto_id = '1'
+                        name='cheque_id' value='$inm_cheque[inm_cheque_id]'>";
+            $inm_cheque['checkbox'] = $check;
+
+            $filtro_rel_doc_che['inm_cheque.id'] = $inm_cheque['inm_cheque_id'];
+            $r_rel_doc_cheque = (new inm_rel_doc_cheque(link: $this->link))->filtro_and(filtro: $filtro_rel_doc_che);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al obtener inputs', data: $r_rel_doc_cheque,header: $header,
+                    ws:  $ws);
+            }
+
+            if($r_rel_doc_cheque->n_registros > 0){
+                $button_descarga = $this->html->button_href(accion: 'descarga', etiqueta: 'Descarga',
+                    registro_id: $r_rel_doc_cheque->registros[0]['inm_doc_comprador_id'],
+                    seccion: 'inm_doc_comprador', style: 'success');
+                if (errores::$error) {
+                    return $this->retorno_error(mensaje: 'Error al integrar button',
+                        data: $button_descarga, header: $header, ws: $ws);
+                }
+
+                $button_vista_previa = $this->html->button_href(accion: 'vista_previa',
+                    etiqueta: 'Vista Previa', registro_id: $r_rel_doc_cheque->registros[0]['inm_doc_comprador_id'],
+                    seccion: 'inm_doc_comprador', style: 'success');
+                if (errores::$error) {
+                    return $this->retorno_error(mensaje: 'Error al integrar button',
+                        data: $button_vista_previa, header: $header, ws: $ws);
+                }
+
+                $button_descarga_zip = $this->html->button_href(accion: 'descarga_zip',
+                    etiqueta: 'Descarga ZIP', registro_id: $r_rel_doc_cheque->registros[0]['inm_doc_comprador_id'],
+                    seccion: 'inm_doc_comprador', style: 'success');
+                if (errores::$error) {
+                    return $this->retorno_error(mensaje: 'Error al integrar button',
+                        data: $button_descarga_zip, header: $header, ws: $ws);
+                }
+
+                $params = array('accion_retorno'=>'proceso_comprador','seccion_retorno'=>'inm_comprador',
+                    'id_retorno'=>$this->registro_id, 'pestana_general_actual' => 'pestanageneral2',
+                    'pestana_actual' => 'pestana7');
+                $button_elimina_bd = $this->html->button_href(accion: 'elimina_bd',
+                    etiqueta: 'Elimina', registro_id: $r_rel_doc_cheque->registros[0]['inm_rel_doc_cheque_id'],
+                    seccion: 'inm_rel_doc_cheque', style: 'danger',params: $params);
+                if (errores::$error) {
+                    return $this->retorno_error(mensaje: 'Error al integrar button', data: $button_elimina_bd,
+                        header: $header, ws: $ws);
+                }
+
+                $res = "<tr>
+                            <td colspan='6'>
+                                <div class='content_btns'>
+                                    <div class='content_btn'>
+                                        $button_descarga
+                                    </div>
+                                    <div class='content_btn'>
+                                        $button_vista_previa
+                                    </div>
+                                    <div class='content_btn'>
+                                        $button_descarga_zip
+                                    </div>
+                                    <div class='content_btn'>
+                                        $button_elimina_bd
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>";
+            }else{
+                $name = "documentos_cheques[$inm_cheque[inm_cheque_id]][36][]";
+
+                $button = $this->html->input_file(cols: 12, name: $name, row_upd: $this->row_upd,
+                    value_vacio: false, place_holder: 'Subir Documento',required: false, con_label: false);
+                if (errores::$error) {
+                    return $this->retorno_error(mensaje: 'Error al obtener inputs', data: $button,header: $header,
+                        ws:  $ws);
+                }
+                $res = "<tr>
+                <td colspan='6'>$button</td>
+                </tr>";
+            }
+
+            $inm_cheque['documento'] = $res;
+
+            $registros[] = $inm_cheque;
+        }
+
+        $this->cheques = $registros;
 
         $inm_comprador_id = $this->html->hidden(name:'inm_comprador_id',value: $this->registro_id);
         if(errores::$error){
@@ -2152,7 +2375,8 @@ class controlador_inm_comprador extends _ctl_base {
             'nombre_empresa_patron','nrp_nep','lada_nep','numero_nep','extension_nep','lada_com','numero_com',
             'cel_com','genero','correo_com','sub_cuenta','monto_final','descuento','puntos', 'telefono_casa',
             'correo_empresa','mts_construidos','mts_terrenos','metros_construidos','metros_terreno', 'valor_avaluo',
-            'numero_escritura','isr');
+            'numero_escritura','isr','nombre_beneficiario','monto_transferencia','efectivo','monto','numero_cheque',
+            'transferencia');
         $keys->selects = array();
 
 
@@ -2172,6 +2396,10 @@ class controlador_inm_comprador extends _ctl_base {
         $init_data['inm_valuador'] = "gamboamartin\\inmuebles";
         $init_data['com_cliente'] = "gamboamartin\\comercial";
         $init_data['adm_estado_civil'] = "gamboamartin\\administrador";
+        $init_data['inm_tipo_cheque'] = "gamboamartin\\inmuebles";
+        $init_data['inm_tipo_gasto'] = "gamboamartin\\inmuebles";
+
+        $init_data['bn_cuenta'] = "gamboamartin\\banco";
 
         $init_data = (new _base_paquete())->init_data_domicilio(init_data: $init_data);
         if(errores::$error){

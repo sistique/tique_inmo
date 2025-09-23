@@ -1157,12 +1157,117 @@
                                     </form>
                                 </div>
                                 <div class="conten" id="cpestana10">
-                                    <form method="post" action="<?php echo $controlador->link_cobrado_bd; ?>"
+                                    <!--<form method="post" action="<?php //echo $controlador->link_cobrado_bd; ?>"
                                           class="form-additional" enctype="multipart/form-data">
 
                                         <div class="control-group btn-alta">
                                             <div class="controls">
                                                 <button type="submit" class="btn btn-success">Avanza Etapa</button><br>
+                                            </div>
+                                        </div>
+                                    </form>-->
+                                    <form method="post" action="<?php echo $controlador->link_cobrado_bd; ?>"
+                                          class="form-additional" enctype="multipart/form-data">
+
+                                        <?php echo $controlador->inputs->inm_tipo_gasto_id; ?>
+
+                                        <?php echo $controlador->inputs->nombre_beneficiario; ?>
+                                        <div id="cont_cheque">
+                                            <?php echo $controlador->inputs->inm_tipo_cheque_id; ?>
+                                            <?php echo $controlador->inputs->bn_cuenta_sl_id; ?>
+                                            <?php echo $controlador->inputs->numero_cheque; ?>
+                                            <?php echo $controlador->inputs->monto; ?>
+                                        </div>
+                                        <div id="cont_transfer">
+                                            <?php echo $controlador->inputs->transferencia; ?>
+                                            <?php echo $controlador->inputs->bn_cuenta_sl_trs_id; ?>
+                                            <?php echo $controlador->inputs->monto_transferencia; ?>
+                                        </div>
+                                        <div id="cont_efectivo">
+                                            <?php echo $controlador->inputs->efectivo; ?>
+                                        </div>
+                                        <div class="control-group btn-alta">
+                                            <div class="controls">
+                                                <button type="submit" class="btn btn-success" name="alta_gasto" value="alta_gasto">
+                                                    Alta
+                                                </button>
+                                                <button type="submit" class="btn btn-success" name="alta_documento" value="alta_documento">
+                                                    Alta Documento
+                                                </button>
+                                                <button type="submit" class="btn btn-success" name="avanza_etapa" value="avanza_etapa">
+                                                    Avanza Etapa
+                                                </button>
+                                                <br>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="widget widget-box box-container widget-mylistings">
+                                                    <table class="table table-striped">
+                                                        <thead>
+                                                        <tr>
+                                                            <th>Id</th>
+                                                            <th>Beneficiario</th>
+                                                            <th>Referencia</th>
+                                                            <th>Monto</th>
+                                                            <th>Cuenta Bancaria</th>
+                                                            <th>Fecha</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        <tr>
+                                                            <td colspan="6">Cheques</td>
+                                                        </tr>
+                                                        <?php
+                                                        foreach ($controlador->cheques as $cheque){
+                                                            ?>
+                                                            <tr>
+                                                                <td><?php echo $cheque['inm_cheque_id'] ?></td>
+                                                                <td><?php echo $cheque['inm_cheque_nombre_beneficiario'] ?></td>
+                                                                <td><?php echo $cheque['inm_cheque_numero_cheque'] ?></td>
+                                                                <td><?php echo $cheque['inm_cheque_monto'] ?></td>
+                                                                <td><?php echo $cheque['bn_cuenta_descripcion'] ?></td>
+                                                                <td><?php echo $cheque['inm_cheque_fecha_alta'] ?></td>
+                                                            </tr>
+
+                                                            <?php echo $cheque['documento'] ?>
+                                                        <?php } ?>
+                                                        <tr>
+                                                            <td colspan="6">Transferencias</td>
+                                                        </tr>
+                                                        <?php
+                                                        foreach ($controlador->transferencias as $transferencia){
+                                                            ?>
+                                                            <tr>
+                                                                <td><?php echo $transferencia['inm_transferencia_id'] ?></td>
+                                                                <td><?php echo $transferencia['inm_transferencia_nombre_beneficiario'] ?></td>
+                                                                <td><?php echo $transferencia['inm_transferencia_transferencia'] ?></td>
+                                                                <td><?php echo $transferencia['inm_transferencia_monto'] ?></td>
+                                                                <td><?php echo $transferencia['bn_cuenta_descripcion'] ?></td>
+                                                                <td><?php echo $transferencia['inm_transferencia_fecha_alta'] ?></td>
+                                                            </tr>
+
+                                                            <?php echo $transferencia['documento'] ?>
+                                                        <?php } ?>
+                                                        <tr>
+                                                            <td colspan="6">Efectivo</td>
+                                                        </tr>
+                                                        <?php
+                                                        foreach ($controlador->efectivos as $efectivo){
+                                                            ?>
+                                                            <tr>
+                                                                <td><?php echo $efectivo['inm_efectivo_id'] ?></td>
+                                                                <td><?php echo $efectivo['inm_efectivo_nombre_beneficiario'] ?></td>
+                                                                <td></td>
+                                                                <td><?php echo $efectivo['inm_efectivo_monto'] ?></td>
+                                                                <td></td>
+                                                                <td><?php echo $efectivo['inm_efectivo_fecha_alta'] ?></td>
+                                                            </tr>
+                                                        <?php } ?>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
                                             </div>
                                         </div>
                                     </form>

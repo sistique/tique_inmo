@@ -1573,3 +1573,31 @@ const table_tipos_documentos = table('inm_comprador', columns_tipos_documentos, 
     }, true,
     "tipos_documentos", {registro_id: registro_id,pestana_general_actual: pestana_general_actual,
         pestana_actual:pestana_actual}, options);
+
+/***** Etapa Cobrador *****/
+
+let sl_inm_tipo_gasto_id = $("#inm_tipo_gasto_id");
+let cont_cont_cheque = $("#cont_cheque");
+let cont_cont_transfer = $("#cont_transfer");
+let cont_cont_efectivo = $("#cont_efectivo");
+sl_inm_tipo_gasto_id.change(function(){
+    inm_tipo_gasto_id = $(this).val();
+
+    if(inm_tipo_gasto_id === "1"){
+        cont_cont_cheque.show();
+        cont_cont_transfer.hide();
+        cont_cont_efectivo.hide();
+    }else if(inm_tipo_gasto_id === "2"){
+        cont_cont_transfer.show();
+        cont_cont_cheque.hide();
+        cont_cont_efectivo.hide();
+    }else if(inm_tipo_gasto_id === "3"){
+        cont_cont_efectivo.show();
+        cont_cont_cheque.hide();
+        cont_cont_transfer.hide();
+    }else{
+        cont_cont_cheque.hide();
+        cont_cont_transfer.hide();
+        cont_cont_efectivo.hide();
+    }
+});
