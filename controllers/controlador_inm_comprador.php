@@ -51,6 +51,7 @@ use gamboamartin\plugins\exportador;
 use gamboamartin\system\_ctl_base;
 use gamboamartin\system\links_menu;
 use gamboamartin\template\html;
+use gamboamartin\validacion\validacion;
 use html\doc_tipo_documento_html;
 use html\dp_estado_html;
 use html\dp_municipio_html;
@@ -4069,6 +4070,51 @@ class controlador_inm_comprador extends _ctl_base {
 
     public function solicitud_avaluo(bool $header, bool $ws = false)
     {
+        $imp_rel_comprador_com_cliente = (new inm_rel_comprador_com_cliente(link: $this->link))
+            ->imp_rel_comprador_com_cliente(inm_comprador_id: $this->registro_id);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener imp_rel_comprador_com_cliente',
+                data: $imp_rel_comprador_com_cliente,header: $header,ws: $ws);
+        }
+
+        $imp_rel_ubi_comp = (new inm_rel_ubi_comp(link: $this->link))->imp_rel_ubi_comp(
+            inm_comprador_id: $this->registro_id);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener imp_rel_ubi_comp', data: $imp_rel_ubi_comp,
+                header: $header,ws: $ws);
+        }
+
+        $inm_rel_cliente_valuador = (new inm_rel_cliente_valuador(link: $this->link))
+            ->inm_rel_cliente_valuador(inm_comprador_id:  $this->registro_id);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener inm_rel_cliente_valuador',
+                data: $inm_rel_cliente_valuador, header: $header, ws: $ws);
+        }
+
+        if($inm_rel_cliente_valuador['inm_valuador_alias'] === 'fajardo'){
+            $keys_cliente = array('inm_comprador_nss','com_cliente_razon_social','inm_comprador_curp',
+                'com_cliente_rfc','dp_colonia_postal_id','com_cliente_calle');
+            $valida = $this->validacion->valida_existencia_keys(keys: $keys_cliente,
+                registro: $imp_rel_comprador_com_cliente);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error el registro de cliente con id '.
+                    $imp_rel_comprador_com_cliente['inm_comprador_id'] .' y nombre '.
+                    $imp_rel_comprador_com_cliente['com_cliente_razon_social'], data: $valida,
+                    header: $header, ws: $ws);
+            }
+
+            $keys = array('dp_colonia_postal_domicilio_id','inm_ubicacion_calle_domicilio',
+                'inm_ubicacion_numero_exterior_domicilio','inm_tipo_vivienda_id','inm_ubicacion_numero_notaria',
+                'inm_ubicacion_nombre_notario', 'inm_ubicacion_plaza_notaria','inm_ubicacion_numero_escritura',
+                'inm_ubicacion_libro', 'inm_ubicacion_volumen','inm_ubicacion_entre_calle_1',
+                'inm_ubicacion_entre_calle_2');
+            $valida = $this->validacion->valida_existencia_keys(keys: $keys, registro: $imp_rel_ubi_comp);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error el registro de ubicacion con id '.
+                    $imp_rel_ubi_comp['inm_ubicacion_id'] .' y domicilio '.$imp_rel_ubi_comp['inm_ubicacion_ubicacion'],
+                    data: $valida, header: $header, ws: $ws);
+            }
+        }
 
         $pdf = new Fpdi();
         $_pdf = new _pdf(pdf: $pdf);

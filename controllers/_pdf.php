@@ -115,8 +115,8 @@ class _pdf{
         $keys_comprador['inm_comprador_apellido_materno'] = array('x' => 120, 'y' => 43);
         $keys_comprador['inm_comprador_nombre'] = array('x' => 20, 'y' => 51);
         $keys_comprador['inm_comprador_curp'] = array('x' => 120, 'y' => 59);
-        $keys_comprador['inm_comprador_lada_com'] = array('x' => 20, 'y' => 90);
-        $keys_comprador['inm_comprador_numero_com'] = array('x' => 30, 'y' => 90);
+        $keys_comprador['inm_comprador_lada_com'] = array('x' => 20, 'y' => 91);
+        $keys_comprador['inm_comprador_numero_com'] = array('x' => 30, 'y' => 91);
         foreach ($keys_comprador as $key => $valor) {
             $pdf[] = $this->write(valor: $data->inm_comprador[$key], x: $valor['x'], y: $valor['y']);
             if (errores::$error) {
