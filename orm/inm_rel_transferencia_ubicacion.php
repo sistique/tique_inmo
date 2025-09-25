@@ -104,5 +104,44 @@ class inm_rel_transferencia_ubicacion extends _modelo_parent{
         return $r_alta_bd;
     }
 
+    public function elimina_bd(int $id): array|stdClass
+    {
+        $filtro = array();
+        $filtro['inm_rel_transferencia_ubicacion.id'] = $id;
+        $r_rel = $this->filtro_and(filtro: $filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener relacion',data:  $r_rel);
+        }
 
+        if($r_rel->n_registros > 0) {
+            $modelo_inm_doc = new inm_rel_doc_transferencia_ubicacion(link: $this->link);
+
+            $filtro = array();
+            $filtro['inm_transferencia.id'] = $r_rel->registros[0]['inm_transferencia_id'];
+            $r_doc = $modelo_inm_doc->filtro_and(filtro: $filtro);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al obtener relacion documento', data: $r_doc);
+            }
+
+            if ($r_doc->n_registros > 0) {
+                return $this->error->error(mensaje: 'Error al existe un documento de poliza transferencia',
+                    data: $r_doc);
+            }
+        }
+
+        $r_elimina_bd = parent::elimina_bd(id:  $id);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al eliminar descripcion',data:  $r_elimina_bd);
+        }
+
+        if($r_rel->n_registros > 0) {
+            $r_elimina = (new inm_transferencia(link: $this->link))->elimina_bd(
+                id: $r_rel->registros[0]['inm_transferencia_id']);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al obtener relacion', data: $r_elimina);
+            }
+        }
+
+        return $r_elimina_bd;
+    }
 }

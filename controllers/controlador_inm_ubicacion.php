@@ -1650,8 +1650,8 @@ class controlador_inm_ubicacion extends _ctl_base {
         }
         foreach ($r_inm_transferencia->registros as $inm_transferencia) {
             $button = $this->html->button_href(accion: 'elimina_bd', etiqueta: 'Elimina',
-                registro_id: $inm_transferencia['inm_transferencia_id'], seccion: 'inm_rel_transferencia_ubicacion',
-                style: 'danger', params: $params);
+                registro_id: $inm_transferencia['inm_rel_transferencia_ubicacion_id'],
+                seccion: 'inm_rel_transferencia_ubicacion', style: 'danger', params: $params);
             if(errores::$error){
                 return $this->retorno_error(mensaje: 'Error al integrar button',data:  $button,header: $header,
                     ws:  $ws);
