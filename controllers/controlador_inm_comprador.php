@@ -1524,8 +1524,8 @@ class controlador_inm_comprador extends _ctl_base {
 
         foreach ($r_inm_cheque->registros as $inm_cheque) {
             $button = $this->html->button_href(accion: 'elimina_bd', etiqueta: 'Elimina',
-                registro_id: $inm_cheque['inm_cheque_id'], seccion: 'inm_cheque', style: 'danger',
-                params: $params);
+                registro_id: $inm_cheque['inm_rel_cheque_comprador_id'], seccion: 'inm_rel_cheque_comprador',
+                style: 'danger', params: $params);
             if(errores::$error){
                 return $this->retorno_error(mensaje: 'Error al integrar button',data:  $button,header: $header,
                     ws:  $ws);
@@ -1636,7 +1636,8 @@ class controlador_inm_comprador extends _ctl_base {
 
         $filtro['inm_comprador.id'] = $this->registro_id;
         $order = array('inm_transferencia.fecha_alta'=>'DESC');
-        $r_inm_transferencia = (new inm_rel_transferencia_comprador(link: $this->link))->filtro_and(filtro: $filtro,order: $order);
+        $r_inm_transferencia = (new inm_rel_transferencia_comprador(link: $this->link))->filtro_and(filtro: $filtro,
+            order: $order);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener etapas', data: $r_inm_transferencia,header: $header,
                 ws:  $ws);
@@ -1652,8 +1653,8 @@ class controlador_inm_comprador extends _ctl_base {
         }
         foreach ($r_inm_transferencia->registros as $inm_transferencia) {
             $button = $this->html->button_href(accion: 'elimina_bd', etiqueta: 'Elimina',
-                registro_id: $inm_transferencia['inm_transferencia_id'], seccion: 'inm_transferencia', style: 'danger',
-                params: $params);
+                registro_id: $inm_transferencia['inm_rel_transferencia_comprador_id'],
+                seccion: 'inm_rel_transferencia_comprador', style: 'danger', params: $params);
             if(errores::$error){
                 return $this->retorno_error(mensaje: 'Error al integrar button',data:  $button,header: $header,
                     ws:  $ws);
@@ -1661,10 +1662,11 @@ class controlador_inm_comprador extends _ctl_base {
             $inm_transferencia['elimina_bd'] = $button;
 
             $filtro_rel_doc_trns['inm_transferencia.id'] = $inm_transferencia['inm_transferencia_id'];
-            $r_rel_doc_transferencia = (new inm_rel_doc_transferencia(link: $this->link))->filtro_and(filtro: $filtro_rel_doc_trns);
+            $r_rel_doc_transferencia = (new inm_rel_doc_transferencia(link: $this->link))->filtro_and(
+                filtro: $filtro_rel_doc_trns);
             if (errores::$error) {
-                return $this->retorno_error(mensaje: 'Error al obtener inputs', data: $r_rel_doc_transferencia,header: $header,
-                    ws:  $ws);
+                return $this->retorno_error(mensaje: 'Error al obtener inputs', data: $r_rel_doc_transferencia,
+                    header: $header, ws:  $ws);
             }
 
             if($r_rel_doc_transferencia->n_registros > 0){
@@ -1762,8 +1764,8 @@ class controlador_inm_comprador extends _ctl_base {
         }
         foreach ($r_inm_efectivo->registros as $inm_efectivo) {
             $button = $this->html->button_href(accion: 'elimina_bd', etiqueta: 'Elimina',
-                registro_id: $inm_efectivo['inm_efectivo_id'], seccion: 'inm_efectivo', style: 'danger',
-                params: $params);
+                registro_id: $inm_efectivo['inm_rel_efectivo_comprador_id'], seccion: 'inm_rel_efectivo_comprador',
+                style: 'danger', params: $params);
             if(errores::$error){
                 return $this->retorno_error(mensaje: 'Error al integrar button',data:  $button,header: $header,
                     ws:  $ws);

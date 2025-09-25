@@ -72,7 +72,22 @@ class controlador_inm_rel_efectivo_comprador extends _ctl_base {
         return $campos_view;
     }
 
+    public function elimina_bd(bool $header, bool $ws = false): array|stdClass
+    {
+        $_POST['params'] = array();
+        if(isset($_GET['pestana_general_actual'])) {
+            $_POST['params'] = array('pestana_general_actual' => $_GET['pestana_general_actual'],
+                'pestana_actual' => $_GET['pestana_actual']);
+        }
 
+        $r_elimina_bd =  parent::elimina_bd($header, $ws);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener inputs',data:  $r_elimina_bd, header: $header,ws:  $ws);
+        }
+
+        return $r_elimina_bd;
+    }
 
     public function modifica(bool $header, bool $ws = false): array|stdClass
     {
