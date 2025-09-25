@@ -66,20 +66,6 @@ class inm_efectivo extends _modelo_parent{
 
     public function elimina_bd(int $id): array|stdClass
     {
-        $modelo_inm_rel = new inm_rel_efectivo_ubicacion(link: $this->link);
-        $filtro['inm_efectivo.id'] = $id;
-        $r_rel = $modelo_inm_rel->filtro_and(filtro: $filtro);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al obtener relacion',data:  $r_rel);
-        }
-
-        if($r_rel->n_registros > 0) {
-            $r_elimina = $modelo_inm_rel->elimina_bd(id: $r_rel->registros[0]['inm_rel_efectivo_ubicacion_id']);
-            if (errores::$error) {
-                return $this->error->error(mensaje: 'Error al obtener relacion', data: $r_elimina);
-            }
-        }
-        
         $modelo_inm_rel = new inm_rel_costo_efectivo(link: $this->link);
         $filtro['inm_efectivo.id'] = $id;
         $r_rel = $modelo_inm_rel->filtro_and(filtro: $filtro);

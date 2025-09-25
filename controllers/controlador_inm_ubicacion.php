@@ -1777,8 +1777,8 @@ class controlador_inm_ubicacion extends _ctl_base {
         }
         foreach ($r_inm_efectivo->registros as $inm_efectivo) {
             $button = $this->html->button_href(accion: 'elimina_bd', etiqueta: 'Elimina',
-                registro_id: $inm_efectivo['inm_efectivo_id'], seccion: 'inm_efectivo', style: 'danger',
-                params: $params);
+                registro_id: $inm_efectivo['inm_rel_efectivo_ubicacion_id'], seccion: 'inm_rel_efectivo_ubicacion',
+                style: 'danger', params: $params);
             if(errores::$error){
                 return $this->retorno_error(mensaje: 'Error al integrar button',data:  $button,header: $header,
                     ws:  $ws);
