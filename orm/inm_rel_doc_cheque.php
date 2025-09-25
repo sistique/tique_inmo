@@ -11,8 +11,8 @@ class inm_rel_doc_cheque extends _modelo_parent{
     public function __construct(PDO $link)
     {
         $tabla = 'inm_rel_doc_cheque';
-        $columnas = array($tabla=>false, 'inm_cheque' => $tabla, 'inm_doc_ubicacion' => $tabla,
-            'doc_documento'=>'inm_doc_ubicacion', 'doc_tipo_documento'=>'doc_documento');
+        $columnas = array($tabla=>false, 'inm_cheque' => $tabla, 'inm_doc_comprador' => $tabla,
+            'doc_documento'=>'inm_doc_comprador', 'doc_tipo_documento'=>'doc_documento');
 
         $campos_obligatorios = array();
 
@@ -65,7 +65,7 @@ class inm_rel_doc_cheque extends _modelo_parent{
         }
 
         $descripcion = $registro['inm_cheque_id'];
-        $descripcion .= ' '.$registro['inm_doc_ubicacion_id'];
+        $descripcion .= ' '.$registro['inm_doc_comprador_id'];
         return $descripcion;
     }
 
@@ -81,7 +81,7 @@ class inm_rel_doc_cheque extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al eliminar prospecto documento', data: $elimina);
         }
 
-        $documento = (new inm_doc_ubicacion(link: $this->link))->elimina_bd(id: $registro['inm_doc_ubicacion_id']);
+        $documento = (new inm_doc_comprador(link: $this->link))->elimina_bd(id: $registro['inm_doc_comprador_id']);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al eliminar documento', data: $documento);
         }
@@ -91,7 +91,7 @@ class inm_rel_doc_cheque extends _modelo_parent{
 
     private function valida_alta_relacion(array $registro){
 
-        $keys = array('inm_cheque_id','inm_doc_ubicacion_id');
+        $keys = array('inm_cheque_id','inm_doc_comprador_id');
         $valida = $this->validacion->valida_ids(keys: $keys,registro:  $registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar $registro',data: $valida);

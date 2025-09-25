@@ -1584,9 +1584,9 @@ class controlador_inm_comprador extends _ctl_base {
                         data: $button_descarga_zip, header: $header, ws: $ws);
                 }
 
-                $params = array('accion_retorno'=>'proceso_comprador','seccion_retorno'=>'inm_comprador',
+                $params = array('accion_retorno'=>'proceso_cliente','seccion_retorno'=>'inm_comprador',
                     'id_retorno'=>$this->registro_id, 'pestana_general_actual' => 'pestanageneral2',
-                    'pestana_actual' => 'pestana7');
+                    'pestana_actual' => 'pestana10');
                 $button_elimina_bd = $this->html->button_href(accion: 'elimina_bd',
                     etiqueta: 'Elimina', registro_id: $r_rel_doc_cheque->registros[0]['inm_rel_doc_cheque_id'],
                     seccion: 'inm_rel_doc_cheque', style: 'danger',params: $params);
@@ -1596,7 +1596,7 @@ class controlador_inm_comprador extends _ctl_base {
                 }
 
                 $res = "<tr>
-                            <td colspan='6'>
+                            <td colspan='7'>
                                 <div class='content_btns'>
                                     <div class='content_btn'>
                                         $button_descarga
@@ -1623,7 +1623,7 @@ class controlador_inm_comprador extends _ctl_base {
                         ws:  $ws);
                 }
                 $res = "<tr>
-                <td colspan='6'>$button</td>
+                <td colspan='7'>$button</td>
                 </tr>";
             }
 
@@ -1692,9 +1692,9 @@ class controlador_inm_comprador extends _ctl_base {
                         data: $button_descarga_zip, header: $header, ws: $ws);
                 }
 
-                $params = array('accion_retorno'=>'proceso_comprador','seccion_retorno'=>'inm_comprador',
+                $params = array('accion_retorno'=>'proceso_cliente','seccion_retorno'=>'inm_comprador',
                     'id_retorno'=>$this->registro_id, 'pestana_general_actual' => 'pestanageneral2',
-                    'pestana_actual' => 'pestana2');
+                    'pestana_actual' => 'pestana10');
                 $button_elimina_bd = $this->html->button_href(accion: 'elimina_bd',
                     etiqueta: 'Elimina', registro_id: $r_rel_doc_transferencia->registros[0]['inm_rel_doc_transferencia_id'],
                     seccion: 'inm_rel_doc_transferencia', style: 'danger',params: $params);
@@ -1704,20 +1704,34 @@ class controlador_inm_comprador extends _ctl_base {
                 }
 
                 $res = "<tr>
-                    <td>$button_descarga</td>
-                    <td>$button_vista_previa</td>
-                    <td>$button_descarga_zip</td>
-                    <td>$button_elimina_bd</td>
-                    </tr>";
+                            <td colspan='7'>
+                                <div class='content_btns'>
+                                    <div class='content_btn'>
+                                        $button_descarga
+                                    </div>
+                                    <div class='content_btn'>
+                                        $button_vista_previa
+                                    </div>
+                                    <div class='content_btn'>
+                                        $button_descarga_zip
+                                    </div>
+                                    <div class='content_btn'>
+                                        $button_elimina_bd
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>";
             }else{
-                $button = $this->html->input_file(cols: 12, name: 'documentos[36][]', row_upd: new stdClass(),
+                $name = "documentos_transferencias[$inm_transferencia[inm_transferencia_id]][49][]";
+
+                $button = $this->html->input_file(cols: 12, name: $name, row_upd: new stdClass(),
                     value_vacio: false, place_holder: 'Subir Documento',required: false, con_label: false);
                 if (errores::$error) {
                     return $this->retorno_error(mensaje: 'Error al obtener inputs', data: $button,header: $header,
                         ws:  $ws);
                 }
                 $res = "<tr>
-                <td colspan='6'>$button</td>
+                <td colspan='7'>$button</td>
                 </tr>";
             }
 
@@ -2669,6 +2683,112 @@ class controlador_inm_comprador extends _ctl_base {
                 $this->link->rollBack();
                 return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_efectivo,
                     header: $header, ws: $ws);
+            }
+        }
+
+        if(isset($_POST['alta_documento']) && trim($_POST['alta_documento']) !== '') {
+            $inm_doc_comprador =  new inm_doc_comprador(link: $this->link);
+
+            $tipos_documento_cheque = array();
+            if(isset($_FILES['documentos_cheques'])) {
+                foreach ($_FILES['documentos_cheques']['name'] as $costo => $tipo_documento) {
+                    foreach ($tipo_documento as $key => $value) {
+                        foreach ($value as $nombre_documento) {
+                            $tipos_documento_cheque[$costo][$key]['name'] = $nombre_documento;
+                        }
+                    }
+                }
+
+                foreach ($_FILES['documentos_cheques']['tmp_name'] as $costo => $tipo_documento) {
+                    foreach ($tipo_documento as $key => $value) {
+                        foreach ($value as $nombre_documento) {
+                            $tipos_documento_cheque[$costo][$key]['tmp_name'] = $nombre_documento;
+                        }
+                    }
+                }
+            }
+
+            $tipos_documento_transferencia = array();
+            if(isset($_FILES['documentos_transferencias'])) {
+                foreach ($_FILES['documentos_transferencias']['name'] as $costo => $tipo_documento) {
+                    foreach ($tipo_documento as $key => $value) {
+                        foreach ($value as $nombre_documento) {
+                            $tipos_documento_transferencia[$costo][$key]['name'] = $nombre_documento;
+                        }
+                    }
+                }
+
+                foreach ($_FILES['documentos_transferencias']['tmp_name'] as $costo => $tipo_documento) {
+                    foreach ($tipo_documento as $key => $value) {
+                        foreach ($value as $nombre_documento) {
+                            $tipos_documento_transferencia[$costo][$key]['tmp_name'] = $nombre_documento;
+                        }
+                    }
+                }
+            }
+
+            $r_rel_doc_ubi_che = array();
+            foreach ($tipos_documento_cheque AS $cheque_id => $doc) {
+                $valor_documento = array();
+                foreach ($doc AS $tipo_documento_id => $value) {
+                    $valor_documento['name'] = $value['name'];
+                    $valor_documento['tmp_name'] = $value['tmp_name'];
+
+                    if ($valor_documento['name'] !== '' && $valor_documento['tmp_name'] !== '') {
+                        $registro = array();
+                        $registro['doc_tipo_documento_id'] = $tipo_documento_id;
+                        $registro['inm_comprador_id'] = $this->registro_id;
+
+                        $_FILES = array();
+                        $_FILES['documento'] = $valor_documento;
+                        $result = $inm_doc_comprador->alta_registro(registro: $registro);
+                        if (errores::$error) {
+                            return $this->retorno_error(mensaje: 'Error al insertar datos', data: $result, header: $header,
+                                ws: $ws);
+                        }
+
+                        $registro_rel = array();
+                        $registro_rel['inm_cheque_id'] = $cheque_id;
+                        $registro_rel['inm_doc_comprador_id'] = $result->registro_id;
+                        $r_rel_doc_ubi_che = (new inm_rel_doc_cheque(link: $this->link))->alta_registro(registro: $registro_rel);
+                        if (errores::$error) {
+                            return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_rel_doc_ubi_che,
+                                header: $header, ws: $ws);
+                        }
+                    }
+                }
+            }
+
+            $r_rel_doc_ubi_trs = array();
+            foreach ($tipos_documento_transferencia AS $transferencia_id => $doc) {
+                $valor_documento = array();
+                foreach ($doc AS $tipo_documento_id => $value) {
+                    $valor_documento['name'] = $value['name'];
+                    $valor_documento['tmp_name'] = $value['tmp_name'];
+
+                    if ($valor_documento['name'] !== '' && $valor_documento['tmp_name'] !== '') {
+                        $registro = array();
+                        $registro['doc_tipo_documento_id'] = $tipo_documento_id;
+                        $registro['inm_comprador_id'] = $this->registro_id;
+
+                        $_FILES = array();
+                        $_FILES['documento'] = $valor_documento;
+                        $result = $inm_doc_comprador->alta_registro(registro: $registro);
+                        if (errores::$error) {
+                            return $this->retorno_error(mensaje: 'Error al insertar datos', data: $result, header: $header,
+                                ws: $ws);
+                        }
+
+                        $registro_rel = array();
+                        $registro_rel['inm_transferencia_id'] = $transferencia_id;
+                        $registro_rel['inm_doc_comprador_id'] = $result->registro_id;
+                        $r_rel_doc_ubi_trs = (new inm_rel_doc_transferencia(link: $this->link))->alta_registro(registro: $registro_rel);
+                        if (errores::$error) {
+                            return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_rel_doc_ubi_trs,
+                                header: $header, ws: $ws);
+                        }
+                    }
+                }
             }
         }
 

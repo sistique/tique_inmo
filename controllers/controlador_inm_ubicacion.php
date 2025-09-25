@@ -2634,35 +2634,39 @@ class controlador_inm_ubicacion extends _ctl_base {
         $inm_doc_ubicacion =  new inm_doc_ubicacion(link: $this->link);
 
         $tipos_documento_cheque = array();
-        foreach ($_FILES['documentos_cheques']['name'] AS $costo => $tipo_documento) {
-            foreach ($tipo_documento AS $key => $value) {
-                foreach ($value AS $nombre_documento) {
-                    $tipos_documento_cheque[$costo][$key]['name'] = $nombre_documento;
+        if(isset($_FILES['documentos_cheques'])) {
+            foreach ($_FILES['documentos_cheques']['name'] as $costo => $tipo_documento) {
+                foreach ($tipo_documento as $key => $value) {
+                    foreach ($value as $nombre_documento) {
+                        $tipos_documento_cheque[$costo][$key]['name'] = $nombre_documento;
+                    }
                 }
             }
-        }
 
-        foreach ($_FILES['documentos_cheques']['tmp_name'] AS $costo => $tipo_documento) {
-            foreach ($tipo_documento AS $key => $value) {
-                foreach ($value AS $nombre_documento) {
-                    $tipos_documento_cheque[$costo][$key]['tmp_name'] = $nombre_documento;
+            foreach ($_FILES['documentos_cheques']['tmp_name'] as $costo => $tipo_documento) {
+                foreach ($tipo_documento as $key => $value) {
+                    foreach ($value as $nombre_documento) {
+                        $tipos_documento_cheque[$costo][$key]['tmp_name'] = $nombre_documento;
+                    }
                 }
             }
         }
 
         $tipos_documento_transferencia = array();
-        foreach ($_FILES['documentos_transferencias']['name'] AS $costo => $tipo_documento) {
-            foreach ($tipo_documento AS $key => $value) {
-                foreach ($value AS $nombre_documento) {
-                    $tipos_documento_transferencia[$costo][$key]['name'] = $nombre_documento;
+        if(isset($_FILES['documentos_transferencias'])) {
+            foreach ($_FILES['documentos_transferencias']['name'] as $costo => $tipo_documento) {
+                foreach ($tipo_documento as $key => $value) {
+                    foreach ($value as $nombre_documento) {
+                        $tipos_documento_transferencia[$costo][$key]['name'] = $nombre_documento;
+                    }
                 }
             }
-        }
 
-        foreach ($_FILES['documentos_transferencias']['tmp_name'] AS $costo => $tipo_documento) {
-            foreach ($tipo_documento AS $key => $value) {
-                foreach ($value AS $nombre_documento) {
-                    $tipos_documento_transferencia[$costo][$key]['tmp_name'] = $nombre_documento;
+            foreach ($_FILES['documentos_transferencias']['tmp_name'] as $costo => $tipo_documento) {
+                foreach ($tipo_documento as $key => $value) {
+                    foreach ($value as $nombre_documento) {
+                        $tipos_documento_transferencia[$costo][$key]['tmp_name'] = $nombre_documento;
+                    }
                 }
             }
         }

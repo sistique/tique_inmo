@@ -10,6 +10,16 @@
     display: none;
 }
 
+.content_btns{
+    display: flex;
+    width: 100%;
+}
+
+.content_btn{
+    width: 25%;
+    padding: 0 10px;
+}
+
 /******* Modifica ********/
 .chk {
     padding-left: 20px;
