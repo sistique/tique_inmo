@@ -3238,10 +3238,30 @@ class controlador_inm_comprador extends _ctl_base {
     }
 
     public function get_etapa_actual(bool $header, bool $ws = false){
+        $in_comp = array();
+        $in_comp['llave'] = 'inm_status_comprador.id';
+        $in_comp['values'] = array('1','2','3','4','5','6','7','8','9','10');
+
+        $filtro_bit['inm_comprador.id'] = $_POST['id'];
+        $order = array('inm_bitacora_status_comprador.fecha_status'=>'DESC');
+        $inm_bit_comp = (new inm_bitacora_status_comprador(link: $this->link))->filtro_and(filtro: $filtro_bit,
+            in: $in_comp, order: $order);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener etapas no validas', data: $inm_bit_comp,
+                header: $header, ws: $ws);
+        }
+
+        $ultimo_etapa = 'DETENIDO';
+        if ($inm_bit_comp->n_registros > 0) {
+            $ultimo_etapa = $inm_bit_comp->registros[0]['inm_status_comprador_descripcion'];
+        }
+
         $pestanas = array("DETENIDO" => "pestana1", "ASIGNADO" => "pestana2", "EN AVALUO" => "pestana3",
             "POR INGRESAR" => "pestana4", "INGRESADO" => "pestana5", "AUTORIZADO" => "pestana6",
             "POR FIRMAR" => "pestana7", "ESCRITURADO" => "pestana8", "COTEJADO" => "pestana9",
-            "COBRADO" => "pestana10", "CANCELADO"=> "pestana1");
+            "COBRADO" => "pestana10", "CANCELADO"=> "sin_pestana");
+
+        $pestana_anterior = $pestanas[$ultimo_etapa] ?? 'pestana1';
 
         $r_comprador = (new inm_comprador(link: $this->link))->registro(registro_id: $_POST['id']);
         if (errores::$error) {
@@ -3253,6 +3273,10 @@ class controlador_inm_comprador extends _ctl_base {
         foreach ($pestanas as $key => $value) {
             if($key === $r_comprador['inm_status_comprador_descripcion']){
                 $pestana_actual = $value;
+
+                if($key === 'CANCELADO'){
+                    $pestana_actual = $pestana_anterior;
+                }
             }
         }
 
