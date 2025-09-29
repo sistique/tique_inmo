@@ -119,6 +119,16 @@ class inm_referencia extends _modelo_parent{
 
     public function elimina_bd(int $id): array|stdClass
     {
+        $inm_bit_comp = (new inm_bitacora_status_comprador(link: $this->link))->existe_status_comprador(
+            inm_comprador_id: $id, values: array('11'));
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener bitacora status comp',data:  $inm_bit_comp);
+        }
+
+        if ($inm_bit_comp->n_registros > 0) {
+            return $this->error->error(mensaje: 'Error el cliente ya esta cancelado',data:  $inm_bit_comp);
+        }
+
         $documento_etapa = (new inm_rel_referencia_comprador(link: $this->link))->elimina_con_filtro_and(
             filtro: array('inm_referencia_id' => $id));
         if (errores::$error) {

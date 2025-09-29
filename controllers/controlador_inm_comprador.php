@@ -3068,6 +3068,19 @@ class controlador_inm_comprador extends _ctl_base {
     }
 
     public function documentos_bd(bool $header, bool $ws = false): array|stdClass{
+
+        $inm_bit_comp = (new inm_bitacora_status_comprador(link: $this->link))->existe_status_comprador(
+            inm_comprador_id: $this->registro_id, values: array('11'));
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener bitacora status comp',data:  $inm_bit_comp,
+                header: $header, ws: $ws);
+        }
+
+        if ($inm_bit_comp->n_registros > 0) {
+            return $this->retorno_error(mensaje: 'Error el cliente ya esta cancelado',data:  $inm_bit_comp,
+                header: $header, ws: $ws);
+        }
+
         $inm_doc_comprador =  new inm_doc_comprador(link: $this->link);
 
         $names = array();
@@ -3972,6 +3985,18 @@ class controlador_inm_comprador extends _ctl_base {
     public function modifica_bd(bool $header, bool $ws): array|stdClass
     {
         $this->link->beginTransaction();
+
+        $inm_bit_comp = (new inm_bitacora_status_comprador(link: $this->link))->existe_status_comprador(
+            inm_comprador_id: $this->registro_id, values: array('11'));
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener bitacora status comp',data:  $inm_bit_comp,
+                header: $header, ws: $ws);
+        }
+
+        if ($inm_bit_comp->n_registros > 0) {
+            return $this->retorno_error(mensaje: 'Error el cliente ya esta cancelado',data:  $inm_bit_comp,
+                header: $header, ws: $ws);
+        }
 
         $tiene_prospecto = (new inm_comprador(link: $this->link))->tiene_prospecto(inm_comprador_id: $this->registro_id);
         if(errores::$error){
