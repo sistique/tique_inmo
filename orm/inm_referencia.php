@@ -119,8 +119,14 @@ class inm_referencia extends _modelo_parent{
 
     public function elimina_bd(int $id): array|stdClass
     {
+        $rel_refe = (new inm_rel_referencia_comprador(link: $this->link))->filtro_and(
+            filtro: array('inm_referencia_id' => $id));
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener bitacora status comp',data:  $rel_refe);
+        }
+
         $inm_bit_comp = (new inm_bitacora_status_comprador(link: $this->link))->existe_status_comprador(
-            inm_comprador_id: $id, values: array('11'));
+            inm_comprador_id: $rel_refe->registros[0]['inm_comprador_id'], values: array('11'));
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al obtener bitacora status comp',data:  $inm_bit_comp);
         }

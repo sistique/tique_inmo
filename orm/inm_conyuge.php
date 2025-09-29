@@ -107,16 +107,6 @@ class inm_conyuge extends _modelo_parent{
 
     public function elimina_bd(int $id): array|stdClass
     {
-        $inm_bit_comp = (new inm_bitacora_status_comprador(link: $this->link))->existe_status_comprador(
-            inm_comprador_id: $id, values: array('11'));
-        if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al obtener bitacora status comp',data:  $inm_bit_comp);
-        }
-
-        if ($inm_bit_comp->n_registros > 0) {
-            return $this->error->error(mensaje: 'Error el cliente ya esta cancelado',data:  $inm_bit_comp);
-        }
-
         $filtro['inm_conyuge.id'] = $id;
 
         $del = (new inm_rel_conyuge_prospecto(link: $this->link))->elimina_con_filtro_and(filtro:$filtro);
