@@ -31,6 +31,16 @@ class inm_avaluo extends _modelo_parent{
 
     public function alta_bd(array $keys_integra_ds = array('codigo', 'descripcion')): array|\stdClass
     {
+        $inm_bit_comp = (new inm_bitacora_status_comprador(link: $this->link))->existe_status_comprador(
+            inm_comprador_id: $this->registro['inm_comprador_id'], values: array('11'));
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener bitacora status comp',data:  $inm_bit_comp);
+        }
+
+        if ($inm_bit_comp->n_registros > 0) {
+            return $this->error->error(mensaje: 'Error el cliente ya esta cancelado',data:  $inm_bit_comp);
+        }
+
         $filtro_rel_ubi['inm_rel_ubi_comp.status'] = 'activo';
         $filtro_rel_ubi['inm_comprador.id'] = $this->registro['inm_comprador_id'];
         $r_inm_rel_ubi_comp = (new inm_rel_ubi_comp(link: $this->link))->filtro_and(filtro: $filtro_rel_ubi);

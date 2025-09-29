@@ -2419,6 +2419,18 @@ class controlador_inm_comprador extends _ctl_base {
     {
         $this->link->beginTransaction();
 
+        $inm_bit_comp = (new inm_bitacora_status_comprador(link: $this->link))->existe_status_comprador(
+            inm_comprador_id: $this->registro['inm_comprador_id'], values: array('11'));
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener bitacora status comp',data:  $inm_bit_comp,
+                header: $header, ws: $ws);
+        }
+
+        if ($inm_bit_comp->n_registros > 0) {
+            return $this->retorno_error(mensaje: 'Error el cliente ya esta cancelado',data:  $inm_bit_comp,
+                header: $header, ws: $ws);
+        }
+
         $filtro_exi['inm_comprador.id'] = $this->registro_id;
         $filtro_exi['inm_status_comprador.id'] = 6;
         $existe = (new inm_bitacora_status_comprador(link: $this->link))->existe(filtro: $filtro_exi);
@@ -3315,6 +3327,18 @@ class controlador_inm_comprador extends _ctl_base {
     public function ingresado_bd(bool $header, bool $ws = false)
     {
         $this->link->beginTransaction();
+
+        $inm_bit_comp = (new inm_bitacora_status_comprador(link: $this->link))->existe_status_comprador(
+            inm_comprador_id: $this->registro['inm_comprador_id'], values: array('11'));
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener bitacora status comp',data:  $inm_bit_comp,
+                header: $header, ws: $ws);
+        }
+
+        if ($inm_bit_comp->n_registros > 0) {
+            return $this->retorno_error(mensaje: 'Error el cliente ya esta cancelado',data:  $inm_bit_comp,
+                header: $header, ws: $ws);
+        }
 
         $filtro_exi['inm_comprador.id'] = $this->registro_id;
         $filtro_exi['inm_status_comprador.id'] = 5;

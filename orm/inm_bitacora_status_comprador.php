@@ -26,13 +26,8 @@ class inm_bitacora_status_comprador extends _modelo_parent{
 
     public function alta_bd(array $keys_integra_ds = array('codigo', 'descripcion')): array|stdClass
     {
-        $in_comp = array();
-        $in_comp['llave'] = 'inm_status_comprador.id';
-        $in_comp['values'] = array('11');
-
-        $filtro_bit['inm_comprador.id'] = $this->registro['inm_comprador_id'];
-        $inm_bit_comp = (new inm_bitacora_status_comprador(link: $this->link))->filtro_and(filtro: $filtro_bit,
-            in: $in_comp);
+        $inm_bit_comp = (new inm_bitacora_status_comprador(link: $this->link))->existe_status_comprador(
+            inm_comprador_id: $this->registro['inm_comprador_id'], values: array('11'));
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al obtener bitacora status comp',data:  $inm_bit_comp);
         }
@@ -83,4 +78,19 @@ class inm_bitacora_status_comprador extends _modelo_parent{
         return $r_alta_bd;
     }
 
+
+    public function existe_status_comprador(int $inm_comprador_id, $key = 'inm_status_comprador.id', $values = array()){
+        $in_comp = array();
+        $in_comp['llave'] = $key;
+        $in_comp['values'] = $values;
+
+        $filtro_bit['inm_comprador.id'] = $inm_comprador_id;
+        $inm_bit_comp = (new inm_bitacora_status_comprador(link: $this->link))->filtro_and(filtro: $filtro_bit,
+            in: $in_comp);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener bitacora status comp',data:  $inm_bit_comp);
+        }
+
+        return $inm_bit_comp;
+    }
 }
