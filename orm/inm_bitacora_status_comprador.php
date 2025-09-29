@@ -26,6 +26,21 @@ class inm_bitacora_status_comprador extends _modelo_parent{
 
     public function alta_bd(array $keys_integra_ds = array('codigo', 'descripcion')): array|stdClass
     {
+        $in_comp = array();
+        $in_comp['llave'] = 'inm_status_comprador.id';
+        $in_comp['values'] = array('11');
+
+        $filtro_bit['inm_comprador.id'] = $this->registro['inm_comprador_id'];
+        $inm_bit_comp = (new inm_bitacora_status_comprador(link: $this->link))->filtro_and(filtro: $filtro_bit,
+            in: $in_comp);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener bitacora status comp',data:  $inm_bit_comp);
+        }
+
+        if ($inm_bit_comp->n_registros > 0) {
+            return $this->error->error(mensaje: 'Error el cliente ya esta cancelado',data:  $inm_bit_comp);
+        }
+
         if(!isset($this->registro['descripcion'])){
             $descripcion = $this->registro['inm_comprador_id'];
             $descripcion .= ' '.$this->registro['inm_status_comprador_id'];

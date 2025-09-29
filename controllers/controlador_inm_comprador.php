@@ -2686,29 +2686,37 @@ class controlador_inm_comprador extends _ctl_base {
                 data: $inm_bit_comp, header: $header, ws: $ws);
         }
 
-        $filtro_exi['inm_comprador.id'] = $_POST['inm_comprador_id'];
-        $filtro_exi['inm_status_comprador.id'] = $_POST['inm_status_comprador_id'];
-        $existe = (new inm_bitacora_status_comprador(link: $this->link))->existe(filtro: $filtro_exi);
+        $imp_rel_ubi_comp = (new inm_rel_ubi_comp(link: $this->link))->existe_imp_rel_ubi_comp(
+            inm_comprador_id: $_POST['inm_comprador_id']);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener imp_rel_ubi_comp', data: $imp_rel_ubi_comp,
+                header: $header,ws: $ws);
+        }
+
+        if($imp_rel_ubi_comp['existe']){
+            $registro_rel['status'] = 'inactivo';
+
+            $imp_rel_ubi_comp = (new inm_rel_ubi_comp(link: $this->link))->modifica_bd(
+                registro: $registro_rel, id: $imp_rel_ubi_comp['registro']['inm_rel_ubi_comp_id']);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al obtener imp_rel_ubi_comp', data: $imp_rel_ubi_comp,
+                    header: $header,ws: $ws);
+            }
+        }
+
+        $registro = array();
+        $registro['inm_comprador_id'] = $_POST['inm_comprador_id'];
+        $registro['inm_status_comprador_id'] = $_POST['inm_status_comprador_id'];
+        $registro['fecha_status'] = date('Y-m-d\TH:i:s');
+        $registro['observaciones'] = $_POST['observaciones'];
+        $r_inm_bitacora_status_comprador = (new inm_bitacora_status_comprador(link: $this->link))->alta_registro(
+            registro: $registro);
         if (errores::$error) {
             $this->link->rollBack();
-            return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $existe,
+            return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_bitacora_status_comprador,
                 header: $header, ws: $ws);
         }
 
-        if (!$existe) {
-            $registro = array();
-            $registro['inm_comprador_id'] = $_POST['inm_comprador_id'];
-            $registro['inm_status_comprador_id'] = $_POST['inm_status_comprador_id'];
-            $registro['fecha_status'] = date('Y-m-d\TH:i:s');
-            $registro['observaciones'] = $_POST['observaciones'];
-            $r_inm_bitacora_status_comprador = (new inm_bitacora_status_comprador(link: $this->link))->alta_registro(
-                registro: $registro);
-            if (errores::$error) {
-                $this->link->rollBack();
-                return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_bitacora_status_comprador,
-                    header: $header, ws: $ws);
-            }
-        }
         $this->link->commit();
 
         $params = array();
@@ -3233,7 +3241,7 @@ class controlador_inm_comprador extends _ctl_base {
         $pestanas = array("DETENIDO" => "pestana1", "ASIGNADO" => "pestana2", "EN AVALUO" => "pestana3",
             "POR INGRESAR" => "pestana4", "INGRESADO" => "pestana5", "AUTORIZADO" => "pestana6",
             "POR FIRMAR" => "pestana7", "ESCRITURADO" => "pestana8", "COTEJADO" => "pestana9",
-            "COBRADO" => "pestana10", "CANCELADO"=> "sin_pestana");
+            "COBRADO" => "pestana10", "CANCELADO"=> "pestana1");
 
         $r_comprador = (new inm_comprador(link: $this->link))->registro(registro_id: $_POST['id']);
         if (errores::$error) {

@@ -78,6 +78,21 @@ class inm_rel_ubi_comp extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al insertar', data: $r_alta_bd);
         }
 
+        $in_comp = array();
+        $in_comp['llave'] = 'inm_status_comprador.id';
+        $in_comp['values'] = array('11');
+
+        $filtro_bit['inm_comprador.id'] = $_POST['inm_comprador_id'];
+        $inm_bit_comp = (new inm_bitacora_status_comprador(link: $this->link))->filtro_and(filtro: $filtro_bit,
+            in: $in_comp);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener datos de bitacora', data: $inm_bit_comp);
+        }
+
+        if ($inm_bit_comp->n_registros > 0) {
+            return $this->error->error(mensaje: 'Error el cliente ya esta cancelado', data: $inm_bit_comp);
+        }
+
         $filtro_exi['inm_comprador.id'] = $registro['inm_comprador_id'];
         $filtro_exi['inm_status_comprador.id'] = 2;
         $existe = (new inm_bitacora_status_comprador(link: $this->link))->existe(filtro: $filtro_exi);
@@ -292,6 +307,65 @@ class inm_rel_ubi_comp extends _modelo_parent{
                 mensaje: 'Error no existe inm_rel_ubi_comp',data:  $r_imp_rel_ubi_comp);
         }
         return $r_imp_rel_ubi_comp->registros[0];
+    }
+
+    final public function existe_imp_rel_ubi_comp(int $inm_comprador_id): array|bool
+    {
+        if($inm_comprador_id<=0){
+            return $this->error->error(mensaje: 'Error inm_comprador_id debe ser mayor a 0',data:  $inm_comprador_id);
+        }
+
+        $filtro['inm_comprador.id'] = $inm_comprador_id;
+        $extra_join['dp_colonia_postal'] = array(
+            'key' => 'id',
+            'enlace' => 'inm_ubicacion',
+            'key_enlace' => 'dp_colonia_postal_domicilio_id',
+            'renombre' => 'dp_colonia_postal_domicilio');
+
+        $extra_join['dp_cp'] = array(
+            'key' => 'id',
+            'enlace' => 'dp_colonia_postal_domicilio',
+            'key_enlace' => 'dp_cp_id',
+            'renombre' => 'dp_cp_domicilio');
+
+        $extra_join['dp_colonia'] = array(
+            'key' => 'id',
+            'enlace' => 'dp_colonia_postal_domicilio',
+            'key_enlace' => 'dp_colonia_id',
+            'renombre' => 'dp_colonia_domicilio');
+
+        $extra_join['dp_municipio'] = array(
+            'key' => 'id',
+            'enlace' => 'dp_cp_domicilio',
+            'key_enlace' => 'dp_municipio_id',
+            'renombre' => 'dp_municipio_domicilio');
+
+        $extra_join['dp_estado'] = array(
+            'key' => 'id',
+            'enlace' => 'dp_municipio_domicilio',
+            'key_enlace' => 'dp_estado_id',
+            'renombre' => 'dp_estado_domicilio');
+
+        $extra_join['dp_pais'] = array(
+            'key' => 'id',
+            'enlace' => 'dp_estado_domicilio',
+            'key_enlace' => 'dp_pais_id',
+            'renombre' => 'dp_pais_domicilio');
+
+        $r_imp_rel_ubi_comp = $this->filtro_and(extra_join: $extra_join, filtro: $filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener r_imp_rel_ubi_comp',data:  $r_imp_rel_ubi_comp);
+        }
+
+        $existe['registro'] = array();
+        $existe['existe'] = false;
+
+        if($r_imp_rel_ubi_comp->n_registros > 0){
+            $existe['registro'] = $r_imp_rel_ubi_comp->registros[0];
+            $existe['existe'] = true;
+        }
+
+        return $existe;
     }
 
     private function imp_rel_ubi_comp_filtro(array $filtro){
