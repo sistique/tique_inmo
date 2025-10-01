@@ -14,7 +14,7 @@ class inm_producto extends _modelo_parent{
     public function __construct(PDO $link)
     {
         $tabla = 'inm_producto';
-        $columnas = array($tabla=>false,'cat_sat_unidad'=>$tabla,'cat_sat_cve_prod'=>$tabla);
+        $columnas = array($tabla=>false,'cat_sat_unidad'=>$tabla,'cat_sat_cve_prod'=>$tabla,'inm_concepto'=>$tabla);
 
         $campos_obligatorios = array();
 
