@@ -380,9 +380,12 @@ class controlador_inm_factura_compra extends _ctl_base {
                     header: $header,ws:  $ws);
         }
 
+        $this->link->beginTransaction();
+
         $this->registros_concepto = (new inm_factura_compra(link: $this->link))->obten_registros_xml(
             inm_factura_compra_id: $this->registro_id);
         if (errores::$error) {
+            $this->link->rollBack();
             return $this->retorno_error(mensaje: 'Error al generar unidad', data: $this->registros_concepto, header: $header,
                 ws: $ws);
         }
@@ -390,18 +393,21 @@ class controlador_inm_factura_compra extends _ctl_base {
         $retorno = 'lista';
         $btn_action_next = $this->html->hidden('btn_action_next', value: $retorno);
         if (errores::$error) {
+            $this->link->rollBack();
             return $this->retorno_error(
                 mensaje: 'Error al generar btn_action_next', data: $btn_action_next, header: $header, ws: $ws);
         }
 
         $id_retorno = $this->html->hidden('id_retorno', value: -1);
         if (errores::$error) {
+            $this->link->rollBack();
             return $this->retorno_error(
                 mensaje: 'Error al generar btn_action_next', data: $btn_action_next, header: $header, ws: $ws);
         }
 
         $seccion_retorno = $this->html->hidden('seccion_retorno', value: $this->seccion);
         if (errores::$error) {
+            $this->link->rollBack();
             return $this->retorno_error(
                 mensaje: 'Error al generar btn_action_next', data: $btn_action_next, header: $header, ws: $ws);
         }
@@ -522,7 +528,7 @@ class controlador_inm_factura_compra extends _ctl_base {
      */
     public function inserta_detalle_bd(bool $header, bool $ws = false):array|stdClass
     {
-        if(!isset($_POST['asignaciones'])){
+        if (!isset($_POST['asignaciones'])) {
             return $this->retorno_error(mensaje: 'Error al obtener registro para alta', data: $_POST,
                 header: $header, ws: $ws);
         }
