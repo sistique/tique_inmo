@@ -25,17 +25,19 @@ class controlador_inm_concepto extends _ctl_base {
     {
         $modelo = new inm_concepto(link: $link);
         $html_ = new inm_concepto_html(html: $html);
-        $obj_link = new links_menu(link: $link, registro_id:  $this->registro_id);
+        $obj_link = new links_menu(link: $link, registro_id: $this->registro_id);
 
         $datatables = $this->init_datatable();
-        if(errores::$error){
-            $error = $this->errores->error(mensaje: 'Error al inicializar datatable',data: $datatables);
+        if (errores::$error) {
+            $error = $this->errores->error(mensaje: 'Error al inicializar datatable', data: $datatables);
             print_r($error);
             die('Error');
         }
 
-        parent::__construct(html:$html_, link: $link,modelo:  $modelo, obj_link: $obj_link, datatables: $datatables,
+        parent::__construct(html: $html_, link: $link, modelo: $modelo, obj_link: $obj_link, datatables: $datatables,
             paths_conf: $paths_conf);
+
+        $this->lista_get_data = true;
     }
 
     public function alta(bool $header, bool $ws = false): array|string

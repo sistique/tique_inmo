@@ -52,6 +52,8 @@ class controlador_inm_factura_compra extends _ctl_base {
         parent::__construct(html:$html_, link: $link,modelo:  $modelo, obj_link: $obj_link, datatables: $datatables,
             paths_conf: $paths_conf);
 
+        $this->lista_get_data = true;
+
         $init_links = $this->init_links();
         if (errores::$error) {
             $error = $this->errores->error(mensaje: 'Error al inicializar links', data: $init_links);

@@ -36,6 +36,8 @@ class controlador_inm_costo extends _ctl_base {
 
         parent::__construct(html:$html_, link: $link,modelo:  $modelo, obj_link: $obj_link, datatables: $datatables,
             paths_conf: $paths_conf);
+
+        $this->lista_get_data = true;
     }
 
     public function alta(bool $header, bool $ws = false): array|string
