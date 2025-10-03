@@ -97,13 +97,14 @@ class controlador_inm_factura_compra extends _ctl_base {
     {
         $keys = new stdClass();
         $keys->inputs = array('descripcion','descripcion_producto','cantidad_actual','costo_promedio',
-            'cat_sat_cve_prod_codigo');
+            'cat_sat_cve_prod_codigo','valor_unitario','subtotal','iva','total');
         $keys->selects = array();
 
         $init_data = array();
         $init_data['gt_proveedor'] = "gamboamartin\\gastos";
         $init_data['cat_sat_unidad'] = "gamboamartin\\cat_sat";
         $init_data['inm_concepto'] = "gamboamartin\\inmuebles";
+        $init_data['inm_producto'] = "gamboamartin\\inmuebles";
         $campos_view = $this->campos_view_base(init_data: $init_data,keys:  $keys);
 
         if(errores::$error){
@@ -284,7 +285,6 @@ class controlador_inm_factura_compra extends _ctl_base {
                 header: $header,ws:  $ws);
         }
 
-
         $this->row_upd->fecha = $r_factura_compra['inm_factura_compra_fecha'];
 
         $fecha = $this->html->input_fecha(cols: 6, row_upd: $this->row_upd, value_vacio: false,
@@ -294,6 +294,24 @@ class controlador_inm_factura_compra extends _ctl_base {
                 mensaje: 'Error al obtener input fecha',data:  $fecha, header: $header,ws:  $ws);
         }
         $this->inputs->fecha = $fecha;
+
+        $keys_selects = $this->key_select(cols: 8, con_registros: true,filtro:  array(), key: 'inm_producto_id',
+            keys_selects: $keys_selects, id_selected: -1, label: 'Producto');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = $this->key_select(cols: 4, con_registros: true,filtro:  array(), key: 'cat_sat_unidad_id',
+            keys_selects: $keys_selects, id_selected: -1, label: 'Unidad');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = $this->key_select(cols: 12, con_registros: true,filtro:  array(), key: 'inm_concepto_id',
+            keys_selects: $keys_selects, id_selected: -1, label: 'Concepto');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
 
         $inputs = $this->inputs(keys_selects: $keys_selects);
         if(errores::$error){
@@ -642,6 +660,30 @@ class controlador_inm_factura_compra extends _ctl_base {
 
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'cat_sat_cve_prod_codigo',
             keys_selects:$keys_selects, place_holder: 'Clave Producto');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'valor_unitario',
+            keys_selects:$keys_selects, place_holder: 'Valor Unitario');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 4,key: 'subtotal',
+            keys_selects:$keys_selects, place_holder: 'Subtotal');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 4,key: 'iva',
+            keys_selects:$keys_selects, place_holder: 'IVA');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 4,key: 'total',
+            keys_selects:$keys_selects, place_holder: 'Total');
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }

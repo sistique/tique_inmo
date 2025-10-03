@@ -204,11 +204,19 @@ echo "<style>
                 <?php include (new views())->ruta_templates."mensajes.php"; ?>
 
                 <div class="widget  widget-box box-container form-main widget-form-cart" id="form">
-                    <form enctype="multipart/form-data" method="post" action="" class="form-additional">
+                    <?php echo $controlador->inputs->gt_proveedor_id; ?>
+                    <?php echo $controlador->inputs->fecha; ?>
+
+                    <form enctype="multipart/form-data" method="post" action="<?php echo $controlador->link_inserta_detalle_bd; ?>" class="form-additional">
                         <?php include (new views())->ruta_templates."head/subtitulo.php"; ?>
 
-                        <?php echo $controlador->inputs->gt_proveedor_id; ?>
-                        <?php echo $controlador->inputs->fecha; ?>
+                        <?php echo $controlador->inputs->inm_producto_id; ?>
+                        <?php echo $controlador->inputs->cat_sat_unidad_id; ?>
+                        <?php echo $controlador->inputs->cantidad_actual; ?>
+                        <?php echo $controlador->inputs->valor_unitario; ?>
+                        <?php echo $controlador->inputs->subtotal; ?>
+                        <?php echo $controlador->inputs->iva; ?>
+                        <?php echo $controlador->inputs->total; ?>
 
                         <?php echo $controlador->inputs->btn_action_next; ?>
                         <?php echo $controlador->inputs->id_retorno; ?>
@@ -219,9 +227,13 @@ echo "<style>
                         </div>
                         <div class="control-group btn-alta">
                             <div class="controls">
+                                <button type="submit" class="btn btn-success btn-insert" name="btn_action_next">Inserta Producto</button>
+                                <button type="submit" class="btn btn-success" name="btn_action_next" title="Vista Previa">Asigna Productos</button>
+                                <br>
                             </div>
                         </div>
                     </form>
+
                     <br>
                     <table class="table table-striped">
                         <thead>
