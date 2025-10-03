@@ -103,6 +103,7 @@ class controlador_inm_factura_compra extends _ctl_base {
         $init_data = array();
         $init_data['gt_proveedor'] = "gamboamartin\\gastos";
         $init_data['cat_sat_unidad'] = "gamboamartin\\cat_sat";
+        $init_data['inm_concepto'] = "gamboamartin\\inmuebles";
         $campos_view = $this->campos_view_base(init_data: $init_data,keys:  $keys);
 
         if(errores::$error){
@@ -359,6 +360,12 @@ class controlador_inm_factura_compra extends _ctl_base {
 
         $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'cat_sat_unidad_id',
             keys_selects: $keys_selects, id_selected: -1, label: 'Unidad');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = $this->key_select(cols: 12, con_registros: true,filtro:  array(), key: 'inm_concepto_id',
+            keys_selects: $keys_selects, id_selected: -1, label: 'Concepto');
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }

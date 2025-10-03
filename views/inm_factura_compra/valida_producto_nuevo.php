@@ -338,6 +338,7 @@ echo "<style>
                             <div class="widget-header">
                                 <h2>Alta Producto</h2>
                             </div>
+                            <?php echo $controlador->inputs->inm_concepto_id; ?>
                             <?php echo $controlador->inputs->descripcion_producto; ?>
                             <?php echo $controlador->inputs->cat_sat_unidad_id; ?>
                             <?php echo $controlador->inputs->cat_sat_cve_prod_codigo; ?>
