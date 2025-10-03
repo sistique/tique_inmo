@@ -228,8 +228,6 @@ echo "<style>
                         <div class="control-group btn-alta">
                             <div class="controls">
                                 <button type="submit" class="btn btn-success btn-insert" name="btn_action_next">Inserta Producto</button>
-                                <button type="submit" class="btn btn-success" name="btn_action_next" title="Vista Previa">Asigna Productos</button>
-                                <br>
                             </div>
                         </div>
                     </form>
