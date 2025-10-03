@@ -37,17 +37,17 @@ class inm_producto extends _modelo_parent{
         $r_cat_sat_unidad = (new cat_sat_unidad(link: $this->link))->registro(
             registro_id: $this->registro['cat_sat_unidad_id']);
         if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al insertar prospecto', data: $r_cat_sat_unidad);
+            return $this->error->error(mensaje: 'Error al obtener unidad', data: $r_cat_sat_unidad);
         }
 
         $filtro['cat_sat_cve_prod.codigo'] = $this->registro['cat_sat_cve_prod_codigo'];
         $r_cat_sat_cve_prod = (new cat_sat_cve_prod(link: $this->link))->filtro_and(filtro: $filtro);
         if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al insertar prospecto', data: $r_cat_sat_cve_prod);
+            return $this->error->error(mensaje: 'Error al obtener clave producto sat', data: $r_cat_sat_cve_prod);
         }
 
         if ($r_cat_sat_cve_prod->n_registros <= 0) {
-            return $this->error->error(mensaje: 'Error al insertar prospecto', data: $r_cat_sat_cve_prod);
+            return $this->error->error(mensaje: 'Error no existe la clave producto sat', data: $r_cat_sat_cve_prod);
         }
 
         $this->registro['cat_sat_cve_prod_id'] = $r_cat_sat_cve_prod->registros[0]['cat_sat_cve_prod_id'];

@@ -9,6 +9,8 @@
 namespace gamboamartin\inmuebles\controllers;
 
 use base\controller\init;
+use gamboamartin\cat_sat\models\cat_sat_cve_prod;
+use gamboamartin\cat_sat\models\cat_sat_unidad;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_producto_html;
 use gamboamartin\inmuebles\models\inm_producto;
@@ -55,6 +57,12 @@ class controlador_inm_producto extends _ctl_base {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
+        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_concepto_id',
+            keys_selects: $keys_selects, id_selected: -1, label: 'Concepto');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
         $inputs = $this->inputs(keys_selects: $keys_selects);
         if(errores::$error){
             return $this->retorno_error(
@@ -72,6 +80,7 @@ class controlador_inm_producto extends _ctl_base {
 
         $init_data = array();
         $init_data['cat_sat_unidad'] = "gamboamartin\\cat_sat";
+        $init_data['inm_concepto'] = "gamboamartin\\inmuebles";
         $campos_view = $this->campos_view_base(init_data: $init_data,keys:  $keys);
 
         if(errores::$error){
@@ -130,7 +139,34 @@ class controlador_inm_producto extends _ctl_base {
         $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'cat_sat_unidad_id',
             keys_selects: $keys_selects, id_selected: $this->row_upd->cat_sat_unidad_id, label: 'Unidad');
         if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
+                header: $header,ws: $ws);
+        }
+
+        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_concepto_id',
+            keys_selects: $keys_selects, id_selected: $this->row_upd->inm_concepto_id, label: 'Concepto');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
+                header: $header,ws: $ws);
+        }
+
+        $r_inm_producto = (new inm_producto(link: $this->link))->registro(
+            registro_id: $this->registro_id);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener unidad', data: $r_inm_producto,header: $header,
+                ws: $ws);
+        }
+
+
+        $filtro['cat_sat_cve_prod.codigo'] = $r_inm_producto['cat_sat_cve_prod_id'];
+        $r_cat_sat_cve_prod = (new cat_sat_cve_prod(link: $this->link))->filtro_and(filtro: $filtro);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener clave producto sat', data: $r_cat_sat_cve_prod,
+                header: $header,ws: $ws);
+        }
+
+        if($r_cat_sat_cve_prod->n_registros > 0) {
+            $this->row_upd->cat_sat_cve_prod_codigo = $r_cat_sat_cve_prod->registros[0]['cat_sat_cve_prod_codigo'];
         }
 
         $base = $this->base_upd(keys_selects: $keys_selects, params: array(),params_ajustados: array());
