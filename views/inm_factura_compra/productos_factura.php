@@ -212,7 +212,7 @@ echo "<style>
 
                         <?php echo $controlador->inputs->inm_producto_id; ?>
                         <?php echo $controlador->inputs->cat_sat_unidad_id; ?>
-                        <?php echo $controlador->inputs->cantidad_actual; ?>
+                        <?php echo $controlador->inputs->cantidad; ?>
                         <?php echo $controlador->inputs->valor_unitario; ?>
                         <?php echo $controlador->inputs->subtotal; ?>
                         <?php echo $controlador->inputs->iva; ?>

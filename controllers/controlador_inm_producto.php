@@ -19,6 +19,7 @@ use gamboamartin\system\links_menu;
 use gamboamartin\template\html;
 use PDO;
 use stdClass;
+use Throwable;
 
 class controlador_inm_producto extends _ctl_base {
 
@@ -224,5 +225,30 @@ class controlador_inm_producto extends _ctl_base {
         return $keys_selects;
     }
 
+    public function get_unidad(bool $header, bool $ws = false){
+        $r_unidad = (new inm_producto(link: $this->link))->registro(registro_id: $_GET['inm_producto_id']);
+        if (errores::$error) {
+            $this->retorno_error(mensaje: 'Error al obtener registro de unidad', data: $r_unidad,
+                header: $header, ws: $ws);
+        }
+
+        if($header){
+            $retorno = $_SERVER['HTTP_REFERER'];
+            header('Location:'.$retorno);
+            exit;
+        }
+        if($ws){
+            header('Content-Type: application/json');
+            try {
+                echo json_encode($r_unidad, JSON_THROW_ON_ERROR);
+            }
+            catch (Throwable $e){
+                return $this->retorno_error(mensaje: 'Error al maquetar estados',data: $e, header: $header, ws: $ws);
+            }
+            exit;
+        }
+
+        return $r_unidad;
+    }
 
 }

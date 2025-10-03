@@ -98,7 +98,7 @@ class controlador_inm_factura_compra extends _ctl_base {
     protected function campos_view(): array
     {
         $keys = new stdClass();
-        $keys->inputs = array('descripcion','descripcion_producto','cantidad_actual','costo_promedio',
+        $keys->inputs = array('descripcion','descripcion_producto','cantidad','costo_promedio',
             'cat_sat_cve_prod_codigo','valor_unitario','subtotal','iva','total');
         $keys->selects = array();
 
@@ -303,7 +303,7 @@ class controlador_inm_factura_compra extends _ctl_base {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = $this->key_select(cols: 4, con_registros: true,filtro:  array(), key: 'cat_sat_unidad_id',
+        $keys_selects = $this->key_select(cols: 4, con_registros: false,filtro:  array(), key: 'cat_sat_unidad_id',
             keys_selects: $keys_selects, id_selected: -1, label: 'Unidad');
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
@@ -314,6 +314,12 @@ class controlador_inm_factura_compra extends _ctl_base {
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
+
+        $this->row_upd->cantidad = 0;
+        $this->row_upd->valor_unitario = 0;
+        $this->row_upd->subtotal = 0;
+        $this->row_upd->iva = 0;
+        $this->row_upd->total = 0;
 
         $inputs = $this->inputs(keys_selects: $keys_selects);
         if(errores::$error){
@@ -654,8 +660,8 @@ class controlador_inm_factura_compra extends _ctl_base {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'cantidad_actual',
-            keys_selects:$keys_selects, place_holder: 'Cantidad Actual');
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'cantidad',
+            keys_selects:$keys_selects, place_holder: 'Cantidad');
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
