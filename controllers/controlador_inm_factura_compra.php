@@ -29,6 +29,7 @@ use stdClass;
 use Throwable;
 
 class controlador_inm_factura_compra extends _ctl_base {
+    public string $link_inm_detalle_factura_compra_bd = '';
     public string $link_inserta_detalle_bd = '';
     public string $link_inserta_producto_bd = '';
     public string $link_valida_producto_nuevo = '';
@@ -196,6 +197,15 @@ class controlador_inm_factura_compra extends _ctl_base {
 
         $this->link_inserta_detalle_bd = $link;
 
+        $link = $this->obj_link->get_link(seccion: "inm_detalle_factura_compra", accion: "alta_bd");
+        if (errores::$error) {
+            $error = $this->errores->error(mensaje: 'Error al recuperar link modifica_direccion', data: $link);
+            print_r($error);
+            exit;
+        }
+
+        $this->link_inm_detalle_factura_compra_bd = $link;
+
         $link = $this->obj_link->get_link(seccion: "inm_factura_compra", accion: "valida_producto_nuevo");
         if (errores::$error) {
             $error = $this->errores->error(mensaje: 'Error al recuperar link modifica_direccion', data: $link);
@@ -274,7 +284,20 @@ class controlador_inm_factura_compra extends _ctl_base {
                 header: $header,ws:  $ws);
         }
 
-        $this->productos_factura = $r_inm_detalle_factura->registros;
+        $detalle = $r_inm_detalle_factura->registros ;
+        foreach ($r_inm_detalle_factura->registros as $inm_detalle_factura_compra) {
+            $button = $this->html->button_href(accion: 'elimina_bd', etiqueta: 'Elimina',
+                registro_id: $inm_detalle_factura_compra['inm_detalle_factura_compra_id'],
+                seccion: 'inm_detalle_factura_compra', style: 'danger');
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al integrar button', data: $button, header: $header,
+                    ws: $ws);
+            }
+
+            $detalle['elimina_bd'] = $button;
+        }
+
+        $this->productos_factura = $detalle;
 
         $keys_selects = array();
         $columns_ds = array('gt_proveedor_razon_social');
@@ -327,15 +350,22 @@ class controlador_inm_factura_compra extends _ctl_base {
                 mensaje: 'Error al obtener inputs',data:  $inputs, header: $header,ws:  $ws);
         }
 
+        $inm_factura_compra_id = $this->html->hidden(name:'inm_factura_compra_id',value: $this->registro_id);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al in_registro_id',data:  $inm_factura_compra_id,
+                header: $header,ws:  $ws);
+        }
 
-        $retorno = 'lista';
+        $this->inputs->inm_factura_compra_id = $inm_factura_compra_id;
+
+        $retorno = 'productos_factura';
         $btn_action_next = $this->html->hidden('btn_action_next', value: $retorno);
         if (errores::$error) {
             return $this->retorno_error(
                 mensaje: 'Error al generar btn_action_next', data: $btn_action_next, header: $header, ws: $ws);
         }
 
-        $id_retorno = $this->html->hidden('id_retorno', value: -1);
+        $id_retorno = $this->html->hidden('id_retorno', value: $this->registro_id);
         if (errores::$error) {
             return $this->retorno_error(
                 mensaje: 'Error al generar btn_action_next', data: $btn_action_next, header: $header, ws: $ws);

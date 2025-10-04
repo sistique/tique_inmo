@@ -186,12 +186,6 @@ echo "<style>
     display: none;
 }
 
-.btn-insert{
-    pointer-events: none;
-    opacity: 0.9;
-    cursor: not-allowed;
-}
-
 </style>";
 ?>
 
@@ -207,8 +201,10 @@ echo "<style>
                     <?php echo $controlador->inputs->gt_proveedor_id; ?>
                     <?php echo $controlador->inputs->fecha; ?>
 
-                    <form enctype="multipart/form-data" method="post" action="<?php echo $controlador->link_inserta_detalle_bd; ?>" class="form-additional">
+                    <form enctype="multipart/form-data" method="post" action="<?php echo $controlador->link_inm_detalle_factura_compra_bd; ?>" class="form-additional">
                         <?php include (new views())->ruta_templates."head/subtitulo.php"; ?>
+
+                        <?php echo $controlador->inputs->inm_factura_compra_id; ?>
 
                         <?php echo $controlador->inputs->inm_producto_id; ?>
                         <?php echo $controlador->inputs->cat_sat_unidad_id; ?>
@@ -222,9 +218,6 @@ echo "<style>
                         <?php echo $controlador->inputs->id_retorno; ?>
                         <?php echo $controlador->inputs->seccion_retorno; ?>
 
-                        <div id="content_form_productos">
-
-                        </div>
                         <div class="control-group btn-alta">
                             <div class="controls">
                                 <button type="submit" class="btn btn-success btn-insert" name="btn_action_next">Inserta Producto</button>
@@ -240,9 +233,9 @@ echo "<style>
                             <th>Cantidad</th>
                             <th>Valor Unitario</th>
                             <th>Subtotal</th>
-                            <th>Traslado</th>
-                            <th>Retenido</th>
+                            <th>IVA</th>
                             <th>Total</th>
+                            <th>Acciones</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -254,9 +247,9 @@ echo "<style>
                                 <td><?php echo $detalle['inm_detalle_factura_compra_cantidad'] ?></td>
                                 <td><?php echo $detalle['inm_detalle_factura_compra_valor_unitario'] ?></td>
                                 <td><?php echo $detalle['inm_detalle_factura_compra_subtotal'] ?></td>
-                                <td><?php echo $detalle['inm_detalle_factura_compra_trasladado'] ?></td>
-                                <td><?php echo $detalle['inm_detalle_factura_compra_retenido'] ?></td>
+                                <td><?php echo $detalle['inm_detalle_factura_compra_iva'] ?></td>
                                 <td><?php echo $detalle['inm_detalle_factura_compra_total'] ?></td>
+                                <td><?php echo $detalle['elimina_bd'] ?></td>
                             </tr>
                         <?php } ?>
                         </tbody>
