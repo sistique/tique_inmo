@@ -284,17 +284,25 @@ class controlador_inm_factura_compra extends _ctl_base {
                 header: $header,ws:  $ws);
         }
 
-        $detalle = $r_inm_detalle_factura->registros ;
+
+        $params = array();
+        if(isset($_GET['accion']) && $_GET['accion'] == 'productos_factura') {
+            $params = array('accion_retorno'=>'productos_factura','seccion_retorno'=>'inm_factura_compra',
+                'id_retorno'=>$this->registro_id,);
+        }
+
+        $detalle = [];
         foreach ($r_inm_detalle_factura->registros as $inm_detalle_factura_compra) {
             $button = $this->html->button_href(accion: 'elimina_bd', etiqueta: 'Elimina',
                 registro_id: $inm_detalle_factura_compra['inm_detalle_factura_compra_id'],
-                seccion: 'inm_detalle_factura_compra', style: 'danger');
+                seccion: 'inm_detalle_factura_compra', style: 'danger', params: $params);
             if (errores::$error) {
                 return $this->retorno_error(mensaje: 'Error al integrar button', data: $button, header: $header,
                     ws: $ws);
             }
 
-            $detalle['elimina_bd'] = $button;
+            $inm_detalle_factura_compra['elimina_bd'] = $button;
+            $detalle[] = $inm_detalle_factura_compra;
         }
 
         $this->productos_factura = $detalle;

@@ -49,5 +49,5 @@ function calcularTotales() {
     total_ct.val(total.toFixed(2));
 }
 
-cantidad_ct.change(calcularTotales);
-valor_unitario_ct.change(calcularTotales);
+cantidad_ct.on('input change', calcularTotales);
+valor_unitario_ct.on('input change', calcularTotales);
