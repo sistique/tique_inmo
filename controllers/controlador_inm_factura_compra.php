@@ -747,7 +747,10 @@ class controlador_inm_factura_compra extends _ctl_base {
 
     public function get_detalles(bool $header, bool $ws = false): array
     {
-        $filtro['inm_factura_compra.id'] = $_GET['inm_factura_compra_id'];
+        //$filtro['inm_factura_compra.id'] = $_GET['inm_factura_compra_id'];
+
+        $filtro = $_POST['filtros'];
+
         $r_modelo = (new inm_detalle_factura_compra(link: $this->link))->filtro_and(filtro: $filtro);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener datos',data:  $r_modelo,header: $header,ws: $ws);
@@ -773,6 +776,8 @@ class controlador_inm_factura_compra extends _ctl_base {
             }
             exit;
         }
+
+        return $r_modelo;
     }
 
 }
