@@ -186,6 +186,12 @@ echo "<style>
     display: none;
 }
 
+hr{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #eee;
+}
+
 </style>";
 ?>
 
@@ -203,6 +209,16 @@ echo "<style>
 
                         <?php echo $controlador->inputs->inm_ubicacion_seleccionado_id; ?>
                         <?php echo $controlador->inputs->inm_factura_compra_id; ?>
+                        <?php echo $controlador->inputs->inm_detalle_factura_compra_id; ?>
+                        <?php echo $controlador->inputs->cantidad_detalle; ?>
+                        <?php echo $controlador->inputs->valor_unitario; ?>
+                        <?php echo $controlador->inputs->subtotal; ?>
+                        <?php echo $controlador->inputs->trasladado; ?>
+                        <?php echo $controlador->inputs->retenido; ?>
+                        <?php echo $controlador->inputs->total_con_impuesto; ?>
+
+                        <hr>
+                        <?php echo $controlador->inputs->total_con_impuesto; ?>
 
                         <?php echo $controlador->inputs->btn_action_next; ?>
                         <?php echo $controlador->inputs->id_retorno; ?>

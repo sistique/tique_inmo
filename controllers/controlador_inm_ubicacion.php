@@ -242,6 +242,14 @@ class controlador_inm_ubicacion extends _ctl_base {
                 header: $header,ws:  $ws);
         }
 
+        $keys_selects = $this->key_select(cols: 12, con_registros: false, filtro: array(),
+            key: 'inm_detalle_factura_compra_id', keys_selects: $keys_selects, id_selected: -1, label: 'Insumo Factura',
+            columns_ds: $columns_ds, disabled: false, required: false);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
+                header: $header,ws:  $ws);
+        }
+
         $base = $this->base_upd(keys_selects: $keys_selects, params: array(),params_ajustados: array());
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
@@ -1944,7 +1952,8 @@ class controlador_inm_ubicacion extends _ctl_base {
             'correo_mi_cuenta_infonavit','password_mi_cuenta_infonavit', 'monto_emision','monto_transferencia_emision',
             'efectivo_emision','numero_exterior_domicilio','numero_interior_domicilio', 'calle_domicilio',
             'numero_notaria','nombre_notario','plaza_notaria','numero_escritura','libro','volumen','entre_calle_1',
-            'entre_calle_2','entrada','supermanzana','edificio','condominio','etapa');
+            'entre_calle_2','entrada','supermanzana','edificio','condominio','etapa','cantidad_detalle',
+            'valor_unitario','total_con_impuesto','subtotal','trasladado','retenido');
         $keys->selects = array();
 
 
@@ -1968,6 +1977,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         $init_data['inm_tipo_cheque'] = "gamboamartin\\inmuebles";
         $init_data['inm_tipo_gasto'] = "gamboamartin\\inmuebles";
         $init_data['inm_factura_compra'] = "gamboamartin\\inmuebles";
+        $init_data['inm_detalle_factura_compra'] = "gamboamartin\\inmuebles";
         $init_data['inm_tipo_vivienda'] = "gamboamartin\\inmuebles";
 
         $campos_view = $this->campos_view_base(init_data: $init_data,keys:  $keys);
@@ -3558,6 +3568,42 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'descripcion', keys_selects:$keys_selects,
             place_holder: 'Descripcion');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'cantidad_detalle', keys_selects:$keys_selects,
+            place_holder: 'Cantidad');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'valor_unitario', keys_selects:$keys_selects,
+            place_holder: 'Valor Unitario');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'subtotal', keys_selects:$keys_selects,
+            place_holder: 'Subtotal');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'trasladado', keys_selects:$keys_selects,
+            place_holder: 'Trasladado');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'retenido', keys_selects:$keys_selects,
+            place_holder: 'Retenido');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'total_con_impuesto', keys_selects:$keys_selects,
+            place_holder: 'Total Con Impuesto');
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
