@@ -333,28 +333,7 @@ class controlador_inm_ubicacion extends _ctl_base {
                 header: $header, ws: $ws);
         }
 
-        if($header){
-            $retorno = $this->obj_link->link_sin_id(
-                accion: 'lista', link: $this->link, seccion: 'inm_factura_compra');
-            if (errores::$error) {
-                $this->retorno_error(mensaje: 'Error al generar link', data: $retorno, header: $header, ws: $ws);
-            }
-
-            header('Location:'.$retorno);
-            exit;
-        }
-        if($ws){
-            header('Content-Type: application/json');
-            try {
-                echo json_encode($r_result, JSON_THROW_ON_ERROR);
-            }
-            catch (Throwable $e){
-                return $this->retorno_error(mensaje: 'Error al maquetar estados',data: $e, header: $header, ws: $ws);
-            }
-            exit;
-        }
-
-        return $r_result;
+        return $r_inm_movimiento_consumo;
     }
 
 
