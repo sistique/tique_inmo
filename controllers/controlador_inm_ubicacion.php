@@ -3573,7 +3573,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         }
 
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'cantidad_detalle', keys_selects:$keys_selects,
-            place_holder: 'Cantidad');
+            place_holder: 'Cantidad',disabled: true);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
@@ -3585,31 +3585,31 @@ class controlador_inm_ubicacion extends _ctl_base {
         }
 
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'valor_unitario', keys_selects:$keys_selects,
-            place_holder: 'Valor Unitario');
+            place_holder: 'Valor Unitario',disabled: true);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
         $keys_selects = (new init())->key_select_txt(cols: 12,key: 'subtotal', keys_selects:$keys_selects,
-            place_holder: 'Subtotal');
+            place_holder: 'Subtotal',disabled: true);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'trasladado', keys_selects:$keys_selects,
-            place_holder: 'Trasladado');
+            place_holder: 'Trasladado',disabled: true);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'retenido', keys_selects:$keys_selects,
-            place_holder: 'Retenido');
+            place_holder: 'Retenido',disabled: true);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
         $keys_selects = (new init())->key_select_txt(cols: 12,key: 'total_con_impuesto', keys_selects:$keys_selects,
-            place_holder: 'Total Con Impuesto');
+            place_holder: 'Total Con Impuesto',disabled: true);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
