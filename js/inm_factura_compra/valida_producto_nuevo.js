@@ -195,6 +195,7 @@ $('#alta_producto').on('click', function () {
     let url_alta_prd = get_url("inm_factura_compra", "inserta_producto_bd", {registro_id: registro_id});
 
     let registro = {};
+    registro['inm_concepto_id'] = $('#inm_concepto_id').val();
     registro['descripcion'] = $('#descripcion_producto').val();
     registro['cat_sat_unidad_id'] = $('#cat_sat_unidad_id').val();
     registro['cat_sat_cve_prod_codigo'] = $('#cat_sat_cve_prod_codigo').val();

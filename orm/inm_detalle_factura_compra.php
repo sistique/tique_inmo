@@ -90,4 +90,44 @@ class inm_detalle_factura_compra extends _modelo_parent{
 
         return $r_alta_bd;
     }
+
+    public function elimina_bd(int $id): array|stdClass
+    {
+        $r_detalle_factura_compra = $this->registro(registro_id: $id);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al insertar prospecto', data: $r_detalle_factura_compra);
+        }
+
+        $filtro_detalle['inm_producto.id'] = $r_detalle_factura_compra['inm_producto_id'];
+        $r_detalles_facturas_compra = $this->filtro_and(filtro: $filtro_detalle);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al insertar prospecto', data: $r_detalles_facturas_compra);
+        }
+
+        if($r_detalles_facturas_compra->n_registros > 0){
+            $monto_total = 0;
+            foreach ($r_detalles_facturas_compra->registros as $detalle){
+                $monto_total += $detalle['inm_detalle_factura_compra_valor_unitario'];
+            }
+
+            $registro_mod['costo_promedio'] = $monto_total / $r_detalles_facturas_compra->n_registros;
+        }
+
+        $registro_mod['cantidad_actual'] = $r_detalle_factura_compra['inm_producto_cantidad_actual'] -
+            $r_detalle_factura_compra['inm_detalle_factura_compra_cantidad'];
+        $registro_mod['enviado'] = 'activo';
+        $r_modifica = (new inm_producto(link: $this->link))->modifica_bd(registro: $registro_mod,
+            id: $r_detalle_factura_compra['inm_producto_id']);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al modificar existencia actual producto', data: $r_modifica);
+        }
+
+        $elimina = parent::elimina_bd($id);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al eliminar prospecto documento', data: $elimina);
+        }
+
+        return $elimina;
+    }
+
 }
