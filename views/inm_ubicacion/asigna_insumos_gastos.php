@@ -248,6 +248,20 @@ hr{
                             </tr>
                             </thead>
                             <tbody>
+                            <?php
+                            foreach ($controlador->movimientos_consumo as $detalle){
+                                ?>
+                                <tr>
+                                    <td><?php echo $detalle['inm_concepto_descripcion'] ?></td>
+                                    <td><?php echo $detalle['inm_producto_descripcion'] ?></td>
+                                    <td><?php echo $detalle['inm_detalle_factura_compra_cantidad'] ?></td>
+                                    <td><?php echo $detalle['inm_detalle_factura_compra_valor_unitario'] ?></td>
+                                    <td><?php echo $detalle['inm_detalle_factura_compra_subtotal'] ?></td>
+                                    <td><?php echo $detalle['inm_detalle_factura_compra_trasladado'] ?></td>
+                                    <td><?php echo $detalle['inm_detalle_factura_compra_total'] ?></td>
+                                    <td><?php echo $detalle['elimina_bd'] ?></td>
+                                </tr>
+                            <?php } ?>
                             </tbody>
                         </table>
                     </form>

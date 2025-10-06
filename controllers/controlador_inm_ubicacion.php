@@ -130,6 +130,8 @@ class controlador_inm_ubicacion extends _ctl_base {
 
     public bool $aplica_seccion_co_acreditado = false;
 
+    public array $movimientos_consumo = array();
+
     public function __construct(PDO      $link, html $html = new \gamboamartin\template_1\html(),
                                 stdClass $paths_conf = new stdClass())
     {
@@ -278,6 +280,36 @@ class controlador_inm_ubicacion extends _ctl_base {
         }
 
         $this->link_asigna_insumos_gastos_bd = $link_asigna_insumos_gastos_bd;
+
+        $filtro_deta['inm_ubicacion.id'] = $this->registro_id;
+        $r_inm_movimiento_consumo = (new inm_movimiento_consumo(link: $this->link))->filtro_and(filtro: $filtro_deta);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener factura compra',data:  $r_inm_movimiento_consumo,
+                header: $header,ws:  $ws);
+        }
+
+
+        $params = array();
+        if(isset($_GET['accion']) && $_GET['accion'] == 'productos_factura') {
+            $params = array('accion_retorno'=>'productos_factura','seccion_retorno'=>'inm_factura_compra',
+                'id_retorno'=>$this->registro_id,);
+        }
+
+        $detalle = [];
+        foreach ($r_inm_movimiento_consumo->registros as $inm_movimiento_consumo) {
+            $button = $this->html->button_href(accion: 'elimina_bd', etiqueta: 'Elimina',
+                registro_id: $inm_movimiento_consumo['inm_movimiento_consumo_id'],
+                seccion: 'inm_movimiento_consumo', style: 'danger', params: $params);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al integrar button', data: $button, header: $header,
+                    ws: $ws);
+            }
+
+            $inm_movimiento_consumo['elimina_bd'] = $button;
+            $detalle[] = $inm_movimiento_consumo;
+        }
+
+        $this->movimientos_consumo = $detalle;
 
         $retorno = 'asigna_insumos_gastos';
         $btn_action_next = $this->html->hidden('btn_action_next', value: $retorno);
