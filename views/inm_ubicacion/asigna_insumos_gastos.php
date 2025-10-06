@@ -218,7 +218,7 @@ hr{
                         <?php echo $controlador->inputs->total_con_impuesto; ?>
 
                         <hr>
-                        <?php echo $controlador->inputs->total_con_impuesto; ?>
+                        <?php echo $controlador->inputs->cantidad_consumo; ?>
 
                         <?php echo $controlador->inputs->btn_action_next; ?>
                         <?php echo $controlador->inputs->id_retorno; ?>
@@ -229,7 +229,8 @@ hr{
                         </div>
                         <div class="control-group btn-alta">
                             <div class="controls">
-                                <button type="submit" class="btn btn-success btn-insert" name="btn_action_next">Asigna Insumos</button>
+                                <button type="submit" class="btn btn-success btn-insert" name="btn_action_next">Asigna Factura Completa</button>
+                                <button type="submit" class="btn btn-success btn-insert" name="btn_action_next">Asigna Insumo</button>
                             </div>
                         </div>
 

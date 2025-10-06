@@ -1953,7 +1953,7 @@ class controlador_inm_ubicacion extends _ctl_base {
             'efectivo_emision','numero_exterior_domicilio','numero_interior_domicilio', 'calle_domicilio',
             'numero_notaria','nombre_notario','plaza_notaria','numero_escritura','libro','volumen','entre_calle_1',
             'entre_calle_2','entrada','supermanzana','edificio','condominio','etapa','cantidad_detalle',
-            'valor_unitario','total_con_impuesto','subtotal','trasladado','retenido');
+            'valor_unitario','total_con_impuesto','subtotal','trasladado','retenido','cantidad_consumo');
         $keys->selects = array();
 
 
@@ -3574,6 +3574,12 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'cantidad_detalle', keys_selects:$keys_selects,
             place_holder: 'Cantidad');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'cantidad_consumo', keys_selects:$keys_selects,
+            place_holder: 'Cantidad Consumo');
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
