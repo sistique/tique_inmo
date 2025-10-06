@@ -75,3 +75,14 @@ sl_inm_detalle_factura_compra_id.change(function () {
         alert('Error al ejecutar');
     });
 });
+
+let txt_cantidad_consumo = $("#cantidad_consumo");
+txt_cantidad_consumo.on('input change', function () {
+    let cantidad_consumo = parseFloat($(this).val()) || 0;
+    let cantidad_detalle = parseFloat(txt_cantidad_detalle.val()) || 0;
+
+    if (cantidad_consumo > cantidad_detalle) {
+        alert("La cantidad de consumo no puede ser mayor que la del detalle");
+        $(this).val(cantidad_detalle);
+    }
+});
