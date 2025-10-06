@@ -229,6 +229,7 @@ echo "<style>
                     <table class="table table-striped">
                         <thead>
                         <tr>
+                            <th>Concepto</th>
                             <th>Producto</th>
                             <th>Cantidad</th>
                             <th>Valor Unitario</th>
@@ -243,6 +244,7 @@ echo "<style>
                         foreach ($controlador->productos_factura as $detalle){
                             ?>
                             <tr>
+                                <td><?php echo $detalle['inm_concepto_descripcion'] ?></td>
                                 <td><?php echo $detalle['inm_producto_descripcion'] ?></td>
                                 <td><?php echo $detalle['inm_detalle_factura_compra_cantidad'] ?></td>
                                 <td><?php echo $detalle['inm_detalle_factura_compra_valor_unitario'] ?></td>

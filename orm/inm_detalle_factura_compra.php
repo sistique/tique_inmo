@@ -11,7 +11,8 @@ class inm_detalle_factura_compra extends _modelo_parent{
     public function __construct(PDO $link)
     {
         $tabla = 'inm_detalle_factura_compra';
-        $columnas = array($tabla=>false,'inm_factura_compra'=>$tabla, 'inm_producto'=>$tabla);
+        $columnas = array($tabla=>false,'inm_factura_compra'=>$tabla, 'inm_producto'=>$tabla,
+            'inm_concepto' => 'inm_producto');
 
         $campos_obligatorios = array();
 
