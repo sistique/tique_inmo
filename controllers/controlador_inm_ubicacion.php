@@ -25,9 +25,11 @@ use gamboamartin\inmuebles\models\_inm_ubicacion;
 use gamboamartin\inmuebles\models\inm_bitacora_status_ubicacion;
 use gamboamartin\inmuebles\models\inm_cheque;
 use gamboamartin\inmuebles\models\inm_conf_docs_ubicacion;
+use gamboamartin\inmuebles\models\inm_detalle_factura_compra;
 use gamboamartin\inmuebles\models\inm_doc_ubicacion;
 use gamboamartin\inmuebles\models\inm_efectivo;
 use gamboamartin\inmuebles\models\inm_factura_compra;
+use gamboamartin\inmuebles\models\inm_movimiento_consumo;
 use gamboamartin\inmuebles\models\inm_nacionalidad;
 use gamboamartin\inmuebles\models\inm_ocupacion;
 use gamboamartin\inmuebles\models\inm_poder;
@@ -47,6 +49,7 @@ use gamboamartin\template\html;
 use html\doc_tipo_documento_html;
 use PDO;
 use stdClass;
+use Throwable;
 
 class controlador_inm_ubicacion extends _ctl_base {
     public stdClass $header_frontend;
@@ -265,7 +268,8 @@ class controlador_inm_ubicacion extends _ctl_base {
         }
         $this->inputs->inm_ubicacion_seleccionado_id  = $inm_prospecto_id;
 
-        $params = array('pestana_general_actual' => 'pestanageneral2', 'pestana_actual' => 'pestana5');
+        $params = array('accion_retorno'=>'asigna_insumos_gastos','seccion_retorno'=>'inm_ubicacion',
+            'id_retorno'=>$this->registro_id,);
         $link_asigna_insumos_gastos_bd = $this->obj_link->link_con_id(accion:'asigna_insumos_gastos_bd',
             link: $this->link,registro_id: $this->registro_id,seccion: 'inm_ubicacion',params: $params);
         if(errores::$error){
@@ -275,7 +279,7 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $this->link_asigna_insumos_gastos_bd = $link_asigna_insumos_gastos_bd;
 
-        $retorno = 'lista';
+        $retorno = 'asigna_insumos_gastos';
         $btn_action_next = $this->html->hidden('btn_action_next', value: $retorno);
         if (errores::$error) {
             return $this->retorno_error(
@@ -303,23 +307,30 @@ class controlador_inm_ubicacion extends _ctl_base {
 
     public function asigna_insumos_gastos_bd(bool $header, bool $ws = false):array|stdClass
     {
-        print_r($_POST);exit;
-        if(!isset($_POST['inm_detalle_factura_compra_id'])){
-            return $this->retorno_error(mensaje: 'Error al obtener registro para alta', data: $_POST,
+        $r_inm_detalle_factura_compra = (new inm_detalle_factura_compra(link:$this->link))->registro(
+            registro_id: $_POST['inm_detalle_factura_compra_id']);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al generar link', data: $r_inm_detalle_factura_compra,
                 header: $header, ws: $ws);
         }
 
-        $r_result = array();
-        foreach ($_POST['inm_detalle_factura_compra_id'] as $asignacion) {
-            $registro = $asignacion;
-                $r_inm_detalle_factura_compra = (new inm_detalle_factura_compra(link: $this->link))->alta_registro(
-                registro: $registro);
-            if (errores::$error) {
-                return $this->retorno_error(mensaje: 'Error al generar link', data: $r_inm_detalle_factura_compra,
-                    header: $header, ws: $ws);
-            }
+        $valor_unitario_con_imp = $r_inm_detalle_factura_compra['inm_detalle_factura_compra_total'] /
+            $r_inm_detalle_factura_compra['inm_detalle_factura_compra_cantidad'];
 
-            $r_result[] = $r_inm_detalle_factura_compra;
+        $total = $valor_unitario_con_imp * $_POST['cantidad_consumo'];
+
+        $registro['inm_ubicacion_id'] = $_POST['inm_ubicacion_id'];
+        $registro['inm_producto_id'] = $r_inm_detalle_factura_compra['inm_producto_id'];
+        $registro['inm_detalle_factura_compra_id'] = $_POST['inm_detalle_factura_compra_id'];
+        $registro['fecha'] = date('Y-m-d');
+        $registro['cantidad'] = $_POST['cantidad_consumo'];
+        $registro['valor_unitario'] = $valor_unitario_con_imp;
+        $registro['total'] = $total;
+        $r_inm_movimiento_consumo = (new inm_movimiento_consumo(link: $this->link))->alta_registro(
+            registro: $registro);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al generar link', data: $r_inm_movimiento_consumo,
+                header: $header, ws: $ws);
         }
 
         if($header){
