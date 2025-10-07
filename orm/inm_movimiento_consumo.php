@@ -11,7 +11,8 @@ class inm_movimiento_consumo extends _modelo_parent{
     public function __construct(PDO $link)
     {
         $tabla = 'inm_movimiento_consumo';
-        $columnas = array($tabla=>false,'inm_ubicacion'=>$tabla,'inm_producto'=>$tabla,'inm_detalle_factura_compra'=>$tabla);
+        $columnas = array($tabla=>false,'inm_ubicacion'=>$tabla,'inm_producto'=>$tabla,
+            'inm_detalle_factura_compra'=>$tabla,'inm_concepto'=>'inm_producto');
 
         $columnas_extra= array();
         $renombres= array();

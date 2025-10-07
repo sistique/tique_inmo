@@ -271,7 +271,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         $this->inputs->inm_ubicacion_seleccionado_id  = $inm_prospecto_id;
 
         $params = array('accion_retorno'=>'asigna_insumos_gastos','seccion_retorno'=>'inm_ubicacion',
-            'id_retorno'=>$this->registro_id,);
+            'id_retorno'=>$this->registro_id);
         $link_asigna_insumos_gastos_bd = $this->obj_link->link_con_id(accion:'asigna_insumos_gastos_bd',
             link: $this->link,registro_id: $this->registro_id,seccion: 'inm_ubicacion',params: $params);
         if(errores::$error){
@@ -290,8 +290,8 @@ class controlador_inm_ubicacion extends _ctl_base {
 
 
         $params = array();
-        if(isset($_GET['accion']) && $_GET['accion'] == 'productos_factura') {
-            $params = array('accion_retorno'=>'productos_factura','seccion_retorno'=>'inm_factura_compra',
+        if(isset($_GET['accion']) && $_GET['accion'] == 'asigna_insumos_gastos') {
+            $params = array('accion_retorno'=>'asigna_insumos_gastos','seccion_retorno'=>'inm_ubicacion',
                 'id_retorno'=>$this->registro_id,);
         }
 
@@ -364,6 +364,23 @@ class controlador_inm_ubicacion extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al generar link', data: $r_inm_movimiento_consumo,
                 header: $header, ws: $ws);
         }
+
+        if($header){
+            $retorno = $_SERVER['HTTP_REFERER'];
+            header('Location:'.$retorno);
+            exit;
+        }
+        if($ws){
+            header('Content-Type: application/json');
+            try {
+                echo json_encode($r_inm_movimiento_consumo, JSON_THROW_ON_ERROR);
+            }
+            catch (Throwable $e){
+                return $this->retorno_error(mensaje: 'Error al maquetar estados',data: $e, header: $header, ws: $ws);
+            }
+            exit;
+        }
+
 
         return $r_inm_movimiento_consumo;
     }
