@@ -248,8 +248,8 @@ class controlador_inm_ubicacion extends _ctl_base {
                 header: $header,ws:  $ws);
         }
 
-        $filtro_deta['inm_detalle_factura_compra.asignado_completo'] = 'inactivo';
-        $keys_selects = $this->key_select(cols: 12, con_registros: false, filtro: $filtro_deta,
+        $filtro_deta_fac['inm_detalle_factura_compra.asignado_completo'] = 'inactivo';
+        $keys_selects = $this->key_select(cols: 12, con_registros: false, filtro: $filtro_deta_fac,
             key: 'inm_detalle_factura_compra_id', keys_selects: $keys_selects, id_selected: -1, label: 'Insumo Factura',
             columns_ds: $columns_ds, required: false);
         if(errores::$error){
@@ -289,7 +289,6 @@ class controlador_inm_ubicacion extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al obtener factura compra',data:  $r_inm_movimiento_consumo,
                 header: $header,ws:  $ws);
         }
-
 
         $params = array();
         if(isset($_GET['accion']) && $_GET['accion'] == 'asigna_insumos_gastos') {

@@ -103,4 +103,63 @@ class inm_movimiento_consumo extends _modelo_parent{
 
         return $r_alta_bd;
     }
+
+    public function elimina_bd(int $id): array|stdClass
+    {
+        $registro_mov = (new inm_movimiento_consumo(link: $this->link))->registro(registro_id: $id);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al insertar prospecto', data: $registro_mov);
+        }
+
+        $r_inm_detalle_factura_compra = (new inm_detalle_factura_compra(link: $this->link))->registro(
+            registro_id: $registro_mov['inm_detalle_factura_compra_id']);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al insertar prospecto', data: $r_inm_detalle_factura_compra);
+        }
+
+        $r_elimina_bd = parent::elimina_bd(id:  $id);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al eliminar descripcion',data:  $r_elimina_bd);
+        }
+
+        $filtro['inm_movimiento_consumo.inm_detalle_factura_compra_id'] = $registro_mov['inm_detalle_factura_compra_id'];
+        $r_movimientos_consumo = $this->filtro_and(filtro: $filtro);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al insertar prospecto', data: $r_movimientos_consumo);
+        }
+
+        $suma = 0;
+        foreach ($r_movimientos_consumo->registros as $registro){
+            $suma += $registro['inm_movimiento_consumo_cantidad'];
+        }
+
+        if((float)$suma < (float)$r_inm_detalle_factura_compra['inm_detalle_factura_compra_cantidad']){
+            $registro_mod['asignado_completo'] = 'inactivo';
+
+            $r_modifica = (new inm_detalle_factura_compra(link: $this->link))->modifica_bd(registro: $registro_mod,
+                id: $registro_mov['inm_detalle_factura_compra_id']);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al modificar existencia actual producto', data: $r_modifica);
+            }
+        }
+
+        $filtro_fact['inm_factura_compra.id'] = $r_inm_detalle_factura_compra['inm_factura_compra_id'];
+        $filtro_fact['inm_detalle_factura_compra.asignado_completo'] = 'inactivo';
+        $r_inm_detalle_fac = (new inm_detalle_factura_compra(link: $this->link))->filtro_and(filtro: $filtro_fact);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al insertar prospecto', data: $r_inm_detalle_fac);
+        }
+
+        if($r_inm_detalle_fac->n_registros > 0){
+            $registro_mod_fac['asignado_completo'] = 'inactivo';
+
+            $r_modifica = (new inm_factura_compra(link: $this->link))->modifica_bd(registro: $registro_mod_fac,
+                id: $r_inm_detalle_factura_compra['inm_factura_compra_id']);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al modificar existencia actual producto', data: $r_modifica);
+            }
+        }
+
+        return $r_elimina_bd;
+    }
 }
