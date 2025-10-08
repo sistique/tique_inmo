@@ -64,22 +64,24 @@ class inm_factura_compra extends _modelo_parent{
     public function modifica_bd(array $registro, int $id, bool $reactiva = false,
                                 array $keys_integra_ds = array('codigo', 'descripcion')): array|stdClass
     {
-        $r_proveedor = (new gt_proveedor(link: $this->link))->registro(registro_id: $registro['gt_proveedor_id']);
-        if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al insertar prospecto', data: $r_proveedor);
-        }
-
-        if(!isset($registro['status'])){
-            if (!isset($registro['descripcion'])) {
-                $descripcion = $r_proveedor['gt_proveedor_razon_social'];
-                $descripcion .= ' ' . $registro['fecha'];
-                $registro['descripcion'] = $descripcion;
+        if(isset($registro['gt_proveedor_id'])) {
+            $r_proveedor = (new gt_proveedor(link: $this->link))->registro(registro_id: $registro['gt_proveedor_id']);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al insertar prospecto', data: $r_proveedor);
             }
 
-            if (!isset($registro['codigo'])) {
-                $descripcion = $r_proveedor['gt_proveedor_razon_social'];
-                $descripcion .= ' ' . $registro['fecha'] . rand();
-                $registro['codigo'] = $descripcion;
+            if (!isset($registro['status'])) {
+                if (!isset($registro['descripcion'])) {
+                    $descripcion = $r_proveedor['gt_proveedor_razon_social'];
+                    $descripcion .= ' ' . $registro['fecha'];
+                    $registro['descripcion'] = $descripcion;
+                }
+
+                if (!isset($registro['codigo'])) {
+                    $descripcion = $r_proveedor['gt_proveedor_razon_social'];
+                    $descripcion .= ' ' . $registro['fecha'] . rand();
+                    $registro['codigo'] = $descripcion;
+                }
             }
         }
 

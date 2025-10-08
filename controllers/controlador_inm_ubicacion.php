@@ -238,8 +238,9 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $keys_selects = array();
 
+        $filtro_fact['inm_factura_compra.asignado_completo'] = 'inactivo';
         $columns_ds = array('inm_factura_compra_id','gt_proveedor_razon_social','inm_factura_compra_fecha');
-        $keys_selects = $this->key_select(cols: 12, con_registros: true, filtro: array(), key: 'inm_factura_compra_id',
+        $keys_selects = $this->key_select(cols: 12, con_registros: true, filtro: $filtro_fact, key: 'inm_factura_compra_id',
             keys_selects: $keys_selects, id_selected: -1, label: 'Factura Compra',
             columns_ds: $columns_ds, disabled: false, required: false);
         if(errores::$error){
@@ -247,9 +248,10 @@ class controlador_inm_ubicacion extends _ctl_base {
                 header: $header,ws:  $ws);
         }
 
-        $keys_selects = $this->key_select(cols: 12, con_registros: false, filtro: array(),
+        $filtro_deta['inm_detalle_factura_compra.asignado_completo'] = 'inactivo';
+        $keys_selects = $this->key_select(cols: 12, con_registros: false, filtro: $filtro_deta,
             key: 'inm_detalle_factura_compra_id', keys_selects: $keys_selects, id_selected: -1, label: 'Insumo Factura',
-            columns_ds: $columns_ds, disabled: false, required: false);
+            columns_ds: $columns_ds, required: false);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);
@@ -339,9 +341,12 @@ class controlador_inm_ubicacion extends _ctl_base {
 
     public function asigna_insumos_gastos_bd(bool $header, bool $ws = false):array|stdClass
     {
+        $this->link->beginTransaction();
+
         $r_inm_detalle_factura_compra = (new inm_detalle_factura_compra(link:$this->link))->registro(
             registro_id: $_POST['inm_detalle_factura_compra_id']);
         if (errores::$error) {
+            $this->link->rollBack();
             return $this->retorno_error(mensaje: 'Error al generar link', data: $r_inm_detalle_factura_compra,
                 header: $header, ws: $ws);
         }
@@ -361,9 +366,12 @@ class controlador_inm_ubicacion extends _ctl_base {
         $r_inm_movimiento_consumo = (new inm_movimiento_consumo(link: $this->link))->alta_registro(
             registro: $registro);
         if (errores::$error) {
+            $this->link->rollBack();
             return $this->retorno_error(mensaje: 'Error al generar link', data: $r_inm_movimiento_consumo,
                 header: $header, ws: $ws);
         }
+
+        $this->link->commit();
 
         if($header){
             $retorno = $_SERVER['HTTP_REFERER'];

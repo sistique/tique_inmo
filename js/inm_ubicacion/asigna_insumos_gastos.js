@@ -15,7 +15,8 @@ sl_inm_factura_compra_id.change(function () {
         url: url,
         data: {
             filtros: {
-                "inm_factura_compra.id": inm_factura_compra_id
+                "inm_factura_compra.id": inm_factura_compra_id,
+                "inm_detalle_factura_compra.asignado_completo": 'inactivo'
             }
         },
     }).done(function (data) {  // Función que se ejecuta si todo ha ido bien
