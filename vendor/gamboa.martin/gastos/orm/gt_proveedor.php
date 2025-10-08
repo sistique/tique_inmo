@@ -4,11 +4,14 @@ namespace gamboamartin\gastos\models;
 
 use base\orm\_modelo_parent;
 use base\orm\modelo;
+use DOMDocument;
+use DOMXPath;
 use gamboamartin\documento\models\doc_documento;
 use gamboamartin\errores\errores;
 use gamboamartin\plugins\imagen;
 use gamboamartin\plugins\pdf;
 use gamboamartin\plugins\web;
+use gamboamartin\template\html;
 use PDO;
 use stdClass;
 
@@ -122,6 +125,13 @@ class gt_proveedor extends _modelo_parent
             return $this->error->error(mensaje: 'Error al leer contenido', data: $contenido);
         }
 
+        $contenido_formateado = $this->contenido_web(html: $contenido);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al formatear contenido', data: $contenido_formateado);
+        }
+
+        return $contenido_formateado;
+
         /*$contenido_formateado = $this->contenido_web_formateado(html: $contenido);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al formatear contenido', data: $contenido_formateado);
@@ -134,6 +144,53 @@ class gt_proveedor extends _modelo_parent
 
         return get_object_vars($contenido_formateado);*/
     }
+
+    public function contenido_web(string $html): array
+    {
+        libxml_use_internal_errors(true);
+
+        $dom = new DOMDocument();
+        $dom->loadHTML($html);
+        $xpath = new DOMXPath($dom);
+
+        foreach ($xpath->query('//script') as $script) {
+            $script->parentNode->removeChild($script);
+        }
+
+        $datos = [];
+        $rfcNodo = $xpath->query("//li[contains(., 'El RFC:')]");
+        if ($rfcNodo->length > 0) {
+            $texto = trim($rfcNodo->item(0)->textContent);
+            if (preg_match('/RFC:\s*([A-Z0-9]+)/', $texto, $coincidencias)) {
+                $datos['RFC'] = $coincidencias[1];
+            }
+        }
+
+        $tablas = $xpath->query("//table[@role='grid']");
+
+        foreach ($tablas as $tabla) {
+            $filas = $xpath->query(".//tbody/tr", $tabla);
+
+            foreach ($filas as $fila) {
+                $celdas = $xpath->query(".//td", $fila);
+
+                if ($celdas->length >= 2) {
+                    $clave = trim(str_replace(":", "", $celdas->item(0)->textContent));
+                    $valor = trim($celdas->item(1)->textContent);
+
+                    $clave = preg_replace('/\s+/', ' ', $clave);
+                    $valor = preg_replace('/\s+/', ' ', $valor);
+
+                    if ($clave !== "" && !preg_match('/PrimeFaces|function|{.*}/', $clave)) {
+                        $datos[$clave] = $valor;
+                    }
+                }
+            }
+        }
+
+        return array_map('trim', $datos);
+    }
+
 
     public function modifica_bd(array $registro, int $id, bool $reactiva = false,
                                 array $keys_integra_ds = array('codigo', 'descripcion')): array|stdClass

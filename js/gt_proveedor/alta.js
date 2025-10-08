@@ -166,7 +166,7 @@ document.getElementById('documento').addEventListener('change', function (event)
     var formData = new FormData();
     formData.append('documento', this.files[0]);
 
-    let url = get_url("com_cliente", "leer_qr", {registro_id: -1});
+    let url = get_url("gt_proveedor", "leer_qr", {registro_id: -1});
 
     fetch(url, {
         method: 'POST',
@@ -182,7 +182,7 @@ document.getElementById('documento').addEventListener('change', function (event)
 
             data = result.data;
             console.log(data);
-            persona = data.datos_identificacion;
+            /*persona = data.datos_identificacion;
 
             let url = get_url("cat_sat_tipo_persona", "get_tipo_persona", {tipo_persona: data.tipo_persona });
             get_data(url, function (data_tp) {
@@ -258,7 +258,7 @@ document.getElementById('documento').addEventListener('change', function (event)
             txt_numero_exterior.val(data.datos_ubicacion.numero_exterior);
             txt_numero_interior.val(data.datos_ubicacion.numero_interior);
 
-            loaderOverlay.remove();
+            loaderOverlay.remove();*/
         })
         .catch(error => {
             alert('Error al leer el documento.');
