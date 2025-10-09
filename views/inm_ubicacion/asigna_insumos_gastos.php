@@ -245,6 +245,7 @@ hr{
                                 <th>Traslado</th>
                                 <th>Retenido</th>
                                 <th>Total</th>
+                                <th>Acciones</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -258,6 +259,7 @@ hr{
                                     <td><?php echo $detalle['inm_detalle_factura_compra_valor_unitario'] ?></td>
                                     <td><?php echo $detalle['inm_detalle_factura_compra_subtotal'] ?></td>
                                     <td><?php echo $detalle['inm_detalle_factura_compra_trasladado'] ?></td>
+                                    <td><?php echo $detalle['inm_detalle_factura_compra_retenido'] ?></td>
                                     <td><?php echo $detalle['inm_detalle_factura_compra_total'] ?></td>
                                     <td><?php echo $detalle['elimina_bd'] ?></td>
                                 </tr>
