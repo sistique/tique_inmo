@@ -190,6 +190,33 @@ class inm_movimiento_consumo extends _modelo_parent{
             }
         }
 
+        $filtro_costo['inm_ubicacion.id'] = $registro_mov['inm_ubicacion_id'];
+        $filtro_costo['inm_concepto.id'] = $registro_mov['inm_concepto_id'];
+        $r_inm_costo = (new inm_costo(link: $this->link))->filtro_and(filtro: $filtro_costo);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al modificar existencia actual producto', data: $r_inm_costo);
+        }
+
+        if($r_inm_costo->n_registros > 0){
+            $registro_che = array();
+            $registro_che['monto'] = $r_inm_costo->registros[0]['inm_costo_monto'] -
+                $registro_mov['inm_movimiento_consumo_total'];
+
+            $r_costo = (new inm_costo(link: $this->link))->modifica_bd(registro: $registro_che,
+                id: $r_inm_costo->registros[0]['inm_costo_id']);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al insertar prospecto',data:  $r_costo);
+            }
+
+            if($registro_che['monto'] <= 0){
+                $r_elimina = (new inm_costo(link: $this->link))->elimina_bd(id:
+                    $r_inm_costo->registros[0]['inm_costo_id']);
+                if (errores::$error) {
+                    return $this->error->error(mensaje: 'Error al obtener relacion', data: $r_elimina);
+                }
+            }
+        }
+
         return $r_elimina_bd;
     }
 }
