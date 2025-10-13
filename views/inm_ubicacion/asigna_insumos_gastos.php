@@ -229,8 +229,8 @@ hr{
                         </div>
                         <div class="control-group btn-alta">
                             <div class="controls">
-                                <button type="submit" class="btn btn-success btn-insert" name="btn_action_next"  value="asigna_insumos_gastos">Asigna Factura Completa</button>
-                                <button type="submit" class="btn btn-success btn-insert" name="btn_action_next" value="asigna_insumos_gastos">Asigna Insumo</button>
+                                <button type="submit" class="btn btn-success btn-insert" name="factura_completa"  value="factura_completa">Asigna Factura Completa</button>
+                                <button type="submit" class="btn btn-success btn-insert" name="asigna_insumo" value="asigna_insumo">Asigna Insumo</button>
                             </div>
                         </div>
 

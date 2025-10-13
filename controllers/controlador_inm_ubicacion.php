@@ -342,32 +342,95 @@ class controlador_inm_ubicacion extends _ctl_base {
     {
         $this->link->beginTransaction();
 
-        $r_inm_detalle_factura_compra = (new inm_detalle_factura_compra(link:$this->link))->registro(
-            registro_id: $_POST['inm_detalle_factura_compra_id']);
-        if (errores::$error) {
+        if(!isset($_POST['inm_factura_compra_id']) || trim($_POST['inm_factura_compra_id']) === ''){
             $this->link->rollBack();
-            return $this->retorno_error(mensaje: 'Error al generar link', data: $r_inm_detalle_factura_compra,
-                header: $header, ws: $ws);
+            return $this->retorno_error(mensaje: 'Error no se selecciono ninguna factura'
+                , data: $_POST, header: $header, ws: $ws);
         }
 
-        $valor_unitario_con_imp = $r_inm_detalle_factura_compra['inm_detalle_factura_compra_total'] /
-            $r_inm_detalle_factura_compra['inm_detalle_factura_compra_cantidad'];
-
-        $total = $valor_unitario_con_imp * $_POST['cantidad_consumo'];
-
-        $registro['inm_ubicacion_id'] = $_POST['inm_ubicacion_id'];
-        $registro['inm_producto_id'] = $r_inm_detalle_factura_compra['inm_producto_id'];
-        $registro['inm_detalle_factura_compra_id'] = $_POST['inm_detalle_factura_compra_id'];
-        $registro['fecha'] = date('Y-m-d');
-        $registro['cantidad'] = $_POST['cantidad_consumo'];
-        $registro['valor_unitario'] = $valor_unitario_con_imp;
-        $registro['total'] = $total;
-        $r_inm_movimiento_consumo = (new inm_movimiento_consumo(link: $this->link))->alta_registro(
-            registro: $registro);
-        if (errores::$error) {
+        if(!isset($_POST['inm_ubicacion_id']) || trim($_POST['inm_ubicacion_id']) === ''){
             $this->link->rollBack();
-            return $this->retorno_error(mensaje: 'Error al generar link', data: $r_inm_movimiento_consumo,
-                header: $header, ws: $ws);
+            return $this->retorno_error(mensaje: 'Error no se selecciono ninguna ubicacion'
+                , data: $_POST, header: $header, ws: $ws);
+        }
+
+        if(isset($_POST['factura_completa']) && trim($_POST['factura_completa']) !== '') {
+            $filtro_detalle['inm_factura_compra.id'] = $_POST['inm_factura_compra_id'];
+            $r_inm_detalle_factura_compra = (new inm_detalle_factura_compra(link:$this->link))->filtro_and(
+                filtro: $filtro_detalle);
+            if (errores::$error) {
+                $this->link->rollBack();
+                return $this->retorno_error(mensaje: 'Error al generar link', data: $r_inm_detalle_factura_compra,
+                    header: $header, ws: $ws);
+            }
+
+            if($r_inm_detalle_factura_compra->n_registros <= 0){
+                $this->link->rollBack();
+                return $this->retorno_error(mensaje: 'Error no se selecciono ninguna factura'
+                    , data: $r_inm_detalle_factura_compra, header: $header, ws: $ws);
+            }
+
+            foreach ($r_inm_detalle_factura_compra->registros as $registro_fac) {
+                $filtro_mov['inm_detalle_factura_compra.id'] = $registro_fac['inm_detalle_factura_compra_id'];
+                $r_inm_movimiento_consumo = (new inm_movimiento_consumo(link:$this->link))->filtro_and(
+                    filtro: $filtro_mov);
+                if (errores::$error) {
+                    $this->link->rollBack();
+                    return $this->retorno_error(mensaje: 'Error al generar link', data: $r_inm_movimiento_consumo,
+                        header: $header, ws: $ws);
+                }
+
+                if($r_inm_movimiento_consumo->n_registros > 0){
+                    $this->link->rollBack();
+                    return $this->retorno_error(mensaje: 'Error un elemento de la factura ya esta asignado a otra factura'
+                        , data: $r_inm_movimiento_consumo, header: $header, ws: $ws);
+                }
+
+                $registro['inm_ubicacion_id'] = $_POST['inm_ubicacion_id'];
+                $registro['inm_producto_id'] = $registro_fac['inm_producto_id'];
+                $registro['inm_detalle_factura_compra_id'] = $registro_fac['inm_detalle_factura_compra_id'];
+                $registro['fecha'] = date('Y-m-d');
+                $registro['cantidad'] = $registro_fac['inm_detalle_factura_compra_cantidad'];
+                $registro['valor_unitario'] = $registro_fac['inm_detalle_factura_compra_valor_unitario'];
+                $registro['total'] = $registro_fac['inm_detalle_factura_compra_total'];
+                $r_inm_movimiento_consumo = (new inm_movimiento_consumo(link: $this->link))->alta_registro(
+                    registro: $registro);
+                if (errores::$error) {
+                    $this->link->rollBack();
+                    return $this->retorno_error(mensaje: 'Error al generar link', data: $r_inm_movimiento_consumo,
+                        header: $header, ws: $ws);
+                }
+            }
+        }
+
+        if(isset($_POST['asigna_insumo']) && trim($_POST['asigna_insumo']) !== '') {
+            $r_inm_detalle_factura_compra = (new inm_detalle_factura_compra(link:$this->link))->registro(
+                registro_id: $_POST['inm_detalle_factura_compra_id']);
+            if (errores::$error) {
+                $this->link->rollBack();
+                return $this->retorno_error(mensaje: 'Error al generar link', data: $r_inm_detalle_factura_compra,
+                    header: $header, ws: $ws);
+            }
+
+            $valor_unitario_con_imp = $r_inm_detalle_factura_compra['inm_detalle_factura_compra_total'] /
+                $r_inm_detalle_factura_compra['inm_detalle_factura_compra_cantidad'];
+
+            $total = $valor_unitario_con_imp * $_POST['cantidad_consumo'];
+
+            $registro['inm_ubicacion_id'] = $_POST['inm_ubicacion_id'];
+            $registro['inm_producto_id'] = $r_inm_detalle_factura_compra['inm_producto_id'];
+            $registro['inm_detalle_factura_compra_id'] = $_POST['inm_detalle_factura_compra_id'];
+            $registro['fecha'] = date('Y-m-d');
+            $registro['cantidad'] = $_POST['cantidad_consumo'];
+            $registro['valor_unitario'] = $valor_unitario_con_imp;
+            $registro['total'] = $total;
+            $r_inm_movimiento_consumo = (new inm_movimiento_consumo(link: $this->link))->alta_registro(
+                registro: $registro);
+            if (errores::$error) {
+                $this->link->rollBack();
+                return $this->retorno_error(mensaje: 'Error al generar link', data: $r_inm_movimiento_consumo,
+                    header: $header, ws: $ws);
+            }
         }
 
         $this->link->commit();
@@ -3625,7 +3688,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         }
 
         $keys_selects = (new init())->key_select_txt(cols: 12,key: 'cantidad_consumo', keys_selects:$keys_selects,
-            place_holder: 'Cantidad Consumo');
+            place_holder: 'Cantidad Consumo', required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
