@@ -379,7 +379,7 @@ $('#anterior').on('click', function() {
 });
 
 $('#siguiente').on('click', function() {
-    if (producto_xml_actual < productos_xml.length - 1) {
+    if (producto_xml_actual <= productos_xml.length - 1) {
         abrir_modal(producto_xml_actual + 1);
     }
 });
@@ -570,6 +570,11 @@ function renderTable_productos_completos(page) {
 
             $('.producto-checkbox').not(this).prop('checked', false);
             if ($(this).val() === '-1') {
+                let sl_inm_concepto_id = $('#inm_concepto_id');
+
+                sl_inm_concepto_id.val('-1');
+                sl_inm_concepto_id.selectpicker('refresh');
+                
                 $('.content_alta').show();
             }
         }else{
