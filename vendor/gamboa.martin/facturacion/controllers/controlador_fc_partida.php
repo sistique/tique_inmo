@@ -36,6 +36,8 @@ class controlador_fc_partida extends _ctl_partida {
             die('Error');
         }
 
+        $this->lista_get_data = true;
+
         $init_links = $this->init_links();
         if (errores::$error) {
             $error = $this->errores->error(mensaje: 'Error al inicializar links', data: $init_links);
