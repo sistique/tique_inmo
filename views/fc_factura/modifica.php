@@ -3,7 +3,7 @@
 
 <?php echo $controlador->inputs->registro_id; ?>
 <main class="main section-color-primary">
-    <!--<!--<div class="container">-->-->
+    <!--<div class="container">-->
 
         <div class="row">
 
