@@ -23,6 +23,7 @@
 config/generales.php
 config/database.php
 config/views.php
+config/pac.php
 archivos
 .idea/
 composer.lock
