@@ -125,7 +125,7 @@ cat_sat_forma_pago_id_sl.change(function() {
             url : url,
             // la información a enviar
             // (también es posible utilizar una cadena de datos)
-            data : { filtros : {'cat_sat_moneda.id': cat_sat_moneda_id,'com_tipo_cambio.fecha': fecha} },
+            data : { filtros : {'cat_sat_moneda.id': cat_sat_moneda_id/*,'com_tipo_cambio.fecha': fecha*/} },
 
             // especifica si será una petición POST o GET
             type : 'POST',
@@ -153,7 +153,9 @@ cat_sat_forma_pago_id_sl.change(function() {
 
 
             $.each(json.registros, function( index, com_tipo_cambio ) {
-                integra_new_option(sl_com_tipo_cambio,com_tipo_cambio.cat_sat_moneda_codigo+' '+com_tipo_cambio.com_tipo_cambio_monto,
+                let monto = parseFloat(com_tipo_cambio.com_tipo_cambio_monto).toFixed(2);
+
+                integra_new_option(sl_com_tipo_cambio,com_tipo_cambio.cat_sat_moneda_codigo+' $'+monto,
                 com_tipo_cambio.com_tipo_cambio_id);
                 sl_com_tipo_cambio.val(com_tipo_cambio.com_tipo_cambio_id);
         });
