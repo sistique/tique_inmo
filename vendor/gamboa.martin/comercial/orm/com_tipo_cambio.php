@@ -26,7 +26,7 @@ class com_tipo_cambio extends _modelo_parent
 
         $this->etiqueta = 'Tipo de Cambio';
 
-        $alta_moneda = $this->tipo_cambio_hoy_ins(cat_sat_moneda_codigo: 'MXN');
+        /*$alta_moneda = $this->tipo_cambio_hoy_ins(cat_sat_moneda_codigo: 'MXN');
         if(errores::$error){
             $error = $this->error->error(mensaje: 'Error al insertar tipo de cambio', data: $alta_moneda);
             print_r($error);
@@ -38,7 +38,7 @@ class com_tipo_cambio extends _modelo_parent
             $error = $this->error->error(mensaje: 'Error al insertar tipo de cambio', data: $alta_moneda);
             print_r($error);
             exit;
-        }
+        }*/
 
     }
 
