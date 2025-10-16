@@ -40,6 +40,8 @@ class controlador_adm_seccion_pertenece extends _ctl_base {
 
         $this->titulo_lista = 'Secciones de Sistema';
 
+        $this->lista_get_data = true;
+
         if(isset($this->registro_id) && $this->registro_id > 0){
             $adm_seccion_pertenece = (new adm_seccion_pertenece($this->link))->registro(registro_id: $this->registro_id);
             if(errores::$error){
