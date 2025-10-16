@@ -30,7 +30,7 @@
         <?php echo $controlador->buttons_base; ?>
     <!--</div>-->
 
-    <div class="partidas" <!--class="containe partidas"-->>
+    <div class="partidas"> <!--class="containe partidas">-->
         <div class="row">
             <div class="col-lg-12">
                 <div class="widget  widget-box box-container form-main widget-form-cart" id="form">
