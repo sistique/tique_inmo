@@ -78,6 +78,7 @@ class controlador_inm_comprador extends _ctl_base {
 
     public string $link_rel_ubi_comp_alta_bd = '';
     public string $link_inm_firma_alta_bd = '';
+    public string $link_genera_factura_bd = '';
 
     /**/
     public string $link_ingresado_bd = '';
@@ -4608,5 +4609,49 @@ class controlador_inm_comprador extends _ctl_base {
         return $r_modifica;
     }
 
+
+    public function genera_factura(bool $header, bool $ws = false): array|stdClass
+    {
+        if(isset($_GET['accion']) && $_GET['accion'] == 'genera_factura') {
+            $template = $this->modifica(header: false);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al integrar base', data: $template, header: $header, ws: $ws);
+            }
+        }
+
+        $filtro_rel['inm_comprador.id'] = $this->registro_id;
+        $registro = (new inm_rel_comprador_com_cliente($this->link))->filtro_and(filtro: $filtro_rel);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener registro',data:  $registro,header: $header,ws: $ws);
+        }
+
+        $keys_selects = array();
+        $columns_ds = array('com_cliente_rfc','com_cliente_razon_social');
+        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'com_cliente_id',
+            keys_selects:$keys_selects, id_selected: $registro->registros[0]['com_cliente_id'], label: 'Cliente',
+            columns_ds : $columns_ds);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
+                header: $header,ws:  $ws);
+        }
+
+        $base = $this->base_upd(keys_selects: $keys_selects, params: array(),params_ajustados: array());
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
+        }
+
+        $params = array('pestana_general_actual' => 'pestanageneral2');
+        $link_genera_factura_bd = $this->obj_link->link_con_id(accion:'genera_factura_bd',
+            link: $this->link,registro_id: $this->registro_id,seccion: 'inm_comprador',params: $params);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al generar link',data:  $link_genera_factura_bd,
+                header: $header,ws:  $ws);
+        }
+
+        $this->link_genera_factura_bd = $link_genera_factura_bd;
+
+        return $base;
+    }
 
 }
