@@ -10,6 +10,7 @@ namespace gamboamartin\inmuebles\controllers;
 
 use base\controller\init;
 use gamboamartin\banco\models\bn_cuenta;
+use gamboamartin\comercial\models\com_tipo_cambio;
 use gamboamartin\direccion_postal\models\dp_estado;
 use gamboamartin\direccion_postal\models\dp_municipio;
 use gamboamartin\errores\errores;
@@ -3744,13 +3745,13 @@ class controlador_inm_comprador extends _ctl_base {
 
 
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'serie',
-            keys_selects:$keys_selects, place_holder: 'Serie');
+            keys_selects:$keys_selects, place_holder: 'Serie', disabled: true);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'folio',
-            keys_selects:$keys_selects, place_holder: 'Folio');
+            keys_selects:$keys_selects, place_holder: 'Folio', disabled: true);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
@@ -4695,48 +4696,85 @@ class controlador_inm_comprador extends _ctl_base {
                 header: $header,ws:  $ws);
         }
 
+        $id_selected = -1;
+        if(isset($registro->registros[0]['com_cliente_cat_sat_tipo_de_comprobante_id']) &&
+            trim($registro->registros[0]['com_cliente_cat_sat_tipo_de_comprobante_id']) !== ''){
+            $id_selected = $registro->registros[0]['com_cliente_cat_sat_tipo_de_comprobante_id'];
+        }
         $keys_selects = $this->key_select(cols: 6, con_registros: true,filtro: array(),
-            key: 'cat_sat_tipo_de_comprobante_id', keys_selects: $keys_selects, id_selected: -1,
+            key: 'cat_sat_tipo_de_comprobante_id', keys_selects: $keys_selects, id_selected: $id_selected,
             label: 'Tipo de Comprobante');
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);
         }
 
+        $id_selected = -1;
+        if(isset($registro->registros[0]['com_cliente_cat_sat_metodo_pago_id']) &&
+            trim($registro->registros[0]['com_cliente_cat_sat_metodo_pago_id']) !== ''){
+            $id_selected = $registro->registros[0]['com_cliente_cat_sat_metodo_pago_id'];
+        }
         $keys_selects = $this->key_select(cols: 6, con_registros: true,filtro: array(),
-            key: 'cat_sat_metodo_pago_id', keys_selects: $keys_selects, id_selected: -1,
+            key: 'cat_sat_metodo_pago_id', keys_selects: $keys_selects, id_selected: $id_selected,
             label: 'Metodo de Pago');
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);
         }
 
+        $id_selected = -1;
+        if(isset($registro->registros[0]['com_cliente_cat_sat_forma_pago_id']) &&
+            trim($registro->registros[0]['com_cliente_cat_sat_forma_pago_id']) !== ''){
+            $id_selected = $registro->registros[0]['com_cliente_cat_sat_forma_pago_id'];
+        }
         $keys_selects = $this->key_select(cols: 6, con_registros: true,filtro: array(),
-            key: 'cat_sat_forma_pago_id', keys_selects: $keys_selects, id_selected: -1,
+            key: 'cat_sat_forma_pago_id', keys_selects: $keys_selects, id_selected: $id_selected,
             label: 'Forma de Pago');
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);
         }
 
+        $id_selected = -1;
+        if(isset($registro->registros[0]['com_cliente_cat_sat_moneda_id']) &&
+            trim($registro->registros[0]['com_cliente_cat_sat_moneda_id']) !== ''){
+            $id_selected = $registro->registros[0]['com_cliente_cat_sat_moneda_id'];
+        }
         $keys_selects = $this->key_select(cols: 6, con_registros: true,filtro: array(),
-            key: 'cat_sat_moneda_id', keys_selects: $keys_selects, id_selected: -1,
+            key: 'cat_sat_moneda_id', keys_selects: $keys_selects, id_selected: $id_selected,
             label: 'Moneda');
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);
         }
 
+        $filtro_cambio['cat_sat_moneda.id'] =  $registro->registros[0]['com_cliente_cat_sat_moneda_id'];
+        $com_tipo_cambio = (new com_tipo_cambio(link: $this->link))->filtro_and(filtro: $filtro_cambio);
+        if(errores::$error){
+            $error = $this->errores->error(mensaje: 'Error al obtener fc_csds',data:  $com_tipo_cambio);
+            print_r($error);
+            die('Error');
+        }
+
+        $id_selected = -1;
+        if($com_tipo_cambio->n_registros > 0){
+            $id_selected = $com_tipo_cambio->registros[0]['com_tipo_cambio_id'];
+        }
         $keys_selects = $this->key_select(cols: 6, con_registros: true,filtro: array(),
-            key: 'com_tipo_cambio_id', keys_selects: $keys_selects, id_selected: -1,
+            key: 'com_tipo_cambio_id', keys_selects: $keys_selects, id_selected: $id_selected,
             label: 'Tipo de Cambio');
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);
         }
 
+        $id_selected = -1;
+        if(isset($registro->registros[0]['com_cliente_cat_sat_uso_cfdi_id']) &&
+            trim($registro->registros[0]['com_cliente_cat_sat_uso_cfdi_id']) !== ''){
+            $id_selected = $registro->registros[0]['com_cliente_cat_sat_uso_cfdi_id'];
+        }
         $keys_selects = $this->key_select(cols: 6, con_registros: true,filtro: array(),
-            key: 'cat_sat_uso_cfdi_id', keys_selects: $keys_selects, id_selected: -1,
+            key: 'cat_sat_uso_cfdi_id', keys_selects: $keys_selects, id_selected: $id_selected,
             label: 'Uso CFDI');
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
