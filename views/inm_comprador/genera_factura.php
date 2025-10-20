@@ -23,21 +23,21 @@
                     <?php echo $controlador->inputs->cat_sat_uso_cfdi_id; ?>
                     <?php echo $controlador->inputs->observaciones_factura; ?>
 
-                    <div class="widget-header" style="display: flex;justify-content: space-between;align-items: center;">
+                    <div class="widget-header col-md-12">
                         <h2>Partida</h2>
                     </div>
 
-                    <?php echo $controlador->inputs->partidas->com_producto_id; ?>
-                    <?php echo $controlador->inputs->partidas->unidad; ?>
-                    <?php echo $controlador->inputs->partidas->cuenta_predial; ?>
-                    <?php echo $controlador->inputs->partidas->cat_sat_obj_imp_id; ?>
-                    <?php echo $controlador->inputs->partidas->descripcion; ?>
-                    <?php echo $controlador->inputs->partidas->cantidad; ?>
-                    <?php echo $controlador->inputs->partidas->valor_unitario; ?>
-                    <?php echo $controlador->inputs->partidas->subtotal; ?>
-                    <?php echo $controlador->inputs->partidas->descuento; ?>
-                    <?php echo $controlador->inputs->partidas->total; ?>
-                    <?php echo $controlador->inputs->partidas->cat_sat_conf_imps_id; ?>
+                    <?php echo $controlador->inputs->com_producto_id; ?>
+                    <?php echo $controlador->inputs->unidad; ?>
+                    <?php echo $controlador->inputs->cuenta_predial; ?>
+                    <?php echo $controlador->inputs->cat_sat_obj_imp_id; ?>
+                    <?php echo $controlador->inputs->descripcion_factura; ?>
+                    <?php echo $controlador->inputs->cantidad; ?>
+                    <?php echo $controlador->inputs->valor_unitario; ?>
+                    <?php echo $controlador->inputs->subtotal; ?>
+                    <?php echo $controlador->inputs->descuento_factura; ?>
+                    <?php echo $controlador->inputs->total; ?>
+                    <?php echo $controlador->inputs->cat_sat_conf_imps_id; ?>
 
 
                     <div class="control-group btn-alta">
