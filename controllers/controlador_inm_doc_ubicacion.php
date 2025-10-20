@@ -435,6 +435,13 @@ class controlador_inm_doc_ubicacion extends _ctl_formato
         }
         $this->inputs->inm_doc_ubicacion_id = $inm_doc_ubicacion_id;
 
+        if ($header) {
+            header('Content-Type: application/pdf');
+            header('Content-Disposition: inline; filename="documento.pdf"');
+            header('Content-Transfer-Encoding: binary');
+            header('Accept-Ranges: bytes');
+        }
+
         return $registro;
     }
 
