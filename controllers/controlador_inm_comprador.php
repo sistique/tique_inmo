@@ -3781,6 +3781,54 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'unidad',
+            keys_selects:$keys_selects, place_holder: 'Unidad');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'cuenta_predial',
+            keys_selects:$keys_selects, place_holder: 'Cuenta Predial');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'descripcion_factura',
+            keys_selects:$keys_selects, place_holder: 'Descripcion');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'cantidad',
+            keys_selects:$keys_selects, place_holder: 'Cantidad');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'valor_unitario',
+            keys_selects:$keys_selects, place_holder: 'Valor Unitario');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 4,key: 'subtotal',
+            keys_selects:$keys_selects, place_holder: 'Subtotal');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 4,key: 'descuento_factura',
+            keys_selects:$keys_selects, place_holder: 'Descuento');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 4,key: 'total',
+            keys_selects:$keys_selects, place_holder: 'Total');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
         return $keys_selects;
     }
 
@@ -4672,6 +4720,8 @@ class controlador_inm_comprador extends _ctl_base {
 
         $this->row_upd->fecha_factura = date('Y-m-d');
         $this->row_upd->exportacion = '01';
+        $this->row_upd->cat_sat_conf_imps_id = '1';
+        $this->row_upd->cantidad = '1';
 
         $keys_selects = array();
         $columns_ds = array('com_cliente_rfc','com_cliente_razon_social');
