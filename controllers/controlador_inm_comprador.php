@@ -2425,7 +2425,7 @@ class controlador_inm_comprador extends _ctl_base {
         $this->link->beginTransaction();
 
         $inm_bit_comp = (new inm_bitacora_status_comprador(link: $this->link))->existe_status_comprador(
-            inm_comprador_id: $this->registro['inm_comprador_id'], values: array('11'));
+            inm_comprador_id: $this->registro_id, values: array('11'));
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al obtener bitacora status comp',data:  $inm_bit_comp,
                 header: $header, ws: $ws);
