@@ -3782,7 +3782,7 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'unidad',
-            keys_selects:$keys_selects, place_holder: 'Unidad');
+            keys_selects:$keys_selects, place_holder: 'Unidad', disabled: true);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
@@ -3812,7 +3812,7 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         $keys_selects = (new init())->key_select_txt(cols: 4,key: 'subtotal',
-            keys_selects:$keys_selects, place_holder: 'Subtotal');
+            keys_selects:$keys_selects, place_holder: 'Subtotal', disabled: true);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
@@ -3824,7 +3824,7 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         $keys_selects = (new init())->key_select_txt(cols: 4,key: 'total',
-            keys_selects:$keys_selects, place_holder: 'Total');
+            keys_selects:$keys_selects, place_holder: 'Total', disabled: true);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
@@ -4720,8 +4720,11 @@ class controlador_inm_comprador extends _ctl_base {
 
         $this->row_upd->fecha_factura = date('Y-m-d');
         $this->row_upd->exportacion = '01';
-        $this->row_upd->cat_sat_conf_imps_id = '1';
         $this->row_upd->cantidad = '1';
+        $this->row_upd->valor_unitario = 0;
+        $this->row_upd->subtotal = 0;
+        $this->row_upd->descuento_factura = 0;
+        $this->row_upd->total = 0;
 
         $keys_selects = array();
         $columns_ds = array('com_cliente_rfc','com_cliente_razon_social');
@@ -4855,7 +4858,7 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         $keys_selects = $this->key_select(cols: 12, con_registros: true,filtro: array(),
-            key: 'cat_sat_conf_imps_id', keys_selects: $keys_selects, id_selected: -1,
+            key: 'cat_sat_conf_imps_id', keys_selects: $keys_selects, id_selected: 1,
             label: 'Configuracion de Impuestos');
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
