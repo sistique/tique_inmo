@@ -2400,9 +2400,8 @@ class controlador_inm_ubicacion extends _ctl_base {
         }*/
 
         if(isset($_POST['avanza_etapa']) && trim($_POST['avanza_etapa']) !== '') {
-
             $filtro_val['inm_ubicacion.id'] = $this->registro_id;
-            $r_cheques = $modelo_cheque->filtro_and(filtro: $filtro_val);
+            $r_cheques = (new inm_rel_cheque_ubicacion(link: $this->link))->filtro_and(filtro: $filtro_val);
             if (errores::$error) {
                 $this->link->rollBack();
                 return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $r_cheques,
@@ -2419,7 +2418,8 @@ class controlador_inm_ubicacion extends _ctl_base {
                 }
             }       
             
-            $r_transferencias = $modelo_transferencia->filtro_and(filtro: $filtro_val);
+            $r_transferencias = (new inm_rel_transferencia_ubicacion(link: $this->link))->filtro_and(
+                filtro: $filtro_val);
             if (errores::$error) {
                 $this->link->rollBack();
                 return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $r_transferencias,
