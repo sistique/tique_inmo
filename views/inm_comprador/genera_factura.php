@@ -13,7 +13,19 @@
                     <?php include (new views())->ruta_templates."head/title.php"; ?>
                     <?php include (new views())->ruta_templates."head/subtitulo.php"; ?>
                     <?php include (new views())->ruta_templates."mensajes.php"; ?>
-                    <?php echo $controlador->form_data_fc; ?>
+                    <?php echo $controlador->inputs->fc_csd_id; ?>
+                    <?php echo $controlador->inputs->com_cliente_id; ?>
+                    <?php echo $controlador->inputs->serie; ?>
+                    <?php echo $controlador->inputs->folio; ?>
+                    <?php echo $controlador->inputs->exportacion; ?>
+                    <?php echo $controlador->inputs->fecha_factura; ?>
+                    <?php echo $controlador->inputs->cat_sat_tipo_de_comprobante_id; ?>
+                    <?php echo $controlador->inputs->cat_sat_metodo_pago_id; ?>
+                    <?php echo $controlador->inputs->cat_sat_forma_pago_id; ?>
+                    <?php echo $controlador->inputs->cat_sat_moneda_id; ?>
+                    <?php echo $controlador->inputs->com_tipo_cambio_id; ?>
+                    <?php echo $controlador->inputs->cat_sat_uso_cfdi_id; ?>
+                    <?php echo $controlador->inputs->observaciones_factura; ?>
                     <?php include (new views())->ruta_templates.'botons/submit/modifica_bd.php';?>
 
                 </form>
@@ -64,119 +76,6 @@
 
         </div>
     </div>
-
-    <!--<div class="container">-->
-    <div class="row">
-        <div class="col-md-12">
-
-            <div class="widget widget-box box-container widget-mylistings">
-                <div class="widget-header" style="display: flex;justify-content: space-between;align-items: center;">
-                    <h2>Partidas</h2>
-                </div>
-
-                <div class="table table-responsive" id="row-partida">
-
-                    <?php    foreach ($controlador->partidas->registros as $partida){ ?>
-
-                        <table class='table table-striped data-partida' style='border: 2px solid'>
-                            <tbody>
-                            <tr class="tr_fc_partida_descripcion">
-                                <td colspan='5' class="td_fc_partida_descripcion" data-fc_partida_factura_id="<?php echo $partida['fc_partida_id']; ?>">
-                                    <input type="text" class="form-control form-control-sm fc_partida_descripcion" name="descripcion" value="<?php echo $partida['fc_partida_descripcion']; ?>" />
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td><b>CVE SAT: </b><td><?php echo $partida['com_producto_codigo']; ?></td>
-                                <td><b>Unidad: </b><?php echo $partida['cat_sat_unidad_descripcion']; ?></td>
-                                <td><b>Obj Imp: </b><?php echo $partida['cat_sat_obj_imp_descripcion']; ?></td>
-                            </tr>
-
-                            <tr>
-                                <td><b>Cantidad</b></td>
-                                <td><b>Valor Unitario</b></td>
-                                <td><b>Importe</b></td>
-                                <td><b>Descuento</b></td>
-                            </tr>
-
-                            <tr class="tr_data_partida">
-                                <td class="td_fc_partida_cantidad">
-                                    <input type="text" class="form-control form-control-sm fc_partida_cantidad" name="cantidad" value="<?php echo $partida['fc_partida_cantidad']; ?>" />
-                                </td>
-                                <td class="td_fc_partida_valor_unitario">
-                                    <input type="text" class="form-control form-control-sm fc_partida_valor_unitario" name="valor_unitario" value="<?php echo $partida['fc_partida_valor_unitario']; ?>" />
-                                </td>
-                                <td class="td_fc_partida_sub_total_base">
-                                    <input type="text" class="form-control form-control-sm fc_partida_sub_total_base" disabled value="<?php echo $partida['fc_partida_sub_total_base']; ?>" />
-                                </td>
-                                <td class="td_fc_partida_descuento">
-                                    <input type="text" class="form-control form-control-sm fc_partida_descuento" name="descuento" value="<?php echo $partida['fc_partida_descuento']; ?>" />
-                                </td>
-
-                            </tr>
-
-                            <tr class="tr_data_partida_rs">
-                                <td class="td_fc_partida_sub_total"><b>Sub Total: </b><?php echo $partida['fc_partida_sub_total']; ?></td>
-                                <td class="td_fc_partida_traslados"><b>Traslados: </b><?php echo $partida['fc_partida_total_traslados']; ?></td>
-                                <td class="td_fc_partida_retenciones"><b>Retenciones: </b><?php echo $partida['fc_partida_total_retenciones']; ?></td>
-                                <td class="td_fc_partida_total"><b>Total: </b><?php echo $partida['fc_partida_total']; ?></td>
-                            </tr>
-                            <tr class='tr_elimina_partida'>
-                                <td colspan='5' class='td_elimina_partida'>
-                                    <button type='button' class='btn btn-danger col-md-12 elimina_partida' data-fc_partida_factura_id='<?php echo $partida['fc_partida_id']; ?>' value='elimina' name='btn_action_next'>Elimina</button>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-
-
-                    <?php }  ?>
-
-                </div>
-            </div>
-        </div>
-
-
-        <div class="row">
-            <div class="col-md-12">
-                <div class="widget widget-box box-container widget-mylistings">
-                    <div class="widget-header" style="display: flex;justify-content: space-between;align-items: center;">
-                        <h2>Correos</h2>
-                    </div>
-                    <div class="table-responsive">
-                        <table class="table table-striped">
-                            <thead>
-                            <tr>
-                                <th>Id</th>
-                                <th>Correo</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <?php foreach ($controlador->registros['fc_emails'] as $fc_email){ ?>
-                                <tr>
-                                    <td><?php echo $fc_email['fc_email_id']; ?></td>
-                                    <td><?php echo $fc_email['com_email_cte_descripcion']; ?></td>
-                                </tr>
-                            <?php } ?>
-                            </tbody>
-                        </table>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <?php echo $controlador->buttons_base; ?>
-
-        <div class="col-md-12 buttons-form">
-            <?php
-            foreach ($controlador->buttons_parents_alta as $button){ ?>
-                <div class="col-md-4">
-                    <?php echo $button; ?>
-                </div>
-            <?php } ?>
-        </div>
-        <!--</div>-->
 </main>
 
 <script src="<?php echo (new \config\generales())->url_base."js/_facturacion.js" ?>"></script>

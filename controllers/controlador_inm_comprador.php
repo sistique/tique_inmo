@@ -13,6 +13,7 @@ use gamboamartin\banco\models\bn_cuenta;
 use gamboamartin\direccion_postal\models\dp_estado;
 use gamboamartin\direccion_postal\models\dp_municipio;
 use gamboamartin\errores\errores;
+use gamboamartin\facturacion\models\fc_csd;
 use gamboamartin\inmuebles\html\_base;
 use gamboamartin\inmuebles\html\inm_comprador_html;
 use gamboamartin\inmuebles\html\inm_referencia_html;
@@ -2537,7 +2538,7 @@ class controlador_inm_comprador extends _ctl_base {
             'cel_com','genero','correo_com','sub_cuenta','monto_final','descuento','puntos', 'telefono_casa',
             'correo_empresa','mts_construidos','mts_terrenos','metros_construidos','metros_terreno', 'valor_avaluo',
             'numero_escritura','isr','nombre_beneficiario','monto_transferencia','efectivo','monto','numero_cheque',
-            'transferencia');
+            'transferencia','serie','folio','exportacion','fecha_factura','observaciones_factura');
         $keys->selects = array();
 
 
@@ -2561,6 +2562,9 @@ class controlador_inm_comprador extends _ctl_base {
         $init_data['inm_tipo_gasto'] = "gamboamartin\\inmuebles";
 
         $init_data['bn_cuenta'] = "gamboamartin\\banco";
+        $init_data['fc_csd'] = "gamboamartin\\facturacion";
+        $init_data['cat_sat_tipo_de_comprobante'] = "gamboamartin\\cat_sat";
+        $init_data['com_tipo_cambio'] = "gamboamartin\\comercial";
 
         $init_data = (new _base_paquete())->init_data_domicilio(init_data: $init_data);
         if(errores::$error){
@@ -4628,9 +4632,29 @@ class controlador_inm_comprador extends _ctl_base {
 
         $keys_selects = array();
         $columns_ds = array('com_cliente_rfc','com_cliente_razon_social');
-        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'com_cliente_id',
-            keys_selects:$keys_selects, id_selected: $registro->registros[0]['com_cliente_id'], label: 'Cliente',
+        $filtro['com_cliente.id'] = $registro->registros[0]['com_cliente_id'];
+        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro: $filtro, key: 'com_cliente_id',
+            keys_selects: $keys_selects, id_selected: $registro->registros[0]['com_cliente_id'], label: 'Cliente',
             columns_ds : $columns_ds);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
+                header: $header,ws:  $ws);
+        }
+
+        $fc_csds = (new fc_csd(link: $this->link))->registros_activos();
+        if(errores::$error){
+            $error = $this->errores->error(mensaje: 'Error al obtener fc_csds',data:  $fc_csds);
+            print_r($error);
+            die('Error');
+        }
+
+        $id_selected = -1;
+        if(count($fc_csds) === 1){
+            $id_selected = $fc_csds[0]['fc_csd_id'];
+        }
+
+        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro: array(), key: 'fc_csd_id',
+            keys_selects: $keys_selects, id_selected: $id_selected, label: 'Cliente');
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);
