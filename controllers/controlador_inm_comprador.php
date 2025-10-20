@@ -73,6 +73,8 @@ class controlador_inm_comprador extends _ctl_base {
     public array $transferencias = array();
     public array $efectivos = array();
 
+    public string $buttons_base = '';
+
     public string $link_documento_bd ='';
     public string $link_exportar_xls ='';
     public string $link_inm_doc_comprador_alta_bd = '';
@@ -4786,6 +4788,13 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
         }
 
+        $buttons = $this->buttons_base();
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al obtener buttons', data: $buttons);
+        }
+
+        $this->buttons_base = $buttons;
+
         $params = array('pestana_general_actual' => 'pestanageneral2');
         $link_genera_factura_bd = $this->obj_link->link_con_id(accion:'genera_factura_bd',
             link: $this->link,registro_id: $this->registro_id,seccion: 'inm_comprador',params: $params);
@@ -4799,4 +4808,47 @@ class controlador_inm_comprador extends _ctl_base {
         return $base;
     }
 
+    public function buttons_base(): array|string
+    {
+        $button_fc_factura_relaciones =  $this->html->button_href(accion: 'relaciones', etiqueta: 'Asignar Relacion',
+            registro_id: $this->registro_id, seccion: $this->seccion, style: 'warning', cols: 2, params: array());
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al generar link', data: $button_fc_factura_relaciones);
+        }
+
+        $button_fc_factura_timbra =  $this->html->button_href(accion: 'timbra_xml', etiqueta: 'Timbrar',
+            registro_id: $this->registro_id, seccion: $this->seccion, style: 'danger', cols: 2, params: array());
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al generar link', data: $button_fc_factura_timbra);
+        }
+        $button_fc_factura_correo =  $this->html->button_href(accion: 'correo', etiqueta: 'Agregar Correos',
+            registro_id: $this->registro_id, seccion: $this->seccion, style: 'success', cols: 2, params: array());
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al generar link', data: $button_fc_factura_correo);
+        }
+
+        $button_fc_factura_envia =  $this->html->button_href(accion: 'envia_cfdi', etiqueta: 'Envia Por Correo',
+            registro_id: $this->registro_id, seccion: $this->seccion, style: 'success', cols: 2, params: array());
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al generar link', data: $button_fc_factura_envia);
+        }
+
+        $button_fc_factura_exportar_documentos =  $this->html->button_href(accion: 'exportar_documentos', etiqueta: 'Descargar',
+            registro_id: $this->registro_id, seccion: $this->seccion, style: 'success', cols: 2, params: array());
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al generar link', data: $button_fc_factura_exportar_documentos);
+        }
+        $button_fc_factura_adjunta =  $this->html->button_href(accion: 'adjunta', etiqueta: 'Adjunta Docs',
+            registro_id: $this->registro_id, seccion: $this->seccion, style: 'info', cols: 2, params: array());
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al generar link', data: $button_fc_factura_exportar_documentos);
+        }
+
+        $buttons = $button_fc_factura_relaciones.$button_fc_factura_timbra.$button_fc_factura_correo.
+            $button_fc_factura_envia.$button_fc_factura_exportar_documentos.$button_fc_factura_adjunta;
+
+        return "<div class='col-md-12 buttons-form'>$buttons</div>";
+
+
+    }
 }
