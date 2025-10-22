@@ -17,6 +17,7 @@ use gamboamartin\direccion_postal\models\dp_municipio;
 use gamboamartin\errores\errores;
 use gamboamartin\facturacion\models\fc_csd;
 use gamboamartin\facturacion\models\fc_factura;
+use gamboamartin\facturacion\models\fc_partida;
 use gamboamartin\inmuebles\html\_base;
 use gamboamartin\inmuebles\html\inm_comprador_html;
 use gamboamartin\inmuebles\html\inm_referencia_html;
@@ -4918,6 +4919,22 @@ class controlador_inm_comprador extends _ctl_base {
         if (errores::$error) {
             $this->link->rollBack();
             return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_fc_factura,
+                header: $header, ws: $ws);
+        }
+
+        $registro_partida['fc_factura_id'] = $r_fc_factura->registro_id;
+        $registro_partida['com_producto_id'] = $_POST['com_producto_id'];
+        $registro_partida['cuenta_predial'] = $_POST['cuenta_predial'];
+        $registro_partida['cat_sat_obj_imp_id'] = $_POST['cat_sat_obj_imp_id'];
+        $registro_partida['descripcion'] = $_POST['descripcion_factura'];
+        $registro_partida['cantidad'] = $_POST['cantidad'];
+        $registro_partida['valor_unitario'] = $_POST['valor_unitario'];
+        $registro_partida['descuento'] = $_POST['descuento_factura'];
+        $registro_partida['cat_sat_conf_imps_id'] = $_POST['cat_sat_conf_imps_id'];
+        $r_fc_partida = (new fc_partida(link:$this->link))->alta_registro(registro: $registro_partida);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_fc_partida,
                 header: $header, ws: $ws);
         }
 
