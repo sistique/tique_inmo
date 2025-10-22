@@ -15,6 +15,7 @@ use gamboamartin\direccion_postal\models\dp_estado;
 use gamboamartin\direccion_postal\models\dp_municipio;
 use gamboamartin\errores\errores;
 use gamboamartin\facturacion\models\fc_csd;
+use gamboamartin\facturacion\models\fc_factura;
 use gamboamartin\inmuebles\html\_base;
 use gamboamartin\inmuebles\html\inm_comprador_html;
 use gamboamartin\inmuebles\html\inm_referencia_html;
@@ -3752,13 +3753,13 @@ class controlador_inm_comprador extends _ctl_base {
 
 
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'serie',
-            keys_selects:$keys_selects, place_holder: 'Serie', disabled: true);
+            keys_selects:$keys_selects, place_holder: 'Serie', required: false, disabled: true);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'folio',
-            keys_selects:$keys_selects, place_holder: 'Folio', disabled: true);
+            keys_selects:$keys_selects, place_holder: 'Folio',required: false, disabled: true);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
@@ -3770,19 +3771,19 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'fecha_factura',
-            keys_selects:$keys_selects, place_holder: 'Fecha Factura');
+            keys_selects:$keys_selects, place_holder: 'Fecha Factura',disabled: true);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
         $keys_selects = (new init())->key_select_txt(cols: 12,key: 'observaciones_factura',
-            keys_selects:$keys_selects, place_holder: 'Observaciones Factura');
+            keys_selects:$keys_selects, place_holder: 'Observaciones Factura',required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'unidad',
-            keys_selects:$keys_selects, place_holder: 'Unidad', disabled: true);
+        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'unidad',
+            keys_selects: $keys_selects, place_holder: 'Unidad', required: false, disabled: true);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
@@ -4468,8 +4469,7 @@ class controlador_inm_comprador extends _ctl_base {
             $keys = array('dp_colonia_postal_domicilio_id','inm_ubicacion_calle_domicilio',
                 'inm_ubicacion_numero_exterior_domicilio','inm_tipo_vivienda_id','inm_ubicacion_numero_notaria',
                 'inm_ubicacion_nombre_notario', 'inm_ubicacion_plaza_notaria','inm_ubicacion_numero_escritura',
-                'inm_ubicacion_libro', 'inm_ubicacion_volumen','inm_ubicacion_entre_calle_1',
-                'inm_ubicacion_entre_calle_2');
+                'inm_ubicacion_volumen','inm_ubicacion_entre_calle_1', 'inm_ubicacion_entre_calle_2');
             $valida = $this->validacion->valida_existencia_keys(keys: $keys, registro: $imp_rel_ubi_comp);
             if (errores::$error) {
                 return $this->retorno_error(mensaje: 'Error el registro de ubicacion con id '.
@@ -4888,6 +4888,47 @@ class controlador_inm_comprador extends _ctl_base {
         $this->link_genera_factura_bd = $link_genera_factura_bd;
 
         return $base;
+    }
+
+    public function genera_factura_bd(bool $header, bool $ws = false)
+    {
+        $this->link->beginTransaction();
+
+        $registro['fc_csd_id'] = $_POST['fc_csd_id'];
+        $registro['com_cliente_id'] = $_POST['com_cliente_id'];
+        $registro['exportacion'] = $_POST['exportacion'];
+        $registro['fecha'] = $_POST['fecha_factura'];
+        $registro['cat_sat_tipo_de_comprobante_id'] = $_POST['cat_sat_tipo_de_comprobante_id'];
+        $registro['cat_sat_metodo_pago_id'] = $_POST['cat_sat_metodo_pago_id'];
+        $registro['cat_sat_forma_pago_id'] = $_POST['cat_sat_forma_pago_id'];
+        $registro['cat_sat_moneda_id'] = $_POST['cat_sat_moneda_id'];
+        $registro['com_tipo_cambio_id'] = $_POST['com_tipo_cambio_id'];
+        $registro['cat_sat_uso_cfdi_id'] = $_POST['cat_sat_uso_cfdi_id'];
+        $registro['observaciones'] = $_POST['observaciones_factura'];
+        print_r($registro);exit;
+        $r_fc_factura = (new fc_factura(link:$this->link))->alta_registro(registro: $registro);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_fc_factura,
+                header: $header, ws: $ws);
+        }
+
+        $this->link->commit();
+
+        $params = array('pestana_general_actual' => 'pestanageneral2');
+        $link_proceso_comprador = $this->obj_link->link_con_id(
+            accion: 'proceso_cliente', link: $this->link, registro_id: $this->registro_id, seccion: 'inm_comprador',
+            params: $params);
+        if (errores::$error) {
+            $this->retorno_error(mensaje: 'Error al generar link', data: $link_proceso_comprador, header: $header, ws: $ws);
+        }
+
+        if($header) {
+            header('Location:' . $link_proceso_comprador);
+            exit;
+        }
+
+        return $this->registro_id;
     }
 
     public function buttons_base(): array|string
