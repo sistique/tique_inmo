@@ -5,12 +5,13 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="widget  widget-box box-container form-main widget-form-cart" id="form">
-                <form method="post" action="<?php echo $controlador->link_genera_factura_bd; ?>" class="form-additional">
-                    <?php include (new views())->ruta_templates."head/title.php"; ?>
-                    <?php include (new views())->ruta_templates."head/subtitulo.php"; ?>
-                    <?php include (new views())->ruta_templates."mensajes.php"; ?>
+                <?php include (new views())->ruta_templates."head/title.php"; ?>
+                <?php include (new views())->ruta_templates."head/subtitulo.php"; ?>
+                <?php include (new views())->ruta_templates."mensajes.php"; ?>
+
+                <form enctype="multipart/form-data" method="post" action="<?php echo $controlador->link_genera_factura_bd; ?>" class="form-additional">
                     <?php echo $controlador->inputs->fc_csd_id; ?>
-                    <?php echo $controlador->inputs->com_cliente_id; ?>
+                    <?php echo $controlador->inputs->com_sucursal_id; ?>
                     <?php echo $controlador->inputs->serie; ?>
                     <?php echo $controlador->inputs->folio; ?>
                     <?php echo $controlador->inputs->exportacion; ?>
@@ -39,12 +40,7 @@
                     <?php echo $controlador->inputs->total; ?>
                     <?php echo $controlador->inputs->cat_sat_conf_imps_id; ?>
 
-
-                    <div class="control-group btn-alta">
-                        <div class="controls">
-                            <button type="button" class="btn btn-success" value="modifica" name="btn_action_next" id="btn-alta-partida">Alta</button><br>
-                        </div>
-                    </div>
+                    <?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
                 </form>
             </div>
         </div>

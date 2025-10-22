@@ -10,6 +10,7 @@ namespace gamboamartin\inmuebles\controllers;
 
 use base\controller\init;
 use gamboamartin\banco\models\bn_cuenta;
+use gamboamartin\comercial\models\com_sucursal;
 use gamboamartin\comercial\models\com_tipo_cambio;
 use gamboamartin\direccion_postal\models\dp_estado;
 use gamboamartin\direccion_postal\models\dp_municipio;
@@ -2569,6 +2570,7 @@ class controlador_inm_comprador extends _ctl_base {
 
         $init_data['bn_cuenta'] = "gamboamartin\\banco";
 
+        $init_data['com_sucursal'] = "gamboamartin\\comercial";
         $init_data['fc_csd'] = "gamboamartin\\facturacion";
         $init_data['cat_sat_tipo_de_comprobante'] = "gamboamartin\\cat_sat";
         $init_data['com_tipo_cambio'] = "gamboamartin\\comercial";
@@ -3789,7 +3791,7 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'cuenta_predial',
-            keys_selects:$keys_selects, place_holder: 'Cuenta Predial');
+            keys_selects:$keys_selects, place_holder: 'Cuenta Predial', required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
@@ -4718,6 +4720,14 @@ class controlador_inm_comprador extends _ctl_base {
                 mensaje: 'Error al obtener registro',data:  $registro,header: $header,ws: $ws);
         }
 
+        $filtro_sucursal['com_cliente.id'] = $registro->registros[0]['com_cliente_id'];
+        $r_com_sucursal = (new com_sucursal(link: $this->link))->filtro_and(
+            filtro: $filtro_sucursal);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener registro',data:  $r_com_sucursal,header: $header,ws: $ws);
+        }
+
         $this->row_upd->fecha_factura = date('Y-m-d');
         $this->row_upd->exportacion = '01';
         $this->row_upd->cantidad = '1';
@@ -4728,10 +4738,10 @@ class controlador_inm_comprador extends _ctl_base {
 
         $keys_selects = array();
         $columns_ds = array('com_cliente_rfc','com_cliente_razon_social');
-        $filtro['com_cliente.id'] = $registro->registros[0]['com_cliente_id'];
-        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro: $filtro, key: 'com_cliente_id',
-            keys_selects: $keys_selects, id_selected: $registro->registros[0]['com_cliente_id'], label: 'Cliente',
-            columns_ds : $columns_ds);
+        $filtro['com_sucursal.id'] = $r_com_sucursal->registros[0]['com_sucursal_id'];
+        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro: $filtro, key: 'com_sucursal_id',
+            keys_selects: $keys_selects, id_selected: $r_com_sucursal->registros[0]['com_sucursal_id'],
+            label: 'Cliente', columns_ds : $columns_ds);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);
@@ -4895,9 +4905,8 @@ class controlador_inm_comprador extends _ctl_base {
         $this->link->beginTransaction();
 
         $registro['fc_csd_id'] = $_POST['fc_csd_id'];
-        $registro['com_cliente_id'] = $_POST['com_cliente_id'];
+        $registro['com_sucursal_id'] = $_POST['com_sucursal_id'];
         $registro['exportacion'] = $_POST['exportacion'];
-        $registro['fecha'] = $_POST['fecha_factura'];
         $registro['cat_sat_tipo_de_comprobante_id'] = $_POST['cat_sat_tipo_de_comprobante_id'];
         $registro['cat_sat_metodo_pago_id'] = $_POST['cat_sat_metodo_pago_id'];
         $registro['cat_sat_forma_pago_id'] = $_POST['cat_sat_forma_pago_id'];
@@ -4905,7 +4914,6 @@ class controlador_inm_comprador extends _ctl_base {
         $registro['com_tipo_cambio_id'] = $_POST['com_tipo_cambio_id'];
         $registro['cat_sat_uso_cfdi_id'] = $_POST['cat_sat_uso_cfdi_id'];
         $registro['observaciones'] = $_POST['observaciones_factura'];
-        print_r($registro);exit;
         $r_fc_factura = (new fc_factura(link:$this->link))->alta_registro(registro: $registro);
         if (errores::$error) {
             $this->link->rollBack();
@@ -4915,10 +4923,10 @@ class controlador_inm_comprador extends _ctl_base {
 
         $this->link->commit();
 
-        $params = array('pestana_general_actual' => 'pestanageneral2');
+        //$params = array('pestana_general_actual' => 'pestanageneral2');
         $link_proceso_comprador = $this->obj_link->link_con_id(
-            accion: 'proceso_cliente', link: $this->link, registro_id: $this->registro_id, seccion: 'inm_comprador',
-            params: $params);
+            accion: 'genera_factura', link: $this->link, registro_id: $this->registro_id, seccion: 'inm_comprador',
+            params: array());
         if (errores::$error) {
             $this->retorno_error(mensaje: 'Error al generar link', data: $link_proceso_comprador, header: $header, ws: $ws);
         }
