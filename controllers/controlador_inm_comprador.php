@@ -4729,13 +4729,42 @@ class controlador_inm_comprador extends _ctl_base {
                 mensaje: 'Error al obtener registro',data:  $r_com_sucursal,header: $header,ws: $ws);
         }
 
-        $this->row_upd->fecha_factura = date('Y-m-d');
+        $filtro_fac['com_cliente.id'] =  $registro->registros[0]['com_cliente_id'];
+        $r_fc_factura = (new fc_factura(link: $this->link))->filtro_and(
+            filtro: $filtro_fac);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener registro',data:  $r_fc_factura,header: $header,ws: $ws);
+        }
+
         $this->row_upd->exportacion = '01';
+        $this->row_upd->fecha_factura = date('Y-m-d');
         $this->row_upd->cantidad = '1';
         $this->row_upd->valor_unitario = 0;
         $this->row_upd->subtotal = 0;
         $this->row_upd->descuento_factura = 0;
         $this->row_upd->total = 0;
+
+        if($r_fc_factura->n_registros > 0){
+            $this->row_upd->serie = $r_fc_factura->registros[0]['fc_factura_serie'];
+            $this->row_upd->folio = $r_fc_factura->registros[0]['fc_factura_folio'];
+            $this->row_upd->exportacion = $r_fc_factura->registros[0]['fc_factura_exportacion'];
+            $this->row_upd->fecha_factura = $r_fc_factura->registros[0]['fc_factura_fecha'];
+            $this->row_upd->observaciones_factura = $r_fc_factura->registros[0]['fc_factura_observaciones'];
+
+            $filtro_par['fc_factura.id'] =  $r_fc_factura->registros[0]['fc_factura_id'];
+            $r_fc_partida = (new fc_partida(link: $this->link))->filtro_and(
+                filtro: $filtro_par);
+            if(errores::$error){
+                return $this->retorno_error(
+                    mensaje: 'Error al obtener registro',data:  $r_fc_partida,header: $header,ws: $ws);
+            }
+            $this->row_upd->cantidad = $r_fc_partida->registros[0]['fc_factura_cantidad'];
+            $this->row_upd->valor_unitario = $r_fc_partida->registros[0]['fc_factura_valor_unitario'];
+            $this->row_upd->subtotal = $r_fc_partida->registros[0]['fc_factura_sub_total'];
+            $this->row_upd->descuento_factura = $r_fc_partida->registros[0]['fc_factura_descuento'];
+            $this->row_upd->total = $r_fc_partida->registros[0]['fc_factura_total'];
+        }
 
         $keys_selects = array();
         $columns_ds = array('com_cliente_rfc','com_cliente_razon_social');
@@ -4759,7 +4788,6 @@ class controlador_inm_comprador extends _ctl_base {
         if(count($fc_csds) === 1){
             $id_selected = $fc_csds[0]['fc_csd_id'];
         }
-
         $keys_selects = $this->key_select(cols:12, con_registros: true,filtro: array(), key: 'fc_csd_id',
             keys_selects: $keys_selects, id_selected: $id_selected, label: 'Empresa');
         if(errores::$error){
@@ -4771,6 +4799,9 @@ class controlador_inm_comprador extends _ctl_base {
         if(isset($registro->registros[0]['com_cliente_cat_sat_tipo_de_comprobante_id']) &&
             trim($registro->registros[0]['com_cliente_cat_sat_tipo_de_comprobante_id']) !== ''){
             $id_selected = $registro->registros[0]['com_cliente_cat_sat_tipo_de_comprobante_id'];
+        }
+        if($r_fc_factura->n_registros > 0) {
+            $id_selected = $r_fc_factura->registros[0]['cat_sat_tipo_de_comprobante_id'];
         }
         $keys_selects = $this->key_select(cols: 6, con_registros: true,filtro: array(),
             key: 'cat_sat_tipo_de_comprobante_id', keys_selects: $keys_selects, id_selected: $id_selected,
@@ -4785,6 +4816,9 @@ class controlador_inm_comprador extends _ctl_base {
             trim($registro->registros[0]['com_cliente_cat_sat_metodo_pago_id']) !== ''){
             $id_selected = $registro->registros[0]['com_cliente_cat_sat_metodo_pago_id'];
         }
+        if($r_fc_factura->n_registros > 0) {
+            $id_selected = $r_fc_factura->registros[0]['cat_sat_metodo_pago_id'];
+        }
         $keys_selects = $this->key_select(cols: 6, con_registros: true,filtro: array(),
             key: 'cat_sat_metodo_pago_id', keys_selects: $keys_selects, id_selected: $id_selected,
             label: 'Metodo de Pago');
@@ -4798,6 +4832,9 @@ class controlador_inm_comprador extends _ctl_base {
             trim($registro->registros[0]['com_cliente_cat_sat_forma_pago_id']) !== ''){
             $id_selected = $registro->registros[0]['com_cliente_cat_sat_forma_pago_id'];
         }
+        if($r_fc_factura->n_registros > 0) {
+            $id_selected = $r_fc_factura->registros[0]['cat_sat_forma_pago_id'];
+        }
         $keys_selects = $this->key_select(cols: 6, con_registros: true,filtro: array(),
             key: 'cat_sat_forma_pago_id', keys_selects: $keys_selects, id_selected: $id_selected,
             label: 'Forma de Pago');
@@ -4810,6 +4847,9 @@ class controlador_inm_comprador extends _ctl_base {
         if(isset($registro->registros[0]['com_cliente_cat_sat_moneda_id']) &&
             trim($registro->registros[0]['com_cliente_cat_sat_moneda_id']) !== ''){
             $id_selected = $registro->registros[0]['com_cliente_cat_sat_moneda_id'];
+        }
+        if($r_fc_factura->n_registros > 0) {
+            $id_selected = $r_fc_factura->registros[0]['cat_sat_moneda_id'];
         }
         $keys_selects = $this->key_select(cols: 6, con_registros: true,filtro: array(),
             key: 'cat_sat_moneda_id', keys_selects: $keys_selects, id_selected: $id_selected,
@@ -4831,6 +4871,9 @@ class controlador_inm_comprador extends _ctl_base {
         if($com_tipo_cambio->n_registros > 0){
             $id_selected = $com_tipo_cambio->registros[0]['com_tipo_cambio_id'];
         }
+        if($r_fc_factura->n_registros > 0) {
+            $id_selected = $r_fc_factura->registros[0]['com_tipo_cambio_id'];
+        }
         $keys_selects = $this->key_select(cols: 6, con_registros: true,filtro: array(),
             key: 'com_tipo_cambio_id', keys_selects: $keys_selects, id_selected: $id_selected,
             label: 'Tipo de Cambio');
@@ -4843,6 +4886,9 @@ class controlador_inm_comprador extends _ctl_base {
         if(isset($registro->registros[0]['com_cliente_cat_sat_uso_cfdi_id']) &&
             trim($registro->registros[0]['com_cliente_cat_sat_uso_cfdi_id']) !== ''){
             $id_selected = $registro->registros[0]['com_cliente_cat_sat_uso_cfdi_id'];
+        }
+        if($r_fc_factura->n_registros > 0) {
+            $id_selected = $r_fc_factura->registros[0]['cat_sat_uso_cfdi_id'];
         }
         $keys_selects = $this->key_select(cols: 6, con_registros: true,filtro: array(),
             key: 'cat_sat_uso_cfdi_id', keys_selects: $keys_selects, id_selected: $id_selected,
