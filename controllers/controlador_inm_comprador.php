@@ -4745,6 +4745,10 @@ class controlador_inm_comprador extends _ctl_base {
         $this->row_upd->descuento_factura = 0;
         $this->row_upd->total = 0;
 
+        $fc_partida = new stdClass();
+        $fc_partida->n_registros = 0;
+        $fc_partida->registros = array();
+
         if($r_fc_factura->n_registros > 0){
             $this->row_upd->serie = $r_fc_factura->registros[0]['fc_factura_serie'];
             $this->row_upd->folio = $r_fc_factura->registros[0]['fc_factura_folio'];
@@ -4753,17 +4757,18 @@ class controlador_inm_comprador extends _ctl_base {
             $this->row_upd->observaciones_factura = $r_fc_factura->registros[0]['fc_factura_observaciones'];
 
             $filtro_par['fc_factura.id'] =  $r_fc_factura->registros[0]['fc_factura_id'];
-            $r_fc_partida = (new fc_partida(link: $this->link))->filtro_and(
+            $fc_partida = (new fc_partida(link: $this->link))->filtro_and(
                 filtro: $filtro_par);
             if(errores::$error){
                 return $this->retorno_error(
-                    mensaje: 'Error al obtener registro',data:  $r_fc_partida,header: $header,ws: $ws);
+                    mensaje: 'Error al obtener registro',data:  $fc_partida,header: $header,ws: $ws);
             }
-            $this->row_upd->cantidad = $r_fc_partida->registros[0]['fc_factura_cantidad'];
-            $this->row_upd->valor_unitario = $r_fc_partida->registros[0]['fc_factura_valor_unitario'];
-            $this->row_upd->subtotal = $r_fc_partida->registros[0]['fc_factura_sub_total'];
-            $this->row_upd->descuento_factura = $r_fc_partida->registros[0]['fc_factura_descuento'];
-            $this->row_upd->total = $r_fc_partida->registros[0]['fc_factura_total'];
+            $this->row_upd->descripcion_factura = $fc_partida->registros[0]['fc_partida_descripcion'];
+            $this->row_upd->cantidad = $fc_partida->registros[0]['fc_partida_cantidad'];
+            $this->row_upd->valor_unitario = $fc_partida->registros[0]['fc_partida_valor_unitario'];
+            $this->row_upd->subtotal = $fc_partida->registros[0]['fc_partida_sub_total'];
+            $this->row_upd->descuento_factura = $fc_partida->registros[0]['fc_partida_descuento'];
+            $this->row_upd->total = $fc_partida->registros[0]['fc_partida_total'];
         }
 
         $keys_selects = array();
@@ -4898,16 +4903,25 @@ class controlador_inm_comprador extends _ctl_base {
                 header: $header,ws:  $ws);
         }
 
+        $id_selected = -1;
+        if($fc_partida->n_registros > 0){
+            $id_selected = $fc_partida->registros[0]['com_producto_id'];
+        }
+
         $keys_selects = $this->key_select(cols: 12, con_registros: true,filtro: array(),
-            key: 'com_producto_id', keys_selects: $keys_selects, id_selected: -1,
+            key: 'com_producto_id', keys_selects: $keys_selects, id_selected: $id_selected,
             label: 'Producto');
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);
         }
 
+        $id_selected = -1;
+        if($fc_partida->n_registros > 0){
+            $id_selected = $fc_partida->registros[0]['cat_sat_obj_imp_id'];
+        }
         $keys_selects = $this->key_select(cols: 12, con_registros: true,filtro: array(),
-            key: 'cat_sat_obj_imp_id', keys_selects: $keys_selects, id_selected: -1,
+            key: 'cat_sat_obj_imp_id', keys_selects: $keys_selects, id_selected: $id_selected,
             label: 'Objeto de Impuesto');
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
@@ -4915,7 +4929,7 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         $keys_selects = $this->key_select(cols: 12, con_registros: true,filtro: array(),
-            key: 'cat_sat_conf_imps_id', keys_selects: $keys_selects, id_selected: 1,
+            key: 'cat_sat_conf_imps_id', keys_selects: $keys_selects, id_selected: -1,
             label: 'Configuracion de Impuestos');
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
