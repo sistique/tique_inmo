@@ -4965,39 +4965,54 @@ class controlador_inm_comprador extends _ctl_base {
     {
         $this->link->beginTransaction();
 
-        $registro['fc_csd_id'] = $_POST['fc_csd_id'];
-        $registro['com_sucursal_id'] = $_POST['com_sucursal_id'];
-        $registro['exportacion'] = $_POST['exportacion'];
-        $registro['cat_sat_tipo_de_comprobante_id'] = $_POST['cat_sat_tipo_de_comprobante_id'];
-        $registro['cat_sat_metodo_pago_id'] = $_POST['cat_sat_metodo_pago_id'];
-        $registro['cat_sat_forma_pago_id'] = $_POST['cat_sat_forma_pago_id'];
-        $registro['cat_sat_moneda_id'] = $_POST['cat_sat_moneda_id'];
-        $registro['com_tipo_cambio_id'] = $_POST['com_tipo_cambio_id'];
-        $registro['cat_sat_uso_cfdi_id'] = $_POST['cat_sat_uso_cfdi_id'];
-        $registro['observaciones'] = $_POST['observaciones_factura'];
-        $r_fc_factura = (new fc_factura(link:$this->link))->alta_registro(registro: $registro);
+        $filtro_fac['com_sucursal.id'] = $_POST['com_sucursal_id'];
+        $r_factura = (new fc_factura(link: $this->link))->filtro_and(filtro: $filtro_fac);
         if (errores::$error) {
             $this->link->rollBack();
-            return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_fc_factura,
+            return $this->retorno_error(mensaje: 'Error al obtener datos de factura', data: $r_factura,
+                header: $header, ws: $ws);
+        }
+        
+        if($r_factura->n_registros > 0) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error ya existe una factura para este cliente', data: $r_factura,
                 header: $header, ws: $ws);
         }
 
-        $registro_partida['fc_factura_id'] = $r_fc_factura->registro_id;
-        $registro_partida['com_producto_id'] = $_POST['com_producto_id'];
-        $registro_partida['cuenta_predial'] = $_POST['cuenta_predial'];
-        $registro_partida['cat_sat_obj_imp_id'] = $_POST['cat_sat_obj_imp_id'];
-        $registro_partida['descripcion'] = $_POST['descripcion_factura'];
-        $registro_partida['cantidad'] = $_POST['cantidad'];
-        $registro_partida['valor_unitario'] = $_POST['valor_unitario'];
-        $registro_partida['descuento'] = $_POST['descuento_factura'];
-        $registro_partida['cat_sat_conf_imps_id'] = $_POST['cat_sat_conf_imps_id'];
-        $r_fc_partida = (new fc_partida(link:$this->link))->alta_registro(registro: $registro_partida);
-        if (errores::$error) {
-            $this->link->rollBack();
-            return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_fc_partida,
-                header: $header, ws: $ws);
-        }
+        if($r_factura->n_registros <= 0) {
+            $registro['fc_csd_id'] = $_POST['fc_csd_id'];
+            $registro['com_sucursal_id'] = $_POST['com_sucursal_id'];
+            $registro['exportacion'] = $_POST['exportacion'];
+            $registro['cat_sat_tipo_de_comprobante_id'] = $_POST['cat_sat_tipo_de_comprobante_id'];
+            $registro['cat_sat_metodo_pago_id'] = $_POST['cat_sat_metodo_pago_id'];
+            $registro['cat_sat_forma_pago_id'] = $_POST['cat_sat_forma_pago_id'];
+            $registro['cat_sat_moneda_id'] = $_POST['cat_sat_moneda_id'];
+            $registro['com_tipo_cambio_id'] = $_POST['com_tipo_cambio_id'];
+            $registro['cat_sat_uso_cfdi_id'] = $_POST['cat_sat_uso_cfdi_id'];
+            $registro['observaciones'] = $_POST['observaciones_factura'];
+            $r_fc_factura = (new fc_factura(link: $this->link))->alta_registro(registro: $registro);
+            if (errores::$error) {
+                $this->link->rollBack();
+                return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_fc_factura,
+                    header: $header, ws: $ws);
+            }
 
+            $registro_partida['fc_factura_id'] = $r_fc_factura->registro_id;
+            $registro_partida['com_producto_id'] = $_POST['com_producto_id'];
+            $registro_partida['cuenta_predial'] = $_POST['cuenta_predial'];
+            $registro_partida['cat_sat_obj_imp_id'] = $_POST['cat_sat_obj_imp_id'];
+            $registro_partida['descripcion'] = $_POST['descripcion_factura'];
+            $registro_partida['cantidad'] = $_POST['cantidad'];
+            $registro_partida['valor_unitario'] = $_POST['valor_unitario'];
+            $registro_partida['descuento'] = $_POST['descuento_factura'];
+            $registro_partida['cat_sat_conf_imps_id'] = $_POST['cat_sat_conf_imps_id'];
+            $r_fc_partida = (new fc_partida(link: $this->link))->alta_registro(registro: $registro_partida);
+            if (errores::$error) {
+                $this->link->rollBack();
+                return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_fc_partida,
+                    header: $header, ws: $ws);
+            }
+        }
         $this->link->commit();
 
         //$params = array('pestana_general_actual' => 'pestanageneral2');
