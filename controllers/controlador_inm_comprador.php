@@ -4972,7 +4972,7 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al obtener datos de factura', data: $r_factura,
                 header: $header, ws: $ws);
         }
-        
+
         if($r_factura->n_registros > 0) {
             $this->link->rollBack();
             return $this->retorno_error(mensaje: 'Error ya existe una factura para este cliente', data: $r_factura,
