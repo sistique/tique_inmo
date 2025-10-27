@@ -155,7 +155,8 @@ cat_sat_forma_pago_id_sl.change(function() {
             $.each(json.registros, function( index, com_tipo_cambio ) {
                 let monto = parseFloat(com_tipo_cambio.com_tipo_cambio_monto).toFixed(2);
 
-                integra_new_option(sl_com_tipo_cambio,com_tipo_cambio.cat_sat_moneda_codigo+' $'+monto,
+                integra_new_option(sl_com_tipo_cambio,com_tipo_cambio.com_tipo_cambio_descripcion,
+                //integra_new_option(sl_com_tipo_cambio,com_tipo_cambio.cat_sat_moneda_codigo+' $'+monto,
                 com_tipo_cambio.com_tipo_cambio_id);
                 sl_com_tipo_cambio.val(com_tipo_cambio.com_tipo_cambio_id);
         });

@@ -25,7 +25,8 @@ function change_moneda(){
             integra_new_option(sl_com_tipo_cambio,'Seleccione un tipo de cambio','-1');
 
             $.each(json.registros, function( index, com_tipo_cambio ) {
-                integra_new_option(sl_com_tipo_cambio,com_tipo_cambio.cat_sat_moneda_codigo+' '+com_tipo_cambio.com_tipo_cambio_monto,
+                integra_new_option(sl_com_tipo_cambio,com_tipo_cambio.com_tipo_cambio_descripcion,
+                //integra_new_option(sl_com_tipo_cambio,com_tipo_cambio.cat_sat_moneda_codigo+' '+com_tipo_cambio.com_tipo_cambio_monto,
                     com_tipo_cambio.com_tipo_cambio_id);
                 sl_com_tipo_cambio.val(com_tipo_cambio.com_tipo_cambio_id);
             });
