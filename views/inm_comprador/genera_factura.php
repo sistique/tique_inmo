@@ -8,6 +8,7 @@
                 <?php include (new views())->ruta_templates."head/title.php"; ?>
                 <?php include (new views())->ruta_templates."head/subtitulo.php"; ?>
                 <?php include (new views())->ruta_templates."mensajes.php"; ?>
+                <?php echo $controlador->buttons_base; ?>
 
                 <form enctype="multipart/form-data" method="post" action="<?php echo $controlador->link_genera_factura_bd; ?>" class="form-additional">
                     <?php echo $controlador->inputs->fc_csd_id; ?>
@@ -47,9 +48,7 @@
     </div>
     <!--</div>-->
 
-    <!--<div class="container">-->
-    <?php echo $controlador->buttons_base; ?>
-    <!--</div>-->
+    <!--<div class="container">--><!--</div>-->
 </main>
 
 <script src="<?php echo (new \config\generales())->url_base."js/_facturacion.js" ?>"></script>
