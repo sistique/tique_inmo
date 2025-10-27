@@ -414,6 +414,7 @@ class _partida extends  _base{
     private function inserta_predial(stdClass $fc_registro_partida){
         $key_id = $this->tabla.'_id';
         $data_predial[$key_id] = $fc_registro_partida->$key_id;
+        $data_predial['cuenta_predial'] = $fc_registro_partida->cuenta_predial;
 
         $r_fc_cuenta_predial = $this->modelo_predial->alta_registro(registro: $data_predial);
         if (errores::$error) {
@@ -424,9 +425,8 @@ class _partida extends  _base{
     private function integra_predial(array $data_predial, stdClass $fc_registro_partida){
 
         if(count($data_predial)>0){
-
             if($fc_registro_partida->com_producto_aplica_predial === 'activo'){
-
+                $fc_registro_partida->cuenta_predial = $data_predial['cuenta_predial'];
                 $r_fc_cuenta_predial = $this->inserta_predial(fc_registro_partida: $fc_registro_partida);
                 if (errores::$error) {
                     return $this->error->error(mensaje: 'Error al insertar predial', data: $r_fc_cuenta_predial);
