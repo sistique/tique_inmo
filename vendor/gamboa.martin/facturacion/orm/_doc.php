@@ -126,7 +126,7 @@ class _doc extends _modelo_parent{
      * @return array|stdClass
      * @version 10.9.0
      */
-    private function get_factura_documentos(string $key_entidad_filter_id,int $registro_id,
+    public function get_factura_documentos(string $key_entidad_filter_id,int $registro_id,
                                                  string $tipo_documento): array|stdClass{
 
         if($registro_id <= 0){

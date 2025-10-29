@@ -4,6 +4,7 @@ namespace gamboamartin\facturacion\controllers;
 
 use base\controller\controler;
 use base\orm\modelo;
+use config\generales;
 use config\pac;
 use gamboamartin\cat_sat\models\cat_sat_forma_pago;
 use gamboamartin\cat_sat\models\cat_sat_metodo_pago;
@@ -47,6 +48,8 @@ use gamboamartin\facturacion\models\fc_partida;
 use gamboamartin\facturacion\models\fc_retenido;
 use gamboamartin\facturacion\models\fc_traslado;
 use gamboamartin\facturacion\models\fc_uuid;
+use gamboamartin\inmuebles\models\_dropbox;
+use gamboamartin\inmuebles\models\inm_dropbox_ruta;
 use gamboamartin\system\actions;
 use gamboamartin\system\html_controler;
 use gamboamartin\system\row;
@@ -1346,16 +1349,47 @@ class _base_system_fc extends _base_system{
     public function exportar_documentos(bool $header, bool $ws = false){
 
 
+        if(!(new generales())->guarda_archivo_dropbox) {
+            $ruta_xml = $this->modelo_documento->get_factura_documento(
+                key_entidad_filter_id: $this->modelo_entidad->key_filtro_id, registro_id: $this->registro_id,
+                tipo_documento: "xml_sin_timbrar");
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al obtener XML', data: $ruta_xml, header: $header, ws: $ws);
+            }
 
-        $ruta_xml = $this->modelo_documento->get_factura_documento(
-            key_entidad_filter_id: $this->modelo_entidad->key_filtro_id, registro_id: $this->registro_id,
-            tipo_documento: "xml_sin_timbrar");
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener XML',data:  $ruta_xml, header: $header,ws:$ws);
-        }
-        
-        if(!file_exists($ruta_xml)){
-            return $this->retorno_error(mensaje: 'Error al no existe xml',data:  $ruta_xml, header: $header,ws:$ws);
+            if (!file_exists($ruta_xml)) {
+                return $this->retorno_error(mensaje: 'Error al no existe xml', data: $ruta_xml, header: $header, ws: $ws);
+            }
+        }else{
+            $documento = $this->modelo_documento->get_factura_documentos(
+                key_entidad_filter_id: $this->modelo_entidad->key_filtro_id, registro_id: $this->registro_id,
+                tipo_documento: "xml_sin_timbrar");
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al no existe xml',data:  $documento,
+                    header: $header,ws:$ws);
+            }
+
+            $filtro_dr['doc_documento.id'] = $documento->registros[0]['doc_documento_id'];
+            $r_inm_dropbox_ruta = (new inm_dropbox_ruta(link: $this->link))->filtro_and(filtro: $filtro_dr);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al no existe xml',data:  $documento,
+                    header: $header,ws:$ws);
+            }
+
+            if($r_inm_dropbox_ruta->n_registros <= 0) {
+                return $this->retorno_error(mensaje: 'Error al no existe xml',data:  $documento,
+                    header: $header,ws:$ws);
+            }
+
+            $guarda = (new _dropbox(link: $this->link))->preview(
+                dropbox_id: $r_inm_dropbox_ruta->registros[0]['inm_dropbox_ruta_id_dropbox'],
+                extencion: $r_inm_dropbox_ruta->registros[0]['doc_extension_descripcion']);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al no existe xml',data:  $documento,
+                    header: $header,ws:$ws);
+            }
+
+            $ruta_xml = (new generales())->path_base . $guarda->ruta_archivo;
         }
 
         $ruta_pdf = (new _pdf())->pdf(descarga: false, guarda: true, link: $this->link,
@@ -1367,7 +1401,6 @@ class _base_system_fc extends _base_system{
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al generar PDF',data:  $ruta_pdf, header: $header,ws:$ws);
         }
-
 
         $fc_factura = $this->modelo->registro(registro_id: $this->registro_id, retorno_obj: true);
         if(errores::$error){
@@ -1386,7 +1419,6 @@ class _base_system_fc extends _base_system{
 
 
         Compresor::descarga_zip_multiple(archivos: $archivos,name_zip: $name_zip);
-
 
         exit;
     }
