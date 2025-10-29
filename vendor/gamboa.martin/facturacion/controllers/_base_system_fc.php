@@ -1368,6 +1368,9 @@ class _base_system_fc extends _base_system{
                 return $this->retorno_error(mensaje: 'Error al no existe xml',data:  $documento,
                     header: $header,ws:$ws);
             }
+            if ($documento->n_registros <= 0) {
+                return $this->retorno_error(mensaje: 'Error al no existe xml', data: $documento, header: $header, ws: $ws);
+            }
 
             $filtro_dr['doc_documento.id'] = $documento->registros[0]['doc_documento_id'];
             $r_inm_dropbox_ruta = (new inm_dropbox_ruta(link: $this->link))->filtro_and(filtro: $filtro_dr);
