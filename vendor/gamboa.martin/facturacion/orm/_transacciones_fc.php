@@ -19,6 +19,8 @@ use gamboamartin\direccion_postal\models\dp_calle_pertenece;
 use gamboamartin\documento\models\doc_documento;
 use gamboamartin\documento\models\doc_extension_permitido;
 use gamboamartin\errores\errores;
+use gamboamartin\inmuebles\models\_dropbox;
+use gamboamartin\inmuebles\models\inm_dropbox_ruta;
 use gamboamartin\plugins\files;
 use gamboamartin\proceso\models\pr_proceso;
 use gamboamartin\xml_cfdi_4\cfdis;
@@ -872,9 +874,18 @@ class _transacciones_fc extends modelo
             $documento['doc_tipo_documento_id'] = $doc_tipo_documento_id;
             $documento['descripcion'] = $ruta_archivos_tmp;
 
+            if((new generales())->guarda_archivo_dropbox) {
+                $documento['ruta_relativa'] = $this->tabla.'/'.$this->registro_id.'/';
+            }
+
             $documento = (new doc_documento(link: $this->link))->alta_documento(registro: $documento, file: $file);
             if (errores::$error) {
                 return $this->error->error(mensaje: 'Error al guardar xml', data: $documento);
+            }
+
+            $documento->registro = (new doc_documento(link: $this->link))->registro(registro_id: $documento->registro_id);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error  al obtener documento', data: $documento);
             }
 
             $fc_factura_documento = array();
@@ -909,6 +920,11 @@ class _transacciones_fc extends modelo
 
             $registro['descripcion'] = $ruta_archivos_tmp;
             $registro['doc_tipo_documento_id'] = $doc_tipo_documento_id;
+
+            if((new generales())->guarda_archivo_dropbox) {
+                $registro['ruta_relativa'] = $this->tabla.'/'.$this->registro_id.'/';
+            }
+
             $_FILES['name'] = $file_xml_st;
             $_FILES['tmp_name'] = $file_xml_st;
 
@@ -923,9 +939,31 @@ class _transacciones_fc extends modelo
             }
         }
 
+        $ruta_doc = $documento->registro['doc_documento_ruta_absoluta'];
+        if((new generales())->guarda_archivo_dropbox) {
+            $filtro_dr['doc_documento.id'] = $documento->registro['doc_documento_id'];
+            $r_inm_dropbox_ruta = (new inm_dropbox_ruta(link: $this->link))->filtro_and(filtro: $filtro_dr);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error  al obtener documento', data: $r_inm_dropbox_ruta);
+            }
+
+            if($r_inm_dropbox_ruta->n_registros <= 0) {
+                return $this->error->error(mensaje: 'Error  al obtener documento', data: $r_inm_dropbox_ruta);
+            }
+
+            $guarda = (new _dropbox(link: $this->link))->preview(
+                dropbox_id: $r_inm_dropbox_ruta->registros[0]['inm_dropbox_ruta_id_dropbox'],
+                extencion: $r_inm_dropbox_ruta->registros[0]['doc_extension_descripcion']);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error  al obtener documento', data: $guarda);
+            }
+
+            $ruta_doc = (new generales())->path_base . $guarda->ruta_archivo;
+        }
+
         $rutas = new stdClass();
         $rutas->file_xml_st = $file_xml_st;
-        $rutas->doc_documento_ruta_absoluta = $documento->registro['doc_documento_ruta_absoluta'];
+        $rutas->doc_documento_ruta_absoluta = $ruta_doc;
 
         return $rutas;
     }
@@ -1782,7 +1820,7 @@ class _transacciones_fc extends modelo
 
     private function ruta_archivos_tmp(string $ruta_archivos): array|string
     {
-        $ruta_archivos_tmp = $ruta_archivos . '/tmp';
+        $ruta_archivos_tmp = $ruta_archivos . 'tmp';
 
         if (!file_exists($ruta_archivos_tmp)) {
             mkdir($ruta_archivos_tmp, 0777, true);

@@ -171,7 +171,7 @@ class doc_documento extends modelo{
             $registro_dbox['ruta_carpeta'] = $nombre_dropbox;
             $r_dropbox_ruta = (new inm_dropbox_ruta(link: $this->link))->alta_registro(registro: $registro_dbox);
             if (errores::$error) {
-                return $this->error->error('Error al guardar archivo', $guarda);
+                return $this->error->error('Error al guardar archivo', $r_dropbox_ruta);
             }
 
         }
@@ -404,17 +404,56 @@ class doc_documento extends modelo{
                 $documento['doc_documento_ruta_absoluta'] = $registro['ruta_absoluta'];
             }
 
-            $doc_version_modelo = new doc_version($this->link);
-            $doc_version_modelo->registro['doc_documento_id'] = $id;
-            $r_alta_version = $doc_version_modelo->alta_bd();
-            if (errores::$error) {
-                return $this->error->error('Error al guardar registro', $r_alta_version);
-            }
+            if(!(new generales())->guarda_archivo_dropbox) {
+                $doc_version_modelo = new doc_version($this->link);
+                $doc_version_modelo->registro['doc_documento_id'] = $id;
+                $r_alta_version = $doc_version_modelo->alta_bd();
+                if (errores::$error) {
+                    return $this->error->error('Error al guardar registro', $r_alta_version);
+                }
+                $guarda = (new files())->guarda_archivo_fisico(contenido_file: file_get_contents($_FILES['tmp_name']),
+                    ruta_file: $documento['doc_documento_ruta_absoluta']);
+                if (errores::$error) {
+                    return $this->error->error('Error al guardar archivo', $guarda);
+                }
+            }else{
 
-            $guarda = (new files())->guarda_archivo_fisico(contenido_file: file_get_contents($_FILES['tmp_name']),
-                ruta_file: $documento['doc_documento_ruta_absoluta']);
-            if (errores::$error) {
-                return $this->error->error('Error al guardar archivo', $guarda);
+                $nombre_doc = (new files())->nombre_doc(tipo_documento_id: $registro['doc_tipo_documento_id'],
+                    extension: $extension);
+                if(errores::$error){
+                    return $this->error->error(mensaje: 'Error obtener nombre documento', data: $nombre_doc);
+                }
+
+                if(isset($registro['ruta_relativa'])) {
+                    $registro['ruta_relativa'] .= $nombre_doc;
+                }
+
+                $nombre_dropbox = $registro['ruta_relativa'];
+
+                $guarda = (new _dropbox(link: $this->link))->upload(archivo_drop: $nombre_dropbox,
+                    archivo_file: $_FILES['tmp_name']);
+                if (errores::$error) {
+                    return $this->error->error('Error al guardar archivo', $guarda);
+                }
+
+                $filtro_drop['doc_documento.id'] = $id;
+                $registro_drop = (new inm_dropbox_ruta(link: $this->link))->filtro_and(filtro: $filtro_drop);
+                if (errores::$error) {
+                    return $this->error->error('Error al guardar archivo', $registro_drop);
+                }
+
+                if($registro_drop->n_registros <= 0) {
+                    return $this->error->error('Error al guardar archivo', $registro_drop);
+                }
+
+                //$registro_dbox['doc_documento_id'] = $id;
+                $registro_dbox['id_dropbox'] = $guarda;
+                $registro_dbox['ruta_carpeta'] = $nombre_dropbox;
+                $r_dropbox_ruta = (new inm_dropbox_ruta(link: $this->link))->modifica_bd(registro: $registro_dbox,
+                    id: $registro_drop->registros[0]['inm_dropbox_ruta_id']);
+                if (errores::$error) {
+                    return $this->error->error('Error al guardar archivo', $r_dropbox_ruta);
+                }
             }
         }
 
