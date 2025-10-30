@@ -63,6 +63,7 @@ class _cert
         $doc_documento->registro['doc_tipo_documento_id'] = $existe->registros[0]['doc_tipo_documento_id'];
         $doc_documento->registro['descripcion'] = $_FILES[$documento]['name'];
         $doc_documento->registro['descripcion_select'] = $_FILES[$documento]['name'];
+        $doc_documento->exento = true;
         $doc_documento = $doc_documento->alta_bd(file: $_FILES[$documento]);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al dar de alta el documento', data: $doc_documento);

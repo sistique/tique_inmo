@@ -12,6 +12,7 @@ use stdClass;
 
 class doc_documento extends modelo{
     public array $file = array();
+    public bool $exento = false;
     /**
      * DEBUG INI
      * accion constructor.
@@ -151,7 +152,7 @@ class doc_documento extends modelo{
             return $this->error->error('Error al guardar registro', $r_alta_doc);
         }
 
-        if(!(new generales())->guarda_archivo_dropbox){
+        if(!(new generales())->guarda_archivo_dropbox || $this->exento){
             $guarda = (new files())->guarda_archivo_fisico(contenido_file: file_get_contents($file['tmp_name']),
                 ruta_file: $this->registro['ruta_absoluta']);
             if (errores::$error) {
