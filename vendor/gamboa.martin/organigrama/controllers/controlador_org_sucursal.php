@@ -8,7 +8,7 @@
  */
 namespace gamboamartin\organigrama\controllers;
 
-use controllers\_init_dps;
+use gamboamartin\direccion_postal\controllers\_init_dps;
 use gamboamartin\direccion_postal\models\dp_calle_pertenece;
 use gamboamartin\errores\errores;
 use gamboamartin\organigrama\controllers\base\empresas;
