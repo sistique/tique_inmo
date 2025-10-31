@@ -27,3 +27,4 @@ config/pac.php
 archivos
 .idea/
 composer.lock
+.phpunit.result.cache

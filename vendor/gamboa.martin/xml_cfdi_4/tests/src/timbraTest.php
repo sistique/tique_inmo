@@ -164,13 +164,15 @@ class timbraTest extends test {
 
         errores::$error = false;
 
+        $date = date('Y-m-d\TH:i:s', strtotime('-10 hour'));
+
         $contenido_xml = '{
     "Comprobante":
     {
         "Version": "4.0",
         "Serie": "LC-P",
         "Folio": "1",
-        "Fecha": "2024-04-02T09:00:59",
+        "Fecha": "'.$date.'",
         "NoCertificado": "30001000000500003416",
         "SubTotal": "0",
         "Moneda": "XXX",
@@ -209,18 +211,16 @@ class timbraTest extends test {
     }
 }';
 
-        $ruta_key_pem = '/var/www/html/xml_cfdi_4/tests/files/CSD_Sucursal_1_EKU9003173C9_20230517_223850.key.pem';
-        $ruta_cer_pem = '/var/www/html/xml_cfdi_4/tests/files/CSD_Sucursal_1_EKU9003173C9_20230517_223850.cer.pem';
+        $ruta_key_pem = '/var/www/html/tique_inmo/archivos/doc_documento/7.868641146182.pem';
+        $ruta_cer_pem = '/var/www/html/tique_inmo/archivos/doc_documento/7.965436996544.pem';
         $id_comprobante = '';
 
         $resultado = $timbra->timbra(contenido_xml: $contenido_xml, id_comprobante: $id_comprobante,
             ruta_cer_pem: $ruta_cer_pem, ruta_key_pem: $ruta_key_pem, pac_prov: 'facturalo');
 
-
         $this->assertNotTrue(errores::$error);
         $this->assertIsObject($resultado);
         $this->assertNotEmpty($resultado->uuid);
-
 
 
         $contenido_xml = '{
@@ -229,7 +229,7 @@ class timbraTest extends test {
         "Version": "4.0",
         "Serie": "LC-P",
         "Folio": "1005",
-        "Fecha": "2024-04-02T09:00:08",
+        "Fecha": "'.$date.'",
         "NoCertificado": "30001000000500003416",
         "SubTotal": "0",
         "Moneda": "XXX",
@@ -280,14 +280,12 @@ class timbraTest extends test {
     }
 }';
 
-        $ruta_key_pem = '/var/www/html/xml_cfdi_4/tests/files/CSD_Sucursal_1_EKU9003173C9_20230517_223850.key.pem';
-        $ruta_cer_pem = '/var/www/html/xml_cfdi_4/tests/files/CSD_Sucursal_1_EKU9003173C9_20230517_223850.cer.pem';
+        $ruta_key_pem = '/var/www/html/tique_inmo/archivos/doc_documento/7.868641146182.pem';
+        $ruta_cer_pem = '/var/www/html/tique_inmo/archivos/doc_documento/7.965436996544.pem';
         $id_comprobante = '';
 
         $resultado = $timbra->timbra(contenido_xml: $contenido_xml, id_comprobante: $id_comprobante,
             ruta_cer_pem: $ruta_cer_pem, ruta_key_pem: $ruta_key_pem, pac_prov: 'facturalo');
-
-        //print_r($resultado);exit;
 
         $this->assertNotTrue(errores::$error);
         $this->assertIsObject($resultado);
@@ -303,7 +301,7 @@ class timbraTest extends test {
         $contenido_xml_array->Comprobante->Serie = '4.0';
 
         $contenido_xml_array->Comprobante->Folio = '0000179826';
-        $contenido_xml_array->Comprobante->Fecha = '2024-04-02T09:00:08';
+        $contenido_xml_array->Comprobante->Fecha = $date;
         $contenido_xml_array->Comprobante->NoCertificado = '30001000000500003416';
         $contenido_xml_array->Comprobante->SubTotal = '0';
         $contenido_xml_array->Comprobante->Moneda = 'XXX';
@@ -401,8 +399,8 @@ class timbraTest extends test {
 
        // print_r($contenido_json);exit;
 
-        $ruta_key_pem = '/var/www/html/xml_cfdi_4/tests/files/CSD_Sucursal_1_EKU9003173C9_20230517_223850.key.pem';
-        $ruta_cer_pem = '/var/www/html/xml_cfdi_4/tests/files/CSD_Sucursal_1_EKU9003173C9_20230517_223850.cer.pem';
+        $ruta_key_pem = '/var/www/html/tique_inmo/archivos/doc_documento/7.868641146182.pem';
+        $ruta_cer_pem = '/var/www/html/tique_inmo/archivos/doc_documento/7.965436996544.pem';
         $id_comprobante = '';
 
         $resultado = $timbra->timbra(contenido_xml: $contenido_json, id_comprobante: $id_comprobante,
