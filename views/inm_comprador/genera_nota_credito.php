@@ -15,8 +15,8 @@
                         <?php echo $controlador->inputs->inm_comprador_id; ?>
                         <?php echo $controlador->inputs->fc_factura_id; ?>
                         <?php echo $controlador->inputs->com_producto_id; ?>
-                        <?php echo $controlador->inputs->descripcion_factura; ?>
-                        <?php echo $controlador->inputs->valor_unitario; ?>
+                        <?php echo $controlador->inputs->descripcion_nota_credito; ?>
+                        <?php echo $controlador->inputs->valor_unitario_nota_credito; ?>
 
                         <input type='hidden' name='seccion_retorno' value='inm_comprador'>
                         <input type='hidden' name='btn_action_next' value='genera_factura'>

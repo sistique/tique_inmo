@@ -17,7 +17,9 @@ use gamboamartin\direccion_postal\models\dp_municipio;
 use gamboamartin\errores\errores;
 use gamboamartin\facturacion\models\fc_csd;
 use gamboamartin\facturacion\models\fc_factura;
+use gamboamartin\facturacion\models\fc_nota_credito;
 use gamboamartin\facturacion\models\fc_partida;
+use gamboamartin\facturacion\models\fc_partida_nc;
 use gamboamartin\inmuebles\html\_base;
 use gamboamartin\inmuebles\html\inm_comprador_html;
 use gamboamartin\inmuebles\html\inm_referencia_html;
@@ -2546,7 +2548,8 @@ class controlador_inm_comprador extends _ctl_base {
             'correo_empresa','mts_construidos','mts_terrenos','metros_construidos','metros_terreno', 'valor_avaluo',
             'numero_escritura','isr','nombre_beneficiario','monto_transferencia','efectivo','monto','numero_cheque',
             'transferencia','serie','folio','exportacion','observaciones_factura','descripcion_factura','unidad',
-            'cuenta_predial','cantidad','valor_unitario','subtotal','descuento_factura','total');
+            'cuenta_predial','cantidad','valor_unitario','subtotal','descuento_factura','total',
+            'valor_unitario_nota_credito','descripcion_nota_credito');
         $keys->selects = array();
         $keys->fechas = array('fecha_factura');
 
@@ -3835,6 +3838,18 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'valor_unitario_nota_credito',
+            keys_selects:$keys_selects, place_holder: 'Valor');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'descripcion_nota_credito',
+            keys_selects:$keys_selects, place_holder: 'Partida Nota Credito');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
         return $keys_selects;
     }
 
@@ -5073,10 +5088,31 @@ class controlador_inm_comprador extends _ctl_base {
             }
         }
 
+        $filtro_rel['inm_comprador.id'] = $this->registro_id;
+        $registro = (new inm_rel_comprador_com_cliente($this->link))->filtro_and(filtro: $filtro_rel);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener registro',data:  $registro,header: $header,ws: $ws);
+        }
+
+        $filtro_fac['com_cliente.id'] =  $registro->registros[0]['com_cliente_id'];
+        $r_fc_factura = (new fc_factura(link: $this->link))->filtro_and(
+            filtro: $filtro_fac);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener registro',data:  $r_fc_factura,header: $header,ws: $ws);
+        }
+
+        if($r_fc_factura->n_registros <= 0){
+            return $this->retorno_error(
+                mensaje: 'Error no existe factura del cliente ID: ' .
+                $this->registro_id ,data:  $r_fc_factura,header: $header,ws: $ws);
+        }
+
         $keys_selects = array();
-        $keys_selects = $this->key_select(cols: 12, con_registros: true,filtro: array(),
-            key: 'fc_factura_id', keys_selects: $keys_selects, id_selected: -1,
-            label: 'Factura');
+        $keys_selects = $this->key_select(cols: 12, con_registros: true, filtro: $filtro_fac,
+            key: 'fc_factura_id', keys_selects: $keys_selects,
+            id_selected: $r_fc_factura->registros[0]['fc_factura_id'], label: 'Factura');
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);
@@ -5119,4 +5155,67 @@ class controlador_inm_comprador extends _ctl_base {
 
         return $base;
     }
+
+    public function genera_nota_credito_bd(bool $header, bool $ws = false)
+    {
+        $this->link->beginTransaction();
+
+        print_r($_POST);exit;
+        $filtro_fac['fc_factura.id'] = $_POST['fc_factura_id'];
+        $r_fc_factura = (new fc_factura(link: $this->link))->filtro_and(filtro: $filtro_fac);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener datos de nota_credito', data: $r_fc_factura,
+                header: $header, ws: $ws);
+        }
+
+        $registro['fc_csd_id'] = $_POST['fc_csd_id'];
+        $registro['com_sucursal_id'] = $_POST['com_sucursal_id'];
+        $registro['exportacion'] = $_POST['exportacion'];
+        $registro['cat_sat_tipo_de_comprobante_id'] = $_POST['cat_sat_tipo_de_comprobante_id'];
+        $registro['cat_sat_metodo_pago_id'] = $_POST['cat_sat_metodo_pago_id'];
+        $registro['cat_sat_forma_pago_id'] = $_POST['cat_sat_forma_pago_id'];
+        $registro['cat_sat_moneda_id'] = $_POST['cat_sat_moneda_id'];
+        $registro['com_tipo_cambio_id'] = $_POST['com_tipo_cambio_id'];
+        $registro['cat_sat_uso_cfdi_id'] = $_POST['cat_sat_uso_cfdi_id'];
+        $registro['observaciones'] = $_POST['observaciones_nota_credito'];
+        $r_fc_nota_credito = (new fc_nota_credito(link: $this->link))->alta_registro(registro: $registro);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_fc_nota_credito,
+                header: $header, ws: $ws);
+        }
+
+        $registro_partida['fc_nota_credito_id'] = $r_fc_nota_credito->registro_id;
+        $registro_partida['com_producto_id'] = $_POST['com_producto_id'];
+        $registro_partida['cat_sat_obj_imp_id'] = $_POST['cat_sat_obj_imp_id'];
+        $registro_partida['descripcion'] = $_POST['descripcion_nota_credito'];
+        $registro_partida['cantidad'] = $_POST['cantidad'];
+        $registro_partida['valor_unitario'] = $_POST['valor_unitario'];
+        $registro_partida['cat_sat_conf_imps_id'] = $_POST['cat_sat_conf_imps_id'];
+        $r_fc_partida = (new fc_partida_nc(link: $this->link))->alta_registro(registro: $registro_partida);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_fc_partida,
+                header: $header, ws: $ws);
+        }
+
+        $this->link->commit();
+
+        //$params = array('pestana_general_actual' => 'pestanageneral2');
+        $link_proceso_comprador = $this->obj_link->link_con_id(
+            accion: 'genera_nota_credito', link: $this->link, registro_id: $this->registro_id, seccion: 'inm_comprador',
+            params: array());
+        if (errores::$error) {
+            $this->retorno_error(mensaje: 'Error al generar link', data: $link_proceso_comprador, header: $header, ws: $ws);
+        }
+
+        if($header) {
+            header('Location:' . $link_proceso_comprador);
+            exit;
+        }
+
+        return $this->registro_id;
+    }
+
 }
