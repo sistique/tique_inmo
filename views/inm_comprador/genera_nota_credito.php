@@ -26,13 +26,11 @@
                             <button type="submit" class="btn btn-success" value="genera_factura" name="btn_action_next">Alta</button><br>
                         </div>
                     </form>
+                    <?php echo $controlador->buttons_base; ?>
 
                 </div>
-
             </div>
         </div>
-
     </div>
-
 </main>
 

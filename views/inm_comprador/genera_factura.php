@@ -8,8 +8,6 @@
                 <?php include (new views())->ruta_templates."head/title.php"; ?>
                 <?php include (new views())->ruta_templates."head/subtitulo.php"; ?>
                 <?php include (new views())->ruta_templates."mensajes.php"; ?>
-                <?php echo $controlador->buttons_base; ?>
-
                 <form enctype="multipart/form-data" method="post" action="<?php echo $controlador->link_genera_factura_bd; ?>" class="form-additional">
                     <?php echo $controlador->inputs->fc_csd_id; ?>
                     <?php echo $controlador->inputs->com_sucursal_id; ?>
@@ -43,6 +41,8 @@
 
                     <?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
                 </form>
+
+                <?php echo $controlador->buttons_base; ?>
             </div>
         </div>
     </div>
