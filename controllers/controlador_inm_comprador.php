@@ -5328,13 +5328,18 @@ class controlador_inm_comprador extends _ctl_base {
                 header: $header, ws: $ws);
         }
 
+        $cantidad = 1;
+        if(isset($_POST['cantidad'])){
+            $cantidad = $_POST['cantidad'];
+        }
+
         $registro_partida['fc_nota_credito_id'] = $r_fc_nota_credito->registro_id;
         $registro_partida['com_producto_id'] = $_POST['com_producto_id'];
-        $registro_partida['cat_sat_obj_imp_id'] = $_POST['cat_sat_obj_imp_id'];
+        $registro_partida['cat_sat_obj_imp_id'] = $r_producto['cat_sat_obj_imp_id'];
         $registro_partida['descripcion'] = $_POST['descripcion_nota_credito'];
-        $registro_partida['cantidad'] = $_POST['cantidad'];
-        $registro_partida['valor_unitario'] = $_POST['valor_unitario'];
-        $registro_partida['cat_sat_conf_imps_id'] = $_POST['cat_sat_conf_imps_id'];
+        $registro_partida['cantidad'] = $cantidad;
+        $registro_partida['valor_unitario'] = $_POST['valor_unitario_nota_credito'];
+        $registro_partida['cat_sat_conf_imps_id'] = $r_producto['cat_sat_conf_imps_id'];
         $r_fc_partida = (new fc_partida_nc(link: $this->link))->alta_registro(registro: $registro_partida);
         if (errores::$error) {
             $this->link->rollBack();
