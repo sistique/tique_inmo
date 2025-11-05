@@ -71,7 +71,7 @@
                                 <td><?php echo $nota_credito['fc_nota_credito_uuid'] ?></td>
                                 <td><?php echo $nota_credito['modifica'] ?></td>
                                 <td><?php echo $nota_credito['timbra_xml'] ?></td>
-                                <td><?php echo $nota_credito['exporta_documentos'] ?></td>
+                                <td><?php echo $nota_credito['exportar_documentos'] ?></td>
                             </tr>
                         <?php } ?>
                         </tbody>

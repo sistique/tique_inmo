@@ -5283,13 +5283,13 @@ class controlador_inm_comprador extends _ctl_base {
             }
             $nota_credito['timbra_xml'] = $timbra_xml;
 
-            $exporta_documentos = $this->html->button_href(accion: 'exporta_documentos', etiqueta: 'Descargar',
+            $exportar_documentos = $this->html->button_href(accion: 'exportar_documentos', etiqueta: 'Descargar',
                 registro_id: $nota_credito['fc_nota_credito_id'], seccion: 'fc_nota_credito', style: 'success');
             if(errores::$error){
                 return $this->retorno_error(
-                    mensaje: 'Error al obtener registro',data:  $exporta_documentos,header: $header,ws: $ws);
+                    mensaje: 'Error al obtener registro',data:  $exportar_documentos,header: $header,ws: $ws);
             }
-            $nota_credito['exporta_documentos'] = $exporta_documentos;
+            $nota_credito['exportar_documentos'] = $exportar_documentos;
 
             $notas_credito[] = $nota_credito;
         }
