@@ -4929,7 +4929,7 @@ class controlador_inm_comprador extends _ctl_base {
 
         $keys_selects = $this->key_select(cols: 6, con_registros: true,filtro: array(),
             key: 'com_producto_id', keys_selects: $keys_selects, id_selected: $id_selected,
-            label: 'Producto', extra_params_keys:  array("com_producto_aplica_predial"));
+            label: 'Producto', extra_params_keys:  array("com_producto_aplica_predial","com_producto_descripcion"));
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);
