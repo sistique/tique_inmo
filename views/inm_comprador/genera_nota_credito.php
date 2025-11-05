@@ -27,11 +27,53 @@
                             <button type="submit" class="btn btn-success" value="genera_factura" name="btn_action_next">Alta</button><br>
                         </div>
                     </form>
-                    <?php echo $controlador->buttons_base; ?>
-
                 </div>
             </div>
         </div>
+    </div>
+</main>
+<?php echo $controlador->buttons_base; ?>
+
+<main class="main section-color-primary">
+    <div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="widget widget-box box-container widget-mylistings">
+                    <div class="widget-header col-md-12">
+                        <h2>Notas de Credito</h2>
+                    </div>
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Folio</th>
+                            <th>Cliente</th>
+                            <th>Fecha</th>
+                            <th>Total</th>
+                            <th>UUID</th>
+                            <th>Acciones</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php
+                        foreach ($controlador->notas_credito as $nota_credito){
+                            ?>
+                            <tr>
+                                <td><?php echo $nota_credito['fc_nota_credito_id'] ?></td>
+                                <td><?php echo $nota_credito['fc_nota_credito_folio'] ?></td>
+                                <td><?php echo $nota_credito['com_cliente_razon_social'] ?></td>
+                                <td><?php echo $nota_credito['fc_nota_credito_fecha'] ?></td>
+                                <td><?php echo $nota_credito['fc_nota_credito_total'] ?></td>
+                                <td><?php echo $nota_credito['fc_nota_credito_uuid'] ?></td>
+                                <td><?php echo $nota_credito['acciones'] ?></td>
+                            </tr>
+                        <?php } ?>
+                        </tbody>
+                    </table>
+                </div> <!-- /. widget-table-->
+            </div><!-- /.center-content -->
+        </div>
+
     </div>
 </main>
 

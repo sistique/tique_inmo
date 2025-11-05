@@ -212,6 +212,7 @@ class controlador_inm_comprador extends _ctl_base {
     public array $beneficiarios = array();
     public array $referencias = array();
     public array $status_comprador = array();
+    public array $notas_credito = array();
 
 
 
@@ -5162,47 +5163,7 @@ class controlador_inm_comprador extends _ctl_base {
                 $this->registro_id ,data:  $r_fc_factura,header: $header,ws: $ws);
         }
 
-        $filtro_nc['com_cliente.id'] =  $registro->registros[0]['com_cliente_id'];
-        $r_fc_nota_credito = (new fc_nota_credito(link: $this->link))->filtro_and(
-            filtro: $filtro_nc);
-        if(errores::$error){
-            return $this->retorno_error(
-                mensaje: 'Error al obtener registro',data:  $r_fc_nota_credito,header: $header,ws: $ws);
-        }
-
-        $this->row_upd->exportacion = '01';
-        $this->row_upd->fecha_nota_credito = date('Y-m-d');
-        $this->row_upd->cantidad = '1';
         $this->row_upd->valor_unitario_nota_credito = 0;
-        $this->row_upd->subtotal = 0;
-        $this->row_upd->descuento_nota_credito = 0;
-        $this->row_upd->total = 0;
-
-        $fc_partida_nc = new stdClass();
-        $fc_partida_nc->n_registros = 0;
-        $fc_partida_nc->registros = array();
-
-        if($r_fc_nota_credito->n_registros > 0){
-            $this->row_upd->serie = $r_fc_nota_credito->registros[0]['fc_nota_credito_serie'];
-            $this->row_upd->folio = $r_fc_nota_credito->registros[0]['fc_nota_credito_folio'];
-            $this->row_upd->exportacion = $r_fc_nota_credito->registros[0]['fc_nota_credito_exportacion'];
-            $this->row_upd->fecha_nota_credito = $r_fc_nota_credito->registros[0]['fc_nota_credito_fecha'];
-            $this->row_upd->observaciones_nota_credito = $r_fc_nota_credito->registros[0]['fc_nota_credito_observaciones'];
-
-            $filtro_par['fc_nota_credito.id'] =  $r_fc_nota_credito->registros[0]['fc_nota_credito_id'];
-            $fc_partida_nc = (new fc_partida_nc(link: $this->link))->filtro_and(
-                filtro: $filtro_par);
-            if(errores::$error){
-                return $this->retorno_error(
-                    mensaje: 'Error al obtener registro',data:  $fc_partida_nc,header: $header,ws: $ws);
-            }
-            $this->row_upd->descripcion_nota_credito = $fc_partida_nc->registros[0]['fc_partida_nc_descripcion'];
-            $this->row_upd->cantidad = $fc_partida_nc->registros[0]['fc_partida_nc_cantidad'];
-            $this->row_upd->valor_unitario_nota_credito  = $fc_partida_nc->registros[0]['fc_partida_nc_valor_unitario'];
-            $this->row_upd->subtotal = $fc_partida_nc->registros[0]['fc_partida_nc_sub_total'];
-            $this->row_upd->descuento_nota_credito = $fc_partida_nc->registros[0]['fc_partida_nc_descuento'];
-            $this->row_upd->total = $fc_partida_nc->registros[0]['fc_partida_nc_total'];
-        }
 
         $filtro_sucursal['com_cliente.id'] = $registro->registros[0]['com_cliente_id'];
         $r_com_sucursal = (new com_sucursal(link: $this->link))->filtro_and(
@@ -5231,13 +5192,8 @@ class controlador_inm_comprador extends _ctl_base {
                 header: $header,ws:  $ws);
         }
 
-        $id_selected = -1;
-        if($fc_partida_nc->n_registros > 0){
-            $id_selected = $fc_partida_nc->registros[0]['com_producto_id'];
-        }
-
         $keys_selects = $this->key_select(cols: 12, con_registros: true,filtro: array(),
-            key: 'com_producto_id', keys_selects: $keys_selects, id_selected: $id_selected,
+            key: 'com_producto_id', keys_selects: $keys_selects, id_selected: -1,
             label: 'Producto', extra_params_keys: array('com_producto_descripcion'));
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
@@ -5278,31 +5234,43 @@ class controlador_inm_comprador extends _ctl_base {
 
         $this->link_nota_credito_bd = $link_nota_credito_bd;
 
+        $filtro_nc['com_cliente.id'] =  $registro->registros[0]['com_cliente_id'];
+        $r_fc_nota_credito = (new fc_nota_credito(link: $this->link))->filtro_and(
+            filtro: $filtro_nc);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener registro',data:  $r_fc_nota_credito,header: $header,ws: $ws);
+        }
+
+        $notas_credito = array();
+
+        foreach ($r_fc_nota_credito->registros as $nota_credito){
+            $button = $this->html->button_href(accion: 'timbra_xml', etiqueta: 'Timbra XML',
+                registro_id: $nota_credito['fc_nota_credito_id'], seccion: 'fc_nota_credito', style: 'danger');
+            if(errores::$error){
+                return $this->retorno_error(
+                    mensaje: 'Error al obtener registro',data:  $button,header: $header,ws: $ws);
+            }
+            $nota_credito['acciones'] = $button;
+
+            $notas_credito[] = $nota_credito;
+        }
+
+        $this->notas_credito = $notas_credito;
+
         return $base;
     }
 
     public function buttons_nota_credito(): array|string
     {
-        $button_fc_factura_timbra =  $this->html->button_href(accion: 'timbra_xml', etiqueta: 'Timbrar',
-            registro_id: $this->registro_id, seccion: $this->seccion, style: 'danger', cols: 4, params: array());
-        if (errores::$error) {
-            return $this->errores->error(mensaje: 'Error al generar link', data: $button_fc_factura_timbra);
-        }
         $button_fc_factura_nota_credito =  $this->html->button_href(accion: 'genera_factura',
             etiqueta: 'Regresa a Factura', registro_id: $this->registro_id, seccion: $this->seccion, style: 'warning',
-            cols: 4, params: array('inm_comprador_id' => $this->registro_id));
+            cols: 12, params: array('inm_comprador_id' => $this->registro_id));
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al generar link', data: $button_fc_factura_nota_credito);
         }
 
-        $button_fc_factura_exportar_documentos =  $this->html->button_href(accion: 'exportar_documentos',
-            etiqueta: 'Descargar', registro_id: $this->registro_id, seccion: $this->seccion, style: 'success',
-            cols: 4, params: array());
-        if (errores::$error) {
-            return $this->errores->error(mensaje: 'Error al generar link', data: $button_fc_factura_exportar_documentos);
-        }
-
-        $buttons = $button_fc_factura_timbra.$button_fc_factura_nota_credito.$button_fc_factura_exportar_documentos;
+        $buttons = $button_fc_factura_nota_credito;
 
         return "<div class='col-md-12 buttons-form'>$buttons</div>";
     }
