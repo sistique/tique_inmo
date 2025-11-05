@@ -5333,11 +5333,17 @@ class controlador_inm_comprador extends _ctl_base {
             $cantidad = $_POST['cantidad'];
         }
 
+        $descuento = 0;
+        if(isset($_POST['descuento'])){
+            $descuento = $_POST['descuento'];
+        }
+
         $registro_partida['fc_nota_credito_id'] = $r_fc_nota_credito->registro_id;
         $registro_partida['com_producto_id'] = $_POST['com_producto_id'];
         $registro_partida['cat_sat_obj_imp_id'] = $r_producto['cat_sat_obj_imp_id'];
         $registro_partida['descripcion'] = $_POST['descripcion_nota_credito'];
         $registro_partida['cantidad'] = $cantidad;
+        $registro_partida['descuento'] = $descuento;
         $registro_partida['valor_unitario'] = $_POST['valor_unitario_nota_credito'];
         $registro_partida['cat_sat_conf_imps_id'] = $r_producto['cat_sat_conf_imps_id'];
         $r_fc_partida = (new fc_partida_nc(link: $this->link))->alta_registro(registro: $registro_partida);
