@@ -11,6 +11,7 @@ namespace gamboamartin\inmuebles\controllers;
 use base\controller\init;
 use gamboamartin\banco\models\bn_cuenta;
 use gamboamartin\cat_sat\models\cat_sat_moneda;
+use gamboamartin\cat_sat\models\cat_sat_tipo_de_comprobante;
 use gamboamartin\comercial\models\com_producto;
 use gamboamartin\comercial\models\com_sucursal;
 use gamboamartin\comercial\models\com_tipo_cambio;
@@ -4999,7 +5000,8 @@ class controlador_inm_comprador extends _ctl_base {
                 header: $header, ws: $ws);
         }
 
-        $r_moneda = (new cat_sat_moneda(link: $this->link))->registro(registro_id: $r_com_sucursal['cat_sat_moneda_id']);
+        $filtro_tipo['cat_sat_moneda.id'] = $r_com_sucursal['cat_sat_moneda_id'];
+        $r_moneda = (new com_tipo_cambio(link: $this->link))->filtro_and(filtro: $filtro_tipo);
         if (errores::$error) {
             $this->link->rollBack();
             return $this->retorno_error(mensaje: 'Error al obtener datos de factura', data: $r_moneda,
@@ -5013,6 +5015,14 @@ class controlador_inm_comprador extends _ctl_base {
                 header: $header, ws: $ws);
         }
 
+        $filtro_comp['cat_sat_tipo_de_comprobante.descripcion'] = 'Ingreso';
+        $r_comprobante = (new cat_sat_tipo_de_comprobante(link: $this->link))->filtro_and(filtro: $filtro_comp);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener datos de factura', data: $r_comprobante,
+                header: $header, ws: $ws);
+        }
+
         if($r_factura->n_registros > 0) {
             $this->link->rollBack();
             return $this->retorno_error(mensaje: 'Error ya existe una factura para este cliente', data: $r_factura,
@@ -5022,12 +5032,12 @@ class controlador_inm_comprador extends _ctl_base {
         if($r_factura->n_registros <= 0) {
             $registro['fc_csd_id'] = $_POST['fc_csd_id'];
             $registro['com_sucursal_id'] = $_POST['com_sucursal_id'];
-            //$registro['exportacion'] = $_POST['exportacion'];
-            $registro['cat_sat_tipo_de_comprobante_id'] = $_POST['cat_sat_tipo_de_comprobante_id'];
+            $registro['exportacion'] = '01';
+            $registro['cat_sat_tipo_de_comprobante_id'] = $r_comprobante->registros[0]['cat_sat_tipo_de_comprobante_id'];
             $registro['cat_sat_metodo_pago_id'] = $r_com_sucursal['cat_sat_metodo_pago_id'];
             $registro['cat_sat_forma_pago_id'] = $r_com_sucursal['cat_sat_forma_pago_id'];
             $registro['cat_sat_moneda_id'] = $r_com_sucursal['cat_sat_moneda_id'];
-            $registro['com_tipo_cambio_id'] = $r_moneda['com_tipo_cambio_id'];
+            $registro['com_tipo_cambio_id'] = $r_moneda->registros[0]['com_tipo_cambio_id'];
             $registro['cat_sat_uso_cfdi_id'] = $r_com_sucursal['cat_sat_uso_cfdi_id'];
             $registro['observaciones'] = $_POST['observaciones_factura'];
             $r_fc_factura = (new fc_factura(link: $this->link))->alta_registro(registro: $registro);
