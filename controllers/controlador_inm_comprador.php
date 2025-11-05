@@ -19,6 +19,7 @@ use gamboamartin\comercial\models\com_tipo_cambio;
 use gamboamartin\direccion_postal\models\dp_estado;
 use gamboamartin\direccion_postal\models\dp_municipio;
 use gamboamartin\errores\errores;
+use gamboamartin\facturacion\models\fc_complemento_pago;
 use gamboamartin\facturacion\models\fc_csd;
 use gamboamartin\facturacion\models\fc_factura;
 use gamboamartin\facturacion\models\fc_nota_credito;
@@ -102,6 +103,7 @@ class controlador_inm_comprador extends _ctl_base {
     public string $link_cobrado_bd = '';
     public string $link_cancelado_bd = '';
     public string $link_nota_credito_bd = '';
+    public string $link_complemento_pago_bd = '';
 
     /**/
     public string $link_inm_avaluo_alta_bd = '';
@@ -213,6 +215,7 @@ class controlador_inm_comprador extends _ctl_base {
     public array $referencias = array();
     public array $status_comprador = array();
     public array $notas_credito = array();
+    public array $complementos_pago = array();
 
 
 
@@ -2554,7 +2557,8 @@ class controlador_inm_comprador extends _ctl_base {
             'numero_escritura','isr','nombre_beneficiario','monto_transferencia','efectivo','monto','numero_cheque',
             'transferencia','serie','folio','exportacion','observaciones_factura','descripcion_factura','unidad',
             'cuenta_predial','cantidad','valor_unitario','subtotal','descuento_factura','total',
-            'observaciones_nota_credito', 'valor_unitario_nota_credito','descripcion_nota_credito');
+            'observaciones_nota_credito', 'valor_unitario_nota_credito','descripcion_nota_credito',
+            'observaciones_complemento_pago', 'valor_unitario_complemento_pago','descripcion_complemento_pago');
         $keys->selects = array();
         $keys->fechas = array('fecha_factura');
 
@@ -3796,7 +3800,13 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         $keys_selects = (new init())->key_select_txt(cols: 12,key: 'observaciones_nota_credito',
-            keys_selects:$keys_selects, place_holder: 'Observaciones Factura',required: false);
+            keys_selects:$keys_selects, place_holder: 'Observaciones',required: false);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'observaciones_complemento_pago',
+            keys_selects:$keys_selects, place_holder: 'Observaciones',required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
@@ -3857,6 +3867,18 @@ class controlador_inm_comprador extends _ctl_base {
 
         $keys_selects = (new init())->key_select_txt(cols: 12,key: 'descripcion_nota_credito',
             keys_selects:$keys_selects, place_holder: 'Partida Nota Credito');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'valor_unitario_complemento_pago',
+            keys_selects:$keys_selects, place_holder: 'Valor');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'descripcion_complemento_pago',
+            keys_selects:$keys_selects, place_holder: 'Partida Pago');
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
@@ -5400,4 +5422,271 @@ class controlador_inm_comprador extends _ctl_base {
         return $this->registro_id;
     }
 
+
+    public function genera_complemento_pago(bool $header, bool $ws = false): array|stdClass
+    {
+        if(isset($_GET['accion']) && $_GET['accion'] == 'genera_complemento_pago') {
+            $template = $this->modifica(header: false);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al integrar base', data: $template, header: $header, ws: $ws);
+            }
+        }
+
+        $filtro_rel['inm_comprador.id'] = $this->registro_id;
+        $registro = (new inm_rel_comprador_com_cliente($this->link))->filtro_and(filtro: $filtro_rel);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener registro',data:  $registro,header: $header,ws: $ws);
+        }
+
+        $filtro_fac['com_cliente.id'] =  $registro->registros[0]['com_cliente_id'];
+        $r_fc_factura = (new fc_factura(link: $this->link))->filtro_and(
+            filtro: $filtro_fac);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener registro',data:  $r_fc_factura,header: $header,ws: $ws);
+        }
+
+        if($r_fc_factura->n_registros <= 0){
+            return $this->retorno_error(
+                mensaje: 'Error no existe factura del cliente ID: ' .
+                $this->registro_id ,data:  $r_fc_factura,header: $header,ws: $ws);
+        }
+
+        $this->row_upd->valor_unitario_complemento_pago = 0;
+
+        $filtro_sucursal['com_cliente.id'] = $registro->registros[0]['com_cliente_id'];
+        $r_com_sucursal = (new com_sucursal(link: $this->link))->filtro_and(
+            filtro: $filtro_sucursal);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener registro',data:  $r_com_sucursal,header: $header,ws: $ws);
+        }
+
+        $keys_selects = array();
+        $columns_ds = array('com_cliente_rfc','com_cliente_razon_social');
+        $filtro_sucu['com_sucursal.id'] = $r_com_sucursal->registros[0]['com_sucursal_id'];
+        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro: $filtro_sucu, key: 'com_sucursal_id',
+            keys_selects: $keys_selects, id_selected: $r_com_sucursal->registros[0]['com_sucursal_id'],
+            label: 'Cliente', columns_ds : $columns_ds);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
+                header: $header,ws:  $ws);
+        }
+
+        $keys_selects = $this->key_select(cols: 12, con_registros: true, filtro: $filtro_fac,
+            key: 'fc_factura_id', keys_selects: $keys_selects,
+            id_selected: $r_fc_factura->registros[0]['fc_factura_id'], label: 'Factura');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
+                header: $header,ws:  $ws);
+        }
+
+        $keys_selects = $this->key_select(cols: 12, con_registros: true,filtro: array(),
+            key: 'com_producto_id', keys_selects: $keys_selects, id_selected: -1,
+            label: 'Producto', extra_params_keys: array('com_producto_descripcion'));
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
+                header: $header,ws:  $ws);
+        }
+
+        $base = $this->base_upd(keys_selects: $keys_selects, params: array(),params_ajustados: array());
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
+        }
+
+        $columns_ds = array('inm_comprador_nss', 'inm_comprador_nombre', 'inm_comprador_apellido_paterno',
+            'inm_comprador_apellido_materno');
+        $filtro['inm_comprador.id'] = $this->registro_id;
+        $inm_prospecto_id = (new inm_comprador_html(html: $this->html_base))->select_inm_comprador_id(
+            cols: 12, con_registros: true, id_selected: $this->registro_id, link: $this->link, columns_ds: $columns_ds,
+            filtro: $filtro,label: 'Cliente');
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al generar input', data: $inm_prospecto_id, header: $header, ws: $ws);
+        }
+
+        $this->inputs->inm_comprador_id = $inm_prospecto_id;
+
+        $buttons = $this->buttons_complemento_pago();
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al obtener buttons', data: $buttons);
+        }
+
+        $this->buttons_base = $buttons;
+
+        $params = array();
+        $link_complemento_pago_bd = $this->obj_link->link_con_id(accion:'genera_complemento_pago_bd',
+            link: $this->link,registro_id: $this->registro_id,seccion: 'inm_comprador',params: $params);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al generar link',data:  $link_complemento_pago_bd,
+                header: $header,ws:  $ws);
+        }
+
+        $this->link_complemento_pago_bd = $link_complemento_pago_bd;
+
+        $filtro_nc['com_cliente.id'] =  $registro->registros[0]['com_cliente_id'];
+        $r_fc_complemento_pago = (new fc_complemento_pago(link: $this->link))->filtro_and(
+            filtro: $filtro_nc);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener registro',data:  $r_fc_complemento_pago,header: $header,ws: $ws);
+        }
+
+        $complementos_pago = array();
+
+        foreach ($r_fc_complemento_pago->registros as $complemento_pago){
+            $timbra_xml = $this->html->button_href(accion: 'modifica', etiqueta: 'Detalles',
+                registro_id: $complemento_pago['fc_complemento_pago_id'], seccion: 'fc_complemento_pago', style: 'warning');
+            if(errores::$error){
+                return $this->retorno_error(
+                    mensaje: 'Error al obtener registro',data:  $timbra_xml,header: $header,ws: $ws);
+            }
+            $complemento_pago['modifica'] = $timbra_xml;
+
+            $timbra_xml = $this->html->button_href(accion: 'timbra_xml', etiqueta: 'Timbra XML',
+                registro_id: $complemento_pago['fc_complemento_pago_id'], seccion: 'fc_complemento_pago', style: 'danger');
+            if(errores::$error){
+                return $this->retorno_error(
+                    mensaje: 'Error al obtener registro',data:  $timbra_xml,header: $header,ws: $ws);
+            }
+            $complemento_pago['timbra_xml'] = $timbra_xml;
+
+            $exporta_documentos = $this->html->button_href(accion: 'exporta_documentos', etiqueta: 'Descargar',
+                registro_id: $complemento_pago['fc_complemento_pago_id'], seccion: 'fc_complemento_pago', style: 'success');
+            if(errores::$error){
+                return $this->retorno_error(
+                    mensaje: 'Error al obtener registro',data:  $exporta_documentos,header: $header,ws: $ws);
+            }
+            $complemento_pago['exporta_documentos'] = $exporta_documentos;
+
+            $complementos_pago[] = $complemento_pago;
+        }
+
+        $this->complementos_pago = $complementos_pago;
+
+        return $base;
+    }
+
+    public function buttons_complemento_pago(): array|string
+    {
+        $button_fc_factura_complemento_pago =  $this->html->button_href(accion: 'genera_factura',
+            etiqueta: 'Regresa a Factura', registro_id: $this->registro_id, seccion: $this->seccion, style: 'warning',
+            cols: 12, params: array('inm_comprador_id' => $this->registro_id));
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al generar link', data: $button_fc_factura_complemento_pago);
+        }
+
+        $buttons = $button_fc_factura_complemento_pago;
+
+        return "<div class='col-md-12 buttons-form'>$buttons</div>";
+    }
+
+    public function genera_complemento_pago_bd(bool $header, bool $ws = false)
+    {
+        $this->link->beginTransaction();
+
+        $r_fc_factura = (new fc_factura(link: $this->link))->registro(registro_id: $_POST['fc_factura_id']);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener datos de complemento_pago', data: $r_fc_factura,
+                header: $header, ws: $ws);
+        }
+
+        $r_com_sucursal = (new com_sucursal(link: $this->link))->registro(registro_id: $_POST['com_sucursal_id']);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener datos de factura', data: $r_com_sucursal,
+                header: $header, ws: $ws);
+        }
+
+        $filtro_tipo['cat_sat_moneda.id'] = $r_com_sucursal['cat_sat_moneda_id'];
+        $r_moneda = (new com_tipo_cambio(link: $this->link))->filtro_and(filtro: $filtro_tipo);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener datos de factura', data: $r_moneda,
+                header: $header, ws: $ws);
+        }
+
+        $r_producto = (new com_producto(link: $this->link))->registro(registro_id: $_POST['com_producto_id']);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener datos de factura', data: $r_producto,
+                header: $header, ws: $ws);
+        }
+
+        $filtro_comp['cat_sat_tipo_de_comprobante.descripcion'] = 'Egreso';
+        $r_comprobante = (new cat_sat_tipo_de_comprobante(link: $this->link))->filtro_and(filtro: $filtro_comp);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener datos de factura', data: $r_comprobante,
+                header: $header, ws: $ws);
+        }
+
+        $filtro_uso['cat_sat_uso_cfdi.codigo'] = 'S01';
+        $r_uso_cfdi = (new cat_sat_uso_cfdi(link: $this->link))->filtro_and(filtro: $filtro_uso);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener datos de factura', data: $r_uso_cfdi,
+                header: $header, ws: $ws);
+        }
+
+        $registro['fc_csd_id'] = $r_fc_factura['fc_csd_id'];
+        $registro['com_sucursal_id'] = $_POST['com_sucursal_id'];
+        $registro['exportacion'] = '01';
+        $registro['cat_sat_tipo_de_comprobante_id'] = $r_comprobante->registros[0]['cat_sat_tipo_de_comprobante_id'];
+        $registro['cat_sat_metodo_pago_id'] = $r_com_sucursal['cat_sat_metodo_pago_id'];
+        $registro['cat_sat_forma_pago_id'] = $r_com_sucursal['cat_sat_forma_pago_id'];
+        $registro['cat_sat_moneda_id'] = $r_com_sucursal['cat_sat_moneda_id'];
+        $registro['com_tipo_cambio_id'] = $r_moneda->registros[0]['com_tipo_cambio_id'];
+        $registro['cat_sat_uso_cfdi_id'] = $r_uso_cfdi->registros[0]['cat_sat_uso_cfdi_id'];
+        $registro['observaciones'] = $_POST['observaciones_complemento_pago'];
+        $r_fc_complemento_pago = (new fc_complemento_pago(link: $this->link))->alta_registro(registro: $registro);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_fc_complemento_pago,
+                header: $header, ws: $ws);
+        }
+
+        $cantidad = 1;
+        if(isset($_POST['cantidad'])){
+            $cantidad = $_POST['cantidad'];
+        }
+
+        $descuento = 0;
+        if(isset($_POST['descuento'])){
+            $descuento = $_POST['descuento'];
+        }
+
+        $registro_partida['fc_complemento_pago_id'] = $r_fc_complemento_pago->registro_id;
+        $registro_partida['com_producto_id'] = $_POST['com_producto_id'];
+        $registro_partida['cat_sat_obj_imp_id'] = $r_producto['cat_sat_obj_imp_id'];
+        $registro_partida['descripcion'] = $_POST['descripcion_complemento_pago'];
+        $registro_partida['cantidad'] = $cantidad;
+        $registro_partida['descuento'] = $descuento;
+        $registro_partida['valor_unitario'] = $_POST['valor_unitario_complemento_pago'];
+        $registro_partida['cat_sat_conf_imps_id'] = $r_producto['cat_sat_conf_imps_id'];
+        $r_fc_partida = (new fc_partida_nc(link: $this->link))->alta_registro(registro: $registro_partida);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_fc_partida,
+                header: $header, ws: $ws);
+        }
+
+        $this->link->commit();
+
+        //$params = array('pestana_general_actual' => 'pestanageneral2');
+        $link_proceso_comprador = $this->obj_link->link_con_id(
+            accion: 'genera_complemento_pago', link: $this->link, registro_id: $this->registro_id, seccion: 'inm_comprador',
+            params: array());
+        if (errores::$error) {
+            $this->retorno_error(mensaje: 'Error al generar link', data: $link_proceso_comprador, header: $header, ws: $ws);
+        }
+
+        if($header) {
+            header('Location:' . $link_proceso_comprador);
+            exit;
+        }
+
+        return $this->registro_id;
+    }
 }
