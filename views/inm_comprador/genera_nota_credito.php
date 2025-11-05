@@ -48,10 +48,13 @@
                             <th>Id</th>
                             <th>Folio</th>
                             <th>Cliente</th>
+                            <th>Observaciones</th>
                             <th>Fecha</th>
                             <th>Total</th>
                             <th>UUID</th>
-                            <th>Acciones</th>
+                            <th>Detalles</th>
+                            <th>Timbra XML</th>
+                            <th>Descargar</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -62,10 +65,13 @@
                                 <td><?php echo $nota_credito['fc_nota_credito_id'] ?></td>
                                 <td><?php echo $nota_credito['fc_nota_credito_folio'] ?></td>
                                 <td><?php echo $nota_credito['com_cliente_razon_social'] ?></td>
+                                <td><?php echo $nota_credito['fc_nota_credito_observaciones'] ?></td>
                                 <td><?php echo $nota_credito['fc_nota_credito_fecha'] ?></td>
                                 <td><?php echo $nota_credito['fc_nota_credito_total'] ?></td>
                                 <td><?php echo $nota_credito['fc_nota_credito_uuid'] ?></td>
-                                <td><?php echo $nota_credito['acciones'] ?></td>
+                                <td><?php echo $nota_credito['modifica'] ?></td>
+                                <td><?php echo $nota_credito['timbra_xml'] ?></td>
+                                <td><?php echo $nota_credito['exporta_documentos'] ?></td>
                             </tr>
                         <?php } ?>
                         </tbody>
