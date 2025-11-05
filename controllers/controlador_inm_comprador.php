@@ -12,6 +12,7 @@ use base\controller\init;
 use gamboamartin\banco\models\bn_cuenta;
 use gamboamartin\cat_sat\models\cat_sat_moneda;
 use gamboamartin\cat_sat\models\cat_sat_tipo_de_comprobante;
+use gamboamartin\cat_sat\models\cat_sat_uso_cfdi;
 use gamboamartin\comercial\models\com_producto;
 use gamboamartin\comercial\models\com_sucursal;
 use gamboamartin\comercial\models\com_tipo_cambio;
@@ -2552,7 +2553,7 @@ class controlador_inm_comprador extends _ctl_base {
             'numero_escritura','isr','nombre_beneficiario','monto_transferencia','efectivo','monto','numero_cheque',
             'transferencia','serie','folio','exportacion','observaciones_factura','descripcion_factura','unidad',
             'cuenta_predial','cantidad','valor_unitario','subtotal','descuento_factura','total',
-            'valor_unitario_nota_credito','descripcion_nota_credito');
+            'observaciones_nota_credito', 'valor_unitario_nota_credito','descripcion_nota_credito');
         $keys->selects = array();
         $keys->fechas = array('fecha_factura');
 
@@ -3788,6 +3789,12 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'observaciones_factura',
+            keys_selects:$keys_selects, place_holder: 'Observaciones Factura',required: false);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'observaciones_nota_credito',
             keys_selects:$keys_selects, place_holder: 'Observaciones Factura',required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
@@ -5157,7 +5164,25 @@ class controlador_inm_comprador extends _ctl_base {
                 $this->registro_id ,data:  $r_fc_factura,header: $header,ws: $ws);
         }
 
+        $filtro_sucursal['com_cliente.id'] = $registro->registros[0]['com_cliente_id'];
+        $r_com_sucursal = (new com_sucursal(link: $this->link))->filtro_and(
+            filtro: $filtro_sucursal);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener registro',data:  $r_com_sucursal,header: $header,ws: $ws);
+        }
+
         $keys_selects = array();
+        $columns_ds = array('com_cliente_rfc','com_cliente_razon_social');
+        $filtro_sucu['com_sucursal.id'] = $r_com_sucursal->registros[0]['com_sucursal_id'];
+        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro: $filtro_sucu, key: 'com_sucursal_id',
+            keys_selects: $keys_selects, id_selected: $r_com_sucursal->registros[0]['com_sucursal_id'],
+            label: 'Cliente', columns_ds : $columns_ds);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
+                header: $header,ws:  $ws);
+        }
+
         $keys_selects = $this->key_select(cols: 12, con_registros: true, filtro: $filtro_fac,
             key: 'fc_factura_id', keys_selects: $keys_selects,
             id_selected: $r_fc_factura->registros[0]['fc_factura_id'], label: 'Factura');
@@ -5241,24 +5266,60 @@ class controlador_inm_comprador extends _ctl_base {
     {
         $this->link->beginTransaction();
 
-        print_r($_POST);exit;
-        $filtro_fac['fc_factura.id'] = $_POST['fc_factura_id'];
-        $r_fc_factura = (new fc_factura(link: $this->link))->filtro_and(filtro: $filtro_fac);
+        $r_fc_factura = (new fc_factura(link: $this->link))->registro(registro_id: $_POST['fc_factura_id']);
         if (errores::$error) {
             $this->link->rollBack();
             return $this->retorno_error(mensaje: 'Error al obtener datos de nota_credito', data: $r_fc_factura,
                 header: $header, ws: $ws);
         }
 
-        $registro['fc_csd_id'] = $_POST['fc_csd_id'];
+        $r_com_sucursal = (new com_sucursal(link: $this->link))->registro(registro_id: $_POST['com_sucursal_id']);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener datos de factura', data: $r_com_sucursal,
+                header: $header, ws: $ws);
+        }
+
+        $filtro_tipo['cat_sat_moneda.id'] = $r_com_sucursal['cat_sat_moneda_id'];
+        $r_moneda = (new com_tipo_cambio(link: $this->link))->filtro_and(filtro: $filtro_tipo);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener datos de factura', data: $r_moneda,
+                header: $header, ws: $ws);
+        }
+
+        $r_producto = (new com_producto(link: $this->link))->registro(registro_id: $_POST['com_producto_id']);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener datos de factura', data: $r_producto,
+                header: $header, ws: $ws);
+        }
+
+        $filtro_comp['cat_sat_tipo_de_comprobante.descripcion'] = 'Egreso';
+        $r_comprobante = (new cat_sat_tipo_de_comprobante(link: $this->link))->filtro_and(filtro: $filtro_comp);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener datos de factura', data: $r_comprobante,
+                header: $header, ws: $ws);
+        }
+
+        $filtro_uso['cat_sat_uso_cfdi.codigo'] = 'S01';
+        $r_uso_cfdi = (new cat_sat_uso_cfdi(link: $this->link))->filtro_and(filtro: $filtro_uso);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener datos de factura', data: $r_uso_cfdi,
+                header: $header, ws: $ws);
+        }
+
+        $registro['fc_csd_id'] = $r_fc_factura['fc_csd_id'];
         $registro['com_sucursal_id'] = $_POST['com_sucursal_id'];
-        $registro['exportacion'] = $_POST['exportacion'];
-        $registro['cat_sat_tipo_de_comprobante_id'] = $_POST['cat_sat_tipo_de_comprobante_id'];
-        $registro['cat_sat_metodo_pago_id'] = $_POST['cat_sat_metodo_pago_id'];
-        $registro['cat_sat_forma_pago_id'] = $_POST['cat_sat_forma_pago_id'];
-        $registro['cat_sat_moneda_id'] = $_POST['cat_sat_moneda_id'];
-        $registro['com_tipo_cambio_id'] = $_POST['com_tipo_cambio_id'];
-        $registro['cat_sat_uso_cfdi_id'] = $_POST['cat_sat_uso_cfdi_id'];
+        $registro['exportacion'] = '01';
+        $registro['cat_sat_tipo_de_comprobante_id'] = $r_comprobante->registros[0]['cat_sat_tipo_de_comprobante_id'];
+        $registro['cat_sat_metodo_pago_id'] = $r_com_sucursal['cat_sat_metodo_pago_id'];
+        $registro['cat_sat_forma_pago_id'] = $r_com_sucursal['cat_sat_forma_pago_id'];
+        $registro['cat_sat_moneda_id'] = $r_com_sucursal['cat_sat_moneda_id'];
+        $registro['com_tipo_cambio_id'] = $r_moneda->registros[0]['com_tipo_cambio_id'];
+        $registro['cat_sat_uso_cfdi_id'] = $r_uso_cfdi->registros[0]['cat_sat_uso_cfdi_id'];
         $registro['observaciones'] = $_POST['observaciones_nota_credito'];
         $r_fc_nota_credito = (new fc_nota_credito(link: $this->link))->alta_registro(registro: $registro);
         if (errores::$error) {

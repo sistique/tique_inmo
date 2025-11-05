@@ -12,8 +12,9 @@
                     <form method="post" action="<?php echo $controlador->link_nota_credito_bd; ?>" class="form-additional">
                         <?php include (new views())->ruta_templates."head/subtitulo.php"; ?>
 
-                        <?php echo $controlador->inputs->inm_comprador_id; ?>
+                        <?php echo $controlador->inputs->com_sucursal_id; ?>
                         <?php echo $controlador->inputs->fc_factura_id; ?>
+                        <?php echo $controlador->inputs->observaciones_nota_credito; ?>
                         <?php echo $controlador->inputs->com_producto_id; ?>
                         <?php echo $controlador->inputs->descripcion_nota_credito; ?>
                         <?php echo $controlador->inputs->valor_unitario_nota_credito; ?>
