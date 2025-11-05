@@ -13,16 +13,16 @@
                 <form enctype="multipart/form-data" method="post" action="<?php echo $controlador->link_genera_factura_bd; ?>" class="form-additional">
                     <?php echo $controlador->inputs->fc_csd_id; ?>
                     <?php echo $controlador->inputs->com_sucursal_id; ?>
-                    <?php echo $controlador->inputs->serie; ?>
-                    <?php echo $controlador->inputs->folio; ?>
-                    <?php echo $controlador->inputs->exportacion; ?>
+                    <?php //echo $controlador->inputs->serie; ?>
+                    <?php //echo $controlador->inputs->folio; ?>
+                    <?php //echo $controlador->inputs->exportacion; ?>
                     <?php echo $controlador->inputs->fecha_factura; ?>
-                    <?php echo $controlador->inputs->cat_sat_tipo_de_comprobante_id; ?>
-                    <?php echo $controlador->inputs->cat_sat_metodo_pago_id; ?>
-                    <?php echo $controlador->inputs->cat_sat_forma_pago_id; ?>
-                    <?php echo $controlador->inputs->cat_sat_moneda_id; ?>
-                    <?php echo $controlador->inputs->com_tipo_cambio_id; ?>
-                    <?php echo $controlador->inputs->cat_sat_uso_cfdi_id; ?>
+                    <?php //echo $controlador->inputs->cat_sat_tipo_de_comprobante_id; ?>
+                    <?php //echo $controlador->inputs->cat_sat_metodo_pago_id; ?>
+                    <?php //echo $controlador->inputs->cat_sat_forma_pago_id; ?>
+                    <?php //echo $controlador->inputs->cat_sat_moneda_id; ?>
+                    <?php //echo $controlador->inputs->com_tipo_cambio_id; ?>
+                    <?php //echo $controlador->inputs->cat_sat_uso_cfdi_id; ?>
                     <?php echo $controlador->inputs->observaciones_factura; ?>
 
                     <div class="widget-header col-md-12">
@@ -30,16 +30,16 @@
                     </div>
 
                     <?php echo $controlador->inputs->com_producto_id; ?>
-                    <?php echo $controlador->inputs->unidad; ?>
+                    <?php //echo $controlador->inputs->unidad; ?>
                     <?php echo $controlador->inputs->cuenta_predial; ?>
-                    <?php echo $controlador->inputs->cat_sat_obj_imp_id; ?>
+                    <?php //echo $controlador->inputs->cat_sat_obj_imp_id; ?>
                     <?php echo $controlador->inputs->descripcion_factura; ?>
-                    <?php echo $controlador->inputs->cantidad; ?>
+                    <?php //echo $controlador->inputs->cantidad; ?>
                     <?php echo $controlador->inputs->valor_unitario; ?>
-                    <?php echo $controlador->inputs->subtotal; ?>
-                    <?php echo $controlador->inputs->descuento_factura; ?>
-                    <?php echo $controlador->inputs->total; ?>
-                    <?php echo $controlador->inputs->cat_sat_conf_imps_id; ?>
+                    <?php //echo $controlador->inputs->subtotal; ?>
+                    <?php //echo $controlador->inputs->descuento_factura; ?>
+                    <?php //echo $controlador->inputs->total; ?>
+                    <?php //echo $controlador->inputs->cat_sat_conf_imps_id; ?>
 
                     <?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
                 </form>

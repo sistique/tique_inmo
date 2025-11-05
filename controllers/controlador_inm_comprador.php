@@ -10,6 +10,8 @@ namespace gamboamartin\inmuebles\controllers;
 
 use base\controller\init;
 use gamboamartin\banco\models\bn_cuenta;
+use gamboamartin\cat_sat\models\cat_sat_moneda;
+use gamboamartin\comercial\models\com_producto;
 use gamboamartin\comercial\models\com_sucursal;
 use gamboamartin\comercial\models\com_tipo_cambio;
 use gamboamartin\direccion_postal\models\dp_estado;
@@ -3784,7 +3786,7 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'observaciones_factura',
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'observaciones_factura',
             keys_selects:$keys_selects, place_holder: 'Observaciones Factura',required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
@@ -3797,7 +3799,7 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'cuenta_predial',
-            keys_selects:$keys_selects, place_holder: 'Cuenta Predial', required: false);
+            keys_selects:$keys_selects, place_holder: 'Cuenta Predial', required: false, disabled: true);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
@@ -3814,8 +3816,8 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'valor_unitario',
-            keys_selects:$keys_selects, place_holder: 'Valor Unitario');
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'valor_unitario',
+            keys_selects:$keys_selects, place_holder: 'Valor Factura');
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
@@ -4925,9 +4927,9 @@ class controlador_inm_comprador extends _ctl_base {
             $id_selected = $fc_partida->registros[0]['com_producto_id'];
         }
 
-        $keys_selects = $this->key_select(cols: 12, con_registros: true,filtro: array(),
+        $keys_selects = $this->key_select(cols: 6, con_registros: true,filtro: array(),
             key: 'com_producto_id', keys_selects: $keys_selects, id_selected: $id_selected,
-            label: 'Producto');
+            label: 'Producto', extra_params_keys:  array("com_producto_aplica_predial"));
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);
@@ -4990,6 +4992,27 @@ class controlador_inm_comprador extends _ctl_base {
                 header: $header, ws: $ws);
         }
 
+        $r_com_sucursal = (new com_sucursal(link: $this->link))->registro(registro_id: $_POST['com_sucursal_id']);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener datos de factura', data: $r_com_sucursal,
+                header: $header, ws: $ws);
+        }
+
+        $r_moneda = (new cat_sat_moneda(link: $this->link))->registro(registro_id: $r_com_sucursal['cat_sat_moneda_id']);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener datos de factura', data: $r_moneda,
+                header: $header, ws: $ws);
+        }
+
+        $r_producto = (new com_producto(link: $this->link))->registro(registro_id: $_POST['com_producto_id']);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener datos de factura', data: $r_producto,
+                header: $header, ws: $ws);
+        }
+
         if($r_factura->n_registros > 0) {
             $this->link->rollBack();
             return $this->retorno_error(mensaje: 'Error ya existe una factura para este cliente', data: $r_factura,
@@ -4999,13 +5022,13 @@ class controlador_inm_comprador extends _ctl_base {
         if($r_factura->n_registros <= 0) {
             $registro['fc_csd_id'] = $_POST['fc_csd_id'];
             $registro['com_sucursal_id'] = $_POST['com_sucursal_id'];
-            $registro['exportacion'] = $_POST['exportacion'];
+            //$registro['exportacion'] = $_POST['exportacion'];
             $registro['cat_sat_tipo_de_comprobante_id'] = $_POST['cat_sat_tipo_de_comprobante_id'];
-            $registro['cat_sat_metodo_pago_id'] = $_POST['cat_sat_metodo_pago_id'];
-            $registro['cat_sat_forma_pago_id'] = $_POST['cat_sat_forma_pago_id'];
-            $registro['cat_sat_moneda_id'] = $_POST['cat_sat_moneda_id'];
-            $registro['com_tipo_cambio_id'] = $_POST['com_tipo_cambio_id'];
-            $registro['cat_sat_uso_cfdi_id'] = $_POST['cat_sat_uso_cfdi_id'];
+            $registro['cat_sat_metodo_pago_id'] = $r_com_sucursal['cat_sat_metodo_pago_id'];
+            $registro['cat_sat_forma_pago_id'] = $r_com_sucursal['cat_sat_forma_pago_id'];
+            $registro['cat_sat_moneda_id'] = $r_com_sucursal['cat_sat_moneda_id'];
+            $registro['com_tipo_cambio_id'] = $r_moneda['com_tipo_cambio_id'];
+            $registro['cat_sat_uso_cfdi_id'] = $r_com_sucursal['cat_sat_uso_cfdi_id'];
             $registro['observaciones'] = $_POST['observaciones_factura'];
             $r_fc_factura = (new fc_factura(link: $this->link))->alta_registro(registro: $registro);
             if (errores::$error) {
@@ -5014,15 +5037,25 @@ class controlador_inm_comprador extends _ctl_base {
                     header: $header, ws: $ws);
             }
 
+            $cantidad = 1;
+            if(isset($_POST['cantidad'])){
+                $cantidad = $_POST['cantidad'];
+            }
+
+            $descuento = 1;
+            if(isset($_POST['descuento'])){
+                $descuento = $_POST['descuento'];
+            }
+
             $registro_partida['fc_factura_id'] = $r_fc_factura->registro_id;
             $registro_partida['com_producto_id'] = $_POST['com_producto_id'];
             $registro_partida['cuenta_predial'] = $_POST['cuenta_predial'];
-            $registro_partida['cat_sat_obj_imp_id'] = $_POST['cat_sat_obj_imp_id'];
+            $registro_partida['cat_sat_obj_imp_id'] = $r_producto['cat_sat_obj_imp_id'];
             $registro_partida['descripcion'] = $_POST['descripcion_factura'];
-            $registro_partida['cantidad'] = $_POST['cantidad'];
+            $registro_partida['cantidad'] = $cantidad;
             $registro_partida['valor_unitario'] = $_POST['valor_unitario'];
-            $registro_partida['descuento'] = $_POST['descuento_factura'];
-            $registro_partida['cat_sat_conf_imps_id'] = $_POST['cat_sat_conf_imps_id'];
+            $registro_partida['descuento'] = $descuento;
+            $registro_partida['cat_sat_conf_imps_id'] = $r_producto['cat_sat_conf_imps_id'];
             $r_fc_partida = (new fc_partida(link: $this->link))->alta_registro(registro: $registro_partida);
             if (errores::$error) {
                 $this->link->rollBack();
