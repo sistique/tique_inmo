@@ -5052,7 +5052,7 @@ class controlador_inm_comprador extends _ctl_base {
                 $cantidad = $_POST['cantidad'];
             }
 
-            $descuento = 1;
+            $descuento = 0;
             if(isset($_POST['descuento'])){
                 $descuento = $_POST['descuento'];
             }
