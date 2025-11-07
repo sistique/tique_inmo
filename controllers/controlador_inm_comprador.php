@@ -3876,7 +3876,7 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         $keys_selects = (new init())->key_select_txt(cols: 12,key: 'valor_unitario_complemento_pago',
-            keys_selects:$keys_selects, place_holder: 'Valor');
+            keys_selects:$keys_selects, place_holder: 'Pago');
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
@@ -5486,9 +5486,21 @@ class controlador_inm_comprador extends _ctl_base {
                 header: $header,ws:  $ws);
         }
 
-        $keys_selects = $this->key_select(cols: 12, con_registros: true,filtro: array(),
-            key: 'com_producto_id', keys_selects: $keys_selects, id_selected: -1,
-            label: 'Producto', extra_params_keys: array('com_producto_descripcion'));
+        $filtro_prod['com_producto.descripcion'] = 'Pago';
+        $r_com_producto = (new com_producto(link: $this->link))->filtro_and(filtro: $filtro_prod);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $r_com_producto,
+                header: $header,ws:  $ws);
+        }
+
+        $id_selected = -1;
+        if($r_com_producto->n_registros > 0){
+            $id_selected = $r_com_producto->registros[0]['com_producto_id'];
+        }
+
+        $keys_selects = $this->key_select(cols: 12, con_registros: true, filtro: $filtro_prod, key: 'com_producto_id',
+            keys_selects: $keys_selects, id_selected: $id_selected, label: 'Producto',
+            extra_params_keys: array('com_producto_descripcion'));
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);
@@ -5690,7 +5702,7 @@ class controlador_inm_comprador extends _ctl_base {
         $registro_partida['fc_complemento_pago_id'] = $r_fc_complemento_pago->registro_id;
         $registro_partida['com_producto_id'] = $_POST['com_producto_id'];
         $registro_partida['cat_sat_obj_imp_id'] = $r_producto['cat_sat_obj_imp_id'];
-        $registro_partida['descripcion'] = $_POST['descripcion_complemento_pago'];
+        //$registro_partida['descripcion'] = $_POST['descripcion_complemento_pago'];
         $registro_partida['cantidad'] = $cantidad;
         $registro_partida['descuento'] = $descuento;
         $registro_partida['valor_unitario'] = $_POST['valor_unitario_complemento_pago'];
@@ -5703,8 +5715,11 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         $registro_pago = array();
+        $registro_pago['fecha_pago'] = $_POST['fecha_pago'];
+        $registro_pago['cat_sat_forma_pago_id'] = $_POST['cat_sat_forma_pago_id'];
         $registro_pago['fc_pago_id'] = $fc_pago->registros[0]['fc_pago_id'];
         $registro_pago['com_tipo_cambio_id'] = $r_moneda->registros[0]['com_tipo_cambio_id'];
+        $registro_pago['monto'] = $_POST['valor_unitario_complemento_pago'];
         $r_fc_pago_pago = (new fc_pago_pago(link: $this->link))->alta_registro(registro: $registro_pago);
         if (errores::$error) {
             $this->link->rollBack();
@@ -5713,6 +5728,9 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         $registro_relacionado = array();
+        $registro_relacionado['fc_factura_id'] = $_POST['fc_factura_id'];
+        $registro_relacionado['fc_pago_pago_id'] = $r_fc_pago_pago->registro_id;
+        $registro_relacionado['imp_pagado'] = $_POST['valor_unitario_complemento_pago'];
         $r_fc_docto_relacionado = (new fc_docto_relacionado(link: $this->link))->alta_registro(registro: $registro_relacionado);
         if (errores::$error) {
             $this->link->rollBack();

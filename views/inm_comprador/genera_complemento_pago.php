@@ -16,7 +16,7 @@
                         <?php echo $controlador->inputs->fc_factura_id; ?>
                         <?php echo $controlador->inputs->observaciones_complemento_pago; ?>
                         <?php echo $controlador->inputs->com_producto_id; ?>
-                        <?php echo $controlador->inputs->descripcion_complemento_pago; ?>
+                        <?php //echo $controlador->inputs->descripcion_complemento_pago; ?>
                         <?php echo $controlador->inputs->fecha_pago; ?>
                         <?php echo $controlador->inputs->cat_sat_forma_pago_id; ?>
                         <?php echo $controlador->inputs->valor_unitario_complemento_pago; ?>
