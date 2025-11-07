@@ -21,9 +21,12 @@ use gamboamartin\direccion_postal\models\dp_municipio;
 use gamboamartin\errores\errores;
 use gamboamartin\facturacion\models\fc_complemento_pago;
 use gamboamartin\facturacion\models\fc_csd;
+use gamboamartin\facturacion\models\fc_docto_relacionado;
 use gamboamartin\facturacion\models\fc_factura;
 use gamboamartin\facturacion\models\fc_nota_credito;
+use gamboamartin\facturacion\models\fc_pago_pago;
 use gamboamartin\facturacion\models\fc_partida;
+use gamboamartin\facturacion\models\fc_partida_cp;
 use gamboamartin\facturacion\models\fc_partida_nc;
 use gamboamartin\inmuebles\html\_base;
 use gamboamartin\inmuebles\html\inm_comprador_html;
@@ -5665,10 +5668,26 @@ class controlador_inm_comprador extends _ctl_base {
         $registro_partida['descuento'] = $descuento;
         $registro_partida['valor_unitario'] = $_POST['valor_unitario_complemento_pago'];
         $registro_partida['cat_sat_conf_imps_id'] = $r_producto['cat_sat_conf_imps_id'];
-        $r_fc_partida = (new fc_partida_nc(link: $this->link))->alta_registro(registro: $registro_partida);
+        $r_fc_partida = (new fc_partida_cp(link: $this->link))->alta_registro(registro: $registro_partida);
         if (errores::$error) {
             $this->link->rollBack();
             return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_fc_partida,
+                header: $header, ws: $ws);
+        }
+
+        $registro_pago = array();
+        $r_fc_pago_pago = (new fc_pago_pago(link: $this->link))->alta_registro(registro: $registro_pago);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_fc_pago_pago,
+                header: $header, ws: $ws);
+        }
+
+        $registro_relacionado = array();
+        $r_fc_docto_relacionado = (new fc_docto_relacionado(link: $this->link))->alta_registro(registro: $registro_relacionado);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_fc_docto_relacionado,
                 header: $header, ws: $ws);
         }
 
