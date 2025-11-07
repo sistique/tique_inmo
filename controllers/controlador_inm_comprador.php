@@ -24,6 +24,7 @@ use gamboamartin\facturacion\models\fc_csd;
 use gamboamartin\facturacion\models\fc_docto_relacionado;
 use gamboamartin\facturacion\models\fc_factura;
 use gamboamartin\facturacion\models\fc_nota_credito;
+use gamboamartin\facturacion\models\fc_pago;
 use gamboamartin\facturacion\models\fc_pago_pago;
 use gamboamartin\facturacion\models\fc_partida;
 use gamboamartin\facturacion\models\fc_partida_cp;
@@ -5493,6 +5494,14 @@ class controlador_inm_comprador extends _ctl_base {
                 header: $header,ws:  $ws);
         }
 
+        $keys_selects = $this->key_select(cols: 6, con_registros: true,filtro: array(),
+            key: 'cat_sat_forma_pago_id', keys_selects: $keys_selects, id_selected: -1,
+            label: 'Forma de Pago');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
+                header: $header,ws:  $ws);
+        }
+
         $base = $this->base_upd(keys_selects: $keys_selects, params: array(),params_ajustados: array());
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
@@ -5509,6 +5518,16 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         $this->inputs->inm_comprador_id = $inm_prospecto_id;
+
+        $fecha_pago = $this->html->input_fecha(cols: 6, row_upd: $this->row_upd,
+            value_vacio: false, name: 'fecha_pago', place_holder: 'Fecha Pago', required: false,
+            value: date("Y-m-d H:i:s"),value_hora: true);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener fecha_nacimiento',data:  $fecha_pago,
+                header: $header, ws:$ws);
+        }
+
+        $this->inputs->fecha_pago = $fecha_pago;
 
         $buttons = $this->buttons_complemento_pago();
         if (errores::$error) {
@@ -5650,6 +5669,14 @@ class controlador_inm_comprador extends _ctl_base {
                 header: $header, ws: $ws);
         }
 
+        $filtro_fc_pago['fc_complemento_pago.id'] = $r_fc_complemento_pago->registro_id;
+        $fc_pago = (new fc_pago(link:$this->link))->filtro_and(filtro: $filtro_fc_pago);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al insertar datos', data: $fc_pago,
+                header: $header, ws: $ws);
+        }
+
         $cantidad = 1;
         if(isset($_POST['cantidad'])){
             $cantidad = $_POST['cantidad'];
@@ -5676,6 +5703,8 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         $registro_pago = array();
+        $registro_pago['fc_pago_id'] = $fc_pago->registros[0]['fc_pago_id'];
+        $registro_pago['com_tipo_cambio_id'] = $r_moneda->registros[0]['com_tipo_cambio_id'];
         $r_fc_pago_pago = (new fc_pago_pago(link: $this->link))->alta_registro(registro: $registro_pago);
         if (errores::$error) {
             $this->link->rollBack();
