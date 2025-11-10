@@ -135,6 +135,7 @@ class inm_firma extends _modelo_parent{
         $registro_mod['pago_propio_peculio'] = $this->registro['pago_propio_peculio'];
         $registro_mod['pago_precio_compra_venta'] = $this->registro['pago_precio_compra_venta'];
         $registro_mod['pago_parcial_precio_compra_venta'] = $this->registro['pago_parcial_precio_compra_venta'];
+        $registro_mod['pago_cuv'] = $this->registro['pago_cuv'];
         $r_mod_comprador = (new inm_comprador(link: $this->link))->modifica_bd(
             registro: $registro_mod,id: $this->registro['inm_comprador_id']);
         if (errores::$error) {
@@ -142,9 +143,9 @@ class inm_firma extends _modelo_parent{
         }
 
         if(isset( $this->registro['pago_propio_peculio']) || isset( $this->registro['pago_precio_compra_venta']) ||
-            isset( $this->registro['pago_parcial_precio_compra_venta'])) {
+            isset( $this->registro['pago_parcial_precio_compra_venta']) || isset( $this->registro['pago_cuv'])) {
             unset($this->registro['pago_propio_peculio'], $this->registro['pago_precio_compra_venta'],
-                $this->registro['pago_parcial_precio_compra_venta']);
+                $this->registro['pago_parcial_precio_compra_venta'], $this->registro['pago_cuv']);
         }
 
         $filtro['inm_comprador.id'] = $this->registro['inm_comprador_id'];
