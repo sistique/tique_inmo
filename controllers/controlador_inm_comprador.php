@@ -3888,8 +3888,8 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'valor_unitario_nota_credito',
-            keys_selects:$keys_selects, place_holder: 'Valor');
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'valor_unitario_nota_credito',
+            keys_selects:$keys_selects, place_holder: 'Valor Nota Credito');
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
@@ -4819,7 +4819,7 @@ class controlador_inm_comprador extends _ctl_base {
         $this->row_upd->exportacion = '01';
         $this->row_upd->fecha_factura = date('Y-m-d');
         $this->row_upd->cantidad = '1';
-        $this->row_upd->valor_unitario = 0;
+        $this->row_upd->valor_unitario = $this->row_upd->pago_precio_compra_venta;
         $this->row_upd->subtotal = 0;
         $this->row_upd->descuento_factura = 0;
         $this->row_upd->total = 0;
@@ -5243,9 +5243,17 @@ class controlador_inm_comprador extends _ctl_base {
                 header: $header,ws:  $ws);
         }
 
-        $keys_selects = $this->key_select(cols: 12, con_registros: true,filtro: array(),
+        $keys_selects = $this->key_select(cols: 6, con_registros: true,filtro: array(),
             key: 'com_producto_id', keys_selects: $keys_selects, id_selected: -1,
             label: 'Producto', extra_params_keys: array('com_producto_descripcion'));
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
+                header: $header,ws:  $ws);
+        }
+
+        $keys_selects = $this->key_select(cols: 6, con_registros: true,filtro: array(),
+            key: 'cat_sat_forma_pago_id', keys_selects: $keys_selects, id_selected: -1,
+            label: 'Forma de Pago');
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);
@@ -5284,6 +5292,49 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         $this->link_nota_credito_bd = $link_nota_credito_bd;
+
+        $filtro['inm_comprador.id'] = $this->registro_id;
+        $order = array('inm_cheque.fecha_alta'=>'DESC');
+        $r_inm_cheque = (new inm_rel_cheque_comprador(link: $this->link))->filtro_and(filtro: $filtro,order: $order);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener etapas', data: $r_inm_cheque,header: $header,
+                ws:  $ws);
+        }
+
+        $r_nc = array();
+        $cont = 1;
+        foreach ($r_inm_cheque->registros as $cheque){
+            $temp['monto'] = $cheque['inm_cheque_monto'];
+            $temp['descripcion_select'] = $cheque['inm_tipo_cheque_descripcion'].' - '. $cheque['inm_cheque_monto'];
+
+            $r_nc[$cont] = $temp;
+            $cont++;
+        }
+
+        if($this->row_upd->pago_propio_peculio > 0){
+            $cont++;
+
+            $temp['monto'] = $this->row_upd->pago_propio_peculio;
+            $temp['descripcion_select'] = 'PAGO PROPIO PECULIO - ' . $this->row_upd->pago_propio_peculio;
+            $r_nc[$cont] = $temp;
+        }
+
+        if($this->row_upd->pago_cuv > 0){
+            $cont++;
+
+            $temp['monto'] = $this->row_upd->pago_cuv;
+            $temp['descripcion_select'] = 'PAGO CUV - ' . $this->row_upd->pago_cuv;
+            $r_nc[$cont] = $temp;
+        }
+
+        $select = $this->html_base->select(cols: 6, id_selected: -1, label: 'Montos Nota Credito',
+            name: 'monto_nota_credito', values: $r_nc, extra_params_key: array("monto"));
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al generar select', data: $select,header: $header,
+                ws:  $ws);
+        }
+
+        $this->inputs->monto_nota_credito = $select;
 
         $filtro_nc['com_cliente.id'] =  $registro->registros[0]['com_cliente_id'];
         $r_fc_nota_credito = (new fc_nota_credito(link: $this->link))->filtro_and(
