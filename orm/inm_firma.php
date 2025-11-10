@@ -131,6 +131,22 @@ class inm_firma extends _modelo_parent{
             $this->registro['descripcion'] = $descripcion;
         }
 
+        $registro_mod = array();
+        $registro_mod['pago_propio_peculio'] = $this->registro['pago_propio_peculio'];
+        $registro_mod['pago_precio_compra_venta'] = $this->registro['pago_precio_compra_venta'];
+        $registro_mod['pago_parcial_precio_compra_venta'] = $this->registro['pago_parcial_precio_compra_venta'];
+        $r_mod_comprador = (new inm_comprador(link: $this->link))->modifica_bd(
+            registro: $registro_mod,id: $this->registro['inm_comprador_id']);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al insertar datos', data: $r_mod_comprador);
+        }
+
+        if(isset( $this->registro['pago_propio_peculio']) || isset( $this->registro['pago_precio_compra_venta']) ||
+            isset( $this->registro['pago_parcial_precio_compra_venta'])) {
+            unset($this->registro['pago_propio_peculio'], $this->registro['pago_precio_compra_venta'],
+                $this->registro['pago_parcial_precio_compra_venta']);
+        }
+
         $filtro['inm_comprador.id'] = $this->registro['inm_comprador_id'];
         $resultado = $this->filtro_and(filtro: $filtro);
         if(errores::$error){

@@ -771,6 +771,24 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
+        $keys_selects = (new init())->key_select_txt(cols: 4,key: 'pago_precio_compra_venta',
+            keys_selects:$keys_selects, place_holder: 'Precio Compra-Venta',required: false);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 4,key: 'pago_parcial_precio_compra_venta',
+            keys_selects:$keys_selects, place_holder: 'Parcial Compra-Venta',required: false);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 4,key: 'pago_propio_peculio',
+            keys_selects:$keys_selects, place_holder: 'Pago Propio Peculio',required: false);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
         $base = $this->base_upd(keys_selects: $keys_selects, params: array(),params_ajustados: array());
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
@@ -2562,7 +2580,8 @@ class controlador_inm_comprador extends _ctl_base {
             'transferencia','serie','folio','exportacion','observaciones_factura','descripcion_factura','unidad',
             'cuenta_predial','cantidad','valor_unitario','subtotal','descuento_factura','total',
             'observaciones_nota_credito', 'valor_unitario_nota_credito','descripcion_nota_credito',
-            'observaciones_complemento_pago', 'valor_unitario_complemento_pago','descripcion_complemento_pago');
+            'observaciones_complemento_pago', 'valor_unitario_complemento_pago','descripcion_complemento_pago',
+            'pago_precio_compra_venta','pago_parcial_precio_compra_venta','pago_propio_peculio');
         $keys->selects = array();
         $keys->fechas = array('fecha_factura');
 

@@ -1601,3 +1601,20 @@ sl_inm_tipo_gasto_id.change(function(){
         cont_cont_efectivo.hide();
     }
 });
+
+/***** Etapa Por Firmar *****/
+let pago_propio_peculio = $("#pago_propio_peculio");
+let pago_precio_compra_venta = $("#pago_precio_compra_venta");
+let pago_parcial_precio_compra_venta = $("#pago_parcial_precio_compra_venta");
+
+function limpiarMonto(valor) {
+    if (!valor) return 0;
+    return parseFloat(valor.replace(/[\$,]/g, "")) || 0;
+}
+
+$("#pago_propio_peculio, #pago_precio_compra_venta").on("input", function() {
+    let propio = limpiarMonto(pago_propio_peculio.val());
+    let precio = limpiarMonto(pago_precio_compra_venta.val());
+    let parcial = precio - propio;
+    pago_parcial_precio_compra_venta.val(parcial.toFixed(2));
+});
