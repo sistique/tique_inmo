@@ -1606,6 +1606,7 @@ sl_inm_tipo_gasto_id.change(function(){
 let pago_propio_peculio = $("#pago_propio_peculio");
 let pago_precio_compra_venta = $("#pago_precio_compra_venta");
 let pago_parcial_precio_compra_venta = $("#pago_parcial_precio_compra_venta");
+let pago_cuv = $("#pago_cuv");
 
 function limpiarMonto(valor) {
     if (!valor) return 0;
@@ -1614,7 +1615,21 @@ function limpiarMonto(valor) {
 
 $("#pago_propio_peculio, #pago_precio_compra_venta").on("input", function() {
     let propio = limpiarMonto(pago_propio_peculio.val());
+    pago_propio_peculio.val(propio);
+
     let precio = limpiarMonto(pago_precio_compra_venta.val());
+    pago_precio_compra_venta.val(precio);
+
     let parcial = precio - propio;
+    
+    if(parcial < 0) {
+        parcial = 0
+    }
+
     pago_parcial_precio_compra_venta.val(parcial.toFixed(2));
+});
+
+$("#pago_cuv").on("input", function() {
+    let cuv = limpiarMonto(pago_cuv.val());
+    pago_cuv.val(cuv);
 });
