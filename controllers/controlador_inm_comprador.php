@@ -5327,15 +5327,6 @@ class controlador_inm_comprador extends _ctl_base {
             $r_nc[$cont] = $temp;
         }
 
-        $select = $this->html_base->select(cols: 6, id_selected: -1, label: 'Montos Nota Credito',
-            name: 'monto_nota_credito', values: $r_nc, extra_params_key: array("monto"));
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al generar select', data: $select,header: $header,
-                ws:  $ws);
-        }
-
-        $this->inputs->monto_nota_credito = $select;
-
         $filtro_nc['com_cliente.id'] =  $registro->registros[0]['com_cliente_id'];
         $r_fc_nota_credito = (new fc_nota_credito(link: $this->link))->filtro_and(
             filtro: $filtro_nc);
@@ -5347,6 +5338,12 @@ class controlador_inm_comprador extends _ctl_base {
         $notas_credito = array();
 
         foreach ($r_fc_nota_credito->registros as $nota_credito){
+            foreach ($r_nc as $key => $nc){
+                if($nc['monto'] === $nota_credito['fc_nota_credito_total']){
+                    unset($r_nc[$key]);
+                }
+            }
+
             $timbra_xml = $this->html->button_href(accion: 'modifica', etiqueta: 'Detalles',
                 registro_id: $nota_credito['fc_nota_credito_id'], seccion: 'fc_nota_credito', style: 'warning');
             if(errores::$error){
@@ -5375,6 +5372,15 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         $this->notas_credito = $notas_credito;
+
+        $select = $this->html_base->select(cols: 6, id_selected: -1, label: 'Montos Nota Credito',
+            name: 'monto_nota_credito', values: $r_nc, extra_params_key: array("monto"));
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al generar select', data: $select,header: $header,
+                ws:  $ws);
+        }
+
+        $this->inputs->monto_nota_credito = $select;
 
         return $base;
     }
@@ -5447,7 +5453,7 @@ class controlador_inm_comprador extends _ctl_base {
         $registro['exportacion'] = '01';
         $registro['cat_sat_tipo_de_comprobante_id'] = $r_comprobante->registros[0]['cat_sat_tipo_de_comprobante_id'];
         $registro['cat_sat_metodo_pago_id'] = $r_com_sucursal['cat_sat_metodo_pago_id'];
-        $registro['cat_sat_forma_pago_id'] = $r_com_sucursal['cat_sat_forma_pago_id'];
+        $registro['cat_sat_forma_pago_id'] = $_POST['cat_sat_forma_pago_id'];
         $registro['cat_sat_moneda_id'] = $r_com_sucursal['cat_sat_moneda_id'];
         $registro['com_tipo_cambio_id'] = $r_moneda->registros[0]['com_tipo_cambio_id'];
         $registro['cat_sat_uso_cfdi_id'] = $r_uso_cfdi->registros[0]['cat_sat_uso_cfdi_id'];
