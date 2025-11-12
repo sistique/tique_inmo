@@ -19,6 +19,7 @@
                         <?php //echo $controlador->inputs->descripcion_complemento_pago; ?>
                         <?php echo $controlador->inputs->fecha_pago; ?>
                         <?php echo $controlador->inputs->cat_sat_forma_pago_id; ?>
+                        <?php echo $controlador->inputs->monto_pago; ?>
                         <?php echo $controlador->inputs->valor_unitario_complemento_pago; ?>
 
                         <input type='hidden' name='seccion_retorno' value='inm_comprador'>

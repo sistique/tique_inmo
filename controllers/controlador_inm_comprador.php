@@ -3900,7 +3900,7 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'valor_unitario_complemento_pago',
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'valor_unitario_complemento_pago',
             keys_selects:$keys_selects, place_holder: 'Pago');
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
@@ -5640,6 +5640,13 @@ class controlador_inm_comprador extends _ctl_base {
 
         $this->link_complemento_pago_bd = $link_complemento_pago_bd;
 
+        $r_cp = array();
+        if($this->row_upd->pago_parcial_precio_compra_venta > 0){
+            $temp['monto'] = $this->row_upd->pago_parcial_precio_compra_venta;
+            $temp['descripcion_select'] = 'PAGO PARCIAL COMPRA-VENTA - ' . $this->row_upd->pago_parcial_precio_compra_venta;
+            $r_cp[1] = $temp;
+        }
+
         $filtro_nc['com_cliente.id'] =  $registro->registros[0]['com_cliente_id'];
         $r_fc_complemento_pago = (new fc_complemento_pago(link: $this->link))->filtro_and(
             filtro: $filtro_nc);
@@ -5679,6 +5686,15 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         $this->complementos_pago = $complementos_pago;
+
+        $select = $this->html_base->select(cols: 6, id_selected: -1, label: 'Montos Pagos',
+            name: 'monto_pago', values: $r_cp, extra_params_key: array("monto"));
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al generar select', data: $select,header: $header,
+                ws:  $ws);
+        }
+
+        $this->inputs->monto_pago = $select;
 
         return $base;
     }
@@ -5771,7 +5787,7 @@ class controlador_inm_comprador extends _ctl_base {
                 header: $header, ws: $ws);
         }
 
-        $cantidad = 1;
+        /*$cantidad = 1;
         if(isset($_POST['cantidad'])){
             $cantidad = $_POST['cantidad'];
         }
@@ -5794,7 +5810,7 @@ class controlador_inm_comprador extends _ctl_base {
             $this->link->rollBack();
             return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_fc_partida,
                 header: $header, ws: $ws);
-        }
+        }*/
 
         $registro_pago = array();
         $registro_pago['fecha_pago'] = $_POST['fecha_pago'];
