@@ -5746,7 +5746,7 @@ class controlador_inm_comprador extends _ctl_base {
                 header: $header, ws: $ws);
         }
 
-        $filtro_comp['cat_sat_tipo_de_comprobante.descripcion'] = 'Egreso';
+        $filtro_comp['cat_sat_tipo_de_comprobante.descripcion'] = 'Pago';
         $r_comprobante = (new cat_sat_tipo_de_comprobante(link: $this->link))->filtro_and(filtro: $filtro_comp);
         if (errores::$error) {
             $this->link->rollBack();
@@ -5754,7 +5754,7 @@ class controlador_inm_comprador extends _ctl_base {
                 header: $header, ws: $ws);
         }
 
-        $filtro_uso['cat_sat_uso_cfdi.codigo'] = 'S01';
+        $filtro_uso['cat_sat_uso_cfdi.codigo'] = 'CP01';
         $r_uso_cfdi = (new cat_sat_uso_cfdi(link: $this->link))->filtro_and(filtro: $filtro_uso);
         if (errores::$error) {
             $this->link->rollBack();
