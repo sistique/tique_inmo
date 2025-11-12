@@ -422,7 +422,7 @@ class _alta_comprador{
         }
         if(!isset($registro_entrada['cat_sat_uso_cfdi_id'])|| $registro_entrada['cat_sat_uso_cfdi_id'] === '' ||
             (int)$registro_entrada['cat_sat_uso_cfdi_id'] === -1){
-            $registro_entrada['cat_sat_uso_cfdi_id'] = 3;
+            $registro_entrada['cat_sat_uso_cfdi_id'] = 22;
         }
         if(!isset($registro_entrada['com_tipo_cliente_id'])|| $registro_entrada['com_tipo_cliente_id'] === '' ||
             (int)$registro_entrada['com_tipo_cliente_id'] === -1){
