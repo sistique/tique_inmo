@@ -35,13 +35,12 @@ use ZipArchive;
 
 class nom_nomina extends modelo
 {
-    public array $salario_minimo = array(2020=>123.22,2021=>141.70,2022=>172.87,2023=>207.44);
+    public array $salario_minimo = array(2020=>123.22,2021=>141.70,2022=>172.87,2023=>207.44,2025=>278.80);
 
     public function __construct(PDO $link)
     {
         $tabla = 'nom_nomina';
-        $columnas = array($tabla => false, 'dp_calle_pertenece' => $tabla, 'dp_calle' => 'dp_calle_pertenece',
-            'dp_colonia_postal' => 'dp_calle_pertenece', 'dp_colonia' => 'dp_colonia_postal',
+        $columnas = array($tabla => false, 'dp_colonia_postal'=>$tabla,
             'dp_cp' => 'dp_colonia_postal', 'dp_municipio' => 'dp_cp', 'dp_estado' => 'dp_municipio',
             'dp_pais' => 'dp_estado', 'em_empleado' => $tabla, 'fc_factura' => $tabla,'fc_csd' =>'fc_factura',
             'org_sucursal' => 'fc_csd','org_empresa'=> 'org_sucursal', 'cat_sat_regimen_fiscal'=>'fc_factura',
