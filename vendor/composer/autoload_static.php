@@ -83,6 +83,9 @@ class ComposerStaticInit7edbf59fdc9c4e0ee6715d0d13d73f4b
             'gamboamartin\\notificaciones\\instalacion\\' => 40,
             'gamboamartin\\notificaciones\\html\\' => 33,
             'gamboamartin\\notificaciones\\controllers\\' => 40,
+            'gamboamartin\\nomina\\tests\\' => 26,
+            'gamboamartin\\nomina\\models\\' => 27,
+            'gamboamartin\\nomina\\controllers\\' => 32,
             'gamboamartin\\js_base\\tests\\' => 27,
             'gamboamartin\\js_base\\eventos\\' => 29,
             'gamboamartin\\js_base\\' => 21,
@@ -260,6 +263,7 @@ class ComposerStaticInit7edbf59fdc9c4e0ee6715d0d13d73f4b
             8 => __DIR__ . '/..' . '/gamboa.martin/im_registro_patronal/links',
             9 => __DIR__ . '/..' . '/gamboa.martin/notificaciones/links',
             10 => __DIR__ . '/..' . '/gamboa.martin/proceso/links',
+            11 => __DIR__ . '/..' . '/gamboa.martin/nomina/links',
         ),
         'html\\' => 
         array (
@@ -272,6 +276,7 @@ class ComposerStaticInit7edbf59fdc9c4e0ee6715d0d13d73f4b
             6 => __DIR__ . '/..' . '/gamboa.martin/empleado/templates/directivas',
             7 => __DIR__ . '/..' . '/gamboa.martin/gastos/templates/directivas',
             8 => __DIR__ . '/..' . '/gamboa.martin/im_registro_patronal/templates/directivas',
+            9 => __DIR__ . '/..' . '/gamboa.martin/nomina/templates/directivas',
         ),
         'gamboamartin\\xml_cfdi_4\\' => 
         array (
@@ -398,6 +403,18 @@ class ComposerStaticInit7edbf59fdc9c4e0ee6715d0d13d73f4b
         'gamboamartin\\notificaciones\\controllers\\' => 
         array (
             0 => __DIR__ . '/..' . '/gamboa.martin/notificaciones/controllers',
+        ),
+        'gamboamartin\\nomina\\tests\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/gamboa.martin/nomina/tests',
+        ),
+        'gamboamartin\\nomina\\models\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/gamboa.martin/nomina/orm',
+        ),
+        'gamboamartin\\nomina\\controllers\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/gamboa.martin/nomina/controllers',
         ),
         'gamboamartin\\js_base\\tests\\' => 
         array (
@@ -664,6 +681,7 @@ class ComposerStaticInit7edbf59fdc9c4e0ee6715d0d13d73f4b
             28 => __DIR__ . '/..' . '/gamboa.martin/validaciones/config',
             29 => __DIR__ . '/..' . '/gamboa.martin/where/config',
             30 => __DIR__ . '/..' . '/gamboa.martin/xml_cfdi_4/config',
+            31 => __DIR__ . '/..' . '/gamboa.martin/nomina/config',
         ),
         'chillerlan\\Settings\\' => 
         array (

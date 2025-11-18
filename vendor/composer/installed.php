@@ -5,7 +5,7 @@
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '0b0d24c6c1fd30758501b7ec864ed2f21e9dd14f',
+        'reference' => 'cf1cfc3d6411471d2b0818d3674b381bcf332d60',
         'name' => 'gamboa.martin/inmuebles',
         'dev' => true,
     ),
@@ -232,7 +232,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '0b0d24c6c1fd30758501b7ec864ed2f21e9dd14f',
+            'reference' => 'cf1cfc3d6411471d2b0818d3674b381bcf332d60',
             'dev_requirement' => false,
         ),
         'gamboa.martin/js_base' => array(
@@ -242,6 +242,15 @@
             'install_path' => __DIR__ . '/../gamboa.martin/js_base',
             'aliases' => array(),
             'reference' => '6c863300d9b900edb35476650a882f97e613db06',
+            'dev_requirement' => false,
+        ),
+        'gamboa.martin/nomina' => array(
+            'pretty_version' => 'v5.0.0',
+            'version' => '5.0.0.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../gamboa.martin/nomina',
+            'aliases' => array(),
+            'reference' => '182d76f57e238a7855455d4735da078f1de1b386',
             'dev_requirement' => false,
         ),
         'gamboa.martin/notificaciones' => array(
