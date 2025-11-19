@@ -212,6 +212,13 @@ class _ubicacion{
             return $this->error->error(mensaje: 'Error al obtener inm_tipo_credito_id', data:  $inm_tipo_credito_id);
         }
         $data_row->inm_tipo_credito_id = $inm_tipo_credito_id;
+
+        $inm_tipo_vivienda_id = $modelo_preferido->id_preferido_detalle(entidad_preferida: 'inm_tipo_vivienda');
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener inm_tipo_vivienda_id', data:  $inm_tipo_vivienda_id);
+        }
+        $data_row->inm_tipo_vivienda_id = $inm_tipo_vivienda_id;
+        
         return $data_row;
     }
 
