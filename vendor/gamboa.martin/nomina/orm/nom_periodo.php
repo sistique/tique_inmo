@@ -17,6 +17,8 @@ class nom_periodo extends nominas_confs {
             columnas: $columnas);
 
         $this->NAMESPACE = __NAMESPACE__;
+        $this->etiqueta = 'Periodo';
+
     }
 
     public function alta_bd(): array|stdClass

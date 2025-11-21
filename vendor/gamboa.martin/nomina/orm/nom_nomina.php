@@ -131,6 +131,7 @@ class nom_nomina extends modelo
             columnas: $columnas, columnas_extra: $columnas_extra, tipo_campos: $tipo_campos);
 
         $this->NAMESPACE = __NAMESPACE__;
+        $this->etiqueta = 'Nomina';
     }
 
     private function ajusta_otro_pago_sub_base(int $nom_nomina_id): array|stdClass

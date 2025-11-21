@@ -19,12 +19,12 @@ class nom_periodo_html extends html_controler {
 
     private function asigna_inputs(controlador_nom_periodo $controler, stdClass $inputs): array|stdClass
     {
-        $controler->inputs->select = new stdClass();
-        $controler->inputs->select->nom_conf_nomina_id = $inputs->selects->nom_conf_nomina_id;
-        $controler->inputs->select->cat_sat_periodicidad_pago_nom_id = $inputs->selects->cat_sat_periodicidad_pago_nom_id;
-        $controler->inputs->select->em_registro_patronal_id = $inputs->selects->em_registro_patronal_id;
-        $controler->inputs->select->nom_tipo_periodo_id = $inputs->selects->nom_tipo_periodo_id;
-        $controler->inputs->select->cat_sat_tipo_nomina_id = $inputs->selects->cat_sat_tipo_nomina_id;
+        $controler->inputs = new stdClass();
+        $controler->inputs->nom_conf_nomina_id = $inputs->selects->nom_conf_nomina_id;
+        $controler->inputs->cat_sat_periodicidad_pago_nom_id = $inputs->selects->cat_sat_periodicidad_pago_nom_id;
+        $controler->inputs->em_registro_patronal_id = $inputs->selects->em_registro_patronal_id;
+        $controler->inputs->nom_tipo_periodo_id = $inputs->selects->nom_tipo_periodo_id;
+        $controler->inputs->cat_sat_tipo_nomina_id = $inputs->selects->cat_sat_tipo_nomina_id;
         $controler->inputs->fecha_inicial_pago = $inputs->texts->fecha_inicial_pago;
         $controler->inputs->fecha_final_pago = $inputs->texts->fecha_final_pago;
         $controler->inputs->fecha_pago = $inputs->texts->fecha_pago;
@@ -217,7 +217,7 @@ class nom_periodo_html extends html_controler {
     $selects->nom_conf_nomina_id = $select;
 
     $select = (new cat_sat_periodicidad_pago_nom_html(html:$this->html_base))->select_cat_sat_periodicidad_pago_nom_id(
-    cols: 12, con_registros:true, id_selected:-1,link: $link);
+    cols: 6, con_registros:true, id_selected:-1,link: $link);
     if(errores::$error){
     return $this->error->error(mensaje: 'Error al generar select',data:  $select);
     }
