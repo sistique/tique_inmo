@@ -33,6 +33,7 @@ class controlador_nom_periodo extends system {
     public function __construct(PDO $link, html $html = new \gamboamartin\template_1\html(),
                                 stdClass $paths_conf = new stdClass()){
         $modelo = new nom_periodo(link: $link);
+        $modelo = new nom_periodo(link: $link);
         $html_ = new nom_periodo_html(html: $html);
         $obj_link = new links_menu(link: $link, registro_id: $this->registro_id);
 
@@ -153,7 +154,7 @@ class controlador_nom_periodo extends system {
             return $this->errores->error(mensaje: 'Error al generar template',data:  $r_modifica);
         }
 
-        $keys = array('cat_sat_periodicidad_pago_nom_id','em_registro_patronal_id','cat_sat_tipo_nomina_id',
+        $keys = array('cat_sat_periodicidad_pago_nom_id','im_registro_patronal_id','cat_sat_tipo_nomina_id',
             'nom_tipo_periodo_id');
 
         foreach ($keys as $key){
