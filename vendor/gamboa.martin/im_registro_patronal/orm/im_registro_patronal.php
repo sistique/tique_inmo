@@ -1,7 +1,6 @@
 <?php
 namespace gamboamartin\im_registro_patronal\models;
 use base\orm\modelo;
-use gamboamartin\cat_sat\models\cat_sat_isn;
 use gamboamartin\empleado\models\em_clase_riesgo;
 use gamboamartin\empleado\models\em_registro_patronal;
 use gamboamartin\errores\errores;
@@ -12,9 +11,8 @@ use stdClass;
 class im_registro_patronal extends modelo{
     public function __construct(PDO $link){
         $tabla = "im_registro_patronal";
-        $columnas = array($tabla=>false, 'fc_csd' => $tabla, 'cat_sat_isn'=>$tabla,'org_sucursal' => 'fc_csd',
-            'org_empresa' => 'org_sucursal','em_clase_riesgo' => $tabla,'dp_calle_pertenece'=>'org_sucursal',
-            'dp_colonia_postal'=>'dp_calle_pertenece','dp_cp'=>'dp_colonia_postal',
+        $columnas = array($tabla=>false, 'fc_csd' => $tabla,'org_sucursal' => 'fc_csd',
+            'org_empresa' => 'org_sucursal','im_clase_riesgo' => $tabla,
             'cat_sat_regimen_fiscal'=>'org_empresa');
         $campos_obligatorios = array('em_clase_riesgo_id','fc_csd_id','descripcion_select');
 
@@ -24,8 +22,6 @@ class im_registro_patronal extends modelo{
         $campos_view['em_clase_riesgo_id']['type'] = 'selects';
         $campos_view['em_clase_riesgo_id']['model'] = (new em_clase_riesgo($link));
         $campos_view['descripcion']['type'] = "inputs";
-        $campos_view['cat_sat_isn_id']['type'] = 'selects';
-        $campos_view['cat_sat_isn_id']['model'] = (new cat_sat_isn($link));
 
         parent::__construct(link: $link,tabla:  $tabla, campos_obligatorios: $campos_obligatorios,
             columnas: $columnas,campos_view:  $campos_view );
@@ -35,7 +31,7 @@ class im_registro_patronal extends modelo{
     public function alta_bd(): array|stdClass
     {
 
-        $keys = array('fc_csd_id','em_clase_riesgo_id','cat_sat_isn_id');
+        $keys = array('fc_csd_id','em_clase_riesgo_id');
         $valida = $this->validacion->valida_ids(keys: $keys,registro:  $this->registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);

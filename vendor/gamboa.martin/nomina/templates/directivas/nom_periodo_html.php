@@ -22,7 +22,7 @@ class nom_periodo_html extends html_controler {
         $controler->inputs = new stdClass();
         $controler->inputs->nom_conf_nomina_id = $inputs->selects->nom_conf_nomina_id;
         $controler->inputs->cat_sat_periodicidad_pago_nom_id = $inputs->selects->cat_sat_periodicidad_pago_nom_id;
-        $controler->inputs->em_registro_patronal_id = $inputs->selects->em_registro_patronal_id;
+        $controler->inputs->im_registro_patronal_id = $inputs->selects->im_registro_patronal_id;
         $controler->inputs->nom_tipo_periodo_id = $inputs->selects->nom_tipo_periodo_id;
         $controler->inputs->cat_sat_tipo_nomina_id = $inputs->selects->cat_sat_tipo_nomina_id;
         $controler->inputs->fecha_inicial_pago = $inputs->texts->fecha_inicial_pago;
@@ -69,7 +69,7 @@ class nom_periodo_html extends html_controler {
     private function genera_inputs_modifica(controlador_nom_periodo $controler,PDO $link,
                                             stdClass $params = new stdClass()): array|stdClass
     {
-        $keys = array('cat_sat_periodicidad_pago_nom_id','em_registro_patronal_id','cat_sat_tipo_nomina_id',
+        $keys = array('cat_sat_periodicidad_pago_nom_id','im_registro_patronal_id','cat_sat_tipo_nomina_id',
             'nom_tipo_periodo_id');
 
         $valida = (new validacion())->valida_existencia_keys(keys: $keys, registro: $controler->row_upd);
@@ -160,7 +160,7 @@ class nom_periodo_html extends html_controler {
 
     private function init_modifica(PDO $link, stdClass $row_upd, stdClass $params = new stdClass()): array|stdClass
     {
-        $keys = array('cat_sat_periodicidad_pago_nom_id','em_registro_patronal_id','cat_sat_tipo_nomina_id',
+        $keys = array('cat_sat_periodicidad_pago_nom_id','im_registro_patronal_id','cat_sat_tipo_nomina_id',
             'nom_tipo_periodo_id');
 
         $valida = (new validacion())->valida_existencia_keys(keys: $keys, registro: $row_upd);
@@ -189,7 +189,7 @@ class nom_periodo_html extends html_controler {
                                        stdClass $params = new stdClass()): array|stdClass
     {
 
-        $keys = array('cat_sat_periodicidad_pago_nom_id','em_registro_patronal_id','cat_sat_tipo_nomina_id',
+        $keys = array('cat_sat_periodicidad_pago_nom_id','im_registro_patronal_id','cat_sat_tipo_nomina_id',
             'nom_tipo_periodo_id');
 
         $valida = (new validacion())->valida_existencia_keys(keys: $keys, registro: $controlador->row_upd);
