@@ -202,7 +202,7 @@ class controlador_nom_nomina extends base_nom
 
         $keys_selects = array();
 
-        $keys_selects['dp_calle_pertenece'] = new stdClass();
+        /*$keys_selects['dp_calle_pertenece'] = new stdClass();
         $keys_selects['dp_calle_pertenece']->label = 'Calle';
         $keys_selects['dp_calle_pertenece']->cols = 6;
 
@@ -228,7 +228,7 @@ class controlador_nom_nomina extends base_nom
             $error = $this->errores->error(mensaje: 'Error al generar inputs', data: $inputs);
             print_r($error);
             die('Error');
-        }
+        }*/
         return $r_alta;
     }
 
@@ -270,11 +270,11 @@ class controlador_nom_nomina extends base_nom
         $keys_selects['dp_colonia_postal']->cols = 6;
         $keys_selects['dp_colonia_postal']->namespace_model = 'gamboamartin\\direccion_postal\\models';
 
-        $keys_selects['dp_calle_pertenece'] = new stdClass();
+        /*$keys_selects['dp_calle_pertenece'] = new stdClass();
         $keys_selects['dp_calle_pertenece']->label = 'Calle Pertenece';
         $keys_selects['dp_calle_pertenece']->con_registros = false;
         $keys_selects['dp_calle_pertenece']->cols = 6;
-        $keys_selects['dp_calle_pertenece']->namespace_model = 'gamboamartin\\direccion_postal\\models';
+        $keys_selects['dp_calle_pertenece']->namespace_model = 'gamboamartin\\direccion_postal\\models';*/
 
         $keys_selects['cat_sat_regimen_fiscal'] = new stdClass();
         $keys_selects['cat_sat_regimen_fiscal']->label = 'Régimen Fiscal';
@@ -296,10 +296,10 @@ class controlador_nom_nomina extends base_nom
         $keys_selects['org_puesto']->cols = 6;
         $keys_selects['org_puesto']->namespace_model = 'gamboamartin\\organigrama\\models';
 
-        $keys_selects['em_centro_costo'] = new stdClass();
+        /*$keys_selects['em_centro_costo'] = new stdClass();
         $keys_selects['em_centro_costo']->label = 'Centro Costo';
         $keys_selects['em_centro_costo']->cols = 6;
-        $keys_selects['em_centro_costo']->namespace_model = 'gamboamartin\\empleado\\models';
+        $keys_selects['em_centro_costo']->namespace_model = 'gamboamartin\\empleado\\models';*/
 
         $keys_selects['em_registro_patronal'] = new stdClass();
         $keys_selects['em_registro_patronal']->label = 'Registro Patronal';

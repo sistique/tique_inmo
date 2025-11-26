@@ -47,7 +47,7 @@ class nom_nomina_html extends base_nominas
         $controler->inputs->select->cat_sat_tipo_jornada_nom_id = $inputs->selects->cat_sat_tipo_jornada_nom_id;
         $controler->inputs->select->em_registro_patronal_id = $inputs->selects->em_registro_patronal_id;
         $controler->inputs->select->cat_sat_regimen_fiscal_id = $inputs->selects->cat_sat_regimen_fiscal_id;
-        $controler->inputs->select->em_centro_costo_id = $inputs->selects->em_centro_costo_id;
+        //$controler->inputs->select->em_centro_costo_id = $inputs->selects->em_centro_costo_id;
 
         $controler->inputs->ap = $inputs->texts->ap;
         $controler->inputs->am = $inputs->texts->am;

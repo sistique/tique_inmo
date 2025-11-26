@@ -28,10 +28,9 @@ class em_empleado extends _modelo_parent{
         $this->error = new errores();
         $tabla = 'em_empleado';
 
-        $columnas = array($tabla=>false, 'em_registro_patronal'=>$tabla, 'cat_sat_regimen_fiscal'=>$tabla,
+        $columnas = array($tabla=>false, 'im_registro_patronal'=>$tabla, 'cat_sat_regimen_fiscal'=>$tabla,
             'dp_calle_pertenece'=>$tabla,'cat_sat_tipo_regimen_nom'=>$tabla,'org_puesto'=>$tabla,
-            'org_departamento'=>'org_puesto','cat_sat_tipo_jornada_nom'=>$tabla, 'em_centro_costo' =>$tabla,
-            'fc_csd' => 'em_registro_patronal');
+            'org_departamento'=>'org_puesto','cat_sat_tipo_jornada_nom'=>$tabla, 'fc_csd' => 'im_registro_patronal');
 
         $campos_obligatorios = array('nombre','ap','descripcion','codigo','curp','rfc');
 
@@ -669,8 +668,8 @@ class em_empleado extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al obtener empleado',data: $r_empleado);
         }
 
-        $r_registro_patronal =  (new em_registro_patronal($this->link))->registro(registro_id:
-            $r_empleado['em_registro_patronal_id']);
+        $r_registro_patronal =  (new im_registro_patronall($this->link))->registro(registro_id:
+            $r_empleado['im_registro_patronall_id']);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener registro patronal',data: $r_registro_patronal);
         }

@@ -51,7 +51,7 @@ class nom_nomina extends modelo
             'bn_sucursal'=>'em_cuenta_bancaria','bn_banco'=>'bn_sucursal');
 
         $campos_obligatorios = array('cat_sat_periodicidad_pago_nom_id', 'cat_sat_tipo_contrato_nom_id',
-            'cat_sat_tipo_jornada_nom_id','cat_sat_tipo_nomina_id','dp_calle_pertenece_id', 'em_cuenta_bancaria_id',
+            'cat_sat_tipo_jornada_nom_id','cat_sat_tipo_nomina_id', 'em_cuenta_bancaria_id',
             'fecha_inicial_pago', 'fecha_final_pago', 'em_registro_patronal_id', 'em_empleado_id','nom_periodo_id',
             'num_dias_pagados','org_departamento_id','org_puesto_id','em_clase_riesgo_id','em_cuenta_bancaria_id',
             'fecha_pago');
