@@ -35,7 +35,16 @@ class controlador_nom_periodo extends system {
         $modelo = new nom_periodo(link: $link);
         $html_ = new nom_periodo_html(html: $html);
         $obj_link = new links_menu(link: $link, registro_id: $this->registro_id);
-        parent::__construct(html:$html_, link: $link,modelo:  $modelo, obj_link: $obj_link, paths_conf: $paths_conf);
+
+        $datatables = $this->init_datatable();
+        if(errores::$error){
+            $error = $this->errores->error(mensaje: 'Error al inicializar datatable',data: $datatables);
+            print_r($error);
+            die('Error');
+        }
+
+        parent::__construct(html:$html_, link: $link,modelo:  $modelo, obj_link: $obj_link,datatables: $datatables,
+            paths_conf: $paths_conf);
 
         $this->titulo_lista = 'Periodos';
 
@@ -200,6 +209,20 @@ class controlador_nom_periodo extends system {
             die('Error');
         }
         exit;
+    }
+
+    private function init_datatable(): stdClass
+    {
+        $columns["nom_periodo_id"]["titulo"] = "Id";
+        $columns["nom_periodo_descripcion"]["titulo"] = "Descripcion";
+
+        $filtro = array("nom_periodo.id","nom_periodo.descripcion");
+
+        $datatables = new stdClass();
+        $datatables->columns = $columns;
+        $datatables->filtro = $filtro;
+
+        return $datatables;
     }
 
     public function lista(bool $header, bool $ws = false): array
