@@ -261,14 +261,14 @@ class nom_periodo_html extends html_controler {
         $selects = new stdClass();
 
         $select = (new nom_conf_nomina_html(html:$this->html_base))->select_nom_conf_nomina_id(
-            cols: 6, con_registros:true, id_selected:-1,link: $link,required: false);
+            cols: 12, con_registros:true, id_selected:-1,link: $link,required: false);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al generar select',data:  $select);
         }
         $selects->nom_conf_nomina_id = $select;
 
         $select = (new cat_sat_periodicidad_pago_nom_html(html:$this->html_base))->select_cat_sat_periodicidad_pago_nom_id(
-            cols: 12, con_registros:true, id_selected:$row_upd->cat_sat_periodicidad_pago_nom_id,link: $link);
+            cols: 6, con_registros:true, id_selected:$row_upd->cat_sat_periodicidad_pago_nom_id,link: $link);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al generar select',data:  $select);
         }
@@ -364,19 +364,19 @@ class nom_periodo_html extends html_controler {
     {
         $texts = new stdClass();
 
-        $in_fecha_inicial_pago = $this->input_fecha_inicial_pago(cols: 6, row_upd: $row_upd, value_vacio: false);
+        $in_fecha_inicial_pago = $this->input_fecha_inicial_pago(cols: 4, row_upd: $row_upd, value_vacio: false);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al generar input', data: $in_fecha_inicial_pago);
         }
         $texts->fecha_inicial_pago = $in_fecha_inicial_pago;
 
-        $in_fecha_final_pago = $this->input_fecha_final_pago(cols: 6, row_upd: $row_upd, value_vacio: false);
+        $in_fecha_final_pago = $this->input_fecha_final_pago(cols: 4, row_upd: $row_upd, value_vacio: false);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al generar input', data: $in_fecha_final_pago);
         }
         $texts->fecha_final_pago = $in_fecha_final_pago;
 
-        $in_fecha_pago = $this->input_fecha_pago(cols: 6, row_upd: $row_upd, value_vacio: false);
+        $in_fecha_pago = $this->input_fecha_pago(cols: 4, row_upd: $row_upd, value_vacio: false);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al generar input', data: $in_fecha_pago);
         }
