@@ -1615,17 +1615,11 @@ function limpiarMonto(valor) {
 
 $("#pago_propio_peculio, #pago_precio_compra_venta").on("input", function() {
     let propio = limpiarMonto(pago_propio_peculio.val());
-    pago_propio_peculio.val(propio);
-
     let precio = limpiarMonto(pago_precio_compra_venta.val());
-    pago_precio_compra_venta.val(precio);
-
     let parcial = precio - propio;
-    
     if(parcial < 0) {
         parcial = 0
     }
-
     pago_parcial_precio_compra_venta.val(parcial.toFixed(2));
 });
 
