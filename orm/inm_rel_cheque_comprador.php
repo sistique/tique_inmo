@@ -71,6 +71,8 @@ class inm_rel_cheque_comprador extends _modelo_parent{
                 $registro['inm_concepto_id'] = 36;
             }else if(trim($this->registro['inm_tipo_cheque_id']) === "3"){
                 $registro['inm_concepto_id'] = 19;
+            }else{
+                $registro['inm_concepto_id'] = 19;
             }
 
             $r_inm_costo = (new inm_costo(link: $this->link))->alta_registro(registro: $registro);
