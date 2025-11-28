@@ -115,7 +115,8 @@ class controlador_inm_empleado extends _ctl_formato {
     {
         $keys = new stdClass();
         $keys->inputs = array('descripcion','nss','rfc','nombre','apellido_paterno','apellido_materno','celular',
-            'razon_social','calle','numero_exterior','numero_interior');
+            'razon_social','calle','numero_exterior','numero_interior','fecha_inicio_rel_laboral','salario_diario',
+            'salario_diario_integrado');
         $keys->selects = array();
 
         $init_data = array();
@@ -126,6 +127,11 @@ class controlador_inm_empleado extends _ctl_formato {
         $init_data['dp_municipio'] = "gamboamartin\\direccion_postal";
         $init_data['dp_cp'] = "gamboamartin\\direccion_postal";
         $init_data['dp_colonia_postal'] = "gamboamartin\\direccion_postal";
+        $init_data['cat_sat_regimen_fiscal'] = "gamboamartin\\cat_sat";
+        $init_data['im_registro_patronal'] = "gamboamartin\\im_registro_patronal";
+        $init_data['cat_sat_tipo_regimen_nom'] = "gamboamartin\\cat_sat";
+        $init_data['cat_sat_tipo_jornada_nom'] = "gamboamartin\\cat_sat";
+        $init_data['org_puesto'] = "gamboamartin\\organigrama";
         $campos_view = $this->campos_view_base(init_data: $init_data,keys:  $keys);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al inicializar campo view',data:  $campos_view);
@@ -225,6 +231,24 @@ class controlador_inm_empleado extends _ctl_formato {
 
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'numero_interior',
             keys_selects: $keys_selects, place_holder: 'Numero Interior', required: false);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'fecha_inicio_rel_laboral',
+            keys_selects: $keys_selects, place_holder: 'Inicio Relacion Laboral', required: false);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'salario_diario',
+            keys_selects: $keys_selects, place_holder: 'Salario Diario', required: false);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'salario_diario_integrado',
+            keys_selects: $keys_selects, place_holder: 'Salario Diario Int.', required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
