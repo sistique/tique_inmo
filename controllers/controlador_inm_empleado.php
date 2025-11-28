@@ -12,6 +12,7 @@ use base\controller\init;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_empleado_html;
 use gamboamartin\inmuebles\models\inm_empleado;
+use gamboamartin\inmuebles\models\inm_rel_emp_emp;
 use gamboamartin\system\links_menu;
 use gamboamartin\template\html;
 use PDO;
@@ -114,12 +115,17 @@ class controlador_inm_empleado extends _ctl_formato {
     {
         $keys = new stdClass();
         $keys->inputs = array('descripcion','nss','rfc','nombre','apellido_paterno','apellido_materno','celular',
-            'razon_social');
+            'razon_social','calle','numero_exterior','numero_interior');
         $keys->selects = array();
 
         $init_data = array();
         $init_data['adm_usuario'] = "gamboamartin\\administrador";
         $init_data['inm_horario'] = "gamboamartin\\inmuebles";
+        $init_data['dp_pais'] = "gamboamartin\\direccion_postal";
+        $init_data['dp_estado'] = "gamboamartin\\direccion_postal";
+        $init_data['dp_municipio'] = "gamboamartin\\direccion_postal";
+        $init_data['dp_cp'] = "gamboamartin\\direccion_postal";
+        $init_data['dp_colonia_postal'] = "gamboamartin\\direccion_postal";
         $campos_view = $this->campos_view_base(init_data: $init_data,keys:  $keys);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al inicializar campo view',data:  $campos_view);
@@ -143,6 +149,82 @@ class controlador_inm_empleado extends _ctl_formato {
         $columns_selects = array('adm_usuario_user');
         $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'adm_usuario_id',
             keys_selects: $keys_selects, id_selected: $this->row_upd->adm_usuario_id, label: 'Usuario',columns_ds: $columns_selects);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $r_rel_emp = (new inm_rel_emp_emp(link: $this->link))->filtro_and(filtro:
+            array('inm_empleado.id'=>$this->registro_id));
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $r_rel_emp);
+        }
+
+        $this->row_upd->dp_pais_id = -1;
+        $this->row_upd->dp_estado_id = -1;
+        $this->row_upd->dp_municipio_id = -1;
+        $this->row_upd->dp_cp_id = -1;
+        $this->row_upd->dp_colonia_postal_id = -1;
+        if($r_rel_emp->n_registros > 0){
+            $this->row_upd->dp_pais_id = $r_rel_emp->registros[0]['dp_pais_id'];
+            $this->row_upd->dp_estado_id = $r_rel_emp->registros[0]['dp_estado_id'];
+            $this->row_upd->dp_municipio_id = $r_rel_emp->registros[0]['dp_municipio_id'];
+            $this->row_upd->dp_cp_id = $r_rel_emp->registros[0]['dp_cp_id'];
+            $this->row_upd->dp_colonia_postal_id = $r_rel_emp->registros[0]['dp_colonia_postal_id'];
+        }
+
+        $columns_selects = array('dp_pais_descripcion');
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'dp_pais_id',
+            keys_selects: $keys_selects, id_selected: $this->row_upd->dp_pais_id, label: 'Pais',
+            columns_ds: $columns_selects);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $columns_selects = array('dp_estado_descripcion');
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'dp_estado_id',
+            keys_selects: $keys_selects, id_selected: $this->row_upd->dp_estado_id, label: 'Estado',
+            columns_ds: $columns_selects);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $columns_selects = array('dp_municipio_descripcion');
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'dp_municipio_id',
+            keys_selects: $keys_selects, id_selected: $this->row_upd->dp_municipio_id, label: 'Municipio',
+            columns_ds: $columns_selects);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $columns_selects = array('dp_cp_descripcion');
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'dp_cp_id',
+            keys_selects: $keys_selects, id_selected: $this->row_upd->dp_cp_id, label: 'CP',columns_ds: $columns_selects);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $columns_selects = array('dp_colonia_postal_descripcion');
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'dp_colonia_postal_id',
+            keys_selects: $keys_selects, id_selected: $this->row_upd->dp_colonia_postal_id, label: 'Colonia Postal',
+            columns_ds: $columns_selects);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'calle',
+            keys_selects: $keys_selects, place_holder: 'Calle', required: false);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'numero_exterior',
+            keys_selects: $keys_selects, place_holder: 'Numero Exterior', required: false);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'numero_interior',
+            keys_selects: $keys_selects, place_holder: 'Numero Interior', required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
