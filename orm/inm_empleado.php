@@ -77,9 +77,17 @@ class inm_empleado extends _modelo_parent{
         $registro_emp['nombre'] = $this->registro['nombre'];
         $registro_emp['ap'] = $this->registro['apellido_paterno'];
         $registro_emp['am'] = $this->registro['apellido_materno'];
-        $registro_emp['rfc'] = $this->registro['rfc'];
-        $registro_emp['nss'] = $this->registro['nss'];
-        $registro_emp['telefono'] = $this->registro['celular'];
+        if(isset($this->registro['rfc'])) {
+            $registro_emp['rfc'] = $this->registro['rfc'];
+        }
+
+        if(isset($this->registro['nss'])) {
+            $registro_emp['nss'] = $this->registro['nss'];
+        }
+
+        if(isset($this->registro['celular'])) {
+            $registro_emp['telefono'] = $this->registro['celular'];
+        }
         $r_emp = (new em_empleado(link: $this->link))->alta_registro(registro: $registro_emp);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al insertar opcion', data: $r_emp);

@@ -16,6 +16,7 @@ use gamboamartin\documento\models\doc_tipo_documento;
 use gamboamartin\empleado\controllers\controlador_em_empleado;
 use gamboamartin\errores\errores;
 
+use gamboamartin\im_registro_patronal\models\im_registro_patronal;
 use gamboamartin\organigrama\models\org_puesto;
 use gamboamartin\plugins\imagen;
 use gamboamartin\plugins\pdf;
@@ -30,7 +31,7 @@ class em_empleado extends _modelo_parent{
         $tabla = 'em_empleado';
 
         $columnas = array($tabla=>false, 'im_registro_patronal'=>$tabla, 'cat_sat_regimen_fiscal'=>$tabla,
-            'dp_calle_pertenece'=>$tabla,'cat_sat_tipo_regimen_nom'=>$tabla,'org_puesto'=>$tabla,
+            'dp_colonia_postal'=>$tabla,'cat_sat_tipo_regimen_nom'=>$tabla,'org_puesto'=>$tabla,
             'org_departamento'=>'org_puesto','cat_sat_tipo_jornada_nom'=>$tabla, 'fc_csd' => 'im_registro_patronal');
 
         $campos_obligatorios = array('nombre','ap');
@@ -50,78 +51,73 @@ class em_empleado extends _modelo_parent{
         $this->NAMESPACE = __NAMESPACE__;
     }
 
-    public function alta_bd(array $keys_integra_ds = array('codigo', 'descripcion')): array|stdClass 
+    public function alta_bd(array $keys_integra_ds = array('codigo', 'descripcion')): array|stdClass
     {
-        if(!isset($this->registro['codigo'])){ 
+        if (!isset($this->registro['codigo'])) {
 
-            $this->registro['codigo'] =  $this->get_codigo_aleatorio();
-            if(errores::$error){
-                return $this->error->error(mensaje: 'Error al generar codigo aleatorio',data:  $this->registro);
+            $this->registro['codigo'] = $this->get_codigo_aleatorio();
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al generar codigo aleatorio', data: $this->registro);
             }
 
-            if (isset($this->registro['rfc'])){
+            if (isset($this->registro['rfc'])) {
                 $this->registro['codigo'] = $this->registro['rfc'];
             }
         }
 
-        if(!isset($this->registro['descripcion'])){
-            $this->registro['descripcion'] = $this->registro['nombre']. ' ';
+        if (!isset($this->registro['descripcion'])) {
+            $this->registro['descripcion'] = $this->registro['nombre'] . ' ';
             $this->registro['descripcion'] .= $this->registro['ap'];
         }
 
         $this->registro = $this->fecha_inicio_rel_laboral_default($this->registro);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al inicializar fecha rel laboral',data: $this->registro);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al inicializar fecha rel laboral', data: $this->registro);
         }
 
         $this->registro = $this->dp_colonia_postal_id($this->registro);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al inicializar direcciones',data: $this->registro);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al inicializar direcciones', data: $this->registro);
         }
 
         $this->registro = $this->org_puesto_id($this->registro);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al inicializar puesto',data: $this->registro);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al inicializar puesto', data: $this->registro);
         }
 
         $this->registro = $this->cat_sat_tipo_jornada_nom_id($this->registro);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al inicializar tipo jornada nomina',data: $this->registro);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al inicializar tipo jornada nomina', data: $this->registro);
         }
 
         $this->registro = $this->cat_sat_regimen_fiscal_id($this->registro);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al inicializar tipo jornada nomina',data: $this->registro);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al inicializar tipo jornada nomina', data: $this->registro);
         }
 
         $this->registro = $this->cat_sat_tipo_regimen_nom_id($this->registro);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al inicializar cat_sat_tipo_regimen_nom_id',data: $this->registro);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al inicializar cat_sat_tipo_regimen_nom_id', data: $this->registro);
         }
 
-        $this->registro = $this->em_centro_costo_id($this->registro);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al inicializar em_centro_costo_id',data: $this->registro);
+        $this->registro = $this->campos_base(data: $this->registro, modelo: $this);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al inicializar campo base', data: $this->registro);
         }
 
-        $this->registro = $this->campos_base(data:$this->registro,modelo: $this);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al inicializar campo base',data: $this->registro);
-        }
-
-        $this->registro['descripcion_select'] = isset($this->registro['nss']) ? $this->registro['nss']." - " : "SIN NSS - ";
-        $this->registro['descripcion_select'] .= $this->registro['nombre']. ' ';
-        $this->registro['descripcion_select'] .= $this->registro['ap']. ' ';
-        $this->registro['descripcion_select'] .= isset($this->registro['am']) ? $this->registro['am']: "";
+        $this->registro['descripcion_select'] = isset($this->registro['nss']) ? $this->registro['nss'] . " - " : "SIN NSS - ";
+        $this->registro['descripcion_select'] .= $this->registro['nombre'] . ' ';
+        $this->registro['descripcion_select'] .= $this->registro['ap'] . ' ';
+        $this->registro['descripcion_select'] .= isset($this->registro['am']) ? $this->registro['am'] : "";
         $this->registro['descripcion_select'] = strtoupper($this->registro['descripcion_select']);
 
         $this->registro = $this->limpia_campos_extras(registro: $this->registro, campos_limpiar: array("dp_pais_id",
-            "dp_estado_id", "dp_cp_id","dp_colonia_postal_id"));
+            "dp_estado_id", "dp_cp_id"));
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al limpiar campos', data: $this->registro);
         }
 
-        if(!isset($this->registro['rfc'])){
+        if (!isset($this->registro['rfc'])) {
             $this->registro['rfc'] = 'AAA010101AAA';
         }
 
@@ -646,8 +642,8 @@ class em_empleado extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al obtener empleado',data: $r_empleado);
         }
 
-        $r_registro_patronal =  (new im_registro_patronall($this->link))->registro(registro_id:
-            $r_empleado['im_registro_patronall_id']);
+        $r_registro_patronal =  (new im_registro_patronal($this->link))->registro(registro_id:
+            $r_empleado['im_registro_patronal_id']);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener registro patronal',data: $r_registro_patronal);
         }
