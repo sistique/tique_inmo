@@ -44,10 +44,10 @@ class nom_nomina extends modelo
             'dp_cp' => 'dp_colonia_postal', 'dp_municipio' => 'dp_cp', 'dp_estado' => 'dp_municipio',
             'dp_pais' => 'dp_estado', 'em_empleado' => $tabla, 'fc_factura' => $tabla,'fc_csd' =>'fc_factura',
             'org_sucursal' => 'fc_csd','org_empresa'=> 'org_sucursal', 'cat_sat_regimen_fiscal'=>'fc_factura',
-            'cat_sat_periodicidad_pago_nom'=>$tabla, 'em_registro_patronal'=>$tabla,'cat_sat_tipo_contrato_nom'=>$tabla,
+            'cat_sat_periodicidad_pago_nom'=>$tabla, 'im_registro_patronal'=>$tabla,'cat_sat_tipo_contrato_nom'=>$tabla,
             'nom_periodo'=>$tabla, 'cat_sat_tipo_nomina'=>$tabla,'cat_sat_tipo_jornada_nom'=>$tabla,
             'cat_sat_tipo_regimen_nom'=>'em_empleado','org_departamento'=>$tabla,'org_puesto'=>$tabla,
-            'em_clase_riesgo'=>'em_registro_patronal','em_cuenta_bancaria'=>$tabla,
+            'im_clase_riesgo'=>'im_registro_patronal','em_cuenta_bancaria'=>$tabla,
             'bn_sucursal'=>'em_cuenta_bancaria','bn_banco'=>'bn_sucursal');
 
         $campos_obligatorios = array('cat_sat_periodicidad_pago_nom_id', 'cat_sat_tipo_contrato_nom_id',
@@ -57,7 +57,8 @@ class nom_nomina extends modelo
             'fecha_pago');
 
         $columnas_extra = array();
-        $columnas_extra['em_empleado_nombre_completo'] = 'CONCAT (IFNULL(em_empleado.nombre,"")," ",IFNULL(em_empleado.ap, "")," ",IFNULL(em_empleado.am,""))';
+        $columnas_extra['em_empleado_nombre_completo'] =
+            'CONCAT (IFNULL(em_empleado.nombre,"")," ",IFNULL(em_empleado.ap, "")," ",IFNULL(em_empleado.am,""))';
 
         $columnas_extra['nom_nomina_total_percepcion_gravado'] =
             "IFNULL ((SELECT SUM(nom_par_percepcion.importe_gravado) 
@@ -128,7 +129,7 @@ class nom_nomina extends modelo
         $tipo_campos['fecha_pago'] = 'fecha';
 
         parent::__construct(link: $link, tabla: $tabla, campos_obligatorios: $campos_obligatorios,
-            columnas: $columnas, columnas_extra: $columnas_extra, tipo_campos: $tipo_campos);
+            columnas: $columnas, columnas_extra: $columnas_extra,tipo_campos: $tipo_campos);
 
         $this->NAMESPACE = __NAMESPACE__;
         $this->etiqueta = 'Nomina';
