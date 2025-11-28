@@ -8,6 +8,7 @@ use gamboamartin\cat_sat\models\cat_sat_tipo_regimen_nom;
 use gamboamartin\comercial\models\com_cliente;
 use gamboamartin\comercial\models\com_sucursal;
 use gamboamartin\direccion_postal\models\dp_calle_pertenece;
+use gamboamartin\direccion_postal\models\dp_colonia_postal;
 use gamboamartin\direccion_postal\models\dp_municipio;
 use gamboamartin\documento\models\doc_conf_tipo_documento_seccion;
 use gamboamartin\documento\models\doc_documento;
@@ -32,7 +33,7 @@ class em_empleado extends _modelo_parent{
             'dp_calle_pertenece'=>$tabla,'cat_sat_tipo_regimen_nom'=>$tabla,'org_puesto'=>$tabla,
             'org_departamento'=>'org_puesto','cat_sat_tipo_jornada_nom'=>$tabla, 'fc_csd' => 'im_registro_patronal');
 
-        $campos_obligatorios = array('nombre','ap','descripcion','codigo','curp','rfc');
+        $campos_obligatorios = array('nombre','ap');
 
         $tipo_campos = array();
         $tipo_campos['rfc'] = 'rfc';
@@ -68,26 +69,12 @@ class em_empleado extends _modelo_parent{
             $this->registro['descripcion'] .= $this->registro['ap'];
         }
 
-        if(!isset($this->registro['dp_municipio_id'])){
-            return $this->error->error(mensaje: 'Error dp_municipio_id no existe',data:  $this->registro);
-        }
-
-        $dp_municipio_modelo = new dp_municipio(link: $this->link);
-        $dp_municipio = $dp_municipio_modelo->registro(registro_id: $this->registro['dp_municipio_id']);
-        if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al obtener dp_municipio', data: $dp_municipio);
-        }
-
-        $this->registro['pais'] = $dp_municipio['dp_pais_descripcion'];
-        $this->registro['estado'] = $dp_municipio['dp_estado_descripcion'];
-        $this->registro['municipio'] = $dp_municipio['dp_municipio_descripcion'];
-
         $this->registro = $this->fecha_inicio_rel_laboral_default($this->registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al inicializar fecha rel laboral',data: $this->registro);
         }
 
-        $this->registro = $this->dp_calle_pertenece_id($this->registro);
+        $this->registro = $this->dp_colonia_postal_id($this->registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al inicializar direcciones',data: $this->registro);
         }
@@ -138,19 +125,10 @@ class em_empleado extends _modelo_parent{
             $this->registro['rfc'] = 'AAA010101AAA';
         }
 
-
-
         $r_alta_bd = parent::alta_bd();
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al dar de alta empleado',data:  $r_alta_bd);
         }
-
-
-        /*$respuesta = $this->transacciona_em_rel_empleado_sucursal(data: $this->registro,
-            em_empleado_id: $r_alta_bd->registro_id);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al transaccionar relacion empleado sucursal',data:  $respuesta);
-        }*/
 
         $inserta_documento = $this->registra_documento_empleado(em_empleado: $r_alta_bd->registro_id);
         if(errores::$error){
@@ -621,12 +599,12 @@ class em_empleado extends _modelo_parent{
 
 
 
-    private function dp_calle_pertenece_id(array $registro): array
+    private function dp_colonia_postal_id(array $registro): array
     {
-        if (!isset($registro['dp_calle_pertenece_id'])) {
-            $registro['dp_calle_pertenece_id'] =  (new dp_calle_pertenece($this->link))->get_calle_pertenece_default_id();
+        if (!isset($registro['dp_colonia_postal_id'])) {
+            $registro['dp_colonia_postal_id'] =  (new dp_colonia_postal($this->link))->get_colonia_postal_default_id();
             if(errores::$error){
-                return $this->error->error(mensaje: 'Error al obtener calle_pertenece_default',data: $registro['dp_calle_pertenece_id']);
+                return $this->error->error(mensaje: 'Error al obtener calle_pertenece_default',data: $registro['dp_colonia_postal_id']);
             }
         }
         return $registro;

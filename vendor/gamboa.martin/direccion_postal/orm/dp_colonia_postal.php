@@ -108,7 +108,7 @@ class dp_colonia_postal extends _base {
         return $data;
     }
 
-    private function dp_colonia_id_predeterminado(array $registro): array
+    public function dp_colonia_id_predeterminado(array $registro): array
     {
 
         if(!isset($registro['dp_colonia_id']) || (int)$registro['dp_colonia_id'] === -1){
@@ -121,7 +121,7 @@ class dp_colonia_postal extends _base {
         return $registro;
     }
 
-    private function dp_cp_id_predeterminado(array $registro): array
+    public function dp_cp_id_predeterminado(array $registro): array
     {
 
         if(!isset($registro['dp_cp_id']) || (int)$registro['dp_cp_id'] === -1){
@@ -133,6 +133,18 @@ class dp_colonia_postal extends _base {
         }
         return $registro;
     }
+
+    public function get_colonia_postal_default_id(): array|stdClass|int
+    {
+
+        $id_predeterminado = $this->id_predeterminado();
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener el puesto predeterminado',data:  $id_predeterminado);
+        }
+
+        return (int)$id_predeterminado;
+    }
+
 
     /**
      * Obtiene los datos de colonia postal
