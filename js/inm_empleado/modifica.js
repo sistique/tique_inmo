@@ -34,11 +34,6 @@ sl_dp_cp_id.change(function(){
     dp_asigna_colonias_postales(dp_cp_id);
 });
 
-sl_dp_colonia_postal_id.change(function(){
-    dp_colonia_postal_id = sl_dp_colonia_postal_id.val();
-    dp_asigna_calles_pertenece(dp_colonia_postal_id);
-});
-
 function dp_asigna_estados(dp_pais_id = '',dp_estado_id = '', name_selector_dependiente = "#dp_estado_id"){
 
     let sl_dp_estado_id = $(name_selector_dependiente);
