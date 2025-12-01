@@ -126,10 +126,10 @@ class em_empleado extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al dar de alta empleado',data:  $r_alta_bd);
         }
 
-        $inserta_documento = $this->registra_documento_empleado(em_empleado: $r_alta_bd->registro_id);
+        /*$inserta_documento = $this->registra_documento_empleado(em_empleado: $r_alta_bd->registro_id);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al insertar documento para empleado', data: $inserta_documento);
-        }
+        }*/
 
         return $r_alta_bd;
     }
