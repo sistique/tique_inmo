@@ -213,7 +213,7 @@ class controlador_inm_empleado extends _ctl_formato {
         }
 
         $columns_selects = array('dp_estado_descripcion');
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'dp_estado_id',
+        $keys_selects = $this->key_select(cols:6, con_registros: false,filtro:  array(), key: 'dp_estado_id',
             keys_selects: $keys_selects, id_selected: $this->row_upd->dp_estado_id, label: 'Estado',
             columns_ds: $columns_selects);
         if(errores::$error){
@@ -221,7 +221,7 @@ class controlador_inm_empleado extends _ctl_formato {
         }
 
         $columns_selects = array('dp_municipio_descripcion');
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'dp_municipio_id',
+        $keys_selects = $this->key_select(cols:6, con_registros: false,filtro:  array(), key: 'dp_municipio_id',
             keys_selects: $keys_selects, id_selected: $this->row_upd->dp_municipio_id, label: 'Municipio',
             columns_ds: $columns_selects);
         if(errores::$error){
@@ -229,14 +229,14 @@ class controlador_inm_empleado extends _ctl_formato {
         }
 
         $columns_selects = array('dp_cp_descripcion');
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'dp_cp_id',
+        $keys_selects = $this->key_select(cols:6, con_registros: false,filtro:  array(), key: 'dp_cp_id',
             keys_selects: $keys_selects, id_selected: $this->row_upd->dp_cp_id, label: 'CP',columns_ds: $columns_selects);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $columns_selects = array('dp_colonia_postal_descripcion');
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'dp_colonia_postal_id',
+        $columns_selects = array('dp_colonia_descripcion');
+        $keys_selects = $this->key_select(cols:6, con_registros: false,filtro:  array(), key: 'dp_colonia_postal_id',
             keys_selects: $keys_selects, id_selected: $this->row_upd->dp_colonia_postal_id, label: 'Colonia Postal',
             columns_ds: $columns_selects);
         if(errores::$error){
