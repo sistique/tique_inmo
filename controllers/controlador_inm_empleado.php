@@ -116,7 +116,7 @@ class controlador_inm_empleado extends _ctl_formato {
         $keys = new stdClass();
         $keys->inputs = array('descripcion','nss','rfc','nombre','apellido_paterno','apellido_materno','celular',
             'razon_social','calle','numero_exterior','numero_interior','fecha_inicio_rel_laboral','salario_diario',
-            'salario_diario_integrado');
+            'salario_diario_integrado','curp');
         $keys->selects = array();
 
         $init_data = array();
@@ -170,12 +170,22 @@ class controlador_inm_empleado extends _ctl_formato {
         $this->row_upd->dp_municipio_id = -1;
         $this->row_upd->dp_cp_id = -1;
         $this->row_upd->dp_colonia_postal_id = -1;
+        $this->row_upd->im_registro_patronal_id = -1;
+        $this->row_upd->org_puesto_id = -1;
+        $this->row_upd->cat_sat_regimen_fiscal_id = -1;
+        $this->row_upd->cat_sat_tipo_regimen_nom_id = -1;
+        $this->row_upd->cat_sat_tipo_jornada_nom_id = -1;
         if($r_rel_emp->n_registros > 0){
             $this->row_upd->dp_pais_id = $r_rel_emp->registros[0]['dp_pais_id'];
             $this->row_upd->dp_estado_id = $r_rel_emp->registros[0]['dp_estado_id'];
             $this->row_upd->dp_municipio_id = $r_rel_emp->registros[0]['dp_municipio_id'];
             $this->row_upd->dp_cp_id = $r_rel_emp->registros[0]['dp_cp_id'];
             $this->row_upd->dp_colonia_postal_id = $r_rel_emp->registros[0]['dp_colonia_postal_id'];
+            $this->row_upd->im_registro_patronal_id = $r_rel_emp->registros[0]['im_registro_patronal_id'];
+            $this->row_upd->org_puesto_id = $r_rel_emp->registros[0]['org_puesto_id'];
+            $this->row_upd->cat_sat_regimen_fiscal_id = $r_rel_emp->registros[0]['cat_sat_regimen_fiscal_id'];
+            $this->row_upd->cat_sat_tipo_regimen_nom_id = $r_rel_emp->registros[0]['cat_sat_tipo_regimen_nom_id'];
+            $this->row_upd->cat_sat_tipo_jornada_nom_id = $r_rel_emp->registros[0]['cat_sat_tipo_jornada_nom_id'];
         }
 
         $columns_selects = array('dp_pais_descripcion');
@@ -217,7 +227,47 @@ class controlador_inm_empleado extends _ctl_formato {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'calle',
+        $columns_selects = array('im_registro_patronal_descripcion');
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'im_registro_patronal_id',
+            keys_selects: $keys_selects, id_selected: $this->row_upd->im_registro_patronal_id, label: 'Registro Patronal',
+            columns_ds: $columns_selects);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+        
+        $columns_selects = array('org_puesto_descripcion');
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'org_puesto_id',
+            keys_selects: $keys_selects, id_selected: $this->row_upd->org_puesto_id, label: 'Puesto',
+            columns_ds: $columns_selects);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $columns_selects = array('cat_sat_regimen_fiscal_descripcion');
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'cat_sat_regimen_fiscal_id',
+            keys_selects: $keys_selects, id_selected: $this->row_upd->cat_sat_regimen_fiscal_id, label: 'Regimen Fiscal',
+            columns_ds: $columns_selects);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $columns_selects = array('cat_sat_tipo_regimen_nom_descripcion');
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'cat_sat_tipo_regimen_nom_id',
+            keys_selects: $keys_selects, id_selected: $this->row_upd->cat_sat_tipo_regimen_nom_id, label: 'Tipo Regimen',
+            columns_ds: $columns_selects);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }       
+        
+        $columns_selects = array('cat_sat_tipo_jornada_nom_descripcion');
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'cat_sat_tipo_jornada_nom_id',
+            keys_selects: $keys_selects, id_selected: $this->row_upd->cat_sat_tipo_jornada_nom_id, label: 'Jornada',
+            columns_ds: $columns_selects);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'calle',
             keys_selects: $keys_selects, place_holder: 'Calle', required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
@@ -249,6 +299,12 @@ class controlador_inm_empleado extends _ctl_formato {
 
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'salario_diario_integrado',
             keys_selects: $keys_selects, place_holder: 'Salario Diario Int.', required: false);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'curp',
+            keys_selects: $keys_selects, place_holder: 'CURP', required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }

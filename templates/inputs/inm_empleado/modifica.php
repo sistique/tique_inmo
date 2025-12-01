@@ -16,6 +16,7 @@
 <?php echo $controlador->inputs->salario_diario; ?>
 <?php echo $controlador->inputs->salario_diario_integrado; ?>
 <?php echo $controlador->inputs->nss; ?>
+<?php echo $controlador->inputs->curp; ?>
 <?php echo $controlador->inputs->dp_pais_id; ?>
 <?php echo $controlador->inputs->dp_estado_id; ?>
 <?php echo $controlador->inputs->dp_municipio_id; ?>
