@@ -1,3 +1,7 @@
+let url = getAbsolutePath();
+let registro_id = getParameterByName('registro_id');
+let session_id = getParameterByName('session_id');
+
 let sl_dp_pais_id = $("#dp_pais_id");
 let sl_dp_estado_id = $("#dp_estado_id");
 let sl_dp_municipio_id = $("#dp_municipio_id");
