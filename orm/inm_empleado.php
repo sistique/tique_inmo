@@ -181,7 +181,7 @@ class inm_empleado extends _modelo_parent{
         $registro_emp['telefono'] = $registro['celular'];
         if($r_rel_emp->n_registros > 0){
             $r_modifica = (new em_empleado(link: $this->link))->modifica_bd(registro: $registro_emp,
-                id: $r_rel_emp->registros[0]['emp_empleado_id']);
+                id: $r_rel_emp->registros[0]['em_empleado_id']);
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $r_modifica);
             }
@@ -192,7 +192,7 @@ class inm_empleado extends _modelo_parent{
             }
 
             $registro_rel_emp['em_empleado_id'] = $r_emp->registro_id;
-            $registro_rel_emp['inm_empleado_id'] = $r_modifica_bd->registro_id;
+            $registro_rel_emp['inm_empleado_id'] = $id;
             $r_rel_emp = (new inm_rel_emp_emp(link: $this->link))->alta_registro(registro: $registro_rel_emp);
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error al insertar opcion', data: $r_rel_emp);

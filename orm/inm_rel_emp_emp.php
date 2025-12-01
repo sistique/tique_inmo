@@ -12,7 +12,12 @@ class inm_rel_emp_emp extends _modelo_parent{
     public function __construct(PDO $link)
     {
         $tabla = 'inm_rel_emp_emp';
-        $columnas = array($tabla=>false,'inm_empleado'=>$tabla,'em_empleado'=>$tabla);
+        $columnas = array($tabla=>false,'inm_empleado'=>$tabla,'em_empleado'=>$tabla,
+            'dp_colonia_postal' => 'em_empleado', 'dp_cp'=>'dp_colonia_postal','dp_colonia'=>'dp_colonia_postal',
+            'dp_municipio'=>'dp_cp', 'dp_estado'=>'dp_municipio','dp_pais'=>'dp_estado',
+            'im_registro_patronal' => 'em_empleado','org_puesto' => 'em_empleado',
+            'cat_sat_regimen_fiscal' => 'em_empleado','cat_sat_tipo_regimen_nom' => 'em_empleado',
+            'cat_sat_tipo_jornada_nom' => 'em_empleado');
 
         $campos_obligatorios = array();
         $columnas_extra= array();

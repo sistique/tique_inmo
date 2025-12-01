@@ -184,6 +184,11 @@ class controlador_inm_empleado extends _ctl_formato {
         $this->row_upd->salario_diario = '';
         $this->row_upd->salario_diario_integrado = '';
 
+        $filtro_estado = array();
+        $filtro_municipio = array();
+        $filtro_cp = array();
+        $filtro_colonia_postal = array();
+        $con_registros = false;
         if($r_rel_emp->n_registros > 0){
             $this->row_upd->dp_pais_id = $r_rel_emp->registros[0]['dp_pais_id'];
             $this->row_upd->dp_estado_id = $r_rel_emp->registros[0]['dp_estado_id'];
@@ -196,12 +201,22 @@ class controlador_inm_empleado extends _ctl_formato {
             $this->row_upd->cat_sat_tipo_regimen_nom_id = $r_rel_emp->registros[0]['cat_sat_tipo_regimen_nom_id'];
             $this->row_upd->cat_sat_tipo_jornada_nom_id = $r_rel_emp->registros[0]['cat_sat_tipo_jornada_nom_id'];
 
-            $this->row_upd->fecha_inicio_rel_laboral = $r_rel_emp->registros[0]['inm_empleado_fecha_inicio_rel_laboral'];
-            $this->row_upd->calle = $r_rel_emp->registros[0]['inm_empleado_calle'];
-            $this->row_upd->numero_exterior = $r_rel_emp->registros[0]['inm_empleado_numero_exterior'];
-            $this->row_upd->numero_interior = $r_rel_emp->registros[0]['inm_empleado_numero_interior'];
-            $this->row_upd->salario_diario = $r_rel_emp->registros[0]['inm_empleado_salario_diario'];
-            $this->row_upd->salario_diario_integrado = $r_rel_emp->registros[0]['inm_empleado_salario_diario_integrado'];
+            $this->row_upd->rfc = $r_rel_emp->registros[0]['em_empleado_rfc'];
+            $this->row_upd->nss = $r_rel_emp->registros[0]['em_empleado_nss'];
+            $this->row_upd->curp = $r_rel_emp->registros[0]['em_empleado_curp'];
+            $this->row_upd->fecha_inicio_rel_laboral = $r_rel_emp->registros[0]['em_empleado_fecha_inicio_rel_laboral'];
+            $this->row_upd->calle = $r_rel_emp->registros[0]['em_empleado_calle'];
+            $this->row_upd->numero_exterior = $r_rel_emp->registros[0]['em_empleado_numero_exterior'];
+            $this->row_upd->numero_interior = $r_rel_emp->registros[0]['em_empleado_numero_interior'];
+            $this->row_upd->salario_diario = $r_rel_emp->registros[0]['em_empleado_salario_diario'];
+            $this->row_upd->salario_diario_integrado = $r_rel_emp->registros[0]['em_empleado_salario_diario_integrado'];
+
+            $filtro_estado['dp_pais.id'] = $r_rel_emp->registros[0]['dp_pais_id'];
+            $filtro_municipio['dp_estado.id'] = $r_rel_emp->registros[0]['dp_estado_id'];
+            $filtro_cp['dp_municipio.id'] = $r_rel_emp->registros[0]['dp_municipio_id'];
+            $filtro_colonia_postal['dp_cp.id'] = $r_rel_emp->registros[0]['dp_cp_id'];
+
+            $con_registros = true;
         }
 
         $columns_selects = array('dp_pais_descripcion');
@@ -213,7 +228,7 @@ class controlador_inm_empleado extends _ctl_formato {
         }
 
         $columns_selects = array('dp_estado_descripcion');
-        $keys_selects = $this->key_select(cols:6, con_registros: false,filtro:  array(), key: 'dp_estado_id',
+        $keys_selects = $this->key_select(cols:6, con_registros: $con_registros,filtro: $filtro_estado, key: 'dp_estado_id',
             keys_selects: $keys_selects, id_selected: $this->row_upd->dp_estado_id, label: 'Estado',
             columns_ds: $columns_selects);
         if(errores::$error){
@@ -221,7 +236,7 @@ class controlador_inm_empleado extends _ctl_formato {
         }
 
         $columns_selects = array('dp_municipio_descripcion');
-        $keys_selects = $this->key_select(cols:6, con_registros: false,filtro:  array(), key: 'dp_municipio_id',
+        $keys_selects = $this->key_select(cols:6, con_registros: $con_registros,filtro: $filtro_municipio, key: 'dp_municipio_id',
             keys_selects: $keys_selects, id_selected: $this->row_upd->dp_municipio_id, label: 'Municipio',
             columns_ds: $columns_selects);
         if(errores::$error){
@@ -229,14 +244,14 @@ class controlador_inm_empleado extends _ctl_formato {
         }
 
         $columns_selects = array('dp_cp_descripcion');
-        $keys_selects = $this->key_select(cols:6, con_registros: false,filtro:  array(), key: 'dp_cp_id',
+        $keys_selects = $this->key_select(cols:6, con_registros: $con_registros,filtro: $filtro_cp, key: 'dp_cp_id',
             keys_selects: $keys_selects, id_selected: $this->row_upd->dp_cp_id, label: 'CP',columns_ds: $columns_selects);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
         $columns_selects = array('dp_colonia_descripcion');
-        $keys_selects = $this->key_select(cols:6, con_registros: false,filtro:  array(), key: 'dp_colonia_postal_id',
+        $keys_selects = $this->key_select(cols:6, con_registros: $con_registros,filtro: $filtro_colonia_postal, key: 'dp_colonia_postal_id',
             keys_selects: $keys_selects, id_selected: $this->row_upd->dp_colonia_postal_id, label: 'Colonia Postal',
             columns_ds: $columns_selects);
         if(errores::$error){
