@@ -154,6 +154,51 @@ class inm_empleado extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al modificar opinion', data: $r_modifica_bd);
         }
 
+        $r_rel_emp = (new inm_rel_emp_emp(link: $this->link))->filtro_and(filtro:
+            array('inm_empleado.id'=>$this->registro_id));
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $r_rel_emp);
+        }
+
+        $registro_emp['nombre'] = $registro['nombre'];
+        $registro_emp['ap'] = $registro['apellido_paterno'];
+        $registro_emp['am'] = $registro['apellido_materno'];
+        $registro_emp['rfc'] = $registro['rfc'];
+        $registro_emp['curp'] = $registro['curp'];
+        $registro_emp['nss'] = $registro['nss'];
+        $registro_emp['im_registro_patronal_id'] = $registro['im_registro_patronal_id'];
+        $registro_emp['org_puesto_id'] = $registro['org_puesto_id'];
+        $registro_emp['cat_sat_regimen_fiscal_id'] = $registro['cat_sat_regimen_fiscal_id'];
+        $registro_emp['cat_sat_tipo_regimen_nom_id'] = $registro['cat_sat_tipo_regimen_nom_id'];
+        $registro_emp['cat_sat_tipo_jornada_nom_id'] = $registro['cat_sat_tipo_jornada_nom_id'];
+        $registro_emp['fecha_inicio_rel_laboral'] = $registro['fecha_inicio_rel_laboral'];
+        $registro_emp['salario_diario'] = $registro['salario_diario'];
+        $registro_emp['salario_diario_integrado'] = $registro['salario_diario_integrado'];
+        $registro_emp['dp_colonia_postal_id'] = $registro['dp_colonia_postal_id'];
+        $registro_emp['calle'] = $registro['calle'];
+        $registro_emp['numero_exterior'] = $registro['numero_exterior'];
+        $registro_emp['numero_interior'] = $registro['numero_interior'];
+        $registro_emp['telefono'] = $registro['celular'];
+        if($r_rel_emp->n_registros > 0){
+            $r_modifica = (new em_empleado(link: $this->link))->modifica_bd(registro: $registro_emp,
+                id: $r_rel_emp->registros[0]['emp_empleado_id']);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $r_modifica);
+            }
+        }else{
+            $r_emp = (new em_empleado(link: $this->link))->alta_registro(registro: $registro_emp);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al insertar opcion', data: $r_emp);
+            }
+
+            $registro_rel_emp['em_empleado_id'] = $r_emp->registro_id;
+            $registro_rel_emp['inm_empleado_id'] = $r_modifica_bd->registro_id;
+            $r_rel_emp = (new inm_rel_emp_emp(link: $this->link))->alta_registro(registro: $registro_rel_emp);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al insertar opcion', data: $r_rel_emp);
+            }
+        }
+
         return $r_modifica_bd;
     }
 
