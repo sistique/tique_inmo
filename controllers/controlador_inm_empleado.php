@@ -115,9 +115,10 @@ class controlador_inm_empleado extends _ctl_formato {
     {
         $keys = new stdClass();
         $keys->inputs = array('descripcion','nss','rfc','nombre','apellido_paterno','apellido_materno','celular',
-            'razon_social','calle','numero_exterior','numero_interior','fecha_inicio_rel_laboral','salario_diario',
+            'razon_social','calle','numero_exterior','numero_interior','salario_diario',
             'salario_diario_integrado','curp');
         $keys->selects = array();
+        $keys->fechas = array('fecha_inicio_rel_laboral');
 
         $init_data = array();
         $init_data['adm_usuario'] = "gamboamartin\\administrador";
@@ -175,6 +176,14 @@ class controlador_inm_empleado extends _ctl_formato {
         $this->row_upd->cat_sat_regimen_fiscal_id = -1;
         $this->row_upd->cat_sat_tipo_regimen_nom_id = -1;
         $this->row_upd->cat_sat_tipo_jornada_nom_id = -1;
+
+        $this->row_upd->fecha_inicio_rel_laboral = date("Y-m-d");
+        $this->row_upd->calle = '';
+        $this->row_upd->numero_exterior = '';
+        $this->row_upd->numero_interior = '';
+        $this->row_upd->salario_diario = '';
+        $this->row_upd->salario_diario_integrado = '';
+
         if($r_rel_emp->n_registros > 0){
             $this->row_upd->dp_pais_id = $r_rel_emp->registros[0]['dp_pais_id'];
             $this->row_upd->dp_estado_id = $r_rel_emp->registros[0]['dp_estado_id'];
@@ -186,6 +195,13 @@ class controlador_inm_empleado extends _ctl_formato {
             $this->row_upd->cat_sat_regimen_fiscal_id = $r_rel_emp->registros[0]['cat_sat_regimen_fiscal_id'];
             $this->row_upd->cat_sat_tipo_regimen_nom_id = $r_rel_emp->registros[0]['cat_sat_tipo_regimen_nom_id'];
             $this->row_upd->cat_sat_tipo_jornada_nom_id = $r_rel_emp->registros[0]['cat_sat_tipo_jornada_nom_id'];
+
+            $this->row_upd->fecha_inicio_rel_laboral = $r_rel_emp->registros[0]['inm_empleado_fecha_inicio_rel_laboral'];
+            $this->row_upd->calle = $r_rel_emp->registros[0]['inm_empleado_calle'];
+            $this->row_upd->numero_exterior = $r_rel_emp->registros[0]['inm_empleado_numero_exterior'];
+            $this->row_upd->numero_interior = $r_rel_emp->registros[0]['inm_empleado_numero_interior'];
+            $this->row_upd->salario_diario = $r_rel_emp->registros[0]['inm_empleado_salario_diario'];
+            $this->row_upd->salario_diario_integrado = $r_rel_emp->registros[0]['inm_empleado_salario_diario_integrado'];
         }
 
         $columns_selects = array('dp_pais_descripcion');
@@ -267,7 +283,7 @@ class controlador_inm_empleado extends _ctl_formato {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'calle',
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'calle',
             keys_selects: $keys_selects, place_holder: 'Calle', required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
@@ -303,7 +319,7 @@ class controlador_inm_empleado extends _ctl_formato {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'curp',
+        $keys_selects = (new init())->key_select_txt(cols: 4,key: 'curp',
             keys_selects: $keys_selects, place_holder: 'CURP', required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
@@ -334,13 +350,13 @@ class controlador_inm_empleado extends _ctl_formato {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'nss',
+        $keys_selects = (new init())->key_select_txt(cols: 4,key: 'nss',
             keys_selects: $keys_selects, place_holder: 'NSS', required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'rfc',
+        $keys_selects = (new init())->key_select_txt(cols: 4,key: 'rfc',
             keys_selects: $keys_selects, place_holder: 'RFC', required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
