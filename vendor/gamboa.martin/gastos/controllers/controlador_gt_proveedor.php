@@ -75,7 +75,8 @@ class controlador_gt_proveedor extends _ctl_base
                 mensaje: 'Error al obtener inputs', data: $inputs, header: $header, ws: $ws);
         }
 
-        $documento = $this->html->input_file(cols: 12, name: 'documento', row_upd: new stdClass(), value_vacio: false);
+        $documento = $this->html->input_file(cols: 12, name: 'documento', row_upd: new stdClass(), value_vacio: false,
+            required: false);
         if (errores::$error) {
             return $this->retorno_error(
                 mensaje: 'Error al obtener inputs', data: $documento, header: $header, ws: $ws);
