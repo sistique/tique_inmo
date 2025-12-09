@@ -72,7 +72,9 @@ sl_nom_empleado.change(function(){
 
         $.each(data.registros, function( index, em_cuenta_bancaria ) {
 
-            integra_new_option("#em_cuenta_bancaria_id",em_cuenta_bancaria.bn_banco_descripcion_select+' '+em_cuenta_bancaria.em_cuenta_bancaria_num_cuenta,em_cuenta_bancaria.em_cuenta_bancaria_id);
+            integra_new_option("#em_cuenta_bancaria_id",em_cuenta_bancaria.bn_banco_descripcion+' ' +
+                em_cuenta_bancaria.em_cuenta_bancaria_num_cuenta+' '+em_cuenta_bancaria.em_cuenta_bancaria_clabe,
+                em_cuenta_bancaria.em_cuenta_bancaria_id);
         });
 
         sl_em_cuenta_bancaria_id.selectpicker('refresh');
@@ -87,7 +89,7 @@ sl_nom_empleado.change(function(){
 
         $.each(data.registros, function( index, nom_conf_empleado ) {
             configuraciones[nom_conf_empleado.nom_conf_empleado_id] = nom_conf_empleado;
-            integra_new_option("#nom_conf_empleado_id",nom_conf_empleado.nom_conf_empleado_descripcion+' '+nom_conf_empleado.em_empleado_id,nom_conf_empleado.nom_conf_empleado_id);
+            integra_new_option("#nom_conf_empleado_id",nom_conf_empleado.nom_conf_empleado_descripcion,nom_conf_empleado.nom_conf_empleado_id);
         });
 
         sl_nom_conf_empleado.selectpicker('refresh');
