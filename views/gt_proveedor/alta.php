@@ -34,8 +34,8 @@
                         <?php echo $controlador->inputs->contacto_3; ?>
                         <?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
 
-                        <input type='hidden' name='seccion_retorno' value='inm_comprador'>
-                        <input type='hidden' name='btn_action_next' value='etapa'>
+                        <input type='hidden' name='seccion_retorno' value='gt_proveedor'>
+                        <input type='hidden' name='btn_action_next' value='modifica'>
                         <input type='hidden' name='id_retorno' value='<?php echo $controlador->registro_id; ?>'>
                     </form>
 
