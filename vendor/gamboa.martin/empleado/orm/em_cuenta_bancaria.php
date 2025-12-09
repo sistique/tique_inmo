@@ -43,6 +43,10 @@ class em_cuenta_bancaria extends _modelo_parent{
             $this->registro['descripcion'] = (isset($this->registro['clabe'])) ? $this->registro['clabe'] : 'SIN CLABE';
         }
 
+        if (!isset($this->registro['descripcion_select'])){
+            $this->registro['descripcion_select'] = $this->registro['descripcion'];
+        }
+
         $validaciones = $this->validaciones($this->registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar campos',data: $validaciones);

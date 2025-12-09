@@ -264,7 +264,7 @@ class controlador_inm_empleado extends _ctl_formato {
 
         $keys_selects = $this->key_select(cols:6, con_registros: true,filtro: $filtro,
             key: 'em_cuenta_bancaria_id', keys_selects: $keys_selects, id_selected: $id_selected,
-            label: 'Cuenta Bancaria');
+            label: 'Cuenta Bancaria',columns_ds: array('em_cuenta_bancaria_descripcion'));
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
@@ -284,7 +284,7 @@ class controlador_inm_empleado extends _ctl_formato {
         }
         $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(),
             key: 'nom_conf_nomina_id', keys_selects: $keys_selects, id_selected: $id_selected,
-            label: 'Configuracion Nomina');
+            label: 'Configuracion Nomina', columns_ds: array('nom_conf_nomina_descripcion'));
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }

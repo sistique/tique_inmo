@@ -33,9 +33,19 @@ class nom_conf_empleado extends _modelo_parent{
             }
         }
 
+        $r_cuenta = (new em_cuenta_bancaria(link: $this->link))->registro(registro_id: $this->registro['em_empleado_id']);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $r_cuenta);
+        }
+
+        $r_conf = (new nom_conf_nomina(link: $this->link))->registro(registro_id: $this->registro['em_empleado_id']);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $r_conf);
+        }
+
         if (!isset($this->registro['descripcion'])){
-            $this->registro['descripcion'] = $this->registro['em_cuenta_bancaria_id'].' '.
-                $this->registro['nom_conf_nomina_id'];
+            $this->registro['descripcion'] = $r_cuenta['em_empleado_nombre'].' '. $r_cuenta['em_empleado_ap']
+                .' '.$r_cuenta['em_empleado_am'].' '. $r_conf['nom_conf_nomina_descripcion'];
         }
 
         $this->registro = $this->limpia_campos_extras(registro: $this->registro,
