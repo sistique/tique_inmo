@@ -24,7 +24,7 @@ class gt_proveedor extends _modelo_parent
             'dp_colonia_postal' => $tabla, 'dp_cp' => 'dp_colonia_postal', 'dp_municipio' => 'dp_cp',
             'dp_estado' => 'dp_municipio', 'dp_pais' => 'dp_estado');
         $campos_obligatorios = array('gt_tipo_proveedor_id', 'dp_colonia_postal_id', 'cat_sat_regimen_fiscal_id',
-            'rfc', 'exterior', 'telefono_1', 'contacto_1', 'pagina_web');
+            'rfc', 'exterior');
 
         $no_duplicados = array();
 
