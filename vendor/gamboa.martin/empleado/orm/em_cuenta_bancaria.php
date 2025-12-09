@@ -39,8 +39,15 @@ class em_cuenta_bancaria extends _modelo_parent{
             $this->registro['num_cuenta'] = 'SIN CUENTA';
         }
 
+        $r_sucursal = (new bn_sucursal(link: $this->link))->registro(registro_id: $this->registro['bn_sucursal_id']);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar campos',data: $r_sucursal);
+        }
+
         if (!isset($this->registro['descripcion'])){
-            $this->registro['descripcion'] = (isset($this->registro['clabe'])) ? $this->registro['clabe'] : 'SIN CLABE';
+            $this->registro['descripcion'] = $r_sucursal['bn_banco_descripcion'];
+            $this->registro['descripcion'] .= ' - ' . $this->registro['num_cuenta'];
+            $this->registro['descripcion'] .= ' - ' . $this->registro['clabe'];
         }
 
         if (!isset($this->registro['descripcion_select'])){

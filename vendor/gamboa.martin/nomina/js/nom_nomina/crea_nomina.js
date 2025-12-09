@@ -72,8 +72,7 @@ sl_nom_empleado.change(function(){
 
         $.each(data.registros, function( index, em_cuenta_bancaria ) {
 
-            integra_new_option("#em_cuenta_bancaria_id",em_cuenta_bancaria.bn_banco_descripcion+' ' +
-                em_cuenta_bancaria.em_cuenta_bancaria_num_cuenta+' '+em_cuenta_bancaria.em_cuenta_bancaria_clabe,
+            integra_new_option("#em_cuenta_bancaria_id",em_cuenta_bancaria.em_cuenta_bancaria_descripcion,
                 em_cuenta_bancaria.em_cuenta_bancaria_id);
         });
 
