@@ -33,14 +33,16 @@ class nom_conf_empleado extends _modelo_parent{
             }
         }
 
-        $r_cuenta = (new em_cuenta_bancaria(link: $this->link))->registro(registro_id: $this->registro['em_empleado_id']);
+        $r_cuenta = (new em_cuenta_bancaria(link: $this->link))->registro(
+            registro_id: $this->registro['em_cuenta_bancaria_id']);
         if (errores::$error) {
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $r_cuenta);
+            return $this->error->error(mensaje: 'Error al maquetar key_selects', data: $r_cuenta);
         }
 
-        $r_conf = (new nom_conf_nomina(link: $this->link))->registro(registro_id: $this->registro['em_empleado_id']);
+        $r_conf = (new nom_conf_nomina(link: $this->link))->registro(
+            registro_id: $this->registro['nom_conf_nomina_id']);
         if (errores::$error) {
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $r_conf);
+            return $this->error->error(mensaje: 'Error al maquetar key_selects', data: $r_conf);
         }
 
         if (!isset($this->registro['descripcion'])){
