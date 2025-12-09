@@ -108,7 +108,7 @@ class nom_nomina_html extends base_nominas
     {
 
         $keys = array('cat_sat_periodicidad_pago_nom_id','cat_sat_tipo_nomina_id','em_cuenta_bancaria_id',
-            'em_empleado_id','em_registro_patronal_id','nom_periodo_id','nom_conf_empleado_id','org_puesto_id',
+            'em_empleado_id','im_registro_patronal_id','nom_periodo_id','nom_conf_empleado_id','org_puesto_id',
             'cat_sat_tipo_contrato_nom_id');
 
         $valida = (new validacion())->valida_existencia_keys(keys:  $keys,registro: $inputs->selects,
@@ -118,7 +118,7 @@ class nom_nomina_html extends base_nominas
         }
 
         $controler->inputs->select = new stdClass();
-        $controler->inputs->select->em_registro_patronal_id = $inputs->selects->em_registro_patronal_id;
+        $controler->inputs->select->im_registro_patronal_id = $inputs->selects->im_registro_patronal_id;
         $controler->inputs->select->em_empleado_id = $inputs->selects->em_empleado_id;
         $controler->inputs->select->nom_conf_empleado_id = $inputs->selects->nom_conf_empleado_id;
         $controler->inputs->select->cat_sat_tipo_nomina_id = $inputs->selects->cat_sat_tipo_nomina_id;
@@ -543,7 +543,7 @@ class nom_nomina_html extends base_nominas
         }
         $selects->org_puesto_id = $select;
 
-        $cols_em_registro_patronal_id = $params->em_registro_patronal_id->cols ?? 6;
+        $cols_im_registro_patronal_id = $params->im_registro_patronal_id->cols ?? 6;
 
         $r_registro_patronal = (new im_registro_patronal(link: $link))->filtro_and(
             filtro: array('im_registro_patronal.status' => 'activo'));
