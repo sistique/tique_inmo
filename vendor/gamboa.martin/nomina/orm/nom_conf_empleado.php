@@ -47,7 +47,7 @@ class nom_conf_empleado extends _modelo_parent{
 
         if (!isset($this->registro['descripcion'])){
             $this->registro['descripcion'] = $r_cuenta['em_empleado_nombre'].' '. $r_cuenta['em_empleado_ap']
-                .' '.$r_cuenta['em_empleado_am'].' '. $r_conf['nom_conf_nomina_descripcion'];
+                .' '.$r_cuenta['em_empleado_am'].' - '. $r_conf['nom_conf_nomina_descripcion'];
         }
 
         $this->registro = $this->limpia_campos_extras(registro: $this->registro,
