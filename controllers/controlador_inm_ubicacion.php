@@ -239,7 +239,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         $keys_selects = array();
 
         $filtro_fact['inm_factura_compra.asignado_completo'] = 'inactivo';
-        $columns_ds = array('inm_factura_compra_id','gt_proveedor_razon_social','inm_factura_compra_fecha');
+        $columns_ds = array('inm_factura_compra_id','inm_factura_compra_descripcion');
         $keys_selects = $this->key_select(cols: 12, con_registros: true, filtro: $filtro_fact, key: 'inm_factura_compra_id',
             keys_selects: $keys_selects, id_selected: -1, label: 'Factura Compra',
             columns_ds: $columns_ds, disabled: false, required: false);

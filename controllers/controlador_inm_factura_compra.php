@@ -99,7 +99,7 @@ class controlador_inm_factura_compra extends _ctl_base {
     protected function campos_view(): array
     {
         $keys = new stdClass();
-        $keys->inputs = array('descripcion','descripcion_producto','cantidad','costo_promedio',
+        $keys->inputs = array('codigo','descripcion','descripcion_producto','cantidad','costo_promedio',
             'cat_sat_cve_prod_codigo','valor_unitario','subtotal','iva','total','cantidad_actual');
         $keys->selects = array();
 
@@ -680,6 +680,12 @@ class controlador_inm_factura_compra extends _ctl_base {
 
     protected function key_selects_txt(array $keys_selects): array
     {
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'codigo',
+            keys_selects:$keys_selects, place_holder: 'Folio');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
         $keys_selects = (new init())->key_select_txt(cols: 12,key: 'descripcion',
             keys_selects:$keys_selects, place_holder: 'Descripcion');
         if(errores::$error){
