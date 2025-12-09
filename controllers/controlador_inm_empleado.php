@@ -169,11 +169,13 @@ class controlador_inm_empleado extends _ctl_formato {
         }
 
         $id_selected = -1;
+        $filtro = array();
         if($r_rel_emp->n_registros > 0){
             $id_selected = $r_rel_emp->registros[0]['em_empleado_id'];
+            $filtro['em_empleado.id'] = $r_rel_emp->registros[0]['em_empleado_id'];
         }
 
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(),
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro: $filtro,
             key: 'em_empleado_id', keys_selects: $keys_selects, id_selected: $id_selected,
             label: 'Empleado');
         if(errores::$error){

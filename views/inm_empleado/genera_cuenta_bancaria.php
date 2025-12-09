@@ -22,7 +22,7 @@
                         <input type='hidden' name='id_retorno' value='<?php echo $controlador->registro_id; ?>'>
 
                         <div class="controls">
-                            <button type="submit" class="btn btn-success" value="etapa" name="btn_action_next">Alta</button><br>
+                            <button type="submit" class="btn btn-success" value="genera_cuenta_bancaria" name="btn_action_next">Alta</button><br>
                         </div>
                     </form>
 
@@ -44,9 +44,10 @@
                         <thead>
                         <tr>
                             <th>Id</th>
-                            <th>Etapa</th>
-                            <th>Fecha</th>
-                            <th>Observaciones</th>
+                            <th>Empleado</th>
+                            <th>Banco</th>
+                            <th>Numero de cuenta</th>
+                            <th>CLABE</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -54,10 +55,12 @@
                         foreach ($controlador->cuentas_bancarias as $cuenta){
                         ?>
                         <tr>
-                            <td><?php echo $cuenta['inm_bitacora_status_comprador_id'] ?></td>
-                            <td><?php echo $cuenta['inm_status_comprador_descripcion'] ?></td>
-                            <td><?php echo $cuenta['inm_bitacora_status_comprador_fecha_status'] ?></td>
-                            <td><?php echo $cuenta['inm_bitacora_status_comprador_observaciones'] ?></td>
+                            <td><?php echo $cuenta['em_cuenta_bancaria_id'] ?></td>
+                            <td><?php echo $cuenta['em_empleado_nombre']." ".$cuenta['em_empleado_ap']
+                                        ." ".$cuenta['em_empleado_am'] ?></td>
+                            <td><?php echo $cuenta['bn_sucursal_descripcion'] ?></td>
+                            <td><?php echo $cuenta['em_cuenta_bancaria_num_cuenta'] ?></td>
+                            <td><?php echo $cuenta['em_cuenta_bancaria_clabe'] ?></td>
                         </tr>
                         <?php } ?>
                         </tbody>
