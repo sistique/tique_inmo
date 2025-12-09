@@ -4,6 +4,7 @@ namespace html;
 
 
 use gamboamartin\errores\errores;
+use gamboamartin\im_registro_patronal\models\im_registro_patronal;
 use gamboamartin\nomina\controllers\controlador_nom_deduccion;
 
 use gamboamartin\nomina\controllers\controlador_nom_periodo;
@@ -223,8 +224,18 @@ class nom_periodo_html extends html_controler {
     }
     $selects->cat_sat_periodicidad_pago_nom_id = $select;
 
+    $r_registro_patronal = (new im_registro_patronal(link: $link))->filtro_and(
+        filtro: array('im_registro_patronal.status' => 'activo'));
+    if (errores::$error) {
+        return $this->error->error(mensaje: 'Error al generar select', data: $select);
+    }
+
+    $id_selected = -1;
+    if($r_registro_patronal->n_registros > 0){
+        $id_selected = $r_registro_patronal->registros[0]['im_registro_patronal_id'];
+    }
     $select = (new im_registro_patronal_html(html:$this->html_base))->select_im_registro_patronal_id(
-    cols: 12, con_registros:true, id_selected:-1,link: $link,required: true);
+    cols: 12, con_registros:true, id_selected: $id_selected,link: $link,required: true);
     if(errores::$error){
     return $this->error->error(mensaje: 'Error al generar select',data:  $select);
     }

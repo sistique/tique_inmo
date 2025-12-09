@@ -5,6 +5,7 @@ use gamboamartin\empleado\models\em_empleado;
 use gamboamartin\errores\errores;
 use gamboamartin\facturacion\html\fc_factura_html;
 use gamboamartin\facturacion\models\fc_factura;
+use gamboamartin\im_registro_patronal\models\im_registro_patronal;
 use gamboamartin\nomina\controllers\controlador_nom_nomina;
 use gamboamartin\organigrama\html\org_puesto_html;
 use gamboamartin\validacion\validacion;
@@ -544,12 +545,23 @@ class nom_nomina_html extends base_nominas
 
         $cols_em_registro_patronal_id = $params->em_registro_patronal_id->cols ?? 6;
 
-        $select = (new em_registro_patronal_html(html: $this->html_base))->select_em_registro_patronal_id(
-            cols: $cols_em_registro_patronal_id, con_registros: true, id_selected: -1, link: $link);
+        $r_registro_patronal = (new im_registro_patronal(link: $link))->filtro_and(
+            filtro: array('im_registro_patronal.status' => 'activo'));
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al generar select', data: $select);
         }
-        $selects->em_registro_patronal_id = $select;
+
+        $id_selected = -1;
+        if($r_registro_patronal->n_registros > 0){
+            $id_selected = $r_registro_patronal->registros[0]['im_registro_patronal_id'];
+        }
+
+        $select = (new im_registro_patronal_html(html: $this->html_base))->select_im_registro_patronal_id(
+            cols: $cols_im_registro_patronal_id, con_registros: true, id_selected: $id_selected, link: $link);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al generar select', data: $select);
+        }
+        $selects->im_registro_patronal_id = $select;
 
         $cols_nom_periodo_id = $params->nom_periodo_id->cols ?? 6;
         $select = (new nom_periodo_html(html: $this->html_base))->select_nom_periodo_id(
