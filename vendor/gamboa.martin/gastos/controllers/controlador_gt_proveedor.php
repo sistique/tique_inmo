@@ -174,13 +174,13 @@ class controlador_gt_proveedor extends _ctl_base
     protected function key_selects_txt(array $keys_selects): array
     {
         $keys_selects = (new \base\controller\init())->key_select_txt(cols: 4, key: 'codigo',
-            keys_selects: $keys_selects, place_holder: 'Código');
+            keys_selects: $keys_selects, place_holder: 'Código', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
         $keys_selects = (new \base\controller\init())->key_select_txt(cols: 12, key: 'descripcion',
-            keys_selects: $keys_selects, place_holder: 'Descripción');
+            keys_selects: $keys_selects, place_holder: 'Descripción', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
@@ -210,7 +210,7 @@ class controlador_gt_proveedor extends _ctl_base
         }
 
         $keys_selects = (new \base\controller\init())->key_select_txt(cols: 4, key: 'telefono_1',
-            keys_selects: $keys_selects, place_holder: 'Teléfono 1');
+            keys_selects: $keys_selects, place_holder: 'Teléfono 1', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
@@ -228,7 +228,7 @@ class controlador_gt_proveedor extends _ctl_base
         }
 
         $keys_selects = (new \base\controller\init())->key_select_txt(cols: 4, key: 'contacto_1',
-            keys_selects: $keys_selects, place_holder: 'Contacto 1');
+            keys_selects: $keys_selects, place_holder: 'Contacto 1', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
@@ -245,14 +245,8 @@ class controlador_gt_proveedor extends _ctl_base
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new \base\controller\init())->key_select_txt(cols: 4, key: 'contacto_3',
-            keys_selects: $keys_selects, place_holder: 'Contacto 3');
-        if (errores::$error) {
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
-        }
-
         $keys_selects = (new \base\controller\init())->key_select_txt(cols: 12, key: 'pagina_web',
-            keys_selects: $keys_selects, place_holder: 'Pagina web');
+            keys_selects: $keys_selects, place_holder: 'Pagina web', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
