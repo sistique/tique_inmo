@@ -10,7 +10,7 @@ use gamboamartin\documento\models\doc_extension_permitido;
 use gamboamartin\empleado\models\em_abono_anticipo;
 use gamboamartin\empleado\models\em_anticipo;
 use gamboamartin\empleado\models\em_empleado;
-use gamboamartin\empleado\models\em_registro_patronal;
+use gamboamartin\im_registro_patronal\models\im_registro_patronal;
 use gamboamartin\errores\errores;
 use gamboamartin\facturacion\models\fc_cfdi_sellado;
 use gamboamartin\facturacion\models\fc_csd;
@@ -52,7 +52,7 @@ class nom_nomina extends modelo
 
         $campos_obligatorios = array('cat_sat_periodicidad_pago_nom_id', 'cat_sat_tipo_contrato_nom_id',
             'cat_sat_tipo_jornada_nom_id','cat_sat_tipo_nomina_id', 'em_cuenta_bancaria_id',
-            'fecha_inicial_pago', 'fecha_final_pago', 'em_registro_patronal_id', 'em_empleado_id','nom_periodo_id',
+            'fecha_inicial_pago', 'fecha_final_pago', 'im_registro_patronal_id', 'em_empleado_id','nom_periodo_id',
             'num_dias_pagados','org_departamento_id','org_puesto_id','em_clase_riesgo_id','em_cuenta_bancaria_id',
             'fecha_pago');
 
@@ -395,7 +395,7 @@ class nom_nomina extends modelo
 
         $registros_factura = $this->genera_registro_factura(registros: $registros['fc_csd'],
             empleado_sucursal: $registros['nom_rel_empleado_sucursal'],cat_sat: $registros['nom_conf_empleado'],
-            em_registro_patronal: $registros['em_registro_patronal']);
+            im_registro_patronal: $registros['im_registro_patronal']);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al generar registros de factura', data: $registros_factura);
         }
@@ -470,7 +470,7 @@ class nom_nomina extends modelo
 
             $calcula_cuota_obrero_patronal = new calcula_cuota_obrero_patronal();
             $calculos = $calcula_cuota_obrero_patronal->cuota_obrero_patronal(
-                porc_riesgo_trabajo: $registros['em_registro_patronal']->em_clase_riesgo_factor,
+                porc_riesgo_trabajo: $registros['im_registro_patronal']->em_clase_riesgo_factor,
                 fecha: $this->registro['fecha_final_pago'],
                 n_dias: $dias_periodo,
                 sbc: $registros['em_empleado']->em_empleado_salario_diario_integrado, link: $this->link);
@@ -1058,7 +1058,7 @@ class nom_nomina extends modelo
         $pdf->Cell(0, 0, $nomina['org_empresa_rfc']);
 
         $pdf->SetXY(77, 19);
-        $pdf->Cell(0, 0, $nomina['em_registro_patronal_descripcion']);
+        $pdf->Cell(0, 0, $nomina['im_registro_patronal_descripcion']);
 
         $pdf->SetXY(165, 17.5);
         $pdf->Cell(0, 0, date('h:i:s'));
@@ -1960,22 +1960,22 @@ class nom_nomina extends modelo
      */
     private function genera_registros_alta_bd(): array
     {
-        $keys = array('em_registro_patronal_id','em_empleado_id','nom_conf_empleado_id');
+        $keys = array('im_registro_patronal_id','em_empleado_id','nom_conf_empleado_id');
         $valida = $this->validacion->valida_ids(keys: $keys,registro:  $this->registro);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al validar registro', data: $valida);
         }
 
-        $em_registro_patronal = $this->registro_por_id(entidad: new em_registro_patronal(link: $this->link),
-            id:  $this->registro['em_registro_patronal_id']);
+        $im_registro_patronal = $this->registro_por_id(entidad: new im_registro_patronal(link: $this->link),
+            id:  $this->registro['im_registro_patronal_id']);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al generar registros de registro patronal',
-                data: $em_registro_patronal);
+                data: $im_registro_patronal);
         }
 
 
         $fc_csd_id = $this->registro_por_id(entidad: new fc_csd($this->link),
-            id: $em_registro_patronal->em_registro_patronal_fc_csd_id);
+            id: $im_registro_patronal->im_registro_patronal_fc_csd_id);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al generar registros de fcd', data: $fc_csd_id);
         }
@@ -1999,7 +1999,7 @@ class nom_nomina extends modelo
                 data: $nom_rel_empleado_sucursal);
         }
 
-        return array('em_registro_patronal' => $em_registro_patronal, 'em_empleado' => $em_empleado,
+        return array('im_registro_patronal' => $im_registro_patronal, 'em_empleado' => $em_empleado,
             'fc_csd' => $fc_csd_id, 'nom_rel_empleado_sucursal' => $nom_rel_empleado_sucursal,
             'nom_conf_empleado' => $nom_conf_empleado);
     }
@@ -2245,7 +2245,7 @@ class nom_nomina extends modelo
 
 
     private function genera_registro_factura(mixed $registros, mixed $empleado_sucursal, mixed $cat_sat,
-                                             stdClass $em_registro_patronal): array
+                                             stdClass $im_registro_patronal): array
     {
         $keys = array('folio','fecha');
         $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $this->registro);
@@ -2271,7 +2271,7 @@ class nom_nomina extends modelo
         $com_tipo_cambio_id = $cat_sat->nom_conf_factura_com_tipo_cambio_id;
         $cat_sat_uso_cfdi_id = $cat_sat->nom_conf_factura_cat_sat_uso_cfdi_id;
         $cat_sat_tipo_de_comprobante_id = $cat_sat->nom_conf_factura_cat_sat_tipo_de_comprobante_id;
-        $dp_calle_pertenece_id = $em_registro_patronal->dp_calle_pertenece_id;
+        $dp_calle_pertenece_id = $im_registro_patronal->dp_calle_pertenece_id;
 
         return array('exportacion'=>$exportacion,'folio' => $folio, 'serie' => $serie, 'fecha' => $fecha, 'fc_csd_id' => $fc_csd_id,
             'com_sucursal_id' => $com_sucursal_id, 'cat_sat_forma_pago_id' => $cat_sat_forma_pago_id,
@@ -2372,7 +2372,7 @@ class nom_nomina extends modelo
         $this->registro['dp_calle_pertenece_id'] = $registros['fc_csd']->dp_calle_pertenece_id;
         $this->registro['org_departamento_id'] = $registros['em_empleado']->org_departamento_id;
         $this->registro['org_puesto_id'] = $registros['em_empleado']->org_puesto_id;
-        $this->registro['em_clase_riesgo_id'] = $registros['em_registro_patronal']->em_clase_riesgo_id;
+        $this->registro['em_clase_riesgo_id'] = $registros['im_registro_patronal']->em_clase_riesgo_id;
 
 
         return $this->registro;
@@ -2830,7 +2830,7 @@ class nom_nomina extends modelo
         $datos['nombre_completo'] .= $registro['em_empleado_am'];
         $datos['puesto'] = $registro['org_puesto_descripcion'];
         $datos['departamento'] = $registro['org_departamento_descripcion'];
-        $datos['registro_patronal'] = $registro['em_registro_patronal_descripcion'];
+        $datos['registro_patronal'] = $registro['im_registro_patronal_descripcion'];
         $datos['fecha_ingreso'] = $registro['em_empleado_fecha_inicio_rel_laboral'];
         $datos['dias_laborados'] = $registro['nom_nomina_num_dias_pagados'];
         $datos['dias_x_incapacidad'] = 0.0;
