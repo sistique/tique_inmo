@@ -302,6 +302,16 @@ class controlador_inm_factura_compra extends _ctl_base {
             }
 
             $inm_detalle_factura_compra['elimina_bd'] = $button;
+
+            $button = $this->html->button_href(accion: 'descuento', etiqueta: 'Descuento',
+                registro_id: $inm_detalle_factura_compra['inm_detalle_factura_compra_id'],
+                seccion: 'inm_detalle_factura_compra', style: 'warning', params: $params);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al integrar button', data: $button, header: $header,
+                    ws: $ws);
+            }
+
+            $inm_detalle_factura_compra['descuento'] = $button;
             $detalle[] = $inm_detalle_factura_compra;
         }
 
