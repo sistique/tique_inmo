@@ -93,11 +93,16 @@ class controlador_inm_detalle_factura_compra extends _ctl_base {
                 mensaje: 'Error al inicializar alta',data:  $r_alta, header: $header,ws:  $ws);
         }
 
-        $keys_selects = array();
+        $r_detalle = (new inm_detalle_factura_compra(link: $this->link))->registro(registro_id: $this->registro_id);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al inicializar alta',data:  $r_alta, header: $header,ws:  $ws);
+        }
 
-        $filtro['inm_factura_compra.id'] = $this->registro_id;
+        $keys_selects = array();
+        $filtro['inm_factura_compra.id'] = $r_detalle['inm_factura_compra_id'];
         $keys_selects = $this->key_select(cols: 12, con_registros: true, filtro: $filtro, key: 'inm_factura_compra_id',
-            keys_selects: $keys_selects, id_selected: $this->registro_id, label: 'Factura', disabled: true,
+            keys_selects: $keys_selects, id_selected: $r_detalle['inm_factura_compra_id'], label: 'Factura',
             required: false);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
@@ -117,7 +122,7 @@ class controlador_inm_detalle_factura_compra extends _ctl_base {
                 mensaje: 'Error al generar btn_action_next', data: $btn_action_next, header: $header, ws: $ws);
         }
 
-        $id_retorno = $this->html->hidden('id_retorno', value: $this->registro_id);
+        $id_retorno = $this->html->hidden('id_retorno', value: $r_detalle['inm_factura_compra_id']);
         if (errores::$error) {
             return $this->retorno_error(
                 mensaje: 'Error al generar btn_action_next', data: $btn_action_next, header: $header, ws: $ws);
