@@ -17,6 +17,7 @@ use gamboamartin\system\links_menu;
 use gamboamartin\template\html;
 use PDO;
 use stdClass;
+use Throwable;
 
 class controlador_inm_detalle_factura_compra extends _ctl_base {
 
@@ -139,6 +140,49 @@ class controlador_inm_detalle_factura_compra extends _ctl_base {
         $this->inputs->seccion_retorno = $seccion_retorno;
 
         return $inputs;
+    }
+
+    public function descuento_bd(bool $header, bool $ws = false):array|stdClass
+    {
+        $r_detalle = (new inm_detalle_factura_compra(link: $this->link))->registro(registro_id: $this->registro_id);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al inicializar alta',data:  $r_detalle, header: $header,ws:  $ws);
+        }
+
+        $registro['total'] = $r_detalle['inm_detalle_factura_compra_total'] - $_POST['descuento'];
+        $registro['descuento'] = $_POST['descuento'];
+        $r_inm_detalle = (new inm_detalle_factura_compra(link: $this->link))->modifica_bd(
+            registro: $registro,id: $this->registro_id);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al generar link', data: $r_inm_detalle,
+                header: $header, ws: $ws);
+        }
+
+        if($header){
+            $retorno = $this->obj_link->link_con_id(
+                accion: $_POST['btn_action_next'], link: $this->link, registro_id: $_POST['id_retorno'],
+                seccion: $_POST['seccion_retorno']);
+            if (errores::$error) {
+                $this->retorno_error(mensaje: 'Error al generar link', data: $retorno, header: $header, ws: $ws);
+            }
+
+            header('Location:'.$retorno);
+            exit;
+        }
+        if($ws){
+            header('Content-Type: application/json');
+            try {
+                echo json_encode($r_inm_detalle, JSON_THROW_ON_ERROR);
+            }
+            catch (Throwable $e){
+                return $this->retorno_error(mensaje: 'Error al maquetar estados',data: $e, header: $header, ws: $ws);
+            }
+            exit;
+        }
+
+
+        return $r_inm_detalle;
     }
 
 

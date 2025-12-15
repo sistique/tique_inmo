@@ -22,7 +22,7 @@
 
                         <div class="control-group btn-alta">
                             <div class="controls">
-                                <button type="submit" class="btn btn-success btn-insert" name="btn_action_next">Inserta Producto</button>
+                                <button type="submit" class="btn btn-success btn-insert">Aplica Descuento</button>
                             </div>
                         </div>
                     </form>
