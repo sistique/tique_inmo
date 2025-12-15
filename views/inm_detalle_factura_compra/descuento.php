@@ -13,6 +13,7 @@
                         <?php include (new views())->ruta_templates."head/subtitulo.php"; ?>
 
                         <?php echo $controlador->inputs->inm_factura_compra_id; ?>
+                        <?php echo $controlador->inputs->total; ?>
                         <?php echo $controlador->inputs->descuento; ?>
 
                         <?php echo $controlador->inputs->btn_action_next; ?>
