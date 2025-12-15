@@ -20,6 +20,7 @@ use stdClass;
 
 class controlador_inm_detalle_factura_compra extends _ctl_base {
 
+    public string $link_descuento_bd = '';
     public function __construct(PDO      $link, html $html = new \gamboamartin\template_1\html(),
                                 stdClass $paths_conf = new stdClass())
     {
@@ -38,6 +39,14 @@ class controlador_inm_detalle_factura_compra extends _ctl_base {
             paths_conf: $paths_conf);
 
         $this->lista_get_data = true;
+
+
+        $init_links = $this->init_links();
+        if (errores::$error) {
+            $error = $this->errores->error(mensaje: 'Error al inicializar links', data: $init_links);
+            print_r($error);
+            die('Error');
+        }
     }
 
     public function alta(bool $header, bool $ws = false): array|string
@@ -60,10 +69,12 @@ class controlador_inm_detalle_factura_compra extends _ctl_base {
     protected function campos_view(): array
     {
         $keys = new stdClass();
-        $keys->inputs = array('descripcion');
+        $keys->inputs = array('descripcion','descuento');
         $keys->selects = array();
 
         $init_data = array();
+        $init_data['inm_factura_compra'] = "gamboamartin\\inmuebles";
+
         $campos_view = $this->campos_view_base(init_data: $init_data,keys:  $keys);
 
         if(errores::$error){
@@ -73,6 +84,58 @@ class controlador_inm_detalle_factura_compra extends _ctl_base {
 
         return $campos_view;
     }
+
+    public function descuento(bool $header, bool $ws = false): array|stdClass
+    {
+        $r_alta = $this->init_alta();
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al inicializar alta',data:  $r_alta, header: $header,ws:  $ws);
+        }
+
+        $keys_selects = array();
+
+        $filtro['inm_factura_compra.id'] = $this->registro_id;
+        $keys_selects = $this->key_select(cols: 12, con_registros: true, filtro: $filtro, key: 'inm_factura_compra_id',
+            keys_selects: $keys_selects, id_selected: $this->registro_id, label: 'Factura', disabled: true,
+            required: false);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
+                header: $header,ws:  $ws);
+        }
+
+        $inputs = $this->inputs(keys_selects: $keys_selects);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener inputs',data:  $inputs, header: $header,ws:  $ws);
+        }
+
+        $retorno = 'productos_factura';
+        $btn_action_next = $this->html->hidden('btn_action_next', value: $retorno);
+        if (errores::$error) {
+            return $this->retorno_error(
+                mensaje: 'Error al generar btn_action_next', data: $btn_action_next, header: $header, ws: $ws);
+        }
+
+        $id_retorno = $this->html->hidden('id_retorno', value: $this->registro_id);
+        if (errores::$error) {
+            return $this->retorno_error(
+                mensaje: 'Error al generar btn_action_next', data: $btn_action_next, header: $header, ws: $ws);
+        }
+
+        $seccion_retorno = $this->html->hidden('seccion_retorno', value: 'inm_factura_compra');
+        if (errores::$error) {
+            return $this->retorno_error(
+                mensaje: 'Error al generar btn_action_next', data: $btn_action_next, header: $header, ws: $ws);
+        }
+
+        $this->inputs->btn_action_next = $btn_action_next;
+        $this->inputs->id_retorno = $id_retorno;
+        $this->inputs->seccion_retorno = $seccion_retorno;
+
+        return $inputs;
+    }
+
 
     public function elimina_bd(bool $header, bool $ws = false): array|stdClass
     {
@@ -86,6 +149,26 @@ class controlador_inm_detalle_factura_compra extends _ctl_base {
     }
 
 
+    protected function init_links(): array|string
+    {
+        $links = $this->obj_link->genera_links(controler: $this);
+        if (errores::$error) {
+            $error = $this->errores->error(mensaje: 'Error al generar links', data: $links);
+            print_r($error);
+            exit;
+        }
+
+        $link = $this->obj_link->get_link(seccion: "inm_detalle_factura_compra", accion: "descuento_bd");
+        if (errores::$error) {
+            $error = $this->errores->error(mensaje: 'Error al recuperar link modifica_direccion', data: $link);
+            print_r($error);
+            exit;
+        }
+
+        $this->link_descuento_bd = $link;
+
+        return $link;
+    }
 
     public function modifica(bool $header, bool $ws = false): array|stdClass
     {
@@ -129,6 +212,12 @@ class controlador_inm_detalle_factura_compra extends _ctl_base {
 
         $keys_selects = (new init())->key_select_txt(cols: 12,key: 'descripcion',
             keys_selects:$keys_selects, place_holder: 'Descripcion');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'descuento',
+            keys_selects:$keys_selects, place_holder: 'Descuento');
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
