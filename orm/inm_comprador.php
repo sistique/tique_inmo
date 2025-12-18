@@ -96,6 +96,17 @@ class inm_comprador extends _modelo_parent{
 
         $columnas_extra['inm_ubicacion_completa'] = $sql;
 
+        $sql = "( IFNULL((SELECT
+                        fecha_status
+                    FROM inm_bitacora_status_comprador 
+                        WHERE
+                    inm_bitacora_status_comprador.inm_comprador_id = inm_comprador.id
+                        AND
+                    inm_bitacora_status_comprador.inm_status_comprador_id = inm_status_comprador.id
+                         LIMIT 1), ''))";
+
+        $columnas_extra['inm_fecha_status'] = $sql;
+
         parent::__construct(link: $link, tabla: $tabla, campos_obligatorios: $campos_obligatorios,
             columnas: $columnas, columnas_extra: $columnas_extra, renombres: $renombres,
             tipo_campos: $tipo_campos, atributos_criticos: $atributos_criticos,
