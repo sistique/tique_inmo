@@ -126,6 +126,12 @@ class em_empleado extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al dar de alta empleado',data:  $r_alta_bd);
         }
 
+        $r_sucursal = $this->transacciona_em_rel_empleado_sucursal(data: $this->registro,
+            em_empleado_id: $r_alta_bd->registro_id);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al dar de alta empleado',data:  $r_sucursal);
+        }
+
         /*$inserta_documento = $this->registra_documento_empleado(em_empleado: $r_alta_bd->registro_id);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al insertar documento para empleado', data: $inserta_documento);
@@ -665,14 +671,14 @@ class em_empleado extends _modelo_parent{
             }
         }
 
-        $dp_calle_pertenece = (new dp_calle_pertenece(link: $this->link))->registro(
-            registro_id: $data['dp_calle_pertenece_id'],retorno_obj: true);
+        $dp_colonia_postal = (new dp_colonia_postal(link: $this->link))->registro(
+            registro_id: $data['dp_colonia_postal_id'],retorno_obj: true);
 
         if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al obtener datos de direccion', data: $dp_calle_pertenece);
+            return $this->error->error(mensaje: 'Error al obtener datos de direccion', data: $dp_colonia_postal);
         }
 
-        $data['dp_municipio_id'] = $dp_calle_pertenece->dp_municipio_id;
+        $data['dp_municipio_id'] = $dp_colonia_postal->dp_municipio_id;
 
         $respuesta = (new com_cliente($this->link))->alta_registro(registro: $data);
         if (errores::$error) {
@@ -752,15 +758,14 @@ class em_empleado extends _modelo_parent{
             $numero_interior = $data['numero_interior'];
         }
 
-        $dp_calle_pertenece_id = $this->dp_calle_pertenece_id(registro: $data);
+        $dp_colonia_postal_id = $this->dp_colonia_postal_id(registro: $data);
         if(errores::$error){
-            return $this->error->error(mensaje: 'Error al inicializar direcciones',data: $dp_calle_pertenece_id);
+            return $this->error->error(mensaje: 'Error al inicializar direcciones',data: $dp_colonia_postal_id);
         }
 
-        if (isset($data['dp_calle_pertenece_id'])) {
-            $dp_calle_pertenece_id = $data['dp_calle_pertenece_id'];
+        if (isset($data['dp_colonia_postal_id'])) {
+            $dp_colonia_postal_id = $data['dp_colonia_postal_id'];
         }
-
 
         if(isset($data['cat_sat_regimen_fiscal_id'])){
             $salida['cat_sat_regimen_fiscal_id'] = $data['cat_sat_regimen_fiscal_id'];
@@ -789,7 +794,7 @@ class em_empleado extends _modelo_parent{
         $salida['telefono'] = $telefono;
         $salida['numero_exterior'] = $numero_exterior;
         $salida['numero_interior'] = $numero_interior;
-        $salida['dp_calle_pertenece_id'] = $dp_calle_pertenece_id;
+        $salida['dp_colonia_postal_id'] = $dp_colonia_postal_id;
         $salida['es_empleado'] = true;
         $salida['cat_sat_tipo_persona_id'] = 5;
 
