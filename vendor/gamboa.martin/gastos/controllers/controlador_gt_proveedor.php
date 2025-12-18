@@ -143,10 +143,10 @@ class controlador_gt_proveedor extends _ctl_base
     }
 
     private function init_selects(array $keys_selects, string $key, string $label, int $id_selected = -1, int $cols = 6,
-                                  bool  $con_registros = true, array $filtro = array()): array
+                                  bool  $con_registros = true, array $columns_ds = array(), array $filtro = array()): array
     {
         $keys_selects = $this->key_select(cols: $cols, con_registros: $con_registros, filtro: $filtro, key: $key,
-            keys_selects: $keys_selects, id_selected: $id_selected, label: $label);
+            keys_selects: $keys_selects, id_selected: $id_selected, label: $label,columns_ds: $columns_ds);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
@@ -156,16 +156,27 @@ class controlador_gt_proveedor extends _ctl_base
 
     public function init_selects_inputs(): array
     {
-        $this->keys_selects = $this->init_selects(keys_selects: array(), key: "dp_pais_id", label: "País");
-        $this->keys_selects = $this->init_selects(keys_selects: $this->keys_selects, key: "dp_estado_id", label: "Estado",
-            con_registros: false);
-        $this->keys_selects = $this->init_selects(keys_selects: $this->keys_selects, key: "dp_municipio_id", label: "Municipio",
-            con_registros: false);
+        $columns_ds = array('dp_pais_descripcion');
+        $this->keys_selects = $this->init_selects(keys_selects: array(), key: "dp_pais_id", label: "País",
+            columns_ds: $columns_ds);
+
+        $columns_ds = array('dp_estado_descripcion');
+        $this->keys_selects = $this->init_selects(keys_selects: $this->keys_selects, key: "dp_estado_id",
+            label: "Estado", con_registros: false,columns_ds: $columns_ds);
+
+        $columns_ds = array('dp_municipio_descripcion');
+        $this->keys_selects = $this->init_selects(keys_selects: $this->keys_selects, key: "dp_municipio_id",
+            label: "Municipio", con_registros: false, columns_ds: $columns_ds);
+
+        $columns_ds = array('dp_cp_descripcion');
         $this->keys_selects = $this->init_selects(keys_selects: $this->keys_selects, key: "dp_cp_id", label: "CP",
-            con_registros: false);
-        $this->keys_selects = $this->init_selects(keys_selects: $this->keys_selects, key: "dp_colonia_postal_id", label: "Colonia",
-            con_registros: false);
-        $this->keys_selects = $this->init_selects(keys_selects: $this->keys_selects, key: "gt_tipo_proveedor_id", label: "Tipo");
+            con_registros: false,columns_ds: $columns_ds);
+
+        $columns_ds = array('dp_colonia_descripcion');
+        $this->keys_selects = $this->init_selects(keys_selects: $this->keys_selects, key: "dp_colonia_postal_id",
+            label: "Colonia", con_registros: false,columns_ds: $columns_ds);
+        $this->keys_selects = $this->init_selects(keys_selects: $this->keys_selects, key: "gt_tipo_proveedor_id",
+            label: "Tipo");
         $this->keys_selects = $this->init_selects(keys_selects: $this->keys_selects, key: "cat_sat_regimen_fiscal_id",
             label: "Régimen Fiscal");
 
