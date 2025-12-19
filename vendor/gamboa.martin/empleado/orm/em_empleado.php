@@ -470,6 +470,18 @@ class em_empleado extends _modelo_parent{
         return $registro;
     }
 
+    /**
+     * @param $r_emp
+     * @param int $id
+     * @return array
+     */
+    public function getRel_emp($r_emp, int $id): array
+    {
+        $registro_rel_emp['em_empleado_id'] = $r_emp->registro_id;
+        $registro_rel_emp['inm_empleado_id'] = $id;
+        return $registro_rel_emp;
+    }
+
     private function em_centro_costo_id(array $registro): array
     {
         $existe = (new em_centro_costo(link: $this->link))->existe_by_id(registro_id: 99);
@@ -798,6 +810,14 @@ class em_empleado extends _modelo_parent{
         $salida['es_empleado'] = true;
         $salida['cat_sat_tipo_persona_id'] = 5;
 
+        $dp_colonia_postal = (new dp_colonia_postal(link: $this->link))->registro(
+            registro_id: $data['dp_colonia_postal_id'],retorno_obj: true);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener datos de direccion', data: $dp_colonia_postal);
+        }
+
+        $data['dp_municipio_id'] = $dp_colonia_postal->dp_municipio_id;
+
         return $salida;
     }
 
@@ -820,6 +840,50 @@ class em_empleado extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al modificar empleado',data: $r_modifica_bd);
         }
 
+        $r_rel_emp = (new em_rel_empleado_sucursal(link: $this->link))->filtro_and(filtro:
+            array('inm_empleado.id'=>$id));
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $r_rel_emp);
+        }
+
+        $data = $this->maqueta_com_cliente(data: $registro);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al maquetar datos para cliente', data: $data);
+        }
+
+        foreach ($data as $campo=>$value){
+            if(is_iterable($value)){
+                return $this->error->error(mensaje: 'Error value es iterable '.$campo, data: $value);
+            }
+        }
+
+        if($r_rel_emp->n_registros > 0){
+            $r_modifica = (new com_cliente(link: $this->link))->modifica_bd(registro: $data,
+                id: $r_rel_emp->registros[0]['com_cliente_id']);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $r_modifica);
+            }
+        }else{
+            $respuesta = (new com_cliente($this->link))->alta_registro(registro: $data);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al ingresar cliente', data: $respuesta);
+            }
+
+            $filtro['com_cliente_id'] = $respuesta->registro_id;
+            $com_sucursal = (new com_sucursal($this->link))->filtro_and(filtro: $filtro, limit: 1);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al datos del cliente', data: $com_sucursal);
+            }
+
+            $registro_rel = $com_sucursal->registros[0];
+            $registro_rel['em_empleado_id'] = $id;
+
+            $respuesta = (new em_rel_empleado_sucursal($this->link))->inserta_em_rel_empleado_sucursal(
+                data: $registro_rel);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al ingresar cliente', data: $respuesta);
+            }
+        }
         return $r_modifica_bd;
     }
 
