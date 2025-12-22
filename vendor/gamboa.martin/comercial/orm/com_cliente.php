@@ -41,7 +41,7 @@ class com_cliente extends _modelo_parent
 
         $campos_obligatorios = array('cat_sat_moneda_id', 'cat_sat_regimen_fiscal_id', 'cat_sat_moneda_id',
             'cat_sat_forma_pago_id', 'cat_sat_uso_cfdi_id', 'cat_sat_tipo_de_comprobante_id', 'cat_sat_metodo_pago_id',
-            'telefono', 'cat_sat_tipo_persona_id', 'pais', 'estado', 'municipio', 'colonia', 'calle', 'cp');
+            'cat_sat_tipo_persona_id', 'pais', 'estado', 'municipio', 'colonia', 'cp');
 
         $columnas_extra['com_cliente_n_sucursales'] =
             "(SELECT COUNT(*) FROM com_sucursal WHERE com_sucursal.com_cliente_id = com_cliente.id)";
@@ -119,7 +119,7 @@ class com_cliente extends _modelo_parent
             return $this->error->error(mensaje: 'Error al inicializar foraneas', data: $this->registro);
         }
 
-        $keys = array('telefono', 'numero_exterior', 'razon_social');
+        $keys = array('numero_exterior', 'razon_social');
         $valida = $this->validacion->valida_existencia_keys(keys: $keys, registro: $this->registro);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al validar registro', data: $valida);

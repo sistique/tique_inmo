@@ -930,7 +930,7 @@ class em_empleado extends _modelo_parent{
         $registro['descripcion_select'] = strtoupper($registro['descripcion_select']);
 
         $registro = $this->limpia_campos_extras(registro: $registro, campos_limpiar: array("dp_pais_id",
-            "dp_estado_id", "dp_cp_id","dp_colonia_postal_id"));
+            "dp_estado_id", "dp_cp_id"));
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al limpiar campos', data: $registro);
         }
