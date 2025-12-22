@@ -17,7 +17,6 @@ use gamboamartin\empleado\controllers\controlador_em_empleado;
 use gamboamartin\errores\errores;
 
 use gamboamartin\im_registro_patronal\models\im_registro_patronal;
-use gamboamartin\inmuebles\models\inm_rel_emp_emp;
 use gamboamartin\organigrama\models\org_puesto;
 use gamboamartin\plugins\imagen;
 use gamboamartin\plugins\pdf;
@@ -841,16 +840,10 @@ class em_empleado extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al modificar empleado',data: $r_modifica_bd);
         }
 
-        $r_rel_emp = (new inm_rel_emp_emp(link: $this->link))->filtro_and(filtro:
-            array('inm_empleado.id'=>$this->registro_id));
+        $r_rel_emp = (new em_rel_empleado_sucursal(link: $this->link))->filtro_and(filtro:
+            array('em_empleado.id'=>$id));
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $r_rel_emp);
-        }
-
-        $r_rel_sucursal = (new em_rel_empleado_sucursal(link: $this->link))->filtro_and(filtro:
-            array('em_empleado.id'=>$r_rel_emp->registros[0]['em_empleado_id']));
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $r_rel_sucursal);
         }
 
         $data = $this->maqueta_com_cliente(data: $registro);
@@ -864,9 +857,9 @@ class em_empleado extends _modelo_parent{
             }
         }
 
-        if($r_rel_sucursal->n_registros > 0){
+        if($r_rel_emp->n_registros > 0){
             $r_modifica = (new com_cliente(link: $this->link))->modifica_bd(registro: $data,
-                id: $r_rel_sucursal->registros[0]['com_cliente_id']);
+                id: $r_rel_emp->registros[0]['com_cliente_id']);
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $r_modifica);
             }
@@ -891,7 +884,6 @@ class em_empleado extends _modelo_parent{
                 return $this->error->error(mensaje: 'Error al ingresar cliente', data: $respuesta);
             }
         }
-
         return $r_modifica_bd;
     }
 
