@@ -737,6 +737,10 @@ class em_empleado extends _modelo_parent{
             $salida['descripcion'] = $data['descripcion'];
         }
 
+        if (isset($data['calle'])) {
+            $salida['calle'] = $data['calle'];
+        }
+
         $r_rfc = $this->rfc(registro: $data);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al inicializar rfc',data: $r_rfc);
