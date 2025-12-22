@@ -811,12 +811,12 @@ class em_empleado extends _modelo_parent{
         $salida['cat_sat_tipo_persona_id'] = 5;
 
         $dp_colonia_postal = (new dp_colonia_postal(link: $this->link))->registro(
-            registro_id: $data['dp_colonia_postal_id'],retorno_obj: true);
+            registro_id: $salida['dp_colonia_postal_id'],retorno_obj: true);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al obtener datos de direccion', data: $dp_colonia_postal);
         }
 
-        $data['dp_municipio_id'] = $dp_colonia_postal->dp_municipio_id;
+        $salida['dp_municipio_id'] = $dp_colonia_postal->dp_municipio_id;
 
         return $salida;
     }
