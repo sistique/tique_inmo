@@ -10,6 +10,7 @@ use gamboamartin\documento\models\doc_extension_permitido;
 use gamboamartin\empleado\models\em_abono_anticipo;
 use gamboamartin\empleado\models\em_anticipo;
 use gamboamartin\empleado\models\em_empleado;
+use gamboamartin\empleado\models\em_rel_empleado_sucursal;
 use gamboamartin\im_registro_patronal\models\im_registro_patronal;
 use gamboamartin\errores\errores;
 use gamboamartin\facturacion\models\fc_cfdi_sellado;
@@ -394,7 +395,7 @@ class nom_nomina extends modelo
         $dias_periodo = $dias->dias_pagados_reales_sep - $total;
 
         $registros_factura = $this->genera_registro_factura(registros: $registros['fc_csd'],
-            empleado_sucursal: $registros['nom_rel_empleado_sucursal'],cat_sat: $registros['nom_conf_empleado'],
+            empleado_sucursal: $registros['em_rel_empleado_sucursal'],cat_sat: $registros['nom_conf_empleado'],
             im_registro_patronal: $registros['im_registro_patronal']);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al generar registros de factura', data: $registros_factura);
@@ -1937,20 +1938,20 @@ class nom_nomina extends modelo
             return $this->error->error(mensaje: 'Error $em_empleado_id debe ser mayor a 0 ', data: $em_empleado_id);
         }
         $filtro['em_empleado.id'] = $em_empleado_id;
-        $nom_rel_empleado_sucursal = (new nom_rel_empleado_sucursal($this->link))->filtro_and( filtro: $filtro);
+        $em_rel_empleado_sucursal = (new em_rel_empleado_sucursal($this->link))->filtro_and( filtro: $filtro);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al generar registros de empleado sucursal ',
-                data: $nom_rel_empleado_sucursal);
+                data: $em_rel_empleado_sucursal);
         }
-        if((int)$nom_rel_empleado_sucursal->n_registros === 0){
+        if((int)$em_rel_empleado_sucursal->n_registros === 0){
             return $this->error->error(mensaje: 'Error no existe sucursal relacionada con empleado',
-                data: $nom_rel_empleado_sucursal);
+                data: $em_rel_empleado_sucursal);
         }
-        if((int)$nom_rel_empleado_sucursal->n_registros > 1){
+        if((int)$em_rel_empleado_sucursal->n_registros > 1){
             return $this->error->error(mensaje: 'Error de integridad solo puede existir un empleado por sucursal',
-                data: $nom_rel_empleado_sucursal);
+                data: $em_rel_empleado_sucursal);
         }
-        return $nom_rel_empleado_sucursal->registros[0];
+        return $em_rel_empleado_sucursal->registros[0];
     }
 
     /**
@@ -1993,14 +1994,14 @@ class nom_nomina extends modelo
                 data: $nom_conf_empleado);
         }
 
-        $nom_rel_empleado_sucursal = $this->get_sucursal_by_empleado(em_empleado_id: $this->registro['em_empleado_id']);
+        $em_rel_empleado_sucursal = $this->get_sucursal_by_empleado(em_empleado_id: $this->registro['em_empleado_id']);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al obtener sucursal de empleado para cfdi',
-                data: $nom_rel_empleado_sucursal);
+                data: $em_rel_empleado_sucursal);
         }
 
         return array('im_registro_patronal' => $im_registro_patronal, 'em_empleado' => $em_empleado,
-            'fc_csd' => $fc_csd_id, 'nom_rel_empleado_sucursal' => $nom_rel_empleado_sucursal,
+            'fc_csd' => $fc_csd_id, 'em_rel_empleado_sucursal' => $em_rel_empleado_sucursal,
             'nom_conf_empleado' => $nom_conf_empleado);
     }
 
