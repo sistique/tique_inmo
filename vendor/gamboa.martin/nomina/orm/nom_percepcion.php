@@ -117,6 +117,6 @@ class nom_percepcion extends nominas_confs {
             return -1;
         }
 
-        return $registro->registros[0]['id'];;
+        return $registro->registros[0]['id'];
     }
 }

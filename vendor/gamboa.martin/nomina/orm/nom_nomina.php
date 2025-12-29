@@ -54,7 +54,7 @@ class nom_nomina extends modelo
         $campos_obligatorios = array('cat_sat_periodicidad_pago_nom_id', 'cat_sat_tipo_contrato_nom_id',
             'cat_sat_tipo_jornada_nom_id','cat_sat_tipo_nomina_id', 'em_cuenta_bancaria_id',
             'fecha_inicial_pago', 'fecha_final_pago', 'im_registro_patronal_id', 'em_empleado_id','nom_periodo_id',
-            'num_dias_pagados','org_departamento_id','org_puesto_id','em_clase_riesgo_id','em_cuenta_bancaria_id',
+            'num_dias_pagados','org_departamento_id','org_puesto_id','im_clase_riesgo_id','em_cuenta_bancaria_id',
             'fecha_pago');
 
         $columnas_extra = array();
@@ -471,7 +471,7 @@ class nom_nomina extends modelo
 
             $calcula_cuota_obrero_patronal = new calcula_cuota_obrero_patronal();
             $calculos = $calcula_cuota_obrero_patronal->cuota_obrero_patronal(
-                porc_riesgo_trabajo: $registros['im_registro_patronal']->em_clase_riesgo_factor,
+                porc_riesgo_trabajo: $registros['im_registro_patronal']->im_clase_riesgo_factor,
                 fecha: $this->registro['fecha_final_pago'],
                 n_dias: $dias_periodo,
                 sbc: $registros['em_empleado']->em_empleado_salario_diario_integrado, link: $this->link);
@@ -2370,10 +2370,10 @@ class nom_nomina extends modelo
 
         $this->registro['fc_factura_id'] = $fc_factura->registro_id;
         $this->registro['cat_sat_tipo_jornada_nom_id'] = $registros['em_empleado']->cat_sat_tipo_jornada_nom_id;
-        $this->registro['dp_calle_pertenece_id'] = $registros['fc_csd']->dp_calle_pertenece_id;
+        $this->registro['dp_colonia_postal_id'] = $registros['fc_csd']->dp_colonia_postal_id;
         $this->registro['org_departamento_id'] = $registros['em_empleado']->org_departamento_id;
         $this->registro['org_puesto_id'] = $registros['em_empleado']->org_puesto_id;
-        $this->registro['em_clase_riesgo_id'] = $registros['im_registro_patronal']->em_clase_riesgo_id;
+        $this->registro['im_clase_riesgo_id'] = $registros['im_registro_patronal']->im_clase_riesgo_id;
 
 
         return $this->registro;
