@@ -13,7 +13,7 @@ class em_rel_empleado_sucursal extends _modelo_parent
     {
         $tabla = 'em_rel_empleado_sucursal';
         $columnas = array($tabla => false, 'em_empleado' => $tabla, 'com_sucursal' => $tabla,
-            'com_cliente'=>'com_sucursal');
+            'com_cliente'=>'com_sucursal','dp_colonia_postal' => 'em_empleado');
         $campos_obligatorios = array('codigo', 'descripcion', 'em_empleado_id', 'com_sucursal_id');
 
         parent::__construct(link: $link, tabla: $tabla, campos_obligatorios: $campos_obligatorios,

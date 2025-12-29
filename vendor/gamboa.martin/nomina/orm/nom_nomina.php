@@ -2272,12 +2272,12 @@ class nom_nomina extends modelo
         $com_tipo_cambio_id = $cat_sat->nom_conf_factura_com_tipo_cambio_id;
         $cat_sat_uso_cfdi_id = $cat_sat->nom_conf_factura_cat_sat_uso_cfdi_id;
         $cat_sat_tipo_de_comprobante_id = $cat_sat->nom_conf_factura_cat_sat_tipo_de_comprobante_id;
-        $dp_calle_pertenece_id = $im_registro_patronal->dp_calle_pertenece_id;
+        //$dp_colonia_postal_id = $empleado_sucursal['dp_colonia_postal_id'];
 
         return array('exportacion'=>$exportacion,'folio' => $folio, 'serie' => $serie, 'fecha' => $fecha, 'fc_csd_id' => $fc_csd_id,
             'com_sucursal_id' => $com_sucursal_id, 'cat_sat_forma_pago_id' => $cat_sat_forma_pago_id,
             'cat_sat_metodo_pago_id' => $cat_sat_metodo_pago_id, 'cat_sat_moneda_id' => $cat_sat_moneda_id,
-            'com_tipo_cambio_id' => $com_tipo_cambio_id, 'dp_calle_pertenece_id'=>$dp_calle_pertenece_id,
+            'com_tipo_cambio_id' => $com_tipo_cambio_id, /*'dp_colonia_postal_id'=>$dp_colonia_postal_id,*/
             'cat_sat_uso_cfdi_id' => $cat_sat_uso_cfdi_id,
             'cat_sat_tipo_de_comprobante_id' => $cat_sat_tipo_de_comprobante_id);
     }
