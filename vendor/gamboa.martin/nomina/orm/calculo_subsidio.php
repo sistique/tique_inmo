@@ -169,21 +169,21 @@ class calculo_subsidio{
             return $this->error->error(mensaje: 'Error al obtener filtro', data: $filtro_especial);
         }
 
-        $r_isr = (new cat_sat_subsidio($link))->filtro_and(
+        $r_subsidio = (new cat_sat_subsidio($link))->filtro_and(
             columnas: array(), filtro: $filtro, filtro_especial: $filtro_especial);
         if(errores::$error){
-            return $this->error->error(mensaje: 'Error al obtener isr', data: $r_isr);
+            return $this->error->error(mensaje: 'Error al obtener subsidio', data: $r_subsidio);
         }
 
-        if($r_isr->n_registros===0){
-            return $this->error->error(mensaje: 'Error no existe registro isr', data: $r_isr);
+        if($r_subsidio->n_registros===0){
+            return $this->error->error(mensaje: 'Error no existe registro subsidio', data: $r_subsidio);
         }
-        if($r_isr->n_registros>1){
-            return $this->error->error(mensaje: 'Error existe mas de un registro de isr', data: $r_isr);
+        if($r_subsidio->n_registros>1){
+            return $this->error->error(mensaje: 'Error existe mas de un registro de subsidio', data: $r_subsidio);
         }
 
 
-        return $r_isr->registros_obj[0];
+        return $r_subsidio->registros_obj[0];
     }
 
     /**
