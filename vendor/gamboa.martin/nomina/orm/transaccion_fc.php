@@ -806,6 +806,7 @@ class transaccion_fc{
             return $this->error->error(mensaje: 'Error al integrar deducciones isr',
                 data: $transacciones_deduccion_isr);
         }
+
         $transacciones_otro_pago_subsidio = $this->transacciona_subsidio_por_nomina(
             mod_nominas: $mod_nominas, nom_nomina_id: $nom_nomina_id);
         if (errores::$error) {
@@ -816,6 +817,7 @@ class transaccion_fc{
         $data = new stdClass();
         $data->isr = $transacciones_deduccion_isr;
         $data->otro_pago = $transacciones_otro_pago_subsidio;
+
         return $data;
 
     }
@@ -866,6 +868,7 @@ class transaccion_fc{
             return $this->error->error(mensaje: 'Error al integrar deducciones isr',
                 data: $transacciones_deduccion_isr_subsidio);
         }
+
         $transacciones_deduccion_imss = $this->transacciona_imss_por_nomina(mod_nominas: $mod_nominas,nom_nomina_id: $nom_nomina_id);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al integrar deducciones imss',
@@ -882,6 +885,7 @@ class transaccion_fc{
         $data->imss = $transacciones_deduccion_imss;
         $data->otro_pago = $transacciones_deduccion_isr_subsidio->otro_pago;
         $data->fc_partida = $fc_partida_upd;
+
         return $data;
     }
 

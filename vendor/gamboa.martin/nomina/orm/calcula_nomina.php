@@ -76,6 +76,7 @@ class calcula_nomina{
             return  $this->error->error(mensaje: 'Error al obtener registro $nom_nomina_id debe ser mayor a 0',
                 data: $nom_nomina_id);
         }
+
         $impuestos = $this->calculos(link:$link, nom_nomina_id: $nom_nomina_id);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al obtener impuestos', data: $impuestos);
@@ -126,6 +127,7 @@ class calcula_nomina{
             return  $this->error->error(mensaje: 'Error al obtener registro $nom_nomina_id debe ser mayor a 0',
                 data: $nom_nomina_id);
         }
+
         $isr = (new calculo_isr())->calcula_isr_por_nomina(link: $link,nom_nomina_id:  $nom_nomina_id);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener isr',data:  $isr);

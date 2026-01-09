@@ -88,6 +88,7 @@ class calculo_isr{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al calcular total gravado', data: $total_gravado);
         }
+
         if($total_gravado >0.0) {
             $isr = $this->isr_nomina(link:$link, nom_nomina_id: $nom_nomina_id,
                 total_gravado: $total_gravado);
@@ -124,6 +125,7 @@ class calculo_isr{
         $cuota_excedente = $diferencia_li * $row_isr->cat_sat_isr_porcentaje_excedente;
         $cuota_excedente = round($cuota_excedente,2);
         $cuota_excedente /= 100;
+
         return round($cuota_excedente,2);
     }
 
@@ -203,17 +205,17 @@ class calculo_isr{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar row_isr', data: $valida);
         }
+
         $keys = array('cat_sat_isr_porcentaje_excedente','cat_sat_isr_cuota_fija');
         $valida = $this->validacion->valida_double_mayores_igual_0(keys: $keys, registro: $row_isr);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar row_isr', data: $valida);
         }
 
-        $diferencia_li = $this->diferencia_li(monto:$monto,row_isr:  $row_isr);
+        $diferencia_li = $this->diferencia_li(monto: $monto,row_isr:  $row_isr);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener diferencia limite inferior', data: $diferencia_li);
         }
-
 
         $cuota_excedente = $this->cuota_excedente_isr(diferencia_li: $diferencia_li,row_isr:  $row_isr);
         if(errores::$error){
@@ -259,7 +261,6 @@ class calculo_isr{
             return $this->error->error(mensaje: 'Error al obtener filtro', data: $filtro_especial);
         }
 
-
         $r_isr = (new cat_sat_isr($link))->filtro_and(columnas: array(), filtro: $filtro,
             filtro_especial: $filtro_especial);
         if(errores::$error){
@@ -269,6 +270,7 @@ class calculo_isr{
         if($r_isr->n_registros===0){
             return $this->error->error(mensaje: 'Error no existe registro isr', data: $r_isr);
         }
+
         if($r_isr->n_registros>1){
             return $this->error->error(mensaje: 'Error existe mas de un registro de isr', data: $r_isr);
         }
@@ -291,6 +293,7 @@ class calculo_isr{
             return $this->error->error(mensaje: 'Error $cat_sat_periodicidad_pago_nom_id debe ser mayor a 0',
                 data: $cat_sat_periodicidad_pago_nom_id);
         }
+
         if($monto<=0.0){
             return $this->error->error(mensaje: 'Error monto debe ser mayor o igual a 0', data: $monto);
         }
@@ -304,7 +307,6 @@ class calculo_isr{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener isr', data: $row_isr);
         }
-
 
         $isr = $this->genera_isr(monto: $monto, row_isr: $row_isr);
         if(errores::$error){
