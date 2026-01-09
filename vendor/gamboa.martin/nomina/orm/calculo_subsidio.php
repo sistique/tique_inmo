@@ -2,6 +2,7 @@
 namespace gamboamartin\nomina\models;
 use gamboamartin\cat_sat\models\cat_sat_subsidio;
 use gamboamartin\errores\errores;
+use gamboamartin\im_registro_patronal\models\im_uma;
 use gamboamartin\validacion\validacion;
 use gamboamartin\nomina\models\nom_nomina;
 use gamboamartin\nomina\models\nominas;
@@ -11,6 +12,7 @@ use stdClass;
 class calculo_subsidio{
     private errores $error;
     private validacion $validacion;
+    public float $dias_mensual = 30.4;
 
     public function __construct(){
         $this->error = new errores();
@@ -105,7 +107,7 @@ class calculo_subsidio{
         $filtro_especial[1][$fecha]['comparacion'] = 'AND';
         $filtro_especial[1][$fecha]['valor_es_campo'] = true;
 
-        $filtro_especial[2][(string)$monto]['operador'] = '>=';
+        /*$filtro_especial[2][(string)$monto]['operador'] = '>=';
         $filtro_especial[2][(string)$monto]['valor'] = 'cat_sat_subsidio.limite_inferior';
         $filtro_especial[2][(string)$monto]['comparacion'] = 'AND';
         $filtro_especial[2][(string)$monto]['valor_es_campo'] = true;
@@ -113,7 +115,12 @@ class calculo_subsidio{
         $filtro_especial[3][(string)$monto]['operador'] = '<=';
         $filtro_especial[3][(string)$monto]['valor'] = 'cat_sat_subsidio.limite_superior';
         $filtro_especial[3][(string)$monto]['comparacion'] = 'AND';
-        $filtro_especial[3][(string)$monto]['valor_es_campo'] = true;
+        $filtro_especial[3][(string)$monto]['valor_es_campo'] = true;*/
+
+        $filtro_especial[2][(string)$monto]['operador'] = '<=';
+        $filtro_especial[2][(string)$monto]['valor'] = 'cat_sat_subsidio.limite_ingreso';
+        $filtro_especial[2][(string)$monto]['comparacion'] = 'AND';
+        $filtro_especial[2][(string)$monto]['valor_es_campo'] = true;
 
         return $filtro_especial;
     }
@@ -124,16 +131,42 @@ class calculo_subsidio{
      * @return float|array
      * @version 0.179.6
      */
-    private function genera_subsidio( stdClass $row_subsidio): float|array
+    private function genera_subsidio( PDO $link, stdClass $row_subsidio, string $fecha = ''): float|array
     {
-
-        $keys = array('cat_sat_subsidio_cuota_fija');
+        /*$keys = array('cat_sat_subsidio_cuota_fija');
         $valida = $this->validacion->valida_double_mayores_igual_0(keys: $keys, registro: $row_subsidio);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar row_subsidio', data: $valida);
         }
 
-        $subsidio = $row_subsidio->cat_sat_subsidio_cuota_fija;
+        $subsidio = $row_subsidio->cat_sat_subsidio_cuota_fija;*/
+
+        $filtro_especial[0][$fecha]['operador'] = '>=';
+        $filtro_especial[0][$fecha]['valor'] = 'im_uma.fecha_inicio';
+        $filtro_especial[0][$fecha]['comparacion'] = 'AND';
+        $filtro_especial[0][$fecha]['valor_es_campo'] = true;
+
+        $filtro_especial[1][$fecha]['operador'] = '<=';
+        $filtro_especial[1][$fecha]['valor'] = 'im_uma.fecha_fin';
+        $filtro_especial[1][$fecha]['comparacion'] = 'AND';
+        $filtro_especial[1][$fecha]['valor_es_campo'] = true;
+        $r_im_uma = (new im_uma(link: $link))->filtro_and( filtro_especial: $filtro_especial);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener subsidio', data: $r_im_uma);
+        }
+
+        if($r_im_uma->n_registros <= 0){
+            return $this->error->error(mensaje: 'Error no existe subsidio', data: $r_im_uma);
+        }
+
+        $uma_mensual = $r_im_uma->registros[0]['im_uma_monto'] * $this->dias_mensual;
+
+        $subsidio_mensual = ($uma_mensual * $row_subsidio->cat_sat_subsidio_porcentaje_uma) / 100;
+
+        $subsidio_diario = $subsidio_mensual / $this->dias_mensual;
+
+        $subsidio = $subsidio_diario * $row_subsidio->cat_sat_periodicidad_pago_nom_n_dias;
+
         return round($subsidio,2);
     }
 
@@ -169,8 +202,7 @@ class calculo_subsidio{
             return $this->error->error(mensaje: 'Error al obtener filtro', data: $filtro_especial);
         }
 
-        $r_subsidio = (new cat_sat_subsidio($link))->filtro_and(
-            columnas: array(), filtro: $filtro, filtro_especial: $filtro_especial);
+        $r_subsidio = (new cat_sat_subsidio($link))->filtro_and(filtro: $filtro, filtro_especial: $filtro_especial);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener subsidio', data: $r_subsidio);
         }
@@ -181,7 +213,6 @@ class calculo_subsidio{
         if($r_subsidio->n_registros>1){
             return $this->error->error(mensaje: 'Error existe mas de un registro de subsidio', data: $r_subsidio);
         }
-
 
         return $r_subsidio->registros_obj[0];
     }
@@ -216,7 +247,7 @@ class calculo_subsidio{
             return $this->error->error(mensaje: 'Error al obtener subsidio', data: $row_subsidio);
         }
 
-        $subsidio = $this->genera_subsidio(row_subsidio: $row_subsidio);
+        $subsidio = $this->genera_subsidio(link: $link,row_subsidio: $row_subsidio, fecha: $fecha);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al calcular subsidio', data: $subsidio);
         }
