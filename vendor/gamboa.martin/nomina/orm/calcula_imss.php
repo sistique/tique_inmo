@@ -153,7 +153,7 @@ class calcula_imss{
      * @return array|float
      */
     private function genera_imss(int $cat_sat_periodicidad_pago_nom_id, string $fecha, float $n_dias, float $sbc,
-                                 float $sd): array|float
+                                 float $sd, float $uma): array|float
     {
         $valida = $this->valida_imss(fecha: $fecha,n_dias:  $n_dias, sbc: $sbc,sd:  $sd);
         if(errores::$error){
@@ -165,7 +165,7 @@ class calcula_imss{
         }
 
         $init = $this->init_data_base(cat_sat_periodicidad_pago_nom_id: $cat_sat_periodicidad_pago_nom_id,
-            fecha: $fecha, n_dias: $n_dias, sbc: $sbc, sd: $sd);
+            fecha: $fecha, n_dias: $n_dias, sbc: $sbc, sd: $sd, uma: $uma);
         if(errores::$error){
             return $this->error->error('Error al inicializar', $init);
         }
@@ -213,7 +213,8 @@ class calcula_imss{
      * @param float $sd
      * @return array
      */
-    public function imss(int $cat_sat_periodicidad_pago_nom_id, string $fecha, float $n_dias, float $sbc, float $sd): array
+    public function imss(int $cat_sat_periodicidad_pago_nom_id, string $fecha, float $n_dias, float $sbc, float $sd,
+                         float $uma): array
     {
         $valida = $this->valida_imss(fecha: $fecha,n_dias:  $n_dias,sbc:  $sbc,sd:  $sd);
         if(errores::$error){
@@ -226,7 +227,7 @@ class calcula_imss{
         }
 
         $init = $this->genera_imss(cat_sat_periodicidad_pago_nom_id: $cat_sat_periodicidad_pago_nom_id,
-            fecha: $fecha, n_dias: $n_dias, sbc: $sbc, sd: $sd);
+            fecha: $fecha, n_dias: $n_dias, sbc: $sbc, sd: $sd, uma: $uma);
         if(errores::$error){
             return $this->error->error('Error al generar imss', $init);
         }
@@ -273,36 +274,19 @@ class calcula_imss{
      * @version 0.229.6
      */
     private function init_base(int  $cat_sat_periodicidad_pago_nom_id, string $fecha, float $n_dias, float $sbc,
-                              float $sd): stdClass|array
+                              float $sd, float $uma): stdClass|array
     {
         $valida = $this->valida_imss(fecha: $fecha,n_dias:  $n_dias, sbc: $sbc,sd:  $sd);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar imss', data: $valida);
         }
+
         if($cat_sat_periodicidad_pago_nom_id<=0){
             return $this->error->error(mensaje: 'Error $sat_nomina_periodicidad_pago_id en menor a 0',
                 data:  $cat_sat_periodicidad_pago_nom_id);
         }
 
-        /*$filtro_especial[0][$fecha]['operador'] = '>=';
-        $filtro_especial[0][$fecha]['valor'] = 'im_uma.fecha_inicio';
-        $filtro_especial[0][$fecha]['comparacion'] = 'AND';
-        $filtro_especial[0][$fecha]['valor_es_campo'] = true;
-
-        $filtro_especial[1][$fecha]['operador'] = '<=';
-        $filtro_especial[1][$fecha]['valor'] = 'im_uma.fecha_fin';
-        $filtro_especial[1][$fecha]['comparacion'] = 'AND';
-        $filtro_especial[1][$fecha]['valor_es_campo'] = true;
-        $r_im_uma = (new im_uma(link: $link))->filtro_and( filtro_especial: $filtro_especial);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al obtener subsidio', data: $r_im_uma);
-        }
-
-        if($r_im_uma->n_registros <= 0){
-            return $this->error->error(mensaje: 'Error no existe subsidio', data: $r_im_uma);
-        }
-
-        $this->monto_uma = $r_im_uma->registros[0]['im_uma_monto'];*/
+        $this->monto_uma = $uma;
 
         $this->year = date('Y', strtotime($fecha));
 
@@ -316,7 +300,6 @@ class calcula_imss{
         if(errores::$error) {
             return $this->error->error(mensaje: "Error al obtener dias", data: $dias);
         }
-
 
         $this->sbc = round($sbc,2);
         $this->sd = round($sd,2);
@@ -358,7 +341,7 @@ class calcula_imss{
      * @return array|stdClass
      */
     private function init_data_base(int $cat_sat_periodicidad_pago_nom_id, string $fecha, float $n_dias, float $sbc,
-                                   float $sd): array|stdClass
+                                   float $sd, float $uma): array|stdClass
     {
         $valida = $this->valida_imss(fecha: $fecha,n_dias:  $n_dias, sbc: $sbc,sd:  $sd);
         if(errores::$error){
@@ -371,15 +354,16 @@ class calcula_imss{
         }
 
         $base = $this->init_base(cat_sat_periodicidad_pago_nom_id: $cat_sat_periodicidad_pago_nom_id,
-            fecha: $fecha, n_dias: $n_dias, sbc: $sbc, sd: $sd);
+            fecha: $fecha, n_dias: $n_dias, sbc: $sbc, sd: $sd, uma: $uma);
         if(errores::$error){
             return $this->error->error('Error al inicializar', $base);
         }
+
         $init = $this->init_data();
         if(errores::$error){
             return $this->error->error('Error al inicializar', $init);
         }
-        
+
         $data = new stdClass();
         $data->base = $base;
         $data->init = $init;
