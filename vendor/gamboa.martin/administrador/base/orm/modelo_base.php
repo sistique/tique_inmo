@@ -358,15 +358,14 @@ class modelo_base{ //PRUEBAS EN PROCESO //DOCUMENTACION EN PROCESO
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar registro', data: $valida);
         }
-        if(!isset($registro['descripcion'])){
 
+        if(!isset($registro['descripcion'])){
             $descripcion = $this->genera_descripcion( modelo:$modelo, registro: $registro);
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error al obtener descripcion', data: $descripcion);
             }
 
             $registro['descripcion'] = $descripcion;
-
         }
         return $registro;
     }
@@ -1240,6 +1239,7 @@ class modelo_base{ //PRUEBAS EN PROCESO //DOCUMENTACION EN PROCESO
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener descripcion', data: $descripcion);
         }
+
         return $descripcion;
     }
 

@@ -71,7 +71,6 @@ class nominas extends modelo {
     {
         $keys_registro = array('nom_nomina_id');
         $keys_row = array('cat_sat_periodicidad_pago_nom_id','em_empleado_rfc','im_registro_patronal_id');
-
         $valida = $this->validacion->valida_ids(keys: $keys_registro, registro: $registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar registro', data: $valida);
@@ -82,14 +81,15 @@ class nominas extends modelo {
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener nomina', data: $nom_nomina);
         }
+
         $nom_nomina_modelo->registro = $nom_nomina;
 
         $registro = $this->asigna_codigo(keys_registro: $keys_registro,keys_row:  $keys_row,
             modelo:  $nom_nomina_modelo,registro:  $registro);
-
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al asignar codigo', data: $registro);
         }
+
         return $registro;
     }
 
@@ -268,7 +268,7 @@ class nominas extends modelo {
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar si existe deduccion', data: $data_existe);
         }
-        
+
         $nom_par_deduccion_ins = $this->nom_par_otro_pago_aut(monto: $monto, nom_otro_pago_id: $nom_otro_pago_id,
             nom_nomina_id: $nom_nomina_id);
         if(errores::$error){
