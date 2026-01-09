@@ -364,6 +364,7 @@ class calcula_imss{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar',data:  $valida);
         }
+
         if($cat_sat_periodicidad_pago_nom_id<=0){
             return $this->error->error(mensaje: 'Error $cat_sat_periodicidad_pago_nom_id en menor a 0',
                 data:  $cat_sat_periodicidad_pago_nom_id);
@@ -378,8 +379,7 @@ class calcula_imss{
         if(errores::$error){
             return $this->error->error('Error al inicializar', $init);
         }
-
-
+        
         $data = new stdClass();
         $data->base = $base;
         $data->init = $init;
