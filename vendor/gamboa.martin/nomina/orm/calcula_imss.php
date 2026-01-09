@@ -3,6 +3,7 @@
 namespace gamboamartin\nomina\models;
 
 use gamboamartin\errores\errores;
+use gamboamartin\im_registro_patronal\models\im_uma;
 use gamboamartin\validacion\validacion;
 use stdClass;
 
@@ -218,21 +219,23 @@ class calcula_imss{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar imss', data: $valida);
         }
+
         if($cat_sat_periodicidad_pago_nom_id<=0){
             return $this->error->error(mensaje: 'Error $cat_sat_periodicidad_pago_nom_id en menor a 0',
                 data:  $cat_sat_periodicidad_pago_nom_id);
         }
-
 
         $init = $this->genera_imss(cat_sat_periodicidad_pago_nom_id: $cat_sat_periodicidad_pago_nom_id,
             fecha: $fecha, n_dias: $n_dias, sbc: $sbc, sd: $sd);
         if(errores::$error){
             return $this->error->error('Error al generar imss', $init);
         }
+
         $data = $this->data_array();
         if(errores::$error){
             return $this->error->error('Error al asignar datos', $data);
         }
+
         return $data;
     }
 
@@ -281,12 +284,32 @@ class calcula_imss{
                 data:  $cat_sat_periodicidad_pago_nom_id);
         }
 
+        /*$filtro_especial[0][$fecha]['operador'] = '>=';
+        $filtro_especial[0][$fecha]['valor'] = 'im_uma.fecha_inicio';
+        $filtro_especial[0][$fecha]['comparacion'] = 'AND';
+        $filtro_especial[0][$fecha]['valor_es_campo'] = true;
+
+        $filtro_especial[1][$fecha]['operador'] = '<=';
+        $filtro_especial[1][$fecha]['valor'] = 'im_uma.fecha_fin';
+        $filtro_especial[1][$fecha]['comparacion'] = 'AND';
+        $filtro_especial[1][$fecha]['valor_es_campo'] = true;
+        $r_im_uma = (new im_uma(link: $link))->filtro_and( filtro_especial: $filtro_especial);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener subsidio', data: $r_im_uma);
+        }
+
+        if($r_im_uma->n_registros <= 0){
+            return $this->error->error(mensaje: 'Error no existe subsidio', data: $r_im_uma);
+        }
+
+        $this->monto_uma = $r_im_uma->registros[0]['im_uma_monto'];*/
+
         $this->year = date('Y', strtotime($fecha));
 
         /**
          * REFACTORIZAR POR AÑO
          */
-        $this->monto_uma = $this->uma[$this->year];
+        //$this->monto_uma = $this->uma[$this->year];
 
         $dias = $this->n_dias(cat_sat_periodicidad_pago_nom_id: $cat_sat_periodicidad_pago_nom_id, fecha: $fecha,
             n_dias: $n_dias);

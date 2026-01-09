@@ -129,7 +129,6 @@ class transaccion_fc{
      */
     private function aplica_imss_valor_por_nomina(nominas $mod_nominas, int $nom_nomina_id): array|stdClass
     {
-
         $imss = $mod_nominas->imss_por_nomina(nom_nomina_id: $nom_nomina_id);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al calcular imss', data: $imss);
@@ -139,6 +138,7 @@ class transaccion_fc{
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al generar transaccion', data: $genera_imss);
         }
+
         return $genera_imss;
     }
 
@@ -843,12 +843,12 @@ class transaccion_fc{
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al obtener isr', data: $subsidio);
         }
+
         $data_isr = (new calcula_nomina())->calcula_impuestos_netos_por_nomina(link: $mod_nominas->link,
             nom_nomina_id: $nom_nomina_id);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al obtener isr', data: $data_isr);
         }
-
 
         if($subsidio>0.0){
             $transaccion = $this->aplica_otro_pago(mod_nominas: $mod_nominas,
@@ -856,25 +856,27 @@ class transaccion_fc{
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error al generar transaccion', data: $transaccion);
             }
-        }
-        elseif($subsidio<=0.0){
+        } else if($subsidio<=0.0){
             $data_existe = $mod_nominas->existe_data_otro_pago(nom_otro_pago_id:2, nom_nomina_id: $nom_nomina_id);
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error al validar si existe deduccion', data: $data_existe);
             }
-            if($data_existe->existe){
 
+            if($data_existe->existe){
                 $elimina_deducciones = $this->elimina_otro_pago_0(filtro: $data_existe->filtro, link: $mod_nominas->link);
                 if(errores::$error){
                     return $this->error->error(mensaje: 'Error al eliminar deducciones', data: $elimina_deducciones);
                 }
             }
-
         }
+
         return $subsidio;
     }
 
 
+    /**
+     * @throws JsonException
+     */
     public function transacciones_por_nomina(nominas $mod_nominas, int $nom_nomina_id): array|stdClass
     {
         $transacciones_deduccion_isr_subsidio = $this->transacciona_isr_subsidio(

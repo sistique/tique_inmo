@@ -11,7 +11,9 @@ class nominas extends modelo {
     protected string $tabla_nom_conf = '';
 
 
-
+    /**
+     * @throws JsonException
+     */
     public function alta_bd_percepcion(modelo $modelo): array|stdClass
     {
         $valida = $this->valida_registro_modelo(modelo: $modelo,registro:  $this->registro);

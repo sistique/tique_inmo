@@ -25,6 +25,9 @@ class nom_par_percepcion extends nominas{
     }
 
 
+    /**
+     * @throws \JsonException
+     */
     public function alta_bd(): array|stdClass
     {
         $keys = array('nom_nomina_id','nom_percepcion_id');
