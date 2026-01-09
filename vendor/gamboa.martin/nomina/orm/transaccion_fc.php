@@ -200,16 +200,18 @@ class transaccion_fc{
     }
 
 
-    private function ejecuta_isr(float $isr, nominas $mod_nominas, int $nom_nomina_id): array|stdClass
+    /**
+     * @throws JsonException
+     */
+    private function ejecuta_isr(float $isr, nominas $mod_nominas, int $nom_nomina_id,
+                                 int $nom_deduccion_id = 2): array|stdClass
     {
-        $transaccion = array();
-        //if($isr>0.0){
-            $transaccion = $this->aplica_deduccion(mod_nominas: $mod_nominas, monto: $isr, nom_deduccion_id: 1,
-                nom_nomina_id:  $nom_nomina_id);
-            if(errores::$error){
-                return $this->error->error(mensaje: 'Error al generar transaccion', data: $transaccion);
-            }
-        //}
+        $transaccion = $this->aplica_deduccion(mod_nominas: $mod_nominas, monto: $isr,
+            nom_deduccion_id: $nom_deduccion_id, nom_nomina_id:  $nom_nomina_id);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al generar transaccion', data: $transaccion);
+        }
+
         if($isr<=0.0){
             $transaccion = $this->del_nodo_0(mod_nominas: $mod_nominas, nom_nomina_id: $nom_nomina_id);
             if(errores::$error){
@@ -777,19 +779,29 @@ class transaccion_fc{
      * @param nominas $mod_nominas
      * @param int $nom_nomina_id
      * @return float|array
-
+     * @throws JsonException
      */
     private function transacciona_isr_por_nomina(nominas $mod_nominas, int $nom_nomina_id): float|array
     {
-
         $data_isr = (new calcula_nomina())->calcula_impuestos_netos_por_nomina(
             link: $mod_nominas->link,nom_nomina_id:  $nom_nomina_id);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al obtener isr', data: $data_isr);
         }
 
+        $filtro['nom_deduccion.es_isr'] = 'activo';
+        $r_nom_deduccion = (new nom_deduccion(link: $mod_nominas->link))->filtro_and(filtro: $filtro);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener deduccion', data: $r_nom_deduccion);
+        }
+
+        if($r_nom_deduccion->n_registros <= 0){
+            return $this->error->error(mensaje: 'Error no existe deduccion', data: $r_nom_deduccion);
+        }
+
         $transaccion = $this->ejecuta_isr(
-            isr: $data_isr->isr_neto,mod_nominas:  $mod_nominas, nom_nomina_id: $nom_nomina_id);
+            isr: $data_isr->isr_neto, mod_nominas:  $mod_nominas, nom_nomina_id: $nom_nomina_id,
+            nom_deduccion_id: $r_nom_deduccion->registros[0]['nom_deduccion_id']);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al generar transaccion', data: $transaccion);
         }
@@ -798,6 +810,9 @@ class transaccion_fc{
     }
 
 
+    /**
+     * @throws JsonException
+     */
     private function transacciona_isr_subsidio(nominas $mod_nominas, int $nom_nomina_id): array|stdClass
     {
         $transacciones_deduccion_isr = $this->transacciona_isr_por_nomina(
