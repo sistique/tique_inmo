@@ -136,12 +136,11 @@ class nominas extends modelo {
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al asignar descripcion_select', data: $registro);
         }
+
         $registro = $this->asigna_importes(registro: $registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al asignar importes', data: $registro);
         }
-
-
 
         return $registro;
     }
@@ -154,7 +153,6 @@ class nominas extends modelo {
         }
 
         $registro = $this->asigna_codigo_partida(registro: $registro);
-
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al asignar codigo', data: $registro);
         }
@@ -163,6 +161,7 @@ class nominas extends modelo {
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al asignar descripcion_select', data: $registro);
         }
+
         return $registro;
     }
 
@@ -178,6 +177,7 @@ class nominas extends modelo {
             return  $this->error->error(mensaje: 'Error al obtener registro $partida_percepcion_id debe ser mayor a 0',
                 data: $partida_percepcion_id);
         }
+
         $nom_par_percepcion = $this->registro(registro_id: $partida_percepcion_id, retorno_obj: true);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al obtener nom_par_percepcion', data: $nom_par_percepcion);
@@ -188,6 +188,7 @@ class nominas extends modelo {
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al validar $nom_par_percepcion', data: $valida);
         }
+
         $keys = array('nom_nomina_fecha_final_pago');
         $valida = $this->validacion->fechas_in_array(data: $nom_par_percepcion, keys: $keys);
         if (errores::$error) {
@@ -203,6 +204,7 @@ class nominas extends modelo {
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar registro', data: $valida);
         }
+
         $data = $this->asigna_descripcion(modelo: $modelo, registro: $data);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al asignar descripcion', data: $data);
@@ -266,6 +268,7 @@ class nominas extends modelo {
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar si existe deduccion', data: $data_existe);
         }
+        
         $nom_par_deduccion_ins = $this->nom_par_otro_pago_aut(monto: $monto, nom_otro_pago_id: $nom_otro_pago_id,
             nom_nomina_id: $nom_nomina_id);
         if(errores::$error){
