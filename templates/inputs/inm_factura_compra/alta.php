@@ -1,7 +1,7 @@
 <?php /** @var  gamboamartin\facturacion\controllers\controlador_fc_docto_relacionado $controlador  controlador en ejecucion */ ?>
 <?php use config\views; ?>
 
-<?php echo $controlador->inputs->codigo; ?>
-<?php echo $controlador->inputs->fecha; ?>
 <?php echo $controlador->inputs->gt_proveedor_id; ?>
+<?php echo $controlador->inputs->fecha; ?>
+<?php echo $controlador->inputs->codigo; ?>
 <?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
