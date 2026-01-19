@@ -487,9 +487,34 @@ class nom_nomina extends modelo
             $year = date('Y', strtotime($r_nom_nomina['nom_nomina_fecha_final_pago']));
 
             if($r_nom_nomina['em_empleado_salario_diario'] <= (float)$this->salario_minimo[$year]){
-                $imss = (new calcula_imss())->imss_sin_excep(cat_sat_periodicidad_pago_nom_id: $r_nom_nomina['cat_sat_periodicidad_pago_nom_id'],
+
+                $fecha = $r_nom_nomina['nom_nomina_fecha_final_pago'];
+
+                $filtro_especial[0][$fecha]['operador'] = '>=';
+                $filtro_especial[0][$fecha]['valor'] = 'im_uma.fecha_inicio';
+                $filtro_especial[0][$fecha]['comparacion'] = 'AND';
+                $filtro_especial[0][$fecha]['valor_es_campo'] = true;
+
+                $filtro_especial[1][$fecha]['operador'] = '<=';
+                $filtro_especial[1][$fecha]['valor'] = 'im_uma.fecha_fin';
+                $filtro_especial[1][$fecha]['comparacion'] = 'AND';
+                $filtro_especial[1][$fecha]['valor_es_campo'] = true;
+                $r_im_uma = (new im_uma(link: $this->link))->filtro_and( filtro_especial: $filtro_especial);
+                if(errores::$error){
+                    return $this->error->error(mensaje: 'Error al obtener subsidio', data: $r_im_uma);
+                }
+
+                if($r_im_uma->n_registros <= 0){
+                    return $this->error->error(mensaje: 'Error no existe subsidio', data: $r_im_uma);
+                }
+
+                $uma = $r_im_uma->registros[0]['im_uma_monto'] * 30.4;
+
+                $imss = (new calcula_imss())->imss_sin_excep(
+                    cat_sat_periodicidad_pago_nom_id: $r_nom_nomina['cat_sat_periodicidad_pago_nom_id'],
                     fecha: $r_nom_nomina['nom_nomina_fecha_final_pago'], n_dias: $dias_periodo,
-                    sbc: $r_nom_nomina['em_empleado_salario_diario_integrado'], sd: $r_nom_nomina['em_empleado_salario_diario']);
+                    sbc: $r_nom_nomina['em_empleado_salario_diario_integrado'],
+                    sd: $r_nom_nomina['em_empleado_salario_diario'], uma: $uma);
                 if (errores::$error) {
                     return $this->error->error(mensaje: 'Error al obtener imss', data: $imss);
                 }

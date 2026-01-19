@@ -180,7 +180,7 @@ class calcula_imss{
     }
 
     private function genera_imss_sin_excep(int $cat_sat_periodicidad_pago_nom_id, string $fecha, float $n_dias, float $sbc,
-                                 float $sd): array|float
+                                 float $sd, float $uma): array|float
     {
         $valida = $this->valida_imss(fecha: $fecha,n_dias:  $n_dias, sbc: $sbc,sd:  $sd);
         if(errores::$error){
@@ -192,7 +192,7 @@ class calcula_imss{
         }
 
         $init = $this->init_data_base(cat_sat_periodicidad_pago_nom_id: $cat_sat_periodicidad_pago_nom_id,
-            fecha: $fecha, n_dias: $n_dias, sbc: $sbc, sd: $sd);
+            fecha: $fecha, n_dias: $n_dias, sbc: $sbc, sd: $sd, uma: $uma);
         if(errores::$error){
             return $this->error->error('Error al inicializar', $init);
         }
@@ -240,26 +240,30 @@ class calcula_imss{
         return $data;
     }
 
-    public function imss_sin_excep(int $cat_sat_periodicidad_pago_nom_id, string $fecha, float $n_dias, float $sbc, float $sd): array
+    public function imss_sin_excep(int $cat_sat_periodicidad_pago_nom_id, string $fecha, float $n_dias, float $sbc,
+                                   float $sd, float $uma): array
     {
         $valida = $this->valida_imss(fecha: $fecha,n_dias:  $n_dias,sbc:  $sbc,sd:  $sd);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar imss', data: $valida);
         }
+
         if($cat_sat_periodicidad_pago_nom_id<=0){
             return $this->error->error(mensaje: 'Error $cat_sat_periodicidad_pago_nom_id en menor a 0',
                 data:  $cat_sat_periodicidad_pago_nom_id);
         }
 
         $init = $this->genera_imss_sin_excep(cat_sat_periodicidad_pago_nom_id: $cat_sat_periodicidad_pago_nom_id,
-            fecha: $fecha, n_dias: $n_dias, sbc: $sbc, sd: $sd);
+            fecha: $fecha, n_dias: $n_dias, sbc: $sbc, sd: $sd, uma: $uma);
         if(errores::$error){
             return $this->error->error('Error al generar imss', $init);
         }
+
         $data = $this->data_array();
         if(errores::$error){
             return $this->error->error('Error al asignar datos', $data);
         }
+
         return $data;
     }
 
