@@ -15,60 +15,105 @@
                 <table id="miTabla" class="table table-striped">
                     <thead>
                         <tr>
-                            <th>Comprador</th>
+                            <th>Propietario</th>
                             <th>Empresa</th>
                             <th>Calle</th>
                             <th>Número</th>
                             <th>Col./fracc.</th>
                             <th>C.p.</th>
                             <th>Municipio</th>
-                            <th>Precio de venta área comercial</th>
-                            <th>Ubicación</th>
-                            <th>Estatus poder</th>
-                            <th>Estatus titulación</th>
-                            <th>Fecha firma</th>
-                            <th>Hora</th>
-                            <th>Fecha cotejo o cancelación</th>
-                            <th>Esquema</th>
-                            <th>Asesor</th>
-                            <th>Devolución cliente negociada</th>
-                            <th>Comisión asesor</th>
-                            <th>Observaciones</th>
-                            <th>Toma de fotos</th>
-                            <th>Precalificación</th>
+                            <th>Status poder</th>
+                            <th>Comentarios</th>
                             <th>Nss</th>
-                            <th>Acceso a mi cuenta</th>
-                            <th>No crédito</th>
-                            <th>Precio cv instrucción</th>
-                            <th>Pago parcial instrucción</th>
-                            <th>Pago por su propio peculio</th>
-                            <th>Cuv</th>
-                            <th>Saldo a favor</th>
+                            <th>Contraseña</th>
+                            <th>Apoderado</th>
+                            <th>Ejecutivo</th>
+                            <th>Número de crédito</th>
+                            <th>Adeudo</th>
+                            <th>Pago cliente</th>
+                            <th>Comisión asesor adquisición</th>
+                            <th>Escritura</th>
                             <th>Notaría</th>
-                            <th>Clg</th>
-                            <th>Cch</th>
-                            <th>Correo a info</th>
-                            <th>Anexo a</th>
-                            <th>Anexo b</th>
-                            <th>Nd sc</th>
-                            <th>Autorización patrón</th>
-                            <th>Pago avalúo</th>
-                            <th>Unidad de valuación</th>
-                            <th>Valor concluido</th>
-                            <th>Mts</th>
+                            <th>Año</th>
+                            <th>Valor operación</th>
+                            <th>Orig</th>
+                            <th>Validada por notaría</th>
+                            <th>Fecha validación</th>
+                            <th>Prototipo inmueble</th>
+                            <th>Recámaras</th>
+                            <th>Baños</th>
+                            <th>1/2 baños</th>
+                            <th>Estac.</th>
+                            <th>Terreno m2.</th>
+                            <th>Construcción m2.</th>
+                            <th>Predial</th>
+                            <th>Adeudo</th>
+                            <th>Cna</th>
+                            <th>Cuenta agua</th>
+                            <th>Adeudo cna</th>
+                            <th>Poder</th>
+                            <th>Notaría</th>
+                            <th>Fecha poder</th>
+                            <th>Orig</th>
+                            <th>Hora</th>
                             <th>Exenta</th>
+                            <th>Estatus obra</th>
+                            <th>Llaves</th>
+                            <th>Precio venta</th>
+                            <th>Estatus vivienda</th>
+                            <th>Precio</th>
+                            <th>Monto pagado</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <td><?php echo $controlador->registro['inm_ubicacion_razon_social'] ?></td>
                             <td></td>
+                            <td><?php echo $controlador->registro['inm_ubicacion_calle'] ?></td>
+                            <td><?php echo $controlador->registro['inm_ubicacion_numero_exterior']; if($controlador->registro['inm_ubicacion_numero_interior'] !== '') echo " ".$controlador->registro['inm_ubicacion_numero_interior']?></td>
+                            <td><?php echo $controlador->registro['dp_colonia_descripcion'] ?></td>
+                            <td><?php echo $controlador->registro['dp_cp_descripcion'] ?></td>
+                            <td><?php echo $controlador->registro['dp_municipio_descripcion'] ?></td>
+                            <td><?php echo $controlador->registro['inm_status_ubicacion_descripcion'] ?></td>
+                            <td></td>
+                            <td><?php echo $controlador->registro['inm_ubicacion_nss'] ?></td>
+                            <td><?php echo $controlador->registro['inm_ubicacion_password_mi_cuenta_infonavit'] ?></td>
+                            <td></td>
+                            <td><?php echo $controlador->registro['com_agente_descripcion'] ?></td>
+                            <td><?php echo $controlador->registro['inm_ubicacion_numero_credito'] ?></td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td><?php echo $controlador->registro['inm_ubicacion_numero_escritura'] ?></td>
+                            <td><?php echo $controlador->registro['inm_ubicacion_numero_notaria']." ". $controlador->registro['inm_ubicacion_plaza_notaria'] ?></td>
+                            <td></td>
+                            <td>0</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td><?php echo $controlador->registro['inm_prototipo_descripcion'] ?></td>
+                            <td><?php echo $controlador->registro['inm_ubicacion_recamaras'] ?></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td><?php echo $controlador->registro['inm_ubicacion_metros_terreno'] ?></td>
+                            <td><?php echo $controlador->registro['inm_ubicacion_metros_construccion'] ?></td>
+                            <td><?php echo $controlador->registro['inm_ubicacion_cuenta_predial'] ?></td>
+                            <td><?php echo $controlador->registro['inm_ubicacion_adeudo_predial'] ?></td>
+                            <td></td>
+                            <td><?php echo $controlador->registro['inm_ubicacion_cuenta_agua'] ?></td>
                             <td></td>
                             <td></td>
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td><?php echo $controlador->registro['inm_ubicacion_pago_precio_compra_venta'] ?></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
                             <td></td>
                         </tr>
                     </tbody>
