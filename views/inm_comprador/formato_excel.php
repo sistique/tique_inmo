@@ -62,12 +62,14 @@
                     <tbody>
                         <tr>
                             <td><?php echo $controlador->registro['inm_comprador_razon_social'] ?></td>
-                            <td>TIQUE</td>
-                            <td><?php echo $controlador->registro['inm_ubicacion_calle'] ?></td>
-                            <td><?php echo $controlador->registro['inm_ubicacion_numero'] ?></td>
-                            <td><?php echo $controlador->registro['inm_ubicacion_colonia'] ?></td>
-                            <td><?php echo $controlador->registro['inm_ubicacion_cp'] ?></td>
-                            <td><?php echo $controlador->registro['inm_ubicacion_municipio'] ?></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td><?php echo $controlador->registro['inm_comprador_pago_precio_compra_venta'] ?></td>
+                            <td></td>
                         </tr>
                     </tbody>
                 </table>

@@ -81,7 +81,7 @@ class inm_comprador extends _modelo_parent{
         $columnas_extra['inm_comprador_razon_social'] = $sql;
 
         $sql = "( IFNULL((SELECT
-                    CONCAT(inm_ubicacion.calle, ' ', inm_ubicacion.numero_exterior, ' ', inm_ubicacion.numero_interior, ' ', dp_colonia.descripcion, ' ', dp_municipio.descripcion)
+                    CONCAT(inm_ubicacion.calle, ' ', inm_ubicacion.numero_exterior, ' ', inm_ubicacion.numero_interior, ' ', dp_colonia.descripcion, ' ', dp_cp.descripcion, ' ', dp_municipio.descripcion)
                     FROM inm_rel_ubi_comp 
                         LEFT JOIN inm_ubicacion ON inm_ubicacion.id = inm_rel_ubi_comp.inm_ubicacion_id
                         LEFT JOIN dp_colonia_postal ON dp_colonia_postal.id = inm_ubicacion.dp_colonia_postal_id
@@ -96,7 +96,7 @@ class inm_comprador extends _modelo_parent{
 
         $columnas_extra['inm_ubicacion_completa'] = $sql;
 
-        $sql = "( IFNULL((SELECT
+        /*$sql = "( IFNULL((SELECT
                     CONCAT(inm_ubicacion.calle)
                     FROM inm_rel_ubi_comp 
                         LEFT JOIN inm_ubicacion ON inm_ubicacion.id = inm_rel_ubi_comp.inm_ubicacion_id
@@ -153,7 +153,7 @@ class inm_comprador extends _modelo_parent{
                         inm_rel_ubi_comp.inm_comprador_id = inm_comprador.id
                          LIMIT 1), ''))";
 
-        $columnas_extra['inm_ubicacion_municipio'] = $sql;
+        $columnas_extra['inm_ubicacion_municipio'] = $sql;*/
 
 
         $sql = "( IFNULL((SELECT
