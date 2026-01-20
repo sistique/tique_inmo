@@ -97,6 +97,66 @@ class inm_comprador extends _modelo_parent{
         $columnas_extra['inm_ubicacion_completa'] = $sql;
 
         $sql = "( IFNULL((SELECT
+                    CONCAT(inm_ubicacion.calle)
+                    FROM inm_rel_ubi_comp 
+                        LEFT JOIN inm_ubicacion ON inm_ubicacion.id = inm_rel_ubi_comp.inm_ubicacion_id
+                        WHERE
+                        inm_rel_ubi_comp.inm_comprador_id = inm_comprador.id
+                         LIMIT 1), ''))";
+
+        $columnas_extra['inm_ubicacion_calle'] = $sql;
+
+        $sql = "( IFNULL((SELECT
+                    CONCAT(inm_ubicacion.numero_exterior, ' ', inm_ubicacion.numero_interior)
+                    FROM inm_rel_ubi_comp 
+                        LEFT JOIN inm_ubicacion ON inm_ubicacion.id = inm_rel_ubi_comp.inm_ubicacion_id
+                        WHERE
+                        inm_rel_ubi_comp.inm_comprador_id = inm_comprador.id
+                         LIMIT 1), ''))";
+
+        $columnas_extra['inm_ubicacion_numero'] = $sql;
+
+        $sql = "( IFNULL((SELECT
+                    CONCAT(dp_colonia.descripcion)
+                    FROM inm_rel_ubi_comp 
+                        LEFT JOIN inm_ubicacion ON inm_ubicacion.id = inm_rel_ubi_comp.inm_ubicacion_id
+                        LEFT JOIN dp_colonia_postal ON dp_colonia_postal.id = inm_ubicacion.dp_colonia_postal_id
+                        LEFT JOIN dp_colonia ON dp_colonia.id = dp_colonia_postal.dp_colonia_id
+                        WHERE
+                        inm_rel_ubi_comp.inm_comprador_id = inm_comprador.id
+                         LIMIT 1), ''))";
+
+        $columnas_extra['inm_ubicacion_colonia'] = $sql;
+
+        $sql = "( IFNULL((SELECT
+                    CONCAT(dp_cp.descripcion)
+                    FROM inm_rel_ubi_comp 
+                        LEFT JOIN inm_ubicacion ON inm_ubicacion.id = inm_rel_ubi_comp.inm_ubicacion_id
+                        LEFT JOIN dp_colonia_postal ON dp_colonia_postal.id = inm_ubicacion.dp_colonia_postal_id
+                        LEFT JOIN dp_colonia ON dp_colonia.id = dp_colonia_postal.dp_colonia_id
+                        LEFT JOIN dp_cp ON dp_cp.id = dp_colonia_postal.dp_cp_id
+                        WHERE
+                        inm_rel_ubi_comp.inm_comprador_id = inm_comprador.id
+                         LIMIT 1), ''))";
+
+        $columnas_extra['inm_ubicacion_cp'] = $sql;
+
+        $sql = "( IFNULL((SELECT
+                    CONCAT(dp_municipio.descripcion)
+                    FROM inm_rel_ubi_comp 
+                        LEFT JOIN inm_ubicacion ON inm_ubicacion.id = inm_rel_ubi_comp.inm_ubicacion_id
+                        LEFT JOIN dp_colonia_postal ON dp_colonia_postal.id = inm_ubicacion.dp_colonia_postal_id
+                        LEFT JOIN dp_colonia ON dp_colonia.id = dp_colonia_postal.dp_colonia_id
+                        LEFT JOIN dp_cp ON dp_cp.id = dp_colonia_postal.dp_cp_id
+                        LEFT JOIN dp_municipio ON dp_municipio.id = dp_cp.dp_municipio_id
+                        WHERE
+                        inm_rel_ubi_comp.inm_comprador_id = inm_comprador.id
+                         LIMIT 1), ''))";
+
+        $columnas_extra['inm_ubicacion_municipio'] = $sql;
+
+
+        $sql = "( IFNULL((SELECT
                         fecha_status
                     FROM inm_bitacora_status_comprador 
                         WHERE
