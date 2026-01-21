@@ -73,7 +73,7 @@ class inm_factura_compra extends _modelo_parent{
             if (!isset($registro['status'])) {
                 if (!isset($registro['descripcion'])) {
                     $descripcion = $r_proveedor['gt_proveedor_razon_social'];
-                    $descripcion .= ' ' . $registro['fecha']. ' '. $this->registro['codigo'];
+                    $descripcion .= ' ' . $registro['fecha']. ' '. $registro['codigo'];
                     $registro['descripcion'] = $descripcion;
                 }
 
