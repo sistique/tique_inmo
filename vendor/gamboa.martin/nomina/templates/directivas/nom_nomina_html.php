@@ -916,7 +916,7 @@ class nom_nomina_html extends base_nominas
         $row_upd->fecha = date('Y-m-d');
 
         $in_fecha = (new fc_factura_html(html: $this->html_base))->input_fecha(cols: 4, row_upd: $row_upd,
-            value_vacio: false);
+            value_vacio: false, value: $row_upd->fecha);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al generar input', data: $in_fecha);
         }
