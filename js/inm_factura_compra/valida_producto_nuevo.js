@@ -181,6 +181,11 @@ $('#asignar').on('click', function () {
             "opacity": "1",
             "cursor": "pointer"
         });
+
+        modal.close();
+        setTimeout(() => {
+            alert("Ya están todos los productos asignados, inserta por favor.");
+        }, 0);
     } else {
         $('.btn-insert').css({
             "pointer-events": "none",
@@ -312,6 +317,11 @@ $('#alta_producto').on('click', function () {
                     "opacity": "1",
                     "cursor": "pointer"
                 });
+
+                modal.close();
+                setTimeout(() => {
+                    alert("Ya están todos los productos asignados, inserta por favor.");
+                }, 0);
             } else {
                 $('.btn-insert').css({
                     "pointer-events": "none",
