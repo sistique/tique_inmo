@@ -4444,27 +4444,32 @@ class controlador_inm_ubicacion extends _ctl_base {
         }
 
         $filtro_especial = array();
+        $filtros = array();
+
+        if(!empty($_POST['id'])){
+            $filtros[$table.'.id'] = $_POST['id'];
+        }
 
         if(!empty($_POST['nombre_ubicacion'])){
-            $filtro_especial[0][$table.'.inm_ubicacion_ubicacion']['operador'] = 'LIKE';
-            $filtro_especial[0][$table.'.inm_ubicacion_ubicacion']['valor'] = '%'.$_POST['nombre_ubicacion'].'%';
-            $filtro_especial[0][$table.'.inm_ubicacion_ubicacion']['comparacion'] = 'AND';
+            $filtro_especial[1][$table.'.inm_ubicacion_ubicacion']['operador'] = 'LIKE';
+            $filtro_especial[1][$table.'.inm_ubicacion_ubicacion']['valor'] = '%'.$_POST['nombre_ubicacion'].'%';
+            $filtro_especial[1][$table.'.inm_ubicacion_ubicacion']['comparacion'] = 'AND';
 
             //$filtro_text[$table.'.razon_social'] = $_POST['nombre_ubicacion'];
         }
 
         if(!empty($_POST['predial'])){
-            $filtro_especial[1][$table.'.cuenta_predial']['operador'] = 'LIKE';
-            $filtro_especial[1][$table.'.cuenta_predial']['valor'] = '%'.$_POST['predial'].'%';
-            $filtro_especial[1][$table.'.cuenta_predial']['comparacion'] = 'AND';
+            $filtro_especial[2][$table.'.cuenta_predial']['operador'] = 'LIKE';
+            $filtro_especial[2][$table.'.cuenta_predial']['valor'] = '%'.$_POST['predial'].'%';
+            $filtro_especial[2][$table.'.cuenta_predial']['comparacion'] = 'AND';
 
             //$filtro_text[$table.'.cuenta_predial'] = $_POST['cuenta_predial'];
         }
 
         if(!empty($_POST['agente'])){
-            $filtro_especial[2]['com_agente.descripcion']['operador'] = 'LIKE';
-            $filtro_especial[2]['com_agente.descripcion']['valor'] = '%'.$_POST['agente'].'%';
-            $filtro_especial[2]['com_agente.descripcion']['comparacion'] = 'AND';
+            $filtro_especial[3]['com_agente.descripcion']['operador'] = 'LIKE';
+            $filtro_especial[3]['com_agente.descripcion']['valor'] = '%'.$_POST['agente'].'%';
+            $filtro_especial[3]['com_agente.descripcion']['comparacion'] = 'AND';
 
             //$filtro_text['com_agente.descripcion'] = $_POST['agente'];
         }
@@ -4476,13 +4481,7 @@ class controlador_inm_ubicacion extends _ctl_base {
             $in['values'] = $array;
         }
 
-        /*$columnas_totales[] = 'inm_ubicacion_sub_total_base';
-        $columnas_totales[] = 'inm_ubicacion_total_descuento';
-        $columnas_totales[] = 'inm_ubicacion_total_traslados';
-        $columnas_totales[] = 'inm_ubicacion_total_retenciones';
-        $columnas_totales[] = 'inm_ubicacion_total';*/
-
-        $result = (new inm_ubicacion(link: $this->link))->filtro_and(filtro_especial: $filtro_especial,
+        $result = (new inm_ubicacion(link: $this->link))->filtro_and(filtro: $filtros,filtro_especial: $filtro_especial,
             filtro_rango: $filtro_rango, in: $in);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al obtener ubicacions', data: $result);

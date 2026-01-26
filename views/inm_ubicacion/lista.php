@@ -8,6 +8,10 @@ echo "<style>
     width: 100%;
 }
 
+.data{
+    width: 100%;
+}
+
 .contenedor_completo{
     display: flex;
     flex-wrap: wrap;
@@ -101,6 +105,15 @@ echo "<style>
         <?php //include (new views())->ruta_templates . 'etiquetas/_titulo_lista.php'; ?>
 
         <div class="contenedor_completo">
+            <div class="data">
+                <div class="filtro-grupo col-md-12">
+                    <div class="col-md-12">
+                        <label for="id">ID</label>
+                        <input type="text" id="id" data-tipo="filtro" data-filtro_campo="inm_ubicacion.id" placeholder="Ej: 1 ">
+                    </div>
+                </div>
+            </div>
+
             <div class="filtros-avanzados">
                 <div class="filtro-grupo col-md-12">
                     <label>Status Ubicacion</label>
@@ -140,6 +153,7 @@ echo "<style>
                 <button id="limpiar">Limpiar</button>
                 <form method="post" action="<?php echo $controlador->link_exportar_xls; ?>" enctype="multipart/form-data">
                     <input type="hidden" name="inm_status_ubicacion" id="hidden_inm_status_ubicacion">
+                    <input type="hidden" name="id" id="hidden_id">
                     <input type="hidden" name="nombre_ubicacion" id="hidden_nombre_ubicacion">
                     <input type="hidden" name="ubicacion" id="hidden_ubicacion">
                     <input type="hidden" name="agente" id="hidden_agente">
