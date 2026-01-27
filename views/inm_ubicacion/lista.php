@@ -8,10 +8,6 @@ echo "<style>
     width: 100%;
 }
 
-.data{
-    width: 100%;
-}
-
 .contenedor_completo{
     display: flex;
     flex-wrap: wrap;
@@ -105,13 +101,9 @@ echo "<style>
         <?php //include (new views())->ruta_templates . 'etiquetas/_titulo_lista.php'; ?>
 
         <div class="contenedor_completo">
-            <div class="data">
-                <div class="filtro-grupo col-md-12">
-                    <div class="col-md-12">
-                        <label for="id">ID</label>
-                        <input type="text" id="id" data-tipo="filtro" data-filtro_campo="inm_ubicacion.id" placeholder="Ej: 1 ">
-                    </div>
-                </div>
+            <div class="filtros filtro-grupo col-md-12">
+                <label for="id">ID</label>
+                <input type="text" id="id" data-tipo="data" data-filtro_campo="inm_ubicacion.id" placeholder="Ej: 1 ">
             </div>
 
             <div class="filtros-avanzados">

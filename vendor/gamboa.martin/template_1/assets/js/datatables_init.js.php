@@ -23,7 +23,7 @@ datatable = function (identificador, columns, columnDefs, data, filtro_in) {
         ajax: {
             "url": url_data_table,
             'data': function (d) {
-                d.data = data;
+                d.data = filtros(data);
                 d.in = filtros_in();
                 d.filtros_avanzados = filtros_avanzados();
             },
@@ -125,6 +125,33 @@ filtros_in = function () {
 
     return filtros;
 };
+
+filtros = function (data) {
+    if(data.length === 0){
+        let filtros = {};
+
+        $(".filtros input").each(function () {
+            let $input = $(this);
+            let filtro = $input.data("filtro_campo");
+            let value = $.trim($input.val());
+
+            if (filtro && value) {
+                if (!filtros) {
+                    filtros = {};
+                }
+
+                filtros[filtro] = value;
+            }
+        });
+
+        data = filtros;
+    }
+
+    console.log(data);
+
+    return data;
+};
+
 
 verify_check = function (columns) {
 

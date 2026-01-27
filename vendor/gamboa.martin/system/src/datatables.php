@@ -1492,6 +1492,7 @@ class datatables{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener pagina', data: $pagina);
         }
+
         $filtro = (new filtros())->filtro();
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener filtro', data: $filtro);

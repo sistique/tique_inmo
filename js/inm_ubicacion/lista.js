@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    var table_inm_prospecto = $('.datatable').DataTable();
+    var table_inm_ubicacion = $('.datatable').DataTable();
     var filtro_aplicado = false;
 
     $('#limpiar').prop('disabled', true);
@@ -46,21 +46,23 @@ $(document).ready(function () {
 
     $('#filtrar').on('click', function () {
         $('#filtrar').prop('disabled', true);
-        table_inm_prospecto.ajax.reload(function () {
+
+        table_inm_ubicacion.ajax.reload(function () {
             $('#filtrar').prop('disabled', false);
             $('#limpiar').prop('disabled', false);
             filtro_aplicado = true;
-        });
+        }, true);
     });
 
     $('#limpiar').on('click', function () {
+        $('.filtros input').val('');
         $('.filtros-avanzados input').val('');
         $('.filtros-avanzados select').val('').trigger('change');
         $('.filtros-avanzados li').remove();
         $('#limpiar').prop('disabled', true);
 
         if (filtro_aplicado) {
-            table_inm_prospecto.ajax.reload();
+            table_inm_ubicacion.ajax.reload();
             filtro_aplicado = false;
         }
     });
