@@ -31,10 +31,18 @@ class inm_detalle_factura_compra extends _modelo_parent{
 
     public function alta_bd(array $keys_integra_ds = array('codigo', 'descripcion')): array|stdClass
     {
+        if(!isset($this->registro['inm_factura_compra_id'])){
+            return $this->error->error(mensaje: 'Error no existe producto', data: $this->registro);
+        }
+
         $r_inm_factura_compra = (new inm_factura_compra(link: $this->link))->registro(
             registro_id: $this->registro['inm_factura_compra_id']);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al insertar prospecto', data: $r_inm_factura_compra);
+        }
+
+        if(!isset($this->registro['inm_producto_id'])){
+            return $this->error->error(mensaje: 'Error no existe producto', data: $this->registro);
         }
 
         $r_inm_producto = (new inm_producto(link: $this->link))->registro(
