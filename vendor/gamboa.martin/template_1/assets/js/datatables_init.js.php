@@ -147,8 +147,6 @@ filtros = function (data) {
         data = filtros;
     }
 
-    console.log(data);
-
     return data;
 };
 
