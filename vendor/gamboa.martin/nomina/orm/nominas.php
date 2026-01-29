@@ -2,6 +2,7 @@
 namespace gamboamartin\nomina\models;
 use base\orm\modelo;
 use gamboamartin\errores\errores;
+use gamboamartin\im_registro_patronal\models\im_salario_minimo;
 use gamboamartin\im_registro_patronal\models\im_uma;
 use html\fc_partida_html;
 use JsonException;
@@ -502,11 +503,35 @@ class nominas extends modelo {
 
         $uma = $r_im_uma->registros[0]['im_uma_monto'];
 
+        $filtro_especial[0][$fecha]['operador'] = '>=';
+        $filtro_especial[0][$fecha]['valor'] = 'im_salario_minimo.fecha_inicio';
+        $filtro_especial[0][$fecha]['comparacion'] = 'AND';
+        $filtro_especial[0][$fecha]['valor_es_campo'] = true;
+
+        $filtro_especial[1][$fecha]['operador'] = '<=';
+        $filtro_especial[1][$fecha]['valor'] = 'im_salario_minimo.fecha_fin';
+        $filtro_especial[1][$fecha]['comparacion'] = 'AND';
+        $filtro_especial[1][$fecha]['valor_es_campo'] = true;
+
+        $filtro['im_tipo_salario_minimo.descripcion'] = 'GENERAL';
+
+        $r_im_salario_minimo = (new im_salario_minimo(link: $this->link))->filtro_and(filtro: $filtro,
+            filtro_especial: $filtro_especial);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener subsidio', data: $r_im_salario_minimo);
+        }
+
+        if($r_im_salario_minimo->n_registros <= 0){
+            return $this->error->error(mensaje: 'Error no existe subsidio', data: $r_im_salario_minimo);
+        }
+
+        $salario_minimo = $r_im_salario_minimo->registros[0]['im_salario_minimo_monto'];
+
         return (new calcula_imss())->imss(
             cat_sat_periodicidad_pago_nom_id: $nom_nomina->cat_sat_periodicidad_pago_nom_id,
             fecha: $fecha, n_dias: $num_dias_pagados,
             sbc: $nom_nomina->em_empleado_salario_diario_integrado, sd: $nom_nomina->em_empleado_salario_diario,
-            uma: $uma);
+            uma: $uma, salario_minimo: $salario_minimo);
     }
 
 

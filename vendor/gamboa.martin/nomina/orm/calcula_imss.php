@@ -153,7 +153,7 @@ class calcula_imss{
      * @return array|float
      */
     private function genera_imss(int $cat_sat_periodicidad_pago_nom_id, string $fecha, float $n_dias, float $sbc,
-                                 float $sd, float $uma): array|float
+                                 float $sd, float $uma, float $salario_minimo): array|float
     {
         $valida = $this->valida_imss(fecha: $fecha,n_dias:  $n_dias, sbc: $sbc,sd:  $sd);
         if(errores::$error){
@@ -170,7 +170,7 @@ class calcula_imss{
             return $this->error->error('Error al inicializar', $init);
         }
 
-        if($this->sd > (float)$this->salario_minimo[$this->year]){
+        if($this->sd > $salario_minimo){
             $calcula = $this->calcula();
             if(errores::$error){
                 return $this->error->error('Error al calcular', $calcula);
@@ -214,7 +214,7 @@ class calcula_imss{
      * @return array
      */
     public function imss(int $cat_sat_periodicidad_pago_nom_id, string $fecha, float $n_dias, float $sbc, float $sd,
-                         float $uma): array
+                         float $uma, float $salario_minimo): array
     {
         $valida = $this->valida_imss(fecha: $fecha,n_dias:  $n_dias,sbc:  $sbc,sd:  $sd);
         if(errores::$error){
@@ -227,7 +227,7 @@ class calcula_imss{
         }
 
         $init = $this->genera_imss(cat_sat_periodicidad_pago_nom_id: $cat_sat_periodicidad_pago_nom_id,
-            fecha: $fecha, n_dias: $n_dias, sbc: $sbc, sd: $sd, uma: $uma);
+            fecha: $fecha, n_dias: $n_dias, sbc: $sbc, sd: $sd, uma: $uma, salario_minimo: $salario_minimo);
         if(errores::$error){
             return $this->error->error('Error al generar imss', $init);
         }
