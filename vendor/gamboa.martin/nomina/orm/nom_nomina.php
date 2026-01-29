@@ -19,6 +19,7 @@ use gamboamartin\facturacion\models\fc_factura;
 use gamboamartin\facturacion\models\fc_factura_documento;
 use gamboamartin\facturacion\models\fc_partida;
 use gamboamartin\im_registro_patronal\models\calcula_cuota_obrero_patronal;
+use gamboamartin\im_registro_patronal\models\im_salario_minimo;
 use gamboamartin\nomina\controllers\xml_nom;
 use gamboamartin\organigrama\models\org_empresa;
 use gamboamartin\organigrama\models\org_sucursal;
@@ -483,13 +484,36 @@ class nom_nomina extends modelo
             if (errores::$error) {
                 return $this->error->error(mensaje: 'Error al obtener regsitro de nomina', data: $r_nom_nomina);
             }
+            
+            $fecha = $r_nom_nomina['nom_nomina_fecha_final_pago'];
 
-            $year = date('Y', strtotime($r_nom_nomina['nom_nomina_fecha_final_pago']));
+            $filtro_especial = array();
+            $filtro_especial[0][$fecha]['operador'] = '>=';
+            $filtro_especial[0][$fecha]['valor'] = 'im_salario_minimo.fecha_inicio';
+            $filtro_especial[0][$fecha]['comparacion'] = 'AND';
+            $filtro_especial[0][$fecha]['valor_es_campo'] = true;
 
-            if($r_nom_nomina['em_empleado_salario_diario'] <= (float)$this->salario_minimo[$year]){
+            $filtro_especial[1][$fecha]['operador'] = '<=';
+            $filtro_especial[1][$fecha]['valor'] = 'im_salario_minimo.fecha_fin';
+            $filtro_especial[1][$fecha]['comparacion'] = 'AND';
+            $filtro_especial[1][$fecha]['valor_es_campo'] = true;
 
-                $fecha = $r_nom_nomina['nom_nomina_fecha_final_pago'];
+            $filtro['im_tipo_salario_minimo.descripcion'] = 'GENERAL';
 
+            $r_im_salario_minimo = (new im_salario_minimo(link: $this->link))->filtro_and(filtro: $filtro,
+                filtro_especial: $filtro_especial);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al obtener subsidio', data: $r_im_salario_minimo);
+            }
+
+            if($r_im_salario_minimo->n_registros <= 0){
+                return $this->error->error(mensaje: 'Error no existe subsidio', data: $r_im_salario_minimo);
+            }
+
+            $salario_minimo = $r_im_salario_minimo->registros[0]['im_salario_minimo_monto'];
+
+            if($r_nom_nomina['em_empleado_salario_diario'] <= (float)$salario_minimo){
+                $filtro_especial = array();
                 $filtro_especial[0][$fecha]['operador'] = '>=';
                 $filtro_especial[0][$fecha]['valor'] = 'im_uma.fecha_inicio';
                 $filtro_especial[0][$fecha]['comparacion'] = 'AND';
@@ -533,7 +557,7 @@ class nom_nomina extends modelo
             }
         }
 
-        if($registros['nom_conf_empleado']->nom_conf_nomina_aplica_septimo_dia === 'activo'
+        /*if($registros['nom_conf_empleado']->nom_conf_nomina_aplica_septimo_dia === 'activo'
             && $dias->dias_septimo_dia > 0 && $dias->dias_pagados_reales > 0){
             $nom_percepcion = (new nom_percepcion($this->link))->get_aplica_septimo_dia();
             if (errores::$error) {
@@ -633,7 +657,7 @@ class nom_nomina extends modelo
             if (errores::$error) {
                 return $this->error->error(mensaje: 'Error al insertar percepcion default', data: $r_alta_nom_par_percepcion);
             }
-        }
+        }*/
 
         if($dias->dias_vacaciones > 0){
             $nom_percepcion = (new nom_percepcion($this->link))->get_aplica_vacaciones();
