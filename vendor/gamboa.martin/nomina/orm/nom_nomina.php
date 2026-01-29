@@ -484,7 +484,7 @@ class nom_nomina extends modelo
             if (errores::$error) {
                 return $this->error->error(mensaje: 'Error al obtener regsitro de nomina', data: $r_nom_nomina);
             }
-            
+
             $fecha = $r_nom_nomina['nom_nomina_fecha_final_pago'];
 
             $filtro_especial = array();
