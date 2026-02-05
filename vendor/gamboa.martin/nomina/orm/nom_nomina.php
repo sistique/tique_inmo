@@ -458,11 +458,11 @@ class nom_nomina extends modelo
             }
         }
 
-        $percepciones = $this->insertar_percepciones_configuracion(dias: $dias,
+        /*$percepciones = $this->insertar_percepciones_configuracion(dias: $dias,
             nom_conf_nomina_id: $registros['nom_conf_empleado']->nom_conf_nomina_id,nom_nomina_id: $r_alta_bd->registro_id);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al insertar percepciones de configuracion', data: $percepciones);
-        }
+        }*/
 
         if($this->registro['num_dias_pagados'] > 0) {
             $conceptos = (new nom_tipo_concepto_imss($this->link))->registros_activos();
@@ -659,7 +659,7 @@ class nom_nomina extends modelo
             }
         }*/
 
-        if($dias->dias_vacaciones > 0){
+        /*if($dias->dias_vacaciones > 0){
             $nom_percepcion = (new nom_percepcion($this->link))->get_aplica_vacaciones();
             if (errores::$error) {
                 return $this->error->error(mensaje: 'Error insertar conceptos', data: $nom_percepcion);
@@ -686,7 +686,7 @@ class nom_nomina extends modelo
         $abonos_aplicados = $this->acciones_anticipo(em_empleado_id: $this->registro['em_empleado_id'],nom_nomina_id: $r_alta_bd->registro_id);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al ejecutar acciones de anticipo', data: $abonos_aplicados);
-        }
+        }*/
 
         return $r_alta_bd;
     }
