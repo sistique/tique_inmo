@@ -374,7 +374,7 @@ class nom_nomina extends modelo
             return $this->error->error(mensaje: 'Error al generar registros', data: $registros);
         }
 
-        $dias = $this->calculo_dias_pagados(nom_conf_empleado: $registros['nom_conf_empleado']);
+        /*$dias = $this->calculo_dias_pagados(nom_conf_empleado: $registros['nom_conf_empleado']);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al calcular los dias pagados', data: $dias);
         }
@@ -393,7 +393,7 @@ class nom_nomina extends modelo
             }
         }
 
-        $dias_periodo = $dias->dias_pagados_reales_sep - $total;
+        $dias_periodo = $dias->dias_pagados_reales_sep - $total;*/
 
         $registros_factura = $this->genera_registro_factura(registros: $registros['fc_csd'],
             empleado_sucursal: $registros['em_rel_empleado_sucursal'],cat_sat: $registros['nom_conf_empleado'],
