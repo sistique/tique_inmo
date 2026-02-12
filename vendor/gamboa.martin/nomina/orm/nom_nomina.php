@@ -373,28 +373,7 @@ class nom_nomina extends modelo
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al generar registros', data: $registros);
         }
-
-        /*$dias = $this->calculo_dias_pagados(nom_conf_empleado: $registros['nom_conf_empleado']);
-        if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al calcular los dias pagados', data: $dias);
-        }
-
-        $incidencias = (new nom_incidencia($this->link))->get_incidencias_faltas(em_empleado_id: $this->registro['em_empleado_id'],
-            nom_periodo_id: $this->registro['nom_periodo_id']);
-        if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al obtener las incidencias', data: $incidencias);
-        }
-
-        $total = 0;
-
-        if ($incidencias->n_registros > 0){
-            foreach ($incidencias->registros as $incidencia){
-                $total += $incidencia['nom_incidencia_n_dias'];
-            }
-        }
-
-        $dias_periodo = $dias->dias_pagados_reales_sep - $total;*/
-
+        
         $registros_factura = $this->genera_registro_factura(registros: $registros['fc_csd'],
             empleado_sucursal: $registros['em_rel_empleado_sucursal'],cat_sat: $registros['nom_conf_empleado'],
             im_registro_patronal: $registros['im_registro_patronal']);
@@ -457,12 +436,6 @@ class nom_nomina extends modelo
                 return $this->error->error(mensaje: 'Error al insertar percepcion default', data: $r_alta_nom_par_percepcion);
             }
         }
-
-        /*$percepciones = $this->insertar_percepciones_configuracion(dias: $dias,
-            nom_conf_nomina_id: $registros['nom_conf_empleado']->nom_conf_nomina_id,nom_nomina_id: $r_alta_bd->registro_id);
-        if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al insertar percepciones de configuracion', data: $percepciones);
-        }*/
 
         if($this->registro['num_dias_pagados'] > 0) {
 
