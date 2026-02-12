@@ -465,6 +465,9 @@ class nom_nomina extends modelo
         }*/
 
         if($this->registro['num_dias_pagados'] > 0) {
+
+
+/*
             $conceptos = (new nom_tipo_concepto_imss($this->link))->registros_activos();
             if (errores::$error) {
                 return $this->error->error(mensaje: 'Error al obtener registros de tipos de conceptos', data: $conceptos);
@@ -554,7 +557,7 @@ class nom_nomina extends modelo
                 nom_nomina_id: $r_alta_bd->registro_id);
             if (errores::$error) {
                 return $this->error->error(mensaje: 'Error insertar conceptos', data: $r_conceptos);
-            }
+            }*/
         }
 
         /*if($registros['nom_conf_empleado']->nom_conf_nomina_aplica_septimo_dia === 'activo'
