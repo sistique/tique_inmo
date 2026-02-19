@@ -2,7 +2,7 @@
 <?php use config\views; ?>
 
 <main class="main section-color-primary">
-    <div class="container">
+    <div >
         <div class="row">
             <div class="col-lg-12">
                 <div class="widget  widget-box box-container form-main widget-form-cart" id="form">
@@ -63,7 +63,7 @@
 
 </main>
 
-<div class="container">
+<div >
     <div class="row">
         <div class="col-md-12">
 
@@ -108,7 +108,7 @@
     </div>
 </div>
 
-<div class="container">
+<div >
     <div class="row">
         <div class="col-md-12">
 
@@ -153,7 +153,7 @@
     </div>
 </div>
 
-<div class="container">
+<div >
     <div class="row">
         <div class="col-md-12">
 
@@ -198,7 +198,7 @@
     </div>
 </div>
 
-<div class="container">
+<div >
     <div class="row">
         <div class="col-md-12">
 
