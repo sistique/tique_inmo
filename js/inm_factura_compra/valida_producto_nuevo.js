@@ -195,17 +195,29 @@ $('#asignar').on('click', function () {
     }
 });
 
+function validarCampo(selector){
+    return $(selector).val().trim();
+}
+
 $('#alta_producto').on('click', function () {
 
     let url_alta_prd = get_url("inm_factura_compra", "inserta_producto_bd", {registro_id: registro_id});
 
-    let registro = {};
-    registro['inm_concepto_id'] = $('#inm_concepto_id').val();
-    registro['descripcion'] = $('#descripcion_producto').val();
-    registro['cat_sat_unidad_id'] = $('#cat_sat_unidad_id').val();
-    registro['cat_sat_cve_prod_codigo'] = $('#cat_sat_cve_prod_codigo').val();
-    registro['costo_promedio'] = $('#costo_promedio').val();
-    registro['cantidad_actual'] = $('#cantidad_actual').val();
+    let registro = {
+        inm_concepto_id: validarCampo('#inm_concepto_id'),
+        descripcion: validarCampo('#descripcion_producto'),
+        cat_sat_unidad_id: validarCampo('#cat_sat_unidad_id'),
+        cat_sat_cve_prod_codigo: validarCampo('#cat_sat_cve_prod_codigo'),
+        costo_promedio: validarCampo('#costo_promedio'),
+        cantidad_actual: validarCampo('#cantidad_actual')
+    };
+
+    for (let key in registro) {
+        if (!registro[key]) {
+            alert('Todos los campos son obligatorios');
+            return;
+        }
+    }
 
     $.ajax({
         url: url_alta_prd,
