@@ -439,6 +439,11 @@ class nom_nomina extends modelo
 
         if($this->registro['num_dias_pagados'] > 0) {
 
+            $factor_clase_riesgo = $registros['im_registro_patronal']->im_clase_riesgo_factor;
+            $dias_periodo = $this->registro['num_dias_pagados'];
+            $fecha = $this->registro['fecha_final_pago'];
+            $sbc = $registros['em_empleado']->em_empleado_salario_diario_integrado;
+
 
 /*
             $conceptos = (new nom_tipo_concepto_imss($this->link))->registros_activos();
