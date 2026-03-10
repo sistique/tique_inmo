@@ -237,7 +237,7 @@ hr{
                         <table class="table table-striped inm_detalle_factura_compra">
                             <thead>
                             <tr>
-                                <th></th>
+                                <th>Factura</th>
                                 <th>Producto</th>
                                 <th>Cantidad</th>
                                 <th>Valor Unitario</th>
@@ -253,6 +253,7 @@ hr{
                             foreach ($controlador->movimientos_consumo as $detalle){
                                 ?>
                                 <tr>
+                                    <td><?php echo $detalle['inm_factura_compra_descripcion'] ?></td>
                                     <td><?php echo $detalle['inm_concepto_descripcion'] ?></td>
                                     <td><?php echo $detalle['inm_producto_descripcion'] ?></td>
                                     <td><?php echo $detalle['inm_detalle_factura_compra_cantidad'] ?></td>

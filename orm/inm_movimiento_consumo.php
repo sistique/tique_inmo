@@ -12,7 +12,8 @@ class inm_movimiento_consumo extends _modelo_parent{
     {
         $tabla = 'inm_movimiento_consumo';
         $columnas = array($tabla=>false,'inm_ubicacion'=>$tabla,'inm_producto'=>$tabla,
-            'inm_detalle_factura_compra'=>$tabla,'inm_concepto'=>'inm_producto');
+            'inm_detalle_factura_compra'=>$tabla,'inm_concepto'=>'inm_producto',
+            'inm_factura_compra'=>'inm_detalle_factura_compra');
 
         $columnas_extra= array();
         $renombres= array();
