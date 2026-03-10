@@ -694,6 +694,85 @@ function renderTable_productos_completos(page) {
 }
 
 function renderPagination_productos_completos() {
+
+    let totalPages = Math.ceil(productos_completos.length / rowsPerPage);
+    let pagination = $('#pagination');
+    pagination.empty();
+
+    let limite = 2;
+    let start = Math.max(1, currentPage - limite);
+    let end = Math.min(totalPages, currentPage + limite);
+
+    if (currentPage > 1) {
+        pagination.append(
+            $('<button>')
+                .text('Anterior')
+                .addClass('btn btn-sm btn-secondary mx-1')
+                .click(function () {
+                    currentPage--;
+                    renderTable_productos_completos(currentPage);
+                    renderPagination_productos_completos();
+                })
+        );
+    }
+
+    if (start > 1) {
+        pagination.append(createPageButtonCompleto(1));
+        pagination.append($('<span>').text('...'));
+    }
+
+    for (let i = start; i <= end; i++) {
+        pagination.append(createPageButtonCompleto(i));
+    }
+
+    if (end < totalPages) {
+        pagination.append($('<span>').text('...'));
+        pagination.append(createPageButtonCompleto(totalPages));
+    }
+
+    if (currentPage < totalPages) {
+        pagination.append(
+            $('<button>')
+                .text('Siguiente')
+                .addClass('btn btn-sm btn-secondary mx-1')
+                .click(function () {
+                    currentPage++;
+                    renderTable_productos_completos(currentPage);
+                    renderPagination_productos_completos();
+                })
+        );
+    }
+}
+
+function createPageButtonCompleto(page) {
+
+    let btn = $('<button>')
+        .text(page)
+        .addClass('page-btn btn btn-sm btn-primary mx-1')
+        .attr('data-page', page);
+
+    if (page === currentPage) {
+        btn.addClass('active');
+    }
+
+    btn.on('click', function () {
+
+        let chk = document.querySelector('input[name="producto"]:checked');
+        if (chk) {
+            $('#producto_asignado').val('');
+            $(chk).prop("checked", false);
+            $('.content_alta').hide();
+        }
+
+        currentPage = page;
+        renderTable_productos_completos(currentPage);
+        renderPagination_productos_completos();
+    });
+
+    return btn;
+}
+
+/*function renderPagination_productos_completos() {
     let totalPages = Math.ceil(productos_completos.length / rowsPerPage);
     let pagination = $('#pagination');
     pagination.empty();
@@ -723,7 +802,7 @@ function renderPagination_productos_completos() {
         renderTable_productos_completos(currentPage);
         renderPagination_productos_completos();
     });
-}
+}*/
 
 $.ajax({
     url: url_prd,
