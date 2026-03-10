@@ -518,7 +518,7 @@ function renderTable(page) {
     });
 }
 
-function renderPagination() {
+/*function renderPagination() {
     let totalPages = Math.ceil(productos.length / rowsPerPage);
     let pagination = $('#pagination');
     pagination.empty();
@@ -548,6 +548,90 @@ function renderPagination() {
         renderTable(currentPage);
         renderPagination();
     });
+}*/
+
+function renderPagination() {
+
+    let totalPages = Math.ceil(productos.length / rowsPerPage);
+    let pagination = $('#pagination');
+    pagination.empty();
+
+    let limite = 2; // paginas antes y despues
+    let start = Math.max(1, currentPage - limite);
+    let end = Math.min(totalPages, currentPage + limite);
+
+    // BOTON ANTERIOR
+    if (currentPage > 1) {
+        pagination.append(
+            $('<button>')
+                .text('Anterior')
+                .addClass('btn btn-sm btn-secondary mx-1')
+                .click(function () {
+                    currentPage--;
+                    renderTable(currentPage);
+                    renderPagination();
+                })
+        );
+    }
+
+    // PRIMERA PAGINA
+    if (start > 1) {
+        pagination.append(createPageButton(1));
+        pagination.append($('<span>').text('...'));
+    }
+
+    // PAGINAS CENTRALES
+    for (let i = start; i <= end; i++) {
+        pagination.append(createPageButton(i));
+    }
+
+    // ULTIMA PAGINA
+    if (end < totalPages) {
+        pagination.append($('<span>').text('...'));
+        pagination.append(createPageButton(totalPages));
+    }
+
+    // BOTON SIGUIENTE
+    if (currentPage < totalPages) {
+        pagination.append(
+            $('<button>')
+                .text('Siguiente')
+                .addClass('btn btn-sm btn-secondary mx-1')
+                .click(function () {
+                    currentPage++;
+                    renderTable(currentPage);
+                    renderPagination();
+                })
+        );
+    }
+}
+
+function createPageButton(page) {
+
+    let btn = $('<button>')
+        .text(page)
+        .addClass('page-btn btn btn-sm btn-primary mx-1')
+        .attr('data-page', page);
+
+    if (page === currentPage) {
+        btn.addClass('active');
+    }
+
+    btn.on('click', function () {
+
+        let chk = document.querySelector('input[name="producto"]:checked');
+        if (chk) {
+            $('#producto_asignado').val('');
+            $(chk).prop("checked", false);
+            $('.content_alta').hide();
+        }
+
+        currentPage = page;
+        renderTable(currentPage);
+        renderPagination();
+    });
+
+    return btn;
 }
 
 function renderTable_productos_completos(page) {
