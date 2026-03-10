@@ -2655,6 +2655,13 @@ class controlador_inm_comprador extends _ctl_base {
 
         $columns_ds = array('inm_comprador_nss', 'inm_comprador_nombre', 'inm_comprador_apellido_paterno',
             'inm_comprador_apellido_materno');
+
+        foreach ($columns_ds as $index => $key){
+            if(trim($this->registro[$key]) === ''){
+                unset($columns_ds[$index]);
+            }
+        }
+
         $filtro['inm_comprador.id'] = $this->registro_id;
         $inm_prospecto_id = (new inm_comprador_html(html: $this->html_base))->select_inm_comprador_id(
             cols: 12, con_registros: true, id_selected: $this->registro_id, link: $this->link, columns_ds: $columns_ds,
