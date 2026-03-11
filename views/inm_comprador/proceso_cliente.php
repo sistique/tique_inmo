@@ -9,11 +9,17 @@
             <div class="col-lg-12">
 
                 <?php include (new views())->ruta_templates."head/title.php"; ?>
-                <?php include (new views())->ruta_templates."head/subtitulo.php"; ?>
+
+                <div class="widget-header">
+                    <h2><?php echo $controlador->accion_titulo." - ID: ".$controlador->registro_id; ?></h2>
+                </div>
+
+                <?php /*include (new views())->ruta_templates."head/subtitulo.php"; */ ?>
                 <?php include (new views())->ruta_templates."mensajes.php"; ?>
                 <div class="widget  widget-box box-container form-main widget-form-cart" id="form">
 
                     <?php echo $controlador->inputs->inm_comprador_seleccionado_id; ?>
+                    <?php echo $controlador->inputs->actual_inm_status_comprador_id; ?>
                     <div id="pestanasgeneral">
                         <ul id="listageneral">
                             <li id="pestanageneral1"><a href='javascript:cambiarPestannaGeneralCl(pestanasgeneral,pestanageneral1,pestanascliente);'>CLIENTE</a></li>

@@ -1951,12 +1951,23 @@ class controlador_inm_comprador extends _ctl_base {
         $columns_ds = array('inm_comprador_nss','inm_comprador_razon_social');
         $filtro['inm_comprador.id'] = $this->registro_id;
         $inm_prospecto_id = (new inm_comprador_html(html: $this->html_base))->select_inm_comprador_id(
-            cols: 12, con_registros: true, id_selected: $this->registro_id, link: $this->link, columns_ds: $columns_ds,
-            filtro: $filtro);
+            cols: 6, con_registros: true, id_selected: $this->registro_id, link: $this->link, columns_ds: $columns_ds,
+            filtro: $filtro,label: "Cliente");
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al generar input', data: $inm_prospecto_id, header: $header, ws: $ws);
         }
         $this->inputs->inm_comprador_seleccionado_id  = $inm_prospecto_id;
+
+        $columns_ds = array('inm_status_comprador_descripcion');
+        $filtro_status['inm_status_comprador.id'] = $this->registro['inm_status_comprador_id'];
+        $inm_status_comprador_id = (new inm_status_comprador_html(html: $this->html_base))->
+        select_inm_status_comprador_id(cols: 6, con_registros: true,
+            id_selected: $this->registro['inm_status_comprador_id'], link: $this->link, columns_ds: $columns_ds,
+            filtro: $filtro_status, label: "Status Actual");
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al generar input', data: $inm_status_comprador_id, header: $header, ws: $ws);
+        }
+        $this->inputs->actual_inm_status_comprador_id  = $inm_status_comprador_id;
 
         $btn_action_next = $this->html->hidden('btn_action_next', value: 'proceso_cliente');
         if (errores::$error) {
