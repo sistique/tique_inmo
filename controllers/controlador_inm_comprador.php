@@ -771,6 +771,12 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'numero_credito',
+            keys_selects: $keys_selects, place_holder: 'Numero de Credito',required: false);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'pago_precio_compra_venta',
             keys_selects:$keys_selects, place_holder: 'Precio Compra-Venta',required: false);
         if(errores::$error){
@@ -2598,7 +2604,8 @@ class controlador_inm_comprador extends _ctl_base {
             'cuenta_predial','cantidad','valor_unitario','subtotal','descuento_factura','total',
             'observaciones_nota_credito', 'valor_unitario_nota_credito','descripcion_nota_credito',
             'observaciones_complemento_pago', 'valor_unitario_complemento_pago','descripcion_complemento_pago',
-            'pago_precio_compra_venta','pago_parcial_precio_compra_venta','pago_propio_peculio','pago_cuv');
+            'numero_credito', 'pago_precio_compra_venta','pago_parcial_precio_compra_venta','pago_propio_peculio',
+            'pago_cuv');
         $keys->selects = array();
         $keys->fechas = array('fecha_factura');
 
