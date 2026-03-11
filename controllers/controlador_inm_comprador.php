@@ -3440,15 +3440,12 @@ class controlador_inm_comprador extends _ctl_base {
         $columns["com_agente_descripcion"]["titulo"] = "Agente";
         $columns["inm_comprador_comentarios"]["titulo"] = "Comentarios";
         $columns["inm_comprador_nss"]["titulo"] = "NSS";
-        $columns["inm_comprador_password_mi_cuenta_infonavit"]["titulo"] = "Cuenta Infonavit";
         $columns["inm_comprador_monto_credito_solicitado_dh"]["titulo"] = "Precalificacion";
-        $columns["inm_comprador_numero_credito"]["titulo"] = "Numero de Credito";
         $columns["inm_fecha_status"]["titulo"] = "Fecha Etapa";
         $columns["inm_status_comprador_descripcion"]["titulo"] = "Etapa Actual";
 
         $filtro = array("inm_comprador.id", 'inm_comprador_razon_social', 'inm_ubicacion_completa',
-            'com_agente.descripcion', 'inm_comprador.nss', 'inm_comprador.numero_credito',
-            'inm_status_comprador.descripcion', 'inm_fecha_status');
+            'com_agente.descripcion', 'inm_comprador.nss', 'inm_status_comprador.descripcion', 'inm_fecha_status');
 
         $datatables = new stdClass();
         $datatables->columns = $columns;
