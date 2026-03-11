@@ -437,6 +437,11 @@ class inm_comprador extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al obtener inm_referencias', data: $inm_referencias);
         }
 
+        $inm_avaluos = (new inm_avaluo(link: $this->link))->inm_avaluos(inm_comprador_id: $inm_comprador_id);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener inm_avaluos', data: $inm_avaluos);
+        }
+
         $data = new stdClass();
         $data->inm_comprador = $inm_comprador;
         $data->imp_rel_comprador_com_cliente = $imp_rel_comprador_com_cliente;
@@ -445,6 +450,7 @@ class inm_comprador extends _modelo_parent{
         $data->inm_conf_empresa = $inm_conf_empresa;
         $data->inm_rel_co_acreditados = $inm_rel_co_acreditados;
         $data->inm_referencias = $inm_referencias;
+        $data->inm_avaluos = $inm_avaluos;
 
         return $data;
 

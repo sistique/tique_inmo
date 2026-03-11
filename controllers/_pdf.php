@@ -683,7 +683,7 @@ class _pdf{
             return $this->error->error(mensaje: 'Error al obtener coordenadas', data: $coord);
         }
 
-        $pdf = $this->write( valor: $data->imp_rel_ubi_comp['inm_rel_ubi_comp_precio_operacion'],
+        $pdf = $this->write( valor: $data->inm_avaluos['inm_avaluo_valor_avaluo'],
             x: $coord->x, y: $coord->y);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al escribir en pdf', data: $pdf);
@@ -745,8 +745,8 @@ class _pdf{
 
     private function ciudad(stdClass $data): string
     {
-        $ciudad = strtoupper($data->inm_comprador['dp_municipio_empresa_descripcion']);
-        $ciudad .= ", ".strtoupper($data->inm_comprador['dp_estado_empresa_descripcion']);
+        $ciudad = strtoupper('ZAPOPAN');
+        $ciudad .= ", ".strtoupper('JALISCO');
         return $ciudad;
     }
 

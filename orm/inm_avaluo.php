@@ -168,4 +168,26 @@ class inm_avaluo extends _modelo_parent{
 
     }
 
+    final public function inm_avaluos(int $inm_comprador_id): array
+    {
+        if($inm_comprador_id<=0){
+            return $this->error->error(mensaje: 'Error inm_comprador_id debe ser mayor a 0',data:  $inm_comprador_id);
+        }
+
+        $filtro = array();
+        $filtro['inm_comprador.id'] = $inm_comprador_id;
+
+        $r_inm_avaluo = (new inm_avaluo(link: $this->link))->filtro_and(filtro:$filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener r_inm_avaluo',data:  $r_inm_avaluo);
+        }
+
+        if($r_inm_avaluo->n_registros === 0){
+            return $this->error->error(
+                mensaje: 'Error no existe inm_rel_ubi_comp',data:  $r_inm_avaluo);
+        }
+
+        return $r_inm_avaluo->registros[0];
+    }
+
 }
