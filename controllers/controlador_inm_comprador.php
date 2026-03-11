@@ -826,6 +826,20 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al obtener inputs_hidden',data:  $inputs, header: $header,ws:  $ws);
         }
 
+        $checked_default_isr = 1;
+        if($this->row_upd->aplica_isr === 'NO'){
+            $checked_default_isr = 2;
+        }
+
+        $aplica_isr = $this->html->directivas->input_radio_doble(campo: 'aplica_isr',
+            checked_default: $checked_default_isr, tag: 'Aplica ISR', val_1: 'SI',val_2: 'NO', cols: 12);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener aplica_isr',data:  $aplica_isr, header: $header,
+                ws:  $ws);
+        }
+
+        $this->inputs->aplica_isr = $aplica_isr;
+
         $params = array();
         if(isset($_GET['accion']) && $_GET['accion'] == 'proceso_cliente') {
             $params = array('pestana_general_actual' => 'pestanageneral2', 'pestana_actual' => 'pestana7');

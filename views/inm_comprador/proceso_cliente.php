@@ -1003,6 +1003,7 @@
                                         <?php echo $controlador->inputs->pago_parcial_precio_compra_venta; ?>
                                         <?php echo $controlador->inputs->pago_cuv; ?>
 
+                                        <?php echo $controlador->inputs->aplica_isr; ?>
                                         <?php echo $controlador->inputs->documento_isr_notaria; ?>
                                         <?php echo $controlador->inputs->isr; ?>
 

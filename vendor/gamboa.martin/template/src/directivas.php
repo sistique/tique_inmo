@@ -1418,7 +1418,7 @@ class directivas{
      * ```
      */
     final public function input_radio_doble(string $campo, int $checked_default, string $tag, string $val_1,
-                                            string $val_2): array|string
+                                            string $val_2, int $cols = 6): array|string
     {
         $campo = trim($campo);
         if($campo === ''){
@@ -1439,7 +1439,7 @@ class directivas{
         }
 
         $radio = $this->radio_doble(checked_default: $checked_default,
-            class_label:  $params_chk->class_label,class_radio:  $params_chk->class_radio,cols:6,
+            class_label:  $params_chk->class_label,class_radio:  $params_chk->class_radio,cols:$cols,
             for: $params_chk->for, ids_css: $params_chk->ids_css,label_html:  $params_chk->label_html,
             name:  $params_chk->name,title:  $params_chk->title,val_1: $val_1,val_2: $val_2);
 
