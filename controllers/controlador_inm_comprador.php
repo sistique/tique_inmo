@@ -819,6 +819,15 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
+        $columns_ds = array('inm_tipo_exento_descripcion');
+        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_tipo_exento_id',
+            keys_selects: $keys_selects, id_selected:  $this->registro['inm_tipo_exento_id'], label: 'Exento',
+            columns_ds : $columns_ds);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
+                header: $header,ws:  $ws);
+        }
+
         $base = $this->base_upd(keys_selects: $keys_selects, params: array(),params_ajustados: array());
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
@@ -2660,6 +2669,7 @@ class controlador_inm_comprador extends _ctl_base {
         $init_data['adm_estado_civil'] = "gamboamartin\\administrador";
         $init_data['inm_tipo_cheque'] = "gamboamartin\\inmuebles";
         $init_data['inm_tipo_gasto'] = "gamboamartin\\inmuebles";
+        $init_data['inm_tipo_exento'] = "gamboamartin\\inmuebles";
 
         $init_data['bn_cuenta'] = "gamboamartin\\banco";
 
