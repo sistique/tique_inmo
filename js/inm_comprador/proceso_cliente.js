@@ -1649,3 +1649,28 @@ $(document).ready(function(){
 $('input[name="aplica_isr"]').change(function(){
     actualizarCamposISR();
 });
+
+let sl_inm_tipo_exento_id = $("#inm_tipo_exento_id");
+
+function validarTipoExento(){
+
+    let inm_tipo_exento_id = parseInt(sl_inm_tipo_exento_id.val());
+
+    if(inm_tipo_exento_id === 1){
+        $("#comprobante_exento").hide();
+        $("#xml_exento").hide();
+    }else if(inm_tipo_exento_id === 3){
+        $("#comprobante_exento").show();
+        $("#xml_exento").show();
+    }else{
+        $("#comprobante_exento").show();
+        $("#xml_exento").hide();
+    }
+
+}
+
+sl_inm_tipo_exento_id.change(validarTipoExento);
+
+$(document).ready(function(){
+    validarTipoExento();
+});

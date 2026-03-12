@@ -1011,7 +1011,7 @@
                                         </div>
 
                                         <div class="campos_exento" id="campos_exento">
-                                            <?php echo $controlador->inputs->imn_tipo_exento_id; ?>
+                                            <?php echo $controlador->inputs->inm_tipo_exento_id; ?>
 
                                             <div class="comprobante_exento" id="comprobante_exento">
                                                 <?php echo $controlador->inputs->documento_comprobante_exento; ?>
