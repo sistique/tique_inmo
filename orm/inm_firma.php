@@ -176,18 +176,25 @@ class inm_firma extends _modelo_parent{
         $registro_mod['pago_cuv'] = $this->registro['pago_cuv'];
         $registro_mod['numero_credito'] = $this->registro['numero_credito'];
         $registro_mod['aplica_isr'] = $this->registro['aplica_isr'];
+        $registro_mod['inm_tipo_exento_id'] = $this->registro['inm_tipo_exento_id'];
         $r_mod_comprador = (new inm_comprador(link: $this->link))->modifica_bd(
             registro: $registro_mod,id: $this->registro['inm_comprador_id']);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al insertar datos', data: $r_mod_comprador);
         }
 
-        if(isset( $this->registro['pago_propio_peculio']) || isset( $this->registro['pago_precio_compra_venta']) ||
-            isset( $this->registro['pago_parcial_precio_compra_venta']) || isset( $this->registro['pago_cuv'])
-            || isset( $this->registro['numero_credito']) || isset( $this->registro['aplica_isr'])) {
-            unset($this->registro['pago_propio_peculio'], $this->registro['pago_precio_compra_venta'],
-                $this->registro['pago_parcial_precio_compra_venta'], $this->registro['pago_cuv'],
-                $this->registro['numero_credito'], $this->registro['aplica_isr']);
+        $campos = [
+            'pago_propio_peculio',
+            'pago_precio_compra_venta',
+            'pago_parcial_precio_compra_venta',
+            'pago_cuv',
+            'numero_credito',
+            'aplica_isr',
+            'inm_tipo_exento_id'
+        ];
+
+        foreach ($campos as $campo) {
+            unset($this->registro[$campo]);
         }
 
         $filtro['inm_comprador.id'] = $this->registro['inm_comprador_id'];
