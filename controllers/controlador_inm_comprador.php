@@ -765,8 +765,9 @@ class controlador_inm_comprador extends _ctl_base {
 
         $this->inputs->documento_isr_notaria = $documento_isr_notaria;
 
-        $documento_comprobante_exento = $this->html->input_file(cols: 12,name: 'comprobante_exento',
-            row_upd:  new stdClass(),value_vacio:  false,place_holder: 'Comprobante Exento',required: false);
+        $documento_comprobante_exento = $this->html->input_file(cols: 12,name: 'comprobante_exento[]',
+            row_upd:  new stdClass(),value_vacio:  false,place_holder: 'Comprobante Exento',required: false,
+            multiple: true);
         if(errores::$error){
             return $this->retorno_error(
                 mensaje: 'Error al obtener inputs',data:  $documento_comprobante_exento, header: $header,ws:  $ws);
@@ -774,8 +775,8 @@ class controlador_inm_comprador extends _ctl_base {
 
         $this->inputs->documento_comprobante_exento = $documento_comprobante_exento;
 
-        $documento_xml_exento = $this->html->input_file(cols: 12,name: 'xml_exento',
-            row_upd:  new stdClass(),value_vacio:  false,place_holder: 'XML Exento',required: false);
+        $documento_xml_exento = $this->html->input_file(cols: 12,name: 'xml_exento[]',
+            row_upd:  new stdClass(),value_vacio:  false,place_holder: 'XML Exento',required: false, multiple: true);
         if(errores::$error){
             return $this->retorno_error(
                 mensaje: 'Error al obtener inputs',data:  $documento_xml_exento, header: $header,ws:  $ws);

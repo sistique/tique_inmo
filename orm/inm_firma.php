@@ -120,6 +120,44 @@ class inm_firma extends _modelo_parent{
             }
         }
 
+        $documentos = [
+            'comprobante_exento' => 66,
+            'xml_exento' => 67
+        ];
+
+        foreach ($documentos as $campo => $tipo_doc) {
+            if(!isset($_FILES[$campo])){
+                continue;
+            }
+
+            foreach ($_FILES[$campo]['name'] as $index => $name) {
+                if(trim($name) === ''){
+                    continue;
+                }
+                $_FILES['documento'] = [
+                    'name' => $_FILES[$campo]['name'][$index],
+                    'type' => $_FILES[$campo]['type'][$index],
+                    'tmp_name' => $_FILES[$campo]['tmp_name'][$index],
+                    'error' => $_FILES[$campo]['error'][$index],
+                    'size' => $_FILES[$campo]['size'][$index]
+                ];
+
+                $registro = [];
+                $registro['inm_comprador_id'] = $this->registro['inm_comprador_id'];
+                $registro['doc_tipo_documento_id'] = $tipo_doc;
+
+                $r_inm_doc_comprador = (new inm_doc_comprador(link: $this->link))
+                    ->alta_registro(registro: $registro);
+
+                if(errores::$error){
+                    return $this->error->error(
+                        mensaje: 'Error al subir documento',
+                        data: $r_inm_doc_comprador
+                    );
+                }
+            }
+        }
+
         $keys = array('inm_comprador_id');
         $valida = $this->validacion->valida_ids(keys: $keys,registro:  $this->registro);
         if(errores::$error){
