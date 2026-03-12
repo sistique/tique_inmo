@@ -159,6 +159,14 @@
     display: none;
 }
 
+.comprobante_exento{
+    display: none;
+}
+
+.xml_exento{
+    display: none;
+}
+
 /****** Documentos ******/
 
 #table-inm_comprador{

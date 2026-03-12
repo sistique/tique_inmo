@@ -1011,8 +1011,14 @@
                                         </div>
 
                                         <div class="campos_exento" id="campos_exento">
-                                            <?php echo $controlador->inputs->documento_comprobante_exento; ?>
-                                            <?php echo $controlador->inputs->documento_xml_exento; ?>
+                                            <?php echo $controlador->inputs->imn_tipo_exento_id; ?>
+
+                                            <div class="comprobante_exento" id="comprobante_exento">
+                                                <?php echo $controlador->inputs->documento_comprobante_exento; ?>
+                                            </div>
+                                            <div class="xml_exento" id="xml_exento">
+                                                <?php echo $controlador->inputs->documento_xml_exento; ?>
+                                            </div>
                                         </div>
 
 
