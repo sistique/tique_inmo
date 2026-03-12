@@ -151,6 +151,14 @@
     pointer-events: none;
 }
 
+.campos_isr{
+    display: none;
+}
+
+.campos_exento{
+    display: none;
+}
+
 /****** Documentos ******/
 
 #table-inm_comprador{

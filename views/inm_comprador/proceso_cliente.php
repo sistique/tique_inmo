@@ -1004,8 +1004,16 @@
                                         <?php echo $controlador->inputs->pago_cuv; ?>
 
                                         <?php echo $controlador->inputs->aplica_isr; ?>
-                                        <?php echo $controlador->inputs->documento_isr_notaria; ?>
-                                        <?php echo $controlador->inputs->isr; ?>
+
+                                        <div class="campos_isr" id="campos_isr">
+                                            <?php echo $controlador->inputs->documento_isr_notaria; ?>
+                                            <?php echo $controlador->inputs->isr; ?>
+                                        </div>
+
+                                        <div class="campos_exento" id="campos_exento">
+                                            <?php echo $controlador->inputs->isr; ?>
+                                        </div>
+
 
                                         <?php echo $controlador->inputs->seccion_retorno; ?>
                                         <?php echo $controlador->inputs->btn_action_next; ?>

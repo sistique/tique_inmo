@@ -1627,3 +1627,25 @@ $("#pago_cuv").on("input", function() {
     let cuv = limpiarMonto(pago_cuv.val());
     pago_cuv.val(cuv);
 });
+
+function actualizarCamposISR(){
+
+    let valor = $('input[name="aplica_isr"]:checked').val();
+
+    if(valor === "SI"){
+        $("#campos_isr").show();
+        $("#campos_exento").hide();
+    }else if(valor === "NO"){
+        $("#campos_isr").hide();
+        $("#campos_exento").show();
+    }
+
+}
+
+$(document).ready(function(){
+    actualizarCamposISR();
+});
+
+$('input[name="aplica_isr"]').change(function(){
+    actualizarCamposISR();
+});
