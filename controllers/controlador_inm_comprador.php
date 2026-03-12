@@ -765,6 +765,24 @@ class controlador_inm_comprador extends _ctl_base {
 
         $this->inputs->documento_isr_notaria = $documento_isr_notaria;
 
+        $documento_comprobante_exento = $this->html->input_file(cols: 12,name: 'comprobante_exento',
+            row_upd:  new stdClass(),value_vacio:  false,place_holder: 'Comprobante Exento',required: false);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener inputs',data:  $documento_comprobante_exento, header: $header,ws:  $ws);
+        }
+
+        $this->inputs->documento_comprobante_exento = $documento_comprobante_exento;
+
+        $documento_xml_exento = $this->html->input_file(cols: 12,name: 'xml_exento',
+            row_upd:  new stdClass(),value_vacio:  false,place_holder: 'XML Exento',required: false);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener inputs',data:  $documento_xml_exento, header: $header,ws:  $ws);
+        }
+
+        $this->inputs->documento_xml_exento = $documento_xml_exento;
+
         $keys_selects = (new init())->key_select_txt(cols: 12,key: 'isr',
             keys_selects:$keys_selects, place_holder: 'ISR',required: false);
         if(errores::$error){
