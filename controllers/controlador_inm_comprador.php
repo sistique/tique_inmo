@@ -1101,61 +1101,6 @@ class controlador_inm_comprador extends _ctl_base {
             }
 
             $this->button_inm_doc_comprador_elimina_bd_isr_notaria = $button_inm_doc_comprador_elimina_bd;
-        }     
-        
-        $filtro_inm_doc['inm_comprador.id'] = $this->registro_id;
-        $filtro_inm_doc['doc_tipo_documento.id'] = 45;
-        $r_inm_doc_comprador = (new inm_doc_comprador(link: $this->link))->filtro_and(filtro: $filtro_inm_doc);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al integrar doc',data:  $r_inm_doc_comprador,
-                header: $header,ws:  $ws);
-        }
-
-        if($r_inm_doc_comprador->n_registros > 0) {
-            $this->descripcion_isr = 'ISR';
-
-            $button_inm_doc_comprador_descarga = $this->html->button_href(accion: 'descarga', etiqueta: 'Descarga',
-                registro_id: $r_inm_doc_comprador->registros[0]['inm_doc_comprador_id'],
-                seccion: 'inm_doc_comprador', style: 'success');
-            if (errores::$error) {
-                return $this->retorno_error(mensaje: 'Error al integrar button',
-                    data: $button_inm_doc_comprador_descarga, header: $header, ws: $ws);
-            }
-
-            $this->button_inm_doc_comprador_descarga_isr = $button_inm_doc_comprador_descarga;
-
-            $button_inm_doc_comprador_vista_previa = $this->html->button_href(accion: 'vista_previa',
-                etiqueta: 'Vista Previa', registro_id: $r_inm_doc_comprador->registros[0]['inm_doc_comprador_id'],
-                seccion: 'inm_doc_comprador', style: 'success');
-            if (errores::$error) {
-                return $this->retorno_error(mensaje: 'Error al integrar button',
-                    data: $button_inm_doc_comprador_vista_previa, header: $header, ws: $ws);
-            }
-
-            $this->button_inm_doc_comprador_vista_previa_isr= $button_inm_doc_comprador_vista_previa;
-
-            $button_inm_doc_comprador_descarga_zip = $this->html->button_href(accion: 'descarga_zip',
-                etiqueta: 'Descarga ZIP', registro_id: $r_inm_doc_comprador->registros[0]['inm_doc_comprador_id'],
-                seccion: 'inm_doc_comprador', style: 'success');
-            if (errores::$error) {
-                return $this->retorno_error(mensaje: 'Error al integrar button',
-                    data: $button_inm_doc_comprador_descarga_zip, header: $header, ws: $ws);
-            }
-
-            $this->button_inm_doc_comprador_descarga_zip_isr = $button_inm_doc_comprador_descarga_zip;
-
-            $params = array('accion_retorno'=>'proceso_cliente','seccion_retorno'=>'inm_comprador',
-                'id_retorno'=>$this->registro_id, 'pestana_general_actual' => 'pestanageneral2',
-                'pestana_actual' => 'pestana7');
-            $button_inm_doc_comprador_elimina_bd = $this->html->button_href(accion: 'elimina_bd',
-                etiqueta: 'Elimina', registro_id: $r_inm_doc_comprador->registros[0]['inm_doc_comprador_id'],
-                seccion: 'inm_doc_comprador', style: 'danger',params: $params);
-            if (errores::$error) {
-                return $this->retorno_error(mensaje: 'Error al integrar button', data: $button_inm_doc_comprador_elimina_bd,
-                    header: $header, ws: $ws);
-            }
-
-            $this->button_inm_doc_comprador_elimina_bd_isr = $button_inm_doc_comprador_elimina_bd;
         }
 
         return $base;
