@@ -31,6 +31,7 @@ use gamboamartin\facturacion\models\fc_partida_cp;
 use gamboamartin\facturacion\models\fc_partida_nc;
 use gamboamartin\inmuebles\html\_base;
 use gamboamartin\inmuebles\html\inm_comprador_html;
+use gamboamartin\inmuebles\html\inm_notaria_html;
 use gamboamartin\inmuebles\html\inm_referencia_html;
 use gamboamartin\inmuebles\html\inm_status_comprador_html;
 use gamboamartin\inmuebles\models\_base_paquete;
@@ -551,6 +552,27 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);
         }
+
+        $columns_ds = array('inm_notaria_descripcion');
+        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_notaria_id',
+            keys_selects: $keys_selects, id_selected:  $this->registro['inm_notaria_id'], label: 'Notaria',
+            columns_ds : $columns_ds);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
+                header: $header,ws:  $ws);
+        }
+
+        $columns_ds = array('inm_notaria_descripcion');
+        $extra_params_keys[] = 'inm_notaria_select_id';
+        $inm_notaria_id = (new inm_notaria_html(html: $this->html_base))->select_inm_notaria_id(
+            cols: 12, con_registros: true, id_selected: $this->registro['inm_notaria_id'], link: $this->link,
+            columns_ds: $columns_ds, disabled: true, extra_params_keys: $extra_params_keys);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al inm_notaria_id',data:  $inm_notaria_id,
+                header: $header,ws:  $ws);
+        }
+
+        $this->inputs->inm_notaria_select_id = $inm_notaria_id;
 
         $base = $this->base_upd(keys_selects: $keys_selects, params: array(),params_ajustados: array());
         if(errores::$error){
@@ -2746,6 +2768,7 @@ class controlador_inm_comprador extends _ctl_base {
         $init_data['inm_tipo_cheque'] = "gamboamartin\\inmuebles";
         $init_data['inm_tipo_gasto'] = "gamboamartin\\inmuebles";
         $init_data['inm_tipo_exento'] = "gamboamartin\\inmuebles";
+        $init_data['inm_notaria'] = "gamboamartin\\inmuebles";
 
         $init_data['bn_cuenta'] = "gamboamartin\\banco";
 

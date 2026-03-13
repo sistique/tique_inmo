@@ -946,6 +946,8 @@
                                           class="form-additional" enctype="multipart/form-data">
                                         <?php echo $controlador->inputs->inm_comprador_id; ?>
 
+                                        <?php echo $controlador->inputs->inm_notaria_id; ?>
+
                                         <?php echo $controlador->inputs->documento_sic; ?>
                                         <?php echo $controlador->inputs->documento_constancia_credito; ?>
 
@@ -993,6 +995,7 @@
                                     <form method="post" action="<?php echo $controlador->link_inm_firma_alta_bd; ?>"
                                           class="form-additional" enctype="multipart/form-data">
                                         <?php echo $controlador->inputs->inm_comprador_id; ?>
+                                        <?php echo $controlador->inputs->inm_notaria_select_id; ?>
 
                                         <?php echo $controlador->inputs->documento_anexos; ?>
                                         <?php echo $controlador->inputs->documento_instruccion_credito; ?>
@@ -1153,6 +1156,7 @@
                                     <form method="post" action="<?php echo $controlador->link_inm_escritura_alta_bd; ?>"
                                           class="form-additional" enctype="multipart/form-data">
                                         <?php echo $controlador->inputs->inm_comprador_id; ?>
+                                        <?php echo $controlador->inputs->inm_notaria_select_id; ?>
 
                                         <?php echo $controlador->inputs->documento_validacion_poder; ?>
                                         <?php echo $controlador->inputs->documento_acuse_patron; ?>
@@ -1224,6 +1228,7 @@
                                 <div class="conten" id="cpestana9">
                                     <form method="post" action="<?php echo $controlador->link_cotejado_bd; ?>"
                                           class="form-additional" enctype="multipart/form-data">
+                                        <?php echo $controlador->inputs->inm_notaria_select_id; ?>
 
                                         <div class="control-group btn-alta">
                                             <div class="controls">
