@@ -1099,6 +1099,30 @@
                                         <div class="col-lg-3">
                                             <?php echo $controlador->button_inm_doc_comprador_elimina_bd_isr_notaria; ?>
                                         </div>
+
+                                        <?php foreach($controlador->comprobante_exento as $registro){ ?>
+                                            <div class="col-lg-12">
+                                                <label class="label-docs">
+                                                    <?php echo $registro->descripcion; ?>
+                                                </label>
+                                            </div>
+
+                                            <div class="col-lg-3">
+                                                <?php echo $registro->button_inm_doc_comprador_descarga; ?>
+                                            </div>
+
+                                            <div class="col-lg-3">
+                                                <?php echo $registro->button_inm_doc_comprador_vista_previa; ?>
+                                            </div>
+
+                                            <div class="col-lg-3">
+                                                <?php echo $registro->button_inm_doc_comprador_descarga_zip; ?>
+                                            </div>
+
+                                            <div class="col-lg-3">
+                                                <?php echo $registro->button_inm_doc_comprador_elimina_bd; ?>
+                                            </div>
+                                        <?php }?>
                                     </div>
                                 </div>
                                 <div class="conten" id="cpestana8">
