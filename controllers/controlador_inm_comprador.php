@@ -2625,12 +2625,12 @@ class controlador_inm_comprador extends _ctl_base {
         $inm_bit_comp = (new inm_bitacora_status_comprador(link: $this->link))->existe_status_comprador(
             inm_comprador_id: $this->registro_id, values: array('11'));
         if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al obtener bitacora status comp',data:  $inm_bit_comp,
+            return $this->retorno_error(mensaje: 'Error al obtener bitacora status comp', data: $inm_bit_comp,
                 header: $header, ws: $ws);
         }
 
         if ($inm_bit_comp->n_registros > 0) {
-            return $this->retorno_error(mensaje: 'Error el cliente ya esta cancelado',data:  $inm_bit_comp,
+            return $this->retorno_error(mensaje: 'Error el cliente ya esta cancelado', data: $inm_bit_comp,
                 header: $header, ws: $ws);
         }
 
@@ -2643,7 +2643,7 @@ class controlador_inm_comprador extends _ctl_base {
                 header: $header, ws: $ws);
         }
 
-        if(!$existe) {
+        if (!$existe) {
             $registro = array();
             $registro['inm_comprador_id'] = $this->registro_id;
             $registro['inm_status_comprador_id'] = 6;
@@ -2666,8 +2666,8 @@ class controlador_inm_comprador extends _ctl_base {
                 header: $header, ws: $ws);
         }
 
-        if(!$existe) {
-            if(trim($_FILES['sic']['name']) !== '') {
+        if (!$existe) {
+            if (trim($_FILES['sic']['name']) !== '') {
                 $_FILES['documento'] = $_FILES['sic'];
                 $registro = array();
                 $registro['inm_comprador_id'] = $this->registro_id;
@@ -2690,8 +2690,8 @@ class controlador_inm_comprador extends _ctl_base {
                 header: $header, ws: $ws);
         }
 
-        if(!$existe) {
-            if(trim($_FILES['constancia_credito']['name']) !== '') {
+        if (!$existe) {
+            if (trim($_FILES['constancia_credito']['name']) !== '') {
                 $_FILES['documento'] = $_FILES['constancia_credito'];
                 $registro = array();
                 $registro['inm_comprador_id'] = $this->registro_id;
@@ -2703,6 +2703,16 @@ class controlador_inm_comprador extends _ctl_base {
                         header: $header, ws: $ws);
                 }
             }
+        }
+
+        $registro_mod = array();
+        $registro_mod['inm_notaria_id'] = $_POST['inm_notaria_id'];
+        $r_mod_comprador = (new inm_comprador(link: $this->link))->modifica_bd(
+            registro: $registro_mod,id: $this->registro_id);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_mod_comprador,
+                header: $header, ws: $ws);
         }
 
         $this->link->commit();
