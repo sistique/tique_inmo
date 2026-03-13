@@ -101,10 +101,31 @@ class inm_firma extends _modelo_parent{
         }
 
         $filtro_doc['inm_comprador.id'] = $this->registro['inm_comprador_id'];
+        $filtro_doc['doc_tipo_documento.id'] = 66;
+        $existe_comp = (new inm_doc_comprador(link: $this->link))->existe(filtro: $filtro_doc);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar registro',data:  $existe_comp);
+        }
+
+        $filtro_doc['inm_comprador.id'] = $this->registro['inm_comprador_id'];
+        $filtro_doc['doc_tipo_documento.id'] = 67;
+        $existe_xml = (new inm_doc_comprador(link: $this->link))->existe(filtro: $filtro_doc);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar registro',data:  $existe_xml);
+        }
+
+        $filtro_doc['inm_comprador.id'] = $this->registro['inm_comprador_id'];
         $filtro_doc['doc_tipo_documento.id'] = 44;
         $existe = (new inm_doc_comprador(link: $this->link))->existe(filtro: $filtro_doc);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar registro',data:  $existe);
+        }
+
+        if(($existe_comp || $existe_xml) && !empty($_FILES['isr_notaria']['name'])){
+            return $this->error->error(
+                mensaje: 'No se puede subir ISR Notaria si existen comprobantes o XML',
+                data: []
+            );
         }
 
         if(!$existe) {
@@ -126,6 +147,14 @@ class inm_firma extends _modelo_parent{
         ];
 
         foreach ($documentos as $campo => $tipo_doc) {
+
+            if($existe && isset($_FILES[$campo]) && !empty($_FILES[$campo]['name'])){
+                return $this->error->error(
+                    mensaje: 'No se puede subir comprobante o XML si ya existe ISR Notaria',
+                    data: []
+                );
+            }
+
             if(!isset($_FILES[$campo])){
                 continue;
             }
