@@ -31,7 +31,7 @@ use Throwable;
 class controlador_inm_factura_compra extends _ctl_base {
     public string $link_inm_detalle_factura_compra_bd = '';
     public string $link_inserta_detalle_bd = '';
-    public string $link_inserta_producto_bd = '';
+    public string $link_inserta_factura_bd = '';
     public string $link_valida_producto_nuevo = '';
     public array $registros_concepto = array();
     public array $productos_factura = array();
@@ -179,14 +179,14 @@ class controlador_inm_factura_compra extends _ctl_base {
             exit;
         }
 
-        $link = $this->obj_link->get_link(seccion: "inm_factura_compra", accion: "inserta_producto_bd");
+        $link = $this->obj_link->get_link(seccion: "inm_factura_compra", accion: "inserta_factura_bd");
         if (errores::$error) {
             $error = $this->errores->error(mensaje: 'Error al recuperar link modifica_direccion', data: $link);
             print_r($error);
             exit;
         }
 
-        $this->link_inserta_producto_bd = $link;
+        $this->link_inserta_factura_bd = $link;
 
         $link = $this->obj_link->get_link(seccion: "inm_factura_compra", accion: "inserta_detalle_bd");
         if (errores::$error) {
@@ -219,7 +219,7 @@ class controlador_inm_factura_compra extends _ctl_base {
     }
 
 
-    public function inserta_producto(bool $header, bool $ws = false): array|stdClass
+    public function inserta_factura(bool $header, bool $ws = false): array|stdClass
     {
         $r_alta = $this->init_alta();
         if(errores::$error){
@@ -534,7 +534,7 @@ class controlador_inm_factura_compra extends _ctl_base {
     /**
      * @throws \Exception
      */
-    /*public function inserta_producto_bd(bool $header, bool $ws = false):array|stdClass
+    /*public function inserta_factura_bd(bool $header, bool $ws = false):array|stdClass
     {
         foreach ($this->registros_concepto as $concepto) {
             $filtro_prod['cat_sat_cve_prod.codigo'] = $concepto['ClaveProdServ'];
@@ -654,7 +654,7 @@ class controlador_inm_factura_compra extends _ctl_base {
     /**
      * @throws \Exception
      */
-    public function inserta_producto_bd(bool $header, bool $ws = false):array|stdClass
+    public function inserta_factura_bd(bool $header, bool $ws = false):array|stdClass
     {
         if(!isset($_POST['registro'])){
             return $this->retorno_error(mensaje: 'Error al obtener registro para alta', data: $_POST,

@@ -201,7 +201,7 @@ function validarCampo(selector){
 
 $('#alta_producto').on('click', function () {
 
-    let url_alta_prd = get_url("inm_factura_compra", "inserta_producto_bd", {registro_id: registro_id});
+    let url_alta_prd = get_url("inm_factura_compra", "inserta_factura_bd", {registro_id: registro_id});
 
     let registro = {
         inm_concepto_id: validarCampo('#inm_concepto_id'),
