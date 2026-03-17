@@ -428,4 +428,32 @@ check = function (column) {
     return salida;
 }
 
+$(document).ready(function(){
 
+    const pagina = window.location.pathname;
+    const key = "form_estado_" + pagina;
+
+    $('.basic-multiple').select2();
+
+    let datos = sessionStorage.getItem(key);
+
+    if(datos){
+        datos = JSON.parse(datos);
+
+        Object.keys(datos).forEach(function(campo){
+            $("#" + campo).val(datos[campo]).trigger('change');
+        });
+    }
+
+    $('form :input').on('change', function(){
+
+        let datosActuales = sessionStorage.getItem(key);
+
+        datosActuales = datosActuales ? JSON.parse(datosActuales) : {};
+
+        datosActuales[this.id] = $(this).val();
+
+        sessionStorage.setItem(key, JSON.stringify(datosActuales));
+    });
+
+});
