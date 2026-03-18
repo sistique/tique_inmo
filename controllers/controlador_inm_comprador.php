@@ -1692,6 +1692,17 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
         }
 
+        $checked_default_gasto = 2;
+
+        $genera_gasto = $this->html->directivas->input_radio_doble(campo: 'genera_gasto',
+            checked_default: $checked_default_gasto, tag: 'Genera Gasto Notaria', val_1: 'SI',val_2: 'NO', cols: 12);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener genera_gasto',data:  $genera_gasto, header: $header,
+                ws:  $ws);
+        }
+
+        $this->inputs->genera_gasto = $genera_gasto;
+
         $modelo = new bn_cuenta(link: $this->link);
         $bn_cuenta_id = $this->html->select_catalogo(cols: 6, con_registros: true, id_selected: -1, modelo: $modelo,
             id_css: 'bn_cuenta_sl_id', label: 'Cuenta', name: 'bn_cuenta_sl_id');

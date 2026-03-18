@@ -1674,3 +1674,24 @@ sl_inm_tipo_exento_id.change(validarTipoExento);
 $(document).ready(function(){
     validarTipoExento();
 });
+
+
+function actualizarCamposGastos(){
+
+    let valor = $('input[name="genera_gasto"]:checked').val();
+
+    if(valor === "SI"){
+        $("#cont_gasto").show();
+    }else if(valor === "NO"){
+        $("#cont_gasto").hide();
+    }
+
+}
+
+$(document).ready(function(){
+    actualizarCamposGastos();
+});
+
+$('input[name="genera_gasto"]').change(function(){
+    actualizarCamposGastos();
+});

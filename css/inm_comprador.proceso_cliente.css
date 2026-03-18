@@ -167,6 +167,10 @@
     display: none;
 }
 
+.cont_gasto{
+    display: none;
+}
+
 /****** Documentos ******/
 
 #table-inm_comprador{

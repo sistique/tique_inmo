@@ -1250,8 +1250,14 @@
                                     <form method="post" action="<?php echo $controlador->link_cobrado_bd; ?>"
                                           class="form-additional" enctype="multipart/form-data">
 
-                                        <?php echo $controlador->inputs->inm_notaria_select_id; ?>
-                                        <?php echo $controlador->inputs->inm_conf_cuenta_notaria_id; ?>
+
+                                        <?php echo $controlador->inputs->genera_gasto; ?>
+
+                                        <div class="cont_gasto" id="cont_gasto">
+                                            <?php echo $controlador->inputs->inm_notaria_select_id; ?>
+                                            <?php echo $controlador->inputs->inm_conf_cuenta_notaria_id; ?>
+                                        </div>
+
                                         <?php echo $controlador->inputs->inm_tipo_gasto_id; ?>
 
                                         <?php echo $controlador->inputs->nombre_beneficiario; ?>
