@@ -1629,6 +1629,16 @@ class controlador_inm_comprador extends _ctl_base {
                 header: $header,ws:  $ws);
         }
 
+        $columns_ds = array('inm_conf_cuenta_notaria_id','inm_conf_cuenta_notaria_descripcion');
+        $filtro_conf['inm_notaria.id'] = $this->registro['inm_notaria_id'];
+        $keys_selects = $this->key_select(cols: 12, con_registros: true, filtro:  $filtro_conf,
+            key: 'inm_conf_cuenta_notaria_id', keys_selects:$keys_selects, id_selected:-1, label: 'Conf. Notaria',
+            columns_ds : $columns_ds,required: false);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
+                header: $header,ws:  $ws);
+        }
+
         $keys_selects = (new init())->key_select_txt(cols: 12,key: 'nombre_beneficiario', keys_selects:$keys_selects,
             place_holder: 'Nombre Beneficiario',required: false);
         if(errores::$error){
@@ -2779,6 +2789,7 @@ class controlador_inm_comprador extends _ctl_base {
         $init_data['inm_tipo_gasto'] = "gamboamartin\\inmuebles";
         $init_data['inm_tipo_exento'] = "gamboamartin\\inmuebles";
         $init_data['inm_notaria'] = "gamboamartin\\inmuebles";
+        $init_data['inm_conf_cuenta_notaria'] = "gamboamartin\\inmuebles";
 
         $init_data['bn_cuenta'] = "gamboamartin\\banco";
 

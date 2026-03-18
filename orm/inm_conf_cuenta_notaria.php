@@ -12,12 +12,12 @@ class inm_conf_cuenta_notaria extends _modelo_parent{
         $tabla = 'inm_conf_cuenta_notaria';
         $columnas = array($tabla=>false, 'inm_notaria' => $tabla);
 
-        $campos_obligatorios = array('x','y');
+        $campos_obligatorios = array();
 
         $columnas_extra= array();
         $renombres= array();
 
-        $atributos_criticos = array('x','y');
+        $atributos_criticos = array();
 
         parent::__construct(link: $link, tabla: $tabla, campos_obligatorios: $campos_obligatorios,
             columnas: $columnas, columnas_extra: $columnas_extra, renombres: $renombres,
