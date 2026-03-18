@@ -428,7 +428,7 @@ check = function (column) {
     return salida;
 }
 
-$(document).ready(function(){
+/*$(document).ready(function(){
 
     const pagina = window.location.pathname;
     const key = "form_estado_" + pagina;
@@ -456,4 +456,62 @@ $(document).ready(function(){
         sessionStorage.setItem(key, JSON.stringify(datosActuales));
     });
 
-});
+});*/
+
+/*$(document).ready(function(){
+
+    const pagina = window.location.pathname;
+    const key = "form_estado_" + pagina;
+
+    // Inicializar Select2
+    $('.basic-multiple').select2();
+
+    // =========================
+    // 🔹 RESTAURAR DATOS
+    // =========================
+    let datos = sessionStorage.getItem(key);
+
+    if(datos){
+        try {
+            datos = JSON.parse(datos);
+
+            Object.keys(datos).forEach(function(campo){
+
+                let $elemento = $("#" + campo);
+
+                // Validar que el elemento exista
+                if($elemento.length){
+                    $elemento.val(datos[campo]).trigger('change');
+                }
+
+            });
+
+        } catch(e){
+            console.warn("Error al parsear sessionStorage:", e);
+        }
+    }
+
+    // =========================
+    // 🔹 GUARDAR CAMBIOS
+    // =========================
+    $('form :select').on('change', function(){
+
+        // Validar que tenga ID
+        if(!this.id) return;
+
+        let datosActuales = sessionStorage.getItem(key);
+
+        datosActuales = datosActuales ? JSON.parse(datosActuales) : {};
+
+        let valor = $(this).val();
+
+        // Si está vacío, eliminarlo
+        if(valor === null || (Array.isArray(valor) && valor.length === 0)){
+            delete datosActuales[this.id];
+        } else {
+            datosActuales[this.id] = valor;
+        }
+
+        sessionStorage.setItem(key, JSON.stringify(datosActuales));
+    });
+});*/
