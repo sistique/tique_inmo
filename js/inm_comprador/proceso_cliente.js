@@ -1574,34 +1574,6 @@ const table_tipos_documentos = table('inm_comprador', columns_tipos_documentos, 
     "tipos_documentos", {registro_id: registro_id,pestana_general_actual: pestana_general_actual,
         pestana_actual:pestana_actual}, options);
 
-/***** Etapa Cobrador *****/
-
-let sl_inm_tipo_gasto_id = $("#inm_tipo_gasto_id");
-let cont_cont_cheque = $("#cont_cheque");
-let cont_cont_transfer = $("#cont_transfer");
-let cont_cont_efectivo = $("#cont_efectivo");
-sl_inm_tipo_gasto_id.change(function(){
-    inm_tipo_gasto_id = $(this).val();
-
-    if(inm_tipo_gasto_id === "1"){
-        cont_cont_cheque.show();
-        cont_cont_transfer.hide();
-        cont_cont_efectivo.hide();
-    }else if(inm_tipo_gasto_id === "2"){
-        cont_cont_transfer.show();
-        cont_cont_cheque.hide();
-        cont_cont_efectivo.hide();
-    }else if(inm_tipo_gasto_id === "3"){
-        cont_cont_efectivo.show();
-        cont_cont_cheque.hide();
-        cont_cont_transfer.hide();
-    }else{
-        cont_cont_cheque.hide();
-        cont_cont_transfer.hide();
-        cont_cont_efectivo.hide();
-    }
-});
-
 /***** Etapa Por Firmar *****/
 let pago_propio_peculio = $("#pago_propio_peculio");
 let pago_precio_compra_venta = $("#pago_precio_compra_venta");
@@ -1676,6 +1648,52 @@ $(document).ready(function(){
 });
 
 
+/***** Etapa Cobrado *****/
+
+let sl_inm_tipo_gasto_id = $("#inm_tipo_gasto_id");
+let cont_cont_cheque = $("#cont_cheque");
+let cont_cont_transfer = $("#cont_transfer");
+let cont_cont_efectivo = $("#cont_efectivo");
+sl_inm_tipo_gasto_id.change(function(){
+    inm_tipo_gasto_id = $(this).val();
+
+    function limpiarCampos(contenedor){
+        contenedor.find('input, select, textarea').val('').trigger('change');
+    }
+
+    if(inm_tipo_gasto_id === "1"){
+        cont_cont_cheque.show();
+        cont_cont_transfer.hide();
+        cont_cont_efectivo.hide();
+
+        limpiarCampos(cont_cont_transfer);
+        limpiarCampos(cont_cont_efectivo);
+    }else if(inm_tipo_gasto_id === "2") {
+        cont_cont_transfer.show();
+        cont_cont_cheque.hide();
+        cont_cont_efectivo.hide();
+
+        limpiarCampos(cont_cont_cheque);
+        limpiarCampos(cont_cont_efectivo);
+    }else if(inm_tipo_gasto_id === "3"){
+        cont_cont_efectivo.show();
+        cont_cont_cheque.hide();
+        cont_cont_transfer.hide();
+
+        limpiarCampos(cont_cont_cheque);
+        limpiarCampos(cont_cont_transfer);
+    }else{
+        cont_cont_cheque.hide();
+        cont_cont_transfer.hide();
+        cont_cont_efectivo.hide();
+
+        limpiarCampos(cont_cont_cheque);
+        limpiarCampos(cont_cont_transfer);
+        limpiarCampos(cont_cont_efectivo);
+    }
+});
+
+
 function actualizarCamposGastos(){
 
     let valor = $('input[name="genera_gasto"]:checked').val();
@@ -1694,4 +1712,9 @@ $(document).ready(function(){
 
 $('input[name="genera_gasto"]').change(function(){
     actualizarCamposGastos();
+});
+
+$('#inm_conf_cuenta_notaria_id').change(function (){
+    let inm_conf_cuenta_notaria_beneficiario = $(this).find(':selected').data('inm_conf_cuenta_notaria_beneficiario');
+    $('#nombre_beneficiario').val(inm_conf_cuenta_notaria_beneficiario);
 });
