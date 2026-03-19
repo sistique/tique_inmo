@@ -28,7 +28,7 @@ class inm_ubicacion extends _inm_ubicaciones {
             'inm_status_ubicacion'=>$tabla,'com_agente'=>$tabla,'inm_estado_vivienda'=>$tabla,
             'inm_prototipo'=>$tabla, 'inm_complemento'=>$tabla, 'inm_tipo_credito'=>$tabla, 'inm_tipo_vivienda'=>$tabla);
 
-        $campos_obligatorios = array('cuenta_predial','inm_tipo_ubicacion_id');
+        $campos_obligatorios = array('inm_tipo_ubicacion_id');
 
         $columnas_extra= array();
         $sql = "(CONCAT_WS(' ', inm_ubicacion.calle, inm_ubicacion.numero_exterior, 
@@ -38,8 +38,8 @@ class inm_ubicacion extends _inm_ubicaciones {
 
         $renombres= array();
 
-        $atributos_criticos = array('manzana','lote','etapa','cuenta_predial',
-            'inm_tipo_ubicacion_id','n_opiniones_valor','monto_opinion_promedio','costo');
+        $atributos_criticos = array('manzana','lote','etapa','inm_tipo_ubicacion_id','n_opiniones_valor',
+            'monto_opinion_promedio','costo');
 
         parent::__construct(link: $link, tabla: $tabla, campos_obligatorios: $campos_obligatorios,
             columnas: $columnas, columnas_extra: $columnas_extra, renombres: $renombres,
@@ -64,11 +64,11 @@ class inm_ubicacion extends _inm_ubicaciones {
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al valida $registro',data:  $valida);
         }
-        $keys = array('cuenta_predial');
+        /*$keys = array('cuenta_predial');
         $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $this->registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
-        }
+        }*/
         $keys = array('inm_tipo_ubicacion_id');
         $valida = $this->validacion->valida_ids(keys: $keys,registro:  $this->registro);
         if(errores::$error){
