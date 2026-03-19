@@ -1650,16 +1650,29 @@ $(document).ready(function(){
 
 /***** Etapa Cobrado *****/
 
+// =====================
+// VARIABLES
+// =====================
 let sl_inm_tipo_gasto_id = $("#inm_tipo_gasto_id");
 let cont_cont_cheque = $("#cont_cheque");
 let cont_cont_transfer = $("#cont_transfer");
 let cont_cont_efectivo = $("#cont_efectivo");
-sl_inm_tipo_gasto_id.change(function(){
-    inm_tipo_gasto_id = $(this).val();
 
-    function limpiarCampos(contenedor){
-        contenedor.find('input, select, textarea').val('').trigger('change');
-    }
+let nombre_anterior = '';
+
+// =====================
+// FUNCIONES
+// =====================
+
+// Limpiar campos de forma segura
+function limpiarCampos(contenedor){
+    contenedor.find('input[type="text"], textarea').val('');
+    contenedor.find('select').val('').trigger('change');
+}
+
+// Manejo de tipo de gasto
+function actualizarTipoGasto(){
+    let inm_tipo_gasto_id = sl_inm_tipo_gasto_id.val();
 
     if(inm_tipo_gasto_id === "1"){
         cont_cont_cheque.show();
@@ -1668,13 +1681,15 @@ sl_inm_tipo_gasto_id.change(function(){
 
         limpiarCampos(cont_cont_transfer);
         limpiarCampos(cont_cont_efectivo);
-    }else if(inm_tipo_gasto_id === "2") {
+
+    }else if(inm_tipo_gasto_id === "2"){
         cont_cont_transfer.show();
         cont_cont_cheque.hide();
         cont_cont_efectivo.hide();
 
         limpiarCampos(cont_cont_cheque);
         limpiarCampos(cont_cont_efectivo);
+
     }else if(inm_tipo_gasto_id === "3"){
         cont_cont_efectivo.show();
         cont_cont_cheque.hide();
@@ -1682,6 +1697,7 @@ sl_inm_tipo_gasto_id.change(function(){
 
         limpiarCampos(cont_cont_cheque);
         limpiarCampos(cont_cont_transfer);
+
     }else{
         cont_cont_cheque.hide();
         cont_cont_transfer.hide();
@@ -1691,30 +1707,55 @@ sl_inm_tipo_gasto_id.change(function(){
         limpiarCampos(cont_cont_transfer);
         limpiarCampos(cont_cont_efectivo);
     }
-});
+}
 
-
+// Manejo de genera gasto
 function actualizarCamposGastos(){
-
     let valor = $('input[name="genera_gasto"]:checked').val();
 
     if(valor === "SI"){
         $("#cont_gasto").show();
     }else if(valor === "NO"){
         $("#cont_gasto").hide();
-    }
 
+        // Restaurar nombre anterior
+        $('#nombre_beneficiario').val(nombre_anterior);
+
+        // Limpiar select
+        $('#inm_conf_cuenta_notaria_id').val('').trigger('change');
+    }
 }
 
+// =====================
+// EVENTOS
+// =====================
+
 $(document).ready(function(){
+
+    // Guardar valor inicial correctamente
+    nombre_anterior = $('#nombre_beneficiario').val();
+
+    // Inicializar estados
     actualizarCamposGastos();
+    actualizarTipoGasto();
 });
 
+// Cambio tipo gasto
+sl_inm_tipo_gasto_id.change(function(){
+    actualizarTipoGasto();
+});
+
+// Cambio genera gasto
 $('input[name="genera_gasto"]').change(function(){
     actualizarCamposGastos();
 });
 
+// Cambio cuenta notaria
 $('#inm_conf_cuenta_notaria_id').change(function (){
-    let inm_conf_cuenta_notaria_beneficiario = $(this).find(':selected').data('inm_conf_cuenta_notaria_beneficiario');
-    $('#nombre_beneficiario').val(inm_conf_cuenta_notaria_beneficiario);
+    let beneficiario = $(this).find(':selected').data('inm_conf_cuenta_notaria_beneficiario');
+
+    // Evitar sobrescribir con undefined
+    if(beneficiario){
+        $('#nombre_beneficiario').val(beneficiario);
+    }
 });
