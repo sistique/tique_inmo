@@ -101,6 +101,26 @@ class inm_firma extends _modelo_parent{
         }
 
         $filtro_doc['inm_comprador.id'] = $this->registro['inm_comprador_id'];
+        $filtro_doc['doc_tipo_documento.id'] = 68;
+        $existe = (new inm_doc_comprador(link: $this->link))->existe(filtro: $filtro_doc);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar registro',data:  $existe);
+        }
+
+        if(!$existe) {
+            if(trim($_FILES['notificacion_descuento_sec']['name']) !== '') {
+                $_FILES['documento'] = $_FILES['notificacion_descuento_sec'];
+                $registro = array();
+                $registro['inm_comprador_id'] = $this->registro['inm_comprador_id'];
+                $registro['doc_tipo_documento_id'] = 68;
+                $r_inm_doc_comprador = (new inm_doc_comprador(link: $this->link))->alta_registro(registro: $registro);
+                if(errores::$error){
+                    return $this->error->error(mensaje: 'Error al validar registro',data:  $r_inm_doc_comprador);
+                }
+            }
+        }
+
+        $filtro_doc['inm_comprador.id'] = $this->registro['inm_comprador_id'];
         $filtro_doc['doc_tipo_documento.id'] = 66;
         $existe_comp = (new inm_doc_comprador(link: $this->link))->existe(filtro: $filtro_doc);
         if(errores::$error){
