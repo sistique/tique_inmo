@@ -1000,6 +1000,9 @@
                                         <?php echo $controlador->inputs->documento_anexos; ?>
                                         <?php echo $controlador->inputs->documento_instruccion_credito; ?>
                                         <?php echo $controlador->inputs->documento_notificacion_descuento; ?>
+
+                                        <?php echo $controlador->inputs->documento_notificacion_descuento_sec; ?>
+
                                         <?php echo $controlador->inputs->numero_credito; ?>
                                         <?php echo $controlador->inputs->pago_propio_peculio; ?>
                                         <?php echo $controlador->inputs->pago_precio_compra_venta; ?>

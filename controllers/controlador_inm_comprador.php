@@ -780,6 +780,21 @@ class controlador_inm_comprador extends _ctl_base {
 
         $this->inputs->documento_notificacion_descuento = $documento_notificacion_descuento;
 
+        $input_not_sec = '';
+        $keys = array(2,3,4);
+        if(in_array($this->registro['inm_tipo_credito_id'],$keys)) {
+            $input_not_sec = $this->html->input_file(cols: 12,name: 'notificacion_descuento_sec',
+                row_upd:  new stdClass(),value_vacio:  false,place_holder: 'Notificacion de Descuento Sec.',
+                required: false);
+            if(errores::$error){
+                return $this->retorno_error(
+                    mensaje: 'Error al obtener inputs',data:  $input_not_sec, header: $header,
+                    ws:  $ws);
+            }
+        }
+
+        $this->inputs->documento_notificacion_descuento_sec = $input_not_sec;
+
         $documento_isr_notaria = $this->html->input_file(cols: 12,name: 'isr_notaria',
             row_upd:  new stdClass(),value_vacio:  false,place_holder: 'ISR Notaria',required: false);
         if(errores::$error){
