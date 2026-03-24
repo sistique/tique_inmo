@@ -1090,6 +1090,24 @@
 
                                         <div class="col-lg-12">
                                             <label class="label-docs">
+                                                <?php echo $controlador->descripcion_notificacion_descuento_sec; ?>
+                                            </label>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_comprador_descarga_notificacion_descuento_sec; ?>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_comprador_vista_previa_notificacion_descuento_sec; ?>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_comprador_descarga_zip_notificacion_descuento_sec; ?>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <?php echo $controlador->button_inm_doc_comprador_elimina_bd_notificacion_descuento_sec; ?>
+                                        </div>
+
+                                        <div class="col-lg-12">
+                                            <label class="label-docs">
                                                 <?php echo $controlador->descripcion_isr_notaria; ?>
                                             </label>
                                         </div>
