@@ -160,10 +160,10 @@ class inm_prospecto_ubicacion extends _modelo_parent{
         }
 
 
-        $valida = $this->valida_prospecto_repetido_nombre(nombre_completo_valida: $nombre_completo_valida);
+        /*$valida = $this->valida_prospecto_repetido_nombre(nombre_completo_valida: $nombre_completo_valida);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar prospecto repetido por nombre',data:  $valida);
-        }
+        }*/
 
         return $r_modifica_nombre_completo_valida;
     }
@@ -374,7 +374,7 @@ class inm_prospecto_ubicacion extends _modelo_parent{
         $con_rel_agente = new com_rel_agente($this->link);
 
         if(!isset($this->registro['com_agente_id'])){
-            $this->registro['com_agente_id'] = 10;
+            $this->registro['com_agente_id'] = 1;
         }
 
         $registro_rel['com_agente_id'] = $this->registro['com_agente_id'];
@@ -382,7 +382,6 @@ class inm_prospecto_ubicacion extends _modelo_parent{
 
         $result = $con_rel_agente->alta_registro(registro: $registro_rel);
         if (errores::$error) {
-            $this->link->rollBack();
             return  $this->error->error(mensaje: 'Error al insertar datos', data: $result);
         }
 

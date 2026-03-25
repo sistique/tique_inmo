@@ -93,7 +93,6 @@ class inm_ubicacion extends _inm_ubicaciones {
         if(!$this->desde_prospecto) {
             $tiene_prospecto = $this->tiene_prospecto_ubicacion(inm_ubicacion_id: $r_alta_bd->registro_id);
             if (errores::$error) {
-                $this->link->rollBack();
                 return $this->error->error(mensaje: 'Error al validar inm_prospecto', data: $tiene_prospecto);
             }
 
