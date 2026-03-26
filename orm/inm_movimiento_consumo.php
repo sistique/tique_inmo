@@ -13,9 +13,16 @@ class inm_movimiento_consumo extends _modelo_parent{
         $tabla = 'inm_movimiento_consumo';
         $columnas = array($tabla=>false,'inm_ubicacion'=>$tabla,'inm_producto'=>$tabla,
             'inm_detalle_factura_compra'=>$tabla,'inm_concepto'=>'inm_producto',
-            'inm_factura_compra'=>'inm_detalle_factura_compra');
+            'inm_factura_compra'=>'inm_detalle_factura_compra','dp_colonia_postal'=>'inm_ubicacion',
+            'dp_cp'=>'dp_colonia_postal','dp_colonia'=>'dp_colonia_postal', 'dp_municipio'=>'dp_cp',
+            'dp_estado'=>'dp_municipio','dp_pais'=>'dp_estado');
 
         $columnas_extra= array();
+        $sql = "(CONCAT_WS(' ', inm_ubicacion.calle, inm_ubicacion.numero_exterior, 
+        inm_ubicacion.numero_interior, dp_colonia.descripcion, dp_municipio.descripcion))";
+
+        $columnas_extra['inm_ubicacion_ubicacion'] = $sql;
+
         $renombres= array();
 
 

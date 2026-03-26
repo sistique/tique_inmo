@@ -19,6 +19,7 @@ use gamboamartin\inmuebles\models\inm_detalle_factura_compra;
 use gamboamartin\inmuebles\models\inm_doc_factura_compra;
 use gamboamartin\inmuebles\models\inm_dropbox_ruta;
 use gamboamartin\inmuebles\models\inm_factura_compra;
+use gamboamartin\inmuebles\models\inm_movimiento_consumo;
 use gamboamartin\inmuebles\models\inm_producto;
 use gamboamartin\system\_ctl_base;
 use gamboamartin\system\links_menu;
@@ -35,6 +36,7 @@ class controlador_inm_factura_compra extends _ctl_base {
     public string $link_valida_producto_nuevo = '';
     public array $registros_concepto = array();
     public array $productos_factura = array();
+    public array $movientos_rel = array();
 
     public function __construct(PDO      $link, html $html = new \gamboamartin\template_1\html(),
                                 stdClass $paths_conf = new stdClass())
@@ -108,6 +110,7 @@ class controlador_inm_factura_compra extends _ctl_base {
         $init_data['cat_sat_unidad'] = "gamboamartin\\cat_sat";
         $init_data['inm_concepto'] = "gamboamartin\\inmuebles";
         $init_data['inm_producto'] = "gamboamartin\\inmuebles";
+        $init_data['inm_factura_compra'] = "gamboamartin\\inmuebles";
         $campos_view = $this->campos_view_base(init_data: $init_data,keys:  $keys);
 
         if(errores::$error){
@@ -794,6 +797,64 @@ class controlador_inm_factura_compra extends _ctl_base {
         }
 
         return $r_modelo;
+    }
+
+    public function ubicaciones_relacionadas(bool $header, bool $ws = false): array|stdClass
+    {
+        $r_alta = $this->init_alta();
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al inicializar alta',data:  $r_alta, header: $header,ws:  $ws);
+        }
+
+        $filtro['inm_factura_compra.id'] = $this->registro_id;
+        $inm_detalle_factura = (new inm_detalle_factura_compra(link: $this->link))->filtro_and(filtro: $filtro);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener factura compra',data:  $inm_detalle_factura,
+                header: $header,ws:  $ws);
+        }
+
+        $temp = array();
+        foreach ($inm_detalle_factura->registros as $registro) {
+            $filtro_mov['inm_detalle_factura_compra.id'] = $registro['inm_detalle_factura_compra_id'];
+            $inm_movimiento = (new inm_movimiento_consumo(link: $this->link))->filtro_and(filtro: $filtro_mov);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al obtener factura compra',data:  $inm_movimiento,
+                    header: $header,ws:  $ws);
+            }
+
+            $temp = $inm_movimiento->registros;
+        }
+
+        $agrupado = array();
+
+        foreach ($temp as $registro) {
+            $ubicacion = $registro['inm_ubicacion_id']; // ajusta el nombre real del campo
+
+            if (!isset($agrupado[$ubicacion])) {
+                $agrupado[$ubicacion] = array();
+            }
+
+            $agrupado[$ubicacion][] = $registro;
+        }
+
+        $this->movientos_rel = $agrupado;
+
+        $keys_selects = array();
+        $colums_ds = array('inm_factura_compra_descripcion');
+        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_factura_compra_id',
+            keys_selects: $keys_selects, id_selected: $this->registro_id, label: 'Factura',columns_ds: $colums_ds);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $inputs = $this->inputs(keys_selects: $keys_selects);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener inputs',data:  $inputs, header: $header,ws:  $ws);
+        }
+
+        return $inputs;
     }
 
 }
