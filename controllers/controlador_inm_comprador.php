@@ -2883,6 +2883,7 @@ class controlador_inm_comprador extends _ctl_base {
         $init_data['bn_cuenta'] = "gamboamartin\\banco";
 
         $init_data['com_sucursal'] = "gamboamartin\\comercial";
+        $init_data['com_agente'] = "gamboamartin\\comercial";
         $init_data['fc_csd'] = "gamboamartin\\facturacion";
         $init_data['cat_sat_tipo_de_comprobante'] = "gamboamartin\\cat_sat";
         $init_data['com_tipo_cambio'] = "gamboamartin\\comercial";
