@@ -1240,9 +1240,13 @@ class _keys_selects{
         $columns_ds = array();
         $columns_ds[] = 'com_agente_descripcion';
         $filtro_agente['org_sucursal.id'] = $row_upd->org_sucursal_id;
+
+        $in = array();
+        $in['llave'] = 'com_tipo_agente.descripcion';
+        $in['values'] = array('PREDETERMINADO','VENDEDOR');
         $keys_selects = $controler->key_select(cols: 6, con_registros: true,filtro: $filtro_agente,
             key: 'com_agente_id', keys_selects: $keys_selects, id_selected: $row_upd->com_agente_id, label: 'Agente',
-            columns_ds: $columns_ds);
+            columns_ds: $columns_ds, in: $in);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
