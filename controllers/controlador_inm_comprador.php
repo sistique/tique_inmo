@@ -2890,6 +2890,7 @@ class controlador_inm_comprador extends _ctl_base {
         $init_data['cat_sat_obj_imp'] = "gamboamartin\\cat_sat";
         $init_data['cat_sat_conf_imps'] = "gamboamartin\\cat_sat";
         $init_data['fc_factura'] = "gamboamartin\\facturacion";
+        $init_data['org_sucursal'] = "gamboamartin\\organigrama";
 
         $init_data = (new _base_paquete())->init_data_domicilio(init_data: $init_data);
         if(errores::$error){

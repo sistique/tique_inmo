@@ -428,6 +428,7 @@ class _keys_selects{
         $entidades_pref[] = 'inm_persona_discapacidad';
         $entidades_pref[] = 'inm_institucion_hipotecaria';
         $entidades_pref[] = 'adm_estado_civil';
+        $entidades_pref[] = 'org_sucursal';
 
         foreach ($entidades_pref as $entidad){
             $entidad_id = $modelo->id_preferido_detalle(entidad_preferida: $entidad);
@@ -1220,6 +1221,16 @@ class _keys_selects{
         $keys_selects = $controler->key_select(cols:12, con_registros: true,filtro:  array(),
             key: 'inm_institucion_hipotecaria_id', keys_selects: $keys_selects,
             id_selected: $row_upd->inm_institucion_hipotecaria_id, label: 'Institucion Hipotecaria',
+            columns_ds: $columns_ds);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $columns_ds = array();
+        $columns_ds[] = 'org_sucursal_descripcion';
+        $keys_selects = $controler->key_select(cols:12, con_registros: true,filtro:  array(),
+            key: 'org_sucursal_id', keys_selects: $keys_selects,
+            id_selected: $row_upd->org_sucursal_id, label: 'Empresa',
             columns_ds: $columns_ds);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
