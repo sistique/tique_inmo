@@ -218,6 +218,12 @@ class _ubicacion{
             return $this->error->error(mensaje: 'Error al obtener inm_tipo_vivienda_id', data:  $inm_tipo_vivienda_id);
         }
         $data_row->inm_tipo_vivienda_id = $inm_tipo_vivienda_id;
+
+        $org_sucursal_id = $modelo_preferido->id_preferido_detalle(entidad_preferida: 'org_sucursal');
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener org_sucursal_id', data:  $org_sucursal_id);
+        }
+        $data_row->org_sucursal_id = $org_sucursal_id;
         
         return $data_row;
     }
@@ -585,17 +591,30 @@ class _ubicacion{
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $columns_ds = array('com_agente_descripcion');
-        $tipo_agente = array('COMPRADOR','PREDETERMINADO');
-        $in['llave'] = 'com_tipo_agente.descripcion';
-        $in['values'] = $tipo_agente;
-        $keys_selects = $controler->key_select(cols:12, con_registros: true,filtro: array(), key: 'com_agente_id',
-            keys_selects: $keys_selects, id_selected: $data_row->com_agente_id, label: 'Agente',
-            columns_ds : $columns_ds,in: $in);
+        $columns_ds = array();
+        $columns_ds[] = 'org_sucursal_descripcion';
+        $keys_selects = $controler->key_select(cols: 6, con_registros: true,filtro:  array(),
+            key: 'org_sucursal_id', keys_selects: $keys_selects,
+            id_selected: $data_row->org_sucursal_id, label: 'Empresa',
+            columns_ds: $columns_ds);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
-        $keys_selects['com_agente_id']->required = false;
+
+        $columns_ds = array();
+        $columns_ds[] = 'com_agente_descripcion';
+        $filtro_agente['org_sucursal.id'] = $data_row->org_sucursal_id;
+
+        $in = array();
+        $in['llave'] = 'com_tipo_agente.descripcion';
+        $in['values'] = array('PREDETERMINADO','COMPRADOR');
+        $keys_selects = $controler->key_select(cols: 6, con_registros: true,filtro: $filtro_agente,
+            key: 'com_agente_id', keys_selects: $keys_selects, id_selected: $data_row->com_agente_id, label: 'Agente',
+            columns_ds: $columns_ds, in: $in, required: false);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
 
         $columns_ds = array('inm_estado_vivienda_descripcion');
         $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_estado_vivienda_id',

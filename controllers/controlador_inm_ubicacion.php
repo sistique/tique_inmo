@@ -2088,6 +2088,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         $init_data['inm_factura_compra'] = "gamboamartin\\inmuebles";
         $init_data['inm_detalle_factura_compra'] = "gamboamartin\\inmuebles";
         $init_data['inm_tipo_vivienda'] = "gamboamartin\\inmuebles";
+        $init_data['org_sucursal'] = "gamboamartin\\organigrama";
 
         $campos_view = $this->campos_view_base(init_data: $init_data,keys:  $keys);
 

@@ -1,5 +1,7 @@
 <?php /** @var  gamboamartin\facturacion\controllers\controlador_fc_docto_relacionado $controlador  controlador en ejecucion */ ?>
 <?php use config\views; ?>
+<?php echo $controlador->inputs->org_sucursal_id; ?>
+<?php echo $controlador->inputs->com_agente_id; ?>
 <?php echo $controlador->inputs->inm_tipo_ubicacion_id; ?>
 <?php echo $controlador->inputs->nombre; ?>
 <?php echo $controlador->inputs->apellido_paterno; ?>

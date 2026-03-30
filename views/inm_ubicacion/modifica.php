@@ -24,6 +24,7 @@
 
                         <?php echo $controlador->header_frontend->apartado_1; ?>
                         <div id="apartado_1">
+                            <?php echo $controlador->inputs->org_sucursal_id; ?>
                             <?php echo $controlador->inputs->com_agente_id; ?>
                             <?php echo $controlador->inputs->nombre; ?>
                             <?php echo $controlador->inputs->apellido_paterno; ?>
