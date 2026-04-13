@@ -171,6 +171,21 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         }
 
 
+        $filtro_sucursal_sel = array();
+        $com_sucursal_id = -1;
+        if($r_agente->n_registros > 0){
+            $filtro_sucursal_sel['com_sucursal.id'] = $r_agente->registros[0]['com_sucursal_id'];
+            $com_sucursal_id = $r_agente->registros[0]['com_sucursal_id'];
+        }
+
+        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro: $filtro_sucursal_sel, key: 'org_sucursal_id',
+            keys_selects:$keys_selects, id_selected: $com_sucursal_id, label: 'Sucursal');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects', data: $keys_selects,
+                header: $header, ws: $ws);
+        }
+
+
         $filtro_tipo['com_tipo_prospecto.descripcion'] = 'COMPRA VIVIENDA';
         $com_tipo_prospecto_reg = (new com_tipo_prospecto(link: $this->link))->filtro_and(filtro: $filtro_tipo);
         if(errores::$error){
@@ -271,6 +286,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         $init_data['dp_estado'] = "gamboamartin\\direccion_postal";
         $init_data['dp_municipio'] = "gamboamartin\\direccion_postal";
         $init_data['inm_tipo_credito'] = "gamboamartin\\inmuebles";
+        $init_data['org_sucursal'] = "gamboamartin\\organigrama";
 
         $init_data = (new _base_paquete())->init_data_domicilio(init_data: $init_data);
         if (errores::$error) {
