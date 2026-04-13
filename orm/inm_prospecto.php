@@ -23,8 +23,8 @@ class inm_prospecto extends _modelo_parent{
             'com_medio_prospeccion'=>'com_prospecto', 'adm_usuario'=>'com_agente','dp_colonia_postal' => $tabla,
             'dp_cp'=>'dp_colonia_postal','dp_colonia'=>'dp_colonia_postal','dp_municipio'=>'dp_cp',
             'dp_estado'=>'dp_municipio','dp_pais'=>'dp_estado','inm_sindicato'=>$tabla, 'inm_nacionalidad'=>$tabla,
-            'inm_ocupacion'=>$tabla,'inm_status_prospecto'=>$tabla, 'inm_tipo_credito' => 'inm_attr_tipo_credito',
-            'adm_estado_civil' => 'inm_estado_civil');
+            'inm_ocupacion'=>$tabla,'inm_status_prospecto'=>$tabla,'org_sucursal'=>$tabla,
+            'inm_tipo_credito' => 'inm_attr_tipo_credito', 'adm_estado_civil' => 'inm_estado_civil');
 
         $campos_obligatorios = array('com_prospecto_id','razon_social','rfc',
             'numero_exterior','numero_interior','inm_sindicato_id','dp_municipio_nacimiento_id','fecha_nacimiento',
