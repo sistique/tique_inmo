@@ -216,7 +216,6 @@ class inm_comprador extends _modelo_parent{
             $tiene_prospecto = (new inm_comprador(link: $this->link))->tiene_prospecto(
                 inm_comprador_id: $r_alta_bd->registro_id);
             if (errores::$error) {
-                $this->link->rollBack();
                 return $this->error->error(mensaje: 'Error al validar inm_prospecto', data: $tiene_prospecto);
             }
 

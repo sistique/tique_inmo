@@ -310,7 +310,7 @@ class inm_prospecto extends _modelo_parent{
 
         $con_rel_agente = new com_rel_agente($this->link);
         if(!isset($this->registro['com_agente_id'])){
-            $this->registro['com_agente_id'] = 10;
+            $this->registro['com_agente_id'] = 1;
         }
 
         $registro_rel['com_agente_id'] = $this->registro['com_agente_id'];
@@ -318,7 +318,6 @@ class inm_prospecto extends _modelo_parent{
 
         $result = $con_rel_agente->alta_registro(registro: $registro_rel);
         if (errores::$error) {
-            $this->link->rollBack();
             return  $this->error->error(mensaje: 'Error al insertar datos', data: $result);
         }
 
