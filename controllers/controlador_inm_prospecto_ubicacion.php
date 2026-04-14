@@ -172,14 +172,14 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
 
 
         $filtro_sucursal_sel = array();
-        $com_sucursal_id = -1;
+        $org_sucursal_id = -1;
         if($r_agente->n_registros > 0){
-            $filtro_sucursal_sel['com_sucursal.id'] = $r_agente->registros[0]['com_sucursal_id'];
-            $com_sucursal_id = $r_agente->registros[0]['com_sucursal_id'];
+            $filtro_sucursal_sel['org_sucursal.id'] = $r_agente->registros[0]['org_sucursal_id'];
+            $org_sucursal_id = $r_agente->registros[0]['org_sucursal_id'];
         }
 
         $keys_selects = $this->key_select(cols:12, con_registros: true,filtro: $filtro_sucursal_sel, key: 'org_sucursal_id',
-            keys_selects:$keys_selects, id_selected: $com_sucursal_id, label: 'Sucursal');
+            keys_selects:$keys_selects, id_selected: $org_sucursal_id, label: 'Empresa');
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects', data: $keys_selects,
                 header: $header, ws: $ws);

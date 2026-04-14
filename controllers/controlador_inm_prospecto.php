@@ -172,6 +172,21 @@ class controlador_inm_prospecto extends _ctl_formato
                 header: $header, ws: $ws);
         }
 
+        $filtro_sucursal_sel = array();
+        $org_sucursal_id = -1;
+        if($r_agente->n_registros > 0){
+            $filtro_sucursal_sel['org_sucursal.id'] = $r_agente->registros[0]['org_sucursal_id'];
+            $org_sucursal_id = $r_agente->registros[0]['org_sucursal_id'];
+        }
+
+        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro: $filtro_sucursal_sel, key: 'org_sucursal_id',
+            keys_selects:$keys_selects, id_selected: $org_sucursal_id, label: 'Empresa');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects', data: $keys_selects,
+                header: $header, ws: $ws);
+        }
+
+
         $keys_selects = (new init())->key_select_txt(cols: 12, key: 'liga_red_social',
             keys_selects: $keys_selects, place_holder: 'Liga Red Social', required: false);
         if (errores::$error) {
@@ -286,6 +301,7 @@ class controlador_inm_prospecto extends _ctl_formato
         $init_data['inm_sindicato'] = "gamboamartin\\inmuebles";
         $init_data['inm_ocupacion'] = "gamboamartin\\inmuebles";
         $init_data['com_tipo_direccion'] = "gamboamartin\\comercial";
+        $init_data['org_sucursal'] = "gamboamartin\\organigrama";
 
         $init_data = (new _base_paquete())->init_data_domicilio(init_data: $init_data);
         if (errores::$error) {
