@@ -453,6 +453,8 @@ class controlador_inm_factura_compra extends _ctl_base {
                 mensaje: 'Error al obtener inputs',data:  $inputs, header: $header,ws:  $ws);
         }
 
+        $this->link->beginTransaction();
+
         $_FILES['documento'] = $_FILES['xml_factura'];
 
         $registro_doc['inm_factura_compra_id'] = $this->registro_id;
@@ -460,11 +462,11 @@ class controlador_inm_factura_compra extends _ctl_base {
 
         $r_inm_doc_factura_compra = (new inm_doc_factura_compra(link:$this->link))->alta_registro(registro: $registro_doc);
         if (errores::$error) {
+            $this->link->rollBack();
             return $this->retorno_error(mensaje: 'Error al convertir en cliente', data: $r_inm_doc_factura_compra,
                     header: $header,ws:  $ws);
         }
 
-        $this->link->beginTransaction();
 
         $this->registros_concepto = (new inm_factura_compra(link: $this->link))->obten_registros_xml(
             inm_factura_compra_id: $this->registro_id);
@@ -499,6 +501,8 @@ class controlador_inm_factura_compra extends _ctl_base {
         $this->inputs->btn_action_next = $btn_action_next;
         $this->inputs->id_retorno = $id_retorno;
         $this->inputs->seccion_retorno = $seccion_retorno;
+
+        $this->link->commit();
 
         return $this->registros_concepto;
     }
