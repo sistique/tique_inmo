@@ -65,7 +65,9 @@ $(document).ready(function () {
         }
     });
 
-    $('.basic-multiple').select2();
-
+    $('.basic-multiple').select2({
+        closeOnSelect: false,
+        allowClear: true
+    });
 
 });
