@@ -192,6 +192,11 @@
                                             <?php //echo $controlador->inputs->conyuge->inm_ocupacion_id; ?>
                                             <?php //echo $controlador->inputs->conyuge->telefono_casa; ?>
                                             <?php //echo $controlador->inputs->conyuge->telefono_celular; ?>
+
+                                            <?php echo $controlador->inputs->btn_action_next; ?>
+                                            <?php echo $controlador->inputs->id_retorno; ?>
+                                            <?php echo $controlador->inputs->seccion_retorno; ?>
+
                                         </div>
                                         <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
                                     </form>
