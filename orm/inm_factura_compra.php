@@ -104,6 +104,14 @@ class inm_factura_compra extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al modificar opinion', data: $path);
         }
 
+        if (empty($path)) {
+            return $this->error->error(mensaje: 'Error ruta vacia', data: $path);
+        }
+
+        if (!file_exists($path)) {
+            return $this->error->error(mensaje: 'Error no existe archivo', data: $path);
+        }
+
         //$xmlString = file_get_contents($_FILES['xml_factura']['tmp_name']);
         $xmlString = file_get_contents($path);
 
