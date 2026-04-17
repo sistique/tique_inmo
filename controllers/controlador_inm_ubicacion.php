@@ -3199,6 +3199,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         $datatables->columns = $columns;
         $datatables->filtro = $filtro;
         $datatables->menu_active = true;
+        $datatables->order_sec = array('inm_status_ubicacion.id' => 'ASC');
 
         return $datatables;
     }
