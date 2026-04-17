@@ -4169,6 +4169,329 @@ class instalacion
         }
         $out->inm_rel_prospecto_cliente = $inm_rel_prospecto_cliente;
 
+        // === MÓDULO FINANCIERO ===
+
+        $inm_categoria_financiera = $this->inm_categoria_financiera(link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error integrar inm_categoria_financiera', data:  $inm_categoria_financiera);
+        }
+        $out->inm_categoria_financiera = $inm_categoria_financiera;
+
+        $inm_tipo_movimiento = $this->inm_tipo_movimiento(link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error integrar inm_tipo_movimiento', data:  $inm_tipo_movimiento);
+        }
+        $out->inm_tipo_movimiento = $inm_tipo_movimiento;
+
+        $inm_presupuesto = $this->inm_presupuesto(link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error integrar inm_presupuesto', data:  $inm_presupuesto);
+        }
+        $out->inm_presupuesto = $inm_presupuesto;
+
+        $inm_mov_real = $this->inm_mov_real(link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error integrar inm_mov_real', data:  $inm_mov_real);
+        }
+        $out->inm_mov_real = $inm_mov_real;
+
+        return $out;
+
+    }
+
+    // =====================================================
+    // MÓDULO FINANCIERO — Métodos de creación de tablas
+    // =====================================================
+
+    private function _add_inm_categoria_financiera(PDO $link): array|stdClass
+    {
+        $out = new stdClass();
+        $init = (new _instalacion(link: $link));
+
+        $create = $init->create_table_new(table: 'inm_categoria_financiera');
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar tabla', data:  $create);
+        }
+        $out->create = $create;
+
+        $columnas = new stdClass();
+
+        $columnas->cuenta_contable = new stdClass();
+        $columnas->cuenta_contable->default = '';
+
+        $add_colums = $init->add_columns(campos: $columnas, table: 'inm_categoria_financiera');
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar columnas', data:  $add_colums);
+        }
+        $out->add_colums = $add_colums;
+
+        return $out;
+    }
+
+    private function inm_categoria_financiera(PDO $link): array|stdClass
+    {
+        $out = new stdClass();
+
+        $create = $this->_add_inm_categoria_financiera(link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar tabla', data:  $create);
+        }
+        $out->create = $create;
+
+        $adm_menu_descripcion = 'Finanzas';
+        $adm_sistema_descripcion = 'inmuebles';
+        $etiqueta_label = 'Categoria Financiera';
+        $adm_seccion_pertenece_descripcion = 'inmuebles';
+        $adm_namespace_descripcion = 'gamboa.martin/inmuebles';
+        $adm_namespace_name = 'gamboamartin/inmuebles';
+
+        $acl = (new _adm())->integra_acl(adm_menu_descripcion: $adm_menu_descripcion,
+            adm_namespace_name: $adm_namespace_name, adm_namespace_descripcion: $adm_namespace_descripcion,
+            adm_seccion_descripcion: __FUNCTION__, adm_seccion_pertenece_descripcion: $adm_seccion_pertenece_descripcion,
+            adm_sistema_descripcion: $adm_sistema_descripcion, etiqueta_label: $etiqueta_label, link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al obtener acl', data:  $acl);
+        }
+
+        return $out;
+    }
+
+    private function _add_inm_tipo_movimiento(PDO $link): array|stdClass
+    {
+        $out = new stdClass();
+        $init = (new _instalacion(link: $link));
+
+        $create = $init->create_table_new(table: 'inm_tipo_movimiento');
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar tabla', data:  $create);
+        }
+        $out->create = $create;
+
+        $columnas = new stdClass();
+
+        $columnas->es_ingreso = new stdClass();
+        $columnas->es_ingreso->default = 'activo';
+
+        $add_colums = $init->add_columns(campos: $columnas, table: 'inm_tipo_movimiento');
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar columnas', data:  $add_colums);
+        }
+        $out->add_colums = $add_colums;
+
+        return $out;
+    }
+
+    private function inm_tipo_movimiento(PDO $link): array|stdClass
+    {
+        $out = new stdClass();
+
+        $create = $this->_add_inm_tipo_movimiento(link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar tabla', data:  $create);
+        }
+        $out->create = $create;
+
+        $adm_menu_descripcion = 'Finanzas';
+        $adm_sistema_descripcion = 'inmuebles';
+        $etiqueta_label = 'Tipo de Movimiento';
+        $adm_seccion_pertenece_descripcion = 'inmuebles';
+        $adm_namespace_descripcion = 'gamboa.martin/inmuebles';
+        $adm_namespace_name = 'gamboamartin/inmuebles';
+
+        $acl = (new _adm())->integra_acl(adm_menu_descripcion: $adm_menu_descripcion,
+            adm_namespace_name: $adm_namespace_name, adm_namespace_descripcion: $adm_namespace_descripcion,
+            adm_seccion_descripcion: __FUNCTION__, adm_seccion_pertenece_descripcion: $adm_seccion_pertenece_descripcion,
+            adm_sistema_descripcion: $adm_sistema_descripcion, etiqueta_label: $etiqueta_label, link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al obtener acl', data:  $acl);
+        }
+
+        return $out;
+    }
+
+    private function _add_inm_presupuesto(PDO $link): array|stdClass
+    {
+        $out = new stdClass();
+        $init = (new _instalacion(link: $link));
+
+        $create = $init->create_table_new(table: 'inm_presupuesto');
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar tabla', data:  $create);
+        }
+        $out->create = $create;
+
+        $columnas = new stdClass();
+
+        $campos_new = array('monto_proyectado');
+        $columnas = $init->campos_double(campos: $columnas, campos_new: $campos_new);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar campo double', data:  $columnas);
+        }
+
+        $columnas->anio = new stdClass();
+        $columnas->anio->default = '2026';
+
+        $columnas->mes = new stdClass();
+        $columnas->mes->default = '1';
+
+        $columnas->es_ingreso = new stdClass();
+        $columnas->es_ingreso->default = 'activo';
+
+        $columnas->observaciones = new stdClass();
+        $columnas->observaciones->tipo_dato = 'TEXT';
+
+        $add_colums = $init->add_columns(campos: $columnas, table: 'inm_presupuesto');
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar columnas', data:  $add_colums);
+        }
+        $out->add_colums = $add_colums;
+
+        $foraneas = array();
+        $foraneas['inm_categoria_financiera_id'] = new stdClass();
+
+        $result = $init->foraneas(foraneas: $foraneas, table: 'inm_presupuesto');
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al ajustar foranea', data:  $result);
+        }
+        $out->foraneas = $result;
+
+        return $out;
+    }
+
+    private function inm_presupuesto(PDO $link): array|stdClass
+    {
+        $out = new stdClass();
+
+        $create = $this->_add_inm_presupuesto(link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar tabla', data:  $create);
+        }
+        $out->create = $create;
+
+        $adm_menu_descripcion = 'Finanzas';
+        $adm_sistema_descripcion = 'inmuebles';
+        $etiqueta_label = 'Presupuesto';
+        $adm_seccion_pertenece_descripcion = 'inmuebles';
+        $adm_namespace_descripcion = 'gamboa.martin/inmuebles';
+        $adm_namespace_name = 'gamboamartin/inmuebles';
+
+        $acl = (new _adm())->integra_acl(adm_menu_descripcion: $adm_menu_descripcion,
+            adm_namespace_name: $adm_namespace_name, adm_namespace_descripcion: $adm_namespace_descripcion,
+            adm_seccion_descripcion: __FUNCTION__, adm_seccion_pertenece_descripcion: $adm_seccion_pertenece_descripcion,
+            adm_sistema_descripcion: $adm_sistema_descripcion, etiqueta_label: $etiqueta_label, link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al obtener acl', data:  $acl);
+        }
+
+        $alta_accion = (new _adm())->inserta_accion_base(adm_accion_descripcion: 'comparativa',
+            adm_seccion_descripcion: __FUNCTION__, es_view: 'activo', icono: 'bi bi-bar-chart-fill', link: $link,
+            lista: 'activo', titulo: 'Comparativa');
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al insertar accion', data: $alta_accion);
+        }
+
+        $alta_accion = (new _adm())->inserta_accion_base(adm_accion_descripcion: 'dashboard',
+            adm_seccion_descripcion: __FUNCTION__, es_view: 'activo', icono: 'bi bi-speedometer2', link: $link,
+            lista: 'activo', titulo: 'Dashboard');
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al insertar accion', data: $alta_accion);
+        }
+
+        return $out;
+    }
+
+    private function _add_inm_mov_real(PDO $link): array|stdClass
+    {
+        $out = new stdClass();
+        $init = (new _instalacion(link: $link));
+
+        $create = $init->create_table_new(table: 'inm_mov_real');
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar tabla', data:  $create);
+        }
+        $out->create = $create;
+
+        $columnas = new stdClass();
+
+        $campos_new = array('monto');
+        $columnas = $init->campos_double(campos: $columnas, campos_new: $campos_new);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar campo double', data:  $columnas);
+        }
+
+        $columnas->fecha = new stdClass();
+        $columnas->fecha->tipo_dato = 'DATE';
+        $columnas->fecha->default = '1900-01-01';
+
+        $columnas->anio = new stdClass();
+        $columnas->anio->default = '2026';
+
+        $columnas->mes = new stdClass();
+        $columnas->mes->default = '1';
+
+        $columnas->es_ingreso = new stdClass();
+        $columnas->es_ingreso->default = 'activo';
+
+        $columnas->referencia = new stdClass();
+        $columnas->referencia->default = 'SIN REF';
+
+        $columnas->observaciones = new stdClass();
+        $columnas->observaciones->tipo_dato = 'TEXT';
+
+        $columnas->inm_ubicacion_id_opt = new stdClass();
+        $columnas->inm_ubicacion_id_opt->default = '0';
+
+        $add_colums = $init->add_columns(campos: $columnas, table: 'inm_mov_real');
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar columnas', data:  $add_colums);
+        }
+        $out->add_colums = $add_colums;
+
+        $foraneas = array();
+        $foraneas['inm_categoria_financiera_id'] = new stdClass();
+        $foraneas['inm_tipo_movimiento_id'] = new stdClass();
+
+        $result = $init->foraneas(foraneas: $foraneas, table: 'inm_mov_real');
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al ajustar foranea', data:  $result);
+        }
+        $out->foraneas = $result;
+
+        return $out;
+    }
+
+    private function inm_mov_real(PDO $link): array|stdClass
+    {
+        $out = new stdClass();
+
+        $create = $this->_add_inm_mov_real(link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar tabla', data:  $create);
+        }
+        $out->create = $create;
+
+        $adm_menu_descripcion = 'Finanzas';
+        $adm_sistema_descripcion = 'inmuebles';
+        $etiqueta_label = 'Movimientos Reales';
+        $adm_seccion_pertenece_descripcion = 'inmuebles';
+        $adm_namespace_descripcion = 'gamboa.martin/inmuebles';
+        $adm_namespace_name = 'gamboamartin/inmuebles';
+
+        $acl = (new _adm())->integra_acl(adm_menu_descripcion: $adm_menu_descripcion,
+            adm_namespace_name: $adm_namespace_name, adm_namespace_descripcion: $adm_namespace_descripcion,
+            adm_seccion_descripcion: __FUNCTION__, adm_seccion_pertenece_descripcion: $adm_seccion_pertenece_descripcion,
+            adm_sistema_descripcion: $adm_sistema_descripcion, etiqueta_label: $etiqueta_label, link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al obtener acl', data:  $acl);
+        }
+
+        $alta_accion = (new _adm())->inserta_accion_base(adm_accion_descripcion: 'reporte_mensual',
+            adm_seccion_descripcion: __FUNCTION__, es_view: 'activo', icono: 'bi bi-journal-text', link: $link,
+            lista: 'activo', titulo: 'Reporte Mensual');
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al insertar accion', data: $alta_accion);
+        }
+
         return $out;
 
     }

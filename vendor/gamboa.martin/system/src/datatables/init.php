@@ -175,6 +175,11 @@ class init
                 $order = array($campo => $_GET['order'][0]['dir']);
             }
         }
+
+        if(count($datatable['order_sec']) > 0){
+            $order = $datatable['order_sec'];
+        }
+
         return $order;
     }
 

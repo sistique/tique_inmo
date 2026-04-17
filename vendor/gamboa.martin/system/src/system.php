@@ -166,7 +166,7 @@ class system extends controlador_base
 
         $this->datatable_init(columns: $data_for_datable->columns, filtro: $data_for_datable->filtro,
             multi_selects: $data_for_datable->multi_selects, menu_active: $data_for_datable->menu_active,
-            type: $data_for_datable->type);
+            type: $data_for_datable->type, order_sec: $data_for_datable->order_sec);
         if (errores::$error) {
             $error = $this->errores->error(mensaje: 'Error al inicializar columnDefs', data: $this->datatable);
             var_dump($error);
@@ -697,7 +697,8 @@ class system extends controlador_base
 
     final public function datatable_init(array $columns, array $filtro = array(), string $identificador = ".datatable",
                                          array $data = array(), array $in = array(), bool $multi_selects = false,
-                                         bool  $menu_active = false, string $type = "datatable"): array
+                                         bool  $menu_active = false, string $type = "datatable",
+                                         array $order_sec = array()): array
     {
         $this->datatable["type"] = $type;
         $this->datatable["columns"] = $columns;
@@ -715,6 +716,8 @@ class system extends controlador_base
             $this->datatable = $datatable;
             $this->datatables[] = $this->datatable;
         }
+
+        $this->datatable["order_sec"] = $order_sec;
 
         return $this->datatable;
     }

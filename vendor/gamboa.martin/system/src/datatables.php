@@ -1213,6 +1213,14 @@ class datatables{
             $menu_active = $datatables->menu_active;
         }
 
+        $order_sec = array();
+        if (property_exists($datatables,"order_sec")){
+            if (!is_array($datatables->order_sec)){
+                return $this->error->error(mensaje: 'Error order sec tiene que ser de tipo bool', data: $datatables);
+            }
+            $order_sec = $datatables->order_sec;
+        }
+
         // Construcción del objeto final con la configuración
         $data = new stdClass();
         $data->filtro = $filtro;
@@ -1220,6 +1228,7 @@ class datatables{
         $data->multi_selects = $multi_selects;
         $data->menu_active = $menu_active;
         $data->type = $type;
+        $data->order_sec = $order_sec;
 
         return $data;
     }
