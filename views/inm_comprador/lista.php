@@ -4,6 +4,21 @@
 
 <?php
 echo "<style>
+.top-title {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* 👈 clave */
+    gap: 10px; /* espacio entre botones y título */
+}
+
+.top-title .breadcrumb {
+    margin: 0;
+}
+
+.top-title h1 {
+    margin: 0 0 0 20px;
+}
+
 .contenedor_completo{
     display: flex;
     flex-wrap: wrap;
@@ -17,7 +32,7 @@ echo "<style>
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    margin-top: 5px;
+    margin-top: 15px;
 }
 
 .filtro-grupo label {
