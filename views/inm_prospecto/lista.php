@@ -4,10 +4,26 @@
 
 <?php
 echo "<style>
+
+.top-title {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* 👈 clave */
+    gap: 10px; /* espacio entre botones y título */
+}
+
+.top-title .breadcrumb {
+    margin: 0;
+}
+
+.top-title h1 {
+    margin: 0 0 0 20px;
+}
+
 .contenedor_completo{
     display: flex;
     flex-wrap: wrap;
-    padding: 15px;
+    padding: 0 0 15px 0;
     background: #f8f9fa;
     border-radius: 8px;
     margin-bottom: 15px;
@@ -99,44 +115,40 @@ echo "<style>
         <div class="contenedor_completo">
             <div class="filtros-avanzados">
                 <div class="filtro-grupo col-md-12">
-                    <label>Status Prospecto</label>
-                    <select class="form-control basic-multiple" id="inm_status_prospecto" name="inm_status_prospecto[]"
-                            data-tipo="in" data-filtro_campo="inm_status_prospecto.descripcion" multiple
-                            data-placeholder="Selecciona una Opcion">
-                        <?php
-                            foreach ($controlador->status_prospecto AS $status){
-                                echo '<option value="'.$status['inm_status_prospecto_descripcion'].'">'.$status['inm_status_prospecto_descripcion'].'</option>';
-                            }
-                        ?>
-                    </select>
-                </div>
-
-                <div class="filtro-grupo col-md-12">
-                    <div class="col-md-4">
+                    <div class="col-md-2">
+                        <label>Status Prospecto</label>
+                        <select class="form-control basic-multiple" id="inm_status_prospecto" name="inm_status_prospecto[]"
+                                data-tipo="in" data-filtro_campo="inm_status_prospecto.descripcion" multiple
+                                data-placeholder="Selecciona una Opcion">
+                            <?php
+                                foreach ($controlador->status_prospecto AS $status){
+                                    echo '<option value="'.$status['inm_status_prospecto_descripcion'].'">'.$status['inm_status_prospecto_descripcion'].'</option>';
+                                }
+                            ?>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
                         <label for="Nombre Prospecto">Nombre Prospecto</label>
                         <input type="text" id="nombre_prospecto" data-tipo="filtro" data-filtro_campo="inm_prospecto.razon_social"
                                placeholder="Ej: JUAN PEREZ">
                     </div>
 
-                    <div class="col-md-4">
+                    <div class="col-md-2">
                         <label for="nss">NSS</label>
                         <input type="text" id="nss" data-tipo="filtro" data-filtro_campo="inm_prospecto.nss"
                                placeholder="Ej: 9999999999">
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-2">
                         <label for="agente">Agente</label>
                         <input type="text" id="agente" data-tipo="filtro" data-filtro_campo="com_agente.descripcion"
                                placeholder="Ej: JUAN PEREZ">
                     </div>
-                </div>
-
-                <div class="filtro-grupo col-md-12">
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <label for="fecha_inicio">Fecha Alta Inicio</label>
                         <input type="date" id="fecha_inicio" data-tipo="rango-fechas" data-filtro_campo="inm_prospecto.fecha_alta"
                                data-filtro_key="campo1">
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <label for="fecha_fin">Fecha Alta Fin</label>
                         <input type="date" id="fecha_fin" data-tipo="rango-fechas" data-filtro_campo="inm_prospecto.fecha_alta"
                                data-filtro_key="campo2">
