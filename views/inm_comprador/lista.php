@@ -7,7 +7,7 @@ echo "<style>
 .contenedor_completo{
     display: flex;
     flex-wrap: wrap;
-    padding: 15px;
+    padding: 0 0 15px 0;
     background: #f8f9fa;
     border-radius: 8px;
     margin-bottom: 15px;
@@ -17,7 +17,7 @@ echo "<style>
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    margin-top: 15px;
+    margin-top: 5px;
 }
 
 .filtro-grupo label {
@@ -99,44 +99,43 @@ echo "<style>
         <div class="contenedor_completo">
             <div class="filtros-avanzados">
                 <div class="filtro-grupo col-md-12">
-                    <label>Status Comprador</label>
-                    <select class="form-control basic-multiple" id="inm_status_comprador" name="inm_status_comprador[]"
-                            data-tipo="in" data-filtro_campo="inm_status_comprador.descripcion" multiple
-                            data-placeholder="Selecciona una Opcion">
-                        <?php
-                            foreach ($controlador->status_comprador AS $status){
-                                echo '<option value="'.$status['inm_status_comprador_descripcion'].'">'.$status['inm_status_comprador_descripcion'].'</option>';
-                            }
-                        ?>
-                    </select>
-                </div>
-
-                <div class="filtro-grupo col-md-12">
-                    <div class="col-md-4">
+                    <div class="col-md-2">
+                        <label>Status Comprador</label>
+                        <select class="form-control basic-multiple" id="inm_status_comprador" name="inm_status_comprador[]"
+                                data-tipo="in" data-filtro_campo="inm_status_comprador.descripcion" multiple
+                                data-placeholder="Selecciona una Opcion">
+                            <?php
+                                foreach ($controlador->status_comprador AS $status){
+                                    echo '<option value="'.$status['inm_status_comprador_descripcion'].'">'.$status['inm_status_comprador_descripcion'].'</option>';
+                                }
+                            ?>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
                         <label for="Nombre comprador">Nombre comprador</label>
                         <input type="text" id="nombre_comprador" data-tipo="filtro" data-filtro_campo="<?php echo $controlador->modelo->columnas_extra['inm_comprador_razon_social']?>"
                                placeholder="Ej: JUAN PEREZ">
                     </div>
 
-                    <div class="col-md-4">
+                    <div class="col-md-2">
                         <label for="Ubicacion">Ubicacion</label>
                         <input type="text" id="ubicacion" data-tipo="filtro" data-filtro_campo="<?php echo $controlador->modelo->columnas_extra['inm_ubicacion_completa']?>"
                                placeholder="Ej: AV. VALLARTA 220 ">
                     </div>
 
-                    <div class="col-md-4">
+                    <div class="col-md-2">
                         <label for="agente">Agente</label>
                         <input type="text" id="agente" data-tipo="filtro" data-filtro_campo="com_agente.descripcion"
                                placeholder="Ej: JUAN PEREZ">
                     </div>
 
-                    <div class="col-md-4">
+                    <div class="col-md-2">
                         <label for="nss">NSS</label>
                         <input type="text" id="nss" data-tipo="filtro" data-filtro_campo="inm_comprador.nss"
                                placeholder="Ej: 9999999999">
                     </div>
 
-                    <div class="col-md-4">
+                    <div class="col-md-2">
                         <label for="numero_credito">Numero de Credito</label>
                         <input type="text" id="numero_credito" data-tipo="filtro" data-filtro_campo="inm_comprador.numero_credito"
                                placeholder="Ej: 02102">
