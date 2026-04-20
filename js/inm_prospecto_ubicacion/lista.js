@@ -46,6 +46,7 @@ $(document).ready(function () {
 
     $('#filtrar').on('click', function () {
         $('#filtrar').prop('disabled', true);
+
         table_inm_prospecto.ajax.reload(function () {
             $('#filtrar').prop('disabled', false);
             $('#limpiar').prop('disabled', false);
@@ -54,8 +55,9 @@ $(document).ready(function () {
     });
 
     $('#limpiar').on('click', function () {
+        $('.filtros input').val('');
         $('.filtros-avanzados input').val('');
-        $('.filtros-avanzados select').val('').trigger('change');;
+        $('.filtros-avanzados select').val('').trigger('change');
         $('.filtros-avanzados li').remove();
         $('#limpiar').prop('disabled', true);
 

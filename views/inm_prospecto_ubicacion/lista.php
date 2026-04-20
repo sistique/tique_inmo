@@ -4,10 +4,29 @@
 
 <?php
 echo "<style>
+.top-title {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* 👈 clave */
+    gap: 10px; /* espacio entre botones y título */
+}
+
+.top-title .breadcrumb {
+    margin: 0;
+}
+
+.top-title h1 {
+    margin: 0 0 0 20px;
+}
+
+.filtros-avanzados{
+    width: 100%;
+}
+
 .contenedor_completo{
     display: flex;
     flex-wrap: wrap;
-    padding: 15px;
+    padding: 0 0 15px 0;
     background: #f8f9fa;
     border-radius: 8px;
     margin-bottom: 15px;
@@ -99,39 +118,38 @@ echo "<style>
         <div class="contenedor_completo">
             <div class="filtros-avanzados">
                 <div class="filtro-grupo col-md-12">
-                    <label>Status Prospecto Ubicacion</label>
-                    <select class="form-control basic-multiple" id="inm_status_prospecto_ubicacion" name="inm_status_prospecto_ubicacion[]"
-                            data-tipo="in" data-filtro_campo="inm_status_prospecto_ubicacion.descripcion" multiple
-                            data-placeholder="Selecciona una Opcion">
-                        <?php
-                            foreach ($controlador->status_prospecto_ubicacion AS $status){
-                                echo '<option value="'.$status['inm_status_prospecto_ubicacion_descripcion'].'">'.$status['inm_status_prospecto_ubicacion_descripcion'].'</option>';
-                            }
-                        ?>
-                    </select>
-                </div>
+                    <div class="col-md-3">
+                        <label>Status Prospecto Ubicacion</label>
+                        <select class="form-control basic-multiple" id="inm_status_prospecto_ubicacion" name="inm_status_prospecto_ubicacion[]"
+                                data-tipo="in" data-filtro_campo="inm_status_prospecto_ubicacion.descripcion" multiple
+                                data-placeholder="Selecciona una Opcion">
+                            <?php
+                                foreach ($controlador->status_prospecto_ubicacion AS $status){
+                                    echo '<option value="'.$status['inm_status_prospecto_ubicacion_descripcion'].'">'.$status['inm_status_prospecto_ubicacion_descripcion'].'</option>';
+                                }
+                            ?>
+                        </select>
+                    </div>
 
-                <div class="filtro-grupo col-md-12">
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label for="Ubicacion">Ubicacion</label>
                         <input type="text" id="ubicacion" data-tipo="filtro" data-filtro_campo="<?php echo $controlador->modelo->columnas_extra['inm_prospecto_ubicacion_ubicacion']?>"
                                placeholder="Ej: AV. VALLARTA 220 ">
                     </div>
 
-                    <div class="col-md-4">
+                    <div class="col-md-2">
                         <label for="Nombre prospecto_ubicacion">Nombre Prospecto</label>
                         <input type="text" id="nombre_prospecto_ubicacion" data-tipo="filtro" data-filtro_campo="inm_prospecto_ubicacion.razon_social"
                                placeholder="Ej: JUAN PEREZ">
                     </div>
 
-
-                    <div class="col-md-4">
+                    <div class="col-md-2">
                         <label for="agente">Agente</label>
                         <input type="text" id="agente" data-tipo="filtro" data-filtro_campo="com_agente.descripcion"
                                placeholder="Ej: JUAN PEREZ">
                     </div>
 
-                    <div class="col-md-4">
+                    <div class="col-md-2">
                         <label for="nss">NSS</label>
                         <input type="text" id="nss" data-tipo="filtro" data-filtro_campo="inm_prospecto_ubicacion.nss"
                                placeholder="Ej: 9999999999">
