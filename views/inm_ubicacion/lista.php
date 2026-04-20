@@ -4,6 +4,21 @@
 
 <?php
 echo "<style>
+.top-title {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* 👈 clave */
+    gap: 10px; /* espacio entre botones y título */
+}
+
+.top-title .breadcrumb {
+    margin: 0;
+}
+
+.top-title h1 {
+    margin: 0 0 0 20px;
+}
+
 .filtros-avanzados{
     width: 100%;
 }
@@ -11,7 +26,7 @@ echo "<style>
 .contenedor_completo{
     display: flex;
     flex-wrap: wrap;
-    padding: 15px;
+    padding: 0 0 15px 0;
     background: #f8f9fa;
     border-radius: 8px;
     margin-bottom: 15px;
@@ -101,39 +116,39 @@ echo "<style>
         <?php //include (new views())->ruta_templates . 'etiquetas/_titulo_lista.php'; ?>
 
         <div class="contenedor_completo">
-            <div class="filtros filtro-grupo col-md-12">
-                <label for="id">ID</label>
-                <input type="text" id="id" data-tipo="data" data-filtro_campo="inm_ubicacion.id" placeholder="Ej: 1 ">
-            </div>
-
             <div class="filtros-avanzados">
                 <div class="filtro-grupo col-md-12">
-                    <label>Status Ubicacion</label>
-                    <select class="form-control basic-multiple" id="inm_status_ubicacion" name="inm_status_ubicacion[]"
-                            data-tipo="in" data-filtro_campo="inm_status_ubicacion.descripcion" multiple
-                            data-placeholder="Selecciona una Opcion">
-                        <?php
-                            foreach ($controlador->status_ubicacion AS $status){
-                                echo '<option value="'.$status['inm_status_ubicacion_descripcion'].'">'.$status['inm_status_ubicacion_descripcion'].'</option>';
-                            }
-                        ?>
-                    </select>
-                </div>
+                    <div class="filtros col-md-2">
+                        <label for="id">ID</label>
+                        <input type="text" id="id" data-tipo="data" data-filtro_campo="inm_ubicacion.id" placeholder="Ej: 1 ">
+                    </div>
 
-                <div class="filtro-grupo col-md-12">
-                    <div class="col-md-4">
+                    <div class="col-md-3">
+                        <label>Status Ubicacion</label>
+                        <select class="form-control basic-multiple" id="inm_status_ubicacion" name="inm_status_ubicacion[]"
+                                data-tipo="in" data-filtro_campo="inm_status_ubicacion.descripcion" multiple
+                                data-placeholder="Selecciona una Opcion">
+                            <?php
+                                foreach ($controlador->status_ubicacion AS $status){
+                                    echo '<option value="'.$status['inm_status_ubicacion_descripcion'].'">'.$status['inm_status_ubicacion_descripcion'].'</option>';
+                                }
+                            ?>
+                        </select>
+                    </div>
+
+                    <div class="col-md-3">
                         <label for="Ubicacion">Ubicacion</label>
                         <input type="text" id="ubicacion" data-tipo="filtro" data-filtro_campo="<?php echo $controlador->modelo->columnas_extra['inm_ubicacion_ubicacion']?>"
                                placeholder="Ej: AV. VALLARTA 220 ">
                     </div>
 
-                    <div class="col-md-4">
+                    <div class="col-md-2">
                         <label for="agente">Agente</label>
                         <input type="text" id="agente" data-tipo="filtro" data-filtro_campo="com_agente.descripcion"
                                placeholder="Ej: JUAN PEREZ">
                     </div>
 
-                    <div class="col-md-4">
+                    <div class="col-md-2">
                         <label for="predial">Predial</label>
                         <input type="text" id="predial" data-tipo="filtro" data-filtro_campo="inm_ubicacion.cuenta_predial"
                                placeholder="Ej: 9999999999">
