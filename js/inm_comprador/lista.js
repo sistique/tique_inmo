@@ -65,6 +65,33 @@ $(document).ready(function () {
         }
     });
 
+    $(document).on('keydown', '.filtros-avanzados', function (e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            if (!$('#filtrar').prop('disabled')) {
+                $('#filtrar').click();
+            }
+        }
+    });
+
+    let filtroTimer = null;
+
+    function dispararFiltradoDebounced() {
+        clearTimeout(filtroTimer);
+        filtroTimer = setTimeout(() => {
+            if (!$('#filtrar').prop('disabled')) $('#filtrar').click();
+        }, 400);
+    }
+
+    $('.basic-multiple')
+        .on('change', function () {
+            dispararFiltradoDebounced();
+        })
+        .select2({
+            closeOnSelect: false,
+            allowClear: true
+        });
+
     $('.basic-multiple').select2({
         closeOnSelect: false,
         allowClear: true
