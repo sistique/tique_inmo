@@ -462,7 +462,7 @@ class controlador_inm_comprador extends _ctl_base {
         foreach ($r_ubicacion_etapa->registros as $registro){
             $rel_ubis_fir[] = $registro['inm_ubicacion_id'];
         }
-        
+
         $filtro_rel_ubi['inm_rel_ubi_comp.status'] = 'activo';
 
         $in_ubi = array();
@@ -868,7 +868,7 @@ class controlador_inm_comprador extends _ctl_base {
         $columns_ds = array('inm_tipo_exento_descripcion');
         $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_tipo_exento_id',
             keys_selects: $keys_selects, id_selected:  $this->registro['inm_tipo_exento_id'], label: 'Exento',
-            columns_ds : $columns_ds);
+            columns_ds : $columns_ds, required: false);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);
