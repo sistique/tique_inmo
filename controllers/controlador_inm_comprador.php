@@ -450,7 +450,7 @@ class controlador_inm_comprador extends _ctl_base {
 
         $in_ubi = array();
         $in_ubi['llave'] = 'inm_status_ubicacion.id';
-        $in_ubi['values'] = array('5','6');
+        $in_ubi['values'] = array('6','7');
 
         $r_ubicacion_etapa = (new inm_ubicacion(link: $this->link))->filtro_and(filtro: $filtro_ubi, in: $in_ubi);
         if(errores::$error){
@@ -462,7 +462,7 @@ class controlador_inm_comprador extends _ctl_base {
         foreach ($r_ubicacion_etapa->registros as $registro){
             $rel_ubis_fir[] = $registro['inm_ubicacion_id'];
         }
-
+        
         $filtro_rel_ubi['inm_rel_ubi_comp.status'] = 'activo';
 
         $in_ubi = array();
