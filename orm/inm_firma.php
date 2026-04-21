@@ -239,13 +239,13 @@ class inm_firma extends _modelo_parent{
         }
 
         if($resultado->n_registros > 0){
-            $r_mod_comprador = $this->modifica_bd(registro: $this->registro,
+            $r_mod_firma = $this->modifica_bd(registro: $this->registro,
                 id: $resultado->registros[0]['inm_firma_id']);
             if (errores::$error) {
-                return $this->error->error(mensaje: 'Error al insertar datos', data: $r_mod_comprador);
+                return $this->error->error(mensaje: 'Error al insertar datos', data: $r_mod_firma);
             }
 
-            return $r_mod_comprador;
+            return $r_mod_firma;
 
             /*$registro_puro = $this->registro(registro_id: $resultado->registros[0]['inm_firma_id'],
                 columnas_en_bruto: true,retorno_obj: true);
