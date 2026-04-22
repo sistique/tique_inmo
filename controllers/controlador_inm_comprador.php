@@ -3711,7 +3711,7 @@ class controlador_inm_comprador extends _ctl_base {
         $datatables->columns = $columns;
         $datatables->filtro = $filtro;
         $datatables->menu_active = true;
-        $datatables->order_sec = array('inm_status_comprador.id' => 'ASC');
+        $datatables->order_sec = array('inm_status_comprador.id' => 'ASC','inm_comprador.id' => 'DESC');
 
         return $datatables;
     }

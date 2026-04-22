@@ -839,7 +839,7 @@ class controlador_inm_prospecto extends _ctl_formato
         $datatables->columns = $columns;
         $datatables->filtro = $filtro;
         $datatables->menu_active = true;
-        $datatables->order_sec = array('inm_status_prospecto.id' => 'ASC');
+        $datatables->order_sec = array('inm_status_prospecto.id' => 'ASC','inm_prospecto.id' => 'DESC');
 
         return $datatables;
     }
