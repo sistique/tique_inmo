@@ -451,6 +451,7 @@ class inm_comprador extends _modelo_parent{
         $data->inm_rel_co_acreditados = $inm_rel_co_acreditados;
         $data->inm_referencias = $inm_referencias;
         $data->inm_avaluos = $inm_avaluos;
+        $data->nombre_archivo = 'solicitud_gasto.pdf';
 
         return $data;
 

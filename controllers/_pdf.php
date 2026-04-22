@@ -1278,7 +1278,8 @@ class _pdf{
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al escribir en pdf', data: $pdf_exe);
         }
-        $this->pdf->Output('D','solicitud_gasto.pdf');
+
+        $this->pdf->Output('D',$data->nombre_archivo);
         return $this->pdf;
     }
 

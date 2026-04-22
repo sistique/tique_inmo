@@ -153,6 +153,8 @@ class inm_cheque extends _modelo_parent{
 
         $data = new stdClass();
         $data->inm_cheque = $inm_cheque->registros[0];
+        $data->nombre_archivo = 'solicitud_gasto - '.$inm_cheque->registros[0]['inm_tipo_cheque_descripcion'].' - '
+            .$inm_cheque->registros[0]['inm_cheque_beneficiario'].'.pdf';
 
         return $data;
     }
