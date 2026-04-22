@@ -4378,12 +4378,23 @@ class controlador_inm_ubicacion extends _ctl_base {
         $columns_ds = array('inm_ubicacion_id','inm_ubicacion_ubicacion');
         $filtro['inm_ubicacion.id'] = $this->registro_id;
         $inm_prospecto_id = (new inm_ubicacion_html(html: $this->html_base))->select_inm_ubicacion_id(
-            cols: 12, con_registros: true, id_selected: $this->registro_id, link: $this->link, columns_ds: $columns_ds,
+            cols: 6, con_registros: true, id_selected: $this->registro_id, link: $this->link, columns_ds: $columns_ds,
             filtro: $filtro);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al generar input', data: $inm_prospecto_id, header: $header, ws: $ws);
         }
         $this->inputs->inm_ubicacion_seleccionado_id  = $inm_prospecto_id;
+
+        $columns_ds = array('inm_status_ubicacion_descripcion');
+        $filtro_status['inm_status_ubicacion.id'] = $this->registro['inm_status_ubicacion_id'];
+        $inm_status_ubicacion_id = (new inm_status_ubicacion_html(html: $this->html_base))->
+        select_inm_status_ubicacion_id(cols: 6, con_registros: true,
+            id_selected: $this->registro['inm_status_ubicacion_id'], link: $this->link, columns_ds: $columns_ds,
+            filtro: $filtro_status, label: "Status Actual");
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al generar input', data: $inm_status_ubicacion_id, header: $header, ws: $ws);
+        }
+        $this->inputs->actual_inm_status_ubicacion_id  = $inm_status_ubicacion_id;
 
         $btn_action_next = $this->html->hidden('btn_action_next', value: 'proceso_ubicacion');
         if (errores::$error) {
