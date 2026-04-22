@@ -492,7 +492,7 @@ class controlador_inm_ubicacion extends _ctl_base {
     {
 
         $documento_rppc = $this->html->input_file(cols: 12, name: 'rppc', row_upd: new stdClass(), value_vacio: false,
-            place_holder: 'RPPC');
+            place_holder: 'RPPC', required: false);
         if (errores::$error) {
             return $this->retorno_error(
                 mensaje: 'Error al obtener inputs', data: $documento_rppc, header: $header, ws: $ws);
@@ -4686,15 +4686,17 @@ class controlador_inm_ubicacion extends _ctl_base {
         }
 
         if(!$existe) {
-            $_FILES['documento'] = $_FILES['rppc'];
-            $registro = array();
-            $registro['inm_ubicacion_id'] = $this->registro_id;
-            $registro['doc_tipo_documento_id'] = 34;
-            $r_inm_doc_ubicacion = (new inm_doc_ubicacion(link: $this->link))->alta_registro(registro: $registro);
-            if (errores::$error) {
-                $this->link->rollBack();
-                return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_doc_ubicacion,
-                    header: $header, ws: $ws);
+            if(isset($_FILES['rppc']) && trim($_FILES['rppc']['name']) !== '') {
+                $_FILES['documento'] = $_FILES['rppc'];
+                $registro = array();
+                $registro['inm_ubicacion_id'] = $this->registro_id;
+                $registro['doc_tipo_documento_id'] = 34;
+                $r_inm_doc_ubicacion = (new inm_doc_ubicacion(link: $this->link))->alta_registro(registro: $registro);
+                if (errores::$error) {
+                    $this->link->rollBack();
+                    return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_doc_ubicacion,
+                        header: $header, ws: $ws);
+                }
             }
         }
 
