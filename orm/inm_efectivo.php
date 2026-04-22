@@ -60,7 +60,7 @@ class inm_efectivo extends _modelo_parent{
 
         $data = new stdClass();
         $data->inm_efectivo = $inm_efectivo->registros[0];
-        $data->nombre_archivo = 'solicitud_gasto - '.$inm_efectivo->registros[0]['inm_cheque_nombre_beneficiario']
+        $data->nombre_archivo = 'solicitud_gasto - '.$inm_efectivo->registros[0]['inm_efectivo_nombre_beneficiario']
             .'.pdf';
 
         return $data;
