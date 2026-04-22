@@ -432,7 +432,7 @@ class _pdf{
             $this->pdf->SetXY(44.5, 70);
             $this->pdf->MultiCell(160.5, 5,
                 mb_convert_encoding((string)$data->inm_cheque['inm_tipo_cheque_descripcion'] . " " . $tipo_operacion . " - " .
-                    (string)$data->inm_cheque['inm_cheque_numero_cheque'], 'ISO-8859-1', 'UTF-8'),
+                    (string)$data->inm_cheque['inm_ubicacion_ubicacion'], 'ISO-8859-1', 'UTF-8'),
                 0, 'C');
 
             $this->pdf->SetXY(164.7, 79);
@@ -476,7 +476,8 @@ class _pdf{
     
             $this->pdf->SetXY(44.5,58);
             $this->pdf->MultiCell(160.5,5,
-                mb_convert_encoding($tipo_operacion." ".$data->inm_transferencia['inm_transferencia_nombre_beneficiario'], 'ISO-8859-1', 'UTF-8'),
+                mb_convert_encoding($tipo_operacion." ".$data->inm_transferencia['inm_transferencia_nombre_beneficiario']
+                    ." - ".$data->inm_transferencia['inm_ubicacion_ubicacion'], 'ISO-8859-1', 'UTF-8'),
                 0,'C');
     
             $this->pdf->SetXY(44.5, 63.5);
@@ -528,7 +529,8 @@ class _pdf{
 
             $this->pdf->SetXY(44.5,58);
             $this->pdf->MultiCell(160.5,5,
-                mb_convert_encoding((string)$data->inm_efectivo['inm_efectivo_nombre_beneficiario'], 'ISO-8859-1', 'UTF-8'),
+                mb_convert_encoding((string)$data->inm_efectivo['inm_efectivo_nombre_beneficiario']." - ".
+                    $data->inm_efectivo['inm_ubicacion_ubicacion'], 'ISO-8859-1', 'UTF-8'),
                 0,'C');
 
             $this->pdf->SetXY(44.5, 63.5);
