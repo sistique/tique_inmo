@@ -65,8 +65,8 @@ class inm_transferencia extends _modelo_parent{
 
         $data = new stdClass();
         $data->inm_transferencia = $inm_transferencia->registros[0];
-        $data->nombre_archivo = 'solicitud_gasto - '.$inm_transferencia->registros[0]['inm_transferencia_beneficiario']
-            .'.pdf';
+        $data->nombre_archivo = 'solicitud_gasto - '.
+            $inm_transferencia->registros[0]['inm_transferencia_nombre_beneficiario'] .'.pdf';
 
 
         return $data;
