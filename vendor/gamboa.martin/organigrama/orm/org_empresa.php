@@ -39,7 +39,6 @@ class org_empresa extends modelo{
 
     public function alta_bd(): array|stdClass
     {
-
         if(!isset($this->registro['org_tipo_empresa_id'])){
             $org_tipo_empresa_id = (new org_tipo_empresa(link: $this->link))->id_predeterminado();
             if(errores::$error){
