@@ -277,7 +277,6 @@ class org_empresa_html extends org_html {
             return $this->error->error(mensaje: 'Error al generar selects',data:  $selects);
         }
 
-
         $texts = $this->texts_alta(row_upd: new stdClass(), value_vacio: true);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al generar texts',data:  $texts);
@@ -652,6 +651,7 @@ class org_empresa_html extends org_html {
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al generar select', data: $select);
         }
+
         return $select;
     }
 
