@@ -479,12 +479,12 @@ class controlador_org_empresa extends empresas {
             return $this->errores->error(mensaje: 'Error al inicializar inputs',data:  $inputs);
         }
 
-
         $registro = (new org_empresa($this->link))->asigna_datos(controlador_org_empresa: $this,
             registro_id: $this->registro_id);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar datos',data:  $registro);
         }
+
         $data = new stdClass();
         $data->template = $r_modifica;
         $data->inputs = $inputs;

@@ -392,7 +392,7 @@ class org_empresa_html extends org_html {
             return $this->error->error(mensaje: 'Error cold debe ser menor o igual a  12', data: $cols);
         }
 
-        $html =$this->directivas->input_text(disabled: false, name: 'Calle', place_holder: 'Calle',
+        $html =$this->directivas->input_text(disabled: false, name: 'calle', place_holder: 'Calle',
             required: false, row_upd: $row_upd, value_vacio: $value_vacio);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al generar input', data: $html);
@@ -606,13 +606,14 @@ class org_empresa_html extends org_html {
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al inicializa datos',data:  $init);
         }
-
+        //print_r($controlador_org_empresa->row_upd);Exit;
 
         $inputs = $this->genera_inputs_modifica(controler: $controlador_org_empresa,
             link: $controlador_org_empresa->link, params: $params);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al generar inputs',data:  $inputs);
         }
+
         return $inputs;
     }
 
@@ -698,15 +699,10 @@ class org_empresa_html extends org_html {
 
     private function selects_modifica(PDO $link, stdClass $row_upd): array|stdClass
     {
-        /**
-         * @Kevin Acuña
-         * REFACTORIZAR FUNCION
-         * Centralizar una funcion que genere un select para evitar la duplicidad de codigo
-         */
         $selects = new stdClass();
 
         $select = (new cat_sat_regimen_fiscal_html(html:$this->html_base))->select_cat_sat_regimen_fiscal_id(
-            cols: 12, con_registros:true, id_selected:$row_upd->cat_sat_regimen_fiscal_id,link: $link);
+            cols: 6, con_registros:true, id_selected:$row_upd->cat_sat_regimen_fiscal_id,link: $link);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al generar select',data:  $select);
         }
@@ -719,7 +715,6 @@ class org_empresa_html extends org_html {
 
         }
 
-
         $select = (new org_tipo_empresa_html(html: $this->html_base))->select_org_tipo_empresa_id(
             cols: 12, con_registros:true, id_selected:$row_upd->org_tipo_empresa_id,link: $link);
         if(errores::$error){
@@ -730,7 +725,7 @@ class org_empresa_html extends org_html {
         $selects->org_tipo_empresa_id = $select;
 
         $select = (new cat_sat_tipo_persona_html(html: $this->html_base))->select_cat_sat_tipo_persona_id(
-            cols: 12, con_registros:true, id_selected:$row_upd->cat_sat_tipo_persona_id,link: $link);
+            cols: 6, con_registros:true, id_selected:$row_upd->cat_sat_tipo_persona_id,link: $link);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al generar select',data:  $select);
 
