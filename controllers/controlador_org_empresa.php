@@ -8,4 +8,4 @@
  */
 namespace gamboamartin\inmuebles\controllers;
 
-class controlador_org_empresa extends \gamboamartin\facturacion\controllers\controlador_org_empresa {}
+class controlador_org_empresa extends \gamboamartin\organigrama\controllers\controlador_org_empresa {}

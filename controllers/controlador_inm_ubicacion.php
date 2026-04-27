@@ -2409,15 +2409,19 @@ class controlador_inm_ubicacion extends _ctl_base {
                     header: $header, ws: $ws);
             }
 
-            foreach ($r_cheques->registros AS $cheque){
-                if(!isset($cheque['inm_cheque_numero_cheque']) || trim($cheque['inm_cheque_numero_cheque']) === ''
-                || !isset($cheque['inm_cheque_bn_cuenta_id']) || trim($cheque['inm_cheque_bn_cuenta_id']) === '1'){
+            foreach ($r_cheques->registros as $cheque) {
+                if ((int)$cheque['inm_tipo_cheque_id'] === 3) {
+                    continue;
+                }
+
+                if (empty($cheque['inm_cheque_numero_cheque']) || empty($cheque['inm_cheque_bn_cuenta_id']) ||
+                    (int)$cheque['inm_cheque_bn_cuenta_id'] === 1) {
                     $this->link->rollBack();
                     return $this->retorno_error(
-                        mensaje: 'Error hace falta especificar el numero de cheque o la cuenta del cheque con id:'.
+                        mensaje: 'Error: hace falta especificar el número de cheque o la cuenta del cheque con id: ' .
                         $cheque['inm_cheque_id'], data: $cheque, header: $header, ws: $ws);
                 }
-            }       
+            }
             
             $r_transferencias = (new inm_rel_transferencia_ubicacion(link: $this->link))->filtro_and(
                 filtro: $filtro_val);
