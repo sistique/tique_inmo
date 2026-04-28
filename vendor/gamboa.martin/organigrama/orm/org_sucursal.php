@@ -74,7 +74,6 @@ class org_sucursal extends modelo{
     public function alta_bd(): array|stdClass
     {
 
-
         $keys = array('org_empresa_id','codigo');
         $valida = $this->validacion->valida_existencia_keys(keys: $keys, registro: $this->registro);
         if(errores::$error){
@@ -100,21 +99,6 @@ class org_sucursal extends modelo{
             return $this->error->error(mensaje: 'Error al validar registro', data: $valida);
         }
 
-        if(!isset($this->registro['dp_calle_pertenece_id']) || (int)$this->registro['dp_calle_pertenece_id'] === -1){
-
-            $inserta_predeterminado = (new dp_calle_pertenece(link: $this->link))->inserta_predeterminado();
-            if(errores::$error){
-                return $this->error->error(
-                    mensaje: 'Error al  inserta_predeterminado',data:  $inserta_predeterminado);
-            }
-
-            $dp_calle_pertenece_id = (new dp_calle_pertenece(link: $this->link))->id_predeterminado();
-            if(errores::$error){
-                return $this->error->error(mensaje: 'Error al obtener dp_calle_pertenece_default',data:  $dp_calle_pertenece_id);
-            }
-            $this->registro['dp_calle_pertenece_id'] = $dp_calle_pertenece_id;
-
-        }
         if(!isset($this->registro['codigo_bis']) || $this->registro['codigo_bis'] === ''){
             $this->registro['codigo_bis'] = strtoupper($this->registro['codigo']);
 

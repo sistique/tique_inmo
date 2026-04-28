@@ -288,7 +288,7 @@ class limpieza{
 
     private function init_upd_org_empresa(controler $controler, stdClass $org_empresa): array|stdClass
     {
-        $keys_foraneas = array('dp_pais_id','dp_estado_id','dp_municipio_id','dp_cp_id','dp_colonia_postal_id',
+        $keys_foraneas = array('dp_pais_id','dp_estado_id','dp_municipio_id','dp_cp_id',
             'org_tipo_empresa_id');
 
         $init = $this->init_foraneas(keys_foraneas: $keys_foraneas,org_empresa:  $org_empresa);
@@ -306,7 +306,7 @@ class limpieza{
 
     private function init_upd_org_sucursal(controler $controler, stdClass $org_sucursal): array|stdClass
     {
-        $keys_foraneas = array('dp_pais_id','dp_estado_id','dp_municipio_id','dp_cp_id','dp_colonia_postal_id');
+        $keys_foraneas = array('dp_pais_id','dp_estado_id','dp_municipio_id','dp_cp_id');
 
         $init = $this->init_foraneas(keys_foraneas: $keys_foraneas,org_empresa:  $org_sucursal);
         if(errores::$error){
@@ -382,7 +382,7 @@ class limpieza{
      */
     private function limpia_domicilio_con_calle(array $registro): array
     {
-        $keys = array('dp_pais_id','dp_estado_id','dp_municipio_id','dp_cp_id','dp_colonia_postal_id');
+        $keys = array('dp_pais_id','dp_estado_id','dp_municipio_id','dp_cp_id');
         foreach ($keys as $key){
             if(isset($registro[$key])){
                 unset($registro[$key]);
@@ -437,7 +437,7 @@ class limpieza{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al asignar dato', data: $org_sucursal_ins);
         }
-        $org_sucursal_ins = $this->asigna_si_existe('dp_calle_pertenece_id', $org_sucursal_ins, $org_empresa_);
+        $org_sucursal_ins = $this->asigna_si_existe('dp_colonia_postal_id', $org_sucursal_ins, $org_empresa_);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al asignar dato', data: $org_sucursal_ins);
         }
@@ -450,6 +450,10 @@ class limpieza{
             return $this->error->error(mensaje: 'Error al asignar dato', data: $org_sucursal_ins);
         }
         $org_sucursal_ins = $this->asigna_si_existe('telefono_3', $org_sucursal_ins, $org_empresa_);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al asignar dato', data: $org_sucursal_ins);
+        }
+        $org_sucursal_ins = $this->asigna_si_existe('calle', $org_sucursal_ins, $org_empresa_);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al asignar dato', data: $org_sucursal_ins);
         }
