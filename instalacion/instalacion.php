@@ -4195,6 +4195,32 @@ class instalacion
         }
         $out->inm_mov_real = $inm_mov_real;
 
+        // === MÓDULO LLAVES Y REPARACIONES ===
+
+        $inm_responsable = $this->inm_responsable(link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error integrar inm_responsable', data:  $inm_responsable);
+        }
+        $out->inm_responsable = $inm_responsable;
+
+        $inm_llave = $this->inm_llave(link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error integrar inm_llave', data:  $inm_llave);
+        }
+        $out->inm_llave = $inm_llave;
+
+        $inm_llave_control = $this->inm_llave_control(link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error integrar inm_llave_control', data:  $inm_llave_control);
+        }
+        $out->inm_llave_control = $inm_llave_control;
+
+        $inm_reparacion = $this->inm_reparacion(link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error integrar inm_reparacion', data:  $inm_reparacion);
+        }
+        $out->inm_reparacion = $inm_reparacion;
+
         return $out;
 
     }
@@ -4494,6 +4520,277 @@ class instalacion
 
         return $out;
 
+    }
+
+    // =====================================================
+    // MÓDULO LLAVES Y REPARACIONES — Métodos de creación de tablas
+    // =====================================================
+
+    private function _add_inm_responsable(PDO $link): array|stdClass
+    {
+        $out = new stdClass();
+        $init = (new _instalacion(link: $link));
+
+        $create = $init->create_table_new(table: 'inm_responsable');
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar tabla', data:  $create);
+        }
+        $out->create = $create;
+
+        $columnas = new stdClass();
+
+        $columnas->tipo = new stdClass();
+        $columnas->tipo->default = '';
+
+        $columnas->telefono = new stdClass();
+        $columnas->telefono->default = '';
+
+        $add_colums = $init->add_columns(campos: $columnas, table: 'inm_responsable');
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar columnas', data:  $add_colums);
+        }
+        $out->add_colums = $add_colums;
+
+        return $out;
+    }
+
+    private function inm_responsable(PDO $link): array|stdClass
+    {
+        $out = new stdClass();
+
+        $create = $this->_add_inm_responsable(link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar tabla', data:  $create);
+        }
+        $out->create = $create;
+
+        $adm_menu_descripcion = 'Mantenimiento';
+        $adm_sistema_descripcion = 'inmuebles';
+        $etiqueta_label = 'Responsables';
+        $adm_seccion_pertenece_descripcion = 'inmuebles';
+        $adm_namespace_descripcion = 'gamboa.martin/inmuebles';
+        $adm_namespace_name = 'gamboamartin/inmuebles';
+
+        $acl = (new _adm())->integra_acl(adm_menu_descripcion: $adm_menu_descripcion,
+            adm_namespace_name: $adm_namespace_name, adm_namespace_descripcion: $adm_namespace_descripcion,
+            adm_seccion_descripcion: __FUNCTION__, adm_seccion_pertenece_descripcion: $adm_seccion_pertenece_descripcion,
+            adm_sistema_descripcion: $adm_sistema_descripcion, etiqueta_label: $etiqueta_label, link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al obtener acl', data:  $acl);
+        }
+
+        return $out;
+    }
+
+    private function _add_inm_llave(PDO $link): array|stdClass
+    {
+        $out = new stdClass();
+        $init = (new _instalacion(link: $link));
+
+        $create = $init->create_table_new(table: 'inm_llave');
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar tabla', data:  $create);
+        }
+        $out->create = $create;
+
+        $columnas = new stdClass();
+
+        $columnas->activo = new stdClass();
+        $columnas->activo->default = '1';
+
+        $add_colums = $init->add_columns(campos: $columnas, table: 'inm_llave');
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar columnas', data:  $add_colums);
+        }
+        $out->add_colums = $add_colums;
+
+        $foraneas = array();
+        $foraneas['inm_ubicacion_id'] = new stdClass();
+
+        $result = $init->foraneas(foraneas: $foraneas, table: 'inm_llave');
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al ajustar foranea', data:  $result);
+        }
+        $out->foraneas = $result;
+
+        return $out;
+    }
+
+    private function inm_llave(PDO $link): array|stdClass
+    {
+        $out = new stdClass();
+
+        $create = $this->_add_inm_llave(link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar tabla', data:  $create);
+        }
+        $out->create = $create;
+
+        $adm_menu_descripcion = 'Mantenimiento';
+        $adm_sistema_descripcion = 'inmuebles';
+        $etiqueta_label = 'Llaves';
+        $adm_seccion_pertenece_descripcion = 'inmuebles';
+        $adm_namespace_descripcion = 'gamboa.martin/inmuebles';
+        $adm_namespace_name = 'gamboamartin/inmuebles';
+
+        $acl = (new _adm())->integra_acl(adm_menu_descripcion: $adm_menu_descripcion,
+            adm_namespace_name: $adm_namespace_name, adm_namespace_descripcion: $adm_namespace_descripcion,
+            adm_seccion_descripcion: __FUNCTION__, adm_seccion_pertenece_descripcion: $adm_seccion_pertenece_descripcion,
+            adm_sistema_descripcion: $adm_sistema_descripcion, etiqueta_label: $etiqueta_label, link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al obtener acl', data:  $acl);
+        }
+
+        return $out;
+    }
+
+    private function _add_inm_llave_control(PDO $link): array|stdClass
+    {
+        $out = new stdClass();
+        $init = (new _instalacion(link: $link));
+
+        $create = $init->create_table_new(table: 'inm_llave_control');
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar tabla', data:  $create);
+        }
+        $out->create = $create;
+
+        $columnas = new stdClass();
+
+        $columnas->responsable_id = new stdClass();
+        $columnas->responsable_id->default = '0';
+
+        $columnas->fecha_entrega = new stdClass();
+        $columnas->fecha_entrega->tipo_dato = 'DATETIME';
+        $columnas->fecha_entrega->default = '1900-01-01 00:00:00';
+
+        $columnas->fecha_devolucion = new stdClass();
+        $columnas->fecha_devolucion->tipo_dato = 'DATETIME';
+        $columnas->fecha_devolucion->es_nulo = true;
+
+        $columnas->observaciones = new stdClass();
+        $columnas->observaciones->tipo_dato = 'TEXT';
+
+        $add_colums = $init->add_columns(campos: $columnas, table: 'inm_llave_control');
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar columnas', data:  $add_colums);
+        }
+        $out->add_colums = $add_colums;
+
+        $foraneas = array();
+        $foraneas['inm_llave_id'] = new stdClass();
+
+        $result = $init->foraneas(foraneas: $foraneas, table: 'inm_llave_control');
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al ajustar foranea', data:  $result);
+        }
+        $out->foraneas = $result;
+
+        return $out;
+    }
+
+    private function inm_llave_control(PDO $link): array|stdClass
+    {
+        $out = new stdClass();
+
+        $create = $this->_add_inm_llave_control(link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar tabla', data:  $create);
+        }
+        $out->create = $create;
+
+        $adm_menu_descripcion = 'Mantenimiento';
+        $adm_sistema_descripcion = 'inmuebles';
+        $etiqueta_label = 'Control de Llaves';
+        $adm_seccion_pertenece_descripcion = 'inmuebles';
+        $adm_namespace_descripcion = 'gamboa.martin/inmuebles';
+        $adm_namespace_name = 'gamboamartin/inmuebles';
+
+        $acl = (new _adm())->integra_acl(adm_menu_descripcion: $adm_menu_descripcion,
+            adm_namespace_name: $adm_namespace_name, adm_namespace_descripcion: $adm_namespace_descripcion,
+            adm_seccion_descripcion: __FUNCTION__, adm_seccion_pertenece_descripcion: $adm_seccion_pertenece_descripcion,
+            adm_sistema_descripcion: $adm_sistema_descripcion, etiqueta_label: $etiqueta_label, link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al obtener acl', data:  $acl);
+        }
+
+        return $out;
+    }
+
+    private function _add_inm_reparacion(PDO $link): array|stdClass
+    {
+        $out = new stdClass();
+        $init = (new _instalacion(link: $link));
+
+        $create = $init->create_table_new(table: 'inm_reparacion');
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar tabla', data:  $create);
+        }
+        $out->create = $create;
+
+        $columnas = new stdClass();
+
+        $columnas->responsable_id = new stdClass();
+        $columnas->responsable_id->default = '0';
+
+        $columnas->fecha_inicio = new stdClass();
+        $columnas->fecha_inicio->tipo_dato = 'DATETIME';
+        $columnas->fecha_inicio->default = '1900-01-01 00:00:00';
+
+        $columnas->fecha_fin = new stdClass();
+        $columnas->fecha_fin->tipo_dato = 'DATETIME';
+        $columnas->fecha_fin->es_nulo = true;
+
+        $columnas->estatus = new stdClass();
+        $columnas->estatus->default = 'pendiente';
+
+        $columnas->observaciones = new stdClass();
+        $columnas->observaciones->tipo_dato = 'TEXT';
+
+        $add_colums = $init->add_columns(campos: $columnas, table: 'inm_reparacion');
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar columnas', data:  $add_colums);
+        }
+        $out->add_colums = $add_colums;
+
+        $foraneas = array();
+        $foraneas['inm_ubicacion_id'] = new stdClass();
+
+        $result = $init->foraneas(foraneas: $foraneas, table: 'inm_reparacion');
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al ajustar foranea', data:  $result);
+        }
+        $out->foraneas = $result;
+
+        return $out;
+    }
+
+    private function inm_reparacion(PDO $link): array|stdClass
+    {
+        $out = new stdClass();
+
+        $create = $this->_add_inm_reparacion(link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar tabla', data:  $create);
+        }
+        $out->create = $create;
+
+        $adm_menu_descripcion = 'Mantenimiento';
+        $adm_sistema_descripcion = 'inmuebles';
+        $etiqueta_label = 'Reparaciones';
+        $adm_seccion_pertenece_descripcion = 'inmuebles';
+        $adm_namespace_descripcion = 'gamboa.martin/inmuebles';
+        $adm_namespace_name = 'gamboamartin/inmuebles';
+
+        $acl = (new _adm())->integra_acl(adm_menu_descripcion: $adm_menu_descripcion,
+            adm_namespace_name: $adm_namespace_name, adm_namespace_descripcion: $adm_namespace_descripcion,
+            adm_seccion_descripcion: __FUNCTION__, adm_seccion_pertenece_descripcion: $adm_seccion_pertenece_descripcion,
+            adm_sistema_descripcion: $adm_sistema_descripcion, etiqueta_label: $etiqueta_label, link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al obtener acl', data:  $acl);
+        }
+
+        return $out;
     }
 
 
