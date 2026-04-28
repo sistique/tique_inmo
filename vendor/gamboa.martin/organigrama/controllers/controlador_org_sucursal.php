@@ -75,7 +75,6 @@ class controlador_org_sucursal extends empresas {
         }
 
         $this->parents_verifica[] = new org_tipo_sucursal(link: $this->link);
-        $this->parents_verifica[] = new dp_calle_pertenece(link: $this->link);
         $this->parents_verifica[] = new org_empresa(link: $this->link);
 
         $this->verifica_parents_alta = true;
@@ -144,11 +143,6 @@ class controlador_org_sucursal extends empresas {
         $this->keys_selects['dp_colonia_postal_id']->filtro = array('dp_cp.id'=>$this->registro['dp_cp_id']);
         $this->keys_selects['dp_colonia_postal_id']->key_descripcion_select = 'dp_colonia_descripcion';
 
-        $this->keys_selects['dp_calle_pertenece_id']->id_selected = $this->registro['dp_calle_pertenece_id'];
-        $this->keys_selects['dp_calle_pertenece_id']->con_registros = true;
-        $this->keys_selects['dp_calle_pertenece_id']->filtro = array('dp_colonia_postal.id'=>$this->registro['dp_colonia_postal_id']);
-        $this->keys_selects['dp_calle_pertenece_id']->key_descripcion_select = 'dp_calle_descripcion';
-
         $this->keys_selects['org_empresa_id']->id_selected = $this->registro['org_empresa_id'];
         $this->keys_selects['org_empresa_id']->con_registros = true;
         $this->keys_selects['org_empresa_id']->disabled = true;
@@ -199,9 +193,6 @@ class controlador_org_sucursal extends empresas {
         $propiedades = array("label" => "Colonia Postal","con_registros"=> false);
         $datos['dp_colonia_postal_id'] = $propiedades;
 
-        $propiedades = array("label" => "Calle","con_registros"=> false);
-        $datos['dp_calle_pertenece_id'] = $propiedades;
-
         $propiedades = array("place_holder" => "Id","disabled" => true);
         $datos['id'] = $propiedades;
 
@@ -210,6 +201,9 @@ class controlador_org_sucursal extends empresas {
 
         $propiedades = array("place_holder" => "Serie");
         $datos['serie'] = $propiedades;
+
+        $propiedades = array("place_holder" => "Calle");
+        $datos['calle'] = $propiedades;
 
         $propiedades = array("place_holder" => "Exterior");
         $datos['exterior'] = $propiedades;

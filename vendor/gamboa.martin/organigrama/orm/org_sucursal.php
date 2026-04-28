@@ -25,11 +25,10 @@ use stdClass;
 class org_sucursal extends modelo{
     public function __construct(PDO $link){
         $tabla = 'org_sucursal';
-        $columnas = array($tabla=>false, 'org_empresa'=>$tabla, 'dp_calle_pertenece'=>$tabla,
-            'dp_calle' => 'dp_calle_pertenece', 'dp_colonia_postal'=>'dp_calle_pertenece',
+        $columnas = array($tabla=>false, 'org_empresa'=>$tabla, 'dp_colonia_postal'=>$tabla,
             'dp_colonia'=>'dp_colonia_postal', 'dp_cp'=>'dp_colonia_postal', 'dp_municipio'=>'dp_cp',
             'dp_estado'=>'dp_municipio','dp_pais'=>'dp_estado','org_tipo_sucursal'=>$tabla);
-        $campos_obligatorios = array('descripcion','org_empresa_id', 'org_tipo_sucursal_id','dp_calle_pertenece_id');
+        $campos_obligatorios = array('descripcion','org_empresa_id', 'org_tipo_sucursal_id','dp_colonia_postal_id');
 
         $tipo_campos['telefono_1'] = 'telefono_mx';
         $tipo_campos['telefono_2'] = 'telefono_mx';
@@ -47,12 +46,12 @@ class org_sucursal extends modelo{
         $campos_view['dp_municipio_id'] = array('type' => 'selects', 'model' => new dp_municipio($link));
         $campos_view['dp_cp_id'] = array('type' => 'selects', 'model' => new dp_cp($link));
         $campos_view['dp_colonia_postal_id'] = array('type' => 'selects', 'model' => new dp_colonia_postal($link));
-        $campos_view['dp_calle_pertenece_id'] = array('type' => 'selects', 'model' => new dp_calle_pertenece($link));
         $campos_view['org_empresa_id'] = array('type' => 'selects', 'model' => new org_empresa($link));
         $campos_view['org_tipo_sucursal_id'] = array('type' => 'selects', 'model' => new org_tipo_sucursal($link));
         $campos_view['id'] = array('type' => 'inputs');
         $campos_view['codigo'] = array('type' => 'inputs');
         $campos_view['serie'] = array('type' => 'inputs');
+        $campos_view['calle'] = array('type' => 'inputs');
         $campos_view['exterior'] = array('type' => 'inputs');
         $campos_view['interior'] = array('type' => 'inputs');
         $campos_view['telefono_1'] = array('type' => 'inputs');
