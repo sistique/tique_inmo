@@ -31,7 +31,8 @@
                                     <li id="pestanaubicacion1"><a href='javascript:cambiarPestanna(pestanasubicacion,pestanaubicacion1);'>MODIFICA</a></li>
                                     <li id="pestanaubicacion2"><a href='javascript:cambiarPestanna(pestanasubicacion,pestanaubicacion2);'>DOCUMENTOS</a></li>
                                     <li id="pestanaubicacion3"><a href='javascript:cambiarPestanna(pestanasubicacion,pestanaubicacion3);'>FOTOGRAFIAS</a></li>
-                                    <li id="pestanaubicacion4"><a href='javascript:cambiarPestanna(pestanasubicacion,pestanaubicacion4);'>ETAPA MANUAL</a></li>
+                                    <li id="pestanaubicacion4"><a href='javascript:cambiarPestanna(pestanasubicacion,pestanaubicacion4);'>REPARACION</a></li>
+                                    <li id="pestanaubicacion5"><a href='javascript:cambiarPestanna(pestanasubicacion,pestanaubicacion5);'>ETAPA MANUAL</a></li>
                                 </ul>
                             </div>
                             <div id="contenidopestanasubicacion">
@@ -264,6 +265,28 @@
                                     </form>
                                 </div>
                                 <div class="conten" id="cpestanaubicacion4">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="widget  widget-box box-container form-main widget-form-cart" id="form">
+                                                <form method="post" action="<?php echo $controlador->link_alta_reparacion; ?>" class="form-additional">
+                                                    <?php echo $controlador->inputs->inm_responsable_id; ?>
+                                                    <?php echo $controlador->inputs->fecha_reparacion; ?>
+                                                    <?php echo $controlador->inputs->observaciones_reparacion; ?>
+                                                    <?php echo $controlador->inputs->inm_ubicacion_id; ?>
+
+                                                    <?php echo $controlador->inputs->btn_action_next; ?>
+                                                    <?php echo $controlador->inputs->id_retorno; ?>
+                                                    <?php echo $controlador->inputs->seccion_retorno; ?>
+
+                                                    <?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
+                                                </form>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="conten" id="cpestanaubicacion5">
                                     <div class="row">
                                         <div class="col-lg-12">
                                             <div class="widget  widget-box box-container form-main widget-form-cart" id="form">
