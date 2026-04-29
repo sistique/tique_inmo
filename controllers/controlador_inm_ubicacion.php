@@ -2539,7 +2539,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         $params = array();
         if(isset($_GET['accion']) && $_GET['accion'] === 'proceso_ubicacion') {
             $params = array('pestana_general_actual' => 'pestanageneral1',
-                'pestana_actual' => 'pestanaubicacion4');
+                'pestana_actual' => 'pestanaubicacion5');
         }
         $link_alta_bitacora= $this->obj_link->link_alta_bd(link: $this->link, seccion: 'inm_bitacora_status_ubicacion',
             params: $params);
