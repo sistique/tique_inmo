@@ -44,6 +44,7 @@ use gamboamartin\inmuebles\models\inm_tipo_cheque;
 use gamboamartin\inmuebles\models\inm_transferencia;
 use gamboamartin\inmuebles\models\inm_ubicacion;
 use gamboamartin\inmuebles\models\inm_llave;
+use gamboamartin\inmuebles\models\inm_llave_control;
 use gamboamartin\inmuebles\html\inm_responsable_html;
 use gamboamartin\plugins\exportador;
 use gamboamartin\system\_ctl_base;
@@ -73,6 +74,7 @@ class controlador_inm_ubicacion extends _ctl_base {
     public string $link_asigna_insumos_gastos_bd = '';
     public string $link_alta_reparacion = '';
     public string $link_alta_llave = '';
+    public string $link_alta_llave_control = '';
 
     /*  */
     public string $button_inm_doc_ubicacion_descarga = '';
@@ -2714,6 +2716,22 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $this->inputs->descripcion_llave = $input_descripcion;
 
+        $fecha = $this->html->input_fecha(cols: 6, row_upd: new stdClass(), value_vacio: false, name: 'fecha_entrega',
+            place_holder: 'Fecha Inicio', value: date('Y-m-d\TH:i:s'), value_hora: true);
+        if (errores::$error) {
+            $this->retorno_error(mensaje: 'Error al generar input fecha', data: $fecha, header: $header, ws: $ws);
+        }
+
+        $this->inputs->fecha_entrega = $fecha;
+
+        $input_observaciones = $this->html->input_text(cols: 12, disabled: false, name: 'observaciones', place_holder: 'Observaciones',
+            row_upd: new stdClass(), value_vacio: false, required: false, value: "");
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $input_observaciones,  header: $header, ws: $ws);
+        }
+
+        $this->inputs->observaciones_control = $input_observaciones;
+
         $inm_ubicacion_id = $this->html->hidden(name:'inm_ubicacion_id',value: $this->registro_id);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener input',data:  $inm_ubicacion_id,  header: $header,
@@ -2721,6 +2739,14 @@ class controlador_inm_ubicacion extends _ctl_base {
         }
 
         $this->inputs->inm_ubicacion_id = $inm_ubicacion_id;
+
+        $inm_llave_id = $this->html->hidden(name:'inm_llave_id',value: "");
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $inm_llave_id,  header: $header,
+                ws: $ws);
+        }
+
+        $this->inputs->inm_llave_id = $inm_llave_id;
 
         $params = array();
         if(isset($_GET['accion']) && $_GET['accion'] === 'proceso_ubicacion') {
@@ -2737,6 +2763,26 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $registros = array();
         foreach ($r_inm_llave->registros as $inm_llave) {
+            $filtro_llave['inm_llave.id'] = $inm_llave['inm_llave_id'];
+            $r_inm_llave_control = (new inm_llave_control(link: $this->link))->filtro_and(filtro: $filtro_llave);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al obtener selector de etapa', data: $r_inm_llave_control,
+                    header: $header, ws: $ws);
+            }
+
+            $responsable = "";
+            $fecha_entrega = "";
+            $observaciones = "";
+            if($r_inm_llave_control->n_registros > 0){
+                $responsable = $r_inm_llave_control->registros[0]['inm_responsable_descripcion'];
+                $fecha_entrega = $r_inm_llave_control->registros[0]['inm_llave_control_fecha_entrega'];
+                $observaciones = $r_inm_llave_control->registros[0]['inm_llave_control_observaciones'];
+            }
+
+            $inm_llave['inm_responsable_descripcion'] = $responsable;
+            $inm_llave['inm_llave_control_fecha_entrega'] = $fecha_entrega;
+            $inm_llave['inm_llave_control_observaciones'] = $observaciones;
+
             $button = $this->html->button_href(accion: 'elimina_bd', etiqueta: 'Elimina',
                 registro_id: $inm_llave['inm_llave_id'], seccion: 'inm_llave', style: 'danger', params: $params);
             if(errores::$error){
@@ -2745,7 +2791,7 @@ class controlador_inm_ubicacion extends _ctl_base {
             }
             $inm_llave['elimina_bd'] = $button;
 
-            $check = "<input type='checkbox'  class='checkbox_reg' 
+            $check = "<input type='checkbox'  class='checkbox_llave' 
                         data-movimiento = 'llave'
                         name='llave_id' value='$inm_llave[inm_llave_id]'>";
             $inm_llave['checkbox'] = $check;
@@ -2763,6 +2809,15 @@ class controlador_inm_ubicacion extends _ctl_base {
         }
 
         $this->link_alta_llave = $link_alta_llave;
+
+        $link_alta_llave_control = $this->obj_link->link_alta_bd(link: $this->link, seccion: 'inm_llave_control',
+            params: $params);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al generar link', data: $link_alta_llave_control, header: $header,
+                ws: $ws);
+        }
+
+        $this->link_alta_llave_control = $link_alta_llave_control;
 
         $retorno = 'reparacion';
         $btn_action_next = $this->html->hidden('btn_action_next', value: $retorno);

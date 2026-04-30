@@ -305,6 +305,9 @@
 
                                                 <form method="post" action="<?php echo $controlador->link_alta_llave_control; ?>" class="form-additional form-llave-control">
                                                     <?php echo $controlador->inputs->inm_responsable_llaves_id; ?>
+                                                    <?php echo $controlador->inputs->fecha_entrega; ?>
+                                                    <?php echo $controlador->inputs->observaciones_control; ?>
+                                                    <?php echo $controlador->inputs->inm_llave_id; ?>
 
                                                     <?php echo $controlador->inputs->btn_action_next; ?>
                                                     <?php echo $controlador->inputs->id_retorno; ?>
@@ -324,6 +327,9 @@
                                                     <tr>
                                                         <th></th>
                                                         <th>Llaves</th>
+                                                        <th>Responsable</th>
+                                                        <th>Fecha Entrega</th>
+                                                        <th>Observaciones</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
@@ -333,10 +339,14 @@
                                                         <tr>
                                                             <td><?php echo $llave['checkbox'] ?></td>
                                                             <td><?php echo $llave['inm_llave_descripcion'] ?></td>
+                                                            <td><?php echo $llave['inm_responsable_descripcion'] ?></td>
+                                                            <td><?php echo $llave['inm_llave_control_fecha_entrega'] ?></td>
+                                                            <td><?php echo $llave['inm_llave_control_observaciones'] ?></td>
                                                         </tr>
                                                     <?php } ?>
                                                     </tbody>
                                                 </table>
+
                                             </div>
                                         </div>
                                     </div>

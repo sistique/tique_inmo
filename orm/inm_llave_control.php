@@ -31,6 +31,24 @@ class inm_llave_control extends _modelo_parent {
 
     public function alta_bd(array $keys_integra_ds = array('codigo', 'descripcion')): array|stdClass
     {
+        $inm_llave = (new inm_llave(link: $this->link))->registro(
+            registro_id: $this->registro['inm_llave_id']);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al insertar',data:  $inm_llave);
+        }
+
+        $inm_responsable = (new inm_responsable(link: $this->link))->registro(
+            registro_id: $this->registro['inm_responsable_id']);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al insertar',data:  $inm_responsable);
+        }
+
+        if (!isset($this->registro['descripcion'])) {
+            $descripcion = $inm_responsable['inm_responsable_descripcion'];
+            $descripcion .= ' ' .  $inm_llave['inm_llave_descripcion'];
+            $this->registro['descripcion'] = $descripcion;
+        }
+
         if (!isset($this->registro['codigo'])) {
             $descripcion = $this->registro['descripcion']. rand();
             $this->registro['codigo'] = $descripcion;

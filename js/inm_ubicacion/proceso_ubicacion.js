@@ -1008,3 +1008,24 @@ $(".contorno").droppable({
         });
     }
 });
+
+/*  Llaves  */
+
+let cont_llave = $(".form-llave");
+let cont_llave_control = $(".form-llave-control");
+let inm_llave_id = $("[name='inm_llave_id']");
+$(".checkbox_llave").on("change", function() {
+    $(".checkbox_llave").not(this).prop("checked", false);
+    let movimiento = '';
+    if ($(this).is(":checked")) {
+        let valorSeleccionado = $(this).val();
+        inm_llave_id.val(valorSeleccionado);
+
+        cont_llave.hide();
+        cont_llave_control.show();
+    } else {
+        inm_llave_id.val("");
+        cont_llave.show();
+        cont_llave_control.hide();
+    }
+});
