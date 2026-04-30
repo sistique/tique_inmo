@@ -2615,13 +2615,15 @@ class controlador_inm_ubicacion extends _ctl_base {
         }
 
         $columns_ds[] = 'inm_responsable_descripcion';
+        $filtro_resp['inm_responsable.repara'] = 'activo';
         $inm_responsable = (new inm_responsable_html(html: $this->html_base))->
         select_inm_responsable_id(cols: 6, con_registros: true, id_selected: $inm_responsable_id, link: $this->link,
-            columns_ds: $columns_ds);
+            columns_ds: $columns_ds, filtro: $filtro_resp);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al obtener selector de etapa', data: $inm_responsable,
                 header: $header, ws: $ws);
         }
+
         $this->inputs->inm_responsable_id = $inm_responsable;
 
         $fecha = $this->html->input_fecha(cols: 6, row_upd: new stdClass(), value_vacio: false, name: 'fecha_inicio',
