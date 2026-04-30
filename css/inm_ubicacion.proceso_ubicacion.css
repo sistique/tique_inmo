@@ -38,6 +38,10 @@
     display: none;
 }
 
+.form-llave-control{
+    display: none;
+}
+
 .content_btns{
     display: flex;
     width: 100%;

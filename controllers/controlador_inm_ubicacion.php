@@ -122,6 +122,7 @@ class controlador_inm_ubicacion extends _ctl_base {
     public array $efectivos = array();
     public array $fotos = array();
     public array $etapas = array();
+    public array $llaves = array();
     public array $inm_opiniones_valor = array();
     public int $n_opiniones_valor = 0;
     public float $monto_opinion_promedio = 0.0;
@@ -2695,26 +2696,10 @@ class controlador_inm_ubicacion extends _ctl_base {
             }
         }
 
-        $filtro_status['inm_ubicacion.id'] = $this->registro_id;
-        $r_inm_llave = (new inm_llave(link: $this->link))->filtro_and(filtro: $filtro_status);
-        if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al obtener selector de etapa', data: $r_inm_llave,
-                header: $header, ws: $ws);
-        }
-
-        $hoy = date('Y-m-d\TH:i:s');
-        $descripcion = "";
-        $inm_responsable_id = -1;
-        if($r_inm_llave->n_registros > 0){
-            $hoy = $r_inm_llave->registros[0]['inm_reparacion_fecha_inicio'];
-            $inm_responsable_id = $r_inm_llave->registros[0]['inm_responsable_id'];
-            $descripcion = $r_inm_llave->registros[0]['inm_reparacion_observaciones'];
-        }
-
         $columns_ds[] = 'inm_responsable_descripcion';
         $inm_responsable = (new inm_responsable_html(html: $this->html_base))->
-        select_inm_responsable_id(cols: 6, con_registros: true, id_selected: $inm_responsable_id, link: $this->link,
-            columns_ds: $columns_ds, name: 'inm_responsable_id');
+        select_inm_responsable_id(cols: 6, con_registros: true, id_selected: -1, link: $this->link,
+            columns_ds: $columns_ds);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al obtener selector de etapa', data: $inm_responsable,
                 header: $header, ws: $ws);
@@ -2722,8 +2707,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         $this->inputs->inm_responsable_llaves_id = $inm_responsable;
 
         $input_descripcion = $this->html->input_text(cols: 12, disabled: false, name: 'descripcion',
-            place_holder: 'Descripcion', row_upd: new stdClass(), value_vacio: false, required: false,
-            value: $descripcion);
+            place_holder: 'Descripcion', row_upd: new stdClass(), value_vacio: false, required: false);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener input',data:  $input_descripcion,  header: $header, ws: $ws);
         }
@@ -2743,6 +2727,33 @@ class controlador_inm_ubicacion extends _ctl_base {
             $params = array('pestana_general_actual' => 'pestanageneral1',
                 'pestana_actual' => 'pestanaubicacion4');
         }
+
+        $filtro_status['inm_ubicacion.id'] = $this->registro_id;
+        $r_inm_llave = (new inm_llave(link: $this->link))->filtro_and(filtro: $filtro_status);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener selector de etapa', data: $r_inm_llave,
+                header: $header, ws: $ws);
+        }
+
+        $registros = array();
+        foreach ($r_inm_llave->registros as $inm_llave) {
+            $button = $this->html->button_href(accion: 'elimina_bd', etiqueta: 'Elimina',
+                registro_id: $inm_llave['inm_llave_id'], seccion: 'inm_llave', style: 'danger', params: $params);
+            if(errores::$error){
+                return $this->retorno_error(mensaje: 'Error al integrar button',data:  $button,header: $header,
+                    ws:  $ws);
+            }
+            $inm_llave['elimina_bd'] = $button;
+
+            $check = "<input type='checkbox'  class='checkbox_reg' 
+                        data-movimiento = 'llave'
+                        name='llave_id' value='$inm_llave[inm_llave_id]'>";
+            $inm_llave['checkbox'] = $check;
+
+            $registros[] = $inm_llave;
+        }
+
+        $this->llaves = $registros;
 
         $link_alta_llave = $this->obj_link->link_alta_bd(link: $this->link, seccion: 'inm_llave',
             params: $params);

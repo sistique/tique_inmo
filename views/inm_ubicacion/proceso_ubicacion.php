@@ -287,12 +287,11 @@
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="conten" id="cpestanaubicacion5">
                                     <div class="row">
                                         <div class="col-lg-12">
                                             <div class="widget  widget-box box-container form-main widget-form-cart" id="form">
-                                                <form method="post" action="<?php echo $controlador->link_alta_llave; ?>" class="form-additional">
+                                                <form method="post" action="<?php echo $controlador->link_alta_llave; ?>" class="form-additional form-llave">
                                                     <?php echo $controlador->inputs->descripcion_llave; ?>
                                                     <?php //echo $controlador->inputs->inm_responsable_llaves_id; ?>
                                                     <?php echo $controlador->inputs->inm_ubicacion_id; ?>
@@ -304,8 +303,41 @@
                                                     <?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
                                                 </form>
 
-                                            </div>
+                                                <form method="post" action="<?php echo $controlador->link_alta_llave_control; ?>" class="form-additional form-llave-control">
+                                                    <?php echo $controlador->inputs->inm_responsable_llaves_id; ?>
 
+                                                    <?php echo $controlador->inputs->btn_action_next; ?>
+                                                    <?php echo $controlador->inputs->id_retorno; ?>
+                                                    <?php echo $controlador->inputs->seccion_retorno; ?>
+
+                                                    <?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="widget widget-box box-container widget-mylistings">
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th>Llaves</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <?php
+                                                    foreach ($controlador->llaves as $llave){
+                                                        ?>
+                                                        <tr>
+                                                            <td><?php echo $llave['checkbox'] ?></td>
+                                                            <td><?php echo $llave['inm_llave_descripcion'] ?></td>
+                                                        </tr>
+                                                    <?php } ?>
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
