@@ -2764,7 +2764,10 @@ class controlador_inm_ubicacion extends _ctl_base {
         $registros = array();
         foreach ($r_inm_llave->registros as $inm_llave) {
             $filtro_llave['inm_llave.id'] = $inm_llave['inm_llave_id'];
-            $r_inm_llave_control = (new inm_llave_control(link: $this->link))->filtro_and(filtro: $filtro_llave);
+            $limit = 1;
+            $order = array('inm_llave_control.fecha_entrega' => 'DESC');
+            $r_inm_llave_control = (new inm_llave_control(link: $this->link))->filtro_and(filtro: $filtro_llave,
+                limit: $limit, order: $order);
             if (errores::$error) {
                 return $this->retorno_error(mensaje: 'Error al obtener selector de etapa', data: $r_inm_llave_control,
                     header: $header, ws: $ws);
