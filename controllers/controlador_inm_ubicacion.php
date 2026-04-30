@@ -2599,7 +2599,9 @@ class controlador_inm_ubicacion extends _ctl_base {
         }
 
         $filtro_status['inm_ubicacion.id'] = $this->registro_id;
-        $r_inm_reparacion = (new inm_reparacion(link: $this->link))->filtro_and(filtro: $filtro_status);
+        $order['inm_reparacion.id'] = "DESC";
+        $r_inm_reparacion = (new inm_reparacion(link: $this->link))->filtro_and(filtro: $filtro_status, limit: 1,
+            order: $order);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al obtener selector de etapa', data: $r_inm_reparacion,
                 header: $header, ws: $ws);

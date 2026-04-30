@@ -39,7 +39,16 @@ class inm_reparacion extends _modelo_parent {
         }
 
         if($r_reparacion->n_registros > 0){
-            $registro_puro = $this->registro(registro_id: $r_reparacion->registros[0]['inm_reparacion_id'],
+            $registro['observaciones'] = $this->registro['observaciones'];
+
+            $r_modifica_bd = parent::modifica_bd(registro: $registro,
+                id: $r_reparacion->registro[0]['inm_reparacion_id'], keys_integra_ds:  $keys_integra_ds);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al modificar opinion', data: $r_modifica_bd);
+            }
+
+            return $r_modifica_bd;
+            /*$registro_puro = $this->registro(registro_id: $r_reparacion->registros[0]['inm_reparacion_id'],
                 columnas_en_bruto: true,retorno_obj: true);
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error al obtener relacion', data: $registro_puro);
@@ -53,7 +62,7 @@ class inm_reparacion extends _modelo_parent {
                 registro_original: $r_reparacion->registros[0],
                 registro_puro: $registro_puro,
                 sql: 'Registro existente'
-            );
+            );*/
         }
 
         $inm_ubicacion = (new inm_ubicacion(link: $this->link))->registro(
