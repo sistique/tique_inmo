@@ -76,6 +76,7 @@ class controlador_com_agente extends _base_sin_cod
         $init_data = array();
         $init_data['com_tipo_agente'] = "gamboamartin\\comercial";
         $init_data['adm_grupo'] = "gamboamartin\\administrador";
+        $init_data['org_sucursal'] = "gamboamartin\\organigrama";
 
         $campos_view = $this->campos_view_base(init_data: $init_data, keys: $keys);
         if (errores::$error) {
@@ -268,6 +269,14 @@ class controlador_com_agente extends _base_sin_cod
             $row->com_tipo_agente_id = $id_selected;
         }
 
+        if (!isset($row->org_sucursal_id)) {
+            $id_selected = $modelo_preferido->id_preferido_detalle(entidad_preferida: 'org_sucursal');
+            if (errores::$error) {
+                return $this->errores->error(mensaje: 'Error al maquetar id_selected', data: $id_selected);
+            }
+            $row->org_sucursal_id = $id_selected;
+        }
+
         if (!isset($row->adm_usuario_id) &&  !isset($row->adm_grupo_id)) {
             $id_selected = (new adm_grupo(link: $this->link))->id_preferido_detalle(entidad_preferida: 'adm_grupo');
             if (errores::$error) {
@@ -282,8 +291,6 @@ class controlador_com_agente extends _base_sin_cod
             $row->adm_grupo_id = $adm_usuario['adm_grupo_id'];
         }
 
-
-
         $disabled = false;
         if (in_array('com_tipo_agente_id', $disableds)) {
             $disabled = true;
@@ -296,7 +303,13 @@ class controlador_com_agente extends _base_sin_cod
         }
 
         $keys_selects = $this->init_selects(key: "adm_grupo_id", keys_selects: $keys_selects, label: "Grupo de Permisos",
-            cols: 12, disabled: $disabled, id_selected: $row->adm_grupo_id,columns_ds: array('adm_grupo_descripcion'));
+            cols: 6, disabled: $disabled, id_selected: $row->adm_grupo_id,columns_ds: array('adm_grupo_descripcion'));
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+        
+        $keys_selects = $this->init_selects(key: "org_sucursal_id", keys_selects: $keys_selects, label: "Empresa",
+            cols: 6, disabled: $disabled, id_selected: $row->org_sucursal_id,columns_ds: array('org_sucursal_descripcion'));
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }

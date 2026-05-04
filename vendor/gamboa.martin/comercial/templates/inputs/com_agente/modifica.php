@@ -2,6 +2,7 @@
 <?php use config\views; ?>
 <?php echo $controlador->inputs->com_tipo_agente_id; ?>
 <?php echo $controlador->inputs->adm_grupo_id; ?>
+<?php echo $controlador->inputs->org_sucursal_id; ?>
 <?php echo $controlador->inputs->nombre; ?>
 <?php echo $controlador->inputs->apellido_paterno; ?>
 <?php echo $controlador->inputs->apellido_materno; ?>
