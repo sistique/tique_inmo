@@ -1,3 +1,19 @@
+.top-title {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* 👈 clave */
+    gap: 10px; /* espacio entre botones y título */
+}
+
+.top-title .breadcrumb {
+    margin: 0;
+}
+
+.top-title h1 {
+    margin: 0 0 0 20px;
+}
+
+
 .chk {
     padding-left: 20px;
 }
