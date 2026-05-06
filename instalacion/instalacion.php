@@ -363,9 +363,25 @@ class instalacion
         $columnas->cuenta_agua = new stdClass();
         $columnas->n_opiniones_valor = new stdClass();
         $columnas->nivel = new stdClass();
+        $columnas->entrada = new stdClass();
+        $columnas->supermanzana = new stdClass();
+        $columnas->edificio = new stdClass();
+        $columnas->condominio = new stdClass();
         $columnas->recamaras = new stdClass();
         $columnas->metros_terreno = new stdClass();
         $columnas->metros_construccion = new stdClass();
+        $columnas->numero_notaria = new stdClass();
+        $columnas->nombre_notario = new stdClass();
+        $columnas->plaza_notaria = new stdClass();
+        $columnas->numero_escritura = new stdClass();
+        $columnas->libro = new stdClass();
+        $columnas->volumen = new stdClass();
+        $columnas->numero_credito = new stdClass();
+        $columnas->correo_mi_cuenta_infonavit = new stdClass();
+        $columnas->password_mi_cuenta_infonavit = new stdClass();
+        $columnas->calle_domicilio = new stdClass();
+        $columnas->numero_exterior_domicilio = new stdClass();
+        $columnas->numero_interior_domicilio = new stdClass();
 
         $columnas->razon_social = new stdClass();
         $columnas->razon_social->default = 'POR ASIGNAR';
@@ -402,6 +418,13 @@ class instalacion
         $foraneas['inm_prototipo_id'] = new stdClass();
         $foraneas['inm_complemento_id'] = new stdClass();
         $foraneas['inm_estado_vivienda_id'] = new stdClass();
+        $foraneas['org_sucursal_id'] = new stdClass();
+        $foraneas['inm_tipo_vivienda_id'] = new stdClass();
+        $foraneas['inm_tipo_credito_id'] = new stdClass();
+        $foraneas['dp_estado_domicilio_id'] = new stdClass();
+        $foraneas['dp_municipio_domicilio_id'] = new stdClass();
+        $foraneas['dp_cp_domicilio_id'] = new stdClass();
+        $foraneas['dp_colonia_postal_domicilio_id'] = new stdClass();
 
         $result = $init->foraneas(foraneas: $foraneas,table:  'inm_prospecto_ubicacion');
         if(errores::$error){

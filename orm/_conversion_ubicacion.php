@@ -442,7 +442,12 @@ class _conversion_ubicacion{
             'adeudo_agua', 'adeudo_luz', 'monto_devolucion', 'cuenta_agua', 'nivel', 'recamaras', 'metros_terreno',
             'metros_construccion', 'razon_social', 'rfc', 'observaciones', 'fecha_otorgamiento_credito',
             'inm_prototipo_id', 'inm_complemento_id', 'inm_estado_vivienda_id', 'lada_com', 'numero_com', 'cel_com',
-            'correo_com');
+            'correo_com', 'org_sucursal_id', 'inm_tipo_vivienda_id', 'inm_tipo_credito_id', 'numero_credito',
+            'correo_mi_cuenta_infonavit', 'password_mi_cuenta_infonavit', 'entrada', 'supermanzana', 'edificio',
+            'condominio', 'numero_notaria', 'nombre_notario', 'plaza_notaria', 'numero_escritura', 'libro', 'volumen',
+            'dp_estado_domicilio_id', 'dp_municipio_domicilio_id', 'dp_cp_domicilio_id',
+            'dp_colonia_postal_domicilio_id', 'calle_domicilio', 'numero_exterior_domicilio',
+            'numero_interior_domicilio');
     }
 
     /**
@@ -458,7 +463,12 @@ class _conversion_ubicacion{
             'monto_devolucion', 'cuenta_agua', 'nivel', 'recamaras', 'metros_terreno', 'metros_construccion',
             'razon_social', 'rfc', 'observaciones', 'fecha_otorgamiento_credito', 'inm_prototipo_id',
             'inm_complemento_id', 'inm_estado_vivienda_id', 'lada_com', 'numero_com', 'cel_com', 'correo_com',
-            'inm_status_prospecto_ubicacion_id', 'calle', 'dp_colonia_postal_id');
+            'inm_status_prospecto_ubicacion_id', 'calle', 'dp_colonia_postal_id', 'org_sucursal_id',
+            'inm_tipo_vivienda_id', 'inm_tipo_credito_id', 'numero_credito', 'correo_mi_cuenta_infonavit',
+            'password_mi_cuenta_infonavit', 'entrada', 'supermanzana', 'edificio', 'condominio', 'numero_notaria',
+            'nombre_notario', 'plaza_notaria', 'numero_escritura', 'libro', 'volumen', 'dp_estado_domicilio_id',
+            'dp_municipio_domicilio_id', 'dp_cp_domicilio_id', 'dp_colonia_postal_domicilio_id',
+            'calle_domicilio', 'numero_exterior_domicilio', 'numero_interior_domicilio');
     }
 
     /**

@@ -326,6 +326,11 @@ class _inm_prospecto_ubicacion{
      */
     private function identificadores_comercial(array $filtro): array
     {
+        $identificadores['org_sucursal_id']['title'] = 'Empresa';
+        $identificadores['org_sucursal_id']['cols'] = 12;
+        $identificadores['org_sucursal_id']['disabled'] = false;
+        $identificadores['org_sucursal_id']['columns_ds'] = array('org_sucursal_descripcion_select');
+
         $identificadores['com_agente_id']['title'] = 'Agente';
         $identificadores['com_agente_id']['cols'] = 12;
         $identificadores['com_agente_id']['disabled'] = false;
@@ -373,6 +378,12 @@ class _inm_prospecto_ubicacion{
         $identificadores['inm_estado_vivienda_id']['disabled'] = false;
         $identificadores['inm_estado_vivienda_id']['columns_ds'] = array('inm_estado_vivienda_descripcion');
 
+        $identificadores['inm_tipo_vivienda_id']['title'] = 'Tipo Vivienda';
+        $identificadores['inm_tipo_vivienda_id']['cols'] = 12;
+        $identificadores['inm_tipo_vivienda_id']['disabled'] = false;
+        $identificadores['inm_tipo_vivienda_id']['columns_ds'] = array('inm_tipo_vivienda_descripcion');
+        $identificadores['inm_tipo_vivienda_id']['required'] = false;
+
         $identificadores['dp_colonia_postal_id']['title'] = 'Colonia';
         $identificadores['dp_colonia_postal_id']['cols'] = 6;
         $identificadores['dp_colonia_postal_id']['disabled'] = false;
@@ -403,6 +414,30 @@ class _inm_prospecto_ubicacion{
         $identificadores['dp_pais_id']['cols'] = 6;
         $identificadores['dp_pais_id']['disabled'] = false;
         $identificadores['dp_pais_id']['columns_ds'] = array('dp_pais_descripcion');
+
+        $identificadores['dp_estado_domicilio_id']['title'] = 'Estado Domicilio';
+        $identificadores['dp_estado_domicilio_id']['cols'] = 6;
+        $identificadores['dp_estado_domicilio_id']['disabled'] = false;
+        $identificadores['dp_estado_domicilio_id']['columns_ds'] = array('dp_estado_descripcion');
+        $identificadores['dp_estado_domicilio_id']['required'] = false;
+
+        $identificadores['dp_municipio_domicilio_id']['title'] = 'Municipio Domicilio';
+        $identificadores['dp_municipio_domicilio_id']['cols'] = 6;
+        $identificadores['dp_municipio_domicilio_id']['disabled'] = false;
+        $identificadores['dp_municipio_domicilio_id']['columns_ds'] = array('dp_municipio_descripcion');
+        $identificadores['dp_municipio_domicilio_id']['required'] = false;
+
+        $identificadores['dp_cp_domicilio_id']['title'] = 'CP Domicilio';
+        $identificadores['dp_cp_domicilio_id']['cols'] = 6;
+        $identificadores['dp_cp_domicilio_id']['disabled'] = false;
+        $identificadores['dp_cp_domicilio_id']['columns_ds'] = array('dp_cp_codigo');
+        $identificadores['dp_cp_domicilio_id']['required'] = false;
+
+        $identificadores['dp_colonia_postal_domicilio_id']['title'] = 'Colonia Domicilio';
+        $identificadores['dp_colonia_postal_domicilio_id']['cols'] = 6;
+        $identificadores['dp_colonia_postal_domicilio_id']['disabled'] = false;
+        $identificadores['dp_colonia_postal_domicilio_id']['columns_ds'] = array('dp_colonia_descripcion');
+        $identificadores['dp_colonia_postal_domicilio_id']['required'] = false;
 
         return $identificadores;
     }
