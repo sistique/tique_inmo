@@ -17,6 +17,7 @@ use gamboamartin\comercial\models\com_direccion;
 use gamboamartin\comercial\models\com_prospecto;
 use gamboamartin\comercial\models\com_rel_agente;
 use gamboamartin\comercial\models\com_tipo_prospecto;
+use gamboamartin\direccion_postal\models\dp_pais;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_prospecto_ubicacion_html;
 use gamboamartin\inmuebles\html\inm_status_prospecto_ubicacion_html;
@@ -149,6 +150,21 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
 
         $keys_selects = array();
 
+        $filtro_pais['dp_pais.descripcion'] = 'México';
+        $r_dp_pais = (new dp_pais(link: $this->link))->filtro_and(filtro: $filtro_pais);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener pais', data: $r_dp_pais,
+                header: $header, ws: $ws);
+        }
+
+        $this->registro['dp_pais_id'] = $r_dp_pais->registros[0]['dp_pais_id'];
+        $keys_selects = (new \gamboamartin\inmuebles\controllers\_inm_prospecto_ubicacion())->keys_selects_dp(
+            controlador: $this, keys_selects:  $keys_selects);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al insertar prospecto',data:  $keys_selects,
+                header: $header, ws: $ws);
+        }
+
         $filtro_agente['adm_usuario.id'] = $_SESSION['usuario_id'];
         $r_agente = (new com_agente(link: $this->link))->filtro_and(filtro: $filtro_agente);
         if(errores::$error){
@@ -266,7 +282,8 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
             'texto_exterior', 'texto_interior', 'documentos', 'receptor', 'asunto', 'mensaje','manzana','lote',
             'cuenta_predial', 'adeudo_hipoteca','adeudo_predial', 'cuenta_agua', 'adeudo_agua',
             'adeudo_luz','monto_devolucion', 'nivel','recamaras','metros_terreno', 'metros_construccion','cp','colonia',
-            'calle','correo_mi_cuenta_infonavit','password_mi_cuenta_infonavit','numero_credito');
+            'calle','correo_mi_cuenta_infonavit','password_mi_cuenta_infonavit','numero_credito','entre_calle_1',
+            'entre_calle_2');
 
         $keys->selects = array();
 
@@ -1582,8 +1599,20 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 12, key: 'calle',
+        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'calle',
             keys_selects: $keys_selects, place_holder: 'Calle', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'entre_calle_1',
+            keys_selects: $keys_selects, place_holder: 'Entre Calle 1', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'entre_calle_2',
+            keys_selects: $keys_selects, place_holder: 'Entre Calle 2', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }

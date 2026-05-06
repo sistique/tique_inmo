@@ -201,7 +201,7 @@ class _inm_prospecto_ubicacion{
      * @param array $keys_selects parametros previos cargados
      * @return array
      */
-    private function genera_keys_selects(controlador_inm_prospecto|controlador_inm_prospecto_ubicacion $controlador, array $identificadores,
+    private function genera_keys_selects(controlador_inm_prospecto_ubicacion $controlador, array $identificadores,
                                          array $keys_selects): array
     {
         foreach ($identificadores as $identificador=>$data){
@@ -374,7 +374,7 @@ class _inm_prospecto_ubicacion{
         $identificadores['inm_estado_vivienda_id']['columns_ds'] = array('inm_estado_vivienda_descripcion');
 
         $identificadores['dp_colonia_postal_id']['title'] = 'Colonia';
-        $identificadores['dp_colonia_postal_id']['cols'] = 12;
+        $identificadores['dp_colonia_postal_id']['cols'] = 6;
         $identificadores['dp_colonia_postal_id']['disabled'] = false;
         $identificadores['dp_colonia_postal_id']['columns_ds'] = array('dp_colonia_descripcion');
         $identificadores['dp_colonia_postal_id']['con_registros'] = false;
@@ -412,7 +412,7 @@ class _inm_prospecto_ubicacion{
      * @param controlador_inm_prospecto $controlador Controlador en ejecucion
      * @return array
      */
-    private function identificadores_dp(controlador_inm_prospecto $controlador): array
+    private function identificadores_dp(controlador_inm_prospecto_ubicacion $controlador): array
     {
         $row = $controlador->registro;
         $keys = array('dp_pais_id','dp_estado_id','dp_municipio_id','dp_cp_id','dp_colonia_postal_id');
@@ -813,7 +813,7 @@ class _inm_prospecto_ubicacion{
      * @param array $keys_selects Parametros cargados previamente
      * @return array
      */
-    private function keys_selects_dp(controlador_inm_prospecto $controlador, array $keys_selects): array
+    public function keys_selects_dp(controlador_inm_prospecto_ubicacion $controlador, array $keys_selects): array
     {
 
         $identificadores = $this->identificadores_dp(controlador: $controlador);

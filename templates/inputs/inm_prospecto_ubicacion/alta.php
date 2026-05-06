@@ -11,6 +11,18 @@
 <?php echo $controlador->inputs->cel_com; ?>
 <?php echo $controlador->inputs->correo_com; ?>
 <?php echo $controlador->inputs->razon_social; ?>
+
+<?php echo $controlador->inputs->dp_pais_id; ?>
+<?php echo $controlador->inputs->dp_estado_id; ?>
+<?php echo $controlador->inputs->dp_municipio_id; ?>
+<?php echo $controlador->inputs->dp_cp_id; ?>
+<?php echo $controlador->inputs->dp_colonia_postal_id; ?>
+<?php echo $controlador->inputs->calle; ?>
+<?php echo $controlador->inputs->numero_exterior; ?>
+<?php echo $controlador->inputs->numero_interior; ?>
+<?php echo $controlador->inputs->entre_calle_1; ?>
+<?php echo $controlador->inputs->entre_calle_2; ?>
+
 <?php echo $controlador->inputs->observaciones; ?>
 
 <?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
