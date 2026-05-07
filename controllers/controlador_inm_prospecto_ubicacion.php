@@ -185,7 +185,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
             $com_agente_id = $r_agente->registros[0]['com_agente_id'];
         }
 
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro: $filtro_agente_sel, key: 'com_agente_id',
+        $keys_selects = $this->key_select(cols:4, con_registros: true,filtro: $filtro_agente_sel, key: 'com_agente_id',
             keys_selects:$keys_selects, id_selected: $com_agente_id, label: 'Agente');
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects', data: $keys_selects,
@@ -200,7 +200,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
             $org_sucursal_id = $r_agente->registros[0]['org_sucursal_id'];
         }
 
-        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro: $filtro_sucursal_sel, key: 'org_sucursal_id',
+        $keys_selects = $this->key_select(cols:4, con_registros: true,filtro: $filtro_sucursal_sel, key: 'org_sucursal_id',
             keys_selects:$keys_selects, id_selected: $org_sucursal_id, label: 'Empresa');
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects', data: $keys_selects,
@@ -219,7 +219,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         if($com_tipo_prospecto_reg->n_registros > 0){
             $com_tipo_prospecto_id = $com_tipo_prospecto_reg->registros[0]['com_tipo_prospecto_id'];
         }
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro: $filtro_tipo,
+        $keys_selects = $this->key_select(cols:4, con_registros: true,filtro: $filtro_tipo,
             key: 'com_tipo_prospecto_id', keys_selects:$keys_selects, id_selected: $com_tipo_prospecto_id,
             label: 'Tipo de prospecto');
         if(errores::$error){
@@ -1502,7 +1502,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
-        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'lada_com',
+        $keys_selects = (new init())->key_select_txt(cols: 3, key: 'lada_com',
             keys_selects: $keys_selects, place_holder: 'Lada', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
@@ -1530,7 +1530,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
 
         $keys_selects['lada_com']->regex = $this->validacion->patterns['lada_html'];
 
-        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'numero_com',
+        $keys_selects = (new init())->key_select_txt(cols: 3, key: 'numero_com',
             keys_selects: $keys_selects, place_holder: 'Numero', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
@@ -1538,7 +1538,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
 
         $keys_selects['numero_com']->regex = $this->validacion->patterns['tel_sin_lada_html'];
 
-        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'cel_com',
+        $keys_selects = (new init())->key_select_txt(cols: 3, key: 'cel_com',
             keys_selects: $keys_selects, place_holder: 'Cel', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
@@ -1546,7 +1546,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
 
         $keys_selects['cel_com']->regex = $this->validacion->patterns['telefono_mx_html'];
 
-        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'correo_com',
+        $keys_selects = (new init())->key_select_txt(cols: 3, key: 'correo_com',
             keys_selects: $keys_selects, place_holder: 'Correo', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
