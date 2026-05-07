@@ -91,11 +91,6 @@ let dp_municipio_domicilio_id = -1;
 let dp_cp_domicilio_id = -1;
 let dp_colonia_postal_domicilio_id = -1;
 
-sl_dp_estado_domicilio_id.change(function(){
-    dp_estado_domicilio_id = $(this).val();
-    dp_asigna_municipios_domicilio(dp_estado_domicilio_id, '','#dp_municipio_domicilio_id');
-});
-
 sl_dp_municipio_domicilio_id.change(function(){
     dp_municipio_domicilio_id = sl_dp_municipio_domicilio_id.val();
     dp_asigna_cps_domicilio(dp_municipio_domicilio_id,'','#dp_cp_domicilio_id');

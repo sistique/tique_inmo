@@ -154,14 +154,16 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
 
         $keys_selects = array();
 
-        $filtro_pais['dp_pais.descripcion'] = 'México';
-        $r_dp_pais = (new dp_pais(link: $this->link))->filtro_and(filtro: $filtro_pais);
+        $filtro_estado['dp_estado.descripcion'] = 'Jalisco';
+        $r_dp_estado = (new dp_estado(link: $this->link))->filtro_and(filtro: $filtro_estado);
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener pais', data: $r_dp_pais,
+            return $this->retorno_error(mensaje: 'Error al obtener estado', data: $r_dp_estado,
                 header: $header, ws: $ws);
         }
 
-        $this->registro['dp_pais_id'] = $r_dp_pais->registros[0]['dp_pais_id'];
+        $this->registro['dp_estado_id'] = $r_dp_estado->registros[0]['dp_estado_id'];
+        $this->registro['dp_pais_id'] = $r_dp_estado->registros[0]['dp_pais_id'];
+
         $keys_selects = (new \gamboamartin\inmuebles\controllers\_inm_prospecto_ubicacion())->keys_selects_dp(
             controlador: $this, keys_selects:  $keys_selects);
         if(errores::$error){

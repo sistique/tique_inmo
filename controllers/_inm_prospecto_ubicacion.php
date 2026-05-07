@@ -327,12 +327,12 @@ class _inm_prospecto_ubicacion{
     private function identificadores_comercial(array $filtro): array
     {
         $identificadores['org_sucursal_id']['title'] = 'Empresa';
-        $identificadores['org_sucursal_id']['cols'] = 12;
+        $identificadores['org_sucursal_id']['cols'] = 6;
         $identificadores['org_sucursal_id']['disabled'] = false;
         $identificadores['org_sucursal_id']['columns_ds'] = array('org_sucursal_descripcion_select');
 
         $identificadores['com_agente_id']['title'] = 'Agente';
-        $identificadores['com_agente_id']['cols'] = 12;
+        $identificadores['com_agente_id']['cols'] = 6;
         $identificadores['com_agente_id']['disabled'] = false;
         $identificadores['com_agente_id']['filtro'] = $filtro;
         $identificadores['com_agente_id']['columns_ds'] = array();
@@ -446,6 +446,7 @@ class _inm_prospecto_ubicacion{
         $identificadores['dp_estado_id']['disabled'] = false;
         $identificadores['dp_estado_id']['filtro'] = $filtro;
         $identificadores['dp_estado_id']['columns_ds'] =  array('dp_estado_descripcion');
+        $identificadores['dp_estado_id']['con_registros'] = true;
 
         $filtro = array();
         $filtro['dp_estado.id'] = $row['dp_estado_id'];
@@ -471,13 +472,6 @@ class _inm_prospecto_ubicacion{
         $identificadores['dp_colonia_postal_id']['filtro'] = $filtro;
         $identificadores['dp_colonia_postal_id']['columns_ds'] =  array('dp_colonia_descripcion');
 
-        $filtro = array();
-        $filtro['dp_colonia_postal.id'] = $row['dp_colonia_postal_id'];
-        $identificadores['dp_calle_pertenece_id']['title'] = 'Calle';
-        $identificadores['dp_calle_pertenece_id']['cols'] = 6;
-        $identificadores['dp_calle_pertenece_id']['disabled'] = false;
-        $identificadores['dp_calle_pertenece_id']['filtro'] = $filtro;
-        $identificadores['dp_calle_pertenece_id']['columns_ds'] = array('dp_calle_descripcion');
         return $identificadores;
     }
 
