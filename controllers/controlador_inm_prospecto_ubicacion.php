@@ -17,6 +17,10 @@ use gamboamartin\comercial\models\com_direccion;
 use gamboamartin\comercial\models\com_prospecto;
 use gamboamartin\comercial\models\com_rel_agente;
 use gamboamartin\comercial\models\com_tipo_prospecto;
+use gamboamartin\direccion_postal\models\dp_colonia_postal;
+use gamboamartin\direccion_postal\models\dp_cp;
+use gamboamartin\direccion_postal\models\dp_estado;
+use gamboamartin\direccion_postal\models\dp_municipio;
 use gamboamartin\direccion_postal\models\dp_pais;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_prospecto_ubicacion_html;
@@ -1999,6 +2003,126 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         }
 
         $this->keys_selects = array_merge($keys_selects, $this->keys_selects);
+
+
+        $filtro_ubi['inm_prospecto_ubicacion.id'] = $this->registro_id;
+
+        $extra_join['dp_colonia_postal'] = array(
+            'key' => 'id',
+            'enlace' => 'inm_prospecto_ubicacion',
+            'key_enlace' => 'dp_colonia_postal_domicilio_id',
+            'renombre' => 'dp_colonia_postal_domicilio');
+
+        $extra_join['dp_cp'] = array(
+            'key' => 'id',
+            'enlace' => 'dp_colonia_postal_domicilio',
+            'key_enlace' => 'dp_cp_id',
+            'renombre' => 'dp_cp_domicilio');
+
+        $extra_join['dp_colonia'] = array(
+            'key' => 'id',
+            'enlace' => 'dp_colonia_postal_domicilio',
+            'key_enlace' => 'dp_colonia_id',
+            'renombre' => 'dp_colonia_domicilio');
+
+        $extra_join['dp_municipio'] = array(
+            'key' => 'id',
+            'enlace' => 'dp_cp_domicilio',
+            'key_enlace' => 'dp_municipio_id',
+            'renombre' => 'dp_municipio_domicilio');
+
+        $extra_join['dp_estado'] = array(
+            'key' => 'id',
+            'enlace' => 'dp_municipio_domicilio',
+            'key_enlace' => 'dp_estado_id',
+            'renombre' => 'dp_estado_domicilio');
+
+        $extra_join['dp_pais'] = array(
+            'key' => 'id',
+            'enlace' => 'dp_estado_domicilio',
+            'key_enlace' => 'dp_pais_id',
+            'renombre' => 'dp_pais_domicilio');
+
+        $data_row = $this->modelo->filtro_and(extra_join: $extra_join, filtro: $filtro_ubi,);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener registro',data:  $data_row,header: $header,ws: $ws);
+        }
+
+        $data_row = $data_row->registros_obj[0];
+
+        $modelo = new dp_estado(link: $this->link);
+        $columns_ds = array('dp_estado_descripcion');
+        $dp_estado_domicilio_id = $this->html->select_catalogo(cols: 6, con_registros: true,
+            id_selected: $data_row->dp_estado_domicilio_id, modelo: $modelo,
+            columns_ds: $columns_ds, id_css: 'dp_estado_domicilio_id',
+            label: 'Estado Domicilio', name: 'dp_estado_domicilio_id');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $dp_estado_domicilio_id,header: $header,
+                ws:$ws);
+        }
+
+        $this->inputs->dp_estado_domicilio_id = $dp_estado_domicilio_id;
+
+        $modelo = new dp_municipio(link: $this->link);
+        $columns_ds = array('dp_municipio_descripcion');
+
+        $filtro_select = array();
+        $con_registro = false;
+        if($data_row->dp_estado_domicilio_id){
+            $filtro_select['dp_estado.id'] = $data_row->dp_estado_domicilio_id;
+            $con_registro = true;
+        }
+        $dp_municipio_domicilio_id = $this->html->select_catalogo(cols: 6, con_registros: $con_registro,
+            id_selected: $data_row->dp_municipio_domicilio_id, modelo: $modelo,
+            columns_ds: $columns_ds, filtro: $filtro_select,
+            id_css: 'dp_municipio_domicilio_id', label: 'Municipio Domicilio', name: 'dp_municipio_domicilio_id');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $dp_municipio_domicilio_id,header: $header,
+                ws:$ws);
+        }
+
+        $this->inputs->dp_municipio_domicilio_id = $dp_municipio_domicilio_id;
+
+        $modelo = new dp_cp(link: $this->link);
+        $columns_ds = array('dp_cp_descripcion');
+
+        $filtro_select = array();
+        $con_registro = false;
+        if($data_row->dp_municipio_domicilio_id){
+            $filtro_select['dp_municipio.id'] = $data_row->dp_municipio_domicilio_id;
+            $con_registro = true;
+        }
+        $dp_cp_domicilio_id = $this->html->select_catalogo(cols: 6, con_registros: $con_registro,
+            id_selected: $data_row->dp_cp_domicilio_id, modelo: $modelo,
+            columns_ds: $columns_ds, filtro: $filtro_select,
+            id_css: 'dp_cp_domicilio_id', label: 'CP Domicilio', name: 'dp_cp_domicilio_id');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $dp_cp_domicilio_id,header: $header,
+                ws:$ws);
+        }
+
+        $this->inputs->dp_cp_domicilio_id = $dp_cp_domicilio_id;
+
+        $modelo = new dp_colonia_postal(link: $this->link);
+        $columns_ds = array('dp_colonia_descripcion');
+
+        $filtro_select = array();
+        $con_registro = false;
+        if($data_row->dp_cp_domicilio_id){
+            $filtro_select['dp_cp.id'] = $data_row->dp_cp_domicilio_id;
+            $con_registro = true;
+        }
+        $dp_colonia_postal_domicilio_id = $this->html->select_catalogo(cols: 6, con_registros: $con_registro,
+            id_selected: $data_row->dp_colonia_postal_domicilio_id, modelo: $modelo,
+            columns_ds: $columns_ds, filtro: $filtro_select,
+            id_css: 'dp_colonia_postal_domicilio_id', label: 'Colonia Domicilio', name: 'dp_colonia_postal_domicilio_id');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $dp_colonia_postal_domicilio_id,header: $header,
+                ws:$ws);
+        }
+
+        $this->inputs->dp_colonia_postal_domicilio_id = $dp_colonia_postal_domicilio_id;
 
         return $r_modifica;
     }

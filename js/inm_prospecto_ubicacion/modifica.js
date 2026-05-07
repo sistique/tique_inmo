@@ -81,6 +81,102 @@ let sl_com_tipo_direccion_id = $("#com_tipo_direccion_id");
 let texto_exterior = $("#texto_exterior");
 let texto_interior = $("#texto_interior");
 
+let sl_dp_estado_domicilio_id = $("#dp_estado_domicilio_id");
+let sl_dp_municipio_domicilio_id = $("#dp_municipio_domicilio_id");
+let sl_dp_cp_domicilio_id = $("#dp_cp_domicilio_id");
+let sl_dp_colonia_postal_domicilio_id = $("#dp_colonia_postal_domicilio_id");
+
+let dp_estado_domicilio_id = -1;
+let dp_municipio_domicilio_id = -1;
+let dp_cp_domicilio_id = -1;
+let dp_colonia_postal_domicilio_id = -1;
+
+sl_dp_estado_domicilio_id.change(function(){
+    dp_estado_domicilio_id = $(this).val();
+    dp_asigna_municipios_domicilio(dp_estado_domicilio_id, '','#dp_municipio_domicilio_id');
+});
+
+sl_dp_municipio_domicilio_id.change(function(){
+    dp_municipio_domicilio_id = sl_dp_municipio_domicilio_id.val();
+    dp_asigna_cps_domicilio(dp_municipio_domicilio_id,'','#dp_cp_domicilio_id');
+});
+
+sl_dp_cp_domicilio_id.change(function(){
+    dp_cp_domicilio_id = sl_dp_cp_domicilio_id.val();
+    dp_asigna_colonias_postales_domicilio(dp_cp_domicilio_id,'','#dp_colonia_postal_domicilio_id');
+});
+
+function dp_asigna_municipios_domicilio(dp_estado_id = '', dp_municipio_id = '', selector = "#dp_municipio_id") {
+
+    let sl_dp_municipio_id = $(selector);
+
+    let url = "index.php?seccion=dp_municipio&ws=1&accion=get_municipio&dp_estado_id=" + dp_estado_id + "&session_id=" + session_id;
+
+    $.ajax({
+        type: 'GET',
+        url: url,
+    }).done(function (data) {  // Función que se ejecuta si todo ha ido bien
+        console.log(data);
+        sl_dp_municipio_id.empty();
+
+        integra_new_option(selector, 'Seleccione un municipio', '-1');
+
+        $.each(data.registros, function (index, dp_municipio) {
+            integra_new_option(selector, dp_municipio.dp_municipio_descripcion, dp_municipio.dp_municipio_id);
+        });
+        sl_dp_municipio_id.val(dp_municipio_id);
+        sl_dp_municipio_id.selectpicker('refresh');
+    }).fail(function (jqXHR, textStatus, errorThrown) { // Función que se ejecuta si algo ha ido mal
+        alert('Error al ejecutar');
+        console.log("The following error occured: " + textStatus + " " + errorThrown);
+    });
+
+}
+
+function dp_asigna_cps_domicilio(dp_municipio_id = '',dp_cp_id = '', selector = "#dp_cp_id"){
+
+    let sl_dp_cp_id = $(selector);
+
+    let url = "index.php?seccion=dp_cp&ws=1&accion=get_cp&dp_municipio_id="+dp_municipio_id+"&session_id="+session_id;
+    $.ajax({
+        type: 'GET',
+        url: url,
+    }).done(function( data ) {  // Función que se ejecuta si todo ha ido bien
+        console.log(data);
+        sl_dp_cp_id.empty();
+        integra_new_option(selector,'Seleccione un cp','-1');
+        $.each(data.registros, function( index, dp_cp ) {
+            integra_new_option(selector,dp_cp.dp_cp_descripcion,dp_cp.dp_cp_id);
+        });
+        sl_dp_cp_id.val(dp_cp_id);
+        sl_dp_cp_id.selectpicker('refresh');
+    }).fail(function (jqXHR, textStatus, errorThrown){ // Función que se ejecuta si algo ha ido mal
+        alert('Error al ejecutar');
+    });
+}
+
+function dp_asigna_colonias_postales_domicilio(dp_cp_id = '',dp_colonia_postal_id = '', selector="#dp_colonia_postal_id"){
+
+    let sl_dp_colonia_postal_id = $(selector);
+
+    let url = "index.php?seccion=dp_colonia_postal&ws=1&accion=get_colonia_postal&dp_cp_id="+dp_cp_id+"&session_id="+session_id;
+    $.ajax({
+        type: 'GET',
+        url: url,
+    }).done(function( data ) {  // Función que se ejecuta si todo ha ido bien
+        console.log(data);
+        sl_dp_colonia_postal_id.empty();
+        integra_new_option(selector,'Seleccione una colonia','-1');
+        $.each(data.registros, function( index, dp_colonia_postal ) {
+            integra_new_option(selector,dp_colonia_postal.dp_colonia_descripcion,dp_colonia_postal.dp_colonia_postal_id);
+        });
+        sl_dp_colonia_postal_id.val(dp_colonia_postal_id);
+        sl_dp_colonia_postal_id.selectpicker('refresh');
+    }).fail(function (jqXHR, textStatus, errorThrown){ // Función que se ejecuta si algo ha ido mal
+        alert('Error al ejecutar');
+    });
+}
+
 btn_inserta_beneficiario.click(function () {
     let url = "index.php?seccion=inm_prospecto&ws=1&accion=inserta_beneficiario&registro_id=" + registro_id + "&session_id=" + session_id;
 
