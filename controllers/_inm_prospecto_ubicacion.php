@@ -358,7 +358,7 @@ class _inm_prospecto_ubicacion{
         $identificadores['com_tipo_direccion_id']['columns_ds'] = array('com_tipo_direccion_descripcion');
 
         $identificadores['inm_prototipo_id']['title'] = 'Prototipo';
-        $identificadores['inm_prototipo_id']['cols'] = 12;
+        $identificadores['inm_prototipo_id']['cols'] = 6;
         $identificadores['inm_prototipo_id']['disabled'] = false;
         $identificadores['inm_prototipo_id']['columns_ds'] = array('inm_prototipo_descripcion');
         
@@ -369,17 +369,17 @@ class _inm_prospecto_ubicacion{
         $identificadores['inm_tipo_credito_id']['required'] = false;
 
         $identificadores['inm_complemento_id']['title'] = 'Complemento';
-        $identificadores['inm_complemento_id']['cols'] = 12;
+        $identificadores['inm_complemento_id']['cols'] = 6;
         $identificadores['inm_complemento_id']['disabled'] = false;
         $identificadores['inm_complemento_id']['columns_ds'] = array('inm_complemento_descripcion');
 
         $identificadores['inm_estado_vivienda_id']['title'] = 'Estado Vivienda';
-        $identificadores['inm_estado_vivienda_id']['cols'] = 12;
+        $identificadores['inm_estado_vivienda_id']['cols'] = 6;
         $identificadores['inm_estado_vivienda_id']['disabled'] = false;
         $identificadores['inm_estado_vivienda_id']['columns_ds'] = array('inm_estado_vivienda_descripcion');
 
         $identificadores['inm_tipo_vivienda_id']['title'] = 'Tipo Vivienda';
-        $identificadores['inm_tipo_vivienda_id']['cols'] = 12;
+        $identificadores['inm_tipo_vivienda_id']['cols'] = 6;
         $identificadores['inm_tipo_vivienda_id']['disabled'] = false;
         $identificadores['inm_tipo_vivienda_id']['columns_ds'] = array('inm_tipo_vivienda_descripcion');
         $identificadores['inm_tipo_vivienda_id']['required'] = false;
