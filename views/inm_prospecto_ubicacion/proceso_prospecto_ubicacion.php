@@ -8,7 +8,7 @@
 
             <div class="col-lg-12">
                 <?php include (new views())->ruta_templates."head/title.php"; ?>
-                <?php include (new views())->ruta_templates."head/subtitulo.php"; ?>
+                <?php //include (new views())->ruta_templates."head/subtitulo.php"; ?>
                 <?php include (new views())->ruta_templates."mensajes.php"; ?>
                 <div class="widget  widget-box box-container form-main widget-form-cart" id="form">
 
@@ -50,14 +50,24 @@
 
                                                     <?php echo $controlador->header_frontend->apartado_1; ?>
                                                     <div id="apartado_1">
-                                                        <?php echo $controlador->inputs->com_agente_id; ?>
-                                                        <?php echo $controlador->inputs->nombre; ?>
-                                                        <?php echo $controlador->inputs->apellido_paterno; ?>
-                                                        <?php echo $controlador->inputs->apellido_materno; ?>
-                                                        <?php echo $controlador->inputs->nss; ?>
-                                                        <?php echo $controlador->inputs->curp; ?>
-                                                        <?php echo $controlador->inputs->rfc; ?>
-                                                        <?php echo $controlador->inputs->observaciones; ?>
+                                                    <?php echo $controlador->inputs->org_sucursal_id; ?>
+                                                    <?php echo $controlador->inputs->com_agente_id; ?>
+                                                    <?php echo $controlador->inputs->nombre; ?>
+                                                    <?php echo $controlador->inputs->apellido_paterno; ?>
+                                                    <?php echo $controlador->inputs->apellido_materno; ?>
+                                                    <?php echo $controlador->inputs->razon_social; ?>
+
+                                                    <?php echo $controlador->inputs->nss; ?>
+                                                    <?php echo $controlador->inputs->curp; ?>
+                                                    <?php echo $controlador->inputs->rfc; ?>
+                                                    <?php echo $controlador->inputs->dp_estado_domicilio_id; ?>
+                                                    <?php echo $controlador->inputs->dp_municipio_domicilio_id; ?>
+                                                    <?php echo $controlador->inputs->dp_cp_domicilio_id; ?>
+                                                    <?php echo $controlador->inputs->dp_colonia_postal_domicilio_id; ?>
+                                                    <?php echo $controlador->inputs->calle_domicilio; ?>
+                                                    <?php echo $controlador->inputs->numero_exterior_domicilio; ?>
+                                                    <?php echo $controlador->inputs->numero_interior_domicilio; ?>
+                                                    <?php echo $controlador->inputs->observaciones; ?>
                                                         <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
 
                                                     </div>
@@ -68,34 +78,47 @@
                                                         <?php echo $controlador->inputs->numero_com; ?>
                                                         <?php echo $controlador->inputs->cel_com; ?>
                                                         <?php echo $controlador->inputs->correo_com; ?>
-                                                        <?php echo $controlador->inputs->razon_social; ?>
                                                         <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
 
                                                     </div>
 
                                                     <?php echo $controlador->header_frontend->apartado_3; ?>
                                                     <div id="apartado_3">
-                                                        <?php echo $controlador->inputs->dp_pais_id; ?>
-                                                        <?php echo $controlador->inputs->dp_estado_id; ?>
-                                                        <?php echo $controlador->inputs->dp_municipio_id; ?>
-                                                        <?php echo $controlador->inputs->dp_cp_id; ?>
-                                                        <?php echo $controlador->inputs->dp_colonia_postal_id; ?>
-                                                        <?php echo $controlador->inputs->calle; ?>
-                                                        <?php echo $controlador->inputs->numero_exterior; ?>
-                                                        <?php echo $controlador->inputs->numero_interior; ?>
-                                                        <?php echo $controlador->inputs->entre_calle_1; ?>
-                                                        <?php echo $controlador->inputs->entre_calle_2; ?>
+                                                    <?php echo $controlador->inputs->dp_pais_id; ?>
+                                                    <?php echo $controlador->inputs->dp_estado_id; ?>
+                                                    <?php echo $controlador->inputs->dp_municipio_id; ?>
+                                                    <?php echo $controlador->inputs->dp_cp_id; ?>
+                                                    <?php echo $controlador->inputs->dp_colonia_postal_id; ?>
+                                                    <?php echo $controlador->inputs->dp_calle_pertenece_id; ?>
+                                                    <?php echo $controlador->inputs->calle; ?>
+                                                    <?php echo $controlador->inputs->numero_exterior; ?>
+                                                    <?php echo $controlador->inputs->numero_interior; ?>
+                                                    <?php echo $controlador->inputs->entre_calle_1; ?>
+                                                    <?php echo $controlador->inputs->entre_calle_2; ?>
 
-                                                        <?php echo $controlador->inputs->inm_estado_vivienda_id; ?>
-                                                        <?php echo $controlador->inputs->fecha_otorgamiento_credito; ?>
-                                                        <?php echo $controlador->inputs->inm_prototipo_id; ?>
-                                                        <?php echo $controlador->inputs->inm_complemento_id; ?>
-                                                        <?php echo $controlador->inputs->manzana; ?>
-                                                        <?php echo $controlador->inputs->lote; ?>
-                                                        <?php echo $controlador->inputs->nivel; ?>
-                                                        <?php echo $controlador->inputs->recamaras; ?>
-                                                        <?php echo $controlador->inputs->metros_terreno; ?>
-                                                        <?php echo $controlador->inputs->metros_construccion; ?>
+                                                    <?php echo $controlador->inputs->inm_tipo_vivienda_id; ?>
+                                                    <?php echo $controlador->inputs->inm_estado_vivienda_id; ?>
+                                                    <?php echo $controlador->inputs->fecha_otorgamiento_credito; ?>
+                                                    <?php echo $controlador->inputs->inm_prototipo_id; ?>
+                                                    <?php echo $controlador->inputs->inm_complemento_id; ?>
+                                                    <?php echo $controlador->inputs->manzana; ?>
+                                                    <?php echo $controlador->inputs->lote; ?>
+                                                    <?php echo $controlador->inputs->nivel; ?>
+                                                    <?php echo $controlador->inputs->entrada; ?>
+                                                    <?php echo $controlador->inputs->supermanzana; ?>
+                                                    <?php echo $controlador->inputs->edificio; ?>
+                                                    <?php echo $controlador->inputs->condominio; ?>
+                                                    <?php echo $controlador->inputs->etapa; ?>
+                                                    <?php echo $controlador->inputs->recamaras; ?>
+                                                    <?php echo $controlador->inputs->metros_terreno; ?>
+                                                    <?php echo $controlador->inputs->metros_construccion; ?>
+
+                                                    <?php echo $controlador->inputs->numero_notaria; ?>
+                                                    <?php echo $controlador->inputs->nombre_notario; ?>
+                                                    <?php echo $controlador->inputs->plaza_notaria; ?>
+                                                    <?php echo $controlador->inputs->numero_escritura; ?>
+                                                    <?php echo $controlador->inputs->libro; ?>
+                                                    <?php echo $controlador->inputs->volumen; ?>
 
                                                         <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
                                                     </div>
