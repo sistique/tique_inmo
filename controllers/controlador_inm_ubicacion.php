@@ -46,6 +46,7 @@ use gamboamartin\inmuebles\models\inm_ubicacion;
 use gamboamartin\inmuebles\models\inm_llave;
 use gamboamartin\inmuebles\models\inm_llave_control;
 use gamboamartin\inmuebles\html\inm_responsable_html;
+use gamboamartin\gastos\models\gt_proveedor;
 use gamboamartin\plugins\exportador;
 use gamboamartin\system\_ctl_base;
 use gamboamartin\system\links_menu;
@@ -143,7 +144,7 @@ class controlador_inm_ubicacion extends _ctl_base {
     public float $total_asignado_ubicacion = 0.0;
     public string $fecha_desde_filtro = '';
     public string $fecha_hasta_filtro = '';
-
+    public string $gt_proveedor_id_filtro = '';
     public function __construct(PDO      $link, html $html = new \gamboamartin\template_1\html(),
                                 stdClass $paths_conf = new stdClass())
     {
@@ -248,6 +249,24 @@ class controlador_inm_ubicacion extends _ctl_base {
             }
         }
 
+        $fecha_desde = isset($_GET['fecha_desde']) ? trim((string)$_GET['fecha_desde']) : '';
+        $fecha_hasta = isset($_GET['fecha_hasta']) ? trim((string)$_GET['fecha_hasta']) : '';
+        $gt_proveedor_id = isset($_GET['gt_proveedor_id']) ? (int)$_GET['gt_proveedor_id'] : -1;
+        $this->fecha_desde_filtro = $fecha_desde;
+        $this->fecha_hasta_filtro = $fecha_hasta;
+        $this->gt_proveedor_id_filtro = $gt_proveedor_id > 0 ? (string)$gt_proveedor_id : '';
+
+        $params_filtro_retorno = array();
+        if($fecha_desde !== ''){
+            $params_filtro_retorno['fecha_desde'] = $fecha_desde;
+        }
+        if($fecha_hasta !== ''){
+            $params_filtro_retorno['fecha_hasta'] = $fecha_hasta;
+        }
+        if($gt_proveedor_id > 0){
+            $params_filtro_retorno['gt_proveedor_id'] = $gt_proveedor_id;
+        }
+
         $keys_selects = array();
 
         $filtro_fact['inm_factura_compra.asignado_completo'] = 'inactivo';
@@ -269,6 +288,15 @@ class controlador_inm_ubicacion extends _ctl_base {
                 header: $header,ws:  $ws);
         }
 
+        $columns_ds = array('gt_proveedor_id','gt_proveedor_descripcion');
+        $keys_selects = $this->key_select(cols: 4, con_registros: true, filtro: array(),
+            key: 'gt_proveedor_id', keys_selects: $keys_selects, id_selected: $gt_proveedor_id, label: 'Proveedor',
+            columns_ds: $columns_ds, required: false);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
+                header: $header,ws:  $ws);
+        }
+
         $base = $this->base_upd(keys_selects: $keys_selects, params: array(),params_ajustados: array());
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
@@ -284,18 +312,6 @@ class controlador_inm_ubicacion extends _ctl_base {
         }
         $this->inputs->inm_ubicacion_seleccionado_id  = $inm_prospecto_id;
 
-        $fecha_desde = isset($_GET['fecha_desde']) ? trim((string)$_GET['fecha_desde']) : '';
-        $fecha_hasta = isset($_GET['fecha_hasta']) ? trim((string)$_GET['fecha_hasta']) : '';
-        $this->fecha_desde_filtro = $fecha_desde;
-        $this->fecha_hasta_filtro = $fecha_hasta;
-
-        $params_filtro_retorno = array();
-        if($fecha_desde !== ''){
-            $params_filtro_retorno['fecha_desde'] = $fecha_desde;
-        }
-        if($fecha_hasta !== ''){
-            $params_filtro_retorno['fecha_hasta'] = $fecha_hasta;
-        }
 
         $params = array('accion_retorno'=>'asigna_insumos_gastos','seccion_retorno'=>'inm_ubicacion',
             'id_retorno'=>$this->registro_id);
@@ -310,6 +326,9 @@ class controlador_inm_ubicacion extends _ctl_base {
         $this->link_asigna_insumos_gastos_bd = $link_asigna_insumos_gastos_bd;
 
         $filtro_deta['inm_ubicacion.id'] = $this->registro_id;
+        if($gt_proveedor_id > 0){
+            $filtro_deta['gt_proveedor.id'] = $gt_proveedor_id;
+        }
         $filtro_rango = array();
         if($fecha_desde !== ''){
             $filtro_rango['inm_factura_compra.fecha']['valor1'] = $fecha_desde;
@@ -2172,6 +2191,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         $init_data['inm_detalle_factura_compra'] = "gamboamartin\\inmuebles";
         $init_data['inm_tipo_vivienda'] = "gamboamartin\\inmuebles";
         $init_data['org_sucursal'] = "gamboamartin\\organigrama";
+        $init_data['gt_proveedor'] = "gamboamartin\\gastos";
 
         $campos_view = $this->campos_view_base(init_data: $init_data,keys:  $keys);
 

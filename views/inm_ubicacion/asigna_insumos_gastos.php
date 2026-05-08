@@ -318,7 +318,9 @@ hr{
                             <input type="hidden" name="session_id" value="<?php echo (string)$_GET['session_id']; ?>">
                         <?php } ?>
 
-                        <div class="control-group fecha-col">
+                        <?php echo $controlador->inputs->gt_proveedor_id; ?>
+
+                        <div class="control-group col-md-3">
                             <label class="control-label" for="fecha_desde">Fecha desde</label>
                             <div class="controls">
                                 <input type="date" id="fecha_desde" name="fecha_desde" class="form-control"
@@ -326,7 +328,7 @@ hr{
                             </div>
                         </div>
 
-                        <div class="control-group fecha-col">
+                        <div class="control-group col-md-3">
                             <label class="control-label" for="fecha_hasta">Fecha hasta</label>
                             <div class="controls">
                                 <input type="date" id="fecha_hasta" name="fecha_hasta" class="form-control"
@@ -334,11 +336,9 @@ hr{
                             </div>
                         </div>
 
-                        <div class="control-group acciones-col">
-                            <div class="controls">
-                                <button type="submit" class="btn btn-primary">Filtrar</button>
-                                <a href="<?php echo $link_limpia_filtro; ?>" class="btn btn-default">Limpiar</a>
-                            </div>
+                        <div class="control-group btn-alta">
+                            <button type="submit" class="btn btn-primary">Filtrar</button>
+                            <a href="<?php echo $link_limpia_filtro; ?>" class="btn btn-default">Limpiar</a>
                         </div>
                     </form>
 
