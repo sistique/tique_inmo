@@ -139,6 +139,10 @@ class controlador_inm_ubicacion extends _ctl_base {
     public bool $aplica_seccion_co_acreditado = false;
 
     public array $movimientos_consumo = array();
+    public array $facturas_movimiento_consumo = array();
+    public float $total_asignado_ubicacion = 0.0;
+    public string $fecha_desde_filtro = '';
+    public string $fecha_hasta_filtro = '';
 
     public function __construct(PDO      $link, html $html = new \gamboamartin\template_1\html(),
                                 stdClass $paths_conf = new stdClass())
@@ -280,8 +284,22 @@ class controlador_inm_ubicacion extends _ctl_base {
         }
         $this->inputs->inm_ubicacion_seleccionado_id  = $inm_prospecto_id;
 
+        $fecha_desde = isset($_GET['fecha_desde']) ? trim((string)$_GET['fecha_desde']) : '';
+        $fecha_hasta = isset($_GET['fecha_hasta']) ? trim((string)$_GET['fecha_hasta']) : '';
+        $this->fecha_desde_filtro = $fecha_desde;
+        $this->fecha_hasta_filtro = $fecha_hasta;
+
+        $params_filtro_retorno = array();
+        if($fecha_desde !== ''){
+            $params_filtro_retorno['fecha_desde'] = $fecha_desde;
+        }
+        if($fecha_hasta !== ''){
+            $params_filtro_retorno['fecha_hasta'] = $fecha_hasta;
+        }
+
         $params = array('accion_retorno'=>'asigna_insumos_gastos','seccion_retorno'=>'inm_ubicacion',
             'id_retorno'=>$this->registro_id);
+        $params = array_merge($params, $params_filtro_retorno);
         $link_asigna_insumos_gastos_bd = $this->obj_link->link_con_id(accion:'asigna_insumos_gastos_bd',
             link: $this->link,registro_id: $this->registro_id,seccion: 'inm_ubicacion',params: $params);
         if(errores::$error){
@@ -292,7 +310,16 @@ class controlador_inm_ubicacion extends _ctl_base {
         $this->link_asigna_insumos_gastos_bd = $link_asigna_insumos_gastos_bd;
 
         $filtro_deta['inm_ubicacion.id'] = $this->registro_id;
-        $r_inm_movimiento_consumo = (new inm_movimiento_consumo(link: $this->link))->filtro_and(filtro: $filtro_deta);
+        $filtro_rango = array();
+        if($fecha_desde !== ''){
+            $filtro_rango['inm_factura_compra.fecha']['valor1'] = $fecha_desde;
+        }
+        if($fecha_hasta !== ''){
+            $filtro_rango['inm_factura_compra.fecha']['valor2'] = $fecha_hasta;
+        }
+
+        $r_inm_movimiento_consumo = (new inm_movimiento_consumo(link: $this->link))->filtro_and(filtro: $filtro_deta,
+            filtro_rango: $filtro_rango);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al obtener factura compra',data:  $r_inm_movimiento_consumo,
                 header: $header,ws:  $ws);
@@ -302,9 +329,12 @@ class controlador_inm_ubicacion extends _ctl_base {
         if(isset($_GET['accion']) && $_GET['accion'] == 'asigna_insumos_gastos') {
             $params = array('accion_retorno'=>'asigna_insumos_gastos','seccion_retorno'=>'inm_ubicacion',
                 'id_retorno'=>$this->registro_id,);
+            $params = array_merge($params, $params_filtro_retorno);
         }
 
         $detalle = [];
+        $facturas_movimiento_consumo = array();
+        $total_asignado_ubicacion = 0.0;
         foreach ($r_inm_movimiento_consumo->registros as $inm_movimiento_consumo) {
             $button = $this->html->button_href(accion: 'elimina_bd', etiqueta: 'Elimina',
                 registro_id: $inm_movimiento_consumo['inm_movimiento_consumo_id'],
@@ -316,9 +346,54 @@ class controlador_inm_ubicacion extends _ctl_base {
 
             $inm_movimiento_consumo['elimina_bd'] = $button;
             $detalle[] = $inm_movimiento_consumo;
+
+            $inm_factura_compra_id = $inm_movimiento_consumo['inm_factura_compra_id'];
+            if(!isset($facturas_movimiento_consumo[$inm_factura_compra_id])){
+                $facturas_movimiento_consumo[$inm_factura_compra_id] = array(
+                    'inm_factura_compra_id' => $inm_factura_compra_id,
+                    'inm_factura_compra_descripcion' => $inm_movimiento_consumo['inm_factura_compra_descripcion'],
+                    'inm_factura_compra_fecha' => $inm_movimiento_consumo['inm_factura_compra_fecha'],
+                    'n_detalles' => 0,
+                    'cantidad_asignada' => 0,
+                    'total_asignado' => 0,
+                    'detalles' => array()
+                );
+            }
+
+            $facturas_movimiento_consumo[$inm_factura_compra_id]['n_detalles']++;
+            $facturas_movimiento_consumo[$inm_factura_compra_id]['cantidad_asignada'] +=
+                (float)$inm_movimiento_consumo['inm_movimiento_consumo_cantidad'];
+            $facturas_movimiento_consumo[$inm_factura_compra_id]['total_asignado'] +=
+                (float)$inm_movimiento_consumo['inm_movimiento_consumo_total'];
+            $total_asignado_ubicacion += (float)$inm_movimiento_consumo['inm_movimiento_consumo_total'];
+            $facturas_movimiento_consumo[$inm_factura_compra_id]['detalles'][] = $inm_movimiento_consumo;
         }
 
         $this->movimientos_consumo = $detalle;
+        $facturas_movimiento_consumo = array_values($facturas_movimiento_consumo);
+        usort($facturas_movimiento_consumo, function(array $a, array $b){
+            $fecha_a = strtotime((string)$a['inm_factura_compra_fecha']);
+            $fecha_b = strtotime((string)$b['inm_factura_compra_fecha']);
+
+            if($fecha_a === false && $fecha_b === false){
+                return (int)$a['inm_factura_compra_id'] <=> (int)$b['inm_factura_compra_id'];
+            }
+            if($fecha_a === false){
+                return 1;
+            }
+            if($fecha_b === false){
+                return -1;
+            }
+
+            if($fecha_a === $fecha_b){
+                return (int)$a['inm_factura_compra_id'] <=> (int)$b['inm_factura_compra_id'];
+            }
+
+            return $fecha_b <=> $fecha_a;
+        });
+
+        $this->facturas_movimiento_consumo = $facturas_movimiento_consumo;
+        $this->total_asignado_ubicacion = $total_asignado_ubicacion;
 
         $retorno = 'asigna_insumos_gastos';
         $btn_action_next = $this->html->hidden('btn_action_next', value: $retorno);
