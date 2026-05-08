@@ -256,7 +256,8 @@ hr{
                 <?php include (new views())->ruta_templates."mensajes.php"; ?>
 
                 <div class="widget  widget-box box-container form-main widget-form-cart" id="form">
-                    <form enctype="multipart/form-data" method="post"  action="<?php echo $controlador->link_asigna_insumos_gastos_bd; ?>" class="form-additional">
+
+                    <form enctype="multipart/form-data" method="post" action="<?php echo $controlador->link_asigna_insumos_gastos_bd; ?>" class="form-additional">
                         <?php include (new views())->ruta_templates."head/subtitulo.php"; ?>
 
                         <?php echo $controlador->inputs->inm_ubicacion_seleccionado_id; ?>
@@ -276,154 +277,154 @@ hr{
                         <?php echo $controlador->inputs->id_retorno; ?>
                         <?php echo $controlador->inputs->seccion_retorno; ?>
 
-                        <div id="content_form_productos">
+                        <div id="content_form_productos"></div>
 
-                        </div>
                         <div class="control-group btn-alta">
                             <div class="controls">
-                                <button type="submit" class="btn btn-success btn-insert" name="factura_completa"  value="factura_completa">Asigna Factura Completa</button>
+                                <button type="submit" class="btn btn-success btn-insert" name="factura_completa" value="factura_completa">Asigna Factura Completa</button>
                                 <button type="submit" class="btn btn-success btn-insert" name="asigna_insumo" value="asigna_insumo">Asigna Insumo</button>
                             </div>
                         </div>
+                    </form>
 
-                        <hr>
+                    <hr>
 
-                        <?php
-                        $link_limpia_filtro = 'index.php?seccion=inm_ubicacion&accion=asigna_insumos_gastos&registro_id='.$controlador->registro_id;
-                        if(isset($_GET['session_id'])){
-                            $link_limpia_filtro .= '&session_id='.(string)$_GET['session_id'];
-                        }
-                        ?>
+                    <?php
+                    $link_limpia_filtro = 'index.php?seccion=inm_ubicacion&accion=asigna_insumos_gastos&registro_id='.$controlador->registro_id;
+                    if(isset($_GET['session_id'])){
+                        $link_limpia_filtro .= '&session_id='.(string)$_GET['session_id'];
+                    }
+                    ?>
+                    <form method="get" action="index.php" class="filtro-fecha-factura form-additional">
+                        <input type="hidden" name="seccion" value="inm_ubicacion">
+                        <input type="hidden" name="accion" value="asigna_insumos_gastos">
+                        <input type="hidden" name="registro_id" value="<?php echo $controlador->registro_id; ?>">
+                        <?php if(isset($_GET['session_id'])){ ?>
+                            <input type="hidden" name="session_id" value="<?php echo (string)$_GET['session_id']; ?>">
+                        <?php } ?>
 
-                        <form method="get" action="index.php" class="filtro-fecha-factura form-additional">
-                            <input type="hidden" name="seccion" value="inm_ubicacion">
-                            <input type="hidden" name="accion" value="asigna_insumos_gastos">
-                            <input type="hidden" name="registro_id" value="<?php echo $controlador->registro_id; ?>">
-                            <?php if(isset($_GET['session_id'])){ ?>
-                                <input type="hidden" name="session_id" value="<?php echo (string)$_GET['session_id']; ?>">
-                            <?php } ?>
-
-                            <div class="control-group col-sm-6">
-                                <label class="control-label" for="fecha_desde">Fecha desde</label>
-                                <div class="controls">
-                                    <input type="date" id="fecha_desde" name="fecha_desde" class="form-control"
-                                           value="<?php echo $controlador->fecha_desde_filtro; ?>">
-                                </div>
-                            </div>
-
-                            <div class="control-group col-sm-6">
-                                <label class="control-label" for="fecha_hasta">Fecha hasta</label>
-                                <div class="controls">
-                                    <input type="date" id="fecha_hasta" name="fecha_hasta" class="form-control"
-                                           value="<?php echo $controlador->fecha_hasta_filtro; ?>">
-                                </div>
-                            </div>
-
-                            <div class="control-group col-sm-3">
-                                <div class="controls">
-                                    <button type="submit" class="btn btn-primary">Filtrar</button>
-                                    <a href="<?php echo $link_limpia_filtro; ?>" class="btn btn-default">Limpiar</a>
-                                </div>
-                            </div>
-                        </form>
-                        <div class="control-group resumen-total-asignado col-sm-12">
-                            <label class="control-label" for="total_asignado_ubicacion">Total Asignado a la Ubicación</label>
+                        <div class="control-group col-sm-4">
+                            <label class="control-label" for="fecha_desde">Fecha desde</label>
                             <div class="controls">
-                                <input type="text" id="total_asignado_ubicacion" class="form-control"
-                                       value="$<?php echo number_format((float)$controlador->total_asignado_ubicacion, 2); ?>"
-                                       readonly>
+                                <input type="date" id="fecha_desde" name="fecha_desde" class="form-control"
+                                       value="<?php echo $controlador->fecha_desde_filtro; ?>">
                             </div>
                         </div>
 
-                        <table class="table table-striped inm_detalle_factura_compra">
-                            <thead>
-                            <tr>
-                                <th>Factura</th>
-                                <th>Fecha Factura</th>
-                                <th>Registros Asignados</th>
-                                <th>Cantidad Asignada</th>
-                                <th>Total Asignado</th>
-                                <th>Acciones</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <?php
-                            $total_registros_asignados = 0;
-                            $total_cantidad_asignada = 0;
-                            $total_monto_asignado = 0;
-                            ?>
+                        <div class="control-group col-sm-4">
+                            <label class="control-label" for="fecha_hasta">Fecha hasta</label>
+                            <div class="controls">
+                                <input type="date" id="fecha_hasta" name="fecha_hasta" class="form-control"
+                                       value="<?php echo $controlador->fecha_hasta_filtro; ?>">
+                            </div>
+                        </div>
 
-                            <?php if(count($controlador->facturas_movimiento_consumo) === 0){ ?>
-                                <tr>
-                                    <td colspan="6">No hay facturas asignadas a esta ubicación.</td>
-                                </tr>
-                            <?php } ?>
-
-                            <?php foreach ($controlador->facturas_movimiento_consumo as $factura){ ?>
-                                <?php
-                                $total_registros_asignados += (int)$factura['n_detalles'];
-                                $total_cantidad_asignada += (float)$factura['cantidad_asignada'];
-                                $total_monto_asignado += (float)$factura['total_asignado'];
-                                ?>
-                                <?php $detalle_row_id = 'detalle_factura_'.$factura['inm_factura_compra_id']; ?>
-                                <tr class="factura-row">
-                                    <td>
-                                        <strong><?php echo $factura['inm_factura_compra_descripcion']; ?></strong><br>
-                                        <small>Factura ID: <?php echo $factura['inm_factura_compra_id']; ?></small>
-                                    </td>
-                                    <td><?php echo $factura['inm_factura_compra_fecha']; ?></td>
-                                    <td><?php echo $factura['n_detalles']; ?></td>
-                                    <td><?php echo $factura['cantidad_asignada']; ?></td>
-                                    <td>$<?php echo number_format((float)$factura['total_asignado'], 2); ?></td>
-                                    <td>
-                                        <button type="button" class="btn btn-info btn-sm toggle-detalle-factura"
-                                                data-target="<?php echo $detalle_row_id; ?>">Ver detalle</button>
-                                    </td>
-                                </tr>
-                                <tr id="<?php echo $detalle_row_id; ?>" class="detalle-factura-row">
-                                    <td colspan="6">
-                                        <div class="detalle-factura-contenido">
-                                            <table class="table table-striped table-bordered mb-0">
-                                                <thead>
-                                                <tr>
-                                                    <th>Tipo</th>
-                                                    <th>Producto</th>
-                                                    <th>Cantidad Asignada</th>
-                                                    <th>Valor Unitario</th>
-                                                    <th>Total Asignado</th>
-                                                    <th>Acciones</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                <?php foreach ($factura['detalles'] as $detalle){ ?>
-                                                    <tr>
-                                                        <td><?php echo $detalle['inm_concepto_descripcion']; ?></td>
-                                                        <td><?php echo $detalle['inm_producto_descripcion']; ?></td>
-                                                        <td><?php echo $detalle['inm_movimiento_consumo_cantidad']; ?></td>
-                                                        <td>$<?php echo number_format((float)$detalle['inm_movimiento_consumo_valor_unitario'], 2); ?></td>
-                                                        <td>$<?php echo number_format((float)$detalle['inm_movimiento_consumo_total'], 2); ?></td>
-                                                        <td><?php echo $detalle['elimina_bd']; ?></td>
-                                                    </tr>
-                                                <?php } ?>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </td>
-                                </tr>
-                            <?php } ?>
-
-                            <?php if(count($controlador->facturas_movimiento_consumo) > 0){ ?>
-                                <tr class="fila-totales">
-                                    <td colspan="2">Totales</td>
-                                    <td><?php echo $total_registros_asignados; ?></td>
-                                    <td><?php echo $total_cantidad_asignada; ?></td>
-                                    <td>$<?php echo number_format((float)$total_monto_asignado, 2); ?></td>
-                                    <td></td>
-                                </tr>
-                            <?php } ?>
-                            </tbody>
-                        </table>
+                        <div class="control-group col-sm-4" style="padding-top:22px;">
+                            <div class="controls">
+                                <button type="submit" class="btn btn-primary">Filtrar</button>
+                                <a href="<?php echo $link_limpia_filtro; ?>" class="btn btn-default">Limpiar</a>
+                            </div>
+                        </div>
                     </form>
+
+                    <div class="control-group resumen-total-asignado col-sm-6">
+                        <label class="control-label" for="total_asignado_ubicacion">Total Asignado a la Ubicación</label>
+                        <div class="controls">
+                            <input type="text" id="total_asignado_ubicacion" class="form-control"
+                                   value="$<?php echo number_format((float)$controlador->total_asignado_ubicacion, 2); ?>"
+                                   readonly>
+                        </div>
+                    </div>
+
+                    <table class="table table-striped inm_detalle_factura_compra">
+                        <thead>
+                        <tr>
+                            <th>Factura</th>
+                            <th>Fecha Factura</th>
+                            <th>Registros Asignados</th>
+                            <th>Cantidad Asignada</th>
+                            <th>Total Asignado</th>
+                            <th>Acciones</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php
+                        $total_registros_asignados = 0;
+                        $total_cantidad_asignada = 0;
+                        $total_monto_asignado = 0;
+                        ?>
+
+                        <?php if(count($controlador->facturas_movimiento_consumo) === 0){ ?>
+                            <tr>
+                                <td colspan="6">No hay facturas asignadas a esta ubicación.</td>
+                            </tr>
+                        <?php } ?>
+
+                        <?php foreach ($controlador->facturas_movimiento_consumo as $factura){ ?>
+                            <?php
+                            $total_registros_asignados += (int)$factura['n_detalles'];
+                            $total_cantidad_asignada += (float)$factura['cantidad_asignada'];
+                            $total_monto_asignado += (float)$factura['total_asignado'];
+                            $detalle_row_id = 'detalle_factura_'.$factura['inm_factura_compra_id'];
+                            ?>
+                            <tr class="factura-row">
+                                <td>
+                                    <strong><?php echo $factura['inm_factura_compra_descripcion']; ?></strong><br>
+                                    <small>Factura ID: <?php echo $factura['inm_factura_compra_id']; ?></small>
+                                </td>
+                                <td><?php echo $factura['inm_factura_compra_fecha']; ?></td>
+                                <td><?php echo $factura['n_detalles']; ?></td>
+                                <td><?php echo $factura['cantidad_asignada']; ?></td>
+                                <td>$<?php echo number_format((float)$factura['total_asignado'], 2); ?></td>
+                                <td>
+                                    <button type="button" class="btn btn-info btn-sm toggle-detalle-factura"
+                                            data-target="<?php echo $detalle_row_id; ?>">Ver detalle</button>
+                                </td>
+                            </tr>
+                            <tr id="<?php echo $detalle_row_id; ?>" class="detalle-factura-row">
+                                <td colspan="6">
+                                    <div class="detalle-factura-contenido">
+                                        <table class="table table-striped table-bordered mb-0">
+                                            <thead>
+                                            <tr>
+                                                <th>Tipo</th>
+                                                <th>Producto</th>
+                                                <th>Cantidad Asignada</th>
+                                                <th>Valor Unitario</th>
+                                                <th>Total Asignado</th>
+                                                <th>Acciones</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <?php foreach ($factura['detalles'] as $detalle){ ?>
+                                                <tr>
+                                                    <td><?php echo $detalle['inm_concepto_descripcion']; ?></td>
+                                                    <td><?php echo $detalle['inm_producto_descripcion']; ?></td>
+                                                    <td><?php echo $detalle['inm_movimiento_consumo_cantidad']; ?></td>
+                                                    <td>$<?php echo number_format((float)$detalle['inm_movimiento_consumo_valor_unitario'], 2); ?></td>
+                                                    <td>$<?php echo number_format((float)$detalle['inm_movimiento_consumo_total'], 2); ?></td>
+                                                    <td><?php echo $detalle['elimina_bd']; ?></td>
+                                                </tr>
+                                            <?php } ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php } ?>
+
+                        <?php if(count($controlador->facturas_movimiento_consumo) > 0){ ?>
+                            <tr class="fila-totales">
+                                <td colspan="2">Totales</td>
+                                <td><?php echo $total_registros_asignados; ?></td>
+                                <td><?php echo $total_cantidad_asignada; ?></td>
+                                <td>$<?php echo number_format((float)$total_monto_asignado, 2); ?></td>
+                                <td></td>
+                            </tr>
+                        <?php } ?>
+                        </tbody>
+                    </table>
+
                     <br>
                 </div>
             </div>
