@@ -84,12 +84,10 @@
 
                                                     <?php echo $controlador->header_frontend->apartado_3; ?>
                                                     <div id="apartado_3">
-                                                    <?php echo $controlador->inputs->dp_pais_id; ?>
                                                     <?php echo $controlador->inputs->dp_estado_id; ?>
                                                     <?php echo $controlador->inputs->dp_municipio_id; ?>
                                                     <?php echo $controlador->inputs->dp_cp_id; ?>
                                                     <?php echo $controlador->inputs->dp_colonia_postal_id; ?>
-                                                    <?php echo $controlador->inputs->dp_calle_pertenece_id; ?>
                                                     <?php echo $controlador->inputs->calle; ?>
                                                     <?php echo $controlador->inputs->numero_exterior; ?>
                                                     <?php echo $controlador->inputs->numero_interior; ?>
@@ -98,13 +96,12 @@
 
                                                     <?php echo $controlador->inputs->inm_tipo_vivienda_id; ?>
                                                     <?php echo $controlador->inputs->inm_estado_vivienda_id; ?>
-                                                    <?php echo $controlador->inputs->fecha_otorgamiento_credito; ?>
                                                     <?php echo $controlador->inputs->inm_prototipo_id; ?>
                                                     <?php echo $controlador->inputs->inm_complemento_id; ?>
-                                                    <?php echo $controlador->inputs->manzana; ?>
                                                     <?php echo $controlador->inputs->lote; ?>
                                                     <?php echo $controlador->inputs->nivel; ?>
                                                     <?php echo $controlador->inputs->entrada; ?>
+                                                    <?php echo $controlador->inputs->manzana; ?>
                                                     <?php echo $controlador->inputs->supermanzana; ?>
                                                     <?php echo $controlador->inputs->edificio; ?>
                                                     <?php echo $controlador->inputs->condominio; ?>
