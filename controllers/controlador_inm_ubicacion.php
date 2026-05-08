@@ -252,7 +252,7 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $filtro_fact['inm_factura_compra.asignado_completo'] = 'inactivo';
         $columns_ds = array('inm_factura_compra_id','inm_factura_compra_descripcion');
-        $keys_selects = $this->key_select(cols: 12, con_registros: true, filtro: $filtro_fact, key: 'inm_factura_compra_id',
+        $keys_selects = $this->key_select(cols: 4, con_registros: true, filtro: $filtro_fact, key: 'inm_factura_compra_id',
             keys_selects: $keys_selects, id_selected: -1, label: 'Factura Compra',
             columns_ds: $columns_ds, disabled: false, required: false);
         if(errores::$error){
@@ -261,7 +261,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         }
 
         $filtro_deta_fac['inm_detalle_factura_compra.asignado_completo'] = 'inactivo';
-        $keys_selects = $this->key_select(cols: 12, con_registros: false, filtro: $filtro_deta_fac,
+        $keys_selects = $this->key_select(cols: 4, con_registros: false, filtro: $filtro_deta_fac,
             key: 'inm_detalle_factura_compra_id', keys_selects: $keys_selects, id_selected: -1, label: 'Insumo Factura',
             columns_ds: $columns_ds, required: false);
         if(errores::$error){
@@ -277,7 +277,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         $columns_ds = array('inm_ubicacion_id','inm_ubicacion_ubicacion');
         $filtro['inm_ubicacion.id'] = $this->registro_id;
         $inm_prospecto_id = (new inm_ubicacion_html(html: $this->html_base))->select_inm_ubicacion_id(
-            cols: 12, con_registros: true, id_selected: $this->registro_id, link: $this->link, columns_ds: $columns_ds,
+            cols: 4, con_registros: true, id_selected: $this->registro_id, link: $this->link, columns_ds: $columns_ds,
             filtro: $filtro);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al generar input', data: $inm_prospecto_id, header: $header, ws: $ws);
@@ -4071,7 +4071,7 @@ class controlador_inm_ubicacion extends _ctl_base {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'cantidad_detalle', keys_selects:$keys_selects,
+        $keys_selects = (new init())->key_select_txt(cols: 4,key: 'cantidad_detalle', keys_selects:$keys_selects,
             place_holder: 'Cantidad',disabled: true);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
@@ -4083,31 +4083,31 @@ class controlador_inm_ubicacion extends _ctl_base {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'valor_unitario', keys_selects:$keys_selects,
+        $keys_selects = (new init())->key_select_txt(cols: 4,key: 'valor_unitario', keys_selects:$keys_selects,
             place_holder: 'Valor Unitario',disabled: true);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'subtotal', keys_selects:$keys_selects,
+        $keys_selects = (new init())->key_select_txt(cols: 4,key: 'subtotal', keys_selects:$keys_selects,
             place_holder: 'Subtotal',disabled: true);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'trasladado', keys_selects:$keys_selects,
+        $keys_selects = (new init())->key_select_txt(cols: 4,key: 'trasladado', keys_selects:$keys_selects,
             place_holder: 'Trasladado',disabled: true);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'retenido', keys_selects:$keys_selects,
+        $keys_selects = (new init())->key_select_txt(cols: 4,key: 'retenido', keys_selects:$keys_selects,
             place_holder: 'Retenido',disabled: true);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'total_con_impuesto', keys_selects:$keys_selects,
+        $keys_selects = (new init())->key_select_txt(cols: 4,key: 'total_con_impuesto', keys_selects:$keys_selects,
             place_holder: 'Total Con Impuesto',disabled: true);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);

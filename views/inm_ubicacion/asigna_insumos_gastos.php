@@ -235,13 +235,28 @@ hr{
 .filtro-fecha-factura{
     margin: 10px 0 20px 0;
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     gap: 10px;
     align-items: end;
 }
 
 .filtro-fecha-factura .control-group{
     margin-bottom: 0;
+}
+
+.filtro-fecha-factura .fecha-col{
+    flex: 1 1 280px;
+}
+
+.filtro-fecha-factura .acciones-col{
+    flex: 0 0 auto;
+}
+
+.filtro-fecha-factura .acciones-col .controls{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
 }
 
 </style>";
@@ -303,7 +318,7 @@ hr{
                             <input type="hidden" name="session_id" value="<?php echo (string)$_GET['session_id']; ?>">
                         <?php } ?>
 
-                        <div class="control-group col-sm-4">
+                        <div class="control-group fecha-col">
                             <label class="control-label" for="fecha_desde">Fecha desde</label>
                             <div class="controls">
                                 <input type="date" id="fecha_desde" name="fecha_desde" class="form-control"
@@ -311,7 +326,7 @@ hr{
                             </div>
                         </div>
 
-                        <div class="control-group col-sm-4">
+                        <div class="control-group fecha-col">
                             <label class="control-label" for="fecha_hasta">Fecha hasta</label>
                             <div class="controls">
                                 <input type="date" id="fecha_hasta" name="fecha_hasta" class="form-control"
@@ -319,7 +334,7 @@ hr{
                             </div>
                         </div>
 
-                        <div class="control-group col-sm-4" style="padding-top:22px;">
+                        <div class="control-group acciones-col">
                             <div class="controls">
                                 <button type="submit" class="btn btn-primary">Filtrar</button>
                                 <a href="<?php echo $link_limpia_filtro; ?>" class="btn btn-default">Limpiar</a>
