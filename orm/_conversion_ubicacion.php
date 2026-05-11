@@ -445,7 +445,6 @@ class _conversion_ubicacion{
             'correo_com', 'org_sucursal_id', 'inm_tipo_vivienda_id', 'inm_tipo_credito_id', 'numero_credito',
             'correo_mi_cuenta_infonavit', 'password_mi_cuenta_infonavit', 'entrada', 'supermanzana', 'edificio',
             'condominio', 'numero_notaria', 'nombre_notario', 'plaza_notaria', 'numero_escritura', 'libro', 'volumen',
-            'dp_estado_domicilio_id', 'dp_municipio_domicilio_id', 'dp_cp_domicilio_id',
             'dp_colonia_postal_domicilio_id', 'calle_domicilio', 'numero_exterior_domicilio',
             'numero_interior_domicilio');
     }
@@ -466,9 +465,9 @@ class _conversion_ubicacion{
             'inm_status_prospecto_ubicacion_id', 'calle', 'dp_colonia_postal_id', 'org_sucursal_id',
             'inm_tipo_vivienda_id', 'inm_tipo_credito_id', 'numero_credito', 'correo_mi_cuenta_infonavit',
             'password_mi_cuenta_infonavit', 'entrada', 'supermanzana', 'edificio', 'condominio', 'numero_notaria',
-            'nombre_notario', 'plaza_notaria', 'numero_escritura', 'libro', 'volumen', 'dp_estado_domicilio_id',
-            'dp_municipio_domicilio_id', 'dp_cp_domicilio_id', 'dp_colonia_postal_domicilio_id',
-            'calle_domicilio', 'numero_exterior_domicilio', 'numero_interior_domicilio');
+            'nombre_notario', 'plaza_notaria', 'numero_escritura', 'libro', 'volumen',
+            'dp_colonia_postal_domicilio_id', 'calle_domicilio', 'numero_exterior_domicilio',
+            'numero_interior_domicilio');
     }
 
     /**
