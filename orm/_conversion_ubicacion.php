@@ -440,7 +440,7 @@ class _conversion_ubicacion{
             'monto_opinion_promedio', 'costo', 'inm_status_ubicacion_id', 'com_agente_id', 'nss', 'curp', 'nombre',
             'apellido_paterno', 'apellido_materno', 'nombre_completo_valida', 'adeudo_hipoteca', 'adeudo_predial',
             'adeudo_agua', 'adeudo_luz', 'monto_devolucion', 'cuenta_agua', 'nivel', 'recamaras', 'metros_terreno',
-            'metros_construccion', 'razon_social', 'rfc', 'observaciones', 'fecha_otorgamiento_credito',
+            'metros_construccion', 'razon_social', 'rfc', 'observaciones',
             'inm_prototipo_id', 'inm_complemento_id', 'inm_estado_vivienda_id', 'lada_com', 'numero_com', 'cel_com',
             'correo_com', 'org_sucursal_id', 'numero_credito', 'correo_mi_cuenta_infonavit',
             'password_mi_cuenta_infonavit', 'entrada', 'supermanzana', 'edificio',
