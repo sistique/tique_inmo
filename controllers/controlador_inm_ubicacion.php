@@ -35,6 +35,7 @@ use gamboamartin\inmuebles\models\inm_ocupacion;
 use gamboamartin\inmuebles\models\inm_poder;
 use gamboamartin\inmuebles\models\inm_rel_cheque_ubicacion;
 use gamboamartin\inmuebles\models\inm_rel_doc_cheque_ubicacion;
+use gamboamartin\inmuebles\models\inm_rel_doc_efectivo_ubicacion;
 use gamboamartin\inmuebles\models\inm_rel_doc_transferencia_ubicacion;
 use gamboamartin\inmuebles\models\inm_rel_efectivo_ubicacion;
 use gamboamartin\inmuebles\models\inm_rel_transferencia_ubicacion;
@@ -2021,6 +2022,82 @@ class controlador_inm_ubicacion extends _ctl_base {
                         name='efectivo_id' value='$inm_efectivo[inm_efectivo_id]'>";
             $inm_efectivo['checkbox'] = $check;
 
+            $filtro_rel_doc_efec['inm_efectivo.id'] = $inm_efectivo['inm_efectivo_id'];
+            $r_rel_doc_efectivo = (new inm_rel_doc_efectivo_ubicacion(link: $this->link))->filtro_and(filtro: $filtro_rel_doc_efec);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al obtener inputs', data: $r_rel_doc_efectivo,header: $header,
+                    ws:  $ws);
+            }
+
+            if($r_rel_doc_efectivo->n_registros > 0){
+                $button_descarga = $this->html->button_href(accion: 'descarga', etiqueta: 'Descarga',
+                    registro_id: $r_rel_doc_efectivo->registros[0]['inm_doc_ubicacion_id'],
+                    seccion: 'inm_doc_ubicacion', style: 'success');
+                if (errores::$error) {
+                    return $this->retorno_error(mensaje: 'Error al integrar button',
+                        data: $button_descarga, header: $header, ws: $ws);
+                }
+
+                $button_vista_previa = $this->html->button_href(accion: 'vista_previa',
+                    etiqueta: 'Vista Previa', registro_id: $r_rel_doc_efectivo->registros[0]['inm_doc_ubicacion_id'],
+                    seccion: 'inm_doc_ubicacion', style: 'success');
+                if (errores::$error) {
+                    return $this->retorno_error(mensaje: 'Error al integrar button',
+                        data: $button_vista_previa, header: $header, ws: $ws);
+                }
+
+                $button_descarga_zip = $this->html->button_href(accion: 'descarga_zip',
+                    etiqueta: 'Descarga ZIP', registro_id: $r_rel_doc_efectivo->registros[0]['inm_doc_ubicacion_id'],
+                    seccion: 'inm_doc_ubicacion', style: 'success');
+                if (errores::$error) {
+                    return $this->retorno_error(mensaje: 'Error al integrar button',
+                        data: $button_descarga_zip, header: $header, ws: $ws);
+                }
+
+                $params = array('accion_retorno'=>'proceso_ubicacion','seccion_retorno'=>'inm_ubicacion',
+                    'id_retorno'=>$this->registro_id, 'pestana_general_actual' => 'pestanageneral2',
+                    'pestana_actual' => 'pestana7');
+                $button_elimina_bd = $this->html->button_href(accion: 'elimina_bd',
+                    etiqueta: 'Elimina', registro_id: $r_rel_doc_efectivo->registros[0]['inm_rel_doc_efectivo_ubicacion_id'],
+                    seccion: 'inm_rel_doc_efectivo_ubicacion', style: 'danger',params: $params);
+                if (errores::$error) {
+                    return $this->retorno_error(mensaje: 'Error al integrar button', data: $button_elimina_bd,
+                        header: $header, ws: $ws);
+                }
+
+                $res = "<tr>
+                            <td colspan='6'>
+                                <div class='content_btns'>
+                                    <div class='content_btn'>
+                                        $button_descarga
+                                    </div>
+                                    <div class='content_btn'>
+                                        $button_vista_previa
+                                    </div>
+                                    <div class='content_btn'>
+                                        $button_descarga_zip
+                                    </div>
+                                    <div class='content_btn'>
+                                        $button_elimina_bd
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>";
+            }else{
+                $name = "documentos_efectivos[$inm_efectivo[inm_efectivo_id]][78][]";
+                $button = $this->html->input_file(cols: 12, name: $name, row_upd: $this->row_upd,
+                    value_vacio: false, place_holder: 'Subir Documento',required: false, con_label: false);
+                if (errores::$error) {
+                    return $this->retorno_error(mensaje: 'Error al obtener inputs', data: $button,header: $header,
+                        ws:  $ws);
+                }
+                $res = "<tr>
+                <td colspan='6'>$button</td>
+                </tr>";
+            }
+
+            $inm_efectivo['documento'] = $res;
+            
             $registros[] = $inm_efectivo;
         }
 
@@ -3162,6 +3239,25 @@ class controlador_inm_ubicacion extends _ctl_base {
                 }
             }
         }
+        
+        $tipos_documento_efectivo = array();
+        if(isset($_FILES['documentos_efectivos'])) {
+            foreach ($_FILES['documentos_efectivos']['name'] as $costo => $tipo_documento) {
+                foreach ($tipo_documento as $key => $value) {
+                    foreach ($value as $nombre_documento) {
+                        $tipos_documento_efectivo[$costo][$key]['name'] = $nombre_documento;
+                    }
+                }
+            }
+
+            foreach ($_FILES['documentos_efectivos']['tmp_name'] as $costo => $tipo_documento) {
+                foreach ($tipo_documento as $key => $value) {
+                    foreach ($value as $nombre_documento) {
+                        $tipos_documento_efectivo[$costo][$key]['tmp_name'] = $nombre_documento;
+                    }
+                }
+            }
+        }
 
         $r_rel_doc_ubi_che = array();
         foreach ($tipos_documento_cheque AS $cheque_id => $doc) {
@@ -3221,6 +3317,38 @@ class controlador_inm_ubicacion extends _ctl_base {
                     $r_rel_doc_ubi_trs = (new inm_rel_doc_transferencia_ubicacion(link: $this->link))->alta_registro(registro: $registro_rel);
                     if (errores::$error) {
                         return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_rel_doc_ubi_trs,
+                            header: $header, ws: $ws);
+                    }
+                }
+            }
+        }
+        
+        $r_rel_doc_ubi_efe = array();
+        foreach ($tipos_documento_efectivo AS $efectivo_id => $doc) {
+            $valor_documento = array();
+            foreach ($doc AS $tipo_documento_id => $value) {
+                $valor_documento['name'] = $value['name'];
+                $valor_documento['tmp_name'] = $value['tmp_name'];
+
+                if ($valor_documento['name'] !== '' && $valor_documento['tmp_name'] !== '') {
+                    $registro = array();
+                    $registro['doc_tipo_documento_id'] = $tipo_documento_id;
+                    $registro['inm_ubicacion_id'] = $this->registro_id;
+
+                    $_FILES = array();
+                    $_FILES['documento'] = $valor_documento;
+                    $result = $inm_doc_ubicacion->alta_registro(registro: $registro);
+                    if (errores::$error) {
+                        return $this->retorno_error(mensaje: 'Error al insertar datos', data: $result, header: $header,
+                            ws: $ws);
+                    }
+
+                    $registro_rel = array();
+                    $registro_rel['inm_efectivo_id'] = $efectivo_id;
+                    $registro_rel['inm_doc_ubicacion_id'] = $result->registro_id;
+                    $r_rel_doc_ubi_efe = (new inm_rel_doc_efectivo_ubicacion(link: $this->link))->alta_registro(registro: $registro_rel);
+                    if (errores::$error) {
+                        return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_rel_doc_ubi_efe,
                             header: $header, ws: $ws);
                     }
                 }
