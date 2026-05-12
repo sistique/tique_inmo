@@ -152,6 +152,7 @@
                             <?php echo $controlador->inputs->inm_co_acreditado->nrp; ?>
                             <?php echo $controlador->inputs->inm_co_acreditado->lada_nep; ?>
                             <?php echo $controlador->inputs->inm_co_acreditado->numero_nep; ?>
+                            <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
                         </div>
 
                         <?php echo $controlador->header_frontend->apartado_7; ?>
