@@ -349,14 +349,15 @@ class _ubicacion{
         $headers['4'] = '4. CREDITO';
         $headers['5'] = '5. ADEUDO';
         $headers['6'] = '6. CO ACREDITADO';
+        $headers['7'] = '7. CONYUGE';
 
         return $headers;
     }
 
     private function header_co_acreditado(array $headers): array
     {
-        $headers['7'] = '7. DATOS DE IDENTIFICACIÓN QUE SERÁN VALIDADOS (OBLIGATORIOS EN CRÉDITO CONYUGAL, FAMILIAR O CORRESIDENCIAL)';
-        $headers['8'] = '8. DATOS DE LA EMPRESA O PATRÓN CO ACREDITADO';
+        //$headers['7'] = '7. DATOS DE IDENTIFICACIÓN QUE SERÁN VALIDADOS (OBLIGATORIOS EN CRÉDITO CONYUGAL, FAMILIAR O CORRESIDENCIAL)';
+        //$headers['8'] = '8. DATOS DE LA EMPRESA O PATRÓN CO ACREDITADO';
         return $headers;
     }
 

@@ -4006,12 +4006,13 @@ class controlador_inm_ubicacion extends _ctl_base {
     {
         $this->link->beginTransaction();
 
-        /*$result_conyuge = $this->modelo->transacciona_conyuge(inm_ubicacion_id: $this->registro_id,link: $this->link);
+        $result_conyuge = $this->modelo->transacciona_conyuge(inm_ubicacion_id: $this->registro_id,link: $this->link);
             if (errores::$error) {
                $this->link->rollBack();
                 return $this->retorno_error(mensaje: 'Error al modificar inm_prospecto',data:  $result_conyuge,
                     header: $header,ws:  $ws);
-        }*/
+        }
+
         $result_co_acreditado = $this->modelo->transacciona_co_acreditado(inm_ubicacion_id: $this->registro_id,
             link: $this->link);
         if (errores::$error) {
