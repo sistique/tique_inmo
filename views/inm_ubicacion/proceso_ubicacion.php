@@ -963,6 +963,7 @@
                                                                 <td></td>
                                                                 <td><?php echo $efectivo['inm_efectivo_fecha_alta'] ?></td>
                                                             </tr>
+                                                            <?php echo $efectivo['documento'] ?>
                                                         <?php } ?>
                                                         </tbody>
                                                     </table>
