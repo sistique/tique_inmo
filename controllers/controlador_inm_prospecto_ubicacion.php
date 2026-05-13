@@ -2173,8 +2173,34 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         }
         $this->link->commit();
 
-        $_SESSION[$r_modifica->salida][]['mensaje'] = $r_modifica->mensaje . ' del id ' . $this->registro_id;
-        $this->header_out(result: $r_modifica, header: $header, ws: $ws);
+        $retorno = $_SERVER['HTTP_REFERER'];
+
+        if(isset($_POST['btn_action_next']) && $_POST['btn_action_next'] === 'proceso_prospecto_ubicacion'){
+            $params = array('pestana_general_actual' => 'pestanageneral1', 'pestana_actual' => 'cpestanaubicacion1');
+            $link_proceso_prospecto_ubicacion = $this->obj_link->link_con_id(
+                accion: 'proceso_prospecto_ubicacion', link: $this->link, registro_id: $this->registro_id, seccion: 'inm_ubicacion',
+                params: $params);
+            if (errores::$error) {
+                $this->retorno_error(mensaje: 'Error al generar link', data: $link_proceso_prospecto_ubicacion, header: $header, ws: $ws);
+            }
+            $retorno = $link_proceso_prospecto_ubicacion;
+        }
+
+        if($header){
+            header('Location:'.$retorno);
+            exit;
+        }
+        if($ws){
+            header('Content-Type: application/json');
+            try {
+                echo json_encode($r_modifica, JSON_THROW_ON_ERROR);
+            }
+            catch (Throwable $e){
+                return $this->retorno_error(mensaje: 'Error al maquetar estados',data: $e, header: $header, ws: $ws);
+            }
+            exit;
+        }
+
 
         return $r_modifica;
 
