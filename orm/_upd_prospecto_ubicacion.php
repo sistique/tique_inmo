@@ -203,17 +203,12 @@ class _upd_prospecto_ubicacion{
      */
     private function inserta_conyuge(array $conyuge, int $inm_prospecto_ubicacion_id, PDO $link): array|stdClass
     {
-        $keys = array('nombre','apellido_paterno','curp','rfc','dp_municipio_id','inm_nacionalidad_id',
-            'inm_ocupacion_id','telefono_casa','telefono_celular','fecha_nacimiento');
+        $keys = array('nombre','apellido_paterno');
         $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $conyuge);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar conyuge',data:  $valida);
         }
-        $keys = array('dp_municipio_id','inm_nacionalidad_id', 'inm_ocupacion_id');
-        $valida = $this->validacion->valida_ids(keys: $keys,registro:  $conyuge);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al validar conyuge',data:  $valida);
-        }
+
         if($inm_prospecto_ubicacion_id <= 0){
             return $this->error->error(mensaje: 'Error inm_prospecto_id debe ser mayor a 0',data:  $inm_prospecto_ubicacion_id);
         }

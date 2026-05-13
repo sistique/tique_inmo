@@ -315,6 +315,7 @@ class _inm_prospecto_ubicacion{
         $headers['4'] = '4. CREDITO';
         $headers['5'] = '5. ADEUDO';
         $headers['6'] = '6. CO ACREDITADO';
+        $headers['7'] = '7. CONYUGE';
 
         return $headers;
     }
