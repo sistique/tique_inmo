@@ -261,3 +261,38 @@ function dp_asigna_cps(dp_municipio_id = '', dp_cp_id = '', selector = "#dp_cp_i
     });
 }
 
+
+
+let sl_org_sucursal_id = $("#org_sucursal_id");
+
+let org_sucursal_id = -1;
+sl_org_sucursal_id.change(function(){
+    org_sucursal_id = $(this).val();
+    get_agente(org_sucursal_id);
+});
+
+function get_agente(org_sucursal_id = '',com_agente_id = '', name_selector_dependiente = "#com_agente_id"){
+
+    let sl_com_agente_id = $(name_selector_dependiente);
+
+    let url = "index.php?seccion=com_agente&ws=1&accion=get_agente&org_sucursal_id="+org_sucursal_id+
+        "&com_tipo_agente_es_comprador=activo&session_id="+session_id;
+
+    $.ajax({
+        type: 'GET',
+        url: url,
+    }).done(function( data ) {  // Función que se ejecuta si todo ha ido bien
+        sl_com_agente_id.empty();
+        integra_new_option(name_selector_dependiente,'Seleccione un estado','-1');
+
+        $.each(data.registros, function( index, com_agente ) {
+            integra_new_option(name_selector_dependiente,com_agente.com_agente_descripcion,com_agente.com_agente_id);
+        });
+        sl_com_agente_id.val(com_agente_id);
+        sl_com_agente_id.selectpicker('refresh');
+    }).fail(function (jqXHR, textStatus, errorThrown){ // Función que se ejecuta si algo ha ido mal
+        alert('Error al ejecutar');
+        console.log("The following error occured: "+ textStatus +" "+ errorThrown);
+    });
+
+}

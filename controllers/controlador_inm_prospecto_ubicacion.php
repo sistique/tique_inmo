@@ -180,13 +180,17 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
 
         $filtro_agente_sel = array();
         $com_agente_id = -1;
+        $con_registros = false;
+
         if($r_agente->n_registros > 0){
             $filtro_agente_sel['com_agente.id'] = $r_agente->registros[0]['com_agente_id'];
             $com_agente_id = $r_agente->registros[0]['com_agente_id'];
+
+            $con_registros = true;
         }
 
-        $keys_selects = $this->key_select(cols:4, con_registros: true,filtro: $filtro_agente_sel, key: 'com_agente_id',
-            keys_selects:$keys_selects, id_selected: $com_agente_id, label: 'Agente');
+        $keys_selects = $this->key_select(cols:4, con_registros: $con_registros,filtro: $filtro_agente_sel,
+            key: 'com_agente_id', keys_selects:$keys_selects, id_selected: $com_agente_id, label: 'Agente');
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects', data: $keys_selects,
                 header: $header, ws: $ws);

@@ -103,6 +103,20 @@ class controlador_com_agente extends _base_sin_cod
         return $inputs;
     }
 
+    public function get_agente(bool $header, bool $ws = true): array|stdClass
+    {
+        $keys['org_sucursal'] = array('id','descripcion','codigo','codigo_bis');
+        $keys['com_tipo_agente'] = array('es_comprador','es_vendedor');
+
+        $salida = $this->get_out(header: $header,keys: $keys, ws: $ws);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al generar salida',data:  $salida,header: $header,ws: $ws);
+        }
+
+        return $salida;
+    }
+
+
     protected function init_controladores(stdClass $paths_conf): controler
     {
         $this->controlador_com_prospecto = new controlador_com_prospecto(link: $this->link, paths_conf: $paths_conf);
