@@ -190,10 +190,10 @@ class inm_co_acreditado_html extends _base {
             $cols_css['extension_nep'] = 4;
         }
         if(!isset($cols_css['nombre_empresa_patron'])){
-            $cols_css['nombre_empresa_patron'] = 12;
+            $cols_css['nombre_empresa_patron'] = 3;
         }
         if(!isset($cols_css['nrp'])){
-            $cols_css['nrp'] = 12;
+            $cols_css['nrp'] = 3;
         }
 
         return $cols_css;
@@ -343,7 +343,7 @@ class inm_co_acreditado_html extends _base {
 
 
     private function nombre_empresa_patron(int $cols,  string $entidad, bool $disabled = false, string $name = 'nombre_empresa_patron',
-                                                string $place_holder= 'Nombre Empresa Patron',
+                                                string $place_holder= 'Nombre Empresa',
                                                 stdClass $row_upd = new stdClass(),
                                                 bool $value_vacio = false, bool $required = true): array|string
     {
