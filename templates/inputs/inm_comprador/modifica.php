@@ -39,6 +39,9 @@
 <?php echo $controlador->header_frontend->apartado_2; ?>
 
     <div  id="apartado_2">
+        <?php echo $controlador->inputs->nss; ?>
+        <?php echo $controlador->inputs->curp; ?>
+        <?php echo $controlador->inputs->rfc; ?>
         <?php echo $controlador->inputs->nombre; ?>
         <?php echo $controlador->inputs->apellido_paterno; ?>
         <?php echo $controlador->inputs->apellido_materno; ?>
@@ -47,9 +50,6 @@
         <?php echo $controlador->inputs->dp_municipio_nacimiento_id; ?>
         <?php echo $controlador->inputs->inm_nacionalidad_id; ?>
         <?php echo $controlador->inputs->inm_ocupacion_id; ?>
-        <?php echo $controlador->inputs->nss; ?>
-        <?php echo $controlador->inputs->curp; ?>
-        <?php echo $controlador->inputs->rfc; ?>
         <?php echo $controlador->inputs->lada_com; ?>
         <?php echo $controlador->inputs->numero_com; ?>
         <?php echo $controlador->inputs->cel_com; ?>
@@ -169,24 +169,6 @@
 
 <?php echo $controlador->header_frontend->apartado_8; ?>
 <div  id="apartado_8">
-    <?php echo $controlador->inputs->cat_sat_regimen_fiscal_id; ?>
-    <?php echo $controlador->inputs->cat_sat_moneda_id; ?>
-    <?php echo $controlador->inputs->cat_sat_forma_pago_id; ?>
-    <?php echo $controlador->inputs->cat_sat_metodo_pago_id; ?>
-    <?php echo $controlador->inputs->cat_sat_uso_cfdi_id; ?>
-    <?php echo $controlador->inputs->cat_sat_tipo_persona_id; ?>
-    <?php echo $controlador->inputs->bn_cuenta_id; ?>
-    <?php echo $controlador->btn; ?>
-</div>
-
-<?php echo $controlador->header_frontend->apartado_9; ?>
-<div  id="apartado_9">
-    <?php echo $controlador->inputs->com_tipo_cliente_id; ?>
-    <?php echo $controlador->btn; ?>
-</div>
-
-<?php echo $controlador->header_frontend->apartado_10; ?>
-<div  id="apartado_10">
     <?php echo $controlador->inputs->conyuge->nombre; ?>
     <?php echo $controlador->inputs->conyuge->apellido_paterno; ?>
     <?php echo $controlador->inputs->conyuge->apellido_materno; ?>
@@ -202,8 +184,8 @@
     <?php echo $controlador->btn; ?>
 </div>
 
-<?php echo $controlador->header_frontend->apartado_11; ?>
-<div  id="apartado_11">
+<?php echo $controlador->header_frontend->apartado_9; ?>
+<div  id="apartado_9">
     <?php echo $controlador->inputs->beneficiario->inm_tipo_beneficiario_id; ?>
     <?php echo $controlador->inputs->beneficiario->inm_parentesco_id; ?>
     <?php echo $controlador->inputs->beneficiario->nombre; ?>
@@ -242,8 +224,8 @@
     </div>
 </div>
 
-<?php echo $controlador->header_frontend->apartado_12; ?>
-<div  id="apartado_12">
+<?php echo $controlador->header_frontend->apartado_10; ?>
+<div  id="apartado_10">
     <?php echo $controlador->inputs->referencia->nombre; ?>
     <?php echo $controlador->inputs->referencia->apellido_paterno; ?>
     <?php echo $controlador->inputs->referencia->apellido_materno; ?>
@@ -287,7 +269,24 @@
             <?php } ?>
             </tbody>
         </table>
+        <?php echo $controlador->btn; ?>
     </div>
-    <?php echo $controlador->btn; ?>
+    <?php echo $controlador->header_frontend->apartado_11; ?>
+    <div  id="apartado_11">
+        <?php echo $controlador->inputs->cat_sat_regimen_fiscal_id; ?>
+        <?php echo $controlador->inputs->cat_sat_moneda_id; ?>
+        <?php echo $controlador->inputs->cat_sat_forma_pago_id; ?>
+        <?php echo $controlador->inputs->cat_sat_metodo_pago_id; ?>
+        <?php echo $controlador->inputs->cat_sat_uso_cfdi_id; ?>
+        <?php echo $controlador->inputs->cat_sat_tipo_persona_id; ?>
+        <?php echo $controlador->inputs->bn_cuenta_id; ?>
+        <?php echo $controlador->btn; ?>
+    </div>
+
+    <?php echo $controlador->header_frontend->apartado_12; ?>
+    <div  id="apartado_12">
+        <?php echo $controlador->inputs->com_tipo_cliente_id; ?>
+        <?php echo $controlador->btn; ?>
+    </div>
 </div>
 

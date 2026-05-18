@@ -3966,23 +3966,24 @@ class controlador_inm_comprador extends _ctl_base {
 
     protected function key_selects_txt(array $keys_selects): array
     {
-
-
         $keys_selects = (new init())->key_select_txt(cols: 12,key: 'descuento_pension_alimenticia_dh',
             keys_selects:$keys_selects, place_holder: 'Descuento Pension Alimenticia Derechohabiente');
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
+
         $keys_selects = (new init())->key_select_txt(cols: 12,key: 'descuento_pension_alimenticia_fc',
             keys_selects:$keys_selects, place_holder: 'Descuento Pension Alimenticia Familiar/Corresidente');
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
+
         $keys_selects = (new init())->key_select_txt(cols: 12,key: 'monto_credito_solicitado_dh',
             keys_selects:$keys_selects, place_holder: 'Monto Credito Solicitado Derechohabiente');
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
+
         $keys_selects = (new init())->key_select_txt(cols: 12,key: 'monto_ahorro_voluntario',
             keys_selects:$keys_selects, place_holder: 'Monto Ahorro Voluntario');
         if(errores::$error){
@@ -3994,18 +3995,17 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'calle',
             keys_selects:$keys_selects, place_holder: 'Calle');
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'numero_exterior',
+        $keys_selects = (new init())->key_select_txt(cols: 3,key: 'numero_exterior',
             keys_selects:$keys_selects, place_holder: 'Exterior');
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'numero_interior',
+        $keys_selects = (new init())->key_select_txt(cols: 3,key: 'numero_interior',
             keys_selects:$keys_selects, place_holder: 'Interior', required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
@@ -4017,7 +4017,7 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'lada_com', keys_selects:$keys_selects,
+        $keys_selects = (new init())->key_select_txt(cols: 3,key: 'lada_com', keys_selects:$keys_selects,
             place_holder: 'Lada',required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
@@ -4025,7 +4025,7 @@ class controlador_inm_comprador extends _ctl_base {
 
         $keys_selects['lada_com']->regex = $this->validacion->patterns['lada_html'];
 
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'numero_com',
+        $keys_selects = (new init())->key_select_txt(cols: 3,key: 'numero_com',
             keys_selects:$keys_selects, place_holder: 'Numero',required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
@@ -4033,7 +4033,7 @@ class controlador_inm_comprador extends _ctl_base {
 
         $keys_selects['numero_com']->regex = $this->validacion->patterns['tel_sin_lada_html'];
 
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'cel_com',
+        $keys_selects = (new init())->key_select_txt(cols: 3,key: 'cel_com',
             keys_selects:$keys_selects, place_holder: 'Celular',required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
@@ -4046,7 +4046,7 @@ class controlador_inm_comprador extends _ctl_base {
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
-        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'correo_com',
+        $keys_selects = (new init())->key_select_txt(cols: 3,key: 'correo_com',
             keys_selects:$keys_selects, place_holder: 'Correo',required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);

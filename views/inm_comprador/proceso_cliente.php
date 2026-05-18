@@ -79,6 +79,9 @@
                                     <?php echo $controlador->header_frontend->apartado_2; ?>
 
                                     <div  id="apartado_2">
+                                        <?php echo $controlador->inputs->nss; ?>
+                                        <?php echo $controlador->inputs->curp; ?>
+                                        <?php echo $controlador->inputs->rfc; ?>
                                         <?php echo $controlador->inputs->nombre; ?>
                                         <?php echo $controlador->inputs->apellido_paterno; ?>
                                         <?php echo $controlador->inputs->apellido_materno; ?>
@@ -87,9 +90,6 @@
                                         <?php echo $controlador->inputs->dp_municipio_nacimiento_id; ?>
                                         <?php echo $controlador->inputs->inm_nacionalidad_id; ?>
                                         <?php echo $controlador->inputs->inm_ocupacion_id; ?>
-                                        <?php echo $controlador->inputs->nss; ?>
-                                        <?php echo $controlador->inputs->curp; ?>
-                                        <?php echo $controlador->inputs->rfc; ?>
                                         <?php echo $controlador->inputs->lada_com; ?>
                                         <?php echo $controlador->inputs->numero_com; ?>
                                         <?php echo $controlador->inputs->cel_com; ?>
@@ -201,137 +201,130 @@
                                             <?php echo $controlador->inputs->inm_co_acreditado->numero_nep; ?>
                                             <?php echo $controlador->btn; ?>
                                         </div>
-
-                                    <?php echo $controlador->header_frontend->apartado_8; ?>
-
-                                    <div  id="apartado_8">
-
-                                        <?php echo $controlador->inputs->cat_sat_regimen_fiscal_id; ?>
-                                        <?php echo $controlador->inputs->cat_sat_moneda_id; ?>
-                                        <?php echo $controlador->inputs->cat_sat_forma_pago_id; ?>
-                                        <?php echo $controlador->inputs->cat_sat_metodo_pago_id; ?>
-                                        <?php echo $controlador->inputs->cat_sat_uso_cfdi_id; ?>
-                                        <?php echo $controlador->inputs->cat_sat_tipo_persona_id; ?>
-                                        <?php echo $controlador->inputs->bn_cuenta_id; ?>
-                                        <?php echo $controlador->btn; ?>
-
-                                    </div>
-
-                                    <?php echo $controlador->header_frontend->apartado_9; ?>
-
-                                    <div  id="apartado_9">
-                                        <?php echo $controlador->inputs->com_tipo_cliente_id; ?>
-                                        <?php echo $controlador->btn; ?>
-                                    </div>
-
-                                    <?php echo $controlador->header_frontend->apartado_10; ?>
-                                    <div  id="apartado_10">
-                                        <?php echo $controlador->inputs->conyuge->nombre; ?>
-                                        <?php echo $controlador->inputs->conyuge->apellido_paterno; ?>
-                                        <?php echo $controlador->inputs->conyuge->apellido_materno; ?>
-                                        <?php echo $controlador->inputs->conyuge->fecha_nacimiento; ?>
-                                        <?php echo $controlador->inputs->conyuge->dp_estado_id; ?>
-                                        <?php echo $controlador->inputs->conyuge->dp_municipio_id; ?>
-                                        <?php echo $controlador->inputs->conyuge->inm_nacionalidad_id; ?>
-                                        <?php echo $controlador->inputs->conyuge->curp; ?>
-                                        <?php echo $controlador->inputs->conyuge->rfc; ?>
-                                        <?php echo $controlador->inputs->conyuge->inm_ocupacion_id; ?>
-                                        <?php echo $controlador->inputs->conyuge->telefono_casa; ?>
-                                        <?php echo $controlador->inputs->conyuge->telefono_celular;  ?>
-                                        <?php echo $controlador->btn; ?>
-                                    </div>
-
-                                    <?php echo $controlador->header_frontend->apartado_11; ?>
-                                    <div  id="apartado_11">
-                                        <?php echo $controlador->inputs->beneficiario->inm_tipo_beneficiario_id; ?>
-                                        <?php echo $controlador->inputs->beneficiario->inm_parentesco_id; ?>
-                                        <?php echo $controlador->inputs->beneficiario->nombre; ?>
-                                        <?php echo $controlador->inputs->beneficiario->apellido_paterno; ?>
-                                        <?php echo $controlador->inputs->beneficiario->apellido_materno; ?>
-                                        <?php echo $controlador->btn; ?>
-                                        <div class="col-md-12 table-responsive">
-                                            <table class="table table-striped">
-                                                <thead>
-                                                <tr>
-                                                    <th>Id</th>
-                                                    <th>Tipo Beneficiario</th>
-                                                    <th>Parentesco</th>
-                                                    <th>Nombre</th>
-                                                    <th>Apellido Paterno</th>
-                                                    <th>Apellido Materno</th>
-                                                    <th>Modifica</th>
-                                                    <th>Elimina</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                <?php foreach ($controlador->beneficiarios as $beneficiario){ ?>
-                                                    <tr>
-                                                        <td><?php echo $beneficiario['inm_beneficiario_id']; ?></td>
-                                                        <td><?php echo $beneficiario['inm_tipo_beneficiario_descripcion']; ?></td>
-                                                        <td><?php echo $beneficiario['inm_parentesco_descripcion']; ?></td>
-                                                        <td><?php echo $beneficiario['inm_beneficiario_nombre']; ?></td>
-                                                        <td><?php echo $beneficiario['inm_beneficiario_apellido_paterno']; ?></td>
-                                                        <td><?php echo $beneficiario['inm_beneficiario_apellido_materno']; ?></td>
-                                                        <td><?php echo $beneficiario['btn_mod']; ?></td>
-                                                        <td><?php echo $beneficiario['btn_del']; ?></td>
-                                                    </tr>
-                                                <?php } ?>
-                                                </tbody>
-                                            </table>
+                                        <?php echo $controlador->header_frontend->apartado_8; ?>
+                                        <div  id="apartado_8">
+                                            <?php echo $controlador->inputs->conyuge->nombre; ?>
+                                            <?php echo $controlador->inputs->conyuge->apellido_paterno; ?>
+                                            <?php echo $controlador->inputs->conyuge->apellido_materno; ?>
+                                            <?php echo $controlador->inputs->conyuge->fecha_nacimiento; ?>
+                                            <?php echo $controlador->inputs->conyuge->dp_estado_id; ?>
+                                            <?php echo $controlador->inputs->conyuge->dp_municipio_id; ?>
+                                            <?php echo $controlador->inputs->conyuge->inm_nacionalidad_id; ?>
+                                            <?php echo $controlador->inputs->conyuge->curp; ?>
+                                            <?php echo $controlador->inputs->conyuge->rfc; ?>
+                                            <?php echo $controlador->inputs->conyuge->inm_ocupacion_id; ?>
+                                            <?php echo $controlador->inputs->conyuge->telefono_casa; ?>
+                                            <?php echo $controlador->inputs->conyuge->telefono_celular;  ?>
+                                            <?php echo $controlador->btn; ?>
                                         </div>
-                                    </div>
+
+                                        <?php echo $controlador->header_frontend->apartado_9; ?>
+                                        <div  id="apartado_9">
+                                            <?php echo $controlador->inputs->beneficiario->inm_tipo_beneficiario_id; ?>
+                                            <?php echo $controlador->inputs->beneficiario->inm_parentesco_id; ?>
+                                            <?php echo $controlador->inputs->beneficiario->nombre; ?>
+                                            <?php echo $controlador->inputs->beneficiario->apellido_paterno; ?>
+                                            <?php echo $controlador->inputs->beneficiario->apellido_materno; ?>
+                                            <?php echo $controlador->btn; ?>
+                                            <div class="col-md-12 table-responsive">
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>Id</th>
+                                                        <th>Tipo Beneficiario</th>
+                                                        <th>Parentesco</th>
+                                                        <th>Nombre</th>
+                                                        <th>Apellido Paterno</th>
+                                                        <th>Apellido Materno</th>
+                                                        <th>Modifica</th>
+                                                        <th>Elimina</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <?php foreach ($controlador->beneficiarios as $beneficiario){ ?>
+                                                        <tr>
+                                                            <td><?php echo $beneficiario['inm_beneficiario_id']; ?></td>
+                                                            <td><?php echo $beneficiario['inm_tipo_beneficiario_descripcion']; ?></td>
+                                                            <td><?php echo $beneficiario['inm_parentesco_descripcion']; ?></td>
+                                                            <td><?php echo $beneficiario['inm_beneficiario_nombre']; ?></td>
+                                                            <td><?php echo $beneficiario['inm_beneficiario_apellido_paterno']; ?></td>
+                                                            <td><?php echo $beneficiario['inm_beneficiario_apellido_materno']; ?></td>
+                                                            <td><?php echo $beneficiario['btn_mod']; ?></td>
+                                                            <td><?php echo $beneficiario['btn_del']; ?></td>
+                                                        </tr>
+                                                    <?php } ?>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
 
 
-                                    <?php echo $controlador->header_frontend->apartado_12; ?>
-                                    <div  id="apartado_12">
-                                        <?php echo $controlador->inputs->referencia->nombre; ?>
-                                        <?php echo $controlador->inputs->referencia->apellido_paterno; ?>
-                                        <?php echo $controlador->inputs->referencia->apellido_materno; ?>
-                                        <?php echo $controlador->inputs->referencia->lada; ?>
-                                        <?php echo $controlador->inputs->referencia->numero; ?>
-                                        <?php echo $controlador->inputs->referencia->celular; ?>
-                                        <?php echo $controlador->inputs->referencia->dp_estado_id; ?>
-                                        <?php echo $controlador->inputs->referencia->dp_municipio_id; ?>
-                                        <?php echo $controlador->inputs->referencia->dp_cp_id; ?>
-                                        <?php echo $controlador->inputs->referencia->dp_colonia_postal_id; ?>
-                                        <?php echo $controlador->inputs->referencia->calle; ?>
-                                        <?php echo $controlador->inputs->referencia->numero_exterior; ?>
-                                        <?php echo $controlador->inputs->referencia->numero_interior; ?>
-                                        <?php echo $controlador->inputs->referencia->inm_parentesco_id; ?>
-                                        <div class="col-md-12 table-responsive">
-                                            <table class="table table-striped">
-                                                <thead>
-                                                <tr>
-                                                    <th>Id</th>
-                                                    <th>Nombre</th>
-                                                    <th>AP</th>
-                                                    <th>AM</th>
-                                                     <th>Parentesco</th>
-                                                     <th>Celular</th>
-                                                     <th>Modifica</th>
-                                                     <th>Elimina</th>
-                                                 </tr>
-                                                 </thead>
-                                                 <tbody>
-                                                 <?php foreach ($controlador->referencias as $referencia){ ?>
-                                                     <tr>
-                                                         <td><?php echo $referencia['inm_referencia_id']; ?></td>
-                                                         <td><?php echo $referencia['inm_referencia_nombre']; ?></td>
-                                                         <td><?php echo $referencia['inm_referencia_apellido_paterno']; ?></td>
-                                                         <td><?php echo $referencia['inm_referencia_apellido_materno']; ?></td>
-                                                         <td><?php echo $referencia['inm_parentesco_descripcion']; ?></td>
-                                                         <td><?php echo $referencia['inm_referencia_celular']; ?></td>
-                                                         <td><?php echo $referencia['btn_mod']; ?></td>
-                                                         <td><?php echo $referencia['btn_del']; ?></td>
+                                        <?php echo $controlador->header_frontend->apartado_10; ?>
+                                        <div  id="apartado_10">
+                                            <?php echo $controlador->inputs->referencia->nombre; ?>
+                                            <?php echo $controlador->inputs->referencia->apellido_paterno; ?>
+                                            <?php echo $controlador->inputs->referencia->apellido_materno; ?>
+                                            <?php echo $controlador->inputs->referencia->lada; ?>
+                                            <?php echo $controlador->inputs->referencia->numero; ?>
+                                            <?php echo $controlador->inputs->referencia->celular; ?>
+                                            <?php echo $controlador->inputs->referencia->dp_estado_id; ?>
+                                            <?php echo $controlador->inputs->referencia->dp_municipio_id; ?>
+                                            <?php echo $controlador->inputs->referencia->dp_cp_id; ?>
+                                            <?php echo $controlador->inputs->referencia->dp_colonia_postal_id; ?>
+                                            <?php echo $controlador->inputs->referencia->calle; ?>
+                                            <?php echo $controlador->inputs->referencia->numero_exterior; ?>
+                                            <?php echo $controlador->inputs->referencia->numero_interior; ?>
+                                            <?php echo $controlador->inputs->referencia->inm_parentesco_id; ?>
+                                            <div class="col-md-12 table-responsive">
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>Id</th>
+                                                        <th>Nombre</th>
+                                                        <th>AP</th>
+                                                        <th>AM</th>
+                                                         <th>Parentesco</th>
+                                                         <th>Celular</th>
+                                                         <th>Modifica</th>
+                                                         <th>Elimina</th>
                                                      </tr>
-                                                 <?php } ?>
-                                                 </tbody>
-                                             </table>
-                                         </div>
-                                     </div>
+                                                     </thead>
+                                                     <tbody>
+                                                     <?php foreach ($controlador->referencias as $referencia){ ?>
+                                                         <tr>
+                                                             <td><?php echo $referencia['inm_referencia_id']; ?></td>
+                                                             <td><?php echo $referencia['inm_referencia_nombre']; ?></td>
+                                                             <td><?php echo $referencia['inm_referencia_apellido_paterno']; ?></td>
+                                                             <td><?php echo $referencia['inm_referencia_apellido_materno']; ?></td>
+                                                             <td><?php echo $referencia['inm_parentesco_descripcion']; ?></td>
+                                                             <td><?php echo $referencia['inm_referencia_celular']; ?></td>
+                                                             <td><?php echo $referencia['btn_mod']; ?></td>
+                                                             <td><?php echo $referencia['btn_del']; ?></td>
+                                                         </tr>
+                                                     <?php } ?>
+                                                     </tbody>
+                                                 </table>
+                                             </div>
+                                            <?php echo $controlador->btn; ?>
+                                        </div>
 
+                                        <?php echo $controlador->header_frontend->apartado_11; ?>
+                                        <div  id="apartado_11">
+                                            <?php echo $controlador->inputs->cat_sat_regimen_fiscal_id; ?>
+                                            <?php echo $controlador->inputs->cat_sat_moneda_id; ?>
+                                            <?php echo $controlador->inputs->cat_sat_forma_pago_id; ?>
+                                            <?php echo $controlador->inputs->cat_sat_metodo_pago_id; ?>
+                                            <?php echo $controlador->inputs->cat_sat_uso_cfdi_id; ?>
+                                            <?php echo $controlador->inputs->cat_sat_tipo_persona_id; ?>
+                                            <?php echo $controlador->inputs->bn_cuenta_id; ?>
+                                            <?php echo $controlador->btn; ?>
+                                        </div>
 
-                                     <?php echo $controlador->btn; ?>
+                                        <?php echo $controlador->header_frontend->apartado_12; ?>
+                                        <div  id="apartado_12">
+                                            <?php echo $controlador->inputs->com_tipo_cliente_id; ?>
+                                            <?php echo $controlador->btn; ?>
+                                        </div>
                                      </form>
                                  </div>
                                  <div class="conten" id="cpestanacliente2">
@@ -527,6 +520,9 @@
                                         <?php echo $controlador->header_frontend->apartado_2; ?>
 
                                         <div  id="apartado_2">
+                                            <?php echo $controlador->inputs->nss; ?>
+                                            <?php echo $controlador->inputs->curp; ?>
+                                            <?php echo $controlador->inputs->rfc; ?>
                                             <?php echo $controlador->inputs->nombre; ?>
                                             <?php echo $controlador->inputs->apellido_paterno; ?>
                                             <?php echo $controlador->inputs->apellido_materno; ?>
@@ -535,9 +531,6 @@
                                             <?php echo $controlador->inputs->dp_municipio_nacimiento_id; ?>
                                             <?php echo $controlador->inputs->inm_nacionalidad_id; ?>
                                             <?php echo $controlador->inputs->inm_ocupacion_id; ?>
-                                            <?php echo $controlador->inputs->nss; ?>
-                                            <?php echo $controlador->inputs->curp; ?>
-                                            <?php echo $controlador->inputs->rfc; ?>
                                             <?php echo $controlador->inputs->lada_com; ?>
                                             <?php echo $controlador->inputs->numero_com; ?>
                                             <?php echo $controlador->inputs->cel_com; ?>
@@ -650,29 +643,7 @@
                                         </div>
 
                                         <?php echo $controlador->header_frontend->apartado_8; ?>
-
                                         <div  id="apartado_8">
-
-                                            <?php echo $controlador->inputs->cat_sat_regimen_fiscal_id; ?>
-                                            <?php echo $controlador->inputs->cat_sat_moneda_id; ?>
-                                            <?php echo $controlador->inputs->cat_sat_forma_pago_id; ?>
-                                            <?php echo $controlador->inputs->cat_sat_metodo_pago_id; ?>
-                                            <?php echo $controlador->inputs->cat_sat_uso_cfdi_id; ?>
-                                            <?php echo $controlador->inputs->cat_sat_tipo_persona_id; ?>
-                                            <?php echo $controlador->inputs->bn_cuenta_id; ?>
-                                            <?php echo $controlador->btn; ?>
-
-                                        </div>
-
-                                        <?php echo $controlador->header_frontend->apartado_9; ?>
-
-                                        <div  id="apartado_9">
-                                            <?php echo $controlador->inputs->com_tipo_cliente_id; ?>
-                                            <?php echo $controlador->btn; ?>
-                                        </div>
-
-                                        <?php echo $controlador->header_frontend->apartado_10; ?>
-                                        <div  id="apartado_10">
                                             <?php echo $controlador->inputs->conyuge->nombre; ?>
                                             <?php echo $controlador->inputs->conyuge->apellido_paterno; ?>
                                             <?php echo $controlador->inputs->conyuge->apellido_materno; ?>
@@ -688,8 +659,8 @@
                                             <?php echo $controlador->btn; ?>
                                         </div>
 
-                                        <?php echo $controlador->header_frontend->apartado_11; ?>
-                                        <div  id="apartado_11">
+                                        <?php echo $controlador->header_frontend->apartado_9; ?>
+                                        <div  id="apartado_9">
                                             <?php echo $controlador->inputs->beneficiario->inm_tipo_beneficiario_id; ?>
                                             <?php echo $controlador->inputs->beneficiario->inm_parentesco_id; ?>
                                             <?php echo $controlador->inputs->beneficiario->nombre; ?>
@@ -729,8 +700,8 @@
                                         </div>
 
 
-                                        <?php echo $controlador->header_frontend->apartado_12; ?>
-                                        <div  id="apartado_12">
+                                        <?php echo $controlador->header_frontend->apartado_10; ?>
+                                        <div  id="apartado_10">
                                             <?php echo $controlador->inputs->referencia->nombre; ?>
                                             <?php echo $controlador->inputs->referencia->apellido_paterno; ?>
                                             <?php echo $controlador->inputs->referencia->apellido_materno; ?>
@@ -775,10 +746,28 @@
                                                  </tbody>
                                              </table>
                                          </div>
-                                     </div>
+                                            <?php echo $controlador->btn; ?>
+                                        </div>
+
+                                        <?php echo $controlador->header_frontend->apartado_11; ?>
+                                        <div  id="apartado_11">
+                                            <?php echo $controlador->inputs->cat_sat_regimen_fiscal_id; ?>
+                                            <?php echo $controlador->inputs->cat_sat_moneda_id; ?>
+                                            <?php echo $controlador->inputs->cat_sat_forma_pago_id; ?>
+                                            <?php echo $controlador->inputs->cat_sat_metodo_pago_id; ?>
+                                            <?php echo $controlador->inputs->cat_sat_uso_cfdi_id; ?>
+                                            <?php echo $controlador->inputs->cat_sat_tipo_persona_id; ?>
+                                            <?php echo $controlador->inputs->bn_cuenta_id; ?>
+                                            <?php echo $controlador->btn; ?>
+                                        </div>
+
+                                        <?php echo $controlador->header_frontend->apartado_12; ?>
+                                        <div  id="apartado_12">
+                                            <?php echo $controlador->inputs->com_tipo_cliente_id; ?>
+                                            <?php echo $controlador->btn; ?>
+                                        </div>
 
 
-                                     <?php echo $controlador->btn; ?>
                                  </form>
                              </div>
                              <div class="conten" id="cpestana2">

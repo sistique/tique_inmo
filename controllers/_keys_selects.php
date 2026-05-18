@@ -910,7 +910,7 @@ class _keys_selects{
     }
 
     private function keys_identificadores(array $keys_selects){
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'nss', keys_selects:$keys_selects,
+        $keys_selects = (new init())->key_select_txt(cols: 4,key: 'nss', keys_selects:$keys_selects,
             place_holder: 'NSS');
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
@@ -918,14 +918,14 @@ class _keys_selects{
 
         $keys_selects['nss']->regex = $this->validacion->patterns['nss_html'];
 
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'curp',
+        $keys_selects = (new init())->key_select_txt(cols: 4,key: 'curp',
             keys_selects:$keys_selects, place_holder: 'CURP');
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
         $keys_selects['curp']->regex = $this->validacion->patterns['curp_html'];
 
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'rfc',
+        $keys_selects = (new init())->key_select_txt(cols: 4,key: 'rfc',
             keys_selects:$keys_selects, place_holder: 'RFC');
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
@@ -936,17 +936,17 @@ class _keys_selects{
     }
 
     final public function keys_name(array $keys_selects){
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'apellido_paterno',
+        $keys_selects = (new init())->key_select_txt(cols: 4,key: 'apellido_paterno',
             keys_selects:$keys_selects, place_holder: 'Apellido Paterno');
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'apellido_materno',
+        $keys_selects = (new init())->key_select_txt(cols: 4,key: 'apellido_materno',
             keys_selects:$keys_selects, place_holder: 'Apellido Materno',required: false);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'nombre',
+        $keys_selects = (new init())->key_select_txt(cols: 4,key: 'nombre',
             keys_selects:$keys_selects, place_holder: 'Nombre(s)');
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
