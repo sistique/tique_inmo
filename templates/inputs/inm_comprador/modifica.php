@@ -135,12 +135,11 @@
     <?php echo $controlador->inputs->inm_co_acreditado->nombre; ?>
     <?php echo $controlador->inputs->inm_co_acreditado->apellido_paterno; ?>
     <?php echo $controlador->inputs->inm_co_acreditado->apellido_materno; ?>
-    <?php echo $controlador->inputs->inm_co_acreditado->numero_credito; ?>
-    <?php echo $controlador->inputs->inm_co_acreditado->adeudo_hipoteca; ?>
     <?php echo $controlador->inputs->inm_co_acreditado->lada; ?>
     <?php echo $controlador->inputs->inm_co_acreditado->numero; ?>
     <?php echo $controlador->inputs->inm_co_acreditado->celular; ?>
-    <div class="control-group col-sm-6">
+    <?php echo $controlador->inputs->inm_co_acreditado->correo; ?>
+    <div class="control-group col-sm-4">
         <label class="control-label" for="inm_attr_tipo_credito_id">Genero</label>
         <label class="form-check-label chk">
             <input type="radio" name="co_acreditado[genero]" value="M" class="form-check-input" id="genero"
@@ -153,7 +152,9 @@
             F
         </label>
     </div>
-    <?php echo $controlador->inputs->inm_co_acreditado->correo; ?>
+
+    <?php echo $controlador->inputs->inm_co_acreditado->numero_credito; ?>
+    <?php echo $controlador->inputs->inm_co_acreditado->adeudo_hipoteca; ?>
 
     <?php echo $controlador->btn; ?>
 

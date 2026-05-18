@@ -161,8 +161,7 @@ class inm_co_acreditado_html extends _base {
      */
     private function init_cols(array $cols_css): array
     {
-        $cols_6 = array('apellido_materno','apellido_paterno','celular','curp','lada','lada_nep','nombre','nss',
-            'numero','numero_nep','rfc', 'numero_credito', 'adeudo_hipoteca');
+        $cols_6 = array();
 
         foreach ($cols_6 as $campo){
             if(!isset($cols_css[$campo])){
@@ -170,9 +169,23 @@ class inm_co_acreditado_html extends _base {
             }
         }
 
-        if(!isset($cols_css['correo'])){
-            $cols_css['correo'] = 12;
+        $cols_4 = array('nss', 'curp', 'rfc', 'nombre', 'apellido_materno','apellido_paterno', 'numero_credito',
+            'adeudo_hipoteca');
+
+        foreach ($cols_4 as $campo){
+            if(!isset($cols_css[$campo])){
+                $cols_css[$campo] = 4;
+            }
         }
+
+        $cols_3 = array('lada','lada_nep', 'numero','numero_nep', 'celular', 'correo');
+
+        foreach ($cols_3 as $campo){
+            if(!isset($cols_css[$campo])){
+                $cols_css[$campo] = 3;
+            }
+        }
+
         if(!isset($cols_css['extension_nep'])){
             $cols_css['extension_nep'] = 4;
         }
