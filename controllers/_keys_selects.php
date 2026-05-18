@@ -955,7 +955,7 @@ class _keys_selects{
     }
 
     private function keys_nrp(array $keys_selects){
-        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'nombre_empresa_patron',
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'nombre_empresa_patron',
             keys_selects:$keys_selects, place_holder: 'Nombre de la Empresa/Patrón',required: false);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
@@ -966,33 +966,33 @@ class _keys_selects{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
-        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'nrp_nep',
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'nrp_nep',
             keys_selects:$keys_selects, place_holder: 'Numero de Registro Patronal (NRP)',required: false);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'lada_nep',
+        $keys_selects = (new init())->key_select_txt(cols: 3,key: 'lada_nep',
             keys_selects:$keys_selects, place_holder: 'Lada',required: false);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
         $keys_selects['lada_nep']->regex = $this->validacion->patterns['lada_html'];
 
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'numero_nep',
+        $keys_selects = (new init())->key_select_txt(cols: 3,key: 'numero_nep',
             keys_selects:$keys_selects, place_holder: 'Numero',required: false  );
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
         $keys_selects['numero_nep']->regex = $this->validacion->patterns['tel_sin_lada_html'];
 
-        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'extension_nep',
+        $keys_selects = (new init())->key_select_txt(cols: 3,key: 'extension_nep',
             keys_selects:$keys_selects, place_holder: 'Extension',required: false);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'correo_empresa',
+        $keys_selects = (new init())->key_select_txt(cols: 3,key: 'correo_empresa',
             keys_selects:$keys_selects, place_holder: 'Correo Empresa', required: false);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
@@ -1130,7 +1130,7 @@ class _keys_selects{
         }
 
         $columns_ds[] = 'inm_producto_infonavit_descripcion';
-        $keys_selects = $controler->key_select(cols:12, con_registros: true,filtro:  array(),
+        $keys_selects = $controler->key_select(cols:4, con_registros: true,filtro:  array(),
             key: 'inm_producto_infonavit_id', keys_selects: $keys_selects,
             id_selected: $row_upd->inm_producto_infonavit_id, label: 'Producto', columns_ds: $columns_ds);
 
@@ -1140,7 +1140,7 @@ class _keys_selects{
 
         $columns_ds = array();
         $columns_ds[] = 'inm_tipo_credito_descripcion';
-        $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  array(),
+        $keys_selects = $controler->key_select(cols: 4, con_registros: true,filtro:  array(),
             key: 'inm_tipo_credito_id', keys_selects: $keys_selects,
             id_selected: $row_upd->inm_tipo_credito_id, label: 'Tipo de Credito', columns_ds: $columns_ds);
         if(errores::$error){
@@ -1156,7 +1156,7 @@ class _keys_selects{
 
         $columns_ds = array();
         $columns_ds[] = 'inm_attr_tipo_credito_descripcion';
-        $keys_selects = $controler->key_select(cols:6, con_registros: $con_registros,filtro:  $filtro_tipo_credito,
+        $keys_selects = $controler->key_select(cols: 4, con_registros: $con_registros,filtro:  $filtro_tipo_credito,
             key: 'inm_attr_tipo_credito_id', keys_selects: $keys_selects,
             id_selected: $row_upd->inm_attr_tipo_credito_id, label: 'Tipo de Credito Especifico', columns_ds: $columns_ds);
         if(errores::$error){
