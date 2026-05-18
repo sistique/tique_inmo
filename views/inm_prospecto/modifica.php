@@ -15,10 +15,9 @@
 
                         <?php echo $controlador->header_frontend->apartado_1; ?>
                         <div id="apartado_1">
+                            <?php echo $controlador->inputs->org_sucursal_id; ?>
                             <?php echo $controlador->inputs->com_agente_id; ?>
                             <?php echo $controlador->inputs->com_tipo_prospecto_id; ?>
-                            <?php echo $controlador->inputs->com_medio_prospeccion_id; ?>
-                            <?php echo $controlador->inputs->liga_red_social; ?>
                             <?php echo $controlador->inputs->nombre; ?>
                             <?php echo $controlador->inputs->apellido_paterno; ?>
                             <?php echo $controlador->inputs->apellido_materno; ?>

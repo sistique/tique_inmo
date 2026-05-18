@@ -253,14 +253,19 @@ class _inm_prospecto{
      */
     private function identificadores_comercial(array $filtro): array
     {
+        $identificadores['org_sucursal_id']['title'] = 'Agente';
+        $identificadores['org_sucursal_id']['cols'] = 4;
+        $identificadores['org_sucursal_id']['disabled'] = false;
+        $identificadores['org_sucursal_id']['columns_ds'] = array();
+
         $identificadores['com_agente_id']['title'] = 'Agente';
-        $identificadores['com_agente_id']['cols'] = 12;
+        $identificadores['com_agente_id']['cols'] = 4;
         $identificadores['com_agente_id']['disabled'] = false;
         $identificadores['com_agente_id']['filtro'] = $filtro;
         $identificadores['com_agente_id']['columns_ds'] = array();
 
         $identificadores['com_tipo_prospecto_id']['title'] = 'Tipo de prospecto';
-        $identificadores['com_tipo_prospecto_id']['cols'] = 12;
+        $identificadores['com_tipo_prospecto_id']['cols'] = 4;
         $identificadores['com_tipo_prospecto_id']['disabled'] = false;
         $identificadores['com_tipo_prospecto_id']['columns_ds'] = array('com_tipo_prospecto_descripcion');
 
