@@ -3820,7 +3820,7 @@ class controlador_inm_comprador extends _ctl_base {
 
         }
 
-        $nombre = $controler->html->input_text(cols: 12, disabled: false, name: 'conyuge[nombre]',
+        $nombre = $controler->html->input_text(cols: 4, disabled: false, name: 'conyuge[nombre]',
             place_holder: 'Nombre', row_upd: $row_upd, value_vacio: false, class_css: array('conyuge_nombre'),
             required: false, value: $row_upd->nombre);
         if(errores::$error){
@@ -3829,7 +3829,7 @@ class controlador_inm_comprador extends _ctl_base {
 
         $conyuge->nombre = $nombre;
 
-        $apellido_paterno = $controler->html->input_text(cols: 6, disabled: false, name: 'conyuge[apellido_paterno]',
+        $apellido_paterno = $controler->html->input_text(cols: 4, disabled: false, name: 'conyuge[apellido_paterno]',
             place_holder: 'Apellido Pat', row_upd: $row_upd, value_vacio: false,
             class_css: array('conyuge_apellido_paterno'), required: false, value: $row_upd->apellido_paterno);
         if(errores::$error){
@@ -3839,7 +3839,7 @@ class controlador_inm_comprador extends _ctl_base {
 
         $conyuge->apellido_paterno = $apellido_paterno;
 
-        $apellido_materno = $controler->html->input_text(cols: 6, disabled: false, name: 'conyuge[apellido_materno]',
+        $apellido_materno = $controler->html->input_text(cols: 4, disabled: false, name: 'conyuge[apellido_materno]',
             place_holder: 'Apellido Mat', row_upd: $row_upd, value_vacio: false,
             class_css: array('conyuge_apellido_materno'), required: false, value: $row_upd->apellido_materno);
         if(errores::$error){
@@ -4287,7 +4287,7 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         $sl_dp_estado_nacimiento_id = (new dp_estado_html(html: $this->html_base))->select_dp_estado_id(
-            cols: 6,con_registros:  true,id_selected:  $this->registro['dp_estado_nacimiento_id'],
+            cols: 4,con_registros:  true,id_selected:  $this->registro['dp_estado_nacimiento_id'],
             link:  $this->link, label: 'Estado Nac', name: 'dp_estado_nacimiento_id');
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al integrar sl_dp_estado_nacimiento_id',
@@ -4298,7 +4298,7 @@ class controlador_inm_comprador extends _ctl_base {
         $this->inputs->dp_estado_nacimiento_id = $sl_dp_estado_nacimiento_id;
 
         $sl_dp_municipio_nacimiento_id = (new dp_municipio_html(html: $this->html_base))->select_dp_municipio_id(
-            cols: 6, con_registros: true, id_selected: $this->registro['dp_municipio_nacimiento_id'],
+            cols: 4, con_registros: true, id_selected: $this->registro['dp_municipio_nacimiento_id'],
             link: $this->link, filtro: $filtro, label: 'Municipio Nac', name: 'dp_municipio_nacimiento_id');
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al integrar sl_dp_municipio_nacimiento_id',
@@ -4307,7 +4307,7 @@ class controlador_inm_comprador extends _ctl_base {
 
         $this->inputs->dp_municipio_nacimiento_id = $sl_dp_municipio_nacimiento_id;
 
-        $fecha_nacimiento = $this->html->input_fecha(cols: 12, row_upd: $this->row_upd, value_vacio: false,
+        $fecha_nacimiento = $this->html->input_fecha(cols: 4, row_upd: $this->row_upd, value_vacio: false,
             place_holder: 'Fecha de Nacimiento', value: $this->row_upd->fecha_nacimiento);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al integrar fecha_nacimiento',

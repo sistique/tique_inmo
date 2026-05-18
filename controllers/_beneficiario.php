@@ -21,7 +21,7 @@ class _beneficiario{
         $row_upd->apellido_materno = '';
         $row_upd->inm_parentesco_id = -1;
 
-        $nombre = $controler->html->input_text(cols: 12, disabled: false, name: 'beneficiario[nombre]',
+        $nombre = $controler->html->input_text(cols: 4, disabled: false, name: 'beneficiario[nombre]',
             place_holder: 'Nombre', row_upd: $row_upd, value_vacio: false, class_css: array('beneficiario_nombre'),
             required: false, value: $row_upd->nombre);
         if(errores::$error){
@@ -30,7 +30,7 @@ class _beneficiario{
 
         $beneficiario->nombre = $nombre;
 
-        $apellido_paterno = $controler->html->input_text(cols: 6, disabled: false,
+        $apellido_paterno = $controler->html->input_text(cols: 4, disabled: false,
             name: 'beneficiario[apellido_paterno]', place_holder: 'Apellido Pat', row_upd: $row_upd, value_vacio: false,
             class_css: array('beneficiario_apellido_paterno'), required: false, value: $row_upd->apellido_paterno);
         if(errores::$error){
@@ -39,7 +39,7 @@ class _beneficiario{
 
         $beneficiario->apellido_paterno = $apellido_paterno;
 
-        $apellido_materno = $controler->html->input_text(cols: 6, disabled: false,
+        $apellido_materno = $controler->html->input_text(cols: 4, disabled: false,
             name: 'beneficiario[apellido_materno]', place_holder: 'Apellido Mat', row_upd: $row_upd, value_vacio: false,
             class_css: array('beneficiario_apellido_materno'), required: false, value: $row_upd->apellido_materno);
         if(errores::$error){

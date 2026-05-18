@@ -37,7 +37,7 @@ class _referencia{
         $row_upd->numero_exterior = '';
         $row_upd->numero_interior = '';
 
-        $nombre = $controler->html->input_text(cols: 12, disabled: false, name: 'referencia[nombre]', place_holder: 'Nombre',
+        $nombre = $controler->html->input_text(cols: 4, disabled: false, name: 'referencia[nombre]', place_holder: 'Nombre',
             row_upd: $row_upd, value_vacio: false, class_css: array('referencia_nombre'), required: false, value: $row_upd->nombre);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener input',data:  $nombre);
@@ -45,7 +45,7 @@ class _referencia{
 
         $referencia->nombre = $nombre;
 
-        $apellido_paterno = $controler->html->input_text(cols: 6, disabled: false, name: 'referencia[apellido_paterno]',
+        $apellido_paterno = $controler->html->input_text(cols: 4, disabled: false, name: 'referencia[apellido_paterno]',
             place_holder: 'Apellido Pat', row_upd: $row_upd, value_vacio: false, class_css: array('referencia_apellido_paterno'),
             required: false, value: $row_upd->apellido_paterno);
         if(errores::$error){
@@ -54,7 +54,7 @@ class _referencia{
 
         $referencia->apellido_paterno = $apellido_paterno;
 
-        $apellido_materno = $controler->html->input_text(cols: 6, disabled: false, name: 'referencia[apellido_materno]',
+        $apellido_materno = $controler->html->input_text(cols: 4, disabled: false, name: 'referencia[apellido_materno]',
             place_holder: 'Apellido Mat', row_upd: $row_upd, value_vacio: false, class_css: array('referencia_apellido_materno'),
             required: false, value: $row_upd->apellido_materno);
         if(errores::$error){
@@ -63,7 +63,7 @@ class _referencia{
 
         $referencia->apellido_materno = $apellido_materno;
 
-        $lada = $controler->html->input_text(cols: 6, disabled: false, name: 'referencia[lada]',
+        $lada = $controler->html->input_text(cols: 4, disabled: false, name: 'referencia[lada]',
             place_holder: 'Lada', row_upd: $row_upd, value_vacio: false, class_css: array('referencia_lada'),
             required: false, value: $row_upd->lada);
         if(errores::$error){
@@ -72,7 +72,7 @@ class _referencia{
 
         $referencia->lada = $lada;
 
-        $numero = $controler->html->input_text(cols: 6, disabled: false, name: 'referencia[numero]',
+        $numero = $controler->html->input_text(cols: 4, disabled: false, name: 'referencia[numero]',
             place_holder: 'Numero', row_upd: $row_upd, value_vacio: false, class_css: array('referencia_numero'),
             required: false, value: $row_upd->numero);
         if(errores::$error){
@@ -81,7 +81,7 @@ class _referencia{
 
         $referencia->numero = $numero;
 
-        $celular = $controler->html->input_text(cols: 12, disabled: false, name: 'referencia[celular]',
+        $celular = $controler->html->input_text(cols: 4, disabled: false, name: 'referencia[celular]',
             place_holder: 'Celular', row_upd: $row_upd, value_vacio: false, class_css: array('referencia_celular'),
             required: false, value: $row_upd->celular);
         if(errores::$error){
@@ -99,7 +99,7 @@ class _referencia{
 
         $referencia->numero_dom = $numero_dom;
         
-        $calle = $controler->html->input_text(cols: 12, disabled: false, name: 'referencia[calle]',
+        $calle = $controler->html->input_text(cols: 6, disabled: false, name: 'referencia[calle]',
             place_holder: 'Calle', row_upd: $row_upd, value_vacio: false, class_css: array('referencia_calle'),
             required: false, value: $row_upd->calle);
         if(errores::$error){
@@ -108,7 +108,7 @@ class _referencia{
 
         $referencia->calle = $calle;
 
-        $numero_exterior = $controler->html->input_text(cols: 6, disabled: false, name: 'referencia[numero_exterior]',
+        $numero_exterior = $controler->html->input_text(cols: 3, disabled: false, name: 'referencia[numero_exterior]',
             place_holder: 'Numero Exterior', row_upd: $row_upd, value_vacio: false, class_css: array('referencia_numero_exterior'),
             required: false, value: $row_upd->numero_exterior);
         if(errores::$error){
@@ -117,7 +117,7 @@ class _referencia{
 
         $referencia->numero_exterior = $numero_exterior;
 
-        $numero_interior = $controler->html->input_text(cols: 6, disabled: false, name: 'referencia[numero_interior]',
+        $numero_interior = $controler->html->input_text(cols: 3, disabled: false, name: 'referencia[numero_interior]',
             place_holder: 'Numero Interior', row_upd: $row_upd, value_vacio: false, class_css: array('referencia_numero_interior'),
             required: false, value: $row_upd->numero_interior);
         if(errores::$error){
