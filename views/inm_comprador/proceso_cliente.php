@@ -79,63 +79,24 @@
                                     <?php echo $controlador->header_frontend->apartado_2; ?>
 
                                     <div  id="apartado_2">
-                                        <?php echo $controlador->inputs->descuento_pension_alimenticia_dh; ?>
-                                        <?php echo $controlador->inputs->descuento_pension_alimenticia_fc; ?>
-                                        <?php echo $controlador->inputs->monto_credito_solicitado_dh; ?>
-                                        <?php echo $controlador->inputs->monto_ahorro_voluntario; ?>
-                                        <?php echo $controlador->inputs->sub_cuenta; ?>
-                                        <?php echo $controlador->inputs->monto_final; ?>
-                                        <?php echo $controlador->inputs->descuento; ?>
-                                        <?php echo $controlador->inputs->puntos; ?>
-                                        <?php echo $controlador->btn; ?>
-                                    </div>
-
-
-                                    <?php echo $controlador->header_frontend->apartado_3; ?>
-
-                                    <div  id="apartado_3">
-                                        <?php echo $controlador->inputs->con_discapacidad; ?>
-                                        <?php echo $controlador->inputs->inm_tipo_discapacidad_id; ?>
-                                        <?php echo $controlador->inputs->inm_persona_discapacidad_id; ?>
-                                        <?php echo $controlador->btn; ?>
-                                    </div>
-
-                                    <?php echo $controlador->header_frontend->apartado_4; ?>
-
-
-                                    <div  id="apartado_4">
-                                        <?php echo $controlador->inputs->nombre_empresa_patron; ?>
-                                        <?php echo $controlador->inputs->nrp_nep; ?>
-                                        <?php echo $controlador->inputs->lada_nep; ?>
-                                        <?php echo $controlador->inputs->numero_nep; ?>
-                                        <?php echo $controlador->inputs->extension_nep; ?>
-                                        <?php echo $controlador->inputs->inm_sindicato_id; ?>
-                                        <?php echo $controlador->inputs->correo_empresa; ?>
-                                        <?php echo $controlador->btn; ?>
-
-                                    </div>
-
-
-                                    <?php echo $controlador->header_frontend->apartado_5; ?>
-
-                                    <div  id="apartado_5">
-                                        <?php echo $controlador->inputs->nss; ?>
-                                        <?php echo $controlador->inputs->curp; ?>
-                                        <?php echo $controlador->inputs->rfc; ?>
                                         <?php echo $controlador->inputs->nombre; ?>
                                         <?php echo $controlador->inputs->apellido_paterno; ?>
                                         <?php echo $controlador->inputs->apellido_materno; ?>
-                                        <?php echo $controlador->inputs->dp_pais_id; ?>
-                                        <?php echo $controlador->inputs->dp_estado_id; ?>
-                                        <?php echo $controlador->inputs->dp_municipio_id; ?>
-                                        <?php echo $controlador->inputs->dp_cp_id; ?>
-                                        <?php echo $controlador->inputs->dp_colonia_postal_id; ?>
-                                        <?php echo $controlador->inputs->calle; ?>
-                                        <?php echo $controlador->inputs->numero_exterior; ?>
-                                        <?php echo $controlador->inputs->numero_interior; ?>
+                                        <?php echo $controlador->inputs->fecha_nacimiento; ?>
+                                        <?php echo $controlador->inputs->dp_estado_nacimiento_id; ?>
+                                        <?php echo $controlador->inputs->dp_municipio_nacimiento_id; ?>
+                                        <?php echo $controlador->inputs->inm_nacionalidad_id; ?>
+                                        <?php echo $controlador->inputs->inm_ocupacion_id; ?>
+                                        <?php echo $controlador->inputs->nss; ?>
+                                        <?php echo $controlador->inputs->curp; ?>
+                                        <?php echo $controlador->inputs->rfc; ?>
                                         <?php echo $controlador->inputs->lada_com; ?>
                                         <?php echo $controlador->inputs->numero_com; ?>
                                         <?php echo $controlador->inputs->cel_com; ?>
+                                        <?php echo $controlador->inputs->correo_com; ?>
+                                        <?php echo $controlador->inputs->telefono_casa; ?>
+                                        <?php echo $controlador->inputs->adm_estado_civil_id; ?>
+                                        <?php echo $controlador->inputs->inm_estado_civil_id; ?>
 
                                         <div class="control-group col-sm-6">
                                             <label class="control-label" for="inm_attr_tipo_credito_id">Genero</label>
@@ -153,18 +114,55 @@
                                             </label>
                                         </div>
 
-                                        <?php echo $controlador->inputs->correo_com; ?>
-                                        <?php echo $controlador->inputs->adm_estado_civil_id; ?>
-                                        <?php echo $controlador->inputs->inm_estado_civil_id; ?>
-                                        <?php echo $controlador->inputs->dp_estado_nacimiento_id; ?>
-                                        <?php echo $controlador->inputs->dp_municipio_nacimiento_id; ?>
-                                        <?php echo $controlador->inputs->fecha_nacimiento; ?>
-                                        <?php echo $controlador->inputs->inm_nacionalidad_id; ?>
-                                        <?php echo $controlador->inputs->inm_ocupacion_id; ?>
-                                        <?php echo $controlador->inputs->telefono_casa; ?>
+                                        <?php echo $controlador->inputs->dp_pais_id; ?>
+                                        <?php echo $controlador->inputs->dp_estado_id; ?>
+                                        <?php echo $controlador->inputs->dp_municipio_id; ?>
+                                        <?php echo $controlador->inputs->dp_cp_id; ?>
+                                        <?php echo $controlador->inputs->dp_colonia_postal_id; ?>
+                                        <?php echo $controlador->inputs->calle; ?>
+                                        <?php echo $controlador->inputs->numero_exterior; ?>
+                                        <?php echo $controlador->inputs->numero_interior; ?>
                                         <?php echo $controlador->btn; ?>
 
                                     </div>
+
+                                    <?php echo $controlador->header_frontend->apartado_3; ?>
+
+                                    <div  id="apartado_3">
+                                        <?php echo $controlador->inputs->descuento_pension_alimenticia_dh; ?>
+                                        <?php echo $controlador->inputs->descuento_pension_alimenticia_fc; ?>
+                                        <?php echo $controlador->inputs->monto_credito_solicitado_dh; ?>
+                                        <?php echo $controlador->inputs->monto_ahorro_voluntario; ?>
+                                        <?php echo $controlador->inputs->sub_cuenta; ?>
+                                        <?php echo $controlador->inputs->monto_final; ?>
+                                        <?php echo $controlador->inputs->descuento; ?>
+                                        <?php echo $controlador->inputs->puntos; ?>
+                                        <?php echo $controlador->btn; ?>
+                                    </div>
+
+                                    <?php echo $controlador->header_frontend->apartado_4; ?>
+
+                                    <div  id="apartado_4">
+                                        <?php echo $controlador->inputs->con_discapacidad; ?>
+                                        <?php echo $controlador->inputs->inm_tipo_discapacidad_id; ?>
+                                        <?php echo $controlador->inputs->inm_persona_discapacidad_id; ?>
+                                        <?php echo $controlador->btn; ?>
+                                    </div>
+
+                                    <?php echo $controlador->header_frontend->apartado_5; ?>
+
+                                    <div  id="apartado_5">
+                                        <?php echo $controlador->inputs->nombre_empresa_patron; ?>
+                                        <?php echo $controlador->inputs->nrp_nep; ?>
+                                        <?php echo $controlador->inputs->lada_nep; ?>
+                                        <?php echo $controlador->inputs->numero_nep; ?>
+                                        <?php echo $controlador->inputs->extension_nep; ?>
+                                        <?php echo $controlador->inputs->inm_sindicato_id; ?>
+                                        <?php echo $controlador->inputs->correo_empresa; ?>
+                                        <?php echo $controlador->btn; ?>
+
+                                    </div>
+
                                         <?php echo $controlador->header_frontend->apartado_6; ?>
                                         <div  id="apartado_6">
                                             <?php echo $controlador->inputs->inm_co_acreditado->nss; ?>
@@ -231,9 +229,9 @@
                                         <?php echo $controlador->inputs->conyuge->nombre; ?>
                                         <?php echo $controlador->inputs->conyuge->apellido_paterno; ?>
                                         <?php echo $controlador->inputs->conyuge->apellido_materno; ?>
+                                        <?php echo $controlador->inputs->conyuge->fecha_nacimiento; ?>
                                         <?php echo $controlador->inputs->conyuge->dp_estado_id; ?>
                                         <?php echo $controlador->inputs->conyuge->dp_municipio_id; ?>
-                                        <?php echo $controlador->inputs->conyuge->fecha_nacimiento; ?>
                                         <?php echo $controlador->inputs->conyuge->inm_nacionalidad_id; ?>
                                         <?php echo $controlador->inputs->conyuge->curp; ?>
                                         <?php echo $controlador->inputs->conyuge->rfc; ?>
@@ -308,35 +306,35 @@
                                                     <th>Nombre</th>
                                                     <th>AP</th>
                                                     <th>AM</th>
-                                                    <th>Parentesto</th>
-                                                    <th>Celular</th>
-                                                    <th>Modifica</th>
-                                                    <th>Elimina</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                <?php foreach ($controlador->referencias as $referencia){ ?>
-                                                    <tr>
-                                                        <td><?php echo $referencia['inm_referencia_id']; ?></td>
-                                                        <td><?php echo $referencia['inm_referencia_nombre']; ?></td>
-                                                        <td><?php echo $referencia['inm_referencia_apellido_paterno']; ?></td>
-                                                        <td><?php echo $referencia['inm_referencia_apellido_materno']; ?></td>
-                                                        <td><?php echo $referencia['inm_parentesco_descripcion']; ?></td>
-                                                        <td><?php echo $referencia['inm_referencia_celular']; ?></td>
-                                                        <td><?php echo $referencia['btn_mod']; ?></td>
-                                                        <td><?php echo $referencia['btn_del']; ?></td>
-                                                    </tr>
-                                                <?php } ?>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
+                                                     <th>Parentesco</th>
+                                                     <th>Celular</th>
+                                                     <th>Modifica</th>
+                                                     <th>Elimina</th>
+                                                 </tr>
+                                                 </thead>
+                                                 <tbody>
+                                                 <?php foreach ($controlador->referencias as $referencia){ ?>
+                                                     <tr>
+                                                         <td><?php echo $referencia['inm_referencia_id']; ?></td>
+                                                         <td><?php echo $referencia['inm_referencia_nombre']; ?></td>
+                                                         <td><?php echo $referencia['inm_referencia_apellido_paterno']; ?></td>
+                                                         <td><?php echo $referencia['inm_referencia_apellido_materno']; ?></td>
+                                                         <td><?php echo $referencia['inm_parentesco_descripcion']; ?></td>
+                                                         <td><?php echo $referencia['inm_referencia_celular']; ?></td>
+                                                         <td><?php echo $referencia['btn_mod']; ?></td>
+                                                         <td><?php echo $referencia['btn_del']; ?></td>
+                                                     </tr>
+                                                 <?php } ?>
+                                                 </tbody>
+                                             </table>
+                                         </div>
+                                     </div>
 
 
-                                    <?php echo $controlador->btn; ?>
-                                    </form>
-                                </div>
-                                <div class="conten" id="cpestanacliente2">
+                                     <?php echo $controlador->btn; ?>
+                                     </form>
+                                 </div>
+                                 <div class="conten" id="cpestanacliente2">
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="widget widget-box box-container widget-mylistings">
@@ -529,63 +527,24 @@
                                         <?php echo $controlador->header_frontend->apartado_2; ?>
 
                                         <div  id="apartado_2">
-                                            <?php echo $controlador->inputs->descuento_pension_alimenticia_dh; ?>
-                                            <?php echo $controlador->inputs->descuento_pension_alimenticia_fc; ?>
-                                            <?php echo $controlador->inputs->monto_credito_solicitado_dh; ?>
-                                            <?php echo $controlador->inputs->monto_ahorro_voluntario; ?>
-                                            <?php echo $controlador->inputs->sub_cuenta; ?>
-                                            <?php echo $controlador->inputs->monto_final; ?>
-                                            <?php echo $controlador->inputs->descuento; ?>
-                                            <?php echo $controlador->inputs->puntos; ?>
-                                            <?php echo $controlador->btn; ?>
-                                        </div>
-
-
-                                        <?php echo $controlador->header_frontend->apartado_3; ?>
-
-                                        <div  id="apartado_3">
-                                            <?php echo $controlador->inputs->con_discapacidad; ?>
-                                            <?php echo $controlador->inputs->inm_tipo_discapacidad_id; ?>
-                                            <?php echo $controlador->inputs->inm_persona_discapacidad_id; ?>
-                                            <?php echo $controlador->btn; ?>
-                                        </div>
-
-                                        <?php echo $controlador->header_frontend->apartado_4; ?>
-
-
-                                        <div  id="apartado_4">
-                                            <?php echo $controlador->inputs->nombre_empresa_patron; ?>
-                                            <?php echo $controlador->inputs->nrp_nep; ?>
-                                            <?php echo $controlador->inputs->lada_nep; ?>
-                                            <?php echo $controlador->inputs->numero_nep; ?>
-                                            <?php echo $controlador->inputs->extension_nep; ?>
-                                            <?php echo $controlador->inputs->inm_sindicato_id; ?>
-                                            <?php echo $controlador->inputs->correo_empresa; ?>
-                                            <?php echo $controlador->btn; ?>
-
-                                        </div>
-
-
-                                        <?php echo $controlador->header_frontend->apartado_5; ?>
-
-                                        <div  id="apartado_5">
-                                            <?php echo $controlador->inputs->nss; ?>
-                                            <?php echo $controlador->inputs->curp; ?>
-                                            <?php echo $controlador->inputs->rfc; ?>
                                             <?php echo $controlador->inputs->nombre; ?>
                                             <?php echo $controlador->inputs->apellido_paterno; ?>
                                             <?php echo $controlador->inputs->apellido_materno; ?>
-                                            <?php echo $controlador->inputs->dp_pais_id; ?>
-                                            <?php echo $controlador->inputs->dp_estado_id; ?>
-                                            <?php echo $controlador->inputs->dp_municipio_id; ?>
-                                            <?php echo $controlador->inputs->dp_cp_id; ?>
-                                            <?php echo $controlador->inputs->dp_colonia_postal_id; ?>
-                                            <?php echo $controlador->inputs->calle; ?>
-                                            <?php echo $controlador->inputs->numero_exterior; ?>
-                                            <?php echo $controlador->inputs->numero_interior; ?>
+                                            <?php echo $controlador->inputs->fecha_nacimiento; ?>
+                                            <?php echo $controlador->inputs->dp_estado_nacimiento_id; ?>
+                                            <?php echo $controlador->inputs->dp_municipio_nacimiento_id; ?>
+                                            <?php echo $controlador->inputs->inm_nacionalidad_id; ?>
+                                            <?php echo $controlador->inputs->inm_ocupacion_id; ?>
+                                            <?php echo $controlador->inputs->nss; ?>
+                                            <?php echo $controlador->inputs->curp; ?>
+                                            <?php echo $controlador->inputs->rfc; ?>
                                             <?php echo $controlador->inputs->lada_com; ?>
                                             <?php echo $controlador->inputs->numero_com; ?>
                                             <?php echo $controlador->inputs->cel_com; ?>
+                                            <?php echo $controlador->inputs->correo_com; ?>
+                                            <?php echo $controlador->inputs->telefono_casa; ?>
+                                            <?php echo $controlador->inputs->adm_estado_civil_id; ?>
+                                            <?php echo $controlador->inputs->inm_estado_civil_id; ?>
 
                                             <div class="control-group col-sm-6">
                                                 <label class="control-label" for="inm_attr_tipo_credito_id">Genero</label>
@@ -603,15 +562,51 @@
                                                 </label>
                                             </div>
 
-                                            <?php echo $controlador->inputs->correo_com; ?>
-                                            <?php echo $controlador->inputs->adm_estado_civil_id; ?>
-                                            <?php echo $controlador->inputs->inm_estado_civil_id; ?>
-                                            <?php echo $controlador->inputs->dp_estado_nacimiento_id; ?>
-                                            <?php echo $controlador->inputs->dp_municipio_nacimiento_id; ?>
-                                            <?php echo $controlador->inputs->fecha_nacimiento; ?>
-                                            <?php echo $controlador->inputs->inm_nacionalidad_id; ?>
-                                            <?php echo $controlador->inputs->inm_ocupacion_id; ?>
-                                            <?php echo $controlador->inputs->telefono_casa; ?>
+                                            <?php echo $controlador->inputs->dp_pais_id; ?>
+                                            <?php echo $controlador->inputs->dp_estado_id; ?>
+                                            <?php echo $controlador->inputs->dp_municipio_id; ?>
+                                            <?php echo $controlador->inputs->dp_cp_id; ?>
+                                            <?php echo $controlador->inputs->dp_colonia_postal_id; ?>
+                                            <?php echo $controlador->inputs->calle; ?>
+                                            <?php echo $controlador->inputs->numero_exterior; ?>
+                                            <?php echo $controlador->inputs->numero_interior; ?>
+                                            <?php echo $controlador->btn; ?>
+
+                                        </div>
+
+                                        <?php echo $controlador->header_frontend->apartado_3; ?>
+
+                                        <div  id="apartado_3">
+                                            <?php echo $controlador->inputs->descuento_pension_alimenticia_dh; ?>
+                                            <?php echo $controlador->inputs->descuento_pension_alimenticia_fc; ?>
+                                            <?php echo $controlador->inputs->monto_credito_solicitado_dh; ?>
+                                            <?php echo $controlador->inputs->monto_ahorro_voluntario; ?>
+                                            <?php echo $controlador->inputs->sub_cuenta; ?>
+                                            <?php echo $controlador->inputs->monto_final; ?>
+                                            <?php echo $controlador->inputs->descuento; ?>
+                                            <?php echo $controlador->inputs->puntos; ?>
+                                            <?php echo $controlador->btn; ?>
+                                        </div>
+
+                                        <?php echo $controlador->header_frontend->apartado_4; ?>
+
+                                        <div  id="apartado_4">
+                                            <?php echo $controlador->inputs->con_discapacidad; ?>
+                                            <?php echo $controlador->inputs->inm_tipo_discapacidad_id; ?>
+                                            <?php echo $controlador->inputs->inm_persona_discapacidad_id; ?>
+                                            <?php echo $controlador->btn; ?>
+                                        </div>
+
+                                        <?php echo $controlador->header_frontend->apartado_5; ?>
+
+                                        <div  id="apartado_5">
+                                            <?php echo $controlador->inputs->nombre_empresa_patron; ?>
+                                            <?php echo $controlador->inputs->nrp_nep; ?>
+                                            <?php echo $controlador->inputs->lada_nep; ?>
+                                            <?php echo $controlador->inputs->numero_nep; ?>
+                                            <?php echo $controlador->inputs->extension_nep; ?>
+                                            <?php echo $controlador->inputs->inm_sindicato_id; ?>
+                                            <?php echo $controlador->inputs->correo_empresa; ?>
                                             <?php echo $controlador->btn; ?>
 
                                         </div>
@@ -681,9 +676,9 @@
                                             <?php echo $controlador->inputs->conyuge->nombre; ?>
                                             <?php echo $controlador->inputs->conyuge->apellido_paterno; ?>
                                             <?php echo $controlador->inputs->conyuge->apellido_materno; ?>
+                                            <?php echo $controlador->inputs->conyuge->fecha_nacimiento; ?>
                                             <?php echo $controlador->inputs->conyuge->dp_estado_id; ?>
                                             <?php echo $controlador->inputs->conyuge->dp_municipio_id; ?>
-                                            <?php echo $controlador->inputs->conyuge->fecha_nacimiento; ?>
                                             <?php echo $controlador->inputs->conyuge->inm_nacionalidad_id; ?>
                                             <?php echo $controlador->inputs->conyuge->curp; ?>
                                             <?php echo $controlador->inputs->conyuge->rfc; ?>
@@ -758,35 +753,35 @@
                                                         <th>Nombre</th>
                                                         <th>AP</th>
                                                         <th>AM</th>
-                                                        <th>Parentesto</th>
-                                                        <th>Celular</th>
-                                                        <th>Modifica</th>
-                                                        <th>Elimina</th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    <?php foreach ($controlador->referencias as $referencia){ ?>
-                                                        <tr>
-                                                            <td><?php echo $referencia['inm_referencia_id']; ?></td>
-                                                            <td><?php echo $referencia['inm_referencia_nombre']; ?></td>
-                                                            <td><?php echo $referencia['inm_referencia_apellido_paterno']; ?></td>
-                                                            <td><?php echo $referencia['inm_referencia_apellido_materno']; ?></td>
-                                                            <td><?php echo $referencia['inm_parentesco_descripcion']; ?></td>
-                                                            <td><?php echo $referencia['inm_referencia_celular']; ?></td>
-                                                            <td><?php echo $referencia['btn_mod']; ?></td>
-                                                            <td><?php echo $referencia['btn_del']; ?></td>
-                                                        </tr>
-                                                    <?php } ?>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
+                                                     <th>Parentesco</th>
+                                                     <th>Celular</th>
+                                                     <th>Modifica</th>
+                                                     <th>Elimina</th>
+                                                 </tr>
+                                                 </thead>
+                                                 <tbody>
+                                                 <?php foreach ($controlador->referencias as $referencia){ ?>
+                                                     <tr>
+                                                         <td><?php echo $referencia['inm_referencia_id']; ?></td>
+                                                         <td><?php echo $referencia['inm_referencia_nombre']; ?></td>
+                                                         <td><?php echo $referencia['inm_referencia_apellido_paterno']; ?></td>
+                                                         <td><?php echo $referencia['inm_referencia_apellido_materno']; ?></td>
+                                                         <td><?php echo $referencia['inm_parentesco_descripcion']; ?></td>
+                                                         <td><?php echo $referencia['inm_referencia_celular']; ?></td>
+                                                         <td><?php echo $referencia['btn_mod']; ?></td>
+                                                         <td><?php echo $referencia['btn_del']; ?></td>
+                                                     </tr>
+                                                 <?php } ?>
+                                                 </tbody>
+                                             </table>
+                                         </div>
+                                     </div>
 
 
-                                        <?php echo $controlador->btn; ?>
-                                    </form>
-                                </div>
-                                <div class="conten" id="cpestana2">
+                                     <?php echo $controlador->btn; ?>
+                                 </form>
+                             </div>
+                             <div class="conten" id="cpestana2">
                                     <div class="row">
                                         <div class="col-lg-12">
                                             <div class="widget  widget-box box-container form-main widget-form-cart" id="form">
