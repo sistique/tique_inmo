@@ -360,10 +360,10 @@ class _base extends html_controler{
     private function headers_base(): array
     {
         $headers['1'] = '1. CRÉDITO SOLICITADO';
-        $headers['2'] = '2. DATOS PARA DETERMINAR EL MONTO DE CRÉDITO';
-        $headers['3'] = '3. DATOS DE LA VIVIENDA/TERRENO DESTINO DEL CRÉDITO';
-        $headers['4'] = '4. DATOS DE LA EMPRESA O PATRÓN';
-        $headers['5'] = '5. DATOS DE IDENTIFICACIÓN DEL (DE LA) DERECHOHABIENTE / DATOS QUE SERÁN VALIDADOS';
+        $headers['2'] = '2. DATOS DE IDENTIFICACIÓN DEL (DE LA) DERECHOHABIENTE / DATOS QUE SERÁN VALIDADOS';
+        $headers['3'] = '3. DATOS PARA DETERMINAR EL MONTO DE CRÉDITO';
+        $headers['4'] = '4. DATOS DE LA VIVIENDA/TERRENO DESTINO DEL CRÉDITO';
+        $headers['5'] = '5. DATOS DE LA EMPRESA O PATRÓN';
         $headers['13'] = '13. DATOS FISCALES PARA FACTURACION';
         $headers['14'] = '14. CONTROL INTERNO';
         return $headers;

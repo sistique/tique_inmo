@@ -175,16 +175,17 @@ class _inm_comprador{
     private function headers_base(): array
     {
         $headers['1'] = '1. CRÉDITO SOLICITADO';
-        $headers['2'] = '2. DATOS PARA DETERMINAR EL MONTO DE CRÉDITO';
-        $headers['3'] = '3. DATOS DE LA VIVIENDA/TERRENO DESTINO DEL CRÉDITO';
-        $headers['4'] = '4. DATOS DE LA EMPRESA O PATRÓN';
-        $headers['5'] = '5. DATOS DE IDENTIFICACIÓN DEL (DE LA) DERECHOHABIENTE / DATOS QUE SERÁN VALIDADOS';
-        $headers['8'] = '8. DATOS FISCALES PARA FACTURACION';
-        $headers['9'] = '9. CONTROL INTERNO';
-        $headers['10'] = '10. DATOS CONYUGE';
-        $headers['11'] = '11. BENEFICIARIOS';
-        $headers['12'] = '12. REFERENCIAS';
+        $headers['2'] = '2. DATOS DE IDENTIFICACIÓN DEL (DE LA) DERECHOHABIENTE / DATOS QUE SERÁN VALIDADOS';
+        $headers['3'] = '3. DATOS PARA DETERMINAR EL MONTO DE CRÉDITO';
+        $headers['4'] = '4. DATOS DE LA VIVIENDA/TERRENO DESTINO DEL CRÉDITO';
+        $headers['5'] = '5. DATOS DE LA EMPRESA O PATRÓN';
 
+        $headers['8'] = '8. DATOS CONYUGE';
+        $headers['9'] = '9. BENEFICIARIOS';
+        $headers['10'] = '10. REFERENCIAS';
+
+        $headers['11'] = '11 DATOS FISCALES PARA FACTURACION';
+        $headers['12'] = '12. CONTROL INTERNO';
         return $headers;
     }
 
