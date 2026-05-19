@@ -4262,91 +4262,91 @@ class controlador_inm_ubicacion extends _ctl_base {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 12, key: 'nombre',
+        $keys_selects = (new init())->key_select_txt(cols: 4, key: 'nombre',
             keys_selects: $keys_selects, place_holder: 'Nombre',required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'apellido_paterno',
+        $keys_selects = (new init())->key_select_txt(cols: 4, key: 'apellido_paterno',
             keys_selects: $keys_selects, place_holder: 'Apellido Paterno',required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'apellido_materno',
+        $keys_selects = (new init())->key_select_txt(cols: 4, key: 'apellido_materno',
             keys_selects: $keys_selects, place_holder: 'Apellido Materno', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'nss',
+        $keys_selects = (new init())->key_select_txt(cols: 4, key: 'nss',
             keys_selects: $keys_selects, place_holder: 'NSS', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'curp',
+        $keys_selects = (new init())->key_select_txt(cols: 4, key: 'curp',
             keys_selects: $keys_selects, place_holder: 'CURP', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 12, key: 'rfc',
+        $keys_selects = (new init())->key_select_txt(cols: 4, key: 'rfc',
             keys_selects: $keys_selects, place_holder: 'RFC', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 12, key: 'calle_domicilio',
+        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'calle_domicilio',
             keys_selects: $keys_selects, place_holder: 'Calle Domicilio', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
         
-        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'numero_exterior_domicilio',
+        $keys_selects = (new init())->key_select_txt(cols: 3, key: 'numero_exterior_domicilio',
             keys_selects: $keys_selects, place_holder: 'Numero Exterior Domicilio', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }     
         
-        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'numero_interior_domicilio',
+        $keys_selects = (new init())->key_select_txt(cols: 3, key: 'numero_interior_domicilio',
             keys_selects: $keys_selects, place_holder: 'Numero Interior Domicilio', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'nombre_notario',
+        $keys_selects = (new init())->key_select_txt(cols: 4, key: 'nombre_notario',
             keys_selects: $keys_selects, place_holder: 'Nombre Notario', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'numero_notaria',
+        $keys_selects = (new init())->key_select_txt(cols: 4, key: 'numero_notaria',
             keys_selects: $keys_selects, place_holder: 'Numero Notaria', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'plaza_notaria',
+        $keys_selects = (new init())->key_select_txt(cols: 4, key: 'plaza_notaria',
             keys_selects: $keys_selects, place_holder: 'Plaza Notaria', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'numero_escritura',
+        $keys_selects = (new init())->key_select_txt(cols: 4, key: 'numero_escritura',
             keys_selects: $keys_selects, place_holder: 'Numero Escritura', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'libro',
+        $keys_selects = (new init())->key_select_txt(cols: 4, key: 'libro',
             keys_selects: $keys_selects, place_holder: 'Libro', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 12, key: 'volumen',
+        $keys_selects = (new init())->key_select_txt(cols: 4, key: 'volumen',
             keys_selects: $keys_selects, place_holder: 'Volumen', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
@@ -4364,44 +4364,44 @@ class controlador_inm_ubicacion extends _ctl_base {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'entrada',
+        $keys_selects = (new init())->key_select_txt(cols: 3, key: 'entrada',
             keys_selects: $keys_selects, place_holder: 'Entrada', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'supermanzana',
+        $keys_selects = (new init())->key_select_txt(cols: 3, key: 'supermanzana',
             keys_selects: $keys_selects, place_holder: 'Supermanzana', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'edificio',
+        $keys_selects = (new init())->key_select_txt(cols: 3, key: 'edificio',
             keys_selects: $keys_selects, place_holder: 'Edificio', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'condominio',
+        $keys_selects = (new init())->key_select_txt(cols: 3, key: 'condominio',
             keys_selects: $keys_selects, place_holder: 'Condominio', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'etapa',
+        $keys_selects = (new init())->key_select_txt(cols: 3, key: 'etapa',
             keys_selects: $keys_selects, place_holder: 'Etapa', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'lada_com',
+        $keys_selects = (new init())->key_select_txt(cols: 3, key: 'lada_com',
             keys_selects: $keys_selects, place_holder: 'Lada', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
         $keys_selects['lada_com']->regex = $this->validacion->patterns['lada_html'];
 
-        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'numero_com',
+        $keys_selects = (new init())->key_select_txt(cols: 3, key: 'numero_com',
             keys_selects: $keys_selects, place_holder: 'Numero', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
@@ -4409,7 +4409,7 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $keys_selects['numero_com']->regex = $this->validacion->patterns['tel_sin_lada_html'];
 
-        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'cel_com',
+        $keys_selects = (new init())->key_select_txt(cols: 3, key: 'cel_com',
             keys_selects: $keys_selects, place_holder: 'Cel', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
@@ -4417,7 +4417,7 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $keys_selects['cel_com']->regex = $this->validacion->patterns['telefono_mx_html'];
 
-        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'correo_com',
+        $keys_selects = (new init())->key_select_txt(cols: 3, key: 'correo_com',
             keys_selects: $keys_selects, place_holder: 'Correo', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
@@ -4431,36 +4431,36 @@ class controlador_inm_ubicacion extends _ctl_base {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'manzana', keys_selects:$keys_selects,
+        $keys_selects = (new init())->key_select_txt(cols: 3,key: 'manzana', keys_selects:$keys_selects,
             place_holder: 'Manzana',required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'lote', keys_selects:$keys_selects,
+        $keys_selects = (new init())->key_select_txt(cols: 3,key: 'lote', keys_selects:$keys_selects,
             place_holder: 'Lote', required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'nivel',
+        $keys_selects = (new init())->key_select_txt(cols: 3, key: 'nivel',
             keys_selects: $keys_selects, place_holder: 'Nivel', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'recamaras',
+        $keys_selects = (new init())->key_select_txt(cols: 4, key: 'recamaras',
             keys_selects: $keys_selects, place_holder: 'Recamaras', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'metros_terreno',
+        $keys_selects = (new init())->key_select_txt(cols: 4, key: 'metros_terreno',
             keys_selects: $keys_selects, place_holder: 'Metros Terreno', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'metros_construccion',
+        $keys_selects = (new init())->key_select_txt(cols: 4, key: 'metros_construccion',
             keys_selects: $keys_selects, place_holder: 'Metros Construccion', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
@@ -4515,18 +4515,18 @@ class controlador_inm_ubicacion extends _ctl_base {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'numero_exterior', keys_selects:$keys_selects,
+        $keys_selects = (new init())->key_select_txt(cols: 3,key: 'numero_exterior', keys_selects:$keys_selects,
             place_holder: 'Exterior',required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'numero_interior', keys_selects: $keys_selects,
+        $keys_selects = (new init())->key_select_txt(cols: 3,key: 'numero_interior', keys_selects: $keys_selects,
             place_holder: 'Interior',required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'calle', keys_selects: $keys_selects,
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'calle', keys_selects: $keys_selects,
             place_holder: 'Calle',required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);

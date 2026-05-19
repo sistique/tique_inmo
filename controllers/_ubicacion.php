@@ -343,13 +343,14 @@ class _ubicacion{
     private function headers_ubicacion(): array
     {
         $headers = array();
-        $headers['1'] = '1. DATOS PERSONALES';
-        $headers['2'] = '2. DATOS DE CONTACTO';
-        $headers['3'] = '3. VIVIENDA';
-        $headers['4'] = '4. CREDITO';
+        $headers['1'] = '1. IDENTIFICACIÓN';
+        $headers['2'] = '2. VIVIENDA';
+        $headers['3'] = '3. CREDITO';
+        $headers['4'] = '4. DATOS PERSONALES';
         $headers['5'] = '5. ADEUDO';
         $headers['6'] = '6. CO ACREDITADO';
-        $headers['7'] = '7. CONYUGE';
+        $headers['7'] = '7. CO ACREDITADO LABORAL';
+        $headers['8'] = '8. CONYUGE';
 
         return $headers;
     }
@@ -618,7 +619,7 @@ class _ubicacion{
 
 
         $columns_ds = array('inm_estado_vivienda_descripcion');
-        $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_estado_vivienda_id',
+        $keys_selects = $controler->key_select(cols: 3, con_registros: true,filtro:  array(), key: 'inm_estado_vivienda_id',
             keys_selects: $keys_selects, id_selected: $data_row->inm_estado_vivienda_id, label: 'Estado Vivienda', columns_ds : $columns_ds);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
@@ -626,7 +627,7 @@ class _ubicacion{
         $keys_selects['inm_estado_vivienda_id']->required = false;
         
         $columns_ds = array('inm_tipo_vivienda_descripcion');
-        $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_tipo_vivienda_id',
+        $keys_selects = $controler->key_select(cols: 3, con_registros: true,filtro:  array(), key: 'inm_tipo_vivienda_id',
             keys_selects: $keys_selects, id_selected: $data_row->inm_tipo_vivienda_id, label: 'Tipo Vivienda',
             columns_ds : $columns_ds);
         if(errores::$error){
@@ -635,7 +636,7 @@ class _ubicacion{
         $keys_selects['inm_tipo_vivienda_id']->required = false;
 
         $columns_ds = array('inm_prototipo_descripcion');
-        $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_prototipo_id',
+        $keys_selects = $controler->key_select(cols: 3, con_registros: true,filtro:  array(), key: 'inm_prototipo_id',
             keys_selects: $keys_selects, id_selected: $data_row->inm_prototipo_id, label: 'Prototipo', columns_ds : $columns_ds);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
@@ -643,7 +644,7 @@ class _ubicacion{
         $keys_selects['inm_prototipo_id']->required = false;
 
         $columns_ds = array('inm_complemento_descripcion');
-        $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_complemento_id',
+        $keys_selects = $controler->key_select(cols: 3, con_registros: true,filtro:  array(), key: 'inm_complemento_id',
             keys_selects: $keys_selects, id_selected: $data_row->inm_complemento_id, label: 'Complemento',
             columns_ds : $columns_ds);
         if(errores::$error){
