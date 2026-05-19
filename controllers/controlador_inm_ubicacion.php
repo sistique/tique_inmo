@@ -4080,7 +4080,7 @@ class controlador_inm_ubicacion extends _ctl_base {
                 mensaje: 'Error al integrar headers',data:  $headers, header: $header,ws:  $ws);
         }
 
-        $fecha_otorgamiento_credito = $this->html->input_fecha(cols: 12, row_upd: $this->row_upd, value_vacio: false,
+        $fecha_otorgamiento_credito = $this->html->input_fecha(cols: 4, row_upd: $this->row_upd, value_vacio: false,
             name: 'fecha_otorgamiento_credito', place_holder: 'Fecha Otorgamiento Credito',
             required: false, value: $this->row_upd->fecha_otorgamiento_credito);
         if(errores::$error){
@@ -4532,7 +4532,7 @@ class controlador_inm_ubicacion extends _ctl_base {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'numero_credito', keys_selects: $keys_selects,
+        $keys_selects = (new init())->key_select_txt(cols: 4,key: 'numero_credito', keys_selects: $keys_selects,
             place_holder: 'Numero Credito',required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
