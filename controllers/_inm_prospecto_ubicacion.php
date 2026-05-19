@@ -309,13 +309,14 @@ class _inm_prospecto_ubicacion{
     private function headers_prospecto_ubicacion(): array
     {
         $headers = array();
-        $headers['1'] = '1. DATOS PERSONALES';
-        $headers['2'] = '2. DATOS DE CONTACTO';
-        $headers['3'] = '3. VIVIENDA';
-        $headers['4'] = '4. CREDITO';
+        $headers['1'] = '1. IDENTIFICACIÓN';
+        $headers['2'] = '2. VIVIENDA';
+        $headers['3'] = '3. CREDITO';
+        $headers['4'] = '4. DATOS PERSONALES';
         $headers['5'] = '5. ADEUDO';
         $headers['6'] = '6. CO ACREDITADO';
-        $headers['7'] = '7. CONYUGE';
+        $headers['7'] = '7. CO ACREDITADO LABORAL';
+        $headers['8'] = '8. CONYUGE';
 
         return $headers;
     }
