@@ -14,8 +14,8 @@
 <?php echo $controlador->inputs->calle; ?>
 <?php echo $controlador->inputs->numero_exterior; ?>
 <?php echo $controlador->inputs->numero_interior; ?>
-<?php echo $controlador->inputs->manzana; ?>
-<?php echo $controlador->inputs->lote; ?>
-<?php echo $controlador->inputs->cuenta_predial; ?>
+<?php //echo $controlador->inputs->manzana; ?>
+<?php //echo $controlador->inputs->lote; ?>
+<?php //echo $controlador->inputs->cuenta_predial; ?>
 
 <?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
