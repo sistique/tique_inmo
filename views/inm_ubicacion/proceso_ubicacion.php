@@ -54,37 +54,23 @@
                                         <div id="apartado_1">
                                             <?php echo $controlador->inputs->org_sucursal_id; ?>
                                             <?php echo $controlador->inputs->com_agente_id; ?>
-                                            <?php echo $controlador->inputs->nombre; ?>
-                                            <?php echo $controlador->inputs->apellido_paterno; ?>
-                                            <?php echo $controlador->inputs->apellido_materno; ?>
+
+                                            <!-- Identificadores -->
                                             <?php echo $controlador->inputs->nss; ?>
                                             <?php echo $controlador->inputs->curp; ?>
                                             <?php echo $controlador->inputs->rfc; ?>
-                                            <?php echo $controlador->inputs->dp_estado_domicilio_id; ?>
-                                            <?php echo $controlador->inputs->dp_municipio_domicilio_id; ?>
-                                            <?php echo $controlador->inputs->dp_cp_domicilio_id; ?>
-                                            <?php echo $controlador->inputs->dp_colonia_postal_domicilio_id; ?>
-                                            <?php echo $controlador->inputs->calle_domicilio; ?>
-                                            <?php echo $controlador->inputs->numero_exterior_domicilio; ?>
-                                            <?php echo $controlador->inputs->numero_interior_domicilio; ?>
-                                            <?php //cho $controlador->inputs->observaciones; ?>
-                                            <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
 
+                                            <!-- Identidad -->
+                                            <?php echo $controlador->inputs->nombre; ?>
+                                            <?php echo $controlador->inputs->apellido_paterno; ?>
+                                            <?php echo $controlador->inputs->apellido_materno; ?>
+
+                                            <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
                                         </div>
 
                                         <?php echo $controlador->header_frontend->apartado_2; ?>
                                         <div id="apartado_2">
-                                            <?php echo $controlador->inputs->lada_com; ?>
-                                            <?php echo $controlador->inputs->numero_com; ?>
-                                            <?php echo $controlador->inputs->cel_com; ?>
-                                            <?php echo $controlador->inputs->correo_com; ?>
-                                            <?php echo $controlador->inputs->razon_social; ?>
-                                            <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
-
-                                        </div>
-
-                                        <?php echo $controlador->header_frontend->apartado_3; ?>
-                                        <div id="apartado_3">
+                                            <!-- Dirección de la vivienda -->
                                             <?php echo $controlador->inputs->dp_estado_id; ?>
                                             <?php echo $controlador->inputs->dp_municipio_id; ?>
                                             <?php echo $controlador->inputs->dp_cp_id; ?>
@@ -95,28 +81,31 @@
                                             <?php echo $controlador->inputs->entre_calle_1; ?>
                                             <?php echo $controlador->inputs->entre_calle_2; ?>
 
+                                            <!-- Tipo y características -->
                                             <?php echo $controlador->inputs->inm_tipo_vivienda_id; ?>
                                             <?php echo $controlador->inputs->inm_estado_vivienda_id; ?>
                                             <?php echo $controlador->inputs->inm_prototipo_id; ?>
                                             <?php echo $controlador->inputs->inm_complemento_id; ?>
 
+                                            <!-- Identificadores de la unidad -->
                                             <?php echo $controlador->inputs->lote; ?>
                                             <?php echo $controlador->inputs->nivel; ?>
                                             <?php echo $controlador->inputs->entrada; ?>
-
                                             <?php echo $controlador->inputs->manzana; ?>
                                             <?php echo $controlador->inputs->supermanzana; ?>
                                             <?php echo $controlador->inputs->edificio; ?>
                                             <?php echo $controlador->inputs->condominio; ?>
                                             <?php echo $controlador->inputs->etapa; ?>
 
+                                            <!-- Dimensiones -->
                                             <?php echo $controlador->inputs->recamaras; ?>
                                             <?php echo $controlador->inputs->metros_terreno; ?>
                                             <?php echo $controlador->inputs->metros_construccion; ?>
 
+                                            <!-- Datos registrales / notaría -->
                                             <?php echo $controlador->inputs->numero_notaria; ?>
-                                            <?php echo $controlador->inputs->nombre_notario; ?>
                                             <?php echo $controlador->inputs->plaza_notaria; ?>
+                                            <?php echo $controlador->inputs->nombre_notario; ?>
                                             <?php echo $controlador->inputs->numero_escritura; ?>
                                             <?php echo $controlador->inputs->libro; ?>
                                             <?php echo $controlador->inputs->volumen; ?>
@@ -124,18 +113,37 @@
                                             <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
                                         </div>
 
-                                        <?php echo $controlador->header_frontend->apartado_4; ?>
-                                        <div id="apartado_4">
+                                        <?php echo $controlador->header_frontend->apartado_3; ?>
+                                        <div id="apartado_3">
                                             <?php echo $controlador->inputs->inm_tipo_credito_id; ?>
                                             <?php echo $controlador->inputs->numero_credito; ?>
-                                            <?php echo $controlador->inputs->correo_mi_cuenta_infonavit; ?>
-                                            <?php echo $controlador->inputs->password_mi_cuenta_infonavit; ?>
                                             <?php echo $controlador->inputs->fecha_otorgamiento_credito; ?>
                                             <?php echo $controlador->inputs->adeudo_hipoteca; ?>
                                             <?php echo $controlador->inputs->monto_devolucion; ?>
-
+                                            <?php echo $controlador->inputs->correo_mi_cuenta_infonavit; ?>
+                                            <?php echo $controlador->inputs->password_mi_cuenta_infonavit; ?>
                                             <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
+                                        </div>
 
+                                        <?php echo $controlador->header_frontend->apartado_4; ?>
+                                        <div id="apartado_4">
+                                            <?php echo $controlador->inputs->razon_social; ?>
+
+                                            <!-- Domicilio del titular -->
+                                            <?php echo $controlador->inputs->dp_estado_domicilio_id; ?>
+                                            <?php echo $controlador->inputs->dp_municipio_domicilio_id; ?>
+                                            <?php echo $controlador->inputs->dp_cp_domicilio_id; ?>
+                                            <?php echo $controlador->inputs->dp_colonia_postal_domicilio_id; ?>
+                                            <?php echo $controlador->inputs->calle_domicilio; ?>
+                                            <?php echo $controlador->inputs->numero_exterior_domicilio; ?>
+                                            <?php echo $controlador->inputs->numero_interior_domicilio; ?>
+
+                                            <!-- Contacto -->
+                                            <?php echo $controlador->inputs->lada_com; ?>
+                                            <?php echo $controlador->inputs->numero_com; ?>
+                                            <?php echo $controlador->inputs->cel_com; ?>
+                                            <?php echo $controlador->inputs->correo_com; ?>
+                                            <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
                                         </div>
 
                                         <?php echo $controlador->header_frontend->apartado_5; ?>
@@ -146,22 +154,27 @@
                                             <?php echo $controlador->inputs->adeudo_agua; ?>
                                             <?php echo $controlador->inputs->adeudo_luz; ?>
                                             <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
-
                                         </div>
+
                                         <?php echo $controlador->header_frontend->apartado_6; ?>
                                         <div id="apartado_6">
+                                            <!-- Identificadores -->
                                             <?php echo $controlador->inputs->inm_co_acreditado->nss; ?>
                                             <?php echo $controlador->inputs->inm_co_acreditado->curp; ?>
                                             <?php echo $controlador->inputs->inm_co_acreditado->rfc; ?>
+
+                                            <!-- Identidad -->
                                             <?php echo $controlador->inputs->inm_co_acreditado->nombre; ?>
                                             <?php echo $controlador->inputs->inm_co_acreditado->apellido_paterno; ?>
                                             <?php echo $controlador->inputs->inm_co_acreditado->apellido_materno; ?>
-                                            <?php echo $controlador->inputs->inm_co_acreditado->numero_credito; ?>
-                                            <?php echo $controlador->inputs->inm_co_acreditado->adeudo_hipoteca; ?>
+
+                                            <!-- Contacto -->
                                             <?php echo $controlador->inputs->inm_co_acreditado->lada; ?>
                                             <?php echo $controlador->inputs->inm_co_acreditado->numero; ?>
                                             <?php echo $controlador->inputs->inm_co_acreditado->celular; ?>
-                                            <div class="control-group col-sm-6">
+                                            <?php echo $controlador->inputs->inm_co_acreditado->correo; ?>
+
+                                            <div class="control-group col-sm-4">
                                                 <label class="control-label" for="inm_attr_tipo_credito_id">Genero</label>
                                                 <label class="form-check-label chk">
                                                     <input type="radio" name="co_acreditado[genero]" value="M" class="form-check-input" id="genero"
@@ -174,30 +187,44 @@
                                                     F
                                                 </label>
                                             </div>
-                                            <?php echo $controlador->inputs->inm_co_acreditado->correo; ?>
-
-                                            <?php echo $controlador->inputs->inm_co_acreditado->nombre_empresa_patron; ?>
-                                            <?php echo $controlador->inputs->inm_co_acreditado->nrp; ?>
-                                            <?php echo $controlador->inputs->inm_co_acreditado->lada_nep; ?>
-                                            <?php echo $controlador->inputs->inm_co_acreditado->numero_nep; ?>
+                                            <?php echo $controlador->inputs->inm_co_acreditado->numero_credito; ?>
+                                            <?php echo $controlador->inputs->inm_co_acreditado->adeudo_hipoteca; ?>
 
                                             <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
                                         </div>
 
                                         <?php echo $controlador->header_frontend->apartado_7; ?>
                                         <div id="apartado_7">
+                                            <?php echo $controlador->inputs->inm_co_acreditado->nombre_empresa_patron; ?>
+                                            <?php echo $controlador->inputs->inm_co_acreditado->nrp; ?>
+                                            <?php echo $controlador->inputs->inm_co_acreditado->lada_nep; ?>
+                                            <?php echo $controlador->inputs->inm_co_acreditado->numero_nep; ?>
+                                            <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
+                                        </div>
+
+                                        <?php echo $controlador->header_frontend->apartado_8; ?>
+                                        <div id="apartado_8">
+                                            <!-- Identificadores -->
+                                            <?php echo $controlador->inputs->conyuge->curp; ?>
+                                            <?php echo $controlador->inputs->conyuge->rfc; ?>
+
+                                            <!-- Identidad -->
                                             <?php echo $controlador->inputs->conyuge->nombre; ?>
                                             <?php echo $controlador->inputs->conyuge->apellido_paterno; ?>
                                             <?php echo $controlador->inputs->conyuge->apellido_materno; ?>
+
+                                            <!-- Nacimiento -->
+                                            <?php echo $controlador->inputs->conyuge->fecha_nacimiento; ?>
                                             <?php echo $controlador->inputs->conyuge->dp_estado_id; ?>
                                             <?php echo $controlador->inputs->conyuge->dp_municipio_id; ?>
-                                            <?php echo $controlador->inputs->conyuge->fecha_nacimiento; ?>
                                             <?php echo $controlador->inputs->conyuge->inm_nacionalidad_id; ?>
-                                            <?php echo $controlador->inputs->conyuge->curp; ?>
-                                            <?php echo $controlador->inputs->conyuge->rfc; ?>
+                                            <?php echo $controlador->inputs->conyuge->inm_ocupacion_id; ?>
+
+                                            <!-- Crédito -->
                                             <?php echo $controlador->inputs->conyuge->numero_credito; ?>
                                             <?php echo $controlador->inputs->conyuge->adeudo_hipoteca; ?>
-                                            <?php echo $controlador->inputs->conyuge->inm_ocupacion_id; ?>
+
+                                            <!-- Contacto -->
                                             <?php echo $controlador->inputs->conyuge->telefono_casa; ?>
                                             <?php echo $controlador->inputs->conyuge->telefono_celular; ?>
 
@@ -429,37 +456,23 @@
                                         <div id="apartado_1">
                                             <?php echo $controlador->inputs->org_sucursal_id; ?>
                                             <?php echo $controlador->inputs->com_agente_id; ?>
-                                            <?php echo $controlador->inputs->nombre; ?>
-                                            <?php echo $controlador->inputs->apellido_paterno; ?>
-                                            <?php echo $controlador->inputs->apellido_materno; ?>
+
+                                            <!-- Identificadores -->
                                             <?php echo $controlador->inputs->nss; ?>
                                             <?php echo $controlador->inputs->curp; ?>
                                             <?php echo $controlador->inputs->rfc; ?>
-                                            <?php echo $controlador->inputs->dp_estado_domicilio_id; ?>
-                                            <?php echo $controlador->inputs->dp_municipio_domicilio_id; ?>
-                                            <?php echo $controlador->inputs->dp_cp_domicilio_id; ?>
-                                            <?php echo $controlador->inputs->dp_colonia_postal_domicilio_id; ?>
-                                            <?php echo $controlador->inputs->calle_domicilio; ?>
-                                            <?php echo $controlador->inputs->numero_exterior_domicilio; ?>
-                                            <?php echo $controlador->inputs->numero_interior_domicilio; ?>
-                                            <?php //cho $controlador->inputs->observaciones; ?>
-                                            <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
 
+                                            <!-- Identidad -->
+                                            <?php echo $controlador->inputs->nombre; ?>
+                                            <?php echo $controlador->inputs->apellido_paterno; ?>
+                                            <?php echo $controlador->inputs->apellido_materno; ?>
+
+                                            <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
                                         </div>
 
                                         <?php echo $controlador->header_frontend->apartado_2; ?>
                                         <div id="apartado_2">
-                                            <?php echo $controlador->inputs->lada_com; ?>
-                                            <?php echo $controlador->inputs->numero_com; ?>
-                                            <?php echo $controlador->inputs->cel_com; ?>
-                                            <?php echo $controlador->inputs->correo_com; ?>
-                                            <?php echo $controlador->inputs->razon_social; ?>
-                                            <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
-
-                                        </div>
-
-                                        <?php echo $controlador->header_frontend->apartado_3; ?>
-                                        <div id="apartado_3">
+                                            <!-- Dirección de la vivienda -->
                                             <?php echo $controlador->inputs->dp_estado_id; ?>
                                             <?php echo $controlador->inputs->dp_municipio_id; ?>
                                             <?php echo $controlador->inputs->dp_cp_id; ?>
@@ -470,28 +483,31 @@
                                             <?php echo $controlador->inputs->entre_calle_1; ?>
                                             <?php echo $controlador->inputs->entre_calle_2; ?>
 
+                                            <!-- Tipo y características -->
                                             <?php echo $controlador->inputs->inm_tipo_vivienda_id; ?>
                                             <?php echo $controlador->inputs->inm_estado_vivienda_id; ?>
                                             <?php echo $controlador->inputs->inm_prototipo_id; ?>
                                             <?php echo $controlador->inputs->inm_complemento_id; ?>
 
+                                            <!-- Identificadores de la unidad -->
                                             <?php echo $controlador->inputs->lote; ?>
                                             <?php echo $controlador->inputs->nivel; ?>
                                             <?php echo $controlador->inputs->entrada; ?>
-
                                             <?php echo $controlador->inputs->manzana; ?>
                                             <?php echo $controlador->inputs->supermanzana; ?>
                                             <?php echo $controlador->inputs->edificio; ?>
                                             <?php echo $controlador->inputs->condominio; ?>
                                             <?php echo $controlador->inputs->etapa; ?>
 
+                                            <!-- Dimensiones -->
                                             <?php echo $controlador->inputs->recamaras; ?>
                                             <?php echo $controlador->inputs->metros_terreno; ?>
                                             <?php echo $controlador->inputs->metros_construccion; ?>
 
+                                            <!-- Datos registrales / notaría -->
                                             <?php echo $controlador->inputs->numero_notaria; ?>
-                                            <?php echo $controlador->inputs->nombre_notario; ?>
                                             <?php echo $controlador->inputs->plaza_notaria; ?>
+                                            <?php echo $controlador->inputs->nombre_notario; ?>
                                             <?php echo $controlador->inputs->numero_escritura; ?>
                                             <?php echo $controlador->inputs->libro; ?>
                                             <?php echo $controlador->inputs->volumen; ?>
@@ -499,18 +515,37 @@
                                             <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
                                         </div>
 
-                                        <?php echo $controlador->header_frontend->apartado_4; ?>
-                                        <div id="apartado_4">
+                                        <?php echo $controlador->header_frontend->apartado_3; ?>
+                                        <div id="apartado_3">
                                             <?php echo $controlador->inputs->inm_tipo_credito_id; ?>
                                             <?php echo $controlador->inputs->numero_credito; ?>
-                                            <?php echo $controlador->inputs->correo_mi_cuenta_infonavit; ?>
-                                            <?php echo $controlador->inputs->password_mi_cuenta_infonavit; ?>
                                             <?php echo $controlador->inputs->fecha_otorgamiento_credito; ?>
                                             <?php echo $controlador->inputs->adeudo_hipoteca; ?>
                                             <?php echo $controlador->inputs->monto_devolucion; ?>
-
+                                            <?php echo $controlador->inputs->correo_mi_cuenta_infonavit; ?>
+                                            <?php echo $controlador->inputs->password_mi_cuenta_infonavit; ?>
                                             <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
+                                        </div>
 
+                                        <?php echo $controlador->header_frontend->apartado_4; ?>
+                                        <div id="apartado_4">
+                                            <?php echo $controlador->inputs->razon_social; ?>
+
+                                            <!-- Domicilio del titular -->
+                                            <?php echo $controlador->inputs->dp_estado_domicilio_id; ?>
+                                            <?php echo $controlador->inputs->dp_municipio_domicilio_id; ?>
+                                            <?php echo $controlador->inputs->dp_cp_domicilio_id; ?>
+                                            <?php echo $controlador->inputs->dp_colonia_postal_domicilio_id; ?>
+                                            <?php echo $controlador->inputs->calle_domicilio; ?>
+                                            <?php echo $controlador->inputs->numero_exterior_domicilio; ?>
+                                            <?php echo $controlador->inputs->numero_interior_domicilio; ?>
+
+                                            <!-- Contacto -->
+                                            <?php echo $controlador->inputs->lada_com; ?>
+                                            <?php echo $controlador->inputs->numero_com; ?>
+                                            <?php echo $controlador->inputs->cel_com; ?>
+                                            <?php echo $controlador->inputs->correo_com; ?>
+                                            <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
                                         </div>
 
                                         <?php echo $controlador->header_frontend->apartado_5; ?>
@@ -521,22 +556,27 @@
                                             <?php echo $controlador->inputs->adeudo_agua; ?>
                                             <?php echo $controlador->inputs->adeudo_luz; ?>
                                             <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
-
                                         </div>
+
                                         <?php echo $controlador->header_frontend->apartado_6; ?>
                                         <div id="apartado_6">
+                                            <!-- Identificadores -->
                                             <?php echo $controlador->inputs->inm_co_acreditado->nss; ?>
                                             <?php echo $controlador->inputs->inm_co_acreditado->curp; ?>
                                             <?php echo $controlador->inputs->inm_co_acreditado->rfc; ?>
+
+                                            <!-- Identidad -->
                                             <?php echo $controlador->inputs->inm_co_acreditado->nombre; ?>
                                             <?php echo $controlador->inputs->inm_co_acreditado->apellido_paterno; ?>
                                             <?php echo $controlador->inputs->inm_co_acreditado->apellido_materno; ?>
-                                            <?php echo $controlador->inputs->inm_co_acreditado->numero_credito; ?>
-                                            <?php echo $controlador->inputs->inm_co_acreditado->adeudo_hipoteca; ?>
+
+                                            <!-- Contacto -->
                                             <?php echo $controlador->inputs->inm_co_acreditado->lada; ?>
                                             <?php echo $controlador->inputs->inm_co_acreditado->numero; ?>
                                             <?php echo $controlador->inputs->inm_co_acreditado->celular; ?>
-                                            <div class="control-group col-sm-6">
+                                            <?php echo $controlador->inputs->inm_co_acreditado->correo; ?>
+
+                                            <div class="control-group col-sm-4">
                                                 <label class="control-label" for="inm_attr_tipo_credito_id">Genero</label>
                                                 <label class="form-check-label chk">
                                                     <input type="radio" name="co_acreditado[genero]" value="M" class="form-check-input" id="genero"
@@ -549,8 +589,14 @@
                                                     F
                                                 </label>
                                             </div>
-                                            <?php echo $controlador->inputs->inm_co_acreditado->correo; ?>
+                                            <?php echo $controlador->inputs->inm_co_acreditado->numero_credito; ?>
+                                            <?php echo $controlador->inputs->inm_co_acreditado->adeudo_hipoteca; ?>
 
+                                            <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
+                                        </div>
+
+                                        <?php echo $controlador->header_frontend->apartado_7; ?>
+                                        <div id="apartado_7">
                                             <?php echo $controlador->inputs->inm_co_acreditado->nombre_empresa_patron; ?>
                                             <?php echo $controlador->inputs->inm_co_acreditado->nrp; ?>
                                             <?php echo $controlador->inputs->inm_co_acreditado->lada_nep; ?>
@@ -558,20 +604,29 @@
                                             <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
                                         </div>
 
-                                        <?php echo $controlador->header_frontend->apartado_7; ?>
-                                        <div id="apartado_7">
+                                        <?php echo $controlador->header_frontend->apartado_8; ?>
+                                        <div id="apartado_8">
+                                            <!-- Identificadores -->
+                                            <?php echo $controlador->inputs->conyuge->curp; ?>
+                                            <?php echo $controlador->inputs->conyuge->rfc; ?>
+
+                                            <!-- Identidad -->
                                             <?php echo $controlador->inputs->conyuge->nombre; ?>
                                             <?php echo $controlador->inputs->conyuge->apellido_paterno; ?>
                                             <?php echo $controlador->inputs->conyuge->apellido_materno; ?>
+
+                                            <!-- Nacimiento -->
+                                            <?php echo $controlador->inputs->conyuge->fecha_nacimiento; ?>
                                             <?php echo $controlador->inputs->conyuge->dp_estado_id; ?>
                                             <?php echo $controlador->inputs->conyuge->dp_municipio_id; ?>
-                                            <?php echo $controlador->inputs->conyuge->fecha_nacimiento; ?>
                                             <?php echo $controlador->inputs->conyuge->inm_nacionalidad_id; ?>
-                                            <?php echo $controlador->inputs->conyuge->curp; ?>
-                                            <?php echo $controlador->inputs->conyuge->rfc; ?>
+                                            <?php echo $controlador->inputs->conyuge->inm_ocupacion_id; ?>
+
+                                            <!-- Crédito -->
                                             <?php echo $controlador->inputs->conyuge->numero_credito; ?>
                                             <?php echo $controlador->inputs->conyuge->adeudo_hipoteca; ?>
-                                            <?php echo $controlador->inputs->conyuge->inm_ocupacion_id; ?>
+
+                                            <!-- Contacto -->
                                             <?php echo $controlador->inputs->conyuge->telefono_casa; ?>
                                             <?php echo $controlador->inputs->conyuge->telefono_celular; ?>
                                         </div>
