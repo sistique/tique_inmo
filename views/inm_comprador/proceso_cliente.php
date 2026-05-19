@@ -79,25 +79,23 @@
                                     <?php echo $controlador->header_frontend->apartado_2; ?>
 
                                     <div  id="apartado_2">
+                                        <!-- Identificadores -->
                                         <?php echo $controlador->inputs->nss; ?>
                                         <?php echo $controlador->inputs->curp; ?>
                                         <?php echo $controlador->inputs->rfc; ?>
+
+                                        <!-- Identidad -->
                                         <?php echo $controlador->inputs->nombre; ?>
                                         <?php echo $controlador->inputs->apellido_paterno; ?>
                                         <?php echo $controlador->inputs->apellido_materno; ?>
+
+                                        <!-- Nacimiento -->
                                         <?php echo $controlador->inputs->fecha_nacimiento; ?>
                                         <?php echo $controlador->inputs->dp_estado_nacimiento_id; ?>
                                         <?php echo $controlador->inputs->dp_municipio_nacimiento_id; ?>
                                         <?php echo $controlador->inputs->inm_nacionalidad_id; ?>
-                                        <?php echo $controlador->inputs->inm_ocupacion_id; ?>
-                                        <?php echo $controlador->inputs->lada_com; ?>
-                                        <?php echo $controlador->inputs->numero_com; ?>
-                                        <?php echo $controlador->inputs->cel_com; ?>
-                                        <?php echo $controlador->inputs->correo_com; ?>
-                                        <?php echo $controlador->inputs->telefono_casa; ?>
-                                        <?php echo $controlador->inputs->adm_estado_civil_id; ?>
-                                        <?php echo $controlador->inputs->inm_estado_civil_id; ?>
 
+                                        <!-- Género -->
                                         <div class="control-group col-sm-6">
                                             <label class="control-label" for="inm_attr_tipo_credito_id">Genero</label>
                                             <label class="form-check-label chk">
@@ -114,7 +112,21 @@
                                             </label>
                                         </div>
 
-                                        <?php echo $controlador->inputs->dp_pais_id; ?>
+                                        <!-- Estado civil y ocupación -->
+                                        <?php echo $controlador->inputs->adm_estado_civil_id; ?>
+                                        <?php echo $controlador->inputs->inm_estado_civil_id; ?>
+                                        <?php echo $controlador->inputs->inm_ocupacion_id; ?>
+
+
+                                        <!-- Contacto -->
+                                        <?php echo $controlador->inputs->lada_com; ?>
+                                        <?php echo $controlador->inputs->numero_com; ?>
+                                        <?php echo $controlador->inputs->cel_com; ?>
+                                        <?php echo $controlador->inputs->telefono_casa; ?>
+                                        <?php echo $controlador->inputs->correo_com; ?>
+
+                                        <!-- Domicilio -->
+                                        <?php //echo $controlador->inputs->dp_pais_id; ?>
                                         <?php echo $controlador->inputs->dp_estado_id; ?>
                                         <?php echo $controlador->inputs->dp_municipio_id; ?>
                                         <?php echo $controlador->inputs->dp_cp_id; ?>
@@ -203,16 +215,20 @@
                                         </div>
                                         <?php echo $controlador->header_frontend->apartado_8; ?>
                                         <div  id="apartado_8">
+                                            <!-- Identificadores -->
+                                            <?php echo $controlador->inputs->conyuge->curp; ?>
+                                            <?php echo $controlador->inputs->conyuge->rfc; ?>
+                                            <!-- Identidad -->
                                             <?php echo $controlador->inputs->conyuge->nombre; ?>
                                             <?php echo $controlador->inputs->conyuge->apellido_paterno; ?>
                                             <?php echo $controlador->inputs->conyuge->apellido_materno; ?>
+                                            <!-- Nacimiento -->
                                             <?php echo $controlador->inputs->conyuge->fecha_nacimiento; ?>
                                             <?php echo $controlador->inputs->conyuge->dp_estado_id; ?>
                                             <?php echo $controlador->inputs->conyuge->dp_municipio_id; ?>
                                             <?php echo $controlador->inputs->conyuge->inm_nacionalidad_id; ?>
-                                            <?php echo $controlador->inputs->conyuge->curp; ?>
-                                            <?php echo $controlador->inputs->conyuge->rfc; ?>
                                             <?php echo $controlador->inputs->conyuge->inm_ocupacion_id; ?>
+                                            <!-- Contacto -->
                                             <?php echo $controlador->inputs->conyuge->telefono_casa; ?>
                                             <?php echo $controlador->inputs->conyuge->telefono_celular;  ?>
                                             <?php echo $controlador->btn; ?>
@@ -520,25 +536,23 @@
                                         <?php echo $controlador->header_frontend->apartado_2; ?>
 
                                         <div  id="apartado_2">
+                                            <!-- Identificadores -->
                                             <?php echo $controlador->inputs->nss; ?>
                                             <?php echo $controlador->inputs->curp; ?>
                                             <?php echo $controlador->inputs->rfc; ?>
+
+                                            <!-- Identidad -->
                                             <?php echo $controlador->inputs->nombre; ?>
                                             <?php echo $controlador->inputs->apellido_paterno; ?>
                                             <?php echo $controlador->inputs->apellido_materno; ?>
+
+                                            <!-- Nacimiento -->
                                             <?php echo $controlador->inputs->fecha_nacimiento; ?>
                                             <?php echo $controlador->inputs->dp_estado_nacimiento_id; ?>
                                             <?php echo $controlador->inputs->dp_municipio_nacimiento_id; ?>
                                             <?php echo $controlador->inputs->inm_nacionalidad_id; ?>
-                                            <?php echo $controlador->inputs->inm_ocupacion_id; ?>
-                                            <?php echo $controlador->inputs->lada_com; ?>
-                                            <?php echo $controlador->inputs->numero_com; ?>
-                                            <?php echo $controlador->inputs->cel_com; ?>
-                                            <?php echo $controlador->inputs->correo_com; ?>
-                                            <?php echo $controlador->inputs->telefono_casa; ?>
-                                            <?php echo $controlador->inputs->adm_estado_civil_id; ?>
-                                            <?php echo $controlador->inputs->inm_estado_civil_id; ?>
 
+                                            <!-- Género -->
                                             <div class="control-group col-sm-6">
                                                 <label class="control-label" for="inm_attr_tipo_credito_id">Genero</label>
                                                 <label class="form-check-label chk">
@@ -555,7 +569,21 @@
                                                 </label>
                                             </div>
 
-                                            <?php echo $controlador->inputs->dp_pais_id; ?>
+                                            <!-- Estado civil y ocupación -->
+                                            <?php echo $controlador->inputs->adm_estado_civil_id; ?>
+                                            <?php echo $controlador->inputs->inm_estado_civil_id; ?>
+                                            <?php echo $controlador->inputs->inm_ocupacion_id; ?>
+
+
+                                            <!-- Contacto -->
+                                            <?php echo $controlador->inputs->lada_com; ?>
+                                            <?php echo $controlador->inputs->numero_com; ?>
+                                            <?php echo $controlador->inputs->cel_com; ?>
+                                            <?php echo $controlador->inputs->telefono_casa; ?>
+                                            <?php echo $controlador->inputs->correo_com; ?>
+
+                                            <!-- Domicilio -->
+                                            <?php //echo $controlador->inputs->dp_pais_id; ?>
                                             <?php echo $controlador->inputs->dp_estado_id; ?>
                                             <?php echo $controlador->inputs->dp_municipio_id; ?>
                                             <?php echo $controlador->inputs->dp_cp_id; ?>
@@ -644,16 +672,20 @@
 
                                         <?php echo $controlador->header_frontend->apartado_8; ?>
                                         <div  id="apartado_8">
+                                            <!-- Identificadores -->
+                                            <?php echo $controlador->inputs->conyuge->curp; ?>
+                                            <?php echo $controlador->inputs->conyuge->rfc; ?>
+                                            <!-- Identidad -->
                                             <?php echo $controlador->inputs->conyuge->nombre; ?>
                                             <?php echo $controlador->inputs->conyuge->apellido_paterno; ?>
                                             <?php echo $controlador->inputs->conyuge->apellido_materno; ?>
+                                            <!-- Nacimiento -->
                                             <?php echo $controlador->inputs->conyuge->fecha_nacimiento; ?>
                                             <?php echo $controlador->inputs->conyuge->dp_estado_id; ?>
                                             <?php echo $controlador->inputs->conyuge->dp_municipio_id; ?>
                                             <?php echo $controlador->inputs->conyuge->inm_nacionalidad_id; ?>
-                                            <?php echo $controlador->inputs->conyuge->curp; ?>
-                                            <?php echo $controlador->inputs->conyuge->rfc; ?>
                                             <?php echo $controlador->inputs->conyuge->inm_ocupacion_id; ?>
+                                            <!-- Contacto -->
                                             <?php echo $controlador->inputs->conyuge->telefono_casa; ?>
                                             <?php echo $controlador->inputs->conyuge->telefono_celular;  ?>
                                             <?php echo $controlador->btn; ?>
