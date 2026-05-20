@@ -77,6 +77,9 @@
                                     F
                                 </label>
                             </div>
+
+                            <?php echo $controlador->inputs->adm_estado_civil_id; ?>
+                            <?php echo $controlador->inputs->inm_estado_civil_id; ?>
                             <?php echo $controlador->inputs->inm_ocupacion_id; ?>
 
                             <!-- Contacto -->

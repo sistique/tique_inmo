@@ -1238,7 +1238,7 @@ class controlador_inm_prospecto extends _ctl_formato
 
         $keys_selects['numero_com']->regex = $this->validacion->patterns['tel_sin_lada_html'];
 
-        $keys_selects = (new init())->key_select_txt(cols: 3, key: 'cel_com',
+        $keys_selects = (new init())->key_select_txt(cols: 4, key: 'cel_com',
             keys_selects: $keys_selects, place_holder: 'Cel', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
@@ -1246,7 +1246,7 @@ class controlador_inm_prospecto extends _ctl_formato
 
         $keys_selects['cel_com']->regex = $this->validacion->patterns['telefono_mx_html'];
 
-        $keys_selects = (new init())->key_select_txt(cols: 3, key: 'correo_com',
+        $keys_selects = (new init())->key_select_txt(cols: 4, key: 'correo_com',
             keys_selects: $keys_selects, place_holder: 'Correo', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
@@ -1333,25 +1333,25 @@ class controlador_inm_prospecto extends _ctl_formato
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 12, key: 'descuento_pension_alimenticia_dh',
-            keys_selects: $keys_selects, place_holder: 'Desc Pension Alimenticia Derecho Habiente', required: false);
+        $keys_selects = (new init())->key_select_txt(cols: 3, key: 'descuento_pension_alimenticia_dh',
+            keys_selects: $keys_selects, place_holder: 'Desc Pension Alimenticia Derechohabiente', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 12, key: 'descuento_pension_alimenticia_fc',
-            keys_selects: $keys_selects, place_holder: 'Desc Pension Alimenticia Co Acreditado', required: false);
+        $keys_selects = (new init())->key_select_txt(cols: 3, key: 'descuento_pension_alimenticia_fc',
+            keys_selects: $keys_selects, place_holder: 'Descuento Pension Alimenticia Familiar/Corresidente', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 12, key: 'monto_credito_solicitado_dh',
-            keys_selects: $keys_selects, place_holder: 'Monto Precalificacion ', required: false);
+        $keys_selects = (new init())->key_select_txt(cols: 3, key: 'monto_credito_solicitado_dh',
+            keys_selects: $keys_selects, place_holder: 'Monto Credito Solicitado Derechohabiente', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 12, key: 'monto_ahorro_voluntario',
+        $keys_selects = (new init())->key_select_txt(cols: 3, key: 'monto_ahorro_voluntario',
             keys_selects: $keys_selects, place_holder: 'Monto Ahorro Voluntario ', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
@@ -1385,7 +1385,7 @@ class controlador_inm_prospecto extends _ctl_formato
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 12, key: 'telefono_casa',
+        $keys_selects = (new init())->key_select_txt(cols: 4, key: 'telefono_casa',
             keys_selects: $keys_selects, place_holder: 'Telefono de Casa', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
