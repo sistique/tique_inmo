@@ -377,17 +377,17 @@ class _inm_prospecto{
         $identificadores['inm_institucion_hipotecaria_id']['columns_ds'] = array('inm_institucion_hipotecaria_descripcion');
 
         $identificadores['inm_producto_infonavit_id']['title'] = 'Producto Infonavit';
-        $identificadores['inm_producto_infonavit_id']['cols'] = 12;
+        $identificadores['inm_producto_infonavit_id']['cols'] = 4;
         $identificadores['inm_producto_infonavit_id']['disabled'] = false;
         $identificadores['inm_producto_infonavit_id']['columns_ds'] = array('inm_producto_infonavit_descripcion');
 
         $identificadores['inm_tipo_credito_id']['title'] = 'Tipo de Credito';
-        $identificadores['inm_tipo_credito_id']['cols'] = 6;
+        $identificadores['inm_tipo_credito_id']['cols'] = 4;
         $identificadores['inm_tipo_credito_id']['disabled'] = false;
         $identificadores['inm_tipo_credito_id']['columns_ds'] = array('inm_tipo_credito_descripcion');
         
         $identificadores['inm_attr_tipo_credito_id']['title'] = 'Tipo de Credito Especifico';
-        $identificadores['inm_attr_tipo_credito_id']['cols'] = 6;
+        $identificadores['inm_attr_tipo_credito_id']['cols'] = 4;
         $identificadores['inm_attr_tipo_credito_id']['disabled'] = false;
         $identificadores['inm_attr_tipo_credito_id']['columns_ds'] = array('inm_attr_tipo_credito_descripcion');
         $identificadores['inm_attr_tipo_credito_id']['con_registros'] = $con_registros;
@@ -603,7 +603,7 @@ class _inm_prospecto{
      */
     final public function inputs_nacimiento(controlador_inm_prospecto $controlador): array|stdClass
     {
-        $dp_estado_nacimiento_id = (new dp_estado_html(html: $controlador->html_base))->select_dp_estado_id(cols: 6,
+        $dp_estado_nacimiento_id = (new dp_estado_html(html: $controlador->html_base))->select_dp_estado_id(cols: 4,
             con_registros: true, id_selected: $controlador->registro['dp_estado_nacimiento_id'], link: $controlador->link,
             label: 'Edo Nac', name: 'dp_estado_nacimiento_id');
 
@@ -614,7 +614,7 @@ class _inm_prospecto{
         $controlador->inputs->dp_estado_nacimiento_id = $dp_estado_nacimiento_id;
 
         $filtro = array('dp_estado.id'=>$controlador->registro['dp_estado_nacimiento_id']);
-        $dp_municipio_nacimiento_id = (new dp_municipio_html(html: $controlador->html_base))->select_dp_municipio_id(cols: 6,
+        $dp_municipio_nacimiento_id = (new dp_municipio_html(html: $controlador->html_base))->select_dp_municipio_id(cols: 4,
             con_registros: true, id_selected: $controlador->registro['dp_municipio_nacimiento_id'], link: $controlador->link,
             filtro: $filtro, label: 'Mun Nac', name: 'dp_municipio_nacimiento_id');
 
@@ -625,7 +625,7 @@ class _inm_prospecto{
         $controlador->inputs->dp_municipio_nacimiento_id = $dp_municipio_nacimiento_id;
 
 
-        $fecha_nacimiento = $controlador->html->input_fecha(cols: 6, row_upd: $controlador->row_upd, value_vacio: false,
+        $fecha_nacimiento = $controlador->html->input_fecha(cols: 4, row_upd: $controlador->row_upd, value_vacio: false,
             name: 'fecha_nacimiento', place_holder: 'Fecha Nac', value: $controlador->row_upd->fecha_nacimiento);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener input',data:  $fecha_nacimiento);
