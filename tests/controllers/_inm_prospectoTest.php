@@ -266,9 +266,9 @@ class _inm_prospectoTest extends test {
         $resultado = $_inm->headers_prospecto();
         $this->assertIsArray($resultado);
         $this->assertNotTrue(errores::$error);
-        $this->assertEquals('1. DATOS PERSONALES',$resultado[1]);
-        $this->assertEquals('5. MONTO CREDITO',$resultado[5]);
-        $this->assertEquals('10. REFERENCIAS',$resultado[10]);
+        $this->assertEquals('1. CREDITO',$resultado[1]);
+        $this->assertEquals('5. DISCAPACIDAD',$resultado[5]);
+        $this->assertEquals('10. MI CUENTA INFONAVIT',$resultado[10]);
 
         errores::$error = false;
     }

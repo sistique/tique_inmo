@@ -1578,6 +1578,33 @@ class controlador_inm_prospecto extends _ctl_formato
             return $this->retorno_error(mensaje: 'Error al generar inputs', data: $inputs, header: $header, ws: $ws);
         }
 
+        $co_acreditados = (new inm_prospecto(link: $this->link))->get_co_acreditados(
+            inm_prospecto_id: $this->registro_id);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener co_acreditados',data:  $co_acreditados,
+                header: $header,ws:  $ws);
+        }
+
+        $inm_co_acreditado = new stdClass();
+        $this->row_upd->genero_co_acreditado = 'M';
+        if(count($co_acreditados) === 1){
+            foreach ($co_acreditados[0] AS $co_acred => $value){
+                $key_co_acred = "co_acreditado[$co_acred]";
+                $inm_co_acreditado->$key_co_acred = $value;
+
+                if($co_acred === 'genero'){
+                    $this->row_upd->genero_co_acreditado = $value;
+                }
+            }
+        }
+
+        $headers = (new \gamboamartin\inmuebles\controllers\_inm_prospecto())->frontend_co_acreditado(
+            controler: $this, row_upd: $inm_co_acreditado);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al integrar headers',data:  $headers, header: $header,ws:  $ws);
+        }
+
         $class_upd = '_upd_prospecto';
         $conyuge = (new _conyuge())->inputs_conyuge(controler: $this,class_upd: $class_upd);
         if (errores::$error) {

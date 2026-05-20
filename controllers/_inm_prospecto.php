@@ -4,6 +4,9 @@ namespace gamboamartin\inmuebles\controllers;
 use base\controller\init;
 use gamboamartin\administrador\models\adm_usuario;
 use gamboamartin\errores\errores;
+use gamboamartin\inmuebles\html\inm_co_acreditado_html;
+use gamboamartin\inmuebles\html\inm_prospecto_html;
+use gamboamartin\inmuebles\html\inm_prospecto_ubicacion_html;
 use gamboamartin\inmuebles\models\inm_prospecto;
 use gamboamartin\inmuebles\models\inm_prospecto_ubicacion;
 use gamboamartin\validacion\validacion;
@@ -21,6 +24,35 @@ class _inm_prospecto{
         $this->error = new errores();
         $this->validacion = new validacion();
     }
+
+    private function data_co_acreditado(controlador_inm_prospecto $controler, int $n_apartado, string $tag_header,
+                                        stdClass $row_upd = new stdClass()): array|stdClass
+    {
+        $header_apartado = $this->header_apartado(html_entidad: $controler->html_entidad,n_apartado:  $n_apartado,
+            tag_header: $tag_header);
+
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al generar header',data:  $header_apartado);
+        }
+
+        $param = $this->param_header(n_apartado: $n_apartado);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al generar parametros',data:  $param);
+        }
+
+        $key_header = $param->key_header;
+        $controler->header_frontend->$key_header = $header_apartado;
+
+        $inm_co_acreditado_inputs = (new inm_co_acreditado_html(html: $controler->html_base))->inputs(
+            entidad: 'inm_co_acreditado', integra_prefijo: true, row_upd: $row_upd);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al generar inputs',data:  $inm_co_acreditado_inputs);
+        }
+
+        $controler->inputs->inm_co_acreditado = $inm_co_acreditado_inputs;
+        return $controler->inputs;
+    }
+
 
     /**
      * Obtiene los datos de children
@@ -125,6 +157,33 @@ class _inm_prospecto{
         return $filtro;
     }
 
+    private function get_headers(array $inm_prospecto){
+        $headers = $this->headers_prospecto();
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al integrar headers',data:  $headers);
+        }
+
+        return $headers;
+    }
+
+    final public function frontend_co_acreditado(controlador_inm_prospecto $controler, stdClass $row_upd = new stdClass()){
+        $headers = $this->get_headers(inm_prospecto: $controler->registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al integrar headers',data:  $headers);
+        }
+
+        foreach ($headers as $n_apartado=>$tag_header){
+
+            $inputs = $this->data_co_acreditado(controler: $controler,n_apartado:  $n_apartado,tag_header:  $tag_header,
+                row_upd: $row_upd);
+
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al generar inputs co acreditado',data:  $inputs);
+            }
+        }
+        return $headers;
+    }
+
     /**
      * Genera un filtro para obtencion de datos ligado a un usuario
      * @param PDO $link Conexion a la base de datos
@@ -203,6 +262,20 @@ class _inm_prospecto{
         return $keys_selects;
     }
 
+    private function header_apartado(inm_prospecto_html $html_entidad, int $n_apartado, string $tag_header){
+        $param = $this->param_header(n_apartado: $n_apartado);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al generar parametros',data:  $param);
+        }
+
+        $header_apartado = $html_entidad->header_collapsible(id_css_button: $param->id_css_button,
+            style_button: 'primary', tag_button: 'Ver/Ocultar',tag_header:  $tag_header);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al generar header',data:  $header_apartado);
+        }
+        return $header_apartado;
+    }
+
     /**
      * Genera los headers para ser mostrados en front por seccion
      * @param controlador_inm_prospecto $controlador
@@ -231,18 +304,16 @@ class _inm_prospecto{
     private function headers_prospecto(): array
     {
         $headers = array();
-        $headers['1'] = '1. DATOS PERSONALES';
-        $headers['2'] = '2. DATOS DE CONTACTO';
+        $headers['1'] = '1. CREDITO';
+        $headers['2'] = '2. DATOS PERSONALES';
         $headers['3'] = '3. DOMICILIO';
-        $headers['4'] = '4. CREDITO';
-        $headers['5'] = '5. MONTO CREDITO';
-        $headers['6'] = '6. DISCAPACIDAD';
-        $headers['7'] = '7. DATOS EMPRESA TRABAJADOR';
-        $headers['8'] = '8. DATOS DE CONYUGE';
-        $headers['9'] = '9. BENEFICIARIOS';
-        $headers['10'] = '10. REFERENCIAS';
-        $headers['11'] = '11. MI CUENTA INFONAVIT';
-        $headers['12'] = '12. PROSPECTO';
+        $headers['4'] = '4. MONTO CREDITO';
+        $headers['5'] = '5. DISCAPACIDAD';
+        $headers['6'] = '6. DATOS EMPRESA TRABAJADOR';
+        $headers['7'] = '7. DATOS DE CONYUGE';
+        $headers['8'] = '8. BENEFICIARIOS';
+        $headers['9'] = '9. REFERENCIAS';
+        $headers['10'] = '10. MI CUENTA INFONAVIT';
         return $headers;
     }
 
@@ -810,6 +881,20 @@ class _inm_prospecto{
         $params['seccion_retorno'] = $seccion_retorno;
         $params['id_retorno'] = $registro_id;
         return $params;
+    }
+
+
+    private function param_header(int $n_apartado): stdClass
+    {
+        $id_css_button = "collapse_a$n_apartado";
+        $key_header = "apartado_$n_apartado";
+
+        $data = new stdClass();
+
+        $data->id_css_button = $id_css_button;
+        $data->key_header = $key_header;
+
+        return $data;
     }
 
     /**
