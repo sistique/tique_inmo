@@ -156,6 +156,8 @@
                             <?php echo $controlador->inputs->conyuge->inm_ocupacion_id; ?>
 
                             <!-- Contacto -->
+                            <?php echo $controlador->inputs->conyuge->numero_credito; ?>
+                            <?php echo $controlador->inputs->conyuge->adeudo_hipoteca; ?>
                             <?php echo $controlador->inputs->conyuge->telefono_casa; ?>
                             <?php echo $controlador->inputs->conyuge->telefono_celular; ?>
                             <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
