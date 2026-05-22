@@ -1611,6 +1611,7 @@ class controlador_inm_prospecto extends _ctl_formato
             return $this->retorno_error(
                 mensaje: 'Error al integrar headers',data:  $headers, header: $header,ws:  $ws);
         }
+        //print_r($this->inputs->inm_co_acreditado);exit;
 
         $class_upd = '_upd_prospecto';
         $conyuge = (new _conyuge())->inputs_conyuge(controler: $this,class_upd: $class_upd);

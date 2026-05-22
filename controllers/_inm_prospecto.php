@@ -50,6 +50,7 @@ class _inm_prospecto{
         }
 
         $controler->inputs->inm_co_acreditado = $inm_co_acreditado_inputs;
+
         return $controler->inputs;
     }
 
@@ -309,10 +310,12 @@ class _inm_prospecto{
         $headers['3'] = '3. MONTO CREDITO';
         $headers['4'] = '4. DISCAPACIDAD';
         $headers['5'] = '5. DATOS EMPRESA TRABAJADOR';
-        $headers['6'] = '6. DATOS DE CONYUGE';
-        $headers['7'] = '7. BENEFICIARIOS';
-        $headers['8'] = '8. REFERENCIAS';
-        $headers['9'] = '9. MI CUENTA INFONAVIT';
+        $headers['6'] = '6. CO ACREDITADO';
+        $headers['7'] = '7. CO ACREDITADO LABORAL';
+        $headers['8'] = '8. DATOS DE CONYUGE';
+        $headers['9'] = '9. BENEFICIARIOS';
+        $headers['10'] = '10. REFERENCIAS';
+        $headers['11'] = '11. MI CUENTA INFONAVIT';
         return $headers;
     }
 
