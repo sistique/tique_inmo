@@ -253,9 +253,14 @@ class _inm_prospecto{
                 $con_registros = $data['con_registros'];
             }
 
+            $required = true;
+            if(isset($data['required'])){
+                $required = $data['required'];
+            }
+
             $keys_selects = $controlador->key_select(cols: $cols, con_registros: $con_registros, filtro: $filtro,
                 key: $identificador, keys_selects: $keys_selects, id_selected: $id_selected, label: $title,
-                columns_ds: $columns_ds, disabled: $disabled);
+                columns_ds: $columns_ds, disabled: $disabled, required: $required);
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
             }
@@ -388,6 +393,7 @@ class _inm_prospecto{
         $identificadores['dp_estado_id']['disabled'] = false;
         $identificadores['dp_estado_id']['filtro'] = $filtro;
         $identificadores['dp_estado_id']['columns_ds'] =  array('dp_estado_descripcion');
+        $identificadores['dp_estado_id']['required'] =  false;
 
         $filtro = array();
         $filtro['dp_estado.id'] = $row['dp_estado_id'];
@@ -396,6 +402,8 @@ class _inm_prospecto{
         $identificadores['dp_municipio_id']['disabled'] = false;
         $identificadores['dp_municipio_id']['filtro'] = $filtro;
         $identificadores['dp_municipio_id']['columns_ds'] =  array('dp_municipio_descripcion');
+        $identificadores['dp_municipio_id']['required'] =  false;
+
 
         $filtro = array();
         $filtro['dp_municipio.id'] = $row['dp_municipio_id'];
@@ -404,6 +412,8 @@ class _inm_prospecto{
         $identificadores['dp_cp_id']['disabled'] = false;
         $identificadores['dp_cp_id']['filtro'] = $filtro;
         $identificadores['dp_cp_id']['columns_ds'] =  array('dp_cp_codigo');
+        $identificadores['dp_cp_id']['required'] =  false;
+
 
         $filtro = array();
         $filtro['dp_cp.id'] = $row['dp_cp_id'];
@@ -412,6 +422,7 @@ class _inm_prospecto{
         $identificadores['dp_colonia_postal_id']['disabled'] = false;
         $identificadores['dp_colonia_postal_id']['filtro'] = $filtro;
         $identificadores['dp_colonia_postal_id']['columns_ds'] =  array('dp_colonia_descripcion');
+        $identificadores['dp_colonia_postal_id']['required'] =  false;
 
         $filtro = array();
         $filtro['dp_colonia_postal.id'] = $row['dp_colonia_postal_id'];
