@@ -86,9 +86,7 @@
                             <?php echo $controlador->inputs->lada_com; ?>
                             <?php echo $controlador->inputs->numero_com; ?>
                             <?php echo $controlador->inputs->cel_com; ?>
-                            <?php echo $controlador->inputs->telefono_casa; ?>
                             <?php echo $controlador->inputs->correo_com; ?>
-                            <?php echo $controlador->inputs->razon_social; ?>
                             <?php echo $controlador->inputs->observaciones; ?>
 
                             <?php echo $controlador->inputs->dp_estado_id; ?>

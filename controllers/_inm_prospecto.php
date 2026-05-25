@@ -531,7 +531,7 @@ class _inm_prospecto{
         $identificadores['inm_nacionalidad_id']['columns_ds'] = array('inm_nacionalidad_descripcion');
 
         $identificadores['inm_ocupacion_id']['title'] = 'Ocupacion';
-        $identificadores['inm_ocupacion_id']['cols'] = 6;
+        $identificadores['inm_ocupacion_id']['cols'] = 12;
         $identificadores['inm_ocupacion_id']['disabled'] = false;
         $identificadores['inm_ocupacion_id']['columns_ds'] = array('inm_ocupacion_descripcion');
         
