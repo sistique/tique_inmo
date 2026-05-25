@@ -845,7 +845,8 @@ class inm_prospecto extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al insertar direccion', data: $result_direccion);
         }
 
-        $result_conyuge = (new _upd_prospecto())->transacciona_conyuge(inm_prospecto_id: $inm_prospecto_id,link: $this->link);
+        $result_conyuge = (new _upd_prospecto())->transacciona_conyuge(inm_prospecto_id: $inm_prospecto_id,
+            link: $this->link);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al insertar conyuge', data: $result_conyuge);
         }
@@ -856,15 +857,24 @@ class inm_prospecto extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al insertar beneficiario', data: $result_beneficiario);
         }
 
-        $result_referencia = (new _upd_prospecto())->transacciona_referencia(inm_prospecto_id: $inm_prospecto_id,link: $this->link);
+        $result_referencia = (new _upd_prospecto())->transacciona_referencia(inm_prospecto_id: $inm_prospecto_id,
+            link: $this->link);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al insertar referencia', data: $result_referencia);
         }
+
+        $result_co_acreditado = (new _upd_prospecto())->transacciona_co_acreditado(inm_prospecto_id: $inm_prospecto_id,
+            link: $this->link);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al insertar co_acreditado', data: $result_co_acreditado);
+        }
+
         $data = new stdClass();
         $data->result_conyuge = $result_conyuge;
         $data->result_beneficiario = $result_beneficiario;
         $data->result_referencia = $result_referencia;
         $data->result_direccion = $result_direccion;
+        $data->result_co_acreditado = $result_co_acreditado;
 
         return $data;
     }

@@ -71,6 +71,29 @@ class _upd_prospecto{
         return $datos;
     }
 
+    private function ajusta_co_acreditado(stdClass $datos, int $inm_prospecto_id, PDO $link): array|stdClass
+    {
+        if(!$datos->existe) {
+            $r_inm_rel_co_acreditado_prospecto_bd = $this->inserta_co_acreditado(co_acreditado: $datos->row,
+                inm_prospecto_id: $inm_prospecto_id,link: $link);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al insertar co_acreditado', data: $r_inm_rel_co_acreditado_prospecto_bd);
+            }
+            $data = $r_inm_rel_co_acreditado_prospecto_bd;
+        }
+        else{
+            $r_modifica_co_acreditado = $this->modifica_co_acreditado(
+                co_acreditado: $datos->row,inm_prospecto_id:  $inm_prospecto_id,link: $link);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al modificar co_acreditado', data: $r_modifica_co_acreditado);
+            }
+            $data = $r_modifica_co_acreditado;
+        }
+
+        return $data;
+    }
+
+
     /**
      * Obtiene un conyuge basado en el prospecto
      * @param bool $columnas_en_bruto si es true da resultado en campos tal como estan en base de datos
@@ -111,6 +134,39 @@ class _upd_prospecto{
         }
 
         return $inm_conyuge;
+    }
+
+    final public function inm_co_acreditado(bool $columnas_en_bruto, int $inm_prospecto_id, PDO $link,
+                                      bool $retorno_obj): array|stdClass
+    {
+        if($inm_prospecto_id<=0){
+            return $this->error->error(mensaje: 'Error inm_prospecto_id debe ser mayor a 0', data:  $inm_prospecto_id);
+        }
+        $filtro = array();
+        $filtro['inm_prospecto.id'] = $inm_prospecto_id;
+
+        $r_inm_rel_co_acreditado_prospecto = (new inm_rel_co_acred_prosp(link: $link))->filtro_and(filtro: $filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener co_acreditado relacion',
+                data:  $r_inm_rel_co_acreditado_prospecto);
+        }
+        if($r_inm_rel_co_acreditado_prospecto->n_registros === 0){
+            return $this->error->error(mensaje: 'Error no existe relacion',data:  $r_inm_rel_co_acreditado_prospecto);
+        }
+        if($r_inm_rel_co_acreditado_prospecto->n_registros > 1){
+            return $this->error->error(mensaje: 'Error de integridad',data:  $r_inm_rel_co_acreditado_prospecto);
+        }
+
+        $inm_rel_co_acreditado_prospecto = $r_inm_rel_co_acreditado_prospecto->registros[0];
+
+        $inm_co_acreditado = (new inm_co_acreditado(link: $link))->registro(
+            registro_id: $inm_rel_co_acreditado_prospecto['inm_co_acreditado_id'],columnas_en_bruto: $columnas_en_bruto,
+            retorno_obj: $retorno_obj);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener co_acreditado',data:  $inm_co_acreditado);
+        }
+
+        return $inm_co_acreditado;
     }
 
     public function inserta_beneficiario(array $beneficiario, int $inm_prospecto_id, PDO $link): array|stdClass
@@ -278,6 +334,40 @@ class _upd_prospecto{
         return $data;
     }
 
+    public function inserta_co_acreditado(array $co_acreditado, int $inm_prospecto_id, PDO $link): array|stdClass
+    {
+        $keys = array('nombre','apellido_paterno');
+        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $co_acreditado);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar co_acreditado',data:  $valida);
+        }
+
+        if($inm_prospecto_id <= 0){
+            return $this->error->error(mensaje: 'Error inm_prospecto_id debe ser mayor a 0',data:  $inm_prospecto_id);
+        }
+
+        $alta_co_acreditado = (new inm_co_acreditado(link: $link))->alta_registro(registro: $co_acreditado);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al insertar co_acreditado', data: $alta_co_acreditado);
+        }
+
+        $inm_rel_co_acreditado_ins['inm_prospecto_id'] = $inm_prospecto_id;
+        $inm_rel_co_acreditado_ins['inm_co_acreditado_id'] = $alta_co_acreditado->registro_id;
+
+        $r_inm_rel_co_acreditado_bd = (new inm_rel_co_acred_prosp(link: $link))->alta_registro(
+            registro: $inm_rel_co_acreditado_ins);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al insertar co_acreditado', data: $r_inm_rel_co_acreditado_bd);
+        }
+
+        $data = new stdClass();
+        $data->alta_co_acreditado = $alta_co_acreditado;
+        $data->inm_rel_co_acreditado_ins = $inm_rel_co_acreditado_ins;
+        $data->r_inm_rel_co_acreditado_bd = $r_inm_rel_co_acreditado_bd;
+
+        return $data;
+    }
+
     /**
      * Modifica los datos de un conyuge ligado al prospecto
      * @param array $conyuge Registro de conyuge a transaccionar
@@ -307,6 +397,31 @@ class _upd_prospecto{
         $data = new stdClass();
         $data->inm_conyuge_previo = $inm_conyuge_previo;
         $data->r_modifica_conyuge = $r_modifica_conyuge;
+
+        return $data;
+    }
+
+    private function modifica_co_acreditado(array $co_acreditado, int $inm_prospecto_id, PDO $link): array|stdClass
+    {
+        if($inm_prospecto_id<=0){
+            return $this->error->error(mensaje: 'Error inm_prospecto_id debe ser mayor a 0', data:  $inm_prospecto_id);
+        }
+        $inm_co_acreditado_previo = $this->inm_co_acreditado(columnas_en_bruto: true, inm_prospecto_id: $inm_prospecto_id,
+            link: $link, retorno_obj: true);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener co_acreditado', data: $inm_co_acreditado_previo);
+        }
+
+        $inm_co_acreditado_id = $inm_co_acreditado_previo->id;
+
+        $r_modifica_co_acreditado = (new inm_co_acreditado(link: $link))->modifica_bd(registro: $co_acreditado,id: $inm_co_acreditado_id);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al modificar co_acreditado', data: $r_modifica_co_acreditado);
+        }
+
+        $data = new stdClass();
+        $data->inm_co_acreditado_previo = $inm_co_acreditado_previo;
+        $data->r_modifica_co_acreditado = $r_modifica_co_acreditado;
 
         return $data;
     }
@@ -345,19 +460,37 @@ class _upd_prospecto{
         return $datos;
 
     }
-    final public function transacciona_referencia(int $inm_prospecto_id, PDO $link){
-        $datos = (new \gamboamartin\inmuebles\controllers\_inm_prospecto())->dato(existe: false,key_data: 'referencia');
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al obtener dato de referencia',data:  $datos);
+    final public function transacciona_referencia(int $inm_prospecto_id, PDO $link)
+    {
+        $datos = (new \gamboamartin\inmuebles\controllers\_inm_prospecto())->dato(existe: false, key_data: 'referencia');
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener dato de referencia', data: $datos);
         }
 
-        if($datos->tiene_dato){
-            $result_referencia = $this->ajusta_referencia(datos: $datos,inm_prospecto_id: $inm_prospecto_id,link: $link);
+        if ($datos->tiene_dato) {
+            $result_referencia = $this->ajusta_referencia(datos: $datos, inm_prospecto_id: $inm_prospecto_id, link: $link);
             if (errores::$error) {
                 return $this->error->error(mensaje: 'Error al insertar referencia', data: $result_referencia);
             }
             $datos->result_referencia = $result_referencia;
         }
+        return $datos;
+    }
+
+    final public function transacciona_co_acreditado(int $inm_prospecto_id, PDO $link){
+        $datos = (new \gamboamartin\inmuebles\controllers\_inm_prospecto())->dato(existe: false,key_data: 'co_acreditado');
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener dato de co_acreditado',data:  $datos);
+        }
+
+        if($datos->tiene_dato){
+            $result_co_acreditado = $this->ajusta_co_acreditado(datos: $datos,inm_prospecto_id: $inm_prospecto_id,link: $link);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al insertar co_acreditado', data: $result_co_acreditado);
+            }
+            $datos->result_co_acreditado = $result_co_acreditado;
+        }
+
         return $datos;
 
     }
