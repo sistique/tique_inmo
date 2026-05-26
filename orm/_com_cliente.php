@@ -150,24 +150,21 @@ class _com_cliente{
             return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
         }
 
+        $com_cliente_data = ['rfc', 'calle', 'numero_exterior', 'cat_sat_regimen_fiscal_id', 'cat_sat_moneda_id',
+            'cat_sat_forma_pago_id', 'cat_sat_metodo_pago_id', 'cat_sat_uso_cfdi_id', 'com_tipo_cliente_id',
+            'cat_sat_tipo_persona_id','dp_municipio_id', 'dp_colonia_postal_id'];
+
+        foreach ($com_cliente_data as $reg){
+            if(isset($registro[$reg])){
+                $com_cliente_data[$reg] = $registro[$reg];
+            }
+        }
 
         $com_cliente_data['razon_social'] = trim($razon_social);
-        $com_cliente_data['rfc'] = $registro['rfc'];
-        $com_cliente_data['calle'] = $registro['calle'];
-        $com_cliente_data['numero_exterior'] = $registro['numero_exterior'];
         $com_cliente_data['numero_interior'] = $numero_interior;
         $com_cliente_data['telefono'] = $telefono;
-        $com_cliente_data['cat_sat_regimen_fiscal_id'] = $registro['cat_sat_regimen_fiscal_id'];
-        $com_cliente_data['cat_sat_moneda_id'] = $registro['cat_sat_moneda_id'];
-        $com_cliente_data['cat_sat_forma_pago_id'] = $registro['cat_sat_forma_pago_id'];
-        $com_cliente_data['cat_sat_metodo_pago_id'] = $registro['cat_sat_metodo_pago_id'];
-        $com_cliente_data['cat_sat_uso_cfdi_id'] = $registro['cat_sat_uso_cfdi_id'];
         $com_cliente_data['codigo'] = $registro['rfc'];
-        $com_cliente_data['com_tipo_cliente_id'] = $registro['com_tipo_cliente_id'];
-        $com_cliente_data['cat_sat_tipo_persona_id'] = $registro['cat_sat_tipo_persona_id'];
         $com_cliente_data['cat_sat_tipo_de_comprobante_id'] = 1;
-        $com_cliente_data['dp_municipio_id'] = $registro['dp_municipio_id'];
-        $com_cliente_data['dp_colonia_postal_id'] = $registro['dp_colonia_postal_id'];
 
         return $com_cliente_data;
     }
@@ -715,8 +712,6 @@ class _com_cliente{
      */
     private function row_upd(array|stdClass $registro_entrada): array
     {
-
-
         $valida = $this->valida_data_result_cliente(registro_entrada: $registro_entrada);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
@@ -732,6 +727,7 @@ class _com_cliente{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar row', data: $row_upd);
         }
+
         return $row_upd;
     }
 
