@@ -24,8 +24,7 @@ class com_sucursal extends modelo
             'cat_sat_uso_cfdi'=>'com_cliente');
 
         $campos_obligatorios = array('descripcion', 'codigo', 'descripcion_select', 'alias', 'codigo_bis',
-            'numero_exterior', 'com_cliente_id','com_tipo_sucursal_id', 'pais','estado','municipio','cp','colonia',
-            'calle','dp_municipio_id');
+            'com_cliente_id','com_tipo_sucursal_id');
 
         $tipo_campos = array();
 

@@ -129,6 +129,10 @@ class com_cliente extends _modelo_parent
             $this->registro['numero_interior'] = '';
         }
 
+        if (!isset($this->registro["calle"])) {
+            $this->registro['calle'] = '';
+        }
+
         $es_empleado = false;
 
         if (isset($this->registro["es_empleado"])) {
