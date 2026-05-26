@@ -619,18 +619,18 @@ class _com_cliente{
             return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
         }
 
-        if(!$existe_cliente) {
-            $r_com_cliente = $this->inserta_com_cliente(link: $link, registro_entrada: $registro_entrada);
-            if (errores::$error) {
-                return $this->error->error(mensaje: 'Error al insertar cliente', data: $r_com_cliente);
-            }
+        //if(!$existe_cliente) {
+        $r_com_cliente = $this->inserta_com_cliente(link: $link, registro_entrada: $registro_entrada);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al insertar cliente', data: $r_com_cliente);
         }
+        /*}
         else{
             $r_com_cliente = $this->r_com_cliente(filtro: $filtro, link: $link, registro_entrada: $registro_entrada);
             if (errores::$error) {
                 return $this->error->error(mensaje: 'Error al obtener cliente', data: $r_com_cliente);
             }
-        }
+        }*/
         return $r_com_cliente;
     }
 
@@ -759,6 +759,7 @@ class _com_cliente{
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al obtener cliente', data: $r_com_cliente);
         }
+
         return $r_com_cliente;
     }
 

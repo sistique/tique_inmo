@@ -174,12 +174,14 @@ class _base_comprador{
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al obtener cliente', data: $r_com_cliente);
         }
+
         $r_inm_rel_comprador_com_cliente = (new _com_cliente())->inserta_inm_rel_comprador_com_cliente(
             com_cliente_id: $r_com_cliente->registro_id,inm_comprador_id:  $inm_comprador_id,link: $link);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al integrar r_inm_rel_comprador_com_cliente',
                 data: $r_inm_rel_comprador_com_cliente);
         }
+
         return $r_inm_rel_comprador_com_cliente;
     }
 
