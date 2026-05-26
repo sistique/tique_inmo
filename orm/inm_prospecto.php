@@ -368,9 +368,19 @@ class inm_prospecto extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al insertar inm_rel_prospecto_cliente_ins', data: $r_alta_rel);
         }
 
+        $r_migracion = (new _conversion())->migra_relaciones_prospecto(
+            inm_comprador_id: $r_alta_comprador->registro_id,
+            inm_prospecto_id: $inm_prospecto_id,
+            link: $this->link);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al migrar relaciones del prospecto al comprador',
+                data: $r_migracion);
+        }
+
         $data = new stdClass();
         $data->r_alta_comprador = $r_alta_comprador;
-        $data->r_alta_rel = $r_alta_rel;
+        $data->r_alta_rel       = $r_alta_rel;
+        $data->r_migracion      = $r_migracion;
 
         return $data;
     }

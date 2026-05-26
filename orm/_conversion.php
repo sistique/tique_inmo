@@ -474,6 +474,228 @@ class _conversion{
         return $inm_prospecto_ins;
     }
 
+    /**
+     * Migra los coacreditados del prospecto al comprador creando los registros en inm_rel_co_acred.
+     * La deduplicación la gestiona el propio alta_bd de inm_rel_co_acred.
+     * @param int $inm_comprador_id Identificador del comprador generado
+     * @param int $inm_prospecto_id Identificador del prospecto origen
+     * @param PDO $link Conexión a la base de datos
+     * @return array|stdClass
+     */
+    private function migra_co_acreditados(int $inm_comprador_id, int $inm_prospecto_id, PDO $link): array|stdClass
+    {
+        if ($inm_comprador_id <= 0) {
+            return $this->error->error(mensaje: 'Error inm_comprador_id debe ser mayor a 0', data: $inm_comprador_id);
+        }
+        if ($inm_prospecto_id <= 0) {
+            return $this->error->error(mensaje: 'Error inm_prospecto_id debe ser mayor a 0', data: $inm_prospecto_id);
+        }
+
+        $filtro['inm_prospecto.id'] = $inm_prospecto_id;
+        $r_co_acred_prosp = (new inm_rel_co_acred_prosp(link: $link))->filtro_and(filtro: $filtro);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener coacreditados del prospecto', data: $r_co_acred_prosp);
+        }
+
+        $r_alta_rels = array();
+        foreach ($r_co_acred_prosp->registros as $registro) {
+            $inm_co_acreditado_id = (int)$registro['inm_rel_co_acred_prosp_inm_co_acreditado_id'];
+
+            $ins['inm_comprador_id']    = $inm_comprador_id;
+            $ins['inm_co_acreditado_id'] = $inm_co_acreditado_id;
+
+            $r_alta = (new inm_rel_co_acred(link: $link))->alta_registro(registro: $ins);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al migrar coacreditado al comprador', data: $r_alta);
+            }
+            $r_alta_rels[] = $r_alta;
+        }
+
+        return $r_alta_rels;
+    }
+
+    /**
+     * Migra el cónyuge del prospecto al comprador creando los registros en inm_rel_conyuge_comprador.
+     * La deduplicación la gestiona el propio alta_bd de inm_rel_conyuge_comprador.
+     * @param int $inm_comprador_id Identificador del comprador generado
+     * @param int $inm_prospecto_id Identificador del prospecto origen
+     * @param PDO $link Conexión a la base de datos
+     * @return array|stdClass
+     */
+    private function migra_conyuges(int $inm_comprador_id, int $inm_prospecto_id, PDO $link): array|stdClass
+    {
+        if ($inm_comprador_id <= 0) {
+            return $this->error->error(mensaje: 'Error inm_comprador_id debe ser mayor a 0', data: $inm_comprador_id);
+        }
+        if ($inm_prospecto_id <= 0) {
+            return $this->error->error(mensaje: 'Error inm_prospecto_id debe ser mayor a 0', data: $inm_prospecto_id);
+        }
+
+        $filtro['inm_prospecto.id'] = $inm_prospecto_id;
+        $r_conyuge_prosp = (new inm_rel_conyuge_prospecto(link: $link))->filtro_and(filtro: $filtro);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener conyuges del prospecto', data: $r_conyuge_prosp);
+        }
+
+        $r_alta_rels = array();
+        foreach ($r_conyuge_prosp->registros as $registro) {
+            $inm_conyuge_id = (int)$registro['inm_rel_conyuge_prospecto_inm_conyuge_id'];
+
+            $ins['inm_comprador_id'] = $inm_comprador_id;
+            $ins['inm_conyuge_id']   = $inm_conyuge_id;
+
+            $r_alta = (new inm_rel_conyuge_comprador(link: $link))->alta_registro(registro: $ins);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al migrar conyuge al comprador', data: $r_alta);
+            }
+            $r_alta_rels[] = $r_alta;
+        }
+
+        return $r_alta_rels;
+    }
+
+    /**
+     * Migra los beneficiarios del prospecto al comprador creando los registros en inm_rel_beneficiario_comprador.
+     * La deduplicación la gestiona el propio alta_bd de inm_rel_beneficiario_comprador.
+     * @param int $inm_comprador_id Identificador del comprador generado
+     * @param int $inm_prospecto_id Identificador del prospecto origen
+     * @param PDO $link Conexión a la base de datos
+     * @return array|stdClass
+     */
+    private function migra_beneficiarios(int $inm_comprador_id, int $inm_prospecto_id, PDO $link): array|stdClass
+    {
+        if ($inm_comprador_id <= 0) {
+            return $this->error->error(mensaje: 'Error inm_comprador_id debe ser mayor a 0', data: $inm_comprador_id);
+        }
+        if ($inm_prospecto_id <= 0) {
+            return $this->error->error(mensaje: 'Error inm_prospecto_id debe ser mayor a 0', data: $inm_prospecto_id);
+        }
+
+        $filtro['inm_prospecto.id'] = $inm_prospecto_id;
+        $r_benef_prosp = (new inm_rel_beneficiario_prospecto(link: $link))->filtro_and(filtro: $filtro);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener beneficiarios del prospecto', data: $r_benef_prosp);
+        }
+
+        $r_alta_rels = array();
+        foreach ($r_benef_prosp->registros as $registro) {
+            $inm_beneficiario_id = (int)$registro['inm_rel_beneficiario_prospecto_inm_beneficiario_id'];
+
+            $ins['inm_comprador_id']   = $inm_comprador_id;
+            $ins['inm_beneficiario_id'] = $inm_beneficiario_id;
+
+            $r_alta = (new inm_rel_beneficiario_comprador(link: $link))->alta_registro(registro: $ins);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al migrar beneficiario al comprador', data: $r_alta);
+            }
+            $r_alta_rels[] = $r_alta;
+        }
+
+        return $r_alta_rels;
+    }
+
+    /**
+     * Migra las referencias del prospecto al comprador creando los registros en inm_rel_referencia_comprador.
+     * Realiza validación de duplicados antes de insertar ya que alta_bd no lo implementa en este modelo.
+     * @param int $inm_comprador_id Identificador del comprador generado
+     * @param int $inm_prospecto_id Identificador del prospecto origen
+     * @param PDO $link Conexión a la base de datos
+     * @return array|stdClass
+     */
+    private function migra_referencias(int $inm_comprador_id, int $inm_prospecto_id, PDO $link): array|stdClass
+    {
+        if ($inm_comprador_id <= 0) {
+            return $this->error->error(mensaje: 'Error inm_comprador_id debe ser mayor a 0', data: $inm_comprador_id);
+        }
+        if ($inm_prospecto_id <= 0) {
+            return $this->error->error(mensaje: 'Error inm_prospecto_id debe ser mayor a 0', data: $inm_prospecto_id);
+        }
+
+        $filtro['inm_prospecto.id'] = $inm_prospecto_id;
+        $r_ref_prosp = (new inm_rel_referencia_prospecto(link: $link))->filtro_and(filtro: $filtro);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener referencias del prospecto', data: $r_ref_prosp);
+        }
+
+        $r_alta_rels = array();
+        foreach ($r_ref_prosp->registros as $registro) {
+            $inm_referencia_id = (int)$registro['inm_rel_referencia_prospecto_inm_referencia_id'];
+
+            $filtro_existe['inm_referencia.id'] = $inm_referencia_id;
+            $filtro_existe['inm_comprador.id']  = $inm_comprador_id;
+
+            $existe = (new inm_rel_referencia_comprador(link: $link))->existe(filtro: $filtro_existe);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al validar si existe inm_rel_referencia_comprador',
+                    data: $existe);
+            }
+
+            if (!$existe) {
+                $ins['inm_comprador_id']  = $inm_comprador_id;
+                $ins['inm_referencia_id'] = $inm_referencia_id;
+
+                $r_alta = (new inm_rel_referencia_comprador(link: $link))->alta_registro(registro: $ins);
+                if (errores::$error) {
+                    return $this->error->error(mensaje: 'Error al migrar referencia al comprador', data: $r_alta);
+                }
+                $r_alta_rels[] = $r_alta;
+            }
+        }
+
+        return $r_alta_rels;
+    }
+
+    /**
+     * Migra todas las relaciones del prospecto hacia las entidades equivalentes del comprador:
+     * coacreditados, cónyuge, beneficiarios y referencias.
+     * @param int $inm_comprador_id Identificador del comprador generado
+     * @param int $inm_prospecto_id Identificador del prospecto origen
+     * @param PDO $link Conexión a la base de datos
+     * @return array|stdClass
+     */
+    final public function migra_relaciones_prospecto(
+        int $inm_comprador_id, int $inm_prospecto_id, PDO $link): array|stdClass
+    {
+        if ($inm_comprador_id <= 0) {
+            return $this->error->error(mensaje: 'Error inm_comprador_id debe ser mayor a 0', data: $inm_comprador_id);
+        }
+        if ($inm_prospecto_id <= 0) {
+            return $this->error->error(mensaje: 'Error inm_prospecto_id debe ser mayor a 0', data: $inm_prospecto_id);
+        }
+
+        $r_co_acred = $this->migra_co_acreditados(
+            inm_comprador_id: $inm_comprador_id, inm_prospecto_id: $inm_prospecto_id, link: $link);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al migrar coacreditados', data: $r_co_acred);
+        }
+
+        $r_conyuges = $this->migra_conyuges(
+            inm_comprador_id: $inm_comprador_id, inm_prospecto_id: $inm_prospecto_id, link: $link);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al migrar conyuges', data: $r_conyuges);
+        }
+
+        $r_beneficiarios = $this->migra_beneficiarios(
+            inm_comprador_id: $inm_comprador_id, inm_prospecto_id: $inm_prospecto_id, link: $link);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al migrar beneficiarios', data: $r_beneficiarios);
+        }
+
+        $r_referencias = $this->migra_referencias(
+            inm_comprador_id: $inm_comprador_id, inm_prospecto_id: $inm_prospecto_id, link: $link);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al migrar referencias', data: $r_referencias);
+        }
+
+        $data = new stdClass();
+        $data->r_co_acred      = $r_co_acred;
+        $data->r_conyuges      = $r_conyuges;
+        $data->r_beneficiarios = $r_beneficiarios;
+        $data->r_referencias   = $r_referencias;
+
+        return $data;
+    }
+
     public function inserta_referencia(int $inm_comprador_id, int $inm_prospecto_id, PDO $link): array|stdClass
     {
         if ($inm_prospecto_id <= 0) {
