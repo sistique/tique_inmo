@@ -163,7 +163,7 @@ class _com_cliente{
         $com_cliente_data['razon_social'] = trim($razon_social);
         $com_cliente_data['numero_interior'] = $numero_interior;
         $com_cliente_data['telefono'] = $telefono;
-        $com_cliente_data['codigo'] = $registro['rfc'];
+        $com_cliente_data['codigo'] = $registro['rfc'].' - '.rand(1000,9999);
         $com_cliente_data['cat_sat_tipo_de_comprobante_id'] = 1;
 
         return $com_cliente_data;
