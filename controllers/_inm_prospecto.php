@@ -77,10 +77,12 @@ class _inm_prospecto{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar si tiene dato tiene_dato',data:  $tiene_dato);
         }
+
         $datos = new stdClass();
         $datos->existe = $existe;
         $datos->row = $row;
         $datos->tiene_dato = $tiene_dato;
+
         return $datos;
     }
 
@@ -991,16 +993,22 @@ class _inm_prospecto{
     private function tiene_dato(array $row): bool
     {
         $tiene_dato = false;
-        foreach ($row as $value){
+        foreach ($row as $key => $value){
+            if($key === 'genero'){
+                continue;
+            }
+
             if($value === null){
                 $value = '';
             }
+
             $value = trim($value);
             if($value!==''){
                 $tiene_dato = true;
                 break;
             }
         }
+
         return $tiene_dato;
     }
 
