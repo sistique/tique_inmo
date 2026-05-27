@@ -248,17 +248,58 @@ class _conversion{
         return $inm_rel_prospecto_cliente_ins;
     }
 
-
     /**
-     * Inserta un comprador
-     * @param int $inm_prospecto_id Identificador de prospecto
-     * @param inm_prospecto $modelo Modelo inm_prospecto
-     * @return array|stdClass
+     * Verifica si un prospecto ya tiene un comprador registrado mediante inm_rel_comprador_prospecto.
+     * @param int $inm_prospecto_id Identificador del prospecto
+     * @param PDO $link Conexión a base de datos
+     * @return array|stdClass  stdClass con ->existe (bool) y ->inm_comprador_id (int, 0 si no existe)
      */
+    private function comprador_existente(int $inm_prospecto_id, PDO $link): array|stdClass
+    {
+        if($inm_prospecto_id <= 0){
+            return $this->error->error(mensaje: 'Error inm_prospecto_id debe ser mayor a 0', data: $inm_prospecto_id);
+        }
+
+        $filtro['inm_rel_comprador_prospecto.inm_prospecto_id'] = $inm_prospecto_id;
+        $existe = (new inm_rel_comprador_prospecto(link: $link))->existe(filtro: $filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al verificar si el prospecto ya tiene comprador',
+                data: $existe);
+        }
+
+        $data = new stdClass();
+        $data->existe = (bool)$existe;
+        $data->inm_comprador_id = 0;
+
+        if($data->existe){
+            $r_rel = (new inm_rel_comprador_prospecto(link: $link))->filtro_and(filtro: $filtro);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al obtener relacion comprador-prospecto', data: $r_rel);
+            }
+            if(isset($r_rel->registros[0]['inm_comprador_id'])){
+                $data->inm_comprador_id = (int)$r_rel->registros[0]['inm_comprador_id'];
+            }
+        }
+
+        return $data;
+    }
+
     final public function inserta_inm_comprador(int $inm_prospecto_id, inm_prospecto $modelo): array|stdClass
     {
         if($inm_prospecto_id<=0){
             return $this->error->error(mensaje: 'Error inm_prospecto_id es menor a 0', data: $inm_prospecto_id);
+        }
+
+        $comprador_existente = $this->comprador_existente(inm_prospecto_id: $inm_prospecto_id, link: $modelo->link);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al verificar comprador existente', data: $comprador_existente);
+        }
+        if($comprador_existente->existe){
+            return $this->error->error(
+                mensaje: 'El prospecto ya tiene un comprador registrado (inm_comprador_id: '
+                    .$comprador_existente->inm_comprador_id.'). No se puede crear un duplicado.',
+                data: $comprador_existente
+            );
         }
 
         $data = $this->data_prospecto(inm_prospecto_id: $inm_prospecto_id,modelo: $modelo);
