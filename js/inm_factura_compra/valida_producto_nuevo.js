@@ -888,3 +888,12 @@ $('#limpiar').on('click', function () {
 
     $('.content_alta').hide();
 });
+
+$(document).on('keydown', '.filtros-avanzados', function (e) {
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        if (!$('#filtrar').prop('disabled')) {
+            $('#filtrar').click();
+        }
+    }
+});
