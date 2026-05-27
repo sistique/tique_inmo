@@ -478,9 +478,10 @@ class _upd_prospecto{
     }
 
     final public function transacciona_co_acreditado(int $inm_prospecto_id, PDO $link){
-        $datos = (new \gamboamartin\inmuebles\controllers\_inm_prospecto())->dato(existe: false,key_data: 'co_acreditado');
+        $datos = (new \gamboamartin\inmuebles\controllers\_inm_prospecto())->datos_co_acreditado(
+            link: $link,inm_prospecto_id: $inm_prospecto_id);
         if(errores::$error){
-            return $this->error->error(mensaje: 'Error al obtener dato de co_acreditado',data:  $datos);
+            return $this->error->error(mensaje: 'Error al obtener dato co_acreditado',data:  $datos);
         }
 
         if($datos->tiene_dato){

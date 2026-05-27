@@ -496,6 +496,22 @@ class inm_prospecto extends _modelo_parent{
         }
         return $existe_conyuge;
     }
+    
+    final public function existe_co_acreditado(int $inm_prospecto_id): bool|array
+    {
+        if($inm_prospecto_id <=0){
+            return $this->error->error(mensaje: 'Error inm_prospecto_id es menor a 0',data:  $inm_prospecto_id);
+        }
+        $filtro = array();
+        $filtro['inm_prospecto.id'] = $inm_prospecto_id;
+
+        $existe_co_acreditado = (new inm_rel_co_acred_prosp(link: $this->link))->existe(filtro: $filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar si existe co_acreditado',data:  $existe_co_acreditado);
+        }
+
+        return $existe_co_acreditado;
+    }
 
     /**
      * Obtiene los datos del cliente de fc basados en el comprador

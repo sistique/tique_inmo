@@ -116,6 +116,24 @@ class _inm_prospecto{
         return $datos;
     }
 
+    final public function datos_co_acreditado(PDO $link, int $inm_prospecto_id): array|stdClass
+    {
+        $existe_co_acreditado = false;
+
+        if($inm_prospecto_id > 0) {
+            $existe_co_acreditado = (new inm_prospecto(link: $link))->existe_co_acreditado(inm_prospecto_id: $inm_prospecto_id);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al validar si existe co_acreditado', data: $existe_co_acreditado);
+            }
+        }
+
+        $datos = $this->dato(existe: $existe_co_acreditado,key_data:  'co_acreditado');
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al inicializar datos',data:  $datos);
+        }
+
+        return $datos;
+    }
 
 
     /**
