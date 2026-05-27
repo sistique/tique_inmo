@@ -524,7 +524,7 @@ class adm_seccion extends _modelo_children {
 
                 $filtro['adm_grupo.id'] = $adm_grupo->id;
                 $filtro['adm_menu.id'] = $adm_menu_id;
-                $filtro['adm_accion.es_view'] = 'activo';
+                $filtro['adm_accion.visible_menu'] = 'activo';
                 $group_by[] = 'adm_seccion.id';
                 $in['llave'] = 'adm_seccion.id';
                 $in['values'] = $seccion_sistema_in;
