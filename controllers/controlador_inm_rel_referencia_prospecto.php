@@ -147,7 +147,7 @@ class controlador_inm_rel_referencia_prospecto extends _ctl_base {
      */
     private function init_datatable(): stdClass
     {
-        $columns["inm_referencia_prospecto_id"]["titulo"] = "Id";
+        $columns["inm_rel_referencia_prospecto_id"]["titulo"] = "Id";
         $columns["inm_prospecto_descripcion"]["titulo"] = "Prospecto";
         $columns["dp_calle_pertenece_descripcion"]["titulo"] = "Tipo de Beneficiario";
         $columns["inm_parentesco_descripcion"]["titulo"] = "Parentesco";

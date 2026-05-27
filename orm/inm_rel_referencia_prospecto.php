@@ -12,7 +12,8 @@ class inm_rel_referencia_prospecto extends _modelo_parent{
     public function __construct(PDO $link)
     {
         $tabla = 'inm_rel_referencia_prospecto';
-        $columnas = array($tabla=>false,'inm_prospecto'=>$tabla,'inm_referencia'=>$tabla);
+        $columnas = array($tabla=>false,'inm_prospecto'=>$tabla,'inm_referencia'=>$tabla,
+            'inm_parentesco' => 'inm_referencia');
 
         $campos_obligatorios = array('inm_prospecto_id','inm_referencia_id');
 

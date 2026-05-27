@@ -1705,7 +1705,7 @@ class controlador_inm_prospecto extends _ctl_formato
         $referencia_prospectos = $r_inm_referencia_prospecto->registros;
 
         $referencia_prospectos = (new \gamboamartin\inmuebles\controllers\_inm_prospecto())->rows(controlador: $this,
-            datas: $referencia_prospectos, params: $params, seccion_exe: 'inm_referencia_prospecto');
+            datas: $referencia_prospectos, params: $params, seccion_exe: 'inm_rel_referencia_prospecto');
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al obtener beneficiarios link del', data: $referencia_prospectos,
                 header: $header, ws: $ws);

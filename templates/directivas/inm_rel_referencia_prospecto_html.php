@@ -6,7 +6,7 @@ use PDO;
 
 class inm_rel_referencia_prospecto_html extends _base {
 
-    public function select_inm_referencia_prospecto_id(int $cols, bool $con_registros, int $id_selected, PDO $link, array $columns_ds=array(),
+    public function select_inm_rel_referencia_prospecto_id(int $cols, bool $con_registros, int $id_selected, PDO $link, array $columns_ds=array(),
                                       bool $disabled = false, array $filtro = array()): array|string
     {
         $modelo = new inm_rel_referencia_prospecto(link: $link);
