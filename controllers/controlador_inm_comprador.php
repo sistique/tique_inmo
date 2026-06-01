@@ -4434,7 +4434,7 @@ class controlador_inm_comprador extends _ctl_base {
         $beneficiarios = $r_inm_beneficiario->registros;
 
         $beneficiarios = (new \gamboamartin\inmuebles\controllers\_inm_comprador())->rows(controlador: $controlador_inm_prospecto,
-            datas: $beneficiarios,params:  $params, seccion_exe: 'inm_beneficiario');
+            datas: $beneficiarios,params:  $params, seccion_exe: 'inm_rel_beneficiario_comprador');
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener beneficiarios link del',data:  $beneficiarios,
                 header: $header,ws:  $ws);
@@ -4465,7 +4465,7 @@ class controlador_inm_comprador extends _ctl_base {
         $referencia_prospectos = $r_inm_referencia_prospecto->registros;
 
         $referencia_prospectos = (new \gamboamartin\inmuebles\controllers\_inm_comprador())->rows(controlador: $controlador_inm_prospecto,
-            datas: $referencia_prospectos,params:  $params, seccion_exe: 'inm_referencia');
+            datas: $referencia_prospectos,params:  $params, seccion_exe: 'inm_rel_referencia_comprador');
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener beneficiarios link del',data:  $referencia_prospectos,
                 header: $header,ws:  $ws);
