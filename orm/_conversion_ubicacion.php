@@ -179,10 +179,62 @@ class _conversion_ubicacion{
     }
 
     
+    /**
+     * Verifica si un prospecto_ubicacion ya tiene una ubicacion registrada mediante inm_rel_ubicacion_prospecto_ubicacion.
+     * @param int $inm_prospecto_ubicacion_id Identificador del prospecto_ubicacion
+     * @param PDO $link Conexion a base de datos
+     * @return array|stdClass stdClass con ->existe (bool) y ->inm_ubicacion_id (int, 0 si no existe)
+     */
+    private function ubicacion_existente(int $inm_prospecto_ubicacion_id, PDO $link): array|stdClass
+    {
+        if($inm_prospecto_ubicacion_id <= 0){
+            return $this->error->error(mensaje: 'Error inm_prospecto_ubicacion_id debe ser mayor a 0',
+                data: $inm_prospecto_ubicacion_id);
+        }
+
+        $filtro['inm_rel_ubicacion_prospecto_ubicacion.inm_prospecto_ubicacion_id'] = $inm_prospecto_ubicacion_id;
+        $existe = (new inm_rel_ubicacion_prospecto_ubicacion(link: $link))->existe(filtro: $filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al verificar si el prospecto_ubicacion ya tiene ubicacion',
+                data: $existe);
+        }
+
+        $data = new stdClass();
+        $data->existe = (bool)$existe;
+        $data->inm_ubicacion_id = 0;
+
+        if($data->existe){
+            $r_rel = (new inm_rel_ubicacion_prospecto_ubicacion(link: $link))->filtro_and(filtro: $filtro);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al obtener relacion ubicacion-prospecto_ubicacion',
+                    data: $r_rel);
+            }
+            if(isset($r_rel->registros[0]['inm_rel_ubicacion_prospecto_ubicacion_inm_ubicacion_id'])){
+                $data->inm_ubicacion_id =
+                    (int)$r_rel->registros[0]['inm_rel_ubicacion_prospecto_ubicacion_inm_ubicacion_id'];
+            }
+        }
+
+        return $data;
+    }
+
     final public function inserta_inm_ubicacion(int $inm_prospecto_ubicacion_id, inm_prospecto_ubicacion $modelo): array|stdClass
     {
         if($inm_prospecto_ubicacion_id<=0){
             return $this->error->error(mensaje: 'Error inm_prospecto_id es menor a 0', data: $inm_prospecto_ubicacion_id);
+        }
+
+        $ubicacion_existente = $this->ubicacion_existente(inm_prospecto_ubicacion_id: $inm_prospecto_ubicacion_id,
+            link: $modelo->link);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al verificar ubicacion existente', data: $ubicacion_existente);
+        }
+        if($ubicacion_existente->existe){
+            return $this->error->error(
+                mensaje: 'El prospecto_ubicacion ya tiene una ubicacion registrada (inm_ubicacion_id: '
+                    .$ubicacion_existente->inm_ubicacion_id.'). No se puede crear un duplicado.',
+                data: $ubicacion_existente
+            );
         }
 
         $data = $this->data_prospecto_ubicacion(inm_prospecto_ubicacion_id: $inm_prospecto_ubicacion_id,
@@ -467,6 +519,128 @@ class _conversion_ubicacion{
             'nombre_notario', 'plaza_notaria', 'numero_escritura', 'libro', 'volumen',
             'dp_colonia_postal_domicilio_id', 'calle_domicilio', 'numero_exterior_domicilio',
             'numero_interior_domicilio');
+    }
+
+    /**
+     * Migra los coacreditados del prospecto_ubicacion a la ubicacion creando registros en inm_rel_co_acred_ubi.
+     * @param int $inm_ubicacion_id Identificador de la ubicacion destino
+     * @param int $inm_prospecto_ubicacion_id Identificador del prospecto_ubicacion origen
+     * @param PDO $link Conexion a la base de datos
+     * @return array|stdClass
+     */
+    private function migra_co_acreditados(int $inm_ubicacion_id, int $inm_prospecto_ubicacion_id, PDO $link): array|stdClass
+    {
+        if ($inm_ubicacion_id <= 0) {
+            return $this->error->error(mensaje: 'Error inm_ubicacion_id debe ser mayor a 0', data: $inm_ubicacion_id);
+        }
+        if ($inm_prospecto_ubicacion_id <= 0) {
+            return $this->error->error(mensaje: 'Error inm_prospecto_ubicacion_id debe ser mayor a 0',
+                data: $inm_prospecto_ubicacion_id);
+        }
+
+        $filtro['inm_prospecto_ubicacion.id'] = $inm_prospecto_ubicacion_id;
+        $r_co_acred_prosp_ubi = (new inm_rel_co_acred_prosp_ubi(link: $link))->filtro_and(filtro: $filtro);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener coacreditados del prospecto_ubicacion',
+                data: $r_co_acred_prosp_ubi);
+        }
+
+        $r_alta_rels = array();
+        foreach ($r_co_acred_prosp_ubi->registros as $registro) {
+            $inm_co_acreditado_id = (int)$registro['inm_rel_co_acred_prosp_ubi_inm_co_acreditado_id'];
+
+            $ins['inm_ubicacion_id']     = $inm_ubicacion_id;
+            $ins['inm_co_acreditado_id'] = $inm_co_acreditado_id;
+
+            $r_alta = (new inm_rel_co_acred_ubi(link: $link))->alta_registro(registro: $ins);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al migrar coacreditado a la ubicacion', data: $r_alta);
+            }
+            $r_alta_rels[] = $r_alta;
+        }
+
+        return $r_alta_rels;
+    }
+
+    /**
+     * Migra el conyuge del prospecto_ubicacion a la ubicacion creando registros en inm_rel_conyuge_ubicacion.
+     * @param int $inm_ubicacion_id Identificador de la ubicacion destino
+     * @param int $inm_prospecto_ubicacion_id Identificador del prospecto_ubicacion origen
+     * @param PDO $link Conexion a la base de datos
+     * @return array|stdClass
+     */
+    private function migra_conyuges(int $inm_ubicacion_id, int $inm_prospecto_ubicacion_id, PDO $link): array|stdClass
+    {
+        if ($inm_ubicacion_id <= 0) {
+            return $this->error->error(mensaje: 'Error inm_ubicacion_id debe ser mayor a 0', data: $inm_ubicacion_id);
+        }
+        if ($inm_prospecto_ubicacion_id <= 0) {
+            return $this->error->error(mensaje: 'Error inm_prospecto_ubicacion_id debe ser mayor a 0',
+                data: $inm_prospecto_ubicacion_id);
+        }
+
+        $filtro['inm_prospecto_ubicacion.id'] = $inm_prospecto_ubicacion_id;
+        $r_conyuge_prosp_ubi = (new inm_rel_conyuge_prospecto_ubicacion(link: $link))->filtro_and(filtro: $filtro);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener conyuges del prospecto_ubicacion',
+                data: $r_conyuge_prosp_ubi);
+        }
+
+        $r_alta_rels = array();
+        foreach ($r_conyuge_prosp_ubi->registros as $registro) {
+            $inm_conyuge_id = (int)$registro['inm_rel_conyuge_prospecto_ubicacion_inm_conyuge_id'];
+
+            $ins['inm_ubicacion_id'] = $inm_ubicacion_id;
+            $ins['inm_conyuge_id']   = $inm_conyuge_id;
+
+            $r_alta = (new inm_rel_conyuge_ubicacion(link: $link))->alta_registro(registro: $ins);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al migrar conyuge a la ubicacion', data: $r_alta);
+            }
+            $r_alta_rels[] = $r_alta;
+        }
+
+        return $r_alta_rels;
+    }
+
+    /**
+     * Migra todas las relaciones del prospecto_ubicacion hacia las entidades equivalentes de la ubicacion:
+     * coacreditados y conyuge.
+     * @param int $inm_ubicacion_id Identificador de la ubicacion destino
+     * @param int $inm_prospecto_ubicacion_id Identificador del prospecto_ubicacion origen
+     * @param PDO $link Conexion a la base de datos
+     * @return array|stdClass
+     */
+    final public function migra_relaciones_prospecto_ubicacion(
+        int $inm_ubicacion_id, int $inm_prospecto_ubicacion_id, PDO $link): array|stdClass
+    {
+        if ($inm_ubicacion_id <= 0) {
+            return $this->error->error(mensaje: 'Error inm_ubicacion_id debe ser mayor a 0', data: $inm_ubicacion_id);
+        }
+        if ($inm_prospecto_ubicacion_id <= 0) {
+            return $this->error->error(mensaje: 'Error inm_prospecto_ubicacion_id debe ser mayor a 0',
+                data: $inm_prospecto_ubicacion_id);
+        }
+
+        $r_co_acred = $this->migra_co_acreditados(
+            inm_ubicacion_id: $inm_ubicacion_id, inm_prospecto_ubicacion_id: $inm_prospecto_ubicacion_id,
+            link: $link);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al migrar coacreditados', data: $r_co_acred);
+        }
+
+        $r_conyuges = $this->migra_conyuges(
+            inm_ubicacion_id: $inm_ubicacion_id, inm_prospecto_ubicacion_id: $inm_prospecto_ubicacion_id,
+            link: $link);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al migrar conyuges', data: $r_conyuges);
+        }
+
+        $data = new stdClass();
+        $data->r_co_acred = $r_co_acred;
+        $data->r_conyuges = $r_conyuges;
+
+        return $data;
     }
 
     /**

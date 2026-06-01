@@ -40,10 +40,6 @@ use gamboamartin\inmuebles\models\inm_doc_ubicacion;
 use gamboamartin\inmuebles\models\inm_prospecto;
 use gamboamartin\inmuebles\models\inm_prospecto_ubicacion;
 use gamboamartin\inmuebles\models\inm_rel_referencia_prospecto;
-use gamboamartin\inmuebles\models\inm_rel_co_acred_prosp_ubi;
-use gamboamartin\inmuebles\models\inm_rel_co_acred_ubi;
-use gamboamartin\inmuebles\models\inm_rel_conyuge_prospecto_ubicacion;
-use gamboamartin\inmuebles\models\inm_rel_conyuge_ubicacion;
 use gamboamartin\inmuebles\models\inm_rel_ubicacion_prospecto_ubicacion;
 use gamboamartin\inmuebles\models\inm_status_prospecto_ubicacion;
 use gamboamartin\inmuebles\models\inm_tipo_beneficiario;
@@ -344,67 +340,15 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
                 header: true, ws: false);
         }
 
-        $filtro['inm_prospecto_ubicacion.id'] = $this->registro_id;
-        $existe = (new inm_rel_ubicacion_prospecto_ubicacion(link: $this->link))->filtro_and(filtro: $filtro);
+        $conversion = (new inm_prospecto_ubicacion(link: $this->link))->convierte_ubicacion(
+            inm_prospecto_ubicacion_id: $this->registro_id);
         if (errores::$error) {
             $this->link->rollBack();
-            return $this->retorno_error(mensaje: 'Error al obtener relacion anterior', data: $existe,
+            return $this->retorno_error(mensaje: 'Error al convertir en ubicacion', data: $conversion,
                 header: true, ws: false, class: __CLASS__, file: __FILE__, function: __FILE__, line: __LINE__);
         }
 
-        $conversion = new stdClass();
-        if($existe->n_registros <= 0) {
-            $conversion = (new inm_prospecto_ubicacion(link: $this->link))->convierte_ubicacion(
-                inm_prospecto_ubicacion_id: $this->registro_id);
-            if (errores::$error) {
-                $this->link->rollBack();
-                return $this->retorno_error(mensaje: 'Error al convertir en ubicacion', data: $conversion,
-                    header: true, ws: false, class: __CLASS__, file: __FILE__, function: __FILE__, line: __LINE__);
-            }
-        }
-
-       /* $filtro_prosp['inm_prospecto_ubicacion.id'] = $this->registro_id;
-        $r_inm_rel_conyuge_prospecto_ubicacion =
-            (new inm_rel_conyuge_prospecto_ubicacion(link: $this->link))->filtro_and(filtro: $filtro_prosp);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener conyuge relacion',
-                data:  $r_inm_rel_conyuge_prospecto_ubicacion, header: true, ws: false, class: __CLASS__,
-                file: __FILE__, function: __FILE__, line: __LINE__);
-        }
-
-        if($r_inm_rel_conyuge_prospecto_ubicacion->n_registros > 0) {
-            $inm_rel_conyuge_ubicacion_ins['inm_ubicacion_id'] = $this->registro_id;
-            $inm_rel_conyuge_ubicacion_ins['inm_conyuge_id'] =
-                $r_inm_rel_conyuge_prospecto_ubicacion->registros[0]->inm_conyuge_id;
-            $r_inm_rel_conyuge_ubicacion_bd = (new inm_rel_conyuge_ubicacion(link: $this->link))->alta_registro(
-                registro: $inm_rel_conyuge_ubicacion_ins);
-            if (errores::$error) {
-                return $this->retorno_error(mensaje: 'Error al insertar conyuge', data: $r_inm_rel_conyuge_ubicacion_bd,
-                    header: true, ws: false, class: __CLASS__, file: __FILE__, function: __FILE__, line: __LINE__);
-            }
-        }*/
-
         $filtro_prosp['inm_prospecto_ubicacion.id'] = $this->registro_id;
-        $r_inm_rel_co_acreditado_prospecto_ubicacion =
-            (new inm_rel_co_acred_prosp_ubi(link: $this->link))->filtro_and(filtro: $filtro_prosp);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener co_acreditado relacion',
-                data:  $r_inm_rel_co_acreditado_prospecto_ubicacion, header: true, ws: false, class: __CLASS__,
-                file: __FILE__, function: __FILE__, line: __LINE__);
-        }
-
-        if($r_inm_rel_co_acreditado_prospecto_ubicacion->n_registros > 0) {
-            $inm_rel_co_acreditado_ubicacion_ins['inm_ubicacion_id'] =  $conversion->r_alta_ubicacion->registro_id;
-            $inm_rel_co_acreditado_ubicacion_ins['inm_co_acreditado_id'] =
-                $r_inm_rel_co_acreditado_prospecto_ubicacion->registros_obj[0]->inm_co_acreditado_id;
-            $r_inm_rel_co_acreditado_ubicacion_bd = (new inm_rel_co_acred_ubi(link: $this->link))->alta_registro(
-                registro: $inm_rel_co_acreditado_ubicacion_ins);
-            if (errores::$error) {
-                return $this->retorno_error(mensaje: 'Error al insertar co_acreditado', data: $r_inm_rel_co_acreditado_ubicacion_bd,
-                    header: true, ws: false, class: __CLASS__, file: __FILE__, function: __FILE__, line: __LINE__);
-            }
-        }
-
         $r_doc_prospecto_ubicacion = (new inm_doc_prospecto_ubicacion(link:$this->link))->filtro_and(
             filtro: $filtro_prosp);
         if (errores::$error) {
