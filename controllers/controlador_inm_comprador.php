@@ -4135,7 +4135,7 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'cuenta_predial',
-            keys_selects:$keys_selects, place_holder: 'Cuenta Predial', required: false, disabled: true);
+            keys_selects:$keys_selects, place_holder: 'Cuenta Predial', required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
@@ -5275,7 +5275,19 @@ class controlador_inm_comprador extends _ctl_base {
             $id_selected = $fc_partida->registros[0]['com_producto_id'];
         }
 
-        $keys_selects = $this->key_select(cols: 6, con_registros: true,filtro: array(),
+        $filtro_prod['com_producto.codigo_sat'] = '95122101';
+        $r_com_producto = (new com_producto(link: $this->link))->filtro_and(
+            filtro: $filtro_prod);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener registro',data:  $r_com_producto,header: $header,ws: $ws);
+        }
+
+        if($r_com_producto->n_registros > 0){
+            $id_selected = $r_com_producto->registros[0]['com_producto_id'];
+        }
+
+        $keys_selects = $this->key_select(cols: 6, con_registros: true,filtro: $filtro_prod,
             key: 'com_producto_id', keys_selects: $keys_selects, id_selected: $id_selected,
             label: 'Producto', extra_params_keys:  array("com_producto_aplica_predial","com_producto_descripcion"));
         if(errores::$error){
