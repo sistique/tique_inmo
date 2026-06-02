@@ -72,6 +72,7 @@ use gamboamartin\validacion\validacion;
 use html\doc_tipo_documento_html;
 use html\dp_estado_html;
 use html\dp_municipio_html;
+use NumberFormatter;
 use PDO;
 use setasign\Fpdi\Fpdi;
 use stdClass;
@@ -4134,18 +4135,6 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'cuenta_predial',
-            keys_selects:$keys_selects, place_holder: 'Cuenta Predial', required: false);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-
-        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'descripcion_factura',
-            keys_selects:$keys_selects, place_holder: 'Descripcion');
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'cantidad',
             keys_selects:$keys_selects, place_holder: 'Cantidad');
         if(errores::$error){
@@ -5314,6 +5303,49 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);
         }
+
+        $filtro = array();
+        $filtro['inm_comprador.id'] = $this->registro_id;
+        $order = array('inm_rel_ubi_comp.fecha_alta'=>'DESC');
+        $r_inm_rel_ubi_comp = (new inm_rel_ubi_comp(link: $this->link))->filtro_and(filtro: $filtro, order: $order);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener compradores',data:  $keys_selects,
+                header: $header,ws:  $ws);
+        }
+
+        $registro = (new inm_comprador(link: $this->link))->registro(registro_id: $this->registro_id);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener registro',data:  $registro,header: $header,ws: $ws);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'descripcion_factura',
+            keys_selects:$keys_selects, place_holder: 'Descripcion');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $numero_notaria = $r_inm_rel_ubi_comp->registros[0]['inm_ubicacion_numero_escritura'];
+        $formatter = new NumberFormatter('es', NumberFormatter::SPELLOUT);
+        $enLetras = $formatter->format($numero_notaria);
+
+        $enMayusculas = mb_strtoupper($enLetras, 'UTF-8');
+
+        $this->row_upd->descripcion_factura = $registro['inm_ubicacion_completa'].' NUMERO ESCRITURA '.
+            $r_inm_rel_ubi_comp->registros[0]['inm_ubicacion_numero_escritura'].' '.
+            $enMayusculas. '  NOTARIA PÚBLICA NÚMERO '.
+            $r_inm_rel_ubi_comp->registros[0]['inm_ubicacion_numero_notaria'].' DE '.
+            $r_inm_rel_ubi_comp->registros[0]['inm_ubicacion_plaza_notaria'].' LIC. '.
+            $r_inm_rel_ubi_comp->registros[0]['inm_ubicacion_nombre_notario'].' CUENTA PREDIAL '.
+            $r_inm_rel_ubi_comp->registros[0]['inm_ubicacion_cuenta_predial'];
+
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'cuenta_predial',
+            keys_selects:$keys_selects, place_holder: 'Cuenta Predial', required: false);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $this->row_upd->cuenta_predial = $r_inm_rel_ubi_comp->registros[0]['inm_ubicacion_cuenta_predial'];
 
         $base = $this->base_upd(keys_selects: $keys_selects, params: array(),params_ajustados: array());
         if(errores::$error){
