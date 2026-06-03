@@ -5105,6 +5105,8 @@ class controlador_inm_comprador extends _ctl_base {
         $fc_partida->n_registros = 0;
         $fc_partida->registros = array();
 
+        $fc_factura_id = -1;
+
         if($r_fc_factura->n_registros > 0){
             $this->row_upd->serie = $r_fc_factura->registros[0]['fc_factura_serie'];
             $this->row_upd->folio = $r_fc_factura->registros[0]['fc_factura_folio'];
@@ -5125,6 +5127,8 @@ class controlador_inm_comprador extends _ctl_base {
             $this->row_upd->subtotal = $fc_partida->registros[0]['fc_partida_sub_total'];
             $this->row_upd->descuento_factura = $fc_partida->registros[0]['fc_partida_descuento'];
             $this->row_upd->total = $fc_partida->registros[0]['fc_partida_total'];
+
+            $fc_factura_id = $r_fc_factura->registros[0]['fc_factura_id'];
         }
 
         $keys_selects = array();
@@ -5352,7 +5356,7 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
         }
 
-        $buttons = $this->buttons_base();
+        $buttons = $this->buttons_base(fc_factura_id: $fc_factura_id);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al obtener buttons', data: $buttons);
         }
@@ -5482,13 +5486,14 @@ class controlador_inm_comprador extends _ctl_base {
         return $this->registro_id;
     }
 
-    public function buttons_base(): array|string
+    public function buttons_base(int $fc_factura_id = -1): array|string
     {
         $button_fc_factura_timbra =  $this->html->button_href(accion: 'timbra_xml', etiqueta: 'Timbrar',
-            registro_id: $this->registro_id, seccion: $this->seccion, style: 'danger', cols: 3, params: array());
+            registro_id: $fc_factura_id, seccion: 'fc_factura', style: 'danger', cols: 3, params: array());
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al generar link', data: $button_fc_factura_timbra);
         }
+
         $button_fc_factura_nota_credito =  $this->html->button_href(accion: 'genera_nota_credito',
             etiqueta: 'Nota de Credito', registro_id: $this->registro_id, seccion: $this->seccion, style: 'warning',
             cols: 3, params: array());

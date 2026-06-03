@@ -9,6 +9,7 @@
                 <?php include (new views())->ruta_templates."head/subtitulo.php"; ?>
                 <?php include (new views())->ruta_templates."mensajes.php"; ?>
                 <form enctype="multipart/form-data" method="post" action="<?php echo $controlador->link_genera_factura_bd; ?>" class="form-additional">
+                    <?php //echo $controlador->inputs->uuid; ?>
                     <?php echo $controlador->inputs->fc_csd_id; ?>
                     <?php echo $controlador->inputs->com_sucursal_id; ?>
                     <?php //echo $controlador->inputs->serie; ?>
