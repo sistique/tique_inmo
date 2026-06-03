@@ -5130,7 +5130,7 @@ class controlador_inm_comprador extends _ctl_base {
         $keys_selects = array();
         $columns_ds = array('com_cliente_rfc','com_cliente_razon_social');
         $filtro['com_sucursal.id'] = $r_com_sucursal->registros[0]['com_sucursal_id'];
-        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro: $filtro, key: 'com_sucursal_id',
+        $keys_selects = $this->key_select(cols: 6, con_registros: true,filtro: $filtro, key: 'com_sucursal_id',
             keys_selects: $keys_selects, id_selected: $r_com_sucursal->registros[0]['com_sucursal_id'],
             label: 'Cliente', columns_ds : $columns_ds);
         if(errores::$error){
@@ -5149,7 +5149,7 @@ class controlador_inm_comprador extends _ctl_base {
         if(count($fc_csds) === 1){
             $id_selected = $fc_csds[0]['fc_csd_id'];
         }
-        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro: array(), key: 'fc_csd_id',
+        $keys_selects = $this->key_select(cols: 6, con_registros: true,filtro: array(), key: 'fc_csd_id',
             keys_selects: $keys_selects, id_selected: $id_selected, label: 'Empresa');
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
