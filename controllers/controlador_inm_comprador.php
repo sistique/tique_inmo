@@ -5488,37 +5488,45 @@ class controlador_inm_comprador extends _ctl_base {
 
     public function buttons_base(int $fc_factura_id = -1): array|string
     {
+        $button_fc_factura_modifica =  $this->html->button_href(accion: 'modifica', etiqueta: 'Detalle Factura',
+            registro_id: $fc_factura_id, seccion: 'fc_factura', style: 'success', cols: 4, params: array());
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al generar link', data: $button_fc_factura_modifica);
+        }
+
         $button_fc_factura_timbra =  $this->html->button_href(accion: 'timbra_xml', etiqueta: 'Timbrar',
-            registro_id: $fc_factura_id, seccion: 'fc_factura', style: 'danger', cols: 3, params: array());
+            registro_id: $fc_factura_id, seccion: 'fc_factura', style: 'danger', cols: 12, params: array());
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al generar link', data: $button_fc_factura_timbra);
         }
 
         $button_fc_factura_nota_credito =  $this->html->button_href(accion: 'genera_nota_credito',
             etiqueta: 'Nota de Credito', registro_id: $this->registro_id, seccion: $this->seccion, style: 'warning',
-            cols: 3, params: array());
+            cols: 4, params: array());
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al generar link', data: $button_fc_factura_nota_credito);
         }
 
         $button_fc_factura_complemento_pago =  $this->html->button_href(accion: 'genera_complemento_pago',
             etiqueta: 'Complemento Pago', registro_id: $this->registro_id, seccion: $this->seccion, style: 'warning',
-            cols: 3, params: array());
+            cols: 4, params: array());
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al generar link', data: $button_fc_factura_complemento_pago);
         }
 
         $button_fc_factura_exportar_documentos =  $this->html->button_href(accion: 'exportar_documentos',
-            etiqueta: 'Descargar', registro_id: $this->registro_id, seccion: $this->seccion, style: 'success',
-            cols: 3, params: array());
+            etiqueta: 'Descargar Factura', registro_id: $this->registro_id, seccion: $this->seccion, style: 'success',
+            cols: 12, params: array());
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al generar link', data: $button_fc_factura_exportar_documentos);
         }
 
-        $buttons = $button_fc_factura_timbra.$button_fc_factura_nota_credito.
-            $button_fc_factura_complemento_pago.$button_fc_factura_exportar_documentos;
+        $buttons = $button_fc_factura_modifica.$button_fc_factura_nota_credito.
+            $button_fc_factura_complemento_pago;
 
-        return "<div class='col-md-12 buttons-form'>$buttons</div>";
+        return "<div class='col-md-12 buttons-form'>$buttons</div> 
+                <div class='col-md-12 buttons-form'>$button_fc_factura_timbra</div>
+                <div class='col-md-12 buttons-form'>$button_fc_factura_exportar_documentos</div>";
     }
 
     public function genera_nota_credito(bool $header, bool $ws = false): array|stdClass
