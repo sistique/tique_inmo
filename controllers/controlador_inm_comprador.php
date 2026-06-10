@@ -5329,9 +5329,13 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $numero_notaria = $r_inm_rel_ubi_comp->registros[0]['inm_ubicacion_numero_escritura'];
-        $formatter = new NumberFormatter('es', NumberFormatter::SPELLOUT);
-        $enLetras = $formatter->format($numero_notaria);
+        $numero_notaria = trim($r_inm_rel_ubi_comp->registros[0]['inm_ubicacion_numero_escritura']);
+
+        $enLetras = '';
+        if (is_numeric($numero_notaria)) {
+            $formatter = new NumberFormatter('es', NumberFormatter::SPELLOUT);
+            $enLetras = $formatter->format($numero_notaria);
+        }
 
         $enMayusculas = mb_strtoupper($enLetras, 'UTF-8');
 
