@@ -138,13 +138,13 @@ class inm_periodo_asistencia extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al convertir en cliente', data: $r_inm_doc_periodo_asistencia);
         }
 
-        $inserta_notificacion = (new _email(link: $this->link))->inserta_mensaje(link: $this->link,
+        $inserta_notificacion = (new _email(link: $this->link))->inserta_mensaje_asistencia(link: $this->link,
             row_entidad: $r_periodo_asistencia);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al insertar notificacion',data:  $inserta_notificacion);
         }
 
-        $inserta_adjunto = (new _email(link: $this->link))->inserta_adjunto(
+        $inserta_adjunto = (new _email(link: $this->link))->inserta_adjunto_asistencia(
             doc: $r_inm_doc_periodo_asistencia->registro, not_mensaje_id: $inserta_notificacion, link: $this->link);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al insertar notificacion',data:  $inserta_adjunto);

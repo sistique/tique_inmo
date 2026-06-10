@@ -134,7 +134,63 @@ class _email
         return $r_not_adjunto;
     }
 
+    public function inserta_adjunto_asistencia(array $doc, int $not_mensaje_id, PDO $link){
+
+        $not_adjunto_ins['not_mensaje_id'] = $not_mensaje_id;
+        $not_adjunto_ins['doc_documento_id'] = $doc['doc_documento_id'];
+        $not_adjunto_ins['descripcion'] = $doc['inm_periodo_asistencia_descripcion'].'.'.
+            date('YmdHis').mt_rand(10000,99999). '.'.$doc['doc_extension_descripcion'];
+
+        $not_adjunto_ins['name_out'] = $doc['inm_periodo_asistencia_descripcion'].'.xlsx';
+        if($doc['doc_tipo_documento_descripcion'] !=='ADJUNTO') {
+            $not_adjunto_ins['name_out'] = $doc['inm_periodo_asistencia_descripcion'].'.xlsx';
+        }
+
+        $r_not_adjunto = (new not_adjunto(link: $link))->alta_registro(registro: $not_adjunto_ins);
+        if (errores::$error) {
+            return (new errores())->error(mensaje: 'Error al insertar adjunto', data: $r_not_adjunto);
+        }
+
+        return $r_not_adjunto;
+    }
+
     public function inserta_mensaje(PDO $link, array $row_entidad){
+        $not_mensaje_ins = $this->genera_not_mensaje_reporte_asistencia_ins(link: $link, row_entidad: $row_entidad);
+        if (errores::$error) {
+            return (new errores())->error(mensaje: 'Error al obtener emisor', data: $not_mensaje_ins);
+        }
+
+        $r_not_mensaje = (new not_mensaje(link: $link))->alta_registro(registro: $not_mensaje_ins);
+        if (errores::$error) {
+            return (new errores())->error(mensaje: 'Error al insertar mensaje', data: $r_not_mensaje);
+        }
+
+        $fc_notificacion_ins['inm_periodo_asistencia_id'] = $row_entidad['inm_periodo_asistencia_id'];
+        $fc_notificacion_ins['not_mensaje_id'] = $r_not_mensaje->registro_id;
+        $r_fc_notificacion = (new inm_notificacion_periodo(link: $link))->alta_registro(registro: $fc_notificacion_ins);
+        if (errores::$error) {
+            return (new errores())->error(mensaje: 'Error al insertar fc_notificacion_ins', data: $r_fc_notificacion);
+        }
+
+        $filtro_recep['not_receptor.envio_asistencia'] = 'activo';
+        $r_receptores = (new not_receptor(link: $link))->filtro_and(filtro: $filtro_recep);
+        if (errores::$error) {
+            return (new errores())->error(mensaje: 'Error al insertar fc_notificacion_ins', data: $r_receptores);
+        }
+
+        foreach ($r_receptores->registros as $registro) {
+            $registro_rel['not_mensaje_id'] =  $r_not_mensaje->registro_id;
+            $registro_rel['not_receptor_id'] = $registro['not_receptor_id'];
+            $r_not_rel_mensaje = (new not_rel_mensaje(link: $link))->alta_registro(registro: $registro_rel);
+            if (errores::$error) {
+                return (new errores())->error(mensaje: 'Error al insertar fc_notificacion_ins', data: $r_not_rel_mensaje);
+            }
+        }
+
+        return $r_not_mensaje->registro_id;
+    }
+
+    public function inserta_mensaje_asistencia(PDO $link, array $row_entidad){
         $not_mensaje_ins = $this->genera_not_mensaje_reporte_asistencia_ins(link: $link, row_entidad: $row_entidad);
         if (errores::$error) {
             return (new errores())->error(mensaje: 'Error al obtener emisor', data: $not_mensaje_ins);
