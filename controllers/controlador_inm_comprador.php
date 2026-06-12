@@ -5528,9 +5528,14 @@ class controlador_inm_comprador extends _ctl_base {
         $buttons = $button_fc_factura_modifica.$button_fc_factura_nota_credito.
             $button_fc_factura_complemento_pago;
 
-        return "<div class='col-md-12 buttons-form'>$buttons</div> 
+        $return =  "";
+        if($fc_factura_id > 0) {
+            $return = "<div class='col-md-12 buttons-form'>$buttons</div> 
                 <div class='col-md-12 buttons-form'>$button_fc_factura_timbra</div>
                 <div class='col-md-12 buttons-form'>$button_fc_factura_exportar_documentos</div>";
+        }
+
+        return $return;
     }
 
     public function genera_nota_credito(bool $header, bool $ws = false): array|stdClass
