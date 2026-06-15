@@ -5535,7 +5535,7 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         $button_fc_factura_exportar_documentos =  $this->html->button_href(accion: 'exportar_documentos',
-            etiqueta: 'Descargar Factura', registro_id: $this->registro_id, seccion: $this->seccion, style: 'success',
+            etiqueta: 'Descargar Factura', registro_id: $fc_factura_id, seccion: 'fc_factura', style: 'success',
             cols: 6, params: array());
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al generar link', data: $button_fc_factura_exportar_documentos);
