@@ -5515,7 +5515,7 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         $button_fc_factura_timbra =  $this->html->button_href(accion: 'timbra_xml', etiqueta: 'Timbrar',
-            registro_id: $fc_factura_id, seccion: 'fc_factura', style: 'danger', cols: 12, params: array());
+            registro_id: $fc_factura_id, seccion: 'fc_factura', style: 'danger', cols: 6, params: array());
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al generar link', data: $button_fc_factura_timbra);
         }
@@ -5536,7 +5536,7 @@ class controlador_inm_comprador extends _ctl_base {
 
         $button_fc_factura_exportar_documentos =  $this->html->button_href(accion: 'exportar_documentos',
             etiqueta: 'Descargar Factura', registro_id: $this->registro_id, seccion: $this->seccion, style: 'success',
-            cols: 12, params: array());
+            cols: 6, params: array());
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al generar link', data: $button_fc_factura_exportar_documentos);
         }
@@ -5546,9 +5546,8 @@ class controlador_inm_comprador extends _ctl_base {
 
         $return =  "";
         if($fc_factura_id > 0) {
-            $return = "<div class='col-md-12 buttons-form'>$buttons</div> 
-                <div class='col-md-12 buttons-form'>$button_fc_factura_timbra</div>
-                <div class='col-md-12 buttons-form'>$button_fc_factura_exportar_documentos</div>";
+            $return = "<div class='col-md-12 buttons-form'>$button_fc_factura_timbra $button_fc_factura_exportar_documentos</div>
+                <div class='col-md-12 buttons-form'>$buttons</div> ";
         }
 
         return $return;
