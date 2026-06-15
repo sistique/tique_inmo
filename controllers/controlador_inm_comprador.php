@@ -5063,6 +5063,22 @@ class controlador_inm_comprador extends _ctl_base {
 
     public function genera_factura(bool $header, bool $ws = false): array|stdClass
     {
+        $filtro_comp['inm_comprador.id'] = $this->registro_id;
+
+        $in_comp = array();
+        $in_comp['llave'] = 'inm_status_comprador.id';
+        $in_comp['values'] = array('9','10');
+        $r_comprador_etapa = (new inm_comprador(link: $this->link))->filtro_and(filtro: $filtro_comp, in: $in_comp);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener compradores firmadas',data:  $r_comprador_etapa,
+                header: $header,ws:  $ws);
+        }
+
+        if($r_comprador_etapa->n_registros <= 0){
+            return $this->retorno_error(mensaje: 'Error el cliente no esta COTEJADO', data: $r_comprador_etapa,
+                header: $header, ws: $ws);
+        }
+
         if(isset($_GET['accion']) && $_GET['accion'] == 'genera_factura') {
             $template = $this->modifica(header: false);
             if (errores::$error) {
