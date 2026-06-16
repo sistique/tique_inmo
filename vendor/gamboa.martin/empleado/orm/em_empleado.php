@@ -812,7 +812,7 @@ class em_empleado extends _modelo_parent{
         $salida['numero_interior'] = $numero_interior;
         $salida['dp_colonia_postal_id'] = $dp_colonia_postal_id;
         $salida['es_empleado'] = true;
-        $salida['cat_sat_tipo_persona_id'] = 5;
+        $salida['cat_sat_tipo_persona_id'] = 2;
 
         $dp_colonia_postal = (new dp_colonia_postal(link: $this->link))->registro(
             registro_id: $salida['dp_colonia_postal_id'],retorno_obj: true);
