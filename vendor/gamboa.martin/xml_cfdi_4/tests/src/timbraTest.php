@@ -211,8 +211,8 @@ class timbraTest extends test {
     }
 }';
 
-        $ruta_key_pem = '/var/www/html/tique_inmo/archivos/doc_documento/7.868641146182.pem';
-        $ruta_cer_pem = '/var/www/html/tique_inmo/archivos/doc_documento/7.965436996544.pem';
+        $ruta_key_pem = '/var/www/html/tique_inmo/archivos/doc_documento/7.677616499332.pem';
+        $ruta_cer_pem = '/var/www/html/tique_inmo/archivos/doc_documento/7.985746239838.pem';
         $id_comprobante = '';
 
         $resultado = $timbra->timbra(contenido_xml: $contenido_xml, id_comprobante: $id_comprobante,
@@ -280,8 +280,8 @@ class timbraTest extends test {
     }
 }';
 
-        $ruta_key_pem = '/var/www/html/tique_inmo/archivos/doc_documento/7.868641146182.pem';
-        $ruta_cer_pem = '/var/www/html/tique_inmo/archivos/doc_documento/7.965436996544.pem';
+        $ruta_key_pem = '/var/www/html/tique_inmo/archivos/doc_documento/7.677616499332.pem';
+        $ruta_cer_pem = '/var/www/html/tique_inmo/archivos/doc_documento/7.985746239838.pem';
         $id_comprobante = '';
 
         $resultado = $timbra->timbra(contenido_xml: $contenido_xml, id_comprobante: $id_comprobante,
@@ -399,8 +399,8 @@ class timbraTest extends test {
 
        // print_r($contenido_json);exit;
 
-        $ruta_key_pem = '/var/www/html/tique_inmo/archivos/doc_documento/7.868641146182.pem';
-        $ruta_cer_pem = '/var/www/html/tique_inmo/archivos/doc_documento/7.965436996544.pem';
+        $ruta_key_pem = '/var/www/html/tique_inmo/archivos/doc_documento/7.677616499332.pem';
+        $ruta_cer_pem = '/var/www/html/tique_inmo/archivos/doc_documento/7.985746239838.pem';
         $id_comprobante = '';
 
         $resultado = $timbra->timbra(contenido_xml: $contenido_json, id_comprobante: $id_comprobante,
