@@ -268,7 +268,7 @@ final class pdf
             return $this->error->error(mensaje: 'Error al validar concepto',data:  $valida);
         }
 
-        $class = "txt-center border";
+        $class = "txt-center border contenido";
 
         $fc_partida_valor_unitario = $this->fc_partida_double(concepto: $concepto,
             key: $name_entidad_partida.'_valor_unitario');
@@ -395,7 +395,8 @@ final class pdf
             return $this->error->error(mensaje: 'Error al validar concepto', data: $valida);
         }
 
-        $body_td_1 = $this->html(etiqueta: "td", data: "Descripción", class: "border color negrita", propiedades: "colspan='11'");
+        $body_td_1 = $this->html(etiqueta: "td", data: "Descripción", class: "border color negrita encabezado",
+            propiedades: "colspan='11'");
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al genera dato', data: $body_td_1);
         }
@@ -427,7 +428,7 @@ final class pdf
             $aplica_cuenta_predial = true;
         }
 
-        $class = "color border negrita txt-center";
+        $class = "color border negrita txt-center encabezado";
 
         if($aplica_numero_pedimento) {
             $body_td_1 = $this->html(etiqueta: "td", data: "Número de pedimento", class: $class, propiedades: "colspan='4'");

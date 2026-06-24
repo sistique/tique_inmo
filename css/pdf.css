@@ -17,7 +17,11 @@ table{
 }
 
 .encabezado{
-    font-size: 5pt;
+    font-size: 6pt;
+}
+
+.contenido{
+    font-size: 6pt;
 }
 
 .tabla-longitud{
