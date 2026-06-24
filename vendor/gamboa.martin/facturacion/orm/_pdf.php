@@ -120,7 +120,6 @@ class _pdf{
             return $this->error->error(mensaje: 'Error al obtener factura',data:  $factura);
         }
 
-
         $ruta_qr = $modelo_documento->get_factura_documento(key_entidad_filter_id: $modelo_entidad->key_filtro_id,
             registro_id: $registro_id, tipo_documento: "qr_cfdi");
         if(errores::$error){
@@ -177,7 +176,7 @@ class _pdf{
 
         $pdf = new pdf();
         $pdf->header(cfdi: $factura['cat_sat_uso_cfdi_descripcion'], cod_postal: $factura['dp_cp_descripcion'],
-            cod_postal_receptor: $cod_postal_receptor, csd: $factura['fc_csd_serie'],
+            cod_postal_receptor: $cod_postal_receptor, csd: $factura['fc_csd_no_certificado'],
             efecto: $factura['cat_sat_tipo_de_comprobante_descripcion'],
             exportacion: $factura[$key_exportacion], fecha: $factura[$key_fecha],
             folio: $factura[$key_folio], folio_fiscal: $data->folio_fiscal,

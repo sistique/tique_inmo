@@ -150,7 +150,6 @@ class _doc extends _modelo_parent{
             return $this->error->error(mensaje: 'Error obtener documento', data: $documento);
         }
 
-
         return $documento;
     }
 

@@ -1290,21 +1290,27 @@ final class pdf
         $body_td_7 = $this->html(etiqueta: "td", data: "Descuento:", class: "negrita");
         $body_td_8 = $this->html(etiqueta: "td", data: $descuento);
 
-        $body_td_9 = $this->html(etiqueta: "td", data: "Impuestos trasladados:", class: "negrita");
-        $body_td_10 = $this->html(etiqueta: "td", data: $imp_trasladados);
-        $body_td_11 = $this->html(etiqueta: "td", data: "Impuestos retenidos", class: "negrita");
-        $body_td_12 = $this->html(etiqueta: "td", data: $imp_retenidos);
+        $body_td_9 = $this->html(etiqueta: "td", data: "Método de pago:", class: "negrita");
+        $body_td_10 = $this->html(etiqueta: "td", data: $metodo_pago);
 
-        $body_td_13 = $this->html(etiqueta: "td", data: "Método de pago:", class: "negrita");
-        $body_td_14 = $this->html(etiqueta: "td", data: $metodo_pago);
-        $body_td_15 = $this->html(etiqueta: "td", data: "Total", class: "negrita");
-        $body_td_16 = $this->html(etiqueta: "td", data: $total);
+        $body_td_11 = $this->html(etiqueta: "td", data: "Impuestos trasladados:", class: "negrita");
+        $body_td_12 = $this->html(etiqueta: "td", data: $imp_trasladados);
+
+        $body_td_13 = $this->html(etiqueta: "td", data: "", propiedades: "colspan='2'");
+
+        $body_td_14 = $this->html(etiqueta: "td", data: "Impuestos retenidos", class: "negrita");
+        $body_td_15 = $this->html(etiqueta: "td", data: $imp_retenidos);
+
+        $body_td_16 = $this->html(etiqueta: "td", data: "", propiedades: "colspan='2'");
+
+        $body_td_17 = $this->html(etiqueta: "td", data: "Total", class: "negrita");
+        $body_td_18 = $this->html(etiqueta: "td", data: $total);
 
         $body_tr_1 = $this->html(etiqueta: "tr", data: $body_td_1 . $body_td_2 . $body_td_3 . $body_td_4);
         $body_tr_2 = $this->html(etiqueta: "tr", data: $body_td_5 . $body_td_6 . $body_td_7 . $body_td_8);
-        $body_tr_3 = $this->html(etiqueta: "tr", data: $body_td_9 . $body_td_10);
-        $body_tr_4 = $this->html(etiqueta: "tr", data: $body_td_11 . $body_td_12);
-        $body_tr_5 = $this->html(etiqueta: "tr", data: $body_td_13 . $body_td_14 . $body_td_15 . $body_td_16);
+        $body_tr_3 = $this->html(etiqueta: "tr", data: $body_td_9 . $body_td_10 . $body_td_11 . $body_td_12);
+        $body_tr_4 = $this->html(etiqueta: "tr", data: $body_td_13 . $body_td_14 . $body_td_15);
+        $body_tr_5 = $this->html(etiqueta: "tr", data: $body_td_16 . $body_td_17 . $body_td_18);
 
         $body = $this->html(etiqueta: "tbody", data: $body_tr_1 . $body_tr_2 . $body_tr_3 . $body_tr_4 . $body_tr_5);
 
@@ -1362,13 +1368,13 @@ final class pdf
         $sello = $this->html(etiqueta: "h2", data: "Sello digital del CFDI:", class: "negrita mt-5");
         $this->pdf->WriteHTML($sello);
 
-        $firma = $this->html(etiqueta: "p", data: $sello_cfdi);
+        $firma = $this->html(etiqueta: "p", data: $sello_cfdi, class: "sellos");
         $this->pdf->WriteHTML($firma);
 
         $sello = $this->html(etiqueta: "h2", data: "Sello digital del SAT:", class: "negrita");
         $this->pdf->WriteHTML($sello);
 
-        $firma = $this->html(etiqueta: "p", data: $sello_sat);
+        $firma = $this->html(etiqueta: "p", data: $sello_sat, class: "sellos");
         $this->pdf->WriteHTML($firma);
     }
 
@@ -1398,12 +1404,13 @@ final class pdf
             $this->pdf->WriteHTML('<div class="" width = "120" height="120"></div>');
         }
 
-        $cadena_sat = $this->html(etiqueta: "h2", data: "Cadena Original del complemento de certificación digital del SAT:", class: "negrita");
+        $cadena_sat = $this->html(etiqueta: "h2",
+            data: "Cadena Original del complemento de certificación digital del SAT:", class: "negrita");
         $this->pdf->WriteFixedPosHTML($cadena_sat, 50, $this->pdf->y - 35,200,10);
-        $complento = $this->html(etiqueta: "p", data: $complento);
+        $complento = $this->html(etiqueta: "p", data: $complento, class: "sellos mt-1");
         $this->pdf->WriteFixedPosHTML($complento, 50, $this->pdf->y - 30,170,20);
 
-        $body_td_1 = $this->html(etiqueta: "td", data: "RFC del proveedor de certificación:", class: "negrita");
+        $body_td_1 = $this->html(etiqueta: "td", data: "RFC del proveedor de certificación:", class: "negrita mt-3");
         $body_td_2 = $this->html(etiqueta: "td", data: $rfc_proveedor);
         $body_td_3 = $this->html(etiqueta: "td", data: "Fecha y hora de certificación:", class: "negrita");
         $body_td_4 = $this->html(etiqueta: "td", data: $fecha, class: "text-center");

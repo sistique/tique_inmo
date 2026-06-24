@@ -24,6 +24,10 @@ table{
     font-size: 6pt;
 }
 
+.sellos{
+    font-size: 7pt;
+}
+
 .tabla-longitud{
     width: 100%;
 }
@@ -51,7 +55,7 @@ table{
 }
 
 .mt-5{
-    margin-top: 40px;
+    margin-top: 5px;
 }
 
 img {
