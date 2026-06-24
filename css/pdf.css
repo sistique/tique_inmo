@@ -16,6 +16,14 @@ table{
     font-weight: bold;
 }
 
+.encabezado{
+    font-size: 5pt;
+}
+
+.tabla-longitud{
+    width: 100%;
+}
+
 .titulo {
     font-size: 11pt;
     margin-top: 5px;

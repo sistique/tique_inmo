@@ -472,16 +472,26 @@ final class pdf
             return $this->error->error(mensaje: 'Error al generar pdf',data:  $e);
         }
         $head_td_clave_prod_serv = $this->html(etiqueta: "th",
-            data: "Clave Prod/Serv", class: "negrita border color", propiedades: "colspan='2'");;
-        $head_td_no_identificacion = $this->html(etiqueta: "th", data: "No. Ident", class: "negrita border color");
-        $head_td_cantidad = $this->html(etiqueta: "th", data: "Cant", class: "negrita border color");
-        $head_td_cve_unidad = $this->html(etiqueta: "th", data: "Cve Unidad", class: "negrita border color");
-        $head_td_unidad = $this->html(etiqueta: "th", data: "Unidad", class: "negrita border color");
-        $head_td_valor_unitario = $this->html(etiqueta: "th", data: "Valor Unitario", class: "negrita border color");
-        $head_td_importe = $this->html(etiqueta: "th", data: "Importe", class: "negrita border color");
-        $head_td_descuento = $this->html(etiqueta: "th", data: "Descuento", class: "negrita border color");
-        $head_td_sub_total = $this->html(etiqueta: "th", data: "Sub Total", class: "negrita border color");
-        $head_td_obj_imp = $this->html(etiqueta: "th", data: "Objeto Impuesto", class: "negrita border color");
+            data: "Clave del producto <br> y/o servicio", class: "negrita border color encabezado",
+            propiedades: "colspan='2' width='10%'");
+        $head_td_no_identificacion = $this->html(etiqueta: "th", data: "No. identificación",
+            class: "negrita border color encabezado");
+        $head_td_cantidad = $this->html(etiqueta: "th", data: "Cantidad", class: "negrita border color encabezado",
+            propiedades: "width='10%'");
+        $head_td_cve_unidad = $this->html(etiqueta: "th", data: "Clave de unidad",
+            class: "negrita border color encabezado", propiedades: "width='10%'");
+        $head_td_unidad = $this->html(etiqueta: "th", data: "Unidad", class: "negrita border color encabezado",
+            propiedades: "width='10%'");
+        $head_td_valor_unitario = $this->html(etiqueta: "th", data: "Valor Unitario",
+            class: "negrita border color encabezado", propiedades: "width='10%'");
+        $head_td_importe = $this->html(etiqueta: "th", data: "Importe", class: "negrita border color encabezado",
+            propiedades: "width='10%'");
+        $head_td_descuento = $this->html(etiqueta: "th", data: "Descuento", class: "negrita border color encabezado",
+            propiedades: "width='10%'");
+        $head_td_sub_total = $this->html(etiqueta: "th", data: "Sub Total", class: "negrita border color encabezado",
+            propiedades: "width='10%'");
+        $head_td_obj_imp = $this->html(etiqueta: "th", data: "Objeto Impuesto",
+            class: "negrita border color encabezado", propiedades: "width='10%'");
 
         $head_tr_1 = $this->html(etiqueta: "tr", data: $head_td_clave_prod_serv . $head_td_no_identificacion
             . $head_td_cantidad . $head_td_cve_unidad . $head_td_unidad . $head_td_valor_unitario .
@@ -531,7 +541,7 @@ final class pdf
         $head = $this->html(etiqueta: "thead", data: $head_tr_1);
         $body = $this->html(etiqueta: "tbody", data: $body_tr);
 
-        $table = $this->html(etiqueta: "table", data: $head . $body, class: "border");
+        $table = $this->html(etiqueta: "table", data: $head . $body, class: "border tabla-longitud");
 
         $this->pdf->WriteHTML($table);
     }
@@ -1274,8 +1284,8 @@ final class pdf
         $body_td_3 = $this->html(etiqueta: "td", data: "Subtotal:", class: "negrita");
         $body_td_4 = $this->html(etiqueta: "td", data: $subtotal);
 
-        $body_td_5 = $this->html(etiqueta: "td", data: "Forma de pago:", class: "negrita", propiedades: "rowspan='3'");
-        $body_td_6 = $this->html(etiqueta: "td", data: $forma_pago, propiedades: "rowspan='3'");
+        $body_td_5 = $this->html(etiqueta: "td", data: "Forma de pago:", class: "negrita");
+        $body_td_6 = $this->html(etiqueta: "td", data: $forma_pago);
         $body_td_7 = $this->html(etiqueta: "td", data: "Descuento:", class: "negrita");
         $body_td_8 = $this->html(etiqueta: "td", data: $descuento);
 
@@ -1424,7 +1434,8 @@ final class pdf
             $nombre_documento = $path_base_archivos.'/'.$nombre_documento.'.pdf';
 
 
-            $this->pdf->Output($nombre_documento, 'F');
+            $this->pdf->Output($nombre_documento, 'I');
+            exit;
             return $nombre_documento;
         }
 

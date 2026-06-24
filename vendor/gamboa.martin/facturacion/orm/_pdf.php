@@ -251,22 +251,21 @@ class _pdf{
             return $this->error->error(mensaje: 'Error al maquetar totales',data:  $pdf);
         }
 
+        $pdf->sellos(sello_cfdi: $data->sello_cfdi,sello_sat: $data->sello_sat);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar sellos',data:  $pdf);
+        }
+
         $pdf->complementos(ruta_documento: $ruta_qr, complento: $data->complento,rfc_proveedor: $data->rfc_proveedor,
             fecha: $data->fecha_timbrado, no_certificado: $data->no_certificado);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar complementos',data:  $pdf);
         }
 
-        $pdf->sellos(sello_cfdi: $data->sello_cfdi,sello_sat: $data->sello_sat);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al maquetar sellos',data:  $pdf);
-        }
-
-        $pdf->footer(descripcion: "efacturacion.com.mx");
+        /*$pdf->footer(descripcion: "efacturacion.com.mx");
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al generar pdf',data:  $pdf);
-        }
-
+        }*/
         $key_serie = $modelo_entidad->tabla.'_serie';
         $key_folio = $modelo_entidad->tabla.'_folio';
 
@@ -276,6 +275,7 @@ class _pdf{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al generar pdf',data:  $pdf);
         }
+
         return $nombre_documento;
     }
 }
