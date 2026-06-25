@@ -1729,10 +1729,12 @@ class _transacciones_fc extends modelo
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al obtener fc_factura_etapas', data: $etapas);
         }
+
         $permite_transaccion = $this->valida_permite_transaccion(etapas: $etapas);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al obtener permite_transaccion', data: $permite_transaccion);
         }
+
         return $permite_transaccion;
     }
 
@@ -1993,12 +1995,11 @@ class _transacciones_fc extends modelo
                                _sellado $modelo_sello, _data_impuestos $modelo_traslado, _uuid_ext $modelo_uuid_ext,
                                int $registro_id): array|stdClass
     {
-
         $permite_transaccion = $this->verifica_permite_transaccion(modelo_etapa: $modelo_etapa, registro_id: $registro_id);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error verificar transaccion', data: $permite_transaccion);
         }
-        $tipo = (new pac())->tipo;
+
         $timbrada = (new fc_cfdi_sellado($this->link))->existe(filtro: array('fc_factura.id' => $registro_id));
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al validar si la factura esta timbrado', data: $timbrada);
@@ -2008,11 +2009,12 @@ class _transacciones_fc extends modelo
             return $this->error->error(mensaje: 'Error: la factura ya ha sido timbrada', data: $timbrada);
         }
 
+        $tipo = (new pac())->tipo;
+
         $fc_factura = $this->registro(registro_id: $registro_id);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al obtener factura', data: $fc_factura);
         }
-
 
         $xml = $this->genera_xml(modelo_documento: $modelo_documento, modelo_etapa: $modelo_etapa,
             modelo_partida: $modelo_partida, modelo_predial: $modelo_predial, modelo_relacion: $modelo_relacion,
@@ -2022,19 +2024,16 @@ class _transacciones_fc extends modelo
             return $this->error->error(mensaje: 'Error al generar XML', data: $xml);
         }
 
-
         $xml_contenido = file_get_contents($xml->doc_documento_ruta_absoluta);
 
-
         $filtro_files['fc_csd.id'] = $fc_factura['fc_csd_id'];
-
         $r_fc_key_pem = (new fc_key_pem(link: $this->link))->filtro_and(filtro: $filtro_files);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al obtener key', data: $r_fc_key_pem);
         }
 
         $ruta_key_pem = '';
-        if((int)$r_fc_key_pem->n_registros === 1){
+        if ((int)$r_fc_key_pem->n_registros === 1) {
             $ruta_key_pem = $r_fc_key_pem->registros[0]['doc_documento_ruta_absoluta'];
         }
 
@@ -2042,8 +2041,9 @@ class _transacciones_fc extends modelo
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al obtener cer', data: $r_fc_cer_pem);
         }
+
         $ruta_cer_pem = '';
-        if((int)$r_fc_cer_pem->n_registros === 1){
+        if ((int)$r_fc_cer_pem->n_registros === 1) {
             $ruta_cer_pem = $r_fc_cer_pem->registros[0]['doc_documento_ruta_absoluta'];
         }
 
@@ -2055,13 +2055,10 @@ class _transacciones_fc extends modelo
             return $this->error->error(mensaje: 'Error al obtener factura', data: $factura);
         }
 
-
         $data_factura = $this->data_factura(row_entidad: $factura);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al obtener datos de la factura', data: $data_factura);
         }
-
-
 
         $pac_prov = (new pac())->pac_prov;
         $xml_timbrado = (new timbra())->timbra(contenido_xml: $xml_contenido,
@@ -2070,9 +2067,9 @@ class _transacciones_fc extends modelo
             return $this->error->error(mensaje: 'Error al timbrar XML', data: $xml_timbrado,params: array($fc_factura));
         }
 
-
         file_put_contents(filename: $xml->doc_documento_ruta_absoluta, data: $xml_timbrado->xml_sellado);
 
+        //print_r($xml->doc_documento_ruta_absoluta);exit;
         $qr_code = $xml_timbrado->qr_code;
         if((new pac())->base_64_qr){
             $qr_code = base64_decode($qr_code);
@@ -2242,6 +2239,7 @@ class _transacciones_fc extends modelo
         if(!$permite_transaccion){
             return $this->error->error(mensaje: 'Error no se permite la eliminacion', data: $permite_transaccion);
         }
+
         return $permite_transaccion;
     }
 
