@@ -18,6 +18,7 @@ use gamboamartin\comercial\models\com_tmp_prod_cs;
 use gamboamartin\direccion_postal\models\dp_calle_pertenece;
 use gamboamartin\documento\models\doc_documento;
 use gamboamartin\documento\models\doc_extension_permitido;
+use gamboamartin\documento\models\doc_tipo_documento;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\models\_dropbox;
 use gamboamartin\inmuebles\models\inm_dropbox_ruta;
@@ -541,6 +542,7 @@ class _transacciones_fc extends modelo
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al validar extension del documento', data: $r_doc_extension_permitido);
         }
+
         return $r_doc_extension_permitido->registros[0]['doc_tipo_documento_id'];
     }
 
@@ -1816,7 +1818,7 @@ class _transacciones_fc extends modelo
 
     private function ruta_archivos_tmp(string $ruta_archivos): array|string
     {
-        $ruta_archivos_tmp = $ruta_archivos . 'tmp';
+        $ruta_archivos_tmp = $ruta_archivos . 'temporales';
 
         if (!file_exists($ruta_archivos_tmp)) {
             mkdir($ruta_archivos_tmp, 0777, true);
@@ -2067,27 +2069,100 @@ class _transacciones_fc extends modelo
             return $this->error->error(mensaje: 'Error al timbrar XML', data: $xml_timbrado,params: array($fc_factura));
         }
 
-        file_put_contents(filename: $xml->doc_documento_ruta_absoluta, data: $xml_timbrado->xml_sellado);
+        $ruta_archivos_tmp = $this->genera_ruta_archivo_tmp();
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener ruta de archivos', data: $ruta_archivos_tmp);
+        }
 
-        //print_r($xml->doc_documento_ruta_absoluta);exit;
         $qr_code = $xml_timbrado->qr_code;
         if((new pac())->base_64_qr){
             $qr_code = base64_decode($qr_code);
         }
 
-        $alta_qr = $this->guarda_documento(directorio: "codigos_qr", extension: "jpg", contenido: $qr_code,
+        $nombre_xml = "xml-timbrado.xml";
+        $archivo_xml = $ruta_archivos_tmp."/".$nombre_xml;
+        file_put_contents(filename: $archivo_xml, data: $xml_timbrado->xml_sellado);
+
+        $nombre_jpg = "qr-cfdi.jpg";
+        $archivo_qr = $ruta_archivos_tmp . "/".$nombre_jpg;
+        file_put_contents($archivo_qr, $qr_code);
+
+        $nombre_txt = "cadena-orginal-cfdi.txt";
+        $archivo_txt = $ruta_archivos_tmp . "/". $nombre_txt;
+        file_put_contents($archivo_txt, $xml_timbrado->txt);
+
+        $archivos = [
+            'xml_timbrado' => [
+                'extension' => 'xml',
+                'archivo' => $archivo_xml,
+                'nombre' => $nombre_xml
+            ],
+            'qr_cfdi' => [
+                'extension' => 'jpg',
+                'archivo' => $archivo_qr,
+                'nombre' => $nombre_jpg
+            ],
+            'cadena_orginal_cfdi' => [
+                'extension' => 'txt',
+                'archivo' => $archivo_txt,
+                'nombre' => $nombre_txt
+            ]
+        ];
+
+        foreach ($archivos as $key => $data) {
+            $filtro_tipo_doc['doc_tipo_documento.descripcion'] = $key;
+            $r_doc_tipo_documento = (new doc_tipo_documento($this->link))->filtro_and(filtro: $filtro_tipo_doc,
+                limit: 1);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al validar extension del documento', data: $r_doc_tipo_documento);
+            }
+
+            $doc_tipo_documento_id = $r_doc_tipo_documento->registros[0]['doc_tipo_documento_id'];
+
+            $file['name'] = $data['nombre'];
+            $file['tmp_name'] = $data['archivo'];
+
+            $registro_doc['doc_tipo_documento_id'] = $doc_tipo_documento_id;
+            $registro_doc['descripcion'] = $ruta_archivos_tmp;
+            $registro_doc['nombre'] = $key.'-'.$registro_id.'.'.$data['extension'];
+
+            if((new generales())->guarda_archivo_dropbox) {
+                $registro_doc['ruta_relativa'] = $this->tabla.'/'.$registro_id.'/';
+            }
+
+            $documento = (new doc_documento(link: $this->link))->alta_documento(registro: $registro_doc, file: $file);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al guardar xml', data: $documento);
+            }
+
+            $documento->registro = (new doc_documento(link: $this->link))->registro(registro_id: $documento->registro_id);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error  al obtener documento', data: $documento);
+            }
+
+            $fc_factura_documento = array();
+            $fc_factura_documento[$this->key_id] = $registro_id;
+            $fc_factura_documento['doc_documento_id'] = $documento->registro_id;
+
+            $fc_factura_documento = $modelo_documento->alta_registro(registro: $fc_factura_documento);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al dar de alta factura documento', data: $fc_factura_documento);
+            }
+        }
+
+        /*$alta_qr = $this->guarda_documento(directorio: "codigos_qr", extension: "jpg", contenido: $qr_code,
             modelo_documento: $modelo_documento, registro_id: $registro_id);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al guardar QR', data: $alta_qr);
-        }
+        }*/
 
-        $alta_txt = $this->guarda_documento(directorio: "textos", extension: "txt", contenido: $xml_timbrado->txt,
+        /*$alta_txt = $this->guarda_documento(directorio: "textos", extension: "txt", contenido: $xml_timbrado->txt,
             modelo_documento: $modelo_documento, registro_id: $registro_id);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al guardar TXT', data: $alta_txt);
-        }
+        }*/
 
-        $datos_xml = $this->get_datos_xml(ruta_xml: $xml->doc_documento_ruta_absoluta);
+        $datos_xml = $this->get_datos_xml(ruta_xml: $archivo_xml);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al obtener datos del XML', data: $datos_xml);
         }
