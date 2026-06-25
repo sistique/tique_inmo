@@ -795,15 +795,16 @@ class _transacciones_fc extends modelo
     }
 
     public function genera_xml(_doc $modelo_documento, _etapa $modelo_etapa, _partida $modelo_partida,
-                               _cuenta_predial$modelo_predial, _relacion $modelo_relacion,
+                               _cuenta_predial $modelo_predial, _relacion $modelo_relacion,
                                _relacionada $modelo_relacionada, _data_impuestos $modelo_retencion,
-                               _data_impuestos $modelo_traslado, _uuid_ext $modelo_uuid_ext, int $registro_id, string $tipo): array|stdClass
+                               _data_impuestos $modelo_traslado, _uuid_ext $modelo_uuid_ext, int $registro_id,
+                               string $tipo): array|stdClass
     {
-
         $permite_transaccion = $this->verifica_permite_transaccion(modelo_etapa: $modelo_etapa, registro_id: $registro_id);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error verificar transaccion', data: $permite_transaccion);
         }
+
         $factura = $this->get_factura(modelo_partida: $modelo_partida, modelo_predial: $modelo_predial,
             modelo_relacion: $modelo_relacion, modelo_relacionada: $modelo_relacionada,
             modelo_retencion: $modelo_retencion, modelo_traslado: $modelo_traslado,
@@ -811,7 +812,6 @@ class _transacciones_fc extends modelo
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al obtener factura', data: $factura);
         }
-
 
         $data_factura = $this->data_factura(row_entidad: $factura);
         if (errores::$error) {
@@ -821,7 +821,6 @@ class _transacciones_fc extends modelo
         if(!isset($data_factura->Complemento)){
             $data_factura->Complemento = array();
         }
-
 
         if($tipo === 'xml') {
             $ingreso = (new cfdis())->ingreso(comprobante: $data_factura->comprobante, conceptos: $data_factura->conceptos,
@@ -838,7 +837,6 @@ class _transacciones_fc extends modelo
             if (errores::$error) {
                 return $this->error->error(mensaje: 'Error al generar xml', data: $ingreso);
             }
-
         }
 
 
@@ -849,19 +847,18 @@ class _transacciones_fc extends modelo
 
         $documento = array();
         $file = array();
-        $file_xml_st = $ruta_archivos_tmp . '/' . $this->registro_id . '.st.xml';
+        $file_xml_st = $ruta_archivos_tmp . '/' . $this->registro_id . '.st.'.$tipo;
         file_put_contents($file_xml_st, $ingreso);
 
         $filtro = array();
         $filtro[$this->key_filtro_id] = $this->registro_id;
-        $filtro['doc_extension.codigo'] = 'xml';
-
+        $filtro['doc_extension.codigo'] = $tipo;
         $existe = $modelo_documento->existe(filtro: $filtro);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al validar si existe documento', data: $existe);
         }
 
-        $doc_tipo_documento_id = $this->doc_tipo_documento_id(extension: "xml");
+        $doc_tipo_documento_id = $this->doc_tipo_documento_id(extension: $tipo);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al validar extension del documento', data: $doc_tipo_documento_id);
         }
@@ -896,24 +893,21 @@ class _transacciones_fc extends modelo
             if (errores::$error) {
                 return $this->error->error(mensaje: 'Error al dar de alta factura documento', data: $fc_factura_documento);
             }
-        }
-        else {
-
+        } else {
             $filtro = array();
             $filtro[$this->key_filtro_id] = $this->registro_id;
-            $filtro['doc_extension.descripcion'] = 'xml';
-
+            $filtro['doc_extension.descripcion'] = $tipo;
             $r_fc_factura_documento = $modelo_documento->filtro_and(filtro: $filtro);
             if (errores::$error) {
                 return $this->error->error(mensaje: 'Error al obtener factura documento', data: $r_fc_factura_documento);
             }
-
             if ($r_fc_factura_documento->n_registros > 1) {
                 return $this->error->error(mensaje: 'Error solo debe existir una factura_documento', data: $r_fc_factura_documento);
             }
             if ($r_fc_factura_documento->n_registros === 0) {
                 return $this->error->error(mensaje: 'Error  debe existir al menos una factura_documento', data: $r_fc_factura_documento);
             }
+
             $fc_factura_documento = $r_fc_factura_documento->registros[0];
 
             $doc_documento_id = $fc_factura_documento['doc_documento_id'];

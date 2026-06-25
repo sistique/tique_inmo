@@ -426,7 +426,12 @@ class doc_documento extends modelo{
                 }
 
                 if(isset($registro['ruta_relativa'])) {
+                    $ruta_absoluta_directorio = (new generales())->path_base . $registro['ruta_relativa'];
+
                     $registro['ruta_relativa'] .= $nombre_doc;
+                    $registro['ruta_absoluta'] = $ruta_absoluta_directorio . $nombre_doc;
+                    $registro['nombre'] = $nombre_doc;
+                    $registro['name_out'] = $nombre_doc;
                 }
 
                 $nombre_dropbox = $registro['ruta_relativa'];
@@ -450,6 +455,7 @@ class doc_documento extends modelo{
                 //$registro_dbox['doc_documento_id'] = $id;
                 $registro_dbox['id_dropbox'] = $guarda;
                 $registro_dbox['ruta_carpeta'] = $nombre_dropbox;
+                $registro_dbox['nombre'] = $nombre_doc;
                 $r_dropbox_ruta = (new inm_dropbox_ruta(link: $this->link))->modifica_bd(registro: $registro_dbox,
                     id: $registro_drop->registros[0]['inm_dropbox_ruta_id']);
                 if (errores::$error) {
@@ -462,6 +468,7 @@ class doc_documento extends modelo{
         if(errores::$error){
             return $this->error->error('Error al modificar registro', $r_modifica_doc);
         }
+
         return $r_modifica_doc;
     }
 
