@@ -1800,10 +1800,6 @@ class _transacciones_fc extends modelo
         return $receptor;
     }
 
-
-
-
-
     final public function ruta_archivos(string $directorio = ""): array|string
     {
         $ruta_archivos = (new generales())->path_base . "archivos/$directorio";

@@ -1,7 +1,9 @@
 <?php
 namespace gamboamartin\facturacion\controllers;
 
+use config\generales;
 use gamboamartin\documento\models\doc_documento;
+use gamboamartin\documento\models\doc_tipo_documento;
 use gamboamartin\errores\errores;
 use gamboamartin\facturacion\models\_cuenta_predial;
 use gamboamartin\facturacion\models\_data_impuestos;
@@ -23,23 +25,37 @@ class _doctos{
         $this->error = new errores();
     }
 
-    private function doc_documento_id(PDO $link, string $pdf,stdClass $row_entidad, string $tabla_fc){
+    private function doc_documento_id(PDO $link, string $pdf, stdClass $row_entidad, int $registro_id,
+                                      string $tabla_fc){
         $doc_documento_ins = array();
-
         $file = $this->file_doc_pdf(pdf: $pdf, row_entidad: $row_entidad, tabla_fc: $tabla_fc);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar file',data:  $file);
         }
 
-        /**
-         * AJUSTAR PARA ELIMIANR HARDCODEO
-         */
-        $doc_documento_ins['doc_tipo_documento_id'] = 8;
+        $filtro['doc_tipo_documento.descripcion'] = 'CFDI PDF';
+        $doc_tipo_documento_id = (new doc_tipo_documento(link: $link))->filtro_and(filtro: $filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener doc_tipo_documento',data:  $doc_tipo_documento_id);
+        }
+
+        $ruta_archivos_tmp = $this->genera_ruta_archivo_tmp();
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener ruta de archivos', data: $ruta_archivos_tmp);
+        }
+
+        $doc_documento_ins['doc_tipo_documento_id'] = $doc_tipo_documento_id;
+        $doc_documento_ins['descripcion'] = $ruta_archivos_tmp;
+        $doc_documento_ins['nombre'] = 'CFDI PDF-'.$registro_id.'.pdf';
+        if((new generales())->guarda_archivo_dropbox) {
+            $doc_documento_ins['ruta_relativa'] = $tabla_fc.'/'.$registro_id.'/';
+        }
 
         $r_doc_documento = (new doc_documento(link: $link))->alta_documento(registro: $doc_documento_ins,file: $file);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al al insertar documento',data:  $r_doc_documento);
         }
+
         return $r_doc_documento->registro_id;
     }
 
@@ -63,7 +79,7 @@ class _doctos{
                                         stdClass $row_entidad, string $tabla_fc): array|stdClass
     {
         $doc_documento_id = $this->doc_documento_id(link: $modelo_documento->link, pdf: $pdf,
-            row_entidad: $row_entidad, tabla_fc: $tabla_fc);
+            row_entidad: $row_entidad, registro_id: $registro_id, tabla_fc: $tabla_fc);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al al insertar documento',data:  $doc_documento_id);
         }
@@ -103,12 +119,10 @@ class _doctos{
      * @return bool|array
      * @version 4.3.0
      */
-
-
     private function init_factura_documento(_doc $modelo_documento, int $registro_id, string $tabla_fc): bool|array
     {
         $filtro[$tabla_fc.'.id'] = $registro_id;
-        $filtro['doc_tipo_documento.id'] = 8;
+        $filtro['doc_tipo_documento.descripcion'] = 'CFDI PDF';
 
         $existe_factura_documento = $modelo_documento->existe(filtro: $filtro);
         if(errores::$error){
@@ -122,6 +136,7 @@ class _doctos{
                 return $this->error->error(mensaje: 'Error al al eliminar registro',data:  $r_fc_factura_documento);
             }
         }
+
         return $existe_factura_documento;
     }
 
@@ -168,5 +183,44 @@ class _doctos{
         }
 
         return $r_fc_factura_documento;
+    }
+
+    final public function genera_ruta_archivo_tmp(): array|string
+    {
+        $ruta_archivos = $this->ruta_archivos();
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al generar ruta de archivos', data: $ruta_archivos);
+        }
+
+        $ruta_archivos_tmp = $this->ruta_archivos_tmp(ruta_archivos: $ruta_archivos);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al generar ruta de archivos', data: $ruta_archivos_tmp);
+        }
+        return $ruta_archivos_tmp;
+    }
+
+    final public function ruta_archivos(string $directorio = ""): array|string
+    {
+        $ruta_archivos = (new generales())->path_base . "archivos/$directorio";
+        if (!file_exists($ruta_archivos)) {
+            mkdir($ruta_archivos, 0777, true);
+        }
+        if (!file_exists($ruta_archivos)) {
+            return $this->error->error(mensaje: "Error no existe $ruta_archivos", data: $ruta_archivos);
+        }
+        return $ruta_archivos;
+    }
+
+    private function ruta_archivos_tmp(string $ruta_archivos): array|string
+    {
+        $ruta_archivos_tmp = $ruta_archivos . 'temporales';
+
+        if (!file_exists($ruta_archivos_tmp)) {
+            mkdir($ruta_archivos_tmp, 0777, true);
+        }
+        if (!file_exists($ruta_archivos_tmp)) {
+            return $this->error->error(mensaje: "Error no existe $ruta_archivos_tmp", data: $ruta_archivos_tmp);
+        }
+        return $ruta_archivos_tmp;
     }
 }
