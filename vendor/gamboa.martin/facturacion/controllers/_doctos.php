@@ -44,7 +44,7 @@ class _doctos{
             return $this->error->error(mensaje: 'Error al obtener ruta de archivos', data: $ruta_archivos_tmp);
         }
 
-        $doc_documento_ins['doc_tipo_documento_id'] = $doc_tipo_documento_id;
+        $doc_documento_ins['doc_tipo_documento_id'] = $doc_tipo_documento_id->registros[0]['doc_tipo_documento_id'];
         $doc_documento_ins['descripcion'] = $ruta_archivos_tmp;
         $doc_documento_ins['nombre'] = 'CFDI PDF-'.$registro_id.'.pdf';
         if((new generales())->guarda_archivo_dropbox) {

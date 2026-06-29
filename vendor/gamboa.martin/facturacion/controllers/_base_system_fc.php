@@ -1644,8 +1644,33 @@ class _base_system_fc extends _base_system{
             return $this->retorno_error(mensaje: 'Error al generar pdf',data:  $pdf, header: $header,ws:$ws);
         }
 
+        $ruta_doc = $pdf->registro_obj->doc_documento_ruta_absoluta;
+        if((new generales())->guarda_archivo_dropbox) {
+            $filtro_dr['doc_documento.id'] = $pdf->registro_obj->doc_documento_id;
+            $r_inm_dropbox_ruta = (new inm_dropbox_ruta(link: $this->link))->filtro_and(filtro: $filtro_dr);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error  al obtener documento', data: $r_inm_dropbox_ruta,
+                    header: $header,ws:$ws);
+            }
+
+            if($r_inm_dropbox_ruta->n_registros <= 0) {
+                return $this->retorno_error(mensaje: 'Error  al obtener documento', data: $r_inm_dropbox_ruta,
+                    header: $header,ws:$ws);
+            }
+
+            $guarda = (new _dropbox(link: $this->link))->preview(
+                dropbox_id: $r_inm_dropbox_ruta->registros[0]['inm_dropbox_ruta_id_dropbox'],
+                extencion: $r_inm_dropbox_ruta->registros[0]['doc_extension_descripcion']);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error  al obtener documento', data: $guarda,
+                    header: $header,ws:$ws);
+            }
+
+            $ruta_doc = (new generales())->path_base . $guarda->ruta_archivo;
+        }
+
         if($header){
-            $fichero = $pdf->registro_obj->doc_documento_ruta_absoluta;
+            $fichero = $ruta_doc;
             header('Content-Type: application/pdf');
             header('Expires: 0');
             header('Cache-Control: must-revalidate');
