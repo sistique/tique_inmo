@@ -1634,19 +1634,42 @@ class _base_system_fc extends _base_system{
     }
 
     public function genera_pdf(bool $header, bool $ws = false){
-        $pdf = (new _doctos())->pdf(modelo_documento: $this->modelo_documento,modelo_entidad:  $this->modelo_entidad,
-            modelo_partida: $this->modelo_partida,modelo_predial:  $this->modelo_predial,
-            modelo_relacion: $this->modelo_relacion,modelo_relacionada:  $this->modelo_relacionada,
-            modelo_retencion:  $this->modelo_retencion,modelo_sello:  $this->modelo_sello,
-            modelo_traslado:  $this->modelo_traslado, modelo_uuid_ext: $this->modelo_uuid_ext,
-            row_entidad_id: $this->registro_id);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al generar pdf',data:  $pdf, header: $header,ws:$ws);
+        $permite_transaccion = $this->modelo_entidad->permite_transaccion(modelo_etapa: $this->modelo_etapa,
+            registro_id: $this->registro_id);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener permite_transaccion', data: $permite_transaccion,
+                header: $header,ws:$ws);
         }
 
-        $ruta_doc = $pdf->registro_obj->doc_documento_ruta_absoluta;
+        if(!$permite_transaccion){
+            $filtro[$this->modelo_entidad->tabla.'.id'] = $this->registro_id;
+            $filtro['doc_tipo_documento.descripcion'] = 'CFDI PDF';
+
+            $factura_documento = $this->modelo_documento->filtro_and(filtro: $filtro);
+            if(errores::$error){
+                return $this->retorno_error(mensaje: 'Error al validar si existe documento', data:  $factura_documento,
+                    header: $header,ws:$ws);
+            }
+
+            $doc_documento_id = $factura_documento->registros[0]['doc_documento_id'];
+            $ruta_doc = $factura_documento->registros[0]['doc_documento_ruta_absoluta'];
+        }else{
+            $pdf = (new _doctos())->pdf(modelo_documento: $this->modelo_documento,modelo_entidad:  $this->modelo_entidad,
+                modelo_partida: $this->modelo_partida,modelo_predial:  $this->modelo_predial,
+                modelo_relacion: $this->modelo_relacion,modelo_relacionada:  $this->modelo_relacionada,
+                modelo_retencion:  $this->modelo_retencion,modelo_sello:  $this->modelo_sello,
+                modelo_traslado:  $this->modelo_traslado, modelo_uuid_ext: $this->modelo_uuid_ext,
+                row_entidad_id: $this->registro_id);
+            if(errores::$error){
+                return $this->retorno_error(mensaje: 'Error al generar pdf',data:  $pdf, header: $header,ws:$ws);
+            }
+
+            $ruta_doc = $pdf->registro_obj->doc_documento_ruta_absoluta;
+            $doc_documento_id = $pdf->registro_obj->doc_documento_id;
+        }
+
         if((new generales())->guarda_archivo_dropbox) {
-            $filtro_dr['doc_documento.id'] = $pdf->registro_obj->doc_documento_id;
+            $filtro_dr['doc_documento.id'] = $doc_documento_id;
             $r_inm_dropbox_ruta = (new inm_dropbox_ruta(link: $this->link))->filtro_and(filtro: $filtro_dr);
             if (errores::$error) {
                 return $this->retorno_error(mensaje: 'Error  al obtener documento', data: $r_inm_dropbox_ruta,
