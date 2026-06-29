@@ -1441,9 +1441,7 @@ final class pdf
             }
             $nombre_documento = $path_base_archivos.'/'.$nombre_documento.'.pdf';
 
-
-            $this->pdf->Output($nombre_documento, 'I');
-            exit;
+            $this->pdf->Output($nombre_documento, 'F');
             return $nombre_documento;
         }
 

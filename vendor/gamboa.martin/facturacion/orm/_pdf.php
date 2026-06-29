@@ -1,10 +1,13 @@
 <?php
 namespace gamboamartin\facturacion\models;
+use config\generales;
 use gamboamartin\cat_sat\models\cat_sat_regimen_fiscal;
 use gamboamartin\comercial\models\com_tmp_cte_dp;
 use gamboamartin\direccion_postal\models\dp_calle_pertenece;
 use gamboamartin\errores\errores;
 use gamboamartin\facturacion\controllers\pdf;
+use gamboamartin\inmuebles\models\_dropbox;
+use gamboamartin\inmuebles\models\inm_dropbox_ruta;
 use gamboamartin\organigrama\models\org_logo;
 use PDO;
 use stdClass;
@@ -120,11 +123,54 @@ class _pdf{
             return $this->error->error(mensaje: 'Error al obtener factura',data:  $factura);
         }
 
-        $ruta_qr = $modelo_documento->get_factura_documento(key_entidad_filter_id: $modelo_entidad->key_filtro_id,
+        if(!(new generales())->guarda_archivo_dropbox) {
+            $ruta_qr = $modelo_documento->get_factura_documento(
+                key_entidad_filter_id: $modelo_entidad->key_filtro_id, registro_id: $registro_id,
+                tipo_documento: "qr_cfdi");
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al obtener XML', data: $ruta_qr);
+            }
+
+            if (!file_exists($ruta_qr)) {
+                return $this->error->error(mensaje: 'Error no existe xml', data: $ruta_qr);
+            }
+        }else{
+            $documento = $modelo_documento->get_factura_documentos(
+                key_entidad_filter_id: $modelo_entidad->key_filtro_id, registro_id: $registro_id,
+                tipo_documento: "qr_cfdi");
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al obtener documentos xml', data: $documento);
+            }
+
+            if ($documento->n_registros <= 0) {
+                return $this->error->error(mensaje: 'Error no existe xml', data: $documento);
+            }
+
+            $filtro_dr['doc_documento.id'] = $documento->registros[0]['doc_documento_id'];
+            $r_inm_dropbox_ruta = (new inm_dropbox_ruta(link: $link))->filtro_and(filtro: $filtro_dr);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al obtener ruta dropbox', data: $r_inm_dropbox_ruta);
+            }
+
+            if($r_inm_dropbox_ruta->n_registros <= 0) {
+                return $this->error->error(mensaje: 'Error no existe ruta dropbox', data: $r_inm_dropbox_ruta);
+            }
+
+            $guarda_preview = (new _dropbox(link: $link))->preview(
+                dropbox_id: $r_inm_dropbox_ruta->registros[0]['inm_dropbox_ruta_id_dropbox'],
+                extencion: $r_inm_dropbox_ruta->registros[0]['doc_extension_descripcion']);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al obtener preview dropbox', data: $guarda_preview);
+            }
+
+            $ruta_qr = (new generales())->path_base . $guarda_preview->ruta_archivo;
+        }
+
+        /*$ruta_qr = $modelo_documento->get_factura_documento(key_entidad_filter_id: $modelo_entidad->key_filtro_id,
             registro_id: $registro_id, tipo_documento: "qr_cfdi");
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener QR',data:  $ruta_qr);
-        }
+        }*/
 
         $filtro = array();
         $filtro['org_empresa.id'] = $factura['org_empresa_id'];
@@ -158,12 +204,10 @@ class _pdf{
             return $this->error->error(mensaje: 'Error al obtener regimen fiscal receptor', data:  $rf_receptor);
         }
 
-
         $data = $this->data_factura(cfdi_sellado: $cfdi_sellado, name_entidad_sellado: $modelo_sellado->tabla);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al asignar datos', data:  $data);
         }
-
 
         $key_observaciones = $modelo_entidad->tabla.'_observaciones';
         if(!isset($factura[$key_observaciones])){
@@ -207,7 +251,6 @@ class _pdf{
             }
         }
 
-
         if($modelo_entidad->tabla === 'fc_complemento_pago') {
 
             $r_fc_pago_pago = (new fc_pago_pago(link: $link))->filtro_and(filtro: $filtro);
@@ -235,7 +278,6 @@ class _pdf{
                 return $this->error->error(mensaje: 'Error al maquetar conceptos', data: $rs);
             }
         }
-
 
         //$key_sub_total = $modelo_entidad->tabla.'_sub_total';
         $key_sub_total_base = $modelo_entidad->tabla.'_sub_total_base';

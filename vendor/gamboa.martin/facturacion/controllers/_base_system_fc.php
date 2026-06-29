@@ -42,6 +42,7 @@ use gamboamartin\facturacion\models\fc_complemento_pago;
 use gamboamartin\facturacion\models\fc_complemento_pago_relacionada;
 use gamboamartin\facturacion\models\fc_csd;
 use gamboamartin\facturacion\models\fc_factura;
+use gamboamartin\facturacion\models\fc_factura_documento;
 use gamboamartin\facturacion\models\fc_nc_rel;
 use gamboamartin\facturacion\models\fc_notificacion;
 use gamboamartin\facturacion\models\fc_partida;
@@ -1347,12 +1348,10 @@ class _base_system_fc extends _base_system{
     }
 
     public function exportar_documentos(bool $header, bool $ws = false){
-
-
         if(!(new generales())->guarda_archivo_dropbox) {
             $ruta_xml = $this->modelo_documento->get_factura_documento(
                 key_entidad_filter_id: $this->modelo_entidad->key_filtro_id, registro_id: $this->registro_id,
-                tipo_documento: "xml_sin_timbrar");
+                tipo_documento: "xml_timbrado");
             if (errores::$error) {
                 return $this->retorno_error(mensaje: 'Error al obtener XML', data: $ruta_xml, header: $header, ws: $ws);
             }
@@ -1363,11 +1362,12 @@ class _base_system_fc extends _base_system{
         }else{
             $documento = $this->modelo_documento->get_factura_documentos(
                 key_entidad_filter_id: $this->modelo_entidad->key_filtro_id, registro_id: $this->registro_id,
-                tipo_documento: "xml_sin_timbrar");
+                tipo_documento: "xml_timbrado");
             if (errores::$error) {
                 return $this->retorno_error(mensaje: 'Error al no existe xml',data:  $documento,
                     header: $header,ws:$ws);
             }
+
             if ($documento->n_registros <= 0) {
                 return $this->retorno_error(mensaje: 'Error al no existe xml', data: $documento, header: $header, ws: $ws);
             }
@@ -1419,7 +1419,6 @@ class _base_system_fc extends _base_system{
 
         $archivos[$ruta_xml] = $fc_factura->$key_serie.$fc_factura->$key_folio.".xml";
         $archivos[$ruta_pdf] = $fc_factura->$key_serie.$fc_factura->$key_folio.".pdf";
-
 
         Compresor::descarga_zip_multiple(archivos: $archivos,name_zip: $name_zip);
 
