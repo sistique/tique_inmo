@@ -356,6 +356,7 @@ class controlador_fc_factura extends _base_system_fc {
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al generar pdf',data:  $r_genera,header:  $header, ws: $ws);
         }
+
         return $r_genera;
     }
 

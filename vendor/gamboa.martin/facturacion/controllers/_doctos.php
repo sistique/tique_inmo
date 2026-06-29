@@ -73,13 +73,13 @@ class _doctos{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al al insertar factura_doc',data:  $r_fc_factura_documento);
         }
+
         return $r_fc_factura_documento;
     }
 
     private function inicializa_factura_documento(_doc $modelo_documento, string $pdf,
                                                   int $registro_id, stdClass $row_entidad, string $tabla_fc): array|stdClass
     {
-
         $r_fc_factura_documento = $this->init_factura_documento(modelo_documento: $modelo_documento,
             registro_id: $registro_id,tabla_fc: $tabla_fc);
         if(errores::$error){
@@ -91,6 +91,7 @@ class _doctos{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al al insertar factura_doc',data:  $r_fc_factura_documento);
         }
+
         return $r_fc_factura_documento;
     }
 
@@ -137,6 +138,7 @@ class _doctos{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al al insertar factura_doc',data:  $r_fc_factura_documento);
         }
+
         return $r_fc_factura_documento;
     }
 
@@ -145,7 +147,6 @@ class _doctos{
                               _relacionada $modelo_relacionada, _data_impuestos $modelo_retencion,
                               _sellado $modelo_sello, _data_impuestos $modelo_traslado, _uuid_ext $modelo_uuid_ext,
                               int $row_entidad_id){
-
         $pdf = (new _pdf())->pdf(descarga: false, guarda: true, link: $modelo_entidad->link,
             modelo_documento: $modelo_documento, modelo_entidad: $modelo_entidad, modelo_partida: $modelo_partida,
             modelo_predial: $modelo_predial, modelo_relacion: $modelo_relacion, modelo_relacionada: $modelo_relacionada,
@@ -165,6 +166,7 @@ class _doctos{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al al insertar factura_doc',data:  $r_fc_factura_documento);
         }
+
         return $r_fc_factura_documento;
     }
 }

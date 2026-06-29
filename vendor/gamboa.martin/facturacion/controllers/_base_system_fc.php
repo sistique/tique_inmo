@@ -1634,19 +1634,15 @@ class _base_system_fc extends _base_system{
     }
 
     public function genera_pdf(bool $header, bool $ws = false){
-
-
         $pdf = (new _doctos())->pdf(modelo_documento: $this->modelo_documento,modelo_entidad:  $this->modelo_entidad,
             modelo_partida: $this->modelo_partida,modelo_predial:  $this->modelo_predial,
             modelo_relacion: $this->modelo_relacion,modelo_relacionada:  $this->modelo_relacionada,
             modelo_retencion:  $this->modelo_retencion,modelo_sello:  $this->modelo_sello,
             modelo_traslado:  $this->modelo_traslado, modelo_uuid_ext: $this->modelo_uuid_ext,
             row_entidad_id: $this->registro_id);
-
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al generar pdf',data:  $pdf, header: $header,ws:$ws);
         }
-
 
         if($header){
             $fichero = $pdf->registro_obj->doc_documento_ruta_absoluta;
@@ -1662,7 +1658,6 @@ class _base_system_fc extends _base_system{
 
         }
         return $pdf;
-
     }
 
 
