@@ -975,8 +975,6 @@ class _transacciones_fc extends modelo
     final public function  get_data_relaciones(_relacion $modelo_relacion, _relacionada $modelo_relacionada, _uuid_ext $modelo_uuid_ext,
                                                int $registro_entidad_id): array
     {
-
-
         $relaciones = $modelo_relacion->relaciones(modelo_entidad: $this,
             registro_entidad_id: $registro_entidad_id);
         if (errores::$error) {
@@ -1092,13 +1090,9 @@ class _transacciones_fc extends modelo
             return $this->error->error(mensaje: 'Error al obtener relaciones', data: $relacionados);
         }
 
-
-
         $conceptos = array();
-
         $total_impuestos_trasladados = 0.0;
         $total_impuestos_retenidos = 0.0;
-
         $trs_global= array();
         $ret_global= array();
         foreach ($registro['partidas'] as $key => $partida) {

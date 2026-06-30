@@ -172,15 +172,11 @@ class _relacion extends _modelo_parent_sin_codigo{
         }
 
         $filtro[$this->key_filtro_id] = $row_relacion[$this->key_id];
-
-
-
         $relacionados = $this->ajusta_relacionados(cat_sat_tipo_relacion_codigo: $cat_sat_tipo_relacion_codigo,
             modelo_uuid_ext: $modelo_uuid_ext,relacionados:  $relacionados,row_relacion:  $row_relacion);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al ajustar relacionados', data: $relacionados);
         }
-
 
         if($name_entidad === 'fc_nota_credito'){
             $relacionados = $this->integra_relacion_nc(cat_sat_tipo_relacion_codigo: $cat_sat_tipo_relacion_codigo,
@@ -202,9 +198,7 @@ class _relacion extends _modelo_parent_sin_codigo{
      * @return array
      */
     final public function get_relaciones(_transacciones_fc $modelo_entidad, _relacionada $modelo_relacionada,
-                                         _uuid_ext $modelo_uuid_ext, int $registro_entidad_id): array
-    {
-
+                                         _uuid_ext $modelo_uuid_ext, int $registro_entidad_id): array{
         $row_relaciones = $this->relaciones(modelo_entidad: $modelo_entidad, registro_entidad_id: $registro_entidad_id);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener row_relaciones', data: $row_relaciones);
@@ -215,8 +209,6 @@ class _relacion extends _modelo_parent_sin_codigo{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar relacionado', data: $relacionados);
         }
-
-
 
         return $relacionados;
 

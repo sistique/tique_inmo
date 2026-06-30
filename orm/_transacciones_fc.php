@@ -1058,8 +1058,6 @@ class _transacciones_fc extends modelo
             return $this->error->error(mensaje: 'Error al obtener relaciones', data: $relacionados);
         }
 
-
-
         $conceptos = array();
 
         $total_impuestos_trasladados = 0.0;
