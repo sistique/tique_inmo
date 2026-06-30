@@ -2976,6 +2976,7 @@ class _base_system_fc extends _base_system{
         $html = '<thead>
                                         <tr>
                                             <th>UUID</th>
+                                            <th>RFC</th>
                                             <th>Cliente</th>
                                             <th>Folio</th>
                                             <th>Fecha</th>
@@ -3079,6 +3080,7 @@ class _base_system_fc extends _base_system{
         return "<tr>
                     <td>$fc_factura[$key_uuid]</td>
                     <td>$fc_factura[com_cliente_rfc]</td>
+                    <td>$fc_factura[com_cliente_razon_social]</td>
                     <td>$fc_factura[$key_folio]</td>
                     <td>$fc_factura[$key_fecha]</td>
                     <td>$fc_factura[$key_total]</td>

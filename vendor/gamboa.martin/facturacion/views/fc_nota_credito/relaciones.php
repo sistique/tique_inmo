@@ -92,21 +92,69 @@
                                                 </tr>
                                             <?php } ?>
 
-                                            <?php foreach ($fc_relacion['fc_facturas_relacionadas_factura'] as $fc_factura){
-                                                ?>
-                                                <tr>
-                                                    <td><?php echo $fc_factura['fc_factura_uuid']; ?></td>
+                                            <?php //foreach ($fc_relacion['fc_facturas_relacionadas_factura'] as $fc_factura){?>
+                                                <!--<tr>
+                                                    <td><?php /*echo $fc_factura['fc_factura_uuid']; ?></td>
                                                     <td><?php echo $fc_factura['com_cliente_rfc']; ?></td>
                                                     <td><?php echo $fc_factura['fc_factura_folio']; ?></td>
                                                     <td><?php echo $fc_factura['fc_factura_fecha']; ?></td>
                                                     <td><?php echo $fc_factura['fc_factura_total']; ?></td>
                                                     <td><?php echo $fc_factura['fc_factura_saldo']; ?></td>
+                                                    <td><?php echo $fc_factura['fc_nc_rel_monto_aplicado_factura']; ?></td>
                                                     <td><?php echo $fc_factura['fc_factura_etapa']; ?></td>
                                                     <td><?php echo $fc_factura['cat_sat_tipo_de_comprobante_descripcion']; ?></td>
-                                                    <td><?php echo $fc_factura['elimina_bd']; ?></td>
-                                                </tr>
-                                            <?php } ?>
+                                                    <td><?php echo $fc_factura['elimina_bd']; */?></td>
+                                                </tr>-->
+                                            <?php //} ?>
 
+                                            </tbody>
+                                        </table>
+
+                                        <table id="fc_partida" class="table table-striped">
+                                            <thead>
+                                            <tr>
+                                                <th>SALDOS APLICADOS</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <td colspan="1" class="table-responsive">
+                                                    <table class="table table-striped">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>UUID</th>
+                                                                <th>RFC</th>
+                                                                <th>Cliente</th>
+                                                                <th>Folio</th>
+                                                                <th>Fecha</th>
+                                                                <th>Total</th>
+                                                                <th>Saldo Aplicado</th>
+                                                                <th>Saldo Factura</th>
+                                                                <th>Estatus</th>
+                                                                <th>Tipo de CFDI</th>
+                                                                <th>Elimina</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        <?php foreach ($fc_relacion['fc_facturas_relacionadas_factura'] as $fc_factura){?>
+                                                            <tr>
+                                                                <td><?php echo $fc_factura['fc_factura_uuid']; ?></td>
+                                                                <td><?php echo $fc_factura['com_cliente_rfc']; ?></td>
+                                                                <td><?php echo $fc_factura['com_cliente_razon_social']; ?></td>
+                                                                <td><?php echo $fc_factura['fc_factura_folio']; ?></td>
+                                                                <td><?php echo $fc_factura['fc_factura_fecha']; ?></td>
+                                                                <td><?php echo $fc_factura['fc_factura_total']; ?></td>
+                                                                <td><?php echo $fc_factura['fc_nc_rel_monto_aplicado_factura']; ?></td>
+                                                                <td><?php echo $fc_factura['fc_factura_saldo']; ?></td>
+                                                                <td><?php echo $fc_factura['fc_factura_etapa']; ?></td>
+                                                                <td><?php echo $fc_factura['cat_sat_tipo_de_comprobante_descripcion']; ?></td>
+                                                                <td><?php echo $fc_factura['elimina_bd']; ?></td>
+                                                            </tr>
+                                                        <?php } ?>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
                                             </tbody>
                                         </table>
 
