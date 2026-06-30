@@ -186,7 +186,6 @@ class _relaciones_base{
             registro_entidad_id: $controller->registro_id);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al obtener relaciones', data: $relaciones);
-
         }
 
         $facturas_cliente = $this->facturas_by_client(com_cliente_id: $com_cliente_id,
@@ -289,6 +288,7 @@ class _relaciones_base{
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al generar input_monto', data: $input_monto);
         }
+
         $factura_cliente['input_monto'] = $input_monto;
 
         return $factura_cliente;

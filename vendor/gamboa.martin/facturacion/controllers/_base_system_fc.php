@@ -2692,7 +2692,6 @@ class _base_system_fc extends _base_system{
 
         $this->inputs->cat_sat_tipo_relacion_id = $cat_sat_tipo_relacion_id;
 
-
         $link = $this->obj_link->link_con_id(accion: 'fc_relacion_alta_bd',link:  $this->link,
             registro_id: $this->registro_id, seccion: $this->tabla);
         if (errores::$error) {
@@ -2722,12 +2721,9 @@ class _base_system_fc extends _base_system{
             die('Error');
         }
 
-
-
         $key_relacionada_id = $this->modelo_relacionada->key_id;
         $key_relacion_id = $this->modelo_relacion->key_id;
         foreach ($relaciones as $indice=>$relacion){
-
             $relaciones = $this->links_elimina(indice: $indice,key_relacionada_id:  $key_relacionada_id,relacion:  $relacion,relaciones:  $relaciones);
             if (errores::$error) {
                 return $this->errores->error(mensaje: 'Error al generar links elimina_bd para partida', data: $relaciones);
@@ -2744,13 +2740,10 @@ class _base_system_fc extends _base_system{
 
         }
 
-
-
         $fc_externas = $this->fc_externas(com_cliente_id: $datos->row_upd->com_cliente_id);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al obtener relaciones externas', data: $fc_externas);
         }
-
 
         foreach ($relaciones as $indice=>$relacion){
             $relaciones[$indice]['fc_externas'] = array();
@@ -2764,7 +2757,6 @@ class _base_system_fc extends _base_system{
                     return $this->errores->error(mensaje: 'Error al validar si existe', data: $existe);
                 }
 
-
                 if(!$existe) {
                     /**
                      * POR REVISAR EXTRA PARAMS CLASESS CSS
@@ -2777,7 +2769,6 @@ class _base_system_fc extends _base_system{
                     }
                 }
                 else{
-
                     $filtro['fc_uuid.id'] = $fc_uuid['fc_uuid_id'];
                     $key_filtro_id = $this->modelo_relacion->key_filtro_id;
                     $filtro[$key_filtro_id] = $relacion[$key_relacion_id];
@@ -2806,15 +2797,10 @@ class _base_system_fc extends _base_system{
                 $fc_uuid['seleccion'] = $checkbox;
 
                 $relaciones[$indice]['fc_externas'][] = $fc_uuid;
-
             }
-
         }
 
-
         if($this->tabla === 'fc_nota_credito'){
-
-
             foreach ($relaciones as $indice=>$relacion){
                 $relaciones[$indice]['fc_facturas_relacionadas_factura'] = array();
                 $filtro = array();
@@ -2838,16 +2824,11 @@ class _base_system_fc extends _base_system{
                    $relaciones[$indice]['fc_facturas_relacionadas_factura'][$indice_fr]['elimina_bd'] = $link_elimina_rel;
 
                 }
-
             }
-
         }
 
         if($this->tabla === 'fc_complemento_pago'){
-
-
             foreach ($relaciones as $indice=>$relacion){
-
                 $filtro['com_cliente.id'] = $datos->row_upd->com_cliente_id;
                 $r_fc_complemento_pago = (new fc_complemento_pago(link: $this->link))->filtro_and(filtro: $filtro);
                 if (errores::$error) {
@@ -2883,18 +2864,11 @@ class _base_system_fc extends _base_system{
                     }
                 }
             }
-
-
-
-
         }
-
 
         $this->relaciones = $relaciones;
 
         //print_r($relaciones);exit;
-
-
         $button_fc_factura_modifica =  $this->html->button_href(accion: 'modifica', etiqueta: 'Ir a CFDI',
             registro_id: $this->registro_id,
             seccion: $this->tabla, style: 'warning', params: array());
@@ -2903,7 +2877,6 @@ class _base_system_fc extends _base_system{
         }
 
         $this->button_fc_factura_modifica = $button_fc_factura_modifica;
-
 
         $inputs_relaciones = '';
         $inputs_relaciones.= $this->inputs->fc_csd_id;
