@@ -5612,7 +5612,7 @@ class controlador_inm_comprador extends _ctl_base {
                 header: $header,ws:  $ws);
         }
 
-        $keys_selects = $this->key_select(cols: 6, con_registros: true,filtro: array(),
+        $keys_selects = $this->key_select(cols: 4, con_registros: true,filtro: array(),
             key: 'com_producto_id', keys_selects: $keys_selects, id_selected: -1,
             label: 'Producto', extra_params_keys: array('com_producto_descripcion'));
         if(errores::$error){
@@ -5620,7 +5620,15 @@ class controlador_inm_comprador extends _ctl_base {
                 header: $header,ws:  $ws);
         }
 
-        $keys_selects = $this->key_select(cols: 6, con_registros: true,filtro: array(),
+        $keys_selects = $this->key_select(cols: 4, con_registros: true,filtro: array(),
+            key: 'cat_sat_metodo_pago_id', keys_selects: $keys_selects, id_selected: -1,
+            label: 'Metodo de Pago');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
+                header: $header,ws:  $ws);
+        }
+
+        $keys_selects = $this->key_select(cols: 4, con_registros: true,filtro: array(),
             key: 'cat_sat_forma_pago_id', keys_selects: $keys_selects, id_selected: -1,
             label: 'Forma de Pago');
         if(errores::$error){
@@ -5821,7 +5829,7 @@ class controlador_inm_comprador extends _ctl_base {
         $registro['com_sucursal_id'] = $_POST['com_sucursal_id'];
         $registro['exportacion'] = '01';
         $registro['cat_sat_tipo_de_comprobante_id'] = $r_comprobante->registros[0]['cat_sat_tipo_de_comprobante_id'];
-        $registro['cat_sat_metodo_pago_id'] = $r_com_sucursal['cat_sat_metodo_pago_id'];
+        $registro['cat_sat_metodo_pago_id'] = $_POST['cat_sat_metodo_pago_id'];
         $registro['cat_sat_forma_pago_id'] = $_POST['cat_sat_forma_pago_id'];
         $registro['cat_sat_moneda_id'] = $r_com_sucursal['cat_sat_moneda_id'];
         $registro['com_tipo_cambio_id'] = $r_moneda->registros[0]['com_tipo_cambio_id'];

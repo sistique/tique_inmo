@@ -495,7 +495,6 @@ class _partidas_html{
 
         $partidas->registros[$indice]['descripcion_html'] = $descripcion_html;
 
-
         $impuestos_html = $this->impuestos_html(html_controler: $html_controler,
             modelo_partida: $modelo_partida, name_entidad_retenido: $name_entidad_retenido,
             name_entidad_traslado: $name_entidad_traslado,
@@ -507,6 +506,7 @@ class _partidas_html{
 
         $partidas->registros[$indice]['impuesto_traslado_html'] = $impuestos_html->traslados;
         $partidas->registros[$indice]['impuesto_retenido_html'] = $impuestos_html->retenidos;
+
         return $partidas;
     }
 

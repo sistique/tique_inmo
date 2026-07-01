@@ -2166,9 +2166,6 @@ class _base_system_fc extends _base_system{
             modelo_entidad: $this->modelo_entidad, modelo_partida: $this->modelo_partida,
             modelo_retencion: $this->modelo_retencion, modelo_traslado: $this->modelo_traslado,
             registro_entidad_id: $this->registro_id);
-
-
-
         if (errores::$error) {
             $error = $this->errores->error(mensaje: 'Error al generar html', data: $partidas);
             print_r($error);
@@ -2177,13 +2174,11 @@ class _base_system_fc extends _base_system{
 
         $this->partidas = $partidas;
 
-
         $base = $this->init_modifica(fecha_original: false,modelo_entidad: $this->modelo_entidad);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar datos',data:  $base,
                 header: $header,ws:$ws);
         }
-
 
         $identificador = "com_producto_id";
         $propiedades = array("cols" => 12);
@@ -2197,7 +2192,6 @@ class _base_system_fc extends _base_system{
         $propiedades = array("cols" => 12);
         $this->ctl_partida->asignar_propiedad(identificador:$identificador, propiedades: $propiedades);
 
-
         $com_cliente_id = $this->registro['com_cliente_id'];
 
         $inputs = $this->nueva_partida_inicializa(com_cliente_id: $com_cliente_id);
@@ -2208,7 +2202,6 @@ class _base_system_fc extends _base_system{
         }
 
         $this->inputs->partidas = $inputs;
-
 
         $cat_sat_conf_imps_id = (new fc_factura_html(html: $this->html_base))->select_cat_sat_imp_id(
             configuraciones_impuestos: $this->configuraciones_impuestos,modelo_entidad:  $this->modelo_entidad,
@@ -2255,10 +2248,6 @@ class _base_system_fc extends _base_system{
 
         $this->registros['fc_emails'] = $r_fc_email->registros;
 
-
-
-
-
         $form_data_fc = $this->inputs->fc_csd_id;
         $form_data_fc.= $this->inputs->com_sucursal_id;
         $form_data_fc.= $this->inputs->serie;
@@ -2286,8 +2275,6 @@ class _base_system_fc extends _base_system{
         }
 
         $this->inputs->registro_id = $input_registro_id;
-
-
 
         return $base->template;
     }
@@ -2514,10 +2501,6 @@ class _base_system_fc extends _base_system{
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al obtener inputs', data: $inputs);
         }
-
-
-
-
 
         return $inputs;
     }

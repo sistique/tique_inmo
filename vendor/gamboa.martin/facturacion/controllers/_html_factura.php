@@ -60,6 +60,7 @@ class _html_factura{
         if($name_entidad_partida === ''){
             return $this->error->error(mensaje: 'Error name_entidad_partida esta vacia', data: $name_entidad_partida);
         }
+
         $valida = (new _partidas_html())->valida_partida_html(partida: $partida);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar partida', data: $valida);
@@ -77,11 +78,9 @@ class _html_factura{
 
         $inputs = $this->inputs_producto(html_controler: $html_controler,key_cantidad:  $keys->key_cantidad,
             key_valor_unitario:  $keys->key_valor_unitario,partida:  $partida);
-
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al generar inputs', data: $inputs);
         }
-
 
         $tr_producto = $this->tr_producto(input_cantidad: $inputs->input_cantidad,
             input_valor_unitario:  $inputs->input_valor_unitario, key_descuento:  $keys->key_descuento,
@@ -89,7 +88,6 @@ class _html_factura{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al generar tr_producto', data: $tr_producto);
         }
-
 
         return $tr_producto;
     }

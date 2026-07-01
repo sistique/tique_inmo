@@ -174,7 +174,7 @@ function elimina_partida_bd(boton, entidad_partida){
 
 function tr_data_producto(json){
     let td_com_producto_codigo = "<td>" +
-                                            "<b>CVE SAT: </b>"+json.registro_obj.com_producto_codigo+
+                                            "<b>CVE SAT: </b>"+json.registro_obj.cat_sat_cve_prod_codigo+
                                         "</td>";
 
     let td_cat_sat_unidad_descripcion = "<td>" +

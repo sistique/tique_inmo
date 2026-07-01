@@ -89,7 +89,7 @@
                                     </tr>
 
                                     <tr>
-                                        <td><b>CVE SAT: </b><td><?php echo $partida['com_producto_codigo']; ?></td>
+                                        <td><b>CVE SAT: </b><td><?php echo $partida['cat_sat_cve_prod_codigo']; ?></td>
                                         <td><b>Unidad: </b><?php echo $partida['cat_sat_unidad_descripcion']; ?></td>
                                         <td><b>Obj Imp: </b><?php echo $partida['cat_sat_obj_imp_descripcion']; ?></td>
                                     </tr>

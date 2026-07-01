@@ -16,6 +16,7 @@
                         <?php echo $controlador->inputs->fc_factura_id; ?>
                         <?php echo $controlador->inputs->observaciones_nota_credito; ?>
                         <?php echo $controlador->inputs->cat_sat_forma_pago_id; ?>
+                        <?php echo $controlador->inputs->cat_sat_metodo_pago_id; ?>
                         <?php echo $controlador->inputs->com_producto_id; ?>
                         <?php echo $controlador->inputs->descripcion_nota_credito; ?>
                         <?php echo $controlador->inputs->monto_nota_credito; ?>
