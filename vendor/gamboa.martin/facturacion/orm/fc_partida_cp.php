@@ -14,7 +14,7 @@ class fc_partida_cp extends _partida
         $tabla = 'fc_partida_cp';
         $columnas = array($tabla => false, 'fc_complemento_pago' => $tabla, 'com_producto' => $tabla,
             'cat_sat_producto' => 'com_producto', 'cat_sat_unidad' => 'com_producto', 'cat_sat_obj_imp' => 'com_producto',
-            'com_sucursal'=>'fc_complemento_pago','com_cliente'=>'com_sucursal');
+            'com_sucursal'=>'fc_complemento_pago','com_cliente'=>'com_sucursal','cat_sat_cve_prod'=>'com_producto');
         $campos_obligatorios = array('codigo', 'com_producto_id');
 
         $columnas_extra = array();

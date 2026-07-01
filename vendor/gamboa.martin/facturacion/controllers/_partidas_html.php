@@ -239,6 +239,7 @@ class _partidas_html{
                 return $this->error->error(mensaje: 'Error al generar html', data: $partidas);
             }
         }
+
         return $partidas;
     }
 

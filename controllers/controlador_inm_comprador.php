@@ -12,6 +12,7 @@ use base\controller\init;
 use gamboamartin\banco\models\bn_cuenta;
 use gamboamartin\cat_sat\models\cat_sat_moneda;
 use gamboamartin\cat_sat\models\cat_sat_tipo_de_comprobante;
+use gamboamartin\cat_sat\models\cat_sat_tipo_relacion;
 use gamboamartin\cat_sat\models\cat_sat_uso_cfdi;
 use gamboamartin\comercial\models\com_producto;
 use gamboamartin\comercial\models\com_sucursal;
@@ -23,12 +24,14 @@ use gamboamartin\facturacion\models\fc_complemento_pago;
 use gamboamartin\facturacion\models\fc_csd;
 use gamboamartin\facturacion\models\fc_docto_relacionado;
 use gamboamartin\facturacion\models\fc_factura;
+use gamboamartin\facturacion\models\fc_nc_rel;
 use gamboamartin\facturacion\models\fc_nota_credito;
 use gamboamartin\facturacion\models\fc_pago;
 use gamboamartin\facturacion\models\fc_pago_pago;
 use gamboamartin\facturacion\models\fc_partida;
 use gamboamartin\facturacion\models\fc_partida_cp;
 use gamboamartin\facturacion\models\fc_partida_nc;
+use gamboamartin\facturacion\models\fc_relacion_nc;
 use gamboamartin\inmuebles\html\_base;
 use gamboamartin\inmuebles\html\inm_comprador_html;
 use gamboamartin\inmuebles\html\inm_notaria_html;
@@ -5864,6 +5867,33 @@ class controlador_inm_comprador extends _ctl_base {
         if (errores::$error) {
             $this->link->rollBack();
             return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_fc_partida,
+                header: $header, ws: $ws);
+        }
+
+        $filtro_relacion['cat_sat_tipo_relacion.codigo'] = '01';
+        $r_tipo_relacion = (new cat_sat_tipo_relacion(link: $this->link))->filtro_and(filtro: $filtro_relacion);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener datos de factura', data: $r_tipo_relacion,
+                header: $header, ws: $ws);
+        }
+
+        $registro_relacion_nc['cat_sat_tipo_relacion_id'] = $r_tipo_relacion->registros[0]['cat_sat_tipo_relacion_id'];
+        $registro_relacion_nc['fc_nota_credito_id'] = $r_fc_nota_credito->registro_id;
+        $r_fc_relacion_nc = (new fc_relacion_nc(link: $this->link))->alta_registro(registro: $registro_relacion_nc);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_fc_relacion_nc,
+                header: $header, ws: $ws);
+        }
+        
+        $registro_fc_nc_rel['fc_factura_id'] = $_POST['fc_factura_id'];
+        $registro_fc_nc_rel['fc_relacion_nc_id'] = $r_fc_relacion_nc->registro_id;
+        $registro_fc_nc_rel['monto_aplicado_factura'] = $cantidad;
+        $r_fc_nc_rel = (new fc_nc_rel(link: $this->link))->alta_registro(registro: $registro_fc_nc_rel);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_fc_nc_rel,
                 header: $header, ws: $ws);
         }
 
