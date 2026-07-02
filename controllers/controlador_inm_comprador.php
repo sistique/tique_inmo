@@ -5748,6 +5748,14 @@ class controlador_inm_comprador extends _ctl_base {
             }
             $nota_credito['exportar_documentos'] = $exportar_documentos;
 
+            $elimina_documentos = $this->html->button_href(accion: 'elimina_bd', etiqueta: 'Elimina',
+                registro_id: $nota_credito['fc_nota_credito_id'], seccion: 'fc_nota_credito', style: 'danger');
+            if(errores::$error){
+                return $this->retorno_error(
+                    mensaje: 'Error al obtener registro',data:  $elimina_documentos,header: $header,ws: $ws);
+            }
+            $nota_credito['elimina_bd'] = $elimina_documentos;
+
             $notas_credito[] = $nota_credito;
         }
 

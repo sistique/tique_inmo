@@ -75,6 +75,7 @@
                                 <td><?php echo $complemento_pago['modifica'] ?></td>
                                 <td><?php echo $complemento_pago['timbra_xml'] ?></td>
                                 <td><?php echo $complemento_pago['exporta_documentos'] ?></td>
+                                <td><?php echo $complemento_pago['elimina_bd'] ?></td>
                             </tr>
                         <?php } ?>
                         </tbody>

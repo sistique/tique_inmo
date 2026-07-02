@@ -75,6 +75,7 @@
                                 <td><?php echo $nota_credito['modifica'] ?></td>
                                 <td><?php echo $nota_credito['timbra_xml'] ?></td>
                                 <td><?php echo $nota_credito['exportar_documentos'] ?></td>
+                                <td><?php echo $nota_credito['elimina_bd'] ?></td>
                             </tr>
                         <?php } ?>
                         </tbody>
