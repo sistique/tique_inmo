@@ -2864,7 +2864,7 @@ class controlador_inm_comprador extends _ctl_base {
             'observaciones_nota_credito', 'valor_unitario_nota_credito','descripcion_nota_credito',
             'observaciones_complemento_pago', 'valor_unitario_complemento_pago','descripcion_complemento_pago',
             'numero_credito', 'pago_precio_compra_venta','pago_parcial_precio_compra_venta','pago_propio_peculio',
-            'pago_cuv');
+            'pago_cuv','uuid', 'etapa');
         $keys->selects = array();
         $keys->fechas = array('fecha_factura');
 
@@ -5380,6 +5380,28 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         $this->row_upd->cuenta_predial = $r_inm_rel_ubi_comp->registros[0]['inm_ubicacion_cuenta_predial'];
+
+        $this->row_upd->uuid = '';
+        if(isset($r_fc_factura->registros[0]['fc_factura_folio_fiscal']) &&
+            $r_fc_factura->registros[0]['fc_factura_folio_fiscal'] !== ''){
+            $this->row_upd->uuid = $r_fc_factura->registros[0]['fc_factura_folio_fiscal'];
+        }
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'uuid', keys_selects:$keys_selects,
+            place_holder: 'UUID', required: false);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+        
+        $this->row_upd->etapa = '';
+        if(isset($r_fc_factura->registros[0]['fc_factura_etapa']) &&
+            $r_fc_factura->registros[0]['fc_factura_etapa'] !== ''){
+            $this->row_upd->etapa = $r_fc_factura->registros[0]['fc_factura_etapa'];
+        }
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'etapa', keys_selects:$keys_selects,
+            place_holder: 'Etapa', required: false);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
 
         $base = $this->base_upd(keys_selects: $keys_selects, params: array(),params_ajustados: array());
         if(errores::$error){

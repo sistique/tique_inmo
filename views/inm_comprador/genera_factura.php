@@ -23,6 +23,8 @@
                     <?php //echo $controlador->inputs->com_tipo_cambio_id; ?>
                     <?php //echo $controlador->inputs->cat_sat_uso_cfdi_id; ?>
                     <?php echo $controlador->inputs->observaciones_factura; ?>
+                    <?php echo $controlador->inputs->etapa; ?>
+                    <?php echo $controlador->inputs->uuid; ?>
 
                     <div class="widget-header col-md-12">
                         <h2>Partida</h2>
