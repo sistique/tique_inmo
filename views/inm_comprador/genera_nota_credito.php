@@ -54,10 +54,12 @@
                             <th>Observaciones</th>
                             <th>Fecha</th>
                             <th>Total</th>
+                            <th>Etapa</th>
                             <th>UUID</th>
                             <th>Detalles</th>
                             <th>Timbra XML</th>
                             <th>Descargar</th>
+                            <th>Elimina</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -71,6 +73,7 @@
                                 <td><?php echo $nota_credito['fc_nota_credito_observaciones'] ?></td>
                                 <td><?php echo $nota_credito['fc_nota_credito_fecha'] ?></td>
                                 <td><?php echo $nota_credito['fc_nota_credito_total'] ?></td>
+                                <td><?php echo $nota_credito['fc_nota_credito_sdawetapa'] ?></td>
                                 <td><?php echo $nota_credito['fc_nota_credito_uuid'] ?></td>
                                 <td><?php echo $nota_credito['modifica'] ?></td>
                                 <td><?php echo $nota_credito['timbra_xml'] ?></td>
