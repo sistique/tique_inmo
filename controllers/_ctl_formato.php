@@ -7,6 +7,8 @@ use gamboamartin\errores\errores;
 use gamboamartin\system\_ctl_base;
 
 class _ctl_formato extends _ctl_base{
+
+    use _registro_proceso;
     /**
      * Obtiene los parametros para selectores de tipo texto
      * @param array $keys_selects Parametros previamente cargados

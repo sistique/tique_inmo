@@ -571,16 +571,19 @@ class _inm_comprador{
 
 
         foreach ($entidades_pref as $entidad){
+            $key_entidad_id = $entidad.'_id';
+            // Solo asignar el preferido si no viene ya un valor desde sesión (registro_en_proceso)
+            if(isset($controler->row_upd->$key_entidad_id) && (int)$controler->row_upd->$key_entidad_id > 0){
+                continue;
+            }
             $entidad_id = $modelo_preferido->id_preferido_detalle(entidad_preferida:  $entidad);
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error al obtener '.$entidad, data:  $entidad_id);
             }
-            $key_entidad_id = $entidad.'_id';
             $controler->row_upd->$key_entidad_id = $entidad_id;
 
         }
 
-        //if(!isset($))
 
         return $controler->row_upd;
     }

@@ -144,7 +144,9 @@ class controlador_inm_prospecto extends _ctl_formato
                 mensaje: 'Error al inicializar alta', data: $r_alta, header: $header, ws: $ws);
         }
 
-        $keys_selects = array();
+        // Pre-pobla $keys_selects con id_selected desde sesión para que key_select()
+        // respete los valores que el usuario tenía al enviar el formulario.
+        $keys_selects = $this->init_keys_selects_desde_proceso();
         $keys_selects = (new _keys_selects())->keys_selects_prospecto(controler: $this, keys_selects: $keys_selects);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects', data: $keys_selects,

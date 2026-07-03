@@ -148,7 +148,8 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
                 mensaje: 'Error al inicializar alta', data: $r_alta, header: $header, ws: $ws);
         }
 
-        $keys_selects = array();
+        // Pre-pobla $keys_selects con id_selected desde sesión para restaurar selects tras error
+        $keys_selects = $this->init_keys_selects_desde_proceso();
 
         $filtro_estado['dp_estado.descripcion'] = 'Jalisco';
         $r_dp_estado = (new dp_estado(link: $this->link))->filtro_and(filtro: $filtro_estado);

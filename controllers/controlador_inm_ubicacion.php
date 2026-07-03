@@ -58,6 +58,9 @@ use stdClass;
 use Throwable;
 
 class controlador_inm_ubicacion extends _ctl_base {
+
+    use _registro_proceso;
+
     public stdClass $header_frontend;
     public inm_ubicacion_html $html_entidad;
 
@@ -186,6 +189,9 @@ class controlador_inm_ubicacion extends _ctl_base {
      */
     public function alta(bool $header, bool $ws = false): array|string
     {
+        // Restaura row_upd y pre-pobla keys_selects desde sesión antes de construir los inputs
+        $this->init_row_upd_desde_proceso();
+
         $r_alta = $this->init_alta();
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al inicializar alta',data:  $r_alta, header: $header,ws:  $ws);
@@ -196,6 +202,10 @@ class controlador_inm_ubicacion extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al obtener keys_selects', data:  $keys_selects,
                 header: $header,ws:  $ws);
         }
+
+        // Aplica valores pre-guardados en sesión sobre los keys_selects
+        // (respeta cualquier id_selected ya asignado por la lógica de _ubicacion)
+        $keys_selects = $this->init_keys_selects_desde_proceso(keys_selects: $keys_selects);
 
         $keys_selects = (new init())->key_select_txt(cols: 12,key: 'cuenta_predial', keys_selects:$keys_selects,
             place_holder: 'Cuenta Predial', required: false);

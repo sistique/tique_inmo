@@ -82,6 +82,8 @@ use stdClass;
 
 class controlador_inm_comprador extends _ctl_base {
 
+    use _registro_proceso;
+
     public array $comprobante_exento = array();
     public array $xml_exento = array();
     public array $inm_ubicaciones = array();
@@ -278,6 +280,11 @@ class controlador_inm_comprador extends _ctl_base {
      */
     public function alta(bool $header, bool $ws = false): array|string
     {
+        // Restaura $this->row_upd desde sesión antes de init_alta() para que
+        // tanto los inputs de texto como los selects muestren los valores previos
+        // cuando el formulario se re-renderiza tras un error en alta_bd.
+        $this->init_row_upd_desde_proceso();
+
         $r_alta = $this->init_alta();
         if(errores::$error){
             return $this->retorno_error(
