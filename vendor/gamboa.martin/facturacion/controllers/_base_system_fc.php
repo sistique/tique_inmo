@@ -2286,9 +2286,19 @@ class _base_system_fc extends _base_system{
         }
 
         if($registro->n_registros > 0) {
-            $button_genera_factura = $this->html->button_href(accion: 'genera_factura', etiqueta: 'Regresa Cliente',
-                registro_id: $registro->registros[0]['inm_comprador_id'], seccion: 'inm_comprador', style: 'info',
-                cols: 12, params: array());
+            if($this->tabla === 'fc_factura'){
+                $acccion = 'genera_factura';
+                $etiqueta = 'Regresa a factura';
+            }else if($this->tabla === 'fc_nota_credito'){
+                $acccion = 'genera_nota_credito';
+                $etiqueta = 'Regresa a nota de credito';
+            }else{
+                $acccion = 'genera_complemento_pago';
+                $etiqueta = 'Regresa a complemento de pago';
+            }
+
+            $button_genera_factura = $this->html->button_href(accion: $acccion, etiqueta: $etiqueta,
+                registro_id: $registro->registros[0]['inm_comprador_id'], seccion: 'inm_comprador', style: 'warning');
             if (errores::$error) {
                 return $this->errores->error(mensaje: 'Error al generar link', data: $button_genera_factura);
             }
