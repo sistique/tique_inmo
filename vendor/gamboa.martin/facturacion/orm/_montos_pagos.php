@@ -31,7 +31,6 @@ class _montos_pagos{
             return $this->error->error(mensaje: 'Error al obtener totales',data:  $monto_total_pagos_mxn);
         }
 
-
         $fc_pago_total_upd['monto_total_pagos'] = $monto_total_pagos_mxn;
 
         $total_traslados_base_iva_16_mxn = $this->total_traslados_base_iva_mxn(cat_sat_factor_factor:0.16,
@@ -39,8 +38,6 @@ class _montos_pagos{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener totales',data:  $total_traslados_base_iva_16_mxn);
         }
-
-
 
         $fc_pago_total_upd['total_traslados_base_iva_16'] = $total_traslados_base_iva_16_mxn;
 

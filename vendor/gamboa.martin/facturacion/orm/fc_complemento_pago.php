@@ -387,6 +387,9 @@ class fc_complemento_pago extends _transacciones_fc
                 if((round($fc_pago_total['fc_pago_total_total_traslados_base_iva_00'],2) > 0.0)){
                     $Complemento[$indice_fc_pago]->Pagos20->Totales->TotalTrasladosBaseIVA08 = $fc_pago_total['fc_pago_total_total_traslados_base_iva_00'];
                 }
+                if((round($fc_pago_total['fc_pago_total_total_traslados_base_iva_exento'],2) > 0.0)){
+                    $Complemento[$indice_fc_pago]->Pagos20->Totales->TotalTrasladosBaseIVAExento = $fc_pago_total['fc_pago_total_total_traslados_base_iva_exento'];
+                }
 
                 if((round($fc_pago_total['fc_pago_total_total_traslados_impuesto_iva_16'],2) > 0.0)){
                     $Complemento[$indice_fc_pago]->Pagos20->Totales->TotalTrasladosImpuestoIVA16 = $fc_pago_total['fc_pago_total_total_traslados_impuesto_iva_16'];

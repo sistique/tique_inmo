@@ -25,7 +25,6 @@ class fc_pago extends _modelo_parent{
 
     public function alta_bd(array $keys_integra_ds = array('descripcion')): array|stdClass
     {
-
         $registro = $this->integra_descripcion(registro: $this->registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al generar descripcion',data:  $registro);
@@ -41,8 +40,6 @@ class fc_pago extends _modelo_parent{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al insertar totales',data:  $r_alta_fc_pago_total);
         }
-
-
 
         return $r_alta_bd;
     }
@@ -104,6 +101,7 @@ class fc_pago extends _modelo_parent{
         $fc_pago_total_ins['total_traslados_base_iva_16'] = 0;
         $fc_pago_total_ins['total_traslados_base_iva_08'] = 0;
         $fc_pago_total_ins['total_traslados_base_iva_00'] = 0;
+        $fc_pago_total_ins['total_traslados_base_iva_exento'] = 0;
         $fc_pago_total_ins['total_traslados_impuesto_iva_16'] = 0;
         $fc_pago_total_ins['total_traslados_impuesto_iva_08'] = 0;
         $fc_pago_total_ins['total_traslados_impuesto_iva_00'] = 0;
