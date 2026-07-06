@@ -210,10 +210,6 @@ class fc_complemento_pago extends _transacciones_fc
                                                      int $indice_fc_impuesto_dr_part, int $indice_fc_pago,
                                                      int $indice_fc_pago_pago, string $key_impuesto_dr,
                                                      string $nodo_dr_key, array $row_dr_part){
-        $tasa_o_cuota_dr = $this->tasa_o_cuota(row_dr_part: $row_dr_part);
-        if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al obtener tasa_o_cuota_dr', data: $tasa_o_cuota_dr);
-        }
 
         $key_base_dr = 'fc_'.$key_impuesto_dr.'_dr_part';
 
@@ -233,13 +229,20 @@ class fc_complemento_pago extends _transacciones_fc
             ->DoctoRelacionado[$indice_fc_docto_relacionado]->ImpuestosDR->$nodo_dr_key[$indice_fc_impuesto_dr_part]
             ->TipoFactorDR = $row_dr_part['cat_sat_tipo_factor_codigo'];
 
-        $Complemento[$indice_fc_pago]->Pagos20->Pago[$indice_fc_pago_pago]
-            ->DoctoRelacionado[$indice_fc_docto_relacionado]->ImpuestosDR->$nodo_dr_key[$indice_fc_impuesto_dr_part]
-            ->TasaOCuotaDR = $tasa_o_cuota_dr;
+        if($row_dr_part['cat_sat_tipo_factor_codigo'] !== 'Exento') {
+            $tasa_o_cuota_dr = $this->tasa_o_cuota(row_dr_part: $row_dr_part);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al obtener tasa_o_cuota_dr', data: $tasa_o_cuota_dr);
+            }
 
-        $Complemento[$indice_fc_pago]->Pagos20->Pago[$indice_fc_pago_pago]
-            ->DoctoRelacionado[$indice_fc_docto_relacionado]->ImpuestosDR->$nodo_dr_key[$indice_fc_impuesto_dr_part]
-            ->ImporteDR = $row_dr_part[$key_base_dr.'_importe_dr'];
+            $Complemento[$indice_fc_pago]->Pagos20->Pago[$indice_fc_pago_pago]
+                ->DoctoRelacionado[$indice_fc_docto_relacionado]->ImpuestosDR->$nodo_dr_key[$indice_fc_impuesto_dr_part]
+                ->TasaOCuotaDR = $tasa_o_cuota_dr;
+
+            $Complemento[$indice_fc_pago]->Pagos20->Pago[$indice_fc_pago_pago]
+                ->DoctoRelacionado[$indice_fc_docto_relacionado]->ImpuestosDR->$nodo_dr_key[$indice_fc_impuesto_dr_part]
+                ->ImporteDR = $row_dr_part[$key_base_dr . '_importe_dr'];
+        }
 
         return $Complemento;
     }
@@ -778,18 +781,21 @@ class fc_complemento_pago extends _transacciones_fc
             return $this->error->error(mensaje: 'Error al validar fc_row_p_part', data: $valida);
         }
 
-        $tasa_o_cuota_p = $this->tasa_o_cuota(row_dr_part: $fc_row_p_part);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al maquetar tasa_o_cuota_p', data: $tasa_o_cuota_p);
-        }
-
-
         $row_p_part = new stdClass();
         $row_p_part->BaseP = $fc_row_p_part['fc_'.$tipo_impuesto.'_p_part_base_p'];
         $row_p_part->ImpuestoP = $fc_row_p_part['cat_sat_tipo_impuesto_codigo'];
         $row_p_part->TipoFactorP = $fc_row_p_part['cat_sat_tipo_factor_codigo'];
-        $row_p_part->TasaOCuotaP = $tasa_o_cuota_p;
-        $row_p_part->ImporteP = $fc_row_p_part['fc_'.$tipo_impuesto.'_p_part_importe_p'];
+
+        if($fc_row_p_part['cat_sat_tipo_factor_codigo'] !== 'Exento') {
+            $tasa_o_cuota_p = $this->tasa_o_cuota(row_dr_part: $fc_row_p_part);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al maquetar tasa_o_cuota_p', data: $tasa_o_cuota_p);
+            }
+
+            $row_p_part->TasaOCuotaP = $tasa_o_cuota_p;
+            $row_p_part->ImporteP = $fc_row_p_part['fc_' . $tipo_impuesto . '_p_part_importe_p'];
+        }
+
         return $row_p_part;
     }
 
