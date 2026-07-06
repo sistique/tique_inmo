@@ -334,8 +334,6 @@ class _transacciones_fc extends modelo
             $row_entidad['relacionados'] = array();
         }
 
-
-
         $data = new stdClass();
         $data->comprobante = $comprobante;
         $data->emisor = $emisor;
@@ -819,7 +817,7 @@ class _transacciones_fc extends modelo
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al obtener datos de la factura', data: $data_factura);
         }
-
+print_r($data_factura);Exit;
         if(!isset($data_factura->Complemento)){
             $data_factura->Complemento = array();
         }
@@ -840,7 +838,6 @@ class _transacciones_fc extends modelo
                 return $this->error->error(mensaje: 'Error al generar xml', data: $ingreso);
             }
         }
-
 
         $ruta_archivos_tmp = $this->genera_ruta_archivo_tmp();
         if (errores::$error) {

@@ -978,7 +978,6 @@ class cfdis{
                             array|stdClass $impuestos, stdClass|array $receptor, array $complemento = array(),
                                  stdClass|array $relacionados = array()): bool|array|string
     {
-
         $data = $this->init_base(comprobante: $comprobante,emisor:  $emisor, receptor: $receptor);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al inicializar datos', data: $data);
@@ -987,13 +986,11 @@ class cfdis{
             $data->comprobante->tipo_de_comprobante = 'I';
         }
 
-
         $impuestos_ = $impuestos;
 
         if(is_array($impuestos_)){
             $impuestos_ = (object) $impuestos_;
         }
-
 
         $keys = array('tipo_de_comprobante','moneda','total', 'exportacion','sub_total','lugar_expedicion',
             'folio','no_certificado');
@@ -1043,6 +1040,7 @@ class cfdis{
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al generar impuestos', data: $json);
         }
+
         return json_encode($json);
 
     }

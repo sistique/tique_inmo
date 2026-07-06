@@ -355,7 +355,6 @@ class xml{
 
     public function cfdi_impuestos_json(stdClass $impuestos, array $json): array
     {
-
         $aplica_impuestos_trasladados = $this->aplica_impuestos_trasladados(impuestos: $impuestos);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al validar aplicacion de impuestos', data: $aplica_impuestos_trasladados);
@@ -376,8 +375,6 @@ class xml{
             return $this->error->error(mensaje: 'Error al validar si tiene tasa', data: $tiene_tasa);
         }
 
-
-
         $keys = $this->keys_valida_impuesto(aplica_impuestos_retenidos: $aplica_impuestos_retenidos,
             aplica_impuestos_trasladados:  $aplica_impuestos_trasladados, tiene_tasa: $tiene_tasa);
         if (errores::$error) {
@@ -385,7 +382,6 @@ class xml{
         }
 
         if($aplica_impuestos) {
-
             $valida = $this->valida->valida_existencia_keys(keys: $keys, registro: $impuestos);
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error al validar $receptor', data: $valida);
@@ -396,6 +392,7 @@ class xml{
             if (errores::$error) {
                 return $this->error->error(mensaje: 'Error al setear impuestos', data: $json);
             }
+
             if($aplica_impuestos_retenidos){
                 $retenciones = (new dom_xml())->anexa_impuestos_json(impuestos:  $impuestos,
                     obj_impuestos: 'retenciones',tipo_impuesto: 'Retencion',xml:  $this);
@@ -404,6 +401,7 @@ class xml{
                 }
                 $json['Comprobante']['Impuestos']['Retenciones'] = $retenciones;
             }
+
             if($aplica_impuestos_trasladados){
                 $traslados = (new dom_xml())->anexa_impuestos_json(impuestos: $impuestos, obj_impuestos: 'traslados',
                     tipo_impuesto: 'Traslado', xml: $this);
@@ -412,7 +410,6 @@ class xml{
                 }
                 $json['Comprobante']['Impuestos']['Traslados'] = $traslados;
             }
-
         }
 
         return $json;

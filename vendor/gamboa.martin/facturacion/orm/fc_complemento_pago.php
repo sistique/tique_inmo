@@ -304,7 +304,6 @@ class fc_complemento_pago extends _transacciones_fc
             return $this->error->error(mensaje: 'Error data conceptos debe ser un array',data:  $data);
         }
 
-
         if(isset($data->comprobante['forma_pago'])){
             unset($data->comprobante['forma_pago']);
         }
@@ -326,7 +325,6 @@ class fc_complemento_pago extends _transacciones_fc
                 $data->comprobante['total'] = 0;
             }
         }
-
 
         foreach ($data->conceptos as $indice_concepto=>$concepto){
             if(isset($concepto->no_identificacion)){
@@ -377,8 +375,6 @@ class fc_complemento_pago extends _transacciones_fc
             }
 
             foreach ($fc_pago_totales as $fc_pago_total) {
-
-
                 if((round($fc_pago_total['fc_pago_total_total_traslados_base_iva_16'],2) > 0.0)){
                     $Complemento[$indice_fc_pago]->Pagos20->Totales->TotalTrasladosBaseIVA16 = $fc_pago_total['fc_pago_total_total_traslados_base_iva_16'];
                 }
@@ -412,8 +408,6 @@ class fc_complemento_pago extends _transacciones_fc
                 if((round($fc_pago_total['fc_pago_total_monto_total_pagos'],2) > 0.0)){
                     $Complemento[$indice_fc_pago]->Pagos20->Totales->MontoTotalPagos = $fc_pago_total['fc_pago_total_monto_total_pagos'];
                 }
-
-
             }
 
             $fc_pago_pagos = $this->fc_pago_pagos(fc_pago_id: $fc_pago['fc_pago_id']);
@@ -422,7 +416,6 @@ class fc_complemento_pago extends _transacciones_fc
             }
 
             foreach ($fc_pago_pagos as $indice_fc_pago_pago=>$fc_pago_pago) {
-
                 $fecha_pago = (new fechas())->fecha_hora_min_sec_t($fc_pago_pago['fc_pago_pago_fecha_pago']);
                 if (errores::$error) {
                     return $this->error->error(mensaje: 'Error al maquetar fecha de pago', data: $fecha_pago);
@@ -435,17 +428,12 @@ class fc_complemento_pago extends _transacciones_fc
                 $Complemento[$indice_fc_pago]->Pagos20->Pago[$indice_fc_pago_pago]->TipoCambioP = $fc_pago_pago['com_tipo_cambio_monto'];
                 $Complemento[$indice_fc_pago]->Pagos20->Pago[$indice_fc_pago_pago]->Monto = $fc_pago_pago['fc_pago_pago_monto'];
 
-
-
                 $fc_doctos_relacionados = $this->fc_doctos_relacionados(fc_pago_pago_id: $fc_pago_pago['fc_pago_pago_id']);
                 if (errores::$error) {
                     return $this->error->error(mensaje: 'Error al obtener fc_doctos_relacionados', data: $fc_doctos_relacionados);
                 }
 
-
-
                 foreach ($fc_doctos_relacionados as $indice_fc_docto_relacionado=>$fc_docto_relacionado) {
-
                     $Complemento[$indice_fc_pago]->Pagos20->Pago[$indice_fc_pago_pago]->DoctoRelacionado[$indice_fc_docto_relacionado] = new stdClass();
                     $Complemento[$indice_fc_pago]->Pagos20->Pago[$indice_fc_pago_pago]->DoctoRelacionado[$indice_fc_docto_relacionado]->IdDocumento = $fc_docto_relacionado['fc_factura_uuid'];
                     $Complemento[$indice_fc_pago]->Pagos20->Pago[$indice_fc_pago_pago]->DoctoRelacionado[$indice_fc_docto_relacionado]->Serie = $fc_docto_relacionado['fc_factura_serie'];
@@ -458,8 +446,6 @@ class fc_complemento_pago extends _transacciones_fc
                     $Complemento[$indice_fc_pago]->Pagos20->Pago[$indice_fc_pago_pago]->DoctoRelacionado[$indice_fc_docto_relacionado]->ImpSaldoInsoluto = $fc_docto_relacionado['fc_docto_relacionado_imp_saldo_insoluto'];
                     $Complemento[$indice_fc_pago]->Pagos20->Pago[$indice_fc_pago_pago]->DoctoRelacionado[$indice_fc_docto_relacionado]->ObjetoImpDR = $fc_docto_relacionado['cat_sat_obj_imp_codigo'];
 
-
-
                     $Complemento = $this->complemento_fc_impuestos_dr(Complemento: $Complemento,
                         fc_docto_relacionado_id:  $fc_docto_relacionado['fc_docto_relacionado_id'],
                         indice_fc_docto_relacionado: $indice_fc_docto_relacionado, indice_fc_pago: $indice_fc_pago,
@@ -467,9 +453,6 @@ class fc_complemento_pago extends _transacciones_fc
                     if (errores::$error) {
                         return $this->error->error(mensaje: 'Error al obtener traslado_dr_part', data: $Complemento);
                     }
-
-
-
                 }
 
                 $Complemento = $this->integra_fc_impuestos_p(Complemento: $Complemento,
@@ -478,12 +461,10 @@ class fc_complemento_pago extends _transacciones_fc
                 if (errores::$error) {
                     return $this->error->error(mensaje: 'Error al integrar integra_fc_traslados_p_part', data: $Complemento);
                 }
-
             }
         }
 
         $data->Complemento =$Complemento;
-
 
         return $data;
     }
