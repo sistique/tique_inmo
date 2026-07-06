@@ -54,10 +54,12 @@
                             <th>Observaciones</th>
                             <th>Fecha</th>
                             <th>Total</th>
+                            <th>Etapa</th>
                             <th>UUID</th>
                             <th>Detalles</th>
                             <th>Timbra XML</th>
                             <th>Descargar</th>
+                            <th>Elimina</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -71,6 +73,7 @@
                                 <td><?php echo $complemento_pago['fc_complemento_pago_observaciones'] ?></td>
                                 <td><?php echo $complemento_pago['fc_complemento_pago_fecha'] ?></td>
                                 <td><?php echo $complemento_pago['fc_complemento_pago_total'] ?></td>
+                                <td><?php echo $complemento_pago['fc_complemento_pago_etapa'] ?></td>
                                 <td><?php echo $complemento_pago['fc_complemento_pago_uuid'] ?></td>
                                 <td><?php echo $complemento_pago['modifica'] ?></td>
                                 <td><?php echo $complemento_pago['timbra_xml'] ?></td>

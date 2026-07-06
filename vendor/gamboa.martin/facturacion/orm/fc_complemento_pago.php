@@ -13,7 +13,7 @@ use stdClass;
 class fc_complemento_pago extends _transacciones_fc
 {
 
-    private string $com_producto_codigo_default = '99999999';
+    private string $com_producto_codigo_default = 'PAGO';
     private string $cat_sat_unidad_codigo_default = 'ACT';
     public function __construct(PDO $link, bool $valida_atributos_criticos = true)
     {
@@ -113,8 +113,6 @@ class fc_complemento_pago extends _transacciones_fc
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al insertar fc_pago',data:  $r_alta_fc_pago);
         }
-
-
 
         return $r_alta_bd;
     }
@@ -879,11 +877,13 @@ class fc_complemento_pago extends _transacciones_fc
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener producto',data:  $com_producto);
         }
+
         $cat_sat_unidad = (new cat_sat_unidad(link: $this->link))->registro_by_codigo(
             codigo: $this->cat_sat_unidad_codigo_default);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener cat_sat_unidad',data:  $cat_sat_unidad);
         }
+
         $data = new stdClass();
         $data->com_producto = $com_producto;
         $data->cat_sat_unidad = $cat_sat_unidad;

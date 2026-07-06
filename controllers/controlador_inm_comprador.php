@@ -6126,6 +6126,15 @@ class controlador_inm_comprador extends _ctl_base {
             }
             $complemento_pago['exporta_documentos'] = $exporta_documentos;
 
+            $elimina_bd = $this->html->button_href(accion: 'elimina_bd', etiqueta: 'Elimina',
+                registro_id: $complemento_pago['fc_complemento_pago_id'], seccion: 'fc_complemento_pago',
+                style: 'danger');
+            if(errores::$error){
+                return $this->retorno_error(
+                    mensaje: 'Error al obtener registro',data:  $elimina_bd,header: $header,ws: $ws);
+            }
+            $complemento_pago['elimina_bd'] = $elimina_bd;
+
             $complementos_pago[] = $complemento_pago;
         }
 
