@@ -6215,13 +6215,21 @@ class controlador_inm_comprador extends _ctl_base {
                 header: $header, ws: $ws);
         }
 
+        $filtro_moneda['cat_sat_moneda.codigo'] = 'XXX';
+        $r_moneda_pago = (new cat_sat_moneda(link: $this->link))->filtro_and(filtro: $filtro_moneda);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener datos de factura', data: $r_moneda_pago,
+                header: $header, ws: $ws);
+        }
+
         $registro['fc_csd_id'] = $r_fc_factura['fc_csd_id'];
         $registro['com_sucursal_id'] = $_POST['com_sucursal_id'];
         $registro['exportacion'] = '01';
         $registro['cat_sat_tipo_de_comprobante_id'] = $r_comprobante->registros[0]['cat_sat_tipo_de_comprobante_id'];
         $registro['cat_sat_metodo_pago_id'] = $r_com_sucursal['cat_sat_metodo_pago_id'];
         $registro['cat_sat_forma_pago_id'] = $r_com_sucursal['cat_sat_forma_pago_id'];
-        $registro['cat_sat_moneda_id'] = $r_com_sucursal['cat_sat_moneda_id'];
+        $registro['cat_sat_moneda_id'] = $r_moneda_pago->registros[0]['cat_sat_moneda_id'];
         $registro['com_tipo_cambio_id'] = $r_moneda->registros[0]['com_tipo_cambio_id'];
         $registro['cat_sat_uso_cfdi_id'] = $r_uso_cfdi->registros[0]['cat_sat_uso_cfdi_id'];
         $registro['observaciones'] = $_POST['observaciones_complemento_pago'];
