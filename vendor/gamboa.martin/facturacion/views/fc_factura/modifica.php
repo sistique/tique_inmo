@@ -28,6 +28,7 @@
 
     <div class="container">
         <?php echo $controlador->buttons_base; ?>
+        <?php echo $controlador->button_genera_factura; ?>
     </div>
 
     <div class="container partidas">

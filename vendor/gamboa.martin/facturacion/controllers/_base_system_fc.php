@@ -51,6 +51,7 @@ use gamboamartin\facturacion\models\fc_traslado;
 use gamboamartin\facturacion\models\fc_uuid;
 use gamboamartin\inmuebles\models\_dropbox;
 use gamboamartin\inmuebles\models\inm_dropbox_ruta;
+use gamboamartin\inmuebles\models\inm_rel_comprador_com_cliente;
 use gamboamartin\system\actions;
 use gamboamartin\system\html_controler;
 use gamboamartin\system\row;
@@ -96,6 +97,7 @@ class _base_system_fc extends _base_system{
     public string $button_fc_factura_modifica = '';
     public string $button_fc_factura_correo = '';
     public string $button_fc_factura_envia = '';
+    public string $button_genera_factura = '';
     public string $buttons_base = '';
 
     public string $key_email_id = '';
@@ -2275,6 +2277,23 @@ class _base_system_fc extends _base_system{
         }
 
         $this->inputs->registro_id = $input_registro_id;
+
+        $filtro_rel['com_cliente.id'] = $this->registro['com_cliente_id'];
+        $registro = (new inm_rel_comprador_com_cliente($this->link))->filtro_and(filtro: $filtro_rel);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener registro',data:  $registro,header: $header,ws: $ws);
+        }
+
+        if($registro->n_registros > 0) {
+            $button_genera_factura = $this->html->button_href(accion: 'genera_factura', etiqueta: 'Regresa Cliente',
+                registro_id: $registro->registros[0]['inm_comprador_id'], seccion: 'inm_comprador', style: 'info',
+                cols: 12, params: array());
+            if (errores::$error) {
+                return $this->errores->error(mensaje: 'Error al generar link', data: $button_genera_factura);
+            }
+            $this->button_genera_factura = $button_genera_factura;
+        }
 
         return $base->template;
     }
