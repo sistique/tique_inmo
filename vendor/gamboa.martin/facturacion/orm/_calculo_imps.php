@@ -162,8 +162,8 @@ class _calculo_imps{
         if($tiene_retenciones || $tiene_traslados){
             $tiene_impuestos = true;
         }
-        return $tiene_impuestos;
 
+        return $tiene_impuestos;
     }
 
     final public function tiene_retenciones(_data_impuestos $modelo_retencion, string $key_filtro_id, int $registro_id){
@@ -172,6 +172,7 @@ class _calculo_imps{
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al validar si tiene registros', data: $tiene_rows);
         }
+
         return $tiene_rows;
     }
 
@@ -181,6 +182,7 @@ class _calculo_imps{
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al validar si tiene registros', data: $tiene_rows);
         }
+
         return $tiene_rows;
     }
 
