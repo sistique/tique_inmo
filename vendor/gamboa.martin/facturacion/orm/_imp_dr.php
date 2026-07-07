@@ -48,7 +48,7 @@ class _imp_dr extends _modelo_parent{
                 return $this->error->error(mensaje: 'Error al obtener fc_rows', data: $fc_rows);
             }
         }
-        //print_r($fc_rows);exit;
+        
         if($this->tabla === 'fc_retencion_dr') {
             $fc_rows = (new _calculo_imps())->retenciones(modelo_retencion: $modelo_retencion,
                 key_filtro_id: 'fc_factura_id', registro_id: $fc_row_dr['fc_factura_id']);
