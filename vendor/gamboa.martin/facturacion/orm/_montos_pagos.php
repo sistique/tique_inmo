@@ -57,6 +57,14 @@ class _montos_pagos{
 
         $fc_pago_total_upd['total_traslados_base_iva_00'] = $total_traslados_base_iva_00_mxn;
 
+        $total_traslados_base_iva_exento_mxn = $this->total_traslados_base_iva_mxn(cat_sat_factor_factor:0.00,
+            cat_sat_tipo_factor_descripcion: 'Tasa', fc_pago_id: $fc_pago_id,link: $link);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener totales',data:  $total_traslados_base_iva_16_mxn);
+        }
+
+        $fc_pago_total_upd['total_traslados_base_iva_exento'] = $total_traslados_base_iva_exento_mxn;
+
         $total_traslados_impuesto_iva_16_mxn = $this->total_traslados_impuesto_iva_mxn(cat_sat_factor_factor:0.16,
             cat_sat_tipo_factor_descripcion: 'Tasa', fc_pago_id: $fc_pago_id,link: $link);
         if(errores::$error){
@@ -197,7 +205,6 @@ class _montos_pagos{
 
     private function total_traslados_base_iva_mxn(float $cat_sat_factor_factor, string $cat_sat_tipo_factor_descripcion, int $fc_pago_id, PDO $link): float|array
     {
-
         $monto_mxn = $this->monto_mxn_traslado(cat_sat_factor_factor: $cat_sat_factor_factor,
             cat_sat_tipo_factor_descripcion: $cat_sat_tipo_factor_descripcion, fc_pago_id: $fc_pago_id,
             key_monto: 'fc_traslado_dr_part_base_dr', link: $link);
