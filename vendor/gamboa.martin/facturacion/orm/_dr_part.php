@@ -186,11 +186,11 @@ class _dr_part extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al obtener sumatorias de fc_retencion_dr_part',
                 data:  $impuestos);
         }
+
         $key_factor = $this->key_factor(cat_sat_factor: $cat_sat_factor);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener key_factor', data:  $key_factor);
         }
-
 
         $fc_pago_total_upd = $this->fc_pago_total_upd_factor(
             cat_sat_tipo_impuesto_codigo: $cat_sat_tipo_impuesto_codigo, impuestos: $impuestos,
@@ -199,9 +199,6 @@ class _dr_part extends _modelo_parent{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar fc_pago_total_upd', data:  $fc_pago_total_upd);
         }
-
-
-
 
         return $fc_pago_total_upd;
     }
@@ -241,17 +238,12 @@ class _dr_part extends _modelo_parent{
             return $this->error->error(mensaje: 'Error integrar importe_dr_mxn', data:  $fc_pago_total_upd);
         }
 
-
         $fc_pago_total_upd = $this->integra_impuesto_total_traslado(com_tipo_cambio_factura_monto: $com_tipo_cambio_factura_monto,
             com_tipo_cambio_pago_monto: $com_tipo_cambio_pago_monto, fc_pago_total_upd: $fc_pago_total_upd,
             impuestos: $impuestos, key_factor: $key_factor, tipo_impuesto: $tipo_impuesto);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error integrar fc_pago_total_upd', data:  $fc_pago_total_upd);
         }
-
-
-
-
 
         return $fc_pago_total_upd;
     }
@@ -317,8 +309,8 @@ class _dr_part extends _modelo_parent{
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error integrar fc_pago_total_upd', data:  $fc_pago_total_upd);
             }
-
         }
+
         return $fc_pago_total_upd;
     }
 
@@ -465,11 +457,7 @@ class _dr_part extends _modelo_parent{
             if($com_tipo_cambio_factura_monto !== 1.0) {
                 $base_dr_mxn = round(round($impuestos->base_dr, 2) * $com_tipo_cambio_pago_monto, 2);
             }
-
         }
-
-
-
 
         $fc_pago_total_upd[$key_base_dr] = round($base_dr_mxn,2);
 
@@ -500,7 +488,9 @@ class _dr_part extends _modelo_parent{
         if((float)$cat_sat_factor->cat_sat_factor_factor === 0.0125){
             $key_factor = '0125';
         }
-
+        if((float)$cat_sat_factor->cat_sat_factor_codigo === 'exento'){
+            $key_factor = 'exento';
+        }
 
         if($key_factor === ''){
             return $this->error->error(mensaje: 'Error key_factor invalido ingrese uno valido', data:  $cat_sat_factor);

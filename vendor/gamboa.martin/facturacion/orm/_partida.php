@@ -100,7 +100,6 @@ class _partida extends  _base{
                 return $this->error->error(mensaje: 'Error al maquetar datos traslados', data: $traslado);
             }
 
-
             $alta_traslado = $modelo_traslado->alta_registro(registro: $traslado);
             if (errores::$error) {
                 return $this->error->error(mensaje: 'Error al dar de alta traslados', data: $alta_traslado);
