@@ -66,7 +66,6 @@ class _partida extends  _base{
                                             stdClass $fc_registro_partida, _data_impuestos $modelo_traslado,
                                             array $registro): array|stdClass
     {
-
         $keys = array('com_producto_id');
         $valida = $this->validacion->valida_ids(keys: $keys,registro:  $registro);
         if (errores::$error) {
@@ -78,6 +77,7 @@ class _partida extends  _base{
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al obtener conf. traslados', data: $conf_traslados);
         }
+
         $conf_descripcion = 'fc_conf_traslado_descripcion';
         if($aplica_cat_sat_conf_imps){
             $conf_traslados->registros = (new cat_sat_conf_imps(link: $this->link))->get_traslados(
@@ -85,6 +85,7 @@ class _partida extends  _base{
             if (errores::$error) {
                 return $this->error->error(mensaje: 'Error al obtener conf. traslados', data: $conf_traslados);
             }
+
             $conf_traslados->n_registros = count($conf_traslados->registros);
             $conf_descripcion = 'cat_sat_traslado_conf_descripcion';
         }
@@ -181,8 +182,6 @@ class _partida extends  _base{
             return $this->error->error(mensaje: 'Error al validar datos', data: $validacion);
         }
 
-
-
         $this->registro = $this->limpia_campos(registro: $this->registro,
             campos_limpiar: array('cat_sat_tipo_factor_id', 'cat_sat_factor_id', 'cat_sat_tipo_impuesto_id'));
         if (errores::$error) {
@@ -254,7 +253,6 @@ class _partida extends  _base{
             return $this->error->error(mensaje: 'Error obtener partida', data: $fc_registro_partida);
         }
 
-
         $traslado = $this->acciones_conf_traslado(aplica_cat_sat_conf_imps: $aplica_cat_sat_conf_imps,
             cat_sat_conf_imps_id: $cat_sat_conf_imps_id, fc_registro_partida: $fc_registro_partida,
             modelo_traslado: $this->modelo_traslado, registro: (array)$fc_registro_partida);
@@ -269,7 +267,6 @@ class _partida extends  _base{
             return $this->error->error(mensaje: 'Error al realizar acciones de conf. retenido', data: $retenido);
         }
 
-
         $r_fc_cuenta_predial = $this->integra_predial(data_predial: $data_predial,fc_registro_partida:  $fc_registro_partida);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al insertar predial', data: $r_fc_cuenta_predial);
@@ -281,7 +278,6 @@ class _partida extends  _base{
             return $this->error->error(mensaje: 'Error obtener partida', data: $fc_registro_partida);
         }
 
-
         $upd = $this->upd_total_partida(row_partida_id: $r_alta_bd->registro_id);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al modificar', data: $upd);
@@ -291,7 +287,6 @@ class _partida extends  _base{
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al modificar entidad base', data: $regenera);
         }
-
 
         $upd = $this->integra_descripcion_automatica(registro_id: $r_alta_bd->registro_id);
         if (errores::$error) {
