@@ -300,9 +300,9 @@ class fc_docto_relacionado extends _modelo_parent{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar si existen impuestos',data:  $tiene_impuestos);
         }
+
         $transacciones = new stdClass();
         if($tiene_impuestos){
-
             $transacciones = $this->transacciona_impuestos(fc_docto_relacionado_id: $fc_docto_relacionado_id,
                 fc_pago_pago_id: $fc_pago_pago_id);
             if (errores::$error) {
@@ -311,6 +311,7 @@ class fc_docto_relacionado extends _modelo_parent{
         }
 
         $transacciones->tiene_impuestos = $tiene_impuestos;
+
         return $transacciones;
     }
 
@@ -491,6 +492,7 @@ class fc_docto_relacionado extends _modelo_parent{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al insertar r_fc_impuesto_dr',data:  $r_fc_impuesto_dr);
         }
+
         return $r_fc_impuesto_dr;
     }
 
@@ -847,15 +849,16 @@ class fc_docto_relacionado extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al insertar r_fc_impuesto_dr',data:  $r_fc_impuesto_dr);
         }
 
-
         $fc_impuesto_p = $this->alta_fc_impuesto_p(fc_pago_pago_id: $fc_pago_pago_id);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al insertar r_alta_impuesto_p', data: $fc_impuesto_p);
         }
+
         $data = new stdClass();
         $data->r_fc_impuesto_dr = $r_fc_impuesto_dr;
         $data->fc_impuesto_p = $fc_impuesto_p;
         $data->fc_impuesto_p_id = $fc_impuesto_p['fc_impuesto_p_id'];
+
         return $data;
     }
 

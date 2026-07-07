@@ -50,7 +50,6 @@ class fc_impuesto_dr extends _modelo_parent{
 
         $fc_impuesto_dr = $r_alta_bd->registro_obj;
 
-
         $modelo_traslado = new fc_traslado(link: $this->link);
 
         $tiene_traslados = (new _calculo_imps())->tiene_traslados(modelo_traslado: $modelo_traslado,

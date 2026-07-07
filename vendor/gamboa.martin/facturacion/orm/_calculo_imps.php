@@ -199,11 +199,13 @@ class _calculo_imps{
         if($registro_id <= 0){
             return $this->error->error(mensaje: 'Error al registro_id debe ser mayor a 0', data: $registro_id);
         }
+
         $filtro[$key_filtro_id] = $registro_id;
         $r_traslados = $modelo_traslado->filtro_and(filtro: $filtro);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al validar si tiene registros', data: $r_traslados);
         }
+
         return $r_traslados->registros;
     }
 }
