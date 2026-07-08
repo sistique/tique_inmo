@@ -488,7 +488,7 @@ class _dr_part extends _modelo_parent{
         if((float)$cat_sat_factor->cat_sat_factor_factor === 0.0125){
             $key_factor = '0125';
         }
-        if((float)$cat_sat_factor->cat_sat_factor_codigo === 'exento'){
+        if((string)$cat_sat_factor->cat_sat_factor_codigo === 'exento'){
             $key_factor = 'exento';
         }
 
