@@ -20,6 +20,7 @@ datatable = function (identificador, columns, columnDefs, data, filtro_in) {
         processing: true,
         serverSide: true,
         responsive: true,
+        autoWidth: false,
         pageLength: 25,
         ajax: {
             "url": url_data_table,
