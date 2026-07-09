@@ -404,7 +404,7 @@ html, body.app-layout-body {
 }
 
 .sidebar-menu-icon {
-    font-size: 1rem;
+    font-size: 2rem;
     flex-shrink: 0;
     width: 20px;
     text-align: center;
@@ -593,6 +593,10 @@ html, body.app-layout-body {
     gap: 6px;
 }
 
+.salida{
+    display: none;
+}
+
 /* --- Main content --- */
 .app-main {
     flex: 1;
@@ -724,7 +728,7 @@ html, body.app-layout-body {
 }
 
 .sidebar-submenu-icon {
-    font-size: 0.85rem;
+    font-size: 1.5rem;
     flex-shrink: 0;
     width: 16px;
     text-align: center;
@@ -884,7 +888,7 @@ html, body.app-layout-body {
 
     .app-topbar-right .btn {
         padding: 3px 8px;
-        font-size: 0.78rem;
+        font-size: small;
     }
 }
 
@@ -946,6 +950,10 @@ html, body.app-layout-body {
     .col-md-4,
     .col-md-6 {
         width: 100%;
+    }
+
+    .salida{
+        display: block;
     }
 }
 

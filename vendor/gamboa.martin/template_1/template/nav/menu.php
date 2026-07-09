@@ -93,8 +93,11 @@ function _sb_icono_seccion(string $seccion, array $mapa): string {
 <!-- ===== BRAND ===== -->
 <div class="sidebar-header">
     <div class="sidebar-brand">
-        <i class="bi bi-buildings-fill sidebar-brand-icon"></i>
-        <span class="sidebar-brand-text"><?php echo htmlspecialchars($titulo_sys); ?></span>
+        <a role="button" class="btn btn-sm btn-outline-secondary me-1"
+           href="<?php echo $links_menu->adm_session->inicio ?>">
+            <i class="bi bi-buildings-fill sidebar-brand-icon"></i>
+            <span class="sidebar-brand-text"><?php echo htmlspecialchars($titulo_sys); ?></span>
+        </a>
     </div>
     <!--}<button class="sidebar-collapse-btn" id="sidebar-collapse-btn" title="Colapsar menú">
         <i class="bi bi-chevron-left"></i>

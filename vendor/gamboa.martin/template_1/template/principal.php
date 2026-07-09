@@ -59,11 +59,11 @@ $links_menu = (new links_menu(link:$controlador->link, registro_id: -1))->links;
             </span>
             <div class="app-topbar-right">
                 <?php if(isset($_SESSION['activa']) && (int)$_SESSION['activa'] === 1): ?>
-                    <a role="button" class="btn btn-sm btn-outline-secondary me-1"
-                       href="<?php echo $links_menu->adm_session->inicio ?>">
+                    <!--<a role="button" class="btn btn-sm btn-outline-secondary me-1"
+                       href="<?php //echo $links_menu->adm_session->inicio ?>">
                         <i class="bi bi-house-door"></i> Inicio
-                    </a>
-                    <a role="button" class="btn btn-sm btn-outline-danger"
+                    </a>-->
+                    <a role="button" class="btn btn-sm btn-outline-danger salida"
                        href="<?php echo $links_menu->adm_session->logout ?>">
                         <i class="bi bi-box-arrow-right"></i> Salir
                     </a>
