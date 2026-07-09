@@ -216,3 +216,740 @@ table.dataTable thead th {
     padding: 2px 6px;
     line-height: 1;
 }
+
+/* ============================================================
+   SIDEBAR LAYOUT — App Shell
+   ============================================================ */
+:root {
+    --sidebar-width: 260px;
+    --sidebar-collapsed-width: 62px;
+    --sidebar-bg: #1a2035;
+    --sidebar-hover-bg: rgba(255, 255, 255, 0.07);
+    --sidebar-active-bg: rgba(78, 154, 241, 0.18);
+    --sidebar-active-border: #4e9af1;
+    --sidebar-text: #a9b7d0;
+    --sidebar-text-hover: #ffffff;
+    --sidebar-text-active: #ffffff;
+    --topbar-height: 52px;
+    --topbar-bg: #ffffff;
+    --content-bg: #f0f2f5;
+}
+
+html, body.app-layout-body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background: var(--content-bg);
+}
+
+/* Hide old top-nav container elements */
+.container-wrapper,
+.header,
+.top-box,
+.top-box-mask,
+.box-navigaion,
+.section-color-primary > div[style*="flex-direction: column"] {
+    display: none !important;
+}
+
+/* ---- App shell ---- */
+.app-layout {
+    /*display: flex;*/
+    min-height: 100vh;
+}
+
+/* ==========================
+   SIDEBAR
+   ========================== */
+.app-sidebar {
+    width: var(--sidebar-width);
+    min-height: 100vh;
+    background: var(--sidebar-bg);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 1050;
+    overflow: hidden;
+    transition: width 0.28s cubic-bezier(.4,0,.2,1);
+    box-shadow: 2px 0 12px rgba(0, 0, 0, 0.25);
+}
+
+.app-sidebar.collapsed {
+    width: var(--sidebar-collapsed-width);
+}
+
+/* --- Brand header --- */
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 14px;
+    height: 64px;
+    min-height: 64px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    flex-shrink: 0;
+}
+
+.sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    overflow: hidden;
+    text-decoration: none;
+}
+
+.sidebar-brand-icon {
+    font-size: 1.55rem;
+    color: #4e9af1;
+    flex-shrink: 0;
+}
+
+.sidebar-brand-text {
+    font-size: large;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: #ffffff;
+    white-space: nowrap;
+    transition: opacity 0.2s, width 0.28s;
+    overflow: hidden;
+}
+
+.app-sidebar.collapsed .sidebar-brand-text {
+    opacity: 0;
+    width: 0;
+    pointer-events: none;
+}
+
+/* --- Collapse button inside sidebar --- */
+.sidebar-collapse-btn {
+    background: none;
+    border: none;
+    color: var(--sidebar-text);
+    cursor: pointer;
+    padding: 5px 6px;
+    border-radius: 5px;
+    transition: all 0.2s;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+}
+
+.sidebar-collapse-btn:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.app-sidebar.collapsed .sidebar-collapse-btn i {
+    transform: rotate(180deg);
+}
+
+/* --- Nav list --- */
+.sidebar-nav {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 10px 0;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,255,255,0.12) transparent;
+}
+
+.sidebar-nav::-webkit-scrollbar {
+    width: 4px;
+}
+.sidebar-nav::-webkit-scrollbar-track { background: transparent; }
+.sidebar-nav::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.12);
+    border-radius: 2px;
+}
+
+.sidebar-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-menu-item {
+    margin: 1px 8px;
+    border-radius: 8px;
+}
+
+.sidebar-menu-link {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 9px 11px;
+    color: var(--sidebar-text);
+    text-decoration: none;
+    border-radius: 8px;
+    white-space: nowrap;
+    transition: background 0.18s, color 0.18s;
+    font-size: 0.84rem;
+    line-height: 1.4;
+}
+
+.sidebar-menu-link:hover {
+    background: var(--sidebar-hover-bg);
+    color: var(--sidebar-text-hover);
+    text-decoration: none;
+}
+
+.sidebar-menu-item.active > .sidebar-menu-link {
+    background: var(--sidebar-active-bg);
+    color: var(--sidebar-text-active);
+    border-left: 3px solid var(--sidebar-active-border);
+    padding-left: 8px;
+}
+
+.sidebar-menu-icon {
+    font-size: 1rem;
+    flex-shrink: 0;
+    width: 20px;
+    text-align: center;
+}
+
+.sidebar-menu-label {
+    transition: opacity 0.2s;
+    white-space: nowrap;
+    overflow: hidden;
+    font-size: medium;
+}
+
+.app-sidebar.collapsed .sidebar-menu-label {
+    opacity: 0;
+    width: 0;
+    pointer-events: none;
+}
+
+/* Tooltip on collapsed hover */
+.app-sidebar.collapsed .sidebar-menu-item,
+.app-sidebar.collapsed .sidebar-menu-group {
+    position: relative;
+}
+
+/* ── Tooltip CSS para sidebar colapsado ─────────────────── */
+.app-sidebar.collapsed .sidebar-menu-item > .sidebar-menu-link[title]::after,
+.app-sidebar.collapsed .sidebar-menu-group > .sidebar-group-toggle[title]::after {
+    content: attr(title);
+    position: absolute;
+    left: calc(100% + 10px);
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(15, 25sidebar-collapse-btn, 50, 0.92);
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.18s;
+    z-index: 2000;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.app-sidebar.collapsed .sidebar-menu-item > .sidebar-menu-link[title]:hover::after,
+.app-sidebar.collapsed .sidebar-menu-group > .sidebar-group-toggle[title]:hover::after {
+    opacity: 1;
+}
+
+/* ── Flyout submenú en sidebar colapsado (desktop hover) ── */
+.app-sidebar.collapsed .sidebar-menu-group:hover > .sidebar-submenu {
+    display: block !important;
+    position: absolute;
+    left: calc(100% + 6px);
+    top: 0;
+    min-width: 200px;
+    background: #1a2035;
+    border-radius: 8px;
+    box-shadow: 4px 4px 16px rgba(0,0,0,0.35);
+    padding: 6px 0;
+    max-height: none;
+    z-index: 2100;
+}
+
+.app-sidebar.collapsed .sidebar-menu-group:hover > .sidebar-submenu .sidebar-submenu-item {
+    margin-left: 0;
+}
+
+.app-sidebar.collapsed .sidebar-menu-group:hover > .sidebar-submenu .sidebar-submenu-link {
+    white-space: nowrap;
+    padding: 8px 14px;
+}
+
+.app-sidebar.collapsed .sidebar-menu-group:hover > .sidebar-submenu .sidebar-submenu-link span {
+    display: inline !important;
+    opacity: 1 !important;
+    width: auto !important;
+}
+
+/* ── Breadcrumb en topbar ────────────────────────────────── */
+.app-topbar-breadcrumb {
+    font-size: 0.82rem;
+    color: #666;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-left: 4px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+/* --- Footer / logout --- */
+.sidebar-footer {
+    padding: 10px 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    flex-shrink: 0;
+}
+
+.sidebar-logout {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 9px 11px;
+    color: var(--sidebar-text);
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 0.84rem;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.sidebar-logout:hover {
+    color: #ff6b6b;
+    background: rgba(255, 107, 107, 0.1);
+    text-decoration: none;
+}
+
+.app-sidebar.collapsed .sidebar-logout .sidebar-menu-label {
+    opacity: 0;
+    max-width: 0;
+    pointer-events: none;
+}
+
+/* ==========================
+   APP BODY (content side)
+   ========================== */
+.app-body {
+    margin-left: var(--sidebar-width);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    transition: margin-left 0.28s cubic-bezier(.4,0,.2,1);
+    background: var(--content-bg);
+}
+
+.app-body.sidebar-collapsed {
+    margin-left: var(--sidebar-collapsed-width);
+}
+
+.app-body.app-body-full {
+    margin-left: 0;
+}
+
+/* --- Topbar --- */
+.app-topbar {
+    height: var(--topbar-height);
+    background: var(--topbar-bg);
+    border-bottom: 1px solid #e8ecf0;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    gap: 10px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+    flex-shrink: 0;
+}
+
+.sidebar-toggle-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #555;
+    padding: 5px 8px;
+    border-radius: 6px;
+    transition: all 0.18s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.sidebar-toggle-btn:hover {
+    background: #f0f2f5;
+    color: #222;
+}
+
+.app-topbar-right {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* --- Main content --- */
+.app-main {
+    flex: 1;
+    overflow-x: hidden;
+}
+
+.app-main-inner {
+    padding: 22px 26px;
+}
+
+/* --- Footer --- */
+.app-footer {
+    background: #fff;
+    border-top: 1px solid #e8ecf0;
+    font-size: 0.8rem;
+    color: #999;
+}
+
+.app-footer .container,
+.app-footer .footer-mask,
+.app-footer .footer-contant {
+    padding: 8px 16px;
+}
+
+/* ==========================
+   SUBMENÚS COLAPSABLES
+   ========================== */
+
+/* Grupo padre con submenús */
+.sidebar-menu-group {
+    margin: 1px 8px;
+    border-radius: 8px;
+}
+
+/* Botón de grupo (misma apariencia que sidebar-menu-link) */
+.sidebar-menu-group > .sidebar-group-toggle {
+    width: 100%;
+    background: none;
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 9px 11px;
+    color: var(--sidebar-text);
+    border-radius: 8px;
+    white-space: nowrap;
+    transition: background 0.18s, color 0.18s;
+    font-size: 0.84rem;
+    line-height: 1.4;
+}
+
+.sidebar-menu-group > .sidebar-group-toggle:hover {
+    background: var(--sidebar-hover-bg);
+    color: var(--sidebar-text-hover);
+}
+
+/* Grupo activo/abierto */
+.sidebar-menu-group.open > .sidebar-group-toggle {
+    color: var(--sidebar-text-hover);
+    background: var(--sidebar-hover-bg);
+}
+
+/* Flecha del chevron */
+.sidebar-chevron {
+    font-size: small;
+    transition: transform 0.25s ease;
+    flex-shrink: 0;
+    margin-left: auto !important;
+    opacity: 0.6;
+}
+
+.sidebar-menu-group.open > .sidebar-group-toggle .sidebar-chevron {
+    transform: rotate(180deg);
+    opacity: 1;
+}
+
+/* Ocultar chevron cuando el sidebar está colapsado */
+.app-sidebar.collapsed .sidebar-chevron {
+    display: none;
+}
+
+/* Lista de subitems */
+.sidebar-submenu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.3s ease;
+}
+
+.sidebar-menu-group.open > .sidebar-submenu {
+    max-height: 1000px; /* suficientemente grande */
+}
+
+/* Subitem */
+.sidebar-submenu-item {
+    margin: 1px 0 1px 34px;
+    border-radius: 6px;
+}
+
+.sidebar-submenu-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 10px;
+    color: var(--sidebar-text);
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    transition: background 0.18s, color 0.18s;
+    font-size: medium;
+}
+
+.sidebar-submenu-link:hover {
+    background: var(--sidebar-hover-bg);
+    color: var(--sidebar-text-hover);
+    text-decoration: none;
+}
+
+.sidebar-submenu-item.active > .sidebar-submenu-link {
+    background: var(--sidebar-active-bg);
+    color: var(--sidebar-text-active);
+    border-left: 3px solid var(--sidebar-active-border);
+    padding-left: 7px;
+}
+
+.sidebar-submenu-icon {
+    font-size: 0.85rem;
+    flex-shrink: 0;
+    width: 16px;
+    text-align: center;
+    opacity: 0.75;
+}
+
+/* Cuando el sidebar está colapsado: ocultar submenús y labels */
+.app-sidebar.collapsed .sidebar-submenu {
+    display: none;
+}
+
+.app-sidebar.collapsed .sidebar-menu-group > .sidebar-group-toggle .sidebar-menu-label {
+    opacity: 0;
+    max-width: 0;
+    pointer-events: none;
+}
+
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+/* ── Backdrop overlay (mobile) ───────────────────────────── */
+.sidebar-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 1040;
+    opacity: 0;
+    transition: opacity 0.28s ease;
+}
+
+.sidebar-backdrop.visible {
+    opacity: 1;
+}
+
+/* ── Tablet (901px – 1280px): sidebar colapsado por defecto ─ */
+@media (max-width: 1280px) and (min-width: 901px) {
+    :root {
+        --sidebar-width: 240px;
+    }
+}
+
+/* ── ≤900px: sidebar más angosto ───────────────────────────── */
+@media (max-width: 900px) and (min-width: 769px) {
+    :root {
+        --sidebar-width: 220px;
+    }
+
+    /* Colapsar automáticamente en tablet */
+    .app-sidebar {
+        width: var(--sidebar-collapsed-width);
+    }
+
+    .app-body {
+        margin-left: var(--sidebar-collapsed-width);
+    }
+
+    /* Expandir al hacer hover en tablet */
+    .app-sidebar:hover {
+        width: var(--sidebar-width);
+        box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
+        z-index: 1060;
+    }
+
+    .app-sidebar:hover .sidebar-brand-text,
+    .app-sidebar:hover .sidebar-menu-label,
+    .app-sidebar:hover .sidebar-chevron,
+    .app-sidebar:hover .sidebar-logout .sidebar-menu-label {
+        opacity: 1;
+        width: auto;
+        pointer-events: auto;
+    }
+
+    .app-sidebar:hover .sidebar-submenu {
+        display: block;
+    }
+}
+
+/* ── ≤768px: sidebar como overlay (off-canvas) ──────────── */
+@media (max-width: 768px) {
+    :root {
+        --topbar-height: 48px;
+    }
+
+    /* Sidebar oculto fuera de pantalla */
+    .app-sidebar {
+        transform: translateX(-100%);
+        width: var(--sidebar-width) !important;
+        transition: transform 0.3s cubic-bezier(.4,0,.2,1);
+        z-index: 1055;
+    }
+
+    /* Sidebar abierto en mobile */
+    .app-sidebar.mobile-open {
+        transform: translateX(0);
+        box-shadow: 4px 0 24px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Cuando el sidebar mobile está abierto: bloquear scroll del body */
+    body.sidebar-open {
+        overflow: hidden;
+    }
+
+    /* Backdrop visible en mobile */
+    body.sidebar-open .sidebar-backdrop {
+        display: block;
+    }
+
+    body.sidebar-open .sidebar-backdrop.visible {
+        opacity: 1;
+    }
+
+    /* El contenido ocupa todo el ancho */
+    .app-body,
+    .app-body.sidebar-collapsed {
+        margin-left: 0 !important;
+    }
+
+    /* Topbar más compacta */
+    .app-topbar {
+        padding: 0 12px;
+        gap: 8px;
+    }
+
+    /* Main inner con menos padding */
+    .app-main-inner {
+        padding: 14px 16px;
+    }
+
+    /* Ocultar botón collapse interno del sidebar en mobile */
+    .sidebar-collapse-btn {
+        display: none;
+    }
+
+    /* Asegurar que los submenús funcionen en mobile */
+    .app-sidebar.mobile-open .sidebar-submenu {
+        display: block;
+    }
+
+    /* Submenu indent reducido */
+    .sidebar-submenu-item {
+        margin-left: 28px;
+    }
+}
+
+/* ── ≤480px: pantallas muy pequeñas ────────────────────── */
+@media (max-width: 480px) {
+    :root {
+        --sidebar-width: 85vw;
+    }
+
+    .app-main-inner {
+        padding: 12px;
+    }
+
+    .app-topbar-right .btn {
+        padding: 3px 8px;
+        font-size: 0.78rem;
+    }
+}
+
+/* ── Ocultar chevron del sidebar-collapse en tablet/mobile ── */
+@media (max-width: 900px) {
+    .sidebar-collapse-btn {
+        display: none;
+    }
+}
+
+/* ── Rotar ícono del botón collapse cuando está colapsado ── */
+.app-sidebar.collapsed .sidebar-collapse-btn i {
+    transform: rotate(180deg);
+}
+
+.sidebar-collapse-btn i {
+    transition: transform 0.28s cubic-bezier(.4,0,.2,1);
+}
+
+/* ============================================================
+   RESPONSIVE — CONTENIDO INTERIOR
+   ============================================================ */
+
+/* Tablas scrollables en mobile */
+@media (max-width: 768px) {
+    .table-responsive,
+    .widget .table-responsive {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* Evitar que los modales salgan de pantalla */
+    .modal-dialog {
+        margin: 8px;
+    }
+
+    /* Breadcrumb más compacto */
+    .breadcrumb {
+        font-size: 0.78rem;
+        flex-wrap: wrap;
+    }
+
+    /* Formularios full-width en mobile */
+    .form-control,
+    .btn,
+    select.form-control {
+        max-width: 100%;
+    }
+
+    /* Botones de acción apilados en mobile */
+    .top-title {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+    }
+
+    /* Dashboard cards full-width */
+    .col-md-3,
+    .col-md-4,
+    .col-md-6 {
+        width: 100%;
+    }
+}
+
+/* ── Topbar badge de sección activa (mobile) ─────────────── */
+.sidebar-toggle-btn .bi-list {
+    font-size: 1.3rem;
+}
