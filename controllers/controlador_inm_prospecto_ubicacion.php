@@ -292,7 +292,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
             'calle','correo_mi_cuenta_infonavit','password_mi_cuenta_infonavit','numero_credito','entre_calle_1',
             'entre_calle_2','entrada','supermanzana','edificio','condominio','numero_notaria','nombre_notario',
             'plaza_notaria','numero_escritura','libro','volumen','calle_domicilio','numero_exterior_domicilio',
-            'numero_interior_domicilio','etapa');
+            'numero_interior_domicilio','etapa','mensualidad');
 
         $keys->selects = array();
 
@@ -1480,7 +1480,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         $keys_selects['lada_com']->regex = $this->validacion->patterns['lada_html'];
 
         $keys_selects = (new init())->key_select_txt(cols: 3, key: 'numero_com',
-            keys_selects: $keys_selects, place_holder: 'Numero', required: false);
+            keys_selects: $keys_selects, place_holder: 'Numero Telefono', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }

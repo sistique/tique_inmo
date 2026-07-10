@@ -108,7 +108,7 @@ div.error>label {
 }
 
 .top-title .breadcrumb {
-    margin-left: auto !important;
+    /*margin-left: auto !important;*/
     display: flex;
     align-items: center;
     gap: 6px;
