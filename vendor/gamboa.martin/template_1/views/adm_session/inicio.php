@@ -7,7 +7,7 @@ use gamboamartin\system\links_menu; ?>
     <div class="row">
         <div class="col-md-12">
             <div class="top-title">
-                <ul class="breadcrumb">
+                <ul class="breadcrumb inicio">
                     <?php include (new views())->ruta_templates."breadcrumb/adm_session/inicio.php"; ?>
 
                 </ul>
