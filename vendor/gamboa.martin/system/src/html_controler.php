@@ -608,7 +608,6 @@ class html_controler
         // Generación de parámetros del botón
         $params_btn = $this->params_btn(icon: $icon, etiqueta: $etiqueta, muestra_icono_btn: $muestra_icono_btn,
             muestra_titulo_btn: $muestra_titulo_btn, params: $params);
-
         if (errores::$error) {
             $params_error = array();
             $params_error['accion'] = $accion;
@@ -2406,18 +2405,22 @@ class html_controler
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al generar params_get', data: $params_get);
         }
+
         $icon_html = $this->icon_html(icon: $icon, muestra_icono_btn:  $muestra_icono_btn);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al generar icon_html', data: $icon_html);
         }
+
         $etiqueta_html = $this->etiqueta_html(etiqueta: $etiqueta, muestra_titulo_btn:  $muestra_titulo_btn);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al generar etiqueta_html', data: $etiqueta_html);
         }
+
         $data = new stdClass();
         $data->params_get = $params_get;
         $data->icon_html = $icon_html;
         $data->etiqueta_html = $etiqueta_html;
+
         return $data;
     }
 

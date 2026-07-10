@@ -107,6 +107,8 @@ div.error>label {
      */
     border-radius: 5px !important;
     margin-top: 5px;
+    font-weight: 600;
+    font-size: medium;
 }
 
 .top-title .breadcrumb {
