@@ -109,6 +109,13 @@ div.error>label {
     margin-top: 5px;
 }
 
+.top-title .breadcrumb {
+    margin-left: auto !important;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
 .cerrar-session{
     padding-bottom: 0px;
     padding-top: 0px;

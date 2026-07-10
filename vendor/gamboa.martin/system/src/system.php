@@ -230,6 +230,16 @@ class system extends controlador_base
 
 
         foreach ($this->acciones_visibles_permitidas as $indice => $accion_vis) {
+            if ($this->accion === 'lista') {
+                $mostrar = $accion_vis->adm_accion_descripcion === 'alta';
+            } else {
+                $mostrar = $accion_vis->adm_accion_descripcion === 'lista';
+            }
+
+            if (!$mostrar) {
+                unset($this->acciones_visibles_permitidas[$indice]);
+                continue;
+            }
 
             $button = $this->html->button_href(accion: $accion_vis->adm_accion_descripcion,
                 etiqueta: $accion_vis->adm_accion_titulo, registro_id: $this->registro_id,
@@ -242,7 +252,6 @@ class system extends controlador_base
             }
 
             $this->acciones_visibles_permitidas[$indice]->boton = $button;
-
         }
 
 
