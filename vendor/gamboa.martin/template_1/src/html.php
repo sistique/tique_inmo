@@ -148,7 +148,9 @@ class html extends \gamboamartin\template\html {
             return $this->error->error(mensaje: 'Error al generar label', data: $r_label);
         }
 
-        return "<label class='control-label' for='$id_css'>$place_holder</label>";
+        $clase = ''; // 'control-label'
+
+        return "<label class='$clase' for='$id_css'>$place_holder</label>";
     }
 
     public function monto(bool $disabled, string $id_css, string $name, string $place_holder, bool $required,

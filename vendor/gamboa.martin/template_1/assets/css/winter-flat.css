@@ -801,7 +801,7 @@ body .widget-form .form-additional .btn-property {
 }
 
 .widget.widget-form-cart label {
-    margin-bottom: 15px;
+    margin-bottom: 2px;
 }
 
 .widget-form-cart  .form-additional .form-group {
@@ -2667,7 +2667,7 @@ form textarea.form-control {
 
 @media (min-width: 992px){
     .form-main .controls {
-        margin-left: 180px;
+        /*margin-left: 180px;*/
     }
 
     .form-main .control-label {

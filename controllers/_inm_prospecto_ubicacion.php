@@ -444,7 +444,7 @@ class _inm_prospecto_ubicacion{
         $filtro = array();
         $filtro['dp_pais.id'] = $row['dp_pais_id'];
         $identificadores['dp_estado_id']['title'] = 'Estado';
-        $identificadores['dp_estado_id']['cols'] = 6;
+        $identificadores['dp_estado_id']['cols'] = 3;
         $identificadores['dp_estado_id']['disabled'] = false;
         $identificadores['dp_estado_id']['filtro'] = $filtro;
         $identificadores['dp_estado_id']['columns_ds'] =  array('dp_estado_descripcion');
@@ -453,7 +453,7 @@ class _inm_prospecto_ubicacion{
         $filtro = array();
         $filtro['dp_estado.id'] = $row['dp_estado_id'];
         $identificadores['dp_municipio_id']['title'] = 'Municipio';
-        $identificadores['dp_municipio_id']['cols'] = 6;
+        $identificadores['dp_municipio_id']['cols'] = 3;
         $identificadores['dp_municipio_id']['disabled'] = false;
         $identificadores['dp_municipio_id']['filtro'] = $filtro;
         $identificadores['dp_municipio_id']['columns_ds'] =  array('dp_municipio_descripcion');
@@ -461,7 +461,7 @@ class _inm_prospecto_ubicacion{
         $filtro = array();
         $filtro['dp_municipio.id'] = $row['dp_municipio_id'];
         $identificadores['dp_cp_id']['title'] = 'CP';
-        $identificadores['dp_cp_id']['cols'] = 6;
+        $identificadores['dp_cp_id']['cols'] = 3;
         $identificadores['dp_cp_id']['disabled'] = false;
         $identificadores['dp_cp_id']['filtro'] = $filtro;
         $identificadores['dp_cp_id']['columns_ds'] =  array('dp_cp_codigo');
@@ -469,7 +469,7 @@ class _inm_prospecto_ubicacion{
         $filtro = array();
         $filtro['dp_cp.id'] = $row['dp_cp_id'];
         $identificadores['dp_colonia_postal_id']['title'] = 'Colonia';
-        $identificadores['dp_colonia_postal_id']['cols'] = 6;
+        $identificadores['dp_colonia_postal_id']['cols'] = 3;
         $identificadores['dp_colonia_postal_id']['disabled'] = false;
         $identificadores['dp_colonia_postal_id']['filtro'] = $filtro;
         $identificadores['dp_colonia_postal_id']['columns_ds'] =  array('dp_colonia_descripcion');
