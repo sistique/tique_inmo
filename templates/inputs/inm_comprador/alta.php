@@ -39,17 +39,19 @@
 
         <!-- Género -->
         <div class="control-group col-sm-6">
-            <label class="control-label" for="inm_attr_tipo_credito_id">Genero</label>
-            <label class="form-check-label chk">
-                <input type="radio" name="genero" value="M" class="form-check-input" id="genero"
-                       title="Genero" checked>
-                M
-            </label>
-            <label class="form-check-label chk">
-                <input type="radio" name="genero" value="F" class="form-check-input" id="genero"
-                       title="Genero">
-                F
-            </label>
+            <label class="" for="inm_attr_tipo_credito_id">Genero</label>
+            <div class="col-md-12">
+                <label class="form-check-label chk">
+                    <input type="radio" name="genero" value="M" class="form-check-input" id="genero"
+                           title="Genero" checked>
+                    M
+                </label>
+                <label class="form-check-label chk">
+                    <input type="radio" name="genero" value="F" class="form-check-input" id="genero"
+                           title="Genero">
+                    F
+                </label>
+            </div>
         </div>
 
         <!-- Estado civil y ocupación -->

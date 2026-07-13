@@ -3978,13 +3978,13 @@ class controlador_inm_comprador extends _ctl_base {
     protected function key_selects_txt(array $keys_selects): array
     {
         $keys_selects = (new init())->key_select_txt(cols: 3,key: 'descuento_pension_alimenticia_dh',
-            keys_selects:$keys_selects, place_holder: 'Descuento Pension Alimenticia Derechohabiente');
+            keys_selects:$keys_selects, place_holder: 'Desc. Pension Alimenticia Derechohabiente');
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
         $keys_selects = (new init())->key_select_txt(cols: 3,key: 'descuento_pension_alimenticia_fc',
-            keys_selects:$keys_selects, place_holder: 'Descuento Pension Alimenticia Familiar/Corresidente');
+            keys_selects:$keys_selects, place_holder: 'Desc. Pension Alimenticia Familiar/Corresidente');
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }

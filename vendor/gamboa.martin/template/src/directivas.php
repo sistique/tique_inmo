@@ -731,8 +731,10 @@ class directivas{
 
         return "<div class='control-group col-sm-$cols'>
             $label_html
+            <div class='col-md-12'>
             $inputs->label_input_v1
             $inputs->label_input_v2
+            </div>
         </div>";
     }
 
@@ -2546,7 +2548,6 @@ class directivas{
             return $this->error->error(mensaje: 'Error validar cols', data: $valida);
         }
 
-
         $params = $this->params_html(checked_default: $checked_default,class_label:  $class_label,
             class_radio:  $class_radio, ids_css: $ids_css,label_html:  $params_radio->label_html,
             for:  $params_radio->for);
@@ -2554,12 +2555,10 @@ class directivas{
             return $this->error->error(mensaje: 'Error al integrar params', data: $params);
         }
 
-
         $inputs = $this->labels_radios(name: $name,params:  $params,title:  $title,val_1: $val_1,val_2:  $val_2);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar inputs', data: $inputs);
         }
-
 
         $radios = $this->div_radio(cols: $cols,inputs:  $inputs,label_html:  $params->label_html);
         if(errores::$error){
