@@ -241,18 +241,14 @@ class inm_prospecto_ubicacion extends _modelo_parent{
 
     public function valida_prioridad_campo(array $registro)
     {
-        $keys_contacto = array('liga_red_social', 'lada_com', 'numero_com', 'cel_com', 'correo_com');
+        $keys_contacto = array('liga_red_social', 'numero_com', 'cel_com', 'correo_com');
 
-        $valores = array('liga_red_social' => 'SIN LIGA', 'lada_com' => '33', 'numero_com' => '33333333',
+        $valores = array('liga_red_social' => 'SIN LIGA', 'numero_com' => '3333333333',
             'cel_com' => '3333333333', 'correo_com' => 'sincorreo@correo.com');
 
         $temp = array();
         foreach ($keys_contacto as $key){
             if(!isset($registro[$key]) || $registro[$key] === '') {
-                if($key === 'lada_com' || $key === 'numero_com'){
-                    $temp['lada_com'] = false;
-                    $temp['numero_com'] = false;
-                }
                 $temp[$key] = false;
                 $registro[$key] = $valores[$key];
             }
@@ -297,7 +293,7 @@ class inm_prospecto_ubicacion extends _modelo_parent{
 
         $this->registro = $resultado['registro'];
 
-        $keys = array('nombre','apellido_paterno','numero_com','lada_com');
+        $keys = array('nombre','apellido_paterno');
         $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $this->registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);

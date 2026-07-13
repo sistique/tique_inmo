@@ -1477,7 +1477,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects['lada_com']->regex = $this->validacion->patterns['lada_html'];
+        $keys_selects['lada_com']->regex = $this->validacion->patterns['telefono_mx_html'];
 
         $keys_selects = (new init())->key_select_txt(cols: 4, key: 'numero_com',
             keys_selects: $keys_selects, place_holder: 'Numero Telefono', required: false);
@@ -1488,7 +1488,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         $keys_selects['numero_com']->regex = $this->validacion->patterns['tel_sin_lada_html'];
 
         $keys_selects = (new init())->key_select_txt(cols: 4, key: 'cel_com',
-            keys_selects: $keys_selects, place_holder: 'Cel', required: false);
+            keys_selects: $keys_selects, place_holder: 'Celular', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
@@ -1625,7 +1625,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         }
 
         $keys_selects = (new init())->key_select_txt(cols: 3, key: 'nss',
-            keys_selects: $keys_selects, place_holder: 'NSS', required: false);
+            keys_selects: $keys_selects, place_holder: 'NSS');
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
