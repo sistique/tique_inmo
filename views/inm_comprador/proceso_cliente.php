@@ -97,7 +97,7 @@
 
                                         <!-- Género -->
                                         <div class="control-group col-sm-6">
-                                            <label class="control-label" for="inm_attr_tipo_credito_id">Genero</label>
+                                            <label class="" for="inm_attr_tipo_credito_id">Genero</label>
                                             <label class="form-check-label chk">
                                                 <input type="radio" name="genero" value="M"
                                                        class="form-check-input" id="genero"
@@ -188,7 +188,7 @@
                                             <?php echo $controlador->inputs->inm_co_acreditado->celular; ?>
                                             <?php echo $controlador->inputs->inm_co_acreditado->correo; ?>
                                             <div class="control-group col-sm-4">
-                                                <label class="control-label" for="inm_attr_tipo_credito_id">Genero</label>
+                                                <label class="" for="inm_attr_tipo_credito_id">Genero</label>
                                                 <label class="form-check-label chk">
                                                     <input type="radio" name="co_acreditado[genero]" value="M" class="form-check-input" id="genero"
                                                            title="Genero" <?php echo $checked_genero_co_m; ?>>
@@ -554,7 +554,7 @@
 
                                             <!-- Género -->
                                             <div class="control-group col-sm-6">
-                                                <label class="control-label" for="inm_attr_tipo_credito_id">Genero</label>
+                                                <label class="" for="inm_attr_tipo_credito_id">Genero</label>
                                                 <label class="form-check-label chk">
                                                     <input type="radio" name="genero" value="M"
                                                            class="form-check-input" id="genero"
@@ -644,7 +644,7 @@
                                             <?php echo $controlador->inputs->inm_co_acreditado->celular; ?>
                                             <?php echo $controlador->inputs->inm_co_acreditado->correo; ?>
                                             <div class="control-group col-sm-4">
-                                                <label class="control-label" for="inm_attr_tipo_credito_id">Genero</label>
+                                                <label class="" for="inm_attr_tipo_credito_id">Genero</label>
                                                 <label class="form-check-label chk">
                                                     <input type="radio" name="co_acreditado[genero]" value="M" class="form-check-input" id="genero"
                                                            title="Genero" <?php echo $checked_genero_co_m; ?>>
