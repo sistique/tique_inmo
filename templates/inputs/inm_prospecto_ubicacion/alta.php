@@ -28,6 +28,7 @@
 <?php echo $controlador->inputs->adeudo_predial; ?>
 <?php echo $controlador->inputs->cuenta_agua; ?>
 <?php echo $controlador->inputs->adeudo_agua; ?>
+<?php echo $controlador->inputs->cuenta_luz; ?>
 <?php echo $controlador->inputs->adeudo_luz; ?>
 
 <?php echo $controlador->inputs->observaciones; ?>
