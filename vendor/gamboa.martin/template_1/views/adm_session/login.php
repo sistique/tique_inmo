@@ -19,13 +19,13 @@
                         </div>
                         <form method="post" action="./index.php?seccion=adm_session&accion=loguea" class="form-additional">
                             <div class="control-group">
-                                <label class="control-label" for="inputUsername2">Nombre de usuario</label>
+                                <label class="" for="inputUsername2">Nombre de usuario</label>
                                 <div class="controls">
                                     <input type="text" name="user" value="" class="form-control" id="inputUsername2" placeholder="Nombre de usuario" />
                                 </div>
                             </div>
                             <div class="control-group">
-                                <label class="control-label" for="inputPassword1">Contraseña</label>
+                                <label class="" for="inputPassword1">Contraseña</label>
                                 <div class="controls">
                                     <input type="password" name="password" value="" class="form-control" id="inputPassword1" placeholder="Contraseña" />
                                 </div>
