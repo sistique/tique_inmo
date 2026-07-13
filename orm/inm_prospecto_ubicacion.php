@@ -301,7 +301,7 @@ class inm_prospecto_ubicacion extends _modelo_parent{
         }
 
         if(!isset($this->registro['com_tipo_prospecto_id'])){
-            $filtro_tipo_prosp['com_tipo_prospecto.descripcion'] = 'VENTA DE VIVIENDA';
+            $filtro_tipo_prosp['com_tipo_prospecto.descripcion'] = 'COMPRA VIVIENDA';
             $r_tipo_prospecto = (new com_tipo_prospecto(link: $this->link))->filtro_and(filtro:$filtro_tipo_prosp);
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error al maquetar row',data:  $r_tipo_prospecto);

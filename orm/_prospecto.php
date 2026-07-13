@@ -128,8 +128,7 @@ class _prospecto{
      */
     private function com_prospecto_ins(array $registro): array
     {
-        $keys = array('nombre','apellido_paterno','lada_com','numero_com','razon_social','com_agente_id',
-            'com_tipo_prospecto_id');
+        $keys = array('nombre','apellido_paterno','razon_social','com_agente_id','com_tipo_prospecto_id');
 
         $valida = (new validacion())->valida_existencia_keys(keys: $keys,registro:  $registro);
         if(errores::$error){

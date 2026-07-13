@@ -7,6 +7,7 @@ use gamboamartin\administrador\models\adm_usuario;
 use gamboamartin\comercial\models\com_agente;
 use gamboamartin\comercial\models\com_prospecto;
 use gamboamartin\comercial\models\com_rel_agente;
+use gamboamartin\comercial\models\com_tipo_prospecto;
 use gamboamartin\errores\errores;
 use gamboamartin\proceso\models\pr_sub_proceso;
 use PDO;
@@ -293,6 +294,40 @@ class inm_prospecto extends _modelo_parent{
 
             $this->registro['com_agente_id'] = $r_agente->registros[0]['com_agente_id'];
         }
+
+        if(!isset($this->registro['com_tipo_prospecto_id'])){
+            $filtro_tipo_prosp['com_tipo_prospecto.descripcion'] = 'VENTA DE VIVIENDA';
+            $r_tipo_prospecto = (new com_tipo_prospecto(link: $this->link))->filtro_and(filtro:$filtro_tipo_prosp);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al maquetar row',data:  $r_tipo_prospecto);
+            }
+
+            $this->registro['com_tipo_prospecto_id'] = $r_tipo_prospecto->registros[0]['com_tipo_prospecto_id'];
+        }
+
+        $filtro_agente['adm_usuario.id'] = $_SESSION['usuario_id'];
+        $r_agente = (new com_agente(link: $this->link))->filtro_and(filtro: $filtro_agente);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al insertar prospecto',data:  $r_agente);
+        }
+
+        $this->registro['org_sucursal_id']  = -1;
+        $this->registro['com_agente_id'] = -1;
+        if($r_agente->n_registros > 0){
+            $this->registro['com_agente_id'] = $r_agente->registros[0]['com_agente_id'];
+            $this->registro['org_sucursal_id'] = $r_agente->registros[0]['org_sucursal_id'];
+        }
+
+
+        if(!isset($this->registro['apellido_materno'])){
+            $this->registro['apellido_materno'] = '';
+        }
+
+        $this->registro['razon_social'] = implode(' ', array_filter([
+            trim($this->registro['nombre']),
+            trim($this->registro['apellido_paterno']),
+            trim($this->registro['apellido_materno'])
+        ]));
 
         $entidades = array('inm_producto_infonavit','inm_attr_tipo_credito','inm_destino_credito',
             'inm_plazo_credito_sc','inm_tipo_discapacidad','inm_persona_discapacidad','inm_estado_civil',
