@@ -2151,7 +2151,8 @@ class directivas{
             return $this->error->error(mensaje: 'Error al integrar params',data:  $params);
         }
 
-        return "<label class='control-label' for='$params->for'>$params->label_html</label>";
+        $class = ''; // control-label
+        return "<label class='$class' for='$params->for'>$params->label_html</label>";
     }
 
     /**
