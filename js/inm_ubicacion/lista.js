@@ -94,10 +94,10 @@ $(document).ready(function () {
             allowClear: true
         });
 
-
     $('.basic-multiple').select2({
         closeOnSelect: false,
-        allowClear: true
+        allowClear: true,
+        width: '100%'
     });
 
 });

@@ -94,7 +94,8 @@ $(document).ready(function () {
 
     $('.basic-multiple').select2({
         closeOnSelect: false,
-        allowClear: true
+        allowClear: true,
+        width: '100%'
     });
 
 });
