@@ -2036,7 +2036,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
 
         $modelo = new dp_estado(link: $this->link);
         $columns_ds = array('dp_estado_descripcion');
-        $dp_estado_domicilio_id = $this->html->select_catalogo(cols: 6, con_registros: true,
+        $dp_estado_domicilio_id = $this->html->select_catalogo(cols: 3, con_registros: true,
             id_selected: $data_row->dp_estado_domicilio_id, modelo: $modelo,
             columns_ds: $columns_ds, id_css: 'dp_estado_domicilio_id',
             label: 'Estado Domicilio', name: 'dp_estado_domicilio_id');
@@ -2056,7 +2056,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
             $filtro_select['dp_estado.id'] = $data_row->dp_estado_domicilio_id;
             $con_registro = true;
         }
-        $dp_municipio_domicilio_id = $this->html->select_catalogo(cols: 6, con_registros: $con_registro,
+        $dp_municipio_domicilio_id = $this->html->select_catalogo(cols: 3, con_registros: $con_registro,
             id_selected: $data_row->dp_municipio_domicilio_id, modelo: $modelo,
             columns_ds: $columns_ds, filtro: $filtro_select,
             id_css: 'dp_municipio_domicilio_id', label: 'Municipio Domicilio', name: 'dp_municipio_domicilio_id');
@@ -2076,7 +2076,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
             $filtro_select['dp_municipio.id'] = $data_row->dp_municipio_domicilio_id;
             $con_registro = true;
         }
-        $dp_cp_domicilio_id = $this->html->select_catalogo(cols: 6, con_registros: $con_registro,
+        $dp_cp_domicilio_id = $this->html->select_catalogo(cols: 3, con_registros: $con_registro,
             id_selected: $data_row->dp_cp_domicilio_id, modelo: $modelo,
             columns_ds: $columns_ds, filtro: $filtro_select,
             id_css: 'dp_cp_domicilio_id', label: 'CP Domicilio', name: 'dp_cp_domicilio_id');
@@ -2096,7 +2096,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
             $filtro_select['dp_cp.id'] = $data_row->dp_cp_domicilio_id;
             $con_registro = true;
         }
-        $dp_colonia_postal_domicilio_id = $this->html->select_catalogo(cols: 6, con_registros: $con_registro,
+        $dp_colonia_postal_domicilio_id = $this->html->select_catalogo(cols: 3, con_registros: $con_registro,
             id_selected: $data_row->dp_colonia_postal_domicilio_id, modelo: $modelo,
             columns_ds: $columns_ds, filtro: $filtro_select,
             id_css: 'dp_colonia_postal_domicilio_id', label: 'Colonia Domicilio', name: 'dp_colonia_postal_domicilio_id');

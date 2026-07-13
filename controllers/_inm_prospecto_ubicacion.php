@@ -387,33 +387,31 @@ class _inm_prospecto_ubicacion{
         $identificadores['inm_tipo_vivienda_id']['required'] = false;
 
         $identificadores['dp_colonia_postal_id']['title'] = 'Colonia';
-        $identificadores['dp_colonia_postal_id']['cols'] = 6;
+        $identificadores['dp_colonia_postal_id']['cols'] = 3;
         $identificadores['dp_colonia_postal_id']['disabled'] = false;
         $identificadores['dp_colonia_postal_id']['columns_ds'] = array('dp_colonia_descripcion');
         $identificadores['dp_colonia_postal_id']['con_registros'] = false;
 
         $identificadores['dp_cp_id']['title'] = 'Cp';
-        $identificadores['dp_cp_id']['cols'] = 6;
+        $identificadores['dp_cp_id']['cols'] = 3;
         $identificadores['dp_cp_id']['disabled'] = false;
         $identificadores['dp_cp_id']['columns_ds'] = array('dp_cp_descripcion');
         $identificadores['dp_cp_id']['con_registros'] = false;
 
-
         $identificadores['dp_municipio_id']['title'] = 'Municipio';
-        $identificadores['dp_municipio_id']['cols'] = 6;
+        $identificadores['dp_municipio_id']['cols'] = 3;
         $identificadores['dp_municipio_id']['disabled'] = false;
         $identificadores['dp_municipio_id']['columns_ds'] = array('dp_municipio_descripcion');
         $identificadores['dp_municipio_id']['con_registros'] = false;
 
-
         $identificadores['dp_estado_id']['title'] = 'Estado';
-        $identificadores['dp_estado_id']['cols'] = 6;
+        $identificadores['dp_estado_id']['cols'] = 3;
         $identificadores['dp_estado_id']['disabled'] = false;
         $identificadores['dp_estado_id']['columns_ds'] = array('dp_estado_descripcion');
         $identificadores['dp_estado_id']['con_registros'] = false;
 
         $identificadores['dp_pais_id']['title'] = 'Pais';
-        $identificadores['dp_pais_id']['cols'] = 6;
+        $identificadores['dp_pais_id']['cols'] = 3;
         $identificadores['dp_pais_id']['disabled'] = false;
         $identificadores['dp_pais_id']['columns_ds'] = array('dp_pais_descripcion');
 

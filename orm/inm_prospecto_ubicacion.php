@@ -358,6 +358,16 @@ class inm_prospecto_ubicacion extends _modelo_parent{
             $registro['com_agente_id'] = 1;
         }
 
+        if(!isset($registro['apellido_materno'])){
+            $registro['apellido_materno'] = '';
+        }
+
+        $registro['razon_social'] = implode(' ', array_filter([
+            trim($registro['nombre']),
+            trim($registro['apellido_paterno']),
+            trim($registro['apellido_materno'])
+        ]));
+
         $com_prospecto_ins = $this->com_prospecto_ins(registro: $registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar com_prospecto',data:  $com_prospecto_ins);
@@ -473,20 +483,10 @@ class inm_prospecto_ubicacion extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al validar registro',data: $valida);
         }
 
-        if(!isset($registro['apellido_materno'])){
-            $registro['apellido_materno'] = '';
-        }
-
-        $razon_social = implode(' ', array_filter([
-            trim($registro['nombre']),
-            trim($registro['apellido_paterno']),
-            trim($registro['apellido_materno'])
-        ]));
-
         $com_prospecto_ins['nombre'] = trim($registro['nombre']);
         $com_prospecto_ins['apellido_paterno'] = trim($registro['apellido_paterno']);
         $com_prospecto_ins['apellido_materno'] = trim($registro['apellido_materno']);
-        $com_prospecto_ins['razon_social'] = $razon_social;
+        $com_prospecto_ins['razon_social'] = trim($registro['razon_social']);
         $com_prospecto_ins['com_tipo_prospecto_id'] = trim($registro['com_tipo_prospecto_id']);
         $com_prospecto_ins['com_agente_id'] = trim($registro['com_agente_id']);
 
