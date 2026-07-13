@@ -4,6 +4,7 @@ namespace gamboamartin\inmuebles\models;
 
 use base\orm\_modelo_parent;
 use gamboamartin\administrador\models\adm_usuario;
+use gamboamartin\comercial\models\com_agente;
 use gamboamartin\comercial\models\com_direccion;
 use gamboamartin\comercial\models\com_direccion_prospecto;
 use gamboamartin\comercial\models\com_prospecto;
@@ -309,6 +310,17 @@ class inm_prospecto_ubicacion extends _modelo_parent{
             $this->registro['com_tipo_prospecto_id'] = $r_tipo_prospecto->registros[0]['com_tipo_prospecto_id'];
         }
 
+        $filtro_agente['adm_usuario.id'] = $_SESSION['usuario_id'];
+        $r_agente = (new com_agente(link: $this->link))->filtro_and(filtro: $filtro_agente);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al insertar prospecto',data:  $r_agente);
+        }
+
+        $registro['com_agente_id'] = -1;
+        if($r_agente->n_registros > 0){
+            $registro['com_agente_id'] = $r_agente->registros[0]['com_agente_id'];
+        }
+
         /*$entidades = array('inm_prototipo','inm_complemento','inm_estado_vivienda');
         $registro = (new _prospecto())->previo_alta(modelo: $this, registro: $this->registro,entidades: $entidades);
         if(errores::$error){
@@ -341,7 +353,7 @@ class inm_prospecto_ubicacion extends _modelo_parent{
             $registro['com_tipo_prospecto_id'] = 1;
         }
         if((int)$registro['com_agente_id'] === -1){
-            $registro['com_agente_id'] = 10;
+            $registro['com_agente_id'] = 1;
         }
 
         $com_prospecto_ins = $this->com_prospecto_ins(registro: $registro);
@@ -452,7 +464,7 @@ class inm_prospecto_ubicacion extends _modelo_parent{
 
     private function com_prospecto_ins(array $registro): array
     {
-        $keys = array('nombre','apellido_paterno','razon_social','com_tipo_prospecto_id','com_agente_id');
+        $keys = array('nombre','apellido_paterno','com_tipo_prospecto_id');
 
         $valida = (new validacion())->valida_existencia_keys(keys: $keys,registro:  $registro);
         if(errores::$error){
@@ -462,10 +474,17 @@ class inm_prospecto_ubicacion extends _modelo_parent{
         if(!isset($registro['apellido_materno'])){
             $registro['apellido_materno'] = '';
         }
+
+        $razon_social = implode(' ', array_filter([
+            trim($registro['nombre']),
+            trim($registro['apellido_paterno']),
+            trim($registro['apellido_materno'])
+        ]));
+
         $com_prospecto_ins['nombre'] = trim($registro['nombre']);
         $com_prospecto_ins['apellido_paterno'] = trim($registro['apellido_paterno']);
         $com_prospecto_ins['apellido_materno'] = trim($registro['apellido_materno']);
-        $com_prospecto_ins['razon_social'] = trim($registro['razon_social']);
+        $com_prospecto_ins['razon_social'] = $razon_social;
         $com_prospecto_ins['com_tipo_prospecto_id'] = trim($registro['com_tipo_prospecto_id']);
         $com_prospecto_ins['com_agente_id'] = trim($registro['com_agente_id']);
 
