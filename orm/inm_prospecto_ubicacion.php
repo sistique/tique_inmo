@@ -316,9 +316,11 @@ class inm_prospecto_ubicacion extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al insertar prospecto',data:  $r_agente);
         }
 
+        $registro['org_sucursal_id']  = -1;
         $registro['com_agente_id'] = -1;
         if($r_agente->n_registros > 0){
             $registro['com_agente_id'] = $r_agente->registros[0]['com_agente_id'];
+            $registro['org_sucursal_id'] = $r_agente->registros[0]['org_sucursal_id'];
         }
 
         /*$entidades = array('inm_prototipo','inm_complemento','inm_estado_vivienda');
