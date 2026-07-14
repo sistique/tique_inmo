@@ -38,11 +38,14 @@
                                placeholder="Ej: JUAN PEREZ">
                     </div>
 
-                    <div class="col-md-2">
-                        <label for="agente">Agente</label>
-                        <input type="text" id="agente" data-tipo="filtro" data-filtro_campo="com_agente.descripcion"
-                               placeholder="Ej: JUAN PEREZ">
-                    </div>
+                    <?php
+                        if(!$controlador->es_agente){
+                            echo '<div class="col-md-2">
+                                    <label for="agente">Agente</label>
+                                    <input type="text" id="agente" data-tipo="filtro" data-filtro_campo="com_agente.descripcion" placeholder="Ej: JUAN PEREZ">
+                                </div>';
+                        }
+                    ?>
 
                     <div class="col-md-2">
                         <label for="nss">NSS</label>
