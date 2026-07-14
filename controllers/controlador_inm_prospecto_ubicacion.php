@@ -1368,6 +1368,8 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         $datatables->menu_active = true;
         $datatables->order_sec = array('inm_status_prospecto_ubicacion.id' => 'ASC','inm_prospecto_ubicacion.id' => 'DESC');
 
+        $datatables->dom = "<'row'<'col-md-12'tr>><'row mt-2'<'col-md-4'l><'col-md-4'i><'col-md-4'p>>";
+
         return $datatables;
     }
 

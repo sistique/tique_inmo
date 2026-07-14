@@ -104,7 +104,11 @@
 
 @media (max-width: 431px) {
     #descargar_excel {
-        margin-top: 10px;
-        margin-left: 0px;
+        font-size: 0; /* Oculta el texto original */
+    }
+
+    #descargar_excel::after {
+        content: "Excel"; /* Texto alternativo */
+        font-size: 14px;
     }
 }

@@ -892,7 +892,7 @@ html, body.app-layout-body {
     }
 
     .app-main-inner {
-        padding: 12px;
+        padding: 0px 12px;
     }
 
     .app-topbar-right .btn {
@@ -949,6 +949,7 @@ html, body.app-layout-body {
 
     /* Botones de acción apilados en mobile */
     .top-title {
+        padding: 5px 0px;
         flex-direction: column;
         align-items: flex-start;
         gap: 6px;

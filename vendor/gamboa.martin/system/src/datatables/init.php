@@ -57,7 +57,8 @@ class init
      * @version 0.151.33
      */
     final public function init_datatable(array $filtro, string $identificador = ".datatable", array $data = array(),
-                                         array $in = array(), bool $multi_selects = false, string $type = "datatable"): array
+                                         array $in = array(), bool $multi_selects = false, string $type = "datatable",
+                                         string $dom = ''): array
     {
         $datatable["columns"] = array();
         $datatable["columnDefs"] = array();
@@ -67,6 +68,7 @@ class init
         $datatable['in'] = $in;
         $datatable['multi_selects'] = $multi_selects;
         $datatable['type'] = $type;
+        $datatable['dom'] = $dom;
 
         return $datatable;
     }

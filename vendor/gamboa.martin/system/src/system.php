@@ -166,7 +166,8 @@ class system extends controlador_base
 
         $this->datatable_init(columns: $data_for_datable->columns, filtro: $data_for_datable->filtro,
             multi_selects: $data_for_datable->multi_selects, menu_active: $data_for_datable->menu_active,
-            type: $data_for_datable->type, order_sec: $data_for_datable->order_sec);
+            type: $data_for_datable->type, order_sec: $data_for_datable->order_sec,
+            dom: $data_for_datable->dom);
         if (errores::$error) {
             $error = $this->errores->error(mensaje: 'Error al inicializar columnDefs', data: $this->datatable);
             var_dump($error);
@@ -707,7 +708,7 @@ class system extends controlador_base
     final public function datatable_init(array $columns, array $filtro = array(), string $identificador = ".datatable",
                                          array $data = array(), array $in = array(), bool $multi_selects = false,
                                          bool  $menu_active = false, string $type = "datatable",
-                                         array $order_sec = array()): array
+                                         array $order_sec = array(), string $dom = ''): array
     {
         $this->datatable["type"] = $type;
         $this->datatable["columns"] = $columns;
@@ -717,7 +718,7 @@ class system extends controlador_base
 
         if ($type === "datatable") {
             $datatable = (new datatables())->datatable(columns: $columns, filtro: $filtro, identificador: $identificador,
-                data: $data, in: $in, multi_selects: $multi_selects, menu_active: $menu_active, type: $type);
+                data: $data, in: $in, multi_selects: $multi_selects, menu_active: $menu_active, type: $type, dom: $dom);
             if (errores::$error) {
                 return $this->errores->error(mensaje: 'Error al generar datatables base', data: $datatable);
             }

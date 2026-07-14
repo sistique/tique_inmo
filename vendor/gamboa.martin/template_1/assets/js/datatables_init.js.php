@@ -1,6 +1,6 @@
 let url_data_table = $(location).attr('href') + "&ws=1";
 
-datatable = function (identificador, columns, columnDefs, data, filtro_in) {
+datatable = function (identificador, columns, columnDefs, data, filtro_in, dom) {
 
     let seccion = getParameterByName('seccion');
     let accion = getParameterByName('accion');
@@ -16,12 +16,42 @@ datatable = function (identificador, columns, columnDefs, data, filtro_in) {
     let _columnDefs = asigna_columnDefs(columnDefs);
     let _checks = verify_check(columns);
 
-    var table = $(identificador).DataTable({
+    let config = {
         processing: true,
         serverSide: true,
         responsive: true,
         autoWidth: false,
         pageLength: 25,
+        ajax: {
+            url: url_data_table,
+            data: function (d) {
+                d.data = filtros(data);
+                d.in = filtros_in();
+                d.filtros_avanzados = filtros_avanzados();
+            },
+            error: function (jqXHR) {
+                let response = jqXHR.responseText;
+                document.body.innerHTML = response.replace('[]', '');
+            }
+        },
+        columns: _columns,
+        columnDefs: _columnDefs,
+        select: _checks.select,
+        order: _checks.order
+    };
+
+    if (dom !== undefined && dom !== null && dom !== '') {
+        config.dom = dom;
+    }
+
+    return $(identificador).DataTable(config);
+    /*var table = $(identificador).DataTable({
+        processing: true,
+        serverSide: true,
+        responsive: true,
+        autoWidth: false,
+        pageLength: 25,
+        dom: dom,
         ajax: {
             "url": url_data_table,
             'data': function (d) {
@@ -39,7 +69,7 @@ datatable = function (identificador, columns, columnDefs, data, filtro_in) {
         columnDefs: _columnDefs,
         'select': _checks.select,
         'order': _checks.order
-    });
+    });*/
 };
 
 document.addEventListener("DOMContentLoaded", function () {

@@ -98,7 +98,7 @@ if($data->js_view_aplica_include){
 <?php if (isset($controlador->datatables)):?>
     <?php foreach ($controlador->datatables as $datatable) {
         $objeto = json_encode($datatable);
-        print_r("<script> datatable($objeto.identificador, $objeto.columns, $objeto.columnDefs, $objeto.data,$objeto.in) </script>");
+        print_r("<script> datatable($objeto.identificador, $objeto.columns, $objeto.columnDefs, $objeto.data, $objeto.in, $objeto.dom) </script>");
     } ?>
 <?php endif;?>
 

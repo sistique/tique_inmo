@@ -1092,10 +1092,10 @@ class datatables{
      */
     final public function datatable(array $columns, array $filtro = array(),string $identificador = ".datatable",
                                     array $data = array(), array $in = array(), bool $multi_selects = false,
-                                    bool $menu_active = false, string $type = "datatable"): array
+                                    bool $menu_active = false, string $type = "datatable", string $dom = ''): array
     {
         $datatable = (new \gamboamartin\system\datatables\init())->init_datatable(filtro:$filtro, identificador: $identificador,
-            data: $data,in: $in, multi_selects: $multi_selects, type : $type);
+            data: $data,in: $in, multi_selects: $multi_selects, type : $type, dom: $dom);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al inicializar datatable', data:  $datatable);
         }
@@ -1221,6 +1221,14 @@ class datatables{
             $order_sec = $datatables->order_sec;
         }
 
+        $dom = '';
+        if (property_exists($datatables,"dom")){
+            if (!is_string($datatables->dom)){
+                return $this->error->error(mensaje: 'Error dom tiene que ser de tipo string', data: $datatables);
+            }
+            $dom = $datatables->dom;
+        }
+
         // Construcción del objeto final con la configuración
         $data = new stdClass();
         $data->filtro = $filtro;
@@ -1229,6 +1237,7 @@ class datatables{
         $data->menu_active = $menu_active;
         $data->type = $type;
         $data->order_sec = $order_sec;
+        $data->dom = $dom;
 
         return $data;
     }
