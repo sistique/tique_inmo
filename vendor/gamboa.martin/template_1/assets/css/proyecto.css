@@ -570,7 +570,7 @@ html, body.app-layout-body {
     padding: 0 20px;
     position: sticky;
     top: 0;
-    z-index: 1100;
+    z-index: 100;
     gap: 10px;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
     flex-shrink: 0;
@@ -769,6 +769,10 @@ html, body.app-layout-body {
     z-index: 1040;
     opacity: 0;
     transition: opacity 0.28s ease;
+    top: var(--topbar-height);
+    left: 0;
+    right: 0;
+    bottom: 0;
 }
 
 .sidebar-backdrop.visible {

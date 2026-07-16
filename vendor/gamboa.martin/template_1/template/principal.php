@@ -193,7 +193,7 @@ if($data->js_view_aplica_include){
     }, { passive: true });
 
     /* ── Swipe right en borde izquierdo para abrir ──────────── */
-    document.addEventListener('touchstart', function (e) {
+    /*document.addEventListener('touchstart', function (e) {
         if (!isMobile()) return;
         if (e.touches[0].clientX < 24) {
             touchStartX = e.touches[0].clientX;
@@ -207,7 +207,7 @@ if($data->js_view_aplica_include){
         var dx = e.changedTouches[0].clientX - touchStartX;
         var dy = Math.abs(e.changedTouches[0].clientY - touchStartY);
         if (dx > 60 && dy < 80) openMobile();
-    }, { passive: true });
+    }, { passive: true });*/
 
     /* ── Restaurar estado al cargar (solo desktop) ──────────── */
     function applyInitialState() {

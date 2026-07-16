@@ -94,14 +94,14 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
 
     public bool $es_agente = false;
 
-    public function __construct(PDO      $link, html $html = new \gamboamartin\template_1\html(),
+    public function __construct(PDO $link, html $html = new \gamboamartin\template_1\html(),
                                 stdClass $paths_conf = new stdClass())
     {
         $modelo = new inm_prospecto_ubicacion(link: $link);
         $html_ = new inm_prospecto_ubicacion_html(html: $html);
         $obj_link = new links_menu(link: $link, registro_id: $this->registro_id);
 
-        $datatables = $this->init_datatable();
+        $datatables = $this->init_datatable(link: $link);
         if (errores::$error) {
             $error = $this->errores->error(mensaje: 'Error al inicializar datatable', data: $datatables);
             print_r($error);
@@ -1344,19 +1344,28 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
      * Inicializa el objeto de datos 'datatables' con cinco columnas - Id, Nombre, NSS, RFC y CURP.
      * También establece el filtro en estas columnas para buscar y filtrar en la tabla de datos.
      *
-     * @return stdClass Un objeto con dos propiedades 'columns' y 'filtro', que definen las columnas que se mostrarán
+     * @return array Un objeto con dos propiedades 'columns' y 'filtro', que definen las columnas que se mostrarán
      *  en la tabla de datos y los campos a filtrar respectivamente.
      * @version 2.347.3
      *
      */
-    private function init_datatable(): stdClass
+    private function init_datatable(PDO $link): array|stdClass
     {
+
+        $filtro_agente['adm_usuario.id'] = $_SESSION['usuario_id'];
+        $existe = (new com_agente(link: $link))->existe(filtro: $filtro_agente);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al insertar prospecto',data:  $existe);
+        }
+
         $columns["inm_prospecto_ubicacion_id"]["titulo"] = "Id";
         $columns["inm_prospecto_ubicacion_ubicacion"]["titulo"] = "Ubicacion";
-        $columns["com_prospecto_razon_social"]["titulo"] = "Nombre";
         $columns["inm_prospecto_ubicacion_nss"]["titulo"] = "NSS";
+        $columns["com_prospecto_razon_social"]["titulo"] = "Nombre";
         $columns["inm_prospecto_ubicacion_fecha_alta"]["titulo"] = "Fecha Alta";
-        $columns["com_agente_descripcion"]["titulo"] = "Agente";
+        if(!$existe){
+            $columns["com_agente_descripcion"]["titulo"] = "Agente";
+        }
         $columns["inm_status_prospecto_ubicacion_descripcion"]["titulo"] = "Status Prospecto Ubicacion";
 
 
