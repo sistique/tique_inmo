@@ -239,6 +239,15 @@ class controlador_inm_prospecto extends _ctl_formato
                 mensaje: 'Error al obtener inputs', data: $inputs, header: $header, ws: $ws);
         }
 
+        $documento = $this->html->input_file(cols: 12, name: 'precalificacion', row_upd: new stdClass(),
+            value_vacio: false, place_holder: 'Precalificacion', required: false);
+        if (errores::$error) {
+            return $this->retorno_error(
+                mensaje: 'Error al obtener inputs', data: $documento, header: $header, ws: $ws);
+        }
+
+        $this->inputs->documento = $documento;
+
         return $r_alta;
     }
 
@@ -1201,17 +1210,17 @@ class controlador_inm_prospecto extends _ctl_formato
     protected function key_selects_txt(array $keys_selects, int $cols_descripcion = 12): array
     {
 
-        $keys_selects = (new init())->key_select_txt(cols: 4, key: 'nombre',
+        $keys_selects = (new init())->key_select_txt(cols: 3, key: 'nombre',
             keys_selects: $keys_selects, place_holder: 'Nombre');
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
-        $keys_selects = (new init())->key_select_txt(cols: 4, key: 'apellido_paterno',
+        $keys_selects = (new init())->key_select_txt(cols: 3, key: 'apellido_paterno',
             keys_selects: $keys_selects, place_holder: 'Apellido Paterno');
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
-        $keys_selects = (new init())->key_select_txt(cols: 4, key: 'apellido_materno',
+        $keys_selects = (new init())->key_select_txt(cols: 3, key: 'apellido_materno',
             keys_selects: $keys_selects, place_holder: 'Apellido Materno', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
@@ -1335,7 +1344,7 @@ class controlador_inm_prospecto extends _ctl_formato
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 4, key: 'nss',
+        $keys_selects = (new init())->key_select_txt(cols: 3, key: 'nss',
             keys_selects: $keys_selects, place_holder: 'NSS', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
