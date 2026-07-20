@@ -106,10 +106,12 @@
 
                                         <?php echo $controlador->header_frontend->apartado_3; ?>
                                         <div id="apartado_3">
-                                            <?php echo $controlador->inputs->inm_tipo_credito_id; ?>
                                             <?php echo $controlador->inputs->numero_credito; ?>
-                                            <?php echo $controlador->inputs->fecha_otorgamiento_credito; ?>
                                             <?php echo $controlador->inputs->adeudo_hipoteca; ?>
+                                            <?php echo $controlador->inputs->mensualidad; ?>
+
+                                            <?php echo $controlador->inputs->inm_tipo_credito_id; ?>
+                                            <?php echo $controlador->inputs->fecha_otorgamiento_credito; ?>
                                             <?php echo $controlador->inputs->monto_devolucion; ?>
                                             <?php echo $controlador->inputs->correo_mi_cuenta_infonavit; ?>
                                             <?php echo $controlador->inputs->password_mi_cuenta_infonavit; ?>
@@ -142,6 +144,7 @@
                                             <?php echo $controlador->inputs->adeudo_predial; ?>
                                             <?php echo $controlador->inputs->cuenta_agua; ?>
                                             <?php echo $controlador->inputs->adeudo_agua; ?>
+                                            <?php echo $controlador->inputs->cuenta_luz; ?>
                                             <?php echo $controlador->inputs->adeudo_luz; ?>
                                             <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
                                         </div>
@@ -195,10 +198,6 @@
                                             <?php echo $controlador->inputs->conyuge->dp_municipio_id; ?>
                                             <?php echo $controlador->inputs->conyuge->inm_nacionalidad_id; ?>
                                             <?php echo $controlador->inputs->conyuge->inm_ocupacion_id; ?>
-
-                                            <!-- Crédito -->
-                                            <?php echo $controlador->inputs->conyuge->numero_credito; ?>
-                                            <?php echo $controlador->inputs->conyuge->adeudo_hipoteca; ?>
 
                                             <!-- Contacto -->
                                             <?php echo $controlador->inputs->conyuge->telefono_casa; ?>
@@ -493,10 +492,11 @@
 
                                         <?php echo $controlador->header_frontend->apartado_3; ?>
                                         <div id="apartado_3">
-                                            <?php echo $controlador->inputs->inm_tipo_credito_id; ?>
                                             <?php echo $controlador->inputs->numero_credito; ?>
-                                            <?php echo $controlador->inputs->fecha_otorgamiento_credito; ?>
                                             <?php echo $controlador->inputs->adeudo_hipoteca; ?>
+                                            <?php echo $controlador->inputs->mensualidad; ?>
+                                            <?php echo $controlador->inputs->inm_tipo_credito_id; ?>
+                                            <?php echo $controlador->inputs->fecha_otorgamiento_credito; ?>
                                             <?php echo $controlador->inputs->monto_devolucion; ?>
                                             <?php echo $controlador->inputs->correo_mi_cuenta_infonavit; ?>
                                             <?php echo $controlador->inputs->password_mi_cuenta_infonavit; ?>
@@ -529,6 +529,7 @@
                                             <?php echo $controlador->inputs->adeudo_predial; ?>
                                             <?php echo $controlador->inputs->cuenta_agua; ?>
                                             <?php echo $controlador->inputs->adeudo_agua; ?>
+                                            <?php echo $controlador->inputs->cuenta_luz; ?>
                                             <?php echo $controlador->inputs->adeudo_luz; ?>
                                             <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
                                         </div>
@@ -582,10 +583,6 @@
                                             <?php echo $controlador->inputs->conyuge->dp_municipio_id; ?>
                                             <?php echo $controlador->inputs->conyuge->inm_nacionalidad_id; ?>
                                             <?php echo $controlador->inputs->conyuge->inm_ocupacion_id; ?>
-
-                                            <!-- Crédito -->
-                                            <?php echo $controlador->inputs->conyuge->numero_credito; ?>
-                                            <?php echo $controlador->inputs->conyuge->adeudo_hipoteca; ?>
 
                                             <!-- Contacto -->
                                             <?php echo $controlador->inputs->conyuge->telefono_casa; ?>
