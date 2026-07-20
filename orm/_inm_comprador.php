@@ -506,14 +506,14 @@ class _inm_comprador{
         $controler->inputs->es_segundo_credito = $es_segundo_credito;
 
         $con_discapacidad = $controler->html->directivas->input_radio_doble(campo: 'con_discapacidad',
-            checked_default: $checked_default_cd,tag: 'Con Discapacidad', val_1: 'SI',val_2: 'NO');
+            checked_default: $checked_default_cd,tag: 'Con Discapacidad', val_1: 'SI',val_2: 'NO',cols: 4);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener con_discapacidad',data:  $con_discapacidad);
         }
         $controler->inputs->con_discapacidad = $con_discapacidad;
 
         $genero = $controler->html->directivas->input_radio_doble(campo: 'genero',
-            checked_default: $checked_default_g,tag: 'Genero', val_1: 'M',val_2: 'F');
+            checked_default: $checked_default_g,tag: 'Genero', val_1: 'M',val_2: 'F', cols: 3);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener genero',data:  $genero);
         }

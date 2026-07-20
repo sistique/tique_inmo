@@ -56,7 +56,6 @@
                             <?php echo $controlador->inputs->numero_com; ?>
                             <?php echo $controlador->inputs->cel_com; ?>
                             <?php echo $controlador->inputs->correo_com; ?>
-                            <?php echo $controlador->inputs->observaciones; ?>
 
                             <?php echo $controlador->inputs->dp_estado_id; ?>
                             <?php echo $controlador->inputs->dp_municipio_id; ?>
@@ -65,6 +64,9 @@
                             <?php echo $controlador->inputs->calle; ?>
                             <?php echo $controlador->inputs->numero_exterior; ?>
                             <?php echo $controlador->inputs->numero_interior; ?>
+
+                            <?php echo $controlador->inputs->observaciones; ?>
+
                             <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
                         </div>
 

@@ -400,7 +400,7 @@ class _inm_prospecto{
         }
 
         $identificadores['dp_pais_id']['title'] = 'Pais';
-        $identificadores['dp_pais_id']['cols'] = 6;
+        $identificadores['dp_pais_id']['cols'] = 3;
         $identificadores['dp_pais_id']['disabled'] = false;
         $identificadores['dp_pais_id']['filtro'] = array();
         $identificadores['dp_pais_id']['columns_ds'] = array('dp_pais_descripcion');
@@ -408,7 +408,7 @@ class _inm_prospecto{
         $filtro = array();
         $filtro['dp_pais.id'] = $row['dp_pais_id'];
         $identificadores['dp_estado_id']['title'] = 'Estado';
-        $identificadores['dp_estado_id']['cols'] = 6;
+        $identificadores['dp_estado_id']['cols'] = 3;
         $identificadores['dp_estado_id']['disabled'] = false;
         $identificadores['dp_estado_id']['filtro'] = $filtro;
         $identificadores['dp_estado_id']['columns_ds'] =  array('dp_estado_descripcion');
@@ -417,7 +417,7 @@ class _inm_prospecto{
         $filtro = array();
         $filtro['dp_estado.id'] = $row['dp_estado_id'];
         $identificadores['dp_municipio_id']['title'] = 'Municipio';
-        $identificadores['dp_municipio_id']['cols'] = 6;
+        $identificadores['dp_municipio_id']['cols'] = 3;
         $identificadores['dp_municipio_id']['disabled'] = false;
         $identificadores['dp_municipio_id']['filtro'] = $filtro;
         $identificadores['dp_municipio_id']['columns_ds'] =  array('dp_municipio_descripcion');
@@ -427,7 +427,7 @@ class _inm_prospecto{
         $filtro = array();
         $filtro['dp_municipio.id'] = $row['dp_municipio_id'];
         $identificadores['dp_cp_id']['title'] = 'CP';
-        $identificadores['dp_cp_id']['cols'] = 6;
+        $identificadores['dp_cp_id']['cols'] = 3;
         $identificadores['dp_cp_id']['disabled'] = false;
         $identificadores['dp_cp_id']['filtro'] = $filtro;
         $identificadores['dp_cp_id']['columns_ds'] =  array('dp_cp_codigo');
@@ -437,7 +437,7 @@ class _inm_prospecto{
         $filtro = array();
         $filtro['dp_cp.id'] = $row['dp_cp_id'];
         $identificadores['dp_colonia_postal_id']['title'] = 'Colonia';
-        $identificadores['dp_colonia_postal_id']['cols'] = 6;
+        $identificadores['dp_colonia_postal_id']['cols'] = 3;
         $identificadores['dp_colonia_postal_id']['disabled'] = false;
         $identificadores['dp_colonia_postal_id']['filtro'] = $filtro;
         $identificadores['dp_colonia_postal_id']['columns_ds'] =  array('dp_colonia_descripcion');
@@ -502,12 +502,12 @@ class _inm_prospecto{
         $identificadores['inm_destino_credito_id']['columns_ds'] = array('inm_destino_credito_descripcion');
 
         $identificadores['inm_tipo_discapacidad_id']['title'] = 'Tipo de Discapacidad';
-        $identificadores['inm_tipo_discapacidad_id']['cols'] = 6;
+        $identificadores['inm_tipo_discapacidad_id']['cols'] = 4;
         $identificadores['inm_tipo_discapacidad_id']['disabled'] = false;
         $identificadores['inm_tipo_discapacidad_id']['columns_ds'] = array('inm_tipo_discapacidad_descripcion');
 
         $identificadores['inm_persona_discapacidad_id']['title'] = 'Persona de Discapacidad';
-        $identificadores['inm_persona_discapacidad_id']['cols'] = 12;
+        $identificadores['inm_persona_discapacidad_id']['cols'] = 4;
         $identificadores['inm_persona_discapacidad_id']['disabled'] = false;
         $identificadores['inm_persona_discapacidad_id']['columns_ds'] = array('inm_persona_discapacidad_descripcion');
 
@@ -545,22 +545,22 @@ class _inm_prospecto{
         $identificadores['inm_sindicato_id']['columns_ds'] = array('inm_sindicato_descripcion');
 
         $identificadores['inm_nacionalidad_id']['title'] = 'Nacionalidad';
-        $identificadores['inm_nacionalidad_id']['cols'] = 6;
+        $identificadores['inm_nacionalidad_id']['cols'] = 3;
         $identificadores['inm_nacionalidad_id']['disabled'] = false;
         $identificadores['inm_nacionalidad_id']['columns_ds'] = array('inm_nacionalidad_descripcion');
 
         $identificadores['inm_ocupacion_id']['title'] = 'Ocupacion';
-        $identificadores['inm_ocupacion_id']['cols'] = 12;
+        $identificadores['inm_ocupacion_id']['cols'] = 3;
         $identificadores['inm_ocupacion_id']['disabled'] = false;
         $identificadores['inm_ocupacion_id']['columns_ds'] = array('inm_ocupacion_descripcion');
         
         $identificadores['adm_estado_civil_id']['title'] = 'Estado Civil';
-        $identificadores['adm_estado_civil_id']['cols'] = 6;
+        $identificadores['adm_estado_civil_id']['cols'] = 3;
         $identificadores['adm_estado_civil_id']['disabled'] = false;
         $identificadores['adm_estado_civil_id']['columns_ds'] = array('adm_estado_civil_descripcion');   
         
         $identificadores['inm_estado_civil_id']['title'] = 'Regimen Patrimonial del Matrimonio';
-        $identificadores['inm_estado_civil_id']['cols'] = 6;
+        $identificadores['inm_estado_civil_id']['cols'] = 3;
         $identificadores['inm_estado_civil_id']['disabled'] = false;
         $identificadores['inm_estado_civil_id']['columns_ds'] = array('inm_estado_civil_descripcion');
         $identificadores['inm_estado_civil_id']['con_registro'] = $con_registros;
@@ -709,9 +709,9 @@ class _inm_prospecto{
      */
     final public function inputs_nacimiento(controlador_inm_prospecto $controlador): array|stdClass
     {
-        $dp_estado_nacimiento_id = (new dp_estado_html(html: $controlador->html_base))->select_dp_estado_id(cols: 4,
-            con_registros: true, id_selected: $controlador->registro['dp_estado_nacimiento_id'], link: $controlador->link,
-            label: 'Edo Nac', name: 'dp_estado_nacimiento_id');
+        $dp_estado_nacimiento_id = (new dp_estado_html(html: $controlador->html_base))->select_dp_estado_id(cols: 3,
+            con_registros: true, id_selected: $controlador->registro['dp_estado_nacimiento_id'],
+            link: $controlador->link, label: 'Estado Nacimiento', name: 'dp_estado_nacimiento_id');
 
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener input',data:  $dp_estado_nacimiento_id);
@@ -720,9 +720,10 @@ class _inm_prospecto{
         $controlador->inputs->dp_estado_nacimiento_id = $dp_estado_nacimiento_id;
 
         $filtro = array('dp_estado.id'=>$controlador->registro['dp_estado_nacimiento_id']);
-        $dp_municipio_nacimiento_id = (new dp_municipio_html(html: $controlador->html_base))->select_dp_municipio_id(cols: 4,
-            con_registros: true, id_selected: $controlador->registro['dp_municipio_nacimiento_id'], link: $controlador->link,
-            filtro: $filtro, label: 'Mun Nac', name: 'dp_municipio_nacimiento_id');
+        $dp_municipio_nacimiento_id = (new dp_municipio_html(html: $controlador->html_base))->select_dp_municipio_id(
+            cols: 3, con_registros: true, id_selected: $controlador->registro['dp_municipio_nacimiento_id'],
+            link: $controlador->link, filtro: $filtro, label: 'Municipio Nacimiento',
+            name: 'dp_municipio_nacimiento_id');
 
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener input',data:  $dp_municipio_nacimiento_id);
@@ -731,8 +732,8 @@ class _inm_prospecto{
         $controlador->inputs->dp_municipio_nacimiento_id = $dp_municipio_nacimiento_id;
 
 
-        $fecha_nacimiento = $controlador->html->input_fecha(cols: 4, row_upd: $controlador->row_upd, value_vacio: false,
-            name: 'fecha_nacimiento', place_holder: 'Fecha Nac', value: $controlador->row_upd->fecha_nacimiento);
+        $fecha_nacimiento = $controlador->html->input_fecha(cols: 3, row_upd: $controlador->row_upd, value_vacio: false,
+            name: 'fecha_nacimiento', place_holder: 'Fecha Nacimiento', value: $controlador->row_upd->fecha_nacimiento);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener input',data:  $fecha_nacimiento);
         }
