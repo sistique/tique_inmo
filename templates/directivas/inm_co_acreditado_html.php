@@ -169,8 +169,7 @@ class inm_co_acreditado_html extends _base {
             }
         }
 
-        $cols_4 = array('nss', 'curp', 'rfc', 'nombre', 'apellido_materno','apellido_paterno', 'numero_credito',
-            'adeudo_hipoteca');
+        $cols_4 = array('numero_nep','nombre_empresa_patron', 'nrp');
 
         foreach ($cols_4 as $campo){
             if(!isset($cols_css[$campo])){
@@ -178,7 +177,7 @@ class inm_co_acreditado_html extends _base {
             }
         }
 
-        $cols_3 = array('lada','lada_nep', 'numero','numero_nep', 'celular', 'correo');
+        $cols_3 = array('lada','lada_nep');
 
         foreach ($cols_3 as $campo){
             if(!isset($cols_css[$campo])){
@@ -186,14 +185,13 @@ class inm_co_acreditado_html extends _base {
             }
         }
 
-        if(!isset($cols_css['extension_nep'])){
-            $cols_css['extension_nep'] = 4;
-        }
-        if(!isset($cols_css['nombre_empresa_patron'])){
-            $cols_css['nombre_empresa_patron'] = 3;
-        }
-        if(!isset($cols_css['nrp'])){
-            $cols_css['nrp'] = 3;
+        $cols_2 = array('nss', 'curp', 'rfc', 'nombre', 'apellido_materno','apellido_paterno', 'numero_credito',
+            'adeudo_hipoteca','genero','extension_nep','numero','celular','correo');
+
+        foreach ($cols_2 as $campo){
+            if(!isset($cols_css[$campo])){
+                $cols_css[$campo] = 2;
+            }
         }
 
         return $cols_css;
@@ -316,12 +314,30 @@ class inm_co_acreditado_html extends _base {
             return $this->error->error(mensaje: 'Error al inicializar param',data:  $params);
         }
 
+        if($campo === 'genero'){
+            $checked_default_g = 1;
+            if($row_upd->genero_co_acreditado === 'F'){
+                $checked_default_g = 2;
+            }
+
+            $input = $this->$campo(cols: $params->cols[$campo], disabled: $params->disableds[$campo], entidad: $entidad,
+                name: $params->names[$campo], row_upd: $row_upd, required: $params->requireds[$campo],
+                checked_default: $checked_default_g, val_1: 'M', val_2: 'F');
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al generar input',data:  $input);
+            }
+            $inputs->$campo = $input;
+
+            return $inputs;
+        }
+
         $input = $this->$campo(cols: $params->cols[$campo], disabled: $params->disableds[$campo], entidad: $entidad,
             name: $params->names[$campo], row_upd: $row_upd, required: $params->requireds[$campo]);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al generar input',data:  $input);
         }
         $inputs->$campo = $input;
+
         return $inputs;
     }
 
@@ -361,6 +377,15 @@ class inm_co_acreditado_html extends _base {
     {
         return $this->input_text(cols: $cols,disabled:  $disabled,name:  $name,
             place_holder:  $place_holder,row_upd:  $row_upd,value_vacio:  $value_vacio, required: $required);
+    }
+
+    private function genero(int $cols,  string $entidad, bool $disabled = false, string $name = 'genero',
+                            string $place_holder= 'Genero', stdClass $row_upd = new stdClass(),
+                            bool $value_vacio = false, bool $required = true, int $checked_default = 1,
+                            string $val_1 = '', string $val_2 = ''): array|string
+    {
+        return $this->input_radio_doble(campo: $name, checked_default: $checked_default, tag: $place_holder,
+            val_1: $val_1, val_2: $val_2, cols: $cols);
     }
 
     /**

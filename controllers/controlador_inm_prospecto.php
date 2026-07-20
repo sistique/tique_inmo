@@ -1363,7 +1363,7 @@ class controlador_inm_prospecto extends _ctl_formato
         }
 
         $keys_selects = (new init())->key_select_txt(cols: 3, key: 'descuento_pension_alimenticia_fc',
-            keys_selects: $keys_selects, place_holder: 'Descuento Pension Alimenticia Familiar/Corresidente', required: false);
+            keys_selects: $keys_selects, place_holder: 'Desc Pension Alimenticia Familiar/Corresidente', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
@@ -1584,10 +1584,15 @@ class controlador_inm_prospecto extends _ctl_formato
         }
 
         $inm_co_acreditado = new stdClass();
+        $inm_co_acreditado->genero_co_acreditado = 'M';
         if(count($co_acreditados) === 1){
             foreach ($co_acreditados[0] AS $co_acred => $value){
                 $key_co_acred = "co_acreditado[$co_acred]";
                 $inm_co_acreditado->$key_co_acred = $value;
+
+                if($co_acred === 'genero'){
+                    $inm_co_acreditado->genero_co_acreditado = $value;
+                }
             }
         }
 
