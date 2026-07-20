@@ -2864,10 +2864,10 @@ class controlador_inm_comprador extends _ctl_base {
             'observaciones_nota_credito', 'valor_unitario_nota_credito','descripcion_nota_credito',
             'observaciones_complemento_pago', 'valor_unitario_complemento_pago','descripcion_complemento_pago',
             'numero_credito', 'pago_precio_compra_venta','pago_parcial_precio_compra_venta','pago_propio_peculio',
-            'pago_cuv','uuid', 'etapa');
+            'pago_cuv','uuid', 'etapa','area_empresa');
         $keys->selects = array();
         $keys->fechas = array('fecha_factura');
-
+        $keys->textareas = array('direccion_empresa');
 
         $init_data = array();
         $init_data['inm_producto_infonavit'] = "gamboamartin\\inmuebles";

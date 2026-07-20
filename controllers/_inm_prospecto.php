@@ -350,19 +350,19 @@ class _inm_prospecto{
      */
     private function identificadores_comercial(array $filtro): array
     {
-        $identificadores['org_sucursal_id']['title'] = 'Agente';
-        $identificadores['org_sucursal_id']['cols'] = 4;
+        $identificadores['org_sucursal_id']['title'] = 'Empresa';
+        $identificadores['org_sucursal_id']['cols'] = 2;
         $identificadores['org_sucursal_id']['disabled'] = false;
         $identificadores['org_sucursal_id']['columns_ds'] = array();
 
         $identificadores['com_agente_id']['title'] = 'Agente';
-        $identificadores['com_agente_id']['cols'] = 4;
+        $identificadores['com_agente_id']['cols'] = 2;
         $identificadores['com_agente_id']['disabled'] = false;
         $identificadores['com_agente_id']['filtro'] = $filtro;
         $identificadores['com_agente_id']['columns_ds'] = array();
 
         $identificadores['com_tipo_prospecto_id']['title'] = 'Tipo de prospecto';
-        $identificadores['com_tipo_prospecto_id']['cols'] = 4;
+        $identificadores['com_tipo_prospecto_id']['cols'] = 2;
         $identificadores['com_tipo_prospecto_id']['disabled'] = false;
         $identificadores['com_tipo_prospecto_id']['columns_ds'] = array('com_tipo_prospecto_descripcion');
 
@@ -475,29 +475,29 @@ class _inm_prospecto{
 
 
         $identificadores['inm_institucion_hipotecaria_id']['title'] = 'Institucion Hipotecaria';
-        $identificadores['inm_institucion_hipotecaria_id']['cols'] = 12;
+        $identificadores['inm_institucion_hipotecaria_id']['cols'] = 2;
         $identificadores['inm_institucion_hipotecaria_id']['disabled'] = false;
         $identificadores['inm_institucion_hipotecaria_id']['columns_ds'] = array('inm_institucion_hipotecaria_descripcion');
 
         $identificadores['inm_producto_infonavit_id']['title'] = 'Producto Infonavit';
-        $identificadores['inm_producto_infonavit_id']['cols'] = 4;
+        $identificadores['inm_producto_infonavit_id']['cols'] = 2;
         $identificadores['inm_producto_infonavit_id']['disabled'] = false;
         $identificadores['inm_producto_infonavit_id']['columns_ds'] = array('inm_producto_infonavit_descripcion');
 
         $identificadores['inm_tipo_credito_id']['title'] = 'Tipo de Credito';
-        $identificadores['inm_tipo_credito_id']['cols'] = 4;
+        $identificadores['inm_tipo_credito_id']['cols'] = 2;
         $identificadores['inm_tipo_credito_id']['disabled'] = false;
         $identificadores['inm_tipo_credito_id']['columns_ds'] = array('inm_tipo_credito_descripcion');
         
         $identificadores['inm_attr_tipo_credito_id']['title'] = 'Tipo de Credito Especifico';
-        $identificadores['inm_attr_tipo_credito_id']['cols'] = 4;
+        $identificadores['inm_attr_tipo_credito_id']['cols'] = 3;
         $identificadores['inm_attr_tipo_credito_id']['disabled'] = false;
         $identificadores['inm_attr_tipo_credito_id']['columns_ds'] = array('inm_attr_tipo_credito_descripcion');
         $identificadores['inm_attr_tipo_credito_id']['con_registros'] = $con_registros;
         $identificadores['inm_attr_tipo_credito_id']['filtro'] = $filtro_tipo_credito;
 
         $identificadores['inm_destino_credito_id']['title'] = 'Destino de Credito';
-        $identificadores['inm_destino_credito_id']['cols'] = 12;
+        $identificadores['inm_destino_credito_id']['cols'] = 3;
         $identificadores['inm_destino_credito_id']['disabled'] = false;
         $identificadores['inm_destino_credito_id']['columns_ds'] = array('inm_destino_credito_descripcion');
 
@@ -517,7 +517,7 @@ class _inm_prospecto{
         }
 
         $identificadores['inm_plazo_credito_sc_id']['title'] = 'Plazo de Segundo Credito';
-        $identificadores['inm_plazo_credito_sc_id']['cols'] = 6;
+        $identificadores['inm_plazo_credito_sc_id']['cols'] = 3;
         $identificadores['inm_plazo_credito_sc_id']['disabled'] = $disabled;
         $identificadores['inm_plazo_credito_sc_id']['columns_ds'] = array('inm_plazo_credito_sc_descripcion');
 

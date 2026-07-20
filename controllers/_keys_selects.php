@@ -130,7 +130,7 @@ class _keys_selects{
 
 
         $columns_ds = array('inm_sindicato_descripcion');
-        $keys_selects = $controler->key_select(cols:12, con_registros: true,filtro:  array(),
+        $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  array(),
             key: 'inm_sindicato_id', keys_selects: $keys_selects, id_selected: $row_upd->inm_sindicato_id,
             label: 'Sindicato', columns_ds: $columns_ds);
         if(errores::$error){
@@ -1000,6 +1000,18 @@ class _keys_selects{
 
         $keys_selects['correo_empresa']->regex = $this->validacion->patterns['correo_html_base'];
 
+        $keys_selects = (new init())->key_select_txt(cols: 3,key: 'area_empresa',
+            keys_selects: $keys_selects, place_holder: 'Area Empresa', required: false);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'direccion_empresa',
+            keys_selects:$keys_selects, place_holder: 'Direccion Empresa', required: false);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
         return $keys_selects;
     }
 
@@ -1130,7 +1142,7 @@ class _keys_selects{
         }
 
         $columns_ds[] = 'inm_producto_infonavit_descripcion';
-        $keys_selects = $controler->key_select(cols:4, con_registros: true,filtro:  array(),
+        $keys_selects = $controler->key_select(cols: 2, con_registros: true,filtro:  array(),
             key: 'inm_producto_infonavit_id', keys_selects: $keys_selects,
             id_selected: $row_upd->inm_producto_infonavit_id, label: 'Producto', columns_ds: $columns_ds);
 
@@ -1140,7 +1152,7 @@ class _keys_selects{
 
         $columns_ds = array();
         $columns_ds[] = 'inm_tipo_credito_descripcion';
-        $keys_selects = $controler->key_select(cols: 4, con_registros: true,filtro:  array(),
+        $keys_selects = $controler->key_select(cols: 2, con_registros: true,filtro:  array(),
             key: 'inm_tipo_credito_id', keys_selects: $keys_selects,
             id_selected: $row_upd->inm_tipo_credito_id, label: 'Tipo de Credito', columns_ds: $columns_ds);
         if(errores::$error){
@@ -1156,7 +1168,7 @@ class _keys_selects{
 
         $columns_ds = array();
         $columns_ds[] = 'inm_attr_tipo_credito_descripcion';
-        $keys_selects = $controler->key_select(cols: 4, con_registros: $con_registros,filtro:  $filtro_tipo_credito,
+        $keys_selects = $controler->key_select(cols: 2, con_registros: $con_registros,filtro:  $filtro_tipo_credito,
             key: 'inm_attr_tipo_credito_id', keys_selects: $keys_selects,
             id_selected: $row_upd->inm_attr_tipo_credito_id, label: 'Tipo de Credito Especifico', columns_ds: $columns_ds);
         if(errores::$error){
@@ -1165,7 +1177,7 @@ class _keys_selects{
 
         $columns_ds = array();
         $columns_ds[] = 'inm_destino_credito_descripcion';
-        $keys_selects = $controler->key_select(cols:12, con_registros: true,filtro:  array(),
+        $keys_selects = $controler->key_select(cols: 5, con_registros: true,filtro:  array(),
             key: 'inm_destino_credito_id', keys_selects: $keys_selects, id_selected: $row_upd->inm_destino_credito_id,
             label: 'Destino del Credito', columns_ds: $columns_ds);
         if(errores::$error){
@@ -1177,7 +1189,7 @@ class _keys_selects{
             $disabled = true;
         }
 
-        $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  array(),
+        $keys_selects = $controler->key_select(cols: 4, con_registros: true,filtro:  array(),
             key: 'inm_plazo_credito_sc_id', keys_selects: $keys_selects,
             id_selected: $row_upd->inm_plazo_credito_sc_id, label: 'Plazo Segundo Credito', disabled: $disabled);
         if(errores::$error){
@@ -1219,7 +1231,7 @@ class _keys_selects{
 
         $columns_ds = array();
         $columns_ds[] = 'inm_institucion_hipotecaria_descripcion';
-        $keys_selects = $controler->key_select(cols:12, con_registros: true,filtro:  array(),
+        $keys_selects = $controler->key_select(cols: 2, con_registros: true,filtro:  array(),
             key: 'inm_institucion_hipotecaria_id', keys_selects: $keys_selects,
             id_selected: $row_upd->inm_institucion_hipotecaria_id, label: 'Institucion Hipotecaria',
             columns_ds: $columns_ds);
@@ -1229,7 +1241,7 @@ class _keys_selects{
 
         $columns_ds = array();
         $columns_ds[] = 'org_sucursal_descripcion';
-        $keys_selects = $controler->key_select(cols: 6, con_registros: true,filtro:  array(),
+        $keys_selects = $controler->key_select(cols: 2, con_registros: true,filtro:  array(),
             key: 'org_sucursal_id', keys_selects: $keys_selects,
             id_selected: $row_upd->org_sucursal_id, label: 'Empresa',
             columns_ds: $columns_ds);
@@ -1244,7 +1256,7 @@ class _keys_selects{
         $in = array();
         $in['llave'] = 'com_tipo_agente.descripcion';
         $in['values'] = array('PREDETERMINADO','VENDEDOR');
-        $keys_selects = $controler->key_select(cols: 6, con_registros: true,filtro: $filtro_agente,
+        $keys_selects = $controler->key_select(cols: 2, con_registros: true,filtro: $filtro_agente,
             key: 'com_agente_id', keys_selects: $keys_selects, id_selected: $row_upd->com_agente_id, label: 'Agente',
             columns_ds: $columns_ds, in: $in);
         if(errores::$error){
