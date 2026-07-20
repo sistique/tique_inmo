@@ -37,7 +37,7 @@ class _referencia{
         $row_upd->numero_exterior = '';
         $row_upd->numero_interior = '';
 
-        $nombre = $controler->html->input_text(cols: 4, disabled: false, name: 'referencia[nombre]', place_holder: 'Nombre',
+        $nombre = $controler->html->input_text(cols: 2, disabled: false, name: 'referencia[nombre]', place_holder: 'Nombre',
             row_upd: $row_upd, value_vacio: false, class_css: array('referencia_nombre'), required: false, value: $row_upd->nombre);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener input',data:  $nombre);
@@ -45,8 +45,8 @@ class _referencia{
 
         $referencia->nombre = $nombre;
 
-        $apellido_paterno = $controler->html->input_text(cols: 4, disabled: false, name: 'referencia[apellido_paterno]',
-            place_holder: 'Apellido Pat', row_upd: $row_upd, value_vacio: false, class_css: array('referencia_apellido_paterno'),
+        $apellido_paterno = $controler->html->input_text(cols: 2, disabled: false, name: 'referencia[apellido_paterno]',
+            place_holder: 'Apellido Paterno', row_upd: $row_upd, value_vacio: false, class_css: array('referencia_apellido_paterno'),
             required: false, value: $row_upd->apellido_paterno);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener input',data:  $apellido_paterno);
@@ -54,8 +54,8 @@ class _referencia{
 
         $referencia->apellido_paterno = $apellido_paterno;
 
-        $apellido_materno = $controler->html->input_text(cols: 4, disabled: false, name: 'referencia[apellido_materno]',
-            place_holder: 'Apellido Mat', row_upd: $row_upd, value_vacio: false, class_css: array('referencia_apellido_materno'),
+        $apellido_materno = $controler->html->input_text(cols: 2, disabled: false, name: 'referencia[apellido_materno]',
+            place_holder: 'Apellido Materno', row_upd: $row_upd, value_vacio: false, class_css: array('referencia_apellido_materno'),
             required: false, value: $row_upd->apellido_materno);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener input',data:  $apellido_materno);
@@ -63,7 +63,7 @@ class _referencia{
 
         $referencia->apellido_materno = $apellido_materno;
 
-        $lada = $controler->html->input_text(cols: 4, disabled: false, name: 'referencia[lada]',
+        $lada = $controler->html->input_text(cols: 2, disabled: false, name: 'referencia[lada]',
             place_holder: 'Lada', row_upd: $row_upd, value_vacio: false, class_css: array('referencia_lada'),
             required: false, value: $row_upd->lada);
         if(errores::$error){
@@ -72,7 +72,7 @@ class _referencia{
 
         $referencia->lada = $lada;
 
-        $numero = $controler->html->input_text(cols: 4, disabled: false, name: 'referencia[numero]',
+        $numero = $controler->html->input_text(cols: 2, disabled: false, name: 'referencia[numero]',
             place_holder: 'Numero', row_upd: $row_upd, value_vacio: false, class_css: array('referencia_numero'),
             required: false, value: $row_upd->numero);
         if(errores::$error){
@@ -81,7 +81,7 @@ class _referencia{
 
         $referencia->numero = $numero;
 
-        $celular = $controler->html->input_text(cols: 4, disabled: false, name: 'referencia[celular]',
+        $celular = $controler->html->input_text(cols: 2, disabled: false, name: 'referencia[celular]',
             place_holder: 'Celular', row_upd: $row_upd, value_vacio: false, class_css: array('referencia_celular'),
             required: false, value: $row_upd->celular);
         if(errores::$error){
@@ -128,7 +128,7 @@ class _referencia{
 
 
         $modelo = new inm_parentesco(link: $controler->link);
-        $inm_parentesco_id = $controler->html->select_catalogo(cols: 12, con_registros: true,
+        $inm_parentesco_id = $controler->html->select_catalogo(cols: 2, con_registros: true,
             id_selected: $row_upd->inm_parentesco_id, modelo: $modelo,class_css: array('referencia_inm_parentesco_id'),
             label: 'Parentesco', name: 'referencia[inm_parentesco_id]');
         if(errores::$error){
@@ -139,7 +139,7 @@ class _referencia{
 
 
         $modelo = new dp_estado(link: $controler->link);
-        $dp_estado_id = $controler->html->select_catalogo(cols: 6, con_registros: true,
+        $dp_estado_id = $controler->html->select_catalogo(cols: 3, con_registros: true,
             id_selected: $row_upd->dp_estado_id, modelo: $modelo, columns_ds: array('dp_estado_descripcion'),
             id_css: 'referencia_dp_estado_id', label: 'Estado', name: 'referencia[dp_estado_id]');
         if(errores::$error){
@@ -149,7 +149,7 @@ class _referencia{
         $referencia->dp_estado_id = $dp_estado_id;
 
         $modelo = new dp_municipio(link: $controler->link);
-        $dp_municipio_id = $controler->html->select_catalogo(cols: 6, con_registros: false,
+        $dp_municipio_id = $controler->html->select_catalogo(cols: 3, con_registros: false,
             id_selected: $row_upd->dp_municipio_id, modelo: $modelo, columns_ds: array('dp_municipio_descripcion'),
             id_css: 'referencia_dp_municipio_id', label: 'Municipio', name: 'referencia[dp_municipio_id]');
         if(errores::$error){
@@ -159,7 +159,7 @@ class _referencia{
         $referencia->dp_municipio_id = $dp_municipio_id;
 
         $modelo = new dp_cp(link: $controler->link);
-        $dp_cp_id = $controler->html->select_catalogo(cols: 6, con_registros: false,
+        $dp_cp_id = $controler->html->select_catalogo(cols: 3, con_registros: false,
             id_selected: $row_upd->dp_cp_id, modelo: $modelo, columns_ds: array('dp_cp_descripcion'),
             id_css: 'referencia_dp_cp_id', label: 'CP', name: 'referencia[dp_cp_id]');
         if(errores::$error){
@@ -169,7 +169,7 @@ class _referencia{
         $referencia->dp_cp_id = $dp_cp_id;
 
         $modelo = new dp_colonia_postal(link: $controler->link);
-        $dp_colonia_postal_id = $controler->html->select_catalogo(cols: 6, con_registros: false,
+        $dp_colonia_postal_id = $controler->html->select_catalogo(cols: 3, con_registros: false,
             id_selected: $row_upd->dp_colonia_postal_id, modelo: $modelo, columns_ds: array('dp_colonia_descripcion'),
             id_css: 'referencia_dp_colonia_postal_id', label: 'Colonia', name: 'referencia[dp_colonia_postal_id]');
         if(errores::$error){
@@ -180,7 +180,7 @@ class _referencia{
 
 
         $modelo = new dp_calle_pertenece(link: $controler->link);
-        $dp_calle_pertenece_id = $controler->html->select_catalogo(cols: 12, con_registros: false,
+        $dp_calle_pertenece_id = $controler->html->select_catalogo(cols: 3, con_registros: false,
             id_selected: $row_upd->inm_parentesco_id, modelo: $modelo,class_css: array('referencia_dp_calle_pertenece_id'),
             columns_ds: array('dp_calle_descripcion'), id_css: 'referencia_dp_calle_pertenece_id', label: 'Calle',
             name: 'referencia[dp_calle_pertenece_id]');

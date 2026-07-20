@@ -649,7 +649,7 @@ class _inm_prospecto{
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 3,key: 'area_empresa',
+        $keys_selects = (new init())->key_select_txt(cols: 2,key: 'area_empresa',
             keys_selects:$keys_selects, place_holder: 'Area Empresa', required: false);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);

@@ -144,15 +144,13 @@
                             <?php echo $controlador->inputs->conyuge->apellido_materno; ?>
 
                             <!-- Nacimiento -->
+                            <?php echo $controlador->inputs->conyuge->inm_ocupacion_id; ?>
                             <?php echo $controlador->inputs->conyuge->fecha_nacimiento; ?>
                             <?php echo $controlador->inputs->conyuge->dp_estado_id; ?>
                             <?php echo $controlador->inputs->conyuge->dp_municipio_id; ?>
                             <?php echo $controlador->inputs->conyuge->inm_nacionalidad_id; ?>
-                            <?php echo $controlador->inputs->conyuge->inm_ocupacion_id; ?>
 
                             <!-- Contacto -->
-                            <?php echo $controlador->inputs->conyuge->numero_credito; ?>
-                            <?php echo $controlador->inputs->conyuge->adeudo_hipoteca; ?>
                             <?php echo $controlador->inputs->conyuge->telefono_casa; ?>
                             <?php echo $controlador->inputs->conyuge->telefono_celular; ?>
                             <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
@@ -202,6 +200,7 @@
                             <?php echo $controlador->inputs->referencia->nombre; ?>
                             <?php echo $controlador->inputs->referencia->apellido_paterno; ?>
                             <?php echo $controlador->inputs->referencia->apellido_materno; ?>
+                            <?php echo $controlador->inputs->referencia->inm_parentesco_id; ?>
                             <?php echo $controlador->inputs->referencia->numero; ?>
                             <?php echo $controlador->inputs->referencia->celular; ?>
                             <?php echo $controlador->inputs->referencia->dp_estado_id; ?>
@@ -211,7 +210,6 @@
                             <?php echo $controlador->inputs->referencia->calle; ?>
                             <?php echo $controlador->inputs->referencia->numero_exterior; ?>
                             <?php echo $controlador->inputs->referencia->numero_interior; ?>
-                            <?php echo $controlador->inputs->referencia->inm_parentesco_id; ?>
                             <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
 
                             <div class="col-md-12 table-responsive">

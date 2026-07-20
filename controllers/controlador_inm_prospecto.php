@@ -1283,13 +1283,13 @@ class controlador_inm_prospecto extends _ctl_formato
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'nombre_empresa_patron',
+        $keys_selects = (new init())->key_select_txt(cols: 2, key: 'nombre_empresa_patron',
             keys_selects: $keys_selects, place_holder: 'Nombre Empresa Patron', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'nrp_nep',
+        $keys_selects = (new init())->key_select_txt(cols: 2, key: 'nrp_nep',
             keys_selects: $keys_selects, place_holder: 'Numero de Registro Patronal', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
@@ -1301,13 +1301,13 @@ class controlador_inm_prospecto extends _ctl_formato
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 3, key: 'numero_nep',
+        $keys_selects = (new init())->key_select_txt(cols: 2, key: 'numero_nep',
             keys_selects: $keys_selects, place_holder: 'Numero Tel Empresa', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 3, key: 'extension_nep',
+        $keys_selects = (new init())->key_select_txt(cols: 2, key: 'extension_nep',
             keys_selects: $keys_selects, place_holder: 'Extension Empresa', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
@@ -1415,7 +1415,7 @@ class controlador_inm_prospecto extends _ctl_formato
         }
         $keys_selects['telefono_casa']->regex = $this->validacion->patterns['telefono_mx_html'];
 
-        $keys_selects = (new init())->key_select_txt(cols: 3, key: 'correo_empresa',
+        $keys_selects = (new init())->key_select_txt(cols: 2, key: 'correo_empresa',
             keys_selects: $keys_selects, place_holder: 'Correo Empresa', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
