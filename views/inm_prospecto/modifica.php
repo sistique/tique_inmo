@@ -111,7 +111,6 @@
                             <?php echo $controlador->inputs->inm_co_acreditado->nombre; ?>
                             <?php echo $controlador->inputs->inm_co_acreditado->apellido_paterno; ?>
                             <?php echo $controlador->inputs->inm_co_acreditado->apellido_materno; ?>
-                            <?php echo $controlador->inputs->inm_co_acreditado->lada; ?>
                             <?php echo $controlador->inputs->inm_co_acreditado->numero; ?>
                             <?php echo $controlador->inputs->inm_co_acreditado->celular; ?>
                             <?php echo $controlador->inputs->inm_co_acreditado->correo; ?>
