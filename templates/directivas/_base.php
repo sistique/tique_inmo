@@ -441,14 +441,14 @@ class _base extends html_controler{
             return $this->error->error(mensaje: 'Error al obtener inputs',data:  $inputs);
         }
 
-        $radios = (new _inm_comprador())->radios(checked_default_cd: 2, checked_default_esc: 2, controler: $controler);
+        $radios = (new _inm_comprador())->radios(checked_default_cd: 2, checked_default_esc: 2, checked_default_g: 1,
+            controler: $controler);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar radios',data:  $radios);
         }
 
-
         $sl_dp_estado_nacimiento_id = (new dp_estado_html(html: $controler->html_base))->select_dp_estado_id(
-            cols: 6,con_registros:  true,id_selected:  101,link:  $controler->link, label: 'Estado Nac',
+            cols: 6,con_registros:  true, id_selected:  101,link:  $controler->link, label: 'Estado Nac',
             name: 'dp_estado_nacimiento_id');
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar sl_dp_estado_nacimiento_id',

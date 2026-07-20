@@ -239,6 +239,39 @@ class controlador_inm_prospecto extends _ctl_formato
                 mensaje: 'Error al obtener inputs', data: $inputs, header: $header, ws: $ws);
         }
 
+        $nss = $this->html->input_text(cols: 3, disabled: false, name: 'nss', place_holder: 'Nss',
+            row_upd: new stdClass(), value_vacio: false, required: false);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $nss,  header: $header, ws: $ws);
+        }
+
+        $this->inputs->nss = $nss;
+        
+        $nombre = $this->html->input_text(cols: 3, disabled: false, name: 'nombre', place_holder: 'Nombre',
+            row_upd: new stdClass(), value_vacio: false, required: false);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $nombre,  header: $header, ws: $ws);
+        }
+
+        $this->inputs->nombre = $nombre;
+
+        $apellido_paterno = $this->html->input_text(cols: 3, disabled: false, name: 'apellido_paterno',
+            place_holder: 'Apellido Paterno', row_upd: new stdClass(), value_vacio: false, required: false);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $apellido_paterno,  header: $header, ws: $ws);
+        }
+
+        $this->inputs->apellido_paterno = $apellido_paterno;
+
+        $apellido_materno = $this->html->input_text(cols: 3, disabled: false, name: 'apellido_materno',
+            place_holder: 'Apellido Materno', row_upd: new stdClass(), value_vacio: false, required: false);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $apellido_materno,  header: $header, ws: $ws);
+        }
+
+        $this->inputs->apellido_materno = $apellido_materno;
+
+
         $documento = $this->html->input_file(cols: 12, name: 'precalificacion', row_upd: new stdClass(),
             value_vacio: false, place_holder: 'Precalificacion', required: false);
         if (errores::$error) {
