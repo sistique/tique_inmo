@@ -2856,7 +2856,7 @@ class controlador_inm_comprador extends _ctl_base {
             'descuento_pension_alimenticia_fc','monto_credito_solicitado_dh','monto_ahorro_voluntario','nss','curp',
             'rfc','apellido_paterno','apellido_materno','nombre','calle','numero_exterior','numero_interior','telefono',
             'nombre_empresa_patron','nrp_nep','lada_nep','numero_nep','extension_nep','lada_com','numero_com',
-            'cel_com','genero','correo_com','sub_cuenta','monto_final','descuento','puntos', 'telefono_casa',
+            'cel_com','correo_com','sub_cuenta','monto_final','descuento','puntos', 'telefono_casa',
             'correo_empresa','mts_construidos','mts_terrenos','metros_construidos','metros_terreno', 'valor_avaluo',
             'numero_escritura','isr','nombre_beneficiario','monto_transferencia','efectivo','monto','numero_cheque',
             'transferencia','serie','folio','exportacion','observaciones_factura','descripcion_factura','unidad',
@@ -3831,7 +3831,7 @@ class controlador_inm_comprador extends _ctl_base {
 
         }
 
-        $nombre = $controler->html->input_text(cols: 4, disabled: false, name: 'conyuge[nombre]',
+        $nombre = $controler->html->input_text(cols: 2, disabled: false, name: 'conyuge[nombre]',
             place_holder: 'Nombre', row_upd: $row_upd, value_vacio: false, class_css: array('conyuge_nombre'),
             required: false, value: $row_upd->nombre);
         if(errores::$error){
@@ -3840,7 +3840,7 @@ class controlador_inm_comprador extends _ctl_base {
 
         $conyuge->nombre = $nombre;
 
-        $apellido_paterno = $controler->html->input_text(cols: 4, disabled: false, name: 'conyuge[apellido_paterno]',
+        $apellido_paterno = $controler->html->input_text(cols: 2, disabled: false, name: 'conyuge[apellido_paterno]',
             place_holder: 'Apellido Pat', row_upd: $row_upd, value_vacio: false,
             class_css: array('conyuge_apellido_paterno'), required: false, value: $row_upd->apellido_paterno);
         if(errores::$error){
@@ -3850,7 +3850,7 @@ class controlador_inm_comprador extends _ctl_base {
 
         $conyuge->apellido_paterno = $apellido_paterno;
 
-        $apellido_materno = $controler->html->input_text(cols: 4, disabled: false, name: 'conyuge[apellido_materno]',
+        $apellido_materno = $controler->html->input_text(cols: 2, disabled: false, name: 'conyuge[apellido_materno]',
             place_holder: 'Apellido Mat', row_upd: $row_upd, value_vacio: false,
             class_css: array('conyuge_apellido_materno'), required: false, value: $row_upd->apellido_materno);
         if(errores::$error){
@@ -3860,7 +3860,7 @@ class controlador_inm_comprador extends _ctl_base {
 
         $conyuge->apellido_materno = $apellido_materno;
 
-        $curp = $controler->html->input_text(cols: 6, disabled: false, name: 'conyuge[curp]', place_holder: 'CURP',
+        $curp = $controler->html->input_text(cols: 2, disabled: false, name: 'conyuge[curp]', place_holder: 'CURP',
             row_upd: $row_upd, value_vacio: false, class_css: array('conyuge_curp'), required: false,
             value: $row_upd->curp);
         if(errores::$error){
@@ -3869,7 +3869,7 @@ class controlador_inm_comprador extends _ctl_base {
 
         $conyuge->curp = $curp;
 
-        $rfc = $controler->html->input_text(cols: 6, disabled: false, name: 'conyuge[rfc]', place_holder: 'RFC',
+        $rfc = $controler->html->input_text(cols: 2, disabled: false, name: 'conyuge[rfc]', place_holder: 'RFC',
             row_upd: $row_upd, value_vacio: false, class_css: array('conyuge_rfc'), required: false,
             value: $row_upd->rfc);
         if(errores::$error){
@@ -3878,7 +3878,7 @@ class controlador_inm_comprador extends _ctl_base {
 
         $conyuge->rfc = $rfc;
 
-        $numero_credito = $controler->html->input_text(cols: 6, disabled: false, name: 'conyuge[numero_credito]',
+        $numero_credito = $controler->html->input_text(cols: 2, disabled: false, name: 'conyuge[numero_credito]',
             place_holder: 'Numero Credito', row_upd: $row_upd, value_vacio: false,
             class_css: array('conyuge_numero_credito'), required: false, value: $row_upd->numero_credito);
         if(errores::$error){
@@ -3887,7 +3887,7 @@ class controlador_inm_comprador extends _ctl_base {
 
         $conyuge->numero_credito = $numero_credito;
 
-        $adeudo_hipoteca = $controler->html->input_text(cols: 6, disabled: false, name: 'conyuge[adeudo_hipoteca]',
+        $adeudo_hipoteca = $controler->html->input_text(cols: 2, disabled: false, name: 'conyuge[adeudo_hipoteca]',
             place_holder: 'Adeudo Hipoteca', row_upd: $row_upd, value_vacio: false,
             class_css: array('conyuge_adeudo_hipoteca'), required: false, value: $row_upd->adeudo_hipoteca);
         if(errores::$error){
@@ -3896,7 +3896,7 @@ class controlador_inm_comprador extends _ctl_base {
 
         $conyuge->adeudo_hipoteca = $adeudo_hipoteca;
 
-        $telefono_casa = $controler->html->input_text(cols: 6, disabled: false, name: 'conyuge[telefono_casa]',
+        $telefono_casa = $controler->html->input_text(cols: 2, disabled: false, name: 'conyuge[telefono_casa]',
             place_holder: 'Tel Casa', row_upd: $row_upd, value_vacio: false, class_css: array('conyuge_telefono_casa'),
             required: false, value: $row_upd->telefono_casa);
         if(errores::$error){
@@ -3906,7 +3906,7 @@ class controlador_inm_comprador extends _ctl_base {
 
         $conyuge->telefono_casa = $telefono_casa;
 
-        $telefono_celular = $controler->html->input_text(cols: 6, disabled: false, name: 'conyuge[telefono_celular]',
+        $telefono_celular = $controler->html->input_text(cols: 2, disabled: false, name: 'conyuge[telefono_celular]',
             place_holder: 'Cel', row_upd: $row_upd, value_vacio: false, class_css: array('conyuge_telefono_celular'),
             required: false, value: $row_upd->telefono_celular);
         if(errores::$error){
@@ -3917,7 +3917,7 @@ class controlador_inm_comprador extends _ctl_base {
         $conyuge->telefono_celular = $telefono_celular;
 
         $modelo = new dp_estado(link: $controler->link);
-        $dp_estado_id = $controler->html->select_catalogo(cols: 4, con_registros: true,
+        $dp_estado_id = $controler->html->select_catalogo(cols: 2, con_registros: true,
             id_selected: $row_upd->dp_estado_id, modelo: $modelo, id_css: 'conyuge_dp_estado_id',
             label: 'Estado Nac', name: 'conyuge[dp_estado_id]');
         if(errores::$error){
@@ -3928,7 +3928,7 @@ class controlador_inm_comprador extends _ctl_base {
 
         //print_r($dp_estado_id);exit;
         $modelo = new dp_municipio(link: $controler->link);
-        $dp_municipio_id = $controler->html->select_catalogo(cols: 4, con_registros: true,
+        $dp_municipio_id = $controler->html->select_catalogo(cols: 2, con_registros: true,
             id_selected: $row_upd->dp_municipio_id, modelo: $modelo,
             filtro: array('dp_estado.id'=>$row_upd->dp_estado_id), id_css: 'conyuge_dp_municipio_id',
             label: 'Municipio Nac', name: 'conyuge[dp_municipio_id]');
@@ -3940,7 +3940,7 @@ class controlador_inm_comprador extends _ctl_base {
         $conyuge->dp_municipio_id = $dp_municipio_id;
 
         $modelo = new inm_nacionalidad(link: $controler->link);
-        $inm_nacionalidad_id = $controler->html->select_catalogo(cols: 6, con_registros: true,
+        $inm_nacionalidad_id = $controler->html->select_catalogo(cols: 2, con_registros: true,
             id_selected: $row_upd->inm_nacionalidad_id, modelo: $modelo, label: 'Nacionalidad',
             name: 'conyuge[inm_nacionalidad_id]');
         if(errores::$error){
@@ -3951,7 +3951,7 @@ class controlador_inm_comprador extends _ctl_base {
         $conyuge->inm_nacionalidad_id = $inm_nacionalidad_id;
 
         $modelo = new inm_ocupacion(link: $controler->link);
-        $inm_ocupacion_id = $controler->html->select_catalogo(cols: 6, con_registros: true,
+        $inm_ocupacion_id = $controler->html->select_catalogo(cols: 2, con_registros: true,
             id_selected: $row_upd->inm_ocupacion_id, modelo: $modelo, label: 'Ocupacion',
             name: 'conyuge[inm_ocupacion_id]');
         if(errores::$error){
@@ -3961,7 +3961,7 @@ class controlador_inm_comprador extends _ctl_base {
 
         $conyuge->inm_ocupacion_id = $inm_ocupacion_id;
 
-        $fecha_nacimiento = $controler->html->input_fecha(cols: 4, row_upd: $row_upd,
+        $fecha_nacimiento = $controler->html->input_fecha(cols: 2, row_upd: $row_upd,
             value_vacio: false, name: 'conyuge[fecha_nacimiento]', place_holder: 'Fecha Nac', required: false,
             value: $row_upd->fecha_nacimiento);
         if(errores::$error){
@@ -4036,7 +4036,7 @@ class controlador_inm_comprador extends _ctl_base {
 
         $keys_selects['lada_com']->regex = $this->validacion->patterns['lada_html'];
 
-        $keys_selects = (new init())->key_select_txt(cols: 3,key: 'numero_com',
+        $keys_selects = (new init())->key_select_txt(cols: 4,key: 'numero_com',
             keys_selects:$keys_selects, place_holder: 'Numero',required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
@@ -4065,37 +4065,29 @@ class controlador_inm_comprador extends _ctl_base {
 
         $keys_selects['correo_com']->regex = $this->validacion->patterns['correo_html_base'];
 
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'sub_cuenta',
+        $keys_selects = (new init())->key_select_txt(cols: 3,key: 'sub_cuenta',
             keys_selects:$keys_selects, place_holder: 'Sub Cuenta');
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'monto_final',
+        $keys_selects = (new init())->key_select_txt(cols: 3,key: 'monto_final',
             keys_selects:$keys_selects, place_holder: 'Monto Final');
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'descuento',
+        $keys_selects = (new init())->key_select_txt(cols: 3,key: 'descuento',
             keys_selects:$keys_selects, place_holder: 'Descuento');
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'puntos',
+        $keys_selects = (new init())->key_select_txt(cols: 3,key: 'puntos',
             keys_selects:$keys_selects, place_holder: 'Puntos');
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
-
-        $keys_selects = (new init())->key_select_txt(cols: 4,key: 'telefono_casa',
-            keys_selects:$keys_selects, place_holder: 'Telefono de Casa', required: false);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-        $keys_selects['telefono_casa']->regex = $this->validacion->patterns['telefono_mx_html'];
-
 
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'serie',
             keys_selects:$keys_selects, place_holder: 'Serie', required: false, disabled: true);
@@ -4286,7 +4278,7 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         $sl_dp_estado_nacimiento_id = (new dp_estado_html(html: $this->html_base))->select_dp_estado_id(
-            cols: 4,con_registros:  true,id_selected:  $this->registro['dp_estado_nacimiento_id'],
+            cols: 3,con_registros:  true,id_selected:  $this->registro['dp_estado_nacimiento_id'],
             link:  $this->link, label: 'Estado Nac', name: 'dp_estado_nacimiento_id');
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al integrar sl_dp_estado_nacimiento_id',
@@ -4297,7 +4289,7 @@ class controlador_inm_comprador extends _ctl_base {
         $this->inputs->dp_estado_nacimiento_id = $sl_dp_estado_nacimiento_id;
 
         $sl_dp_municipio_nacimiento_id = (new dp_municipio_html(html: $this->html_base))->select_dp_municipio_id(
-            cols: 4, con_registros: true, id_selected: $this->registro['dp_municipio_nacimiento_id'],
+            cols: 3, con_registros: true, id_selected: $this->registro['dp_municipio_nacimiento_id'],
             link: $this->link, filtro: $filtro, label: 'Municipio Nac', name: 'dp_municipio_nacimiento_id');
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al integrar sl_dp_municipio_nacimiento_id',
@@ -4306,7 +4298,7 @@ class controlador_inm_comprador extends _ctl_base {
 
         $this->inputs->dp_municipio_nacimiento_id = $sl_dp_municipio_nacimiento_id;
 
-        $fecha_nacimiento = $this->html->input_fecha(cols: 4, row_upd: $this->row_upd, value_vacio: false,
+        $fecha_nacimiento = $this->html->input_fecha(cols: 3, row_upd: $this->row_upd, value_vacio: false,
             place_holder: 'Fecha de Nacimiento', value: $this->row_upd->fecha_nacimiento);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al integrar fecha_nacimiento',

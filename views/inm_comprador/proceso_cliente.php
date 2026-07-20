@@ -88,10 +88,8 @@
 
 
                                         <!-- Contacto -->
-                                        <?php echo $controlador->inputs->lada_com; ?>
                                         <?php echo $controlador->inputs->numero_com; ?>
                                         <?php echo $controlador->inputs->cel_com; ?>
-                                        <?php echo $controlador->inputs->telefono_casa; ?>
                                         <?php echo $controlador->inputs->correo_com; ?>
 
                                         <!-- Domicilio -->
@@ -138,7 +136,9 @@
                                         <?php echo $controlador->inputs->numero_nep; ?>
                                         <?php echo $controlador->inputs->extension_nep; ?>
                                         <?php echo $controlador->inputs->correo_empresa; ?>
+                                        <?php echo $controlador->inputs->area_empresa; ?>
                                         <?php echo $controlador->inputs->inm_sindicato_id; ?>
+                                        <?php echo $controlador->inputs->direccion_empresa; ?>
                                         <?php echo $controlador->btn; ?>
 
                                     </div>
@@ -176,12 +176,13 @@
                                             <?php echo $controlador->inputs->conyuge->nombre; ?>
                                             <?php echo $controlador->inputs->conyuge->apellido_paterno; ?>
                                             <?php echo $controlador->inputs->conyuge->apellido_materno; ?>
+                                            <?php echo $controlador->inputs->conyuge->inm_ocupacion_id; ?>
+
                                             <!-- Nacimiento -->
                                             <?php echo $controlador->inputs->conyuge->fecha_nacimiento; ?>
                                             <?php echo $controlador->inputs->conyuge->dp_estado_id; ?>
                                             <?php echo $controlador->inputs->conyuge->dp_municipio_id; ?>
                                             <?php echo $controlador->inputs->conyuge->inm_nacionalidad_id; ?>
-                                            <?php echo $controlador->inputs->conyuge->inm_ocupacion_id; ?>
                                             <!-- Contacto -->
                                             <?php echo $controlador->inputs->conyuge->telefono_casa; ?>
                                             <?php echo $controlador->inputs->conyuge->telefono_celular;  ?>
@@ -234,7 +235,7 @@
                                             <?php echo $controlador->inputs->referencia->nombre; ?>
                                             <?php echo $controlador->inputs->referencia->apellido_paterno; ?>
                                             <?php echo $controlador->inputs->referencia->apellido_materno; ?>
-                                            <?php echo $controlador->inputs->referencia->lada; ?>
+                                            <?php echo $controlador->inputs->referencia->inm_parentesco_id; ?>
                                             <?php echo $controlador->inputs->referencia->numero; ?>
                                             <?php echo $controlador->inputs->referencia->celular; ?>
                                             <?php echo $controlador->inputs->referencia->dp_estado_id; ?>
@@ -244,7 +245,8 @@
                                             <?php echo $controlador->inputs->referencia->calle; ?>
                                             <?php echo $controlador->inputs->referencia->numero_exterior; ?>
                                             <?php echo $controlador->inputs->referencia->numero_interior; ?>
-                                            <?php echo $controlador->inputs->referencia->inm_parentesco_id; ?>
+                                            <?php echo $controlador->btn; ?>
+
                                             <div class="col-md-12 table-responsive">
                                                 <table class="table table-striped">
                                                     <thead>
@@ -275,7 +277,6 @@
                                                      </tbody>
                                                  </table>
                                              </div>
-                                            <?php echo $controlador->btn; ?>
                                         </div>
 
                                         <?php echo $controlador->header_frontend->apartado_11; ?>
@@ -514,10 +515,8 @@
 
 
                                             <!-- Contacto -->
-                                            <?php echo $controlador->inputs->lada_com; ?>
                                             <?php echo $controlador->inputs->numero_com; ?>
                                             <?php echo $controlador->inputs->cel_com; ?>
-                                            <?php echo $controlador->inputs->telefono_casa; ?>
                                             <?php echo $controlador->inputs->correo_com; ?>
 
                                             <!-- Domicilio -->
@@ -604,12 +603,13 @@
                                             <?php echo $controlador->inputs->conyuge->nombre; ?>
                                             <?php echo $controlador->inputs->conyuge->apellido_paterno; ?>
                                             <?php echo $controlador->inputs->conyuge->apellido_materno; ?>
+                                            <?php echo $controlador->inputs->conyuge->inm_ocupacion_id; ?>
+
                                             <!-- Nacimiento -->
                                             <?php echo $controlador->inputs->conyuge->fecha_nacimiento; ?>
                                             <?php echo $controlador->inputs->conyuge->dp_estado_id; ?>
                                             <?php echo $controlador->inputs->conyuge->dp_municipio_id; ?>
                                             <?php echo $controlador->inputs->conyuge->inm_nacionalidad_id; ?>
-                                            <?php echo $controlador->inputs->conyuge->inm_ocupacion_id; ?>
                                             <!-- Contacto -->
                                             <?php echo $controlador->inputs->conyuge->telefono_casa; ?>
                                             <?php echo $controlador->inputs->conyuge->telefono_celular;  ?>
@@ -662,7 +662,7 @@
                                             <?php echo $controlador->inputs->referencia->nombre; ?>
                                             <?php echo $controlador->inputs->referencia->apellido_paterno; ?>
                                             <?php echo $controlador->inputs->referencia->apellido_materno; ?>
-                                            <?php echo $controlador->inputs->referencia->lada; ?>
+                                            <?php echo $controlador->inputs->referencia->inm_parentesco_id; ?>
                                             <?php echo $controlador->inputs->referencia->numero; ?>
                                             <?php echo $controlador->inputs->referencia->celular; ?>
                                             <?php echo $controlador->inputs->referencia->dp_estado_id; ?>
@@ -672,7 +672,8 @@
                                             <?php echo $controlador->inputs->referencia->calle; ?>
                                             <?php echo $controlador->inputs->referencia->numero_exterior; ?>
                                             <?php echo $controlador->inputs->referencia->numero_interior; ?>
-                                            <?php echo $controlador->inputs->referencia->inm_parentesco_id; ?>
+                                            <?php echo $controlador->btn; ?>
+
                                             <div class="col-md-12 table-responsive">
                                                 <table class="table table-striped">
                                                     <thead>
@@ -703,7 +704,6 @@
                                                  </tbody>
                                              </table>
                                          </div>
-                                            <?php echo $controlador->btn; ?>
                                         </div>
 
                                         <?php echo $controlador->header_frontend->apartado_11; ?>

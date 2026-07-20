@@ -73,7 +73,8 @@ class _dps_init{
      * @return array
      */
     private function key_con_descripcion(_ctl_base $controler, string $entidad, array $keys_selects, string $label,
-                                         stdClass $row_upd, array $columns_ds = array(), array $filtro = array()): array
+                                         int $cols = 6, stdClass $row_upd, array $columns_ds = array(),
+                                         array $filtro = array()): array
     {
         $entidad = trim($entidad);
         if($entidad === ''){
@@ -89,7 +90,7 @@ class _dps_init{
             $row_upd->$key_id = -1;
         }
 
-        $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  $filtro, key: $key_id,
+        $keys_selects = $controler->key_select(cols: $cols, con_registros: true,filtro:  $filtro, key: $key_id,
             keys_selects: $keys_selects, id_selected: $row_upd->$key_id, label: $label, columns_ds : $columns_ds);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
@@ -116,16 +117,14 @@ class _dps_init{
             return $this->error->error(mensaje: 'Error al inicializar row_upd',data:  $row_upd);
         }
 
-       // print_r($row_upd);
-
-        $keys_selects = $this->key_con_descripcion(controler: $controler,entidad: 'dp_pais',
-            keys_selects:  $keys_selects,label: 'Pais',row_upd:  $row_upd);
+        $keys_selects = $this->key_con_descripcion(controler: $controler, entidad: 'dp_pais',
+            keys_selects: $keys_selects, label: 'Pais', cols: 3, row_upd: $row_upd);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = $this->key_con_descripcion(controler: $controler,entidad: 'dp_estado',
-            keys_selects:  $keys_selects,label: 'Estado',row_upd:  $row_upd);
+        $keys_selects = $this->key_con_descripcion(controler: $controler, entidad: 'dp_estado',
+            keys_selects: $keys_selects, label: 'Estado', cols: 3, row_upd: $row_upd);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
@@ -133,21 +132,22 @@ class _dps_init{
         $filtro = array();
         $filtro['dp_estado.id'] = $row_upd->dp_estado_id;
 
-        $keys_selects = $this->key_con_descripcion(controler: $controler,entidad: 'dp_municipio',
-            keys_selects:  $keys_selects,label: 'Municipio',row_upd:  $row_upd, filtro: $filtro);
+        $keys_selects = $this->key_con_descripcion(controler: $controler, entidad: 'dp_municipio',
+            keys_selects: $keys_selects, label: 'Municipio', cols: 3, row_upd: $row_upd, filtro: $filtro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
         $keys_selects = $this->key_con_descripcion(controler: $controler,entidad: 'dp_cp',
-            keys_selects:  $keys_selects,label: 'CP',row_upd:  $row_upd, filtro: $filtro);
+            keys_selects:  $keys_selects,label: 'CP', cols: 3, row_upd:  $row_upd, filtro: $filtro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
         $columns_ds = array('dp_colonia_descripcion');
         $keys_selects = $this->key_con_descripcion(controler: $controler, entidad: 'dp_colonia_postal',
-            keys_selects: $keys_selects, label: 'Colonia', row_upd: $row_upd, columns_ds: $columns_ds, filtro: $filtro);
+            keys_selects: $keys_selects, label: 'Colonia', cols: 3, row_upd: $row_upd, columns_ds: $columns_ds,
+            filtro: $filtro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }

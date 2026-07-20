@@ -113,7 +113,7 @@ class _keys_selects{
         }
 
         $columns_ds = array('inm_estado_civil_descripcion');
-        $keys_selects = $controler->key_select(cols:6, con_registros: $con_registros,filtro:  $filtro_estado_civil,
+        $keys_selects = $controler->key_select(cols:3, con_registros: $con_registros,filtro:  $filtro_estado_civil,
             key: 'inm_estado_civil_id', keys_selects: $keys_selects, id_selected: $row_upd->inm_estado_civil_id,
             label: 'Regimen Patrimonial del Matrimonio', columns_ds: $columns_ds);
         if(errores::$error){
@@ -121,7 +121,7 @@ class _keys_selects{
         }
 
         $columns_ds = array('adm_estado_civil_descripcion');
-        $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  array(),
+        $keys_selects = $controler->key_select(cols:3, con_registros: true,filtro:  array(),
             key: 'adm_estado_civil_id', keys_selects: $keys_selects, id_selected: $row_upd->adm_estado_civil_id,
             label: 'Estado Civil', columns_ds: $columns_ds);
         if(errores::$error){
@@ -138,7 +138,7 @@ class _keys_selects{
         }
 
         $columns_ds = array('inm_nacionalidad_descripcion');
-        $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  array(),
+        $keys_selects = $controler->key_select(cols: 3, con_registros: true,filtro:  array(),
             key: 'inm_nacionalidad_id', keys_selects: $keys_selects, id_selected: $row_upd->inm_nacionalidad_id,
             label: 'Nacionalidad', columns_ds: $columns_ds);
         if(errores::$error){
@@ -146,7 +146,7 @@ class _keys_selects{
         }
 
         $columns_ds = array('inm_ocupacion_descripcion');
-        $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  array(),
+        $keys_selects = $controler->key_select(cols:3, con_registros: true,filtro:  array(),
             key: 'inm_ocupacion_id', keys_selects: $keys_selects, id_selected: $row_upd->inm_ocupacion_id,
             label: 'Ocupacion', columns_ds: $columns_ds);
         if(errores::$error){
@@ -910,7 +910,7 @@ class _keys_selects{
     }
 
     private function keys_identificadores(array $keys_selects){
-        $keys_selects = (new init())->key_select_txt(cols: 4,key: 'nss', keys_selects:$keys_selects,
+        $keys_selects = (new init())->key_select_txt(cols: 2,key: 'nss', keys_selects:$keys_selects,
             place_holder: 'NSS');
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
@@ -918,14 +918,14 @@ class _keys_selects{
 
         $keys_selects['nss']->regex = $this->validacion->patterns['nss_html'];
 
-        $keys_selects = (new init())->key_select_txt(cols: 4,key: 'curp',
+        $keys_selects = (new init())->key_select_txt(cols: 2,key: 'curp',
             keys_selects:$keys_selects, place_holder: 'CURP');
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
         $keys_selects['curp']->regex = $this->validacion->patterns['curp_html'];
 
-        $keys_selects = (new init())->key_select_txt(cols: 4,key: 'rfc',
+        $keys_selects = (new init())->key_select_txt(cols: 2,key: 'rfc',
             keys_selects:$keys_selects, place_holder: 'RFC');
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
@@ -936,17 +936,17 @@ class _keys_selects{
     }
 
     final public function keys_name(array $keys_selects){
-        $keys_selects = (new init())->key_select_txt(cols: 4,key: 'apellido_paterno',
+        $keys_selects = (new init())->key_select_txt(cols: 2,key: 'apellido_paterno',
             keys_selects:$keys_selects, place_holder: 'Apellido Paterno');
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
-        $keys_selects = (new init())->key_select_txt(cols: 4,key: 'apellido_materno',
+        $keys_selects = (new init())->key_select_txt(cols: 2,key: 'apellido_materno',
             keys_selects:$keys_selects, place_holder: 'Apellido Materno',required: false);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
-        $keys_selects = (new init())->key_select_txt(cols: 4,key: 'nombre',
+        $keys_selects = (new init())->key_select_txt(cols: 2,key: 'nombre',
             keys_selects:$keys_selects, place_holder: 'Nombre(s)');
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
@@ -1205,7 +1205,7 @@ class _keys_selects{
             $disabled = true;
         }
 
-        $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  array(),
+        $keys_selects = $controler->key_select(cols: 4, con_registros: true,filtro:  array(),
             key: 'inm_tipo_discapacidad_id', keys_selects: $keys_selects,
             id_selected: $row_upd->inm_tipo_discapacidad_id, label: 'Tipo de Discapacidad', columns_ds: $columns_ds,
             disabled: $disabled);
@@ -1221,7 +1221,7 @@ class _keys_selects{
             $disabled = true;
         }
 
-        $keys_selects = $controler->key_select(cols:12, con_registros: true,filtro:  array(),
+        $keys_selects = $controler->key_select(cols: 4, con_registros: true,filtro:  array(),
             key: 'inm_persona_discapacidad_id', keys_selects: $keys_selects,
             id_selected: $row_upd->inm_persona_discapacidad_id, label: 'Persona Discapacidad',
             columns_ds: $columns_ds, disabled: $disabled);
