@@ -955,18 +955,18 @@ class _keys_selects{
     }
 
     private function keys_nrp(array $keys_selects){
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'nombre_empresa_patron',
+        $keys_selects = (new init())->key_select_txt(cols: 2,key: 'nombre_empresa_patron',
             keys_selects:$keys_selects, place_holder: 'Nombre de la Empresa/Patrón',required: false);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'nrp',
+        $keys_selects = (new init())->key_select_txt(cols: 2,key: 'nrp',
             keys_selects:$keys_selects, place_holder: 'Numero de Registro Patronal (NRP)',required: false);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'nrp_nep',
+        $keys_selects = (new init())->key_select_txt(cols: 2,key: 'nrp_nep',
             keys_selects:$keys_selects, place_holder: 'Numero de Registro Patronal (NRP)',required: false);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
@@ -979,20 +979,20 @@ class _keys_selects{
         }
         $keys_selects['lada_nep']->regex = $this->validacion->patterns['lada_html'];
 
-        $keys_selects = (new init())->key_select_txt(cols: 3,key: 'numero_nep',
+        $keys_selects = (new init())->key_select_txt(cols: 2,key: 'numero_nep',
             keys_selects:$keys_selects, place_holder: 'Numero',required: false  );
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
-        $keys_selects['numero_nep']->regex = $this->validacion->patterns['tel_sin_lada_html'];
+        $keys_selects['numero_nep']->regex = $this->validacion->patterns['telefono_mx'];
 
-        $keys_selects = (new init())->key_select_txt(cols: 3,key: 'extension_nep',
+        $keys_selects = (new init())->key_select_txt(cols: 2,key: 'extension_nep',
             keys_selects:$keys_selects, place_holder: 'Extension',required: false);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 3,key: 'correo_empresa',
+        $keys_selects = (new init())->key_select_txt(cols: 2,key: 'correo_empresa',
             keys_selects:$keys_selects, place_holder: 'Correo Empresa', required: false);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
@@ -1000,7 +1000,7 @@ class _keys_selects{
 
         $keys_selects['correo_empresa']->regex = $this->validacion->patterns['correo_html_base'];
 
-        $keys_selects = (new init())->key_select_txt(cols: 3,key: 'area_empresa',
+        $keys_selects = (new init())->key_select_txt(cols: 2,key: 'area_empresa',
             keys_selects: $keys_selects, place_holder: 'Area Empresa', required: false);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
