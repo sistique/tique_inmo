@@ -687,6 +687,9 @@ class _inm_prospecto{
         if(!isset($controlador->row_upd->con_discapacidad)){
             $controlador->row_upd->con_discapacidad = 'NO';
         }
+        if(!isset($controlador->row_upd->genero) || $controlador->row_upd->genero === ''){
+            $controlador->row_upd->genero = 'M';
+        }
 
         $radios = (new \gamboamartin\inmuebles\models\_inm_comprador())->radios_chk(controler: $controlador);
         if(errores::$error){

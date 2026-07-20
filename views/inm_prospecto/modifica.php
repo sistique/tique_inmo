@@ -10,22 +10,6 @@
                     <?php include (new views())->ruta_templates . "mensajes.php"; ?>
                     <?php echo $controlador->buttons['btn_collapse_all']; ?>
 
-                    <?php
-                    $checked_genero_m = 'checked';
-                    $checked_genero_f = '';
-                    if($controlador->row_upd->genero === 'F'){
-                        $checked_genero_m = '';
-                        $checked_genero_f = 'checked';
-                    }
-
-                    $checked_genero_co_m = 'checked';
-                    $checked_genero_co_f = '';
-                    if($controlador->row_upd->genero_co_acreditado === 'F'){
-                        $checked_genero_co_m = '';
-                        $checked_genero_co_f = 'checked';
-                    }
-                    ?>
-
                     <form method="post" action="<?php echo $controlador->link_modifica_bd; ?>" class="form-additional"
                           enctype="multipart/form-data">
 
@@ -49,41 +33,26 @@
                         <div id="apartado_2">
                             <!-- Identificadores -->
                             <?php echo $controlador->inputs->nss; ?>
-                            <?php echo $controlador->inputs->curp; ?>
-                            <?php echo $controlador->inputs->rfc; ?>
 
-                            <!-- Identidad -->
                             <?php echo $controlador->inputs->nombre; ?>
                             <?php echo $controlador->inputs->apellido_paterno; ?>
                             <?php echo $controlador->inputs->apellido_materno; ?>
+
+                            <?php echo $controlador->inputs->curp; ?>
+                            <?php echo $controlador->inputs->rfc; ?>
 
                             <!-- Nacimiento -->
                             <?php echo $controlador->inputs->fecha_nacimiento; ?>
                             <?php echo $controlador->inputs->dp_estado_nacimiento_id; ?>
                             <?php echo $controlador->inputs->dp_municipio_nacimiento_id; ?>
                             <?php echo $controlador->inputs->inm_nacionalidad_id; ?>
-                            <div class="control-group col-sm-6">
-                                <label class="control-label" for="inm_attr_tipo_credito_id">Genero</label>
-                                <label class="form-check-label chk">
-                                    <input type="radio" name="genero" value="M"
-                                           class="form-check-input" id="genero"
-                                           title="Genero" <?php echo $checked_genero_m; ?> >
-                                    M
-                                </label>
-                                <label class="form-check-label chk">
-                                    <input type="radio" name="genero" value="F"
-                                           class="form-check-input" id="genero"
-                                           title="Genero" <?php echo $checked_genero_f; ?>>
-                                    F
-                                </label>
-                            </div>
+                            <?php echo $controlador->inputs->genero; ?>
 
                             <?php echo $controlador->inputs->adm_estado_civil_id; ?>
                             <?php echo $controlador->inputs->inm_estado_civil_id; ?>
                             <?php echo $controlador->inputs->inm_ocupacion_id; ?>
 
                             <!-- Contacto -->
-                            <?php echo $controlador->inputs->lada_com; ?>
                             <?php echo $controlador->inputs->numero_com; ?>
                             <?php echo $controlador->inputs->cel_com; ?>
                             <?php echo $controlador->inputs->correo_com; ?>

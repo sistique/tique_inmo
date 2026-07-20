@@ -118,7 +118,7 @@ class _inm_comprador{
      */
     private function checkeds_default(controlador_inm_comprador|controlador_inm_prospecto $controler): stdClass|array
     {
-        $keys = array('es_segundo_credito','con_discapacidad');
+        $keys = array('es_segundo_credito','con_discapacidad','genero');
         $valida = (new validacion())->valida_existencia_keys(keys: $keys,registro:  $controler->row_upd);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar row upd',data:  $valida);
@@ -133,9 +133,15 @@ class _inm_comprador{
             $checked_default_cd = 2;
         }
 
+        $checked_default_g = 1;
+        if($controler->row_upd->genero === 'F'){
+            $checked_default_g = 2;
+        }
+
         $data = new stdClass();
         $data->checked_default_esc = $checked_default_esc;
         $data->checked_default_cd = $checked_default_cd;
+        $data->checked_default_g = $checked_default_g;
 
         return $data;
 
@@ -460,7 +466,7 @@ class _inm_comprador{
      * @return array|stdClass
      * @version 1.102.1
      */
-    final public function radios(int $checked_default_cd, int $checked_default_esc,
+    final public function radios(int $checked_default_cd, int $checked_default_esc, int $checked_default_g,
                                  controlador_inm_comprador|controlador_inm_prospecto $controler): array|stdClass
     {
         if($checked_default_esc <=0){
@@ -477,6 +483,14 @@ class _inm_comprador{
         }
         if($checked_default_cd > 2){
             return $this->error->error(mensaje: 'Error checked_default debe ser menor a 3', data: $checked_default_cd);
+        }
+
+        if($checked_default_g <=0){
+            return $this->error->error(mensaje: 'Error checked_default debe ser mayor a 0',
+                data: $checked_default_g);
+        }
+        if($checked_default_g > 2){
+            return $this->error->error(mensaje: 'Error checked_default debe ser menor a 3', data: $checked_default_g);
         }
 
         if(is_array($controler->inputs)){
@@ -498,6 +512,13 @@ class _inm_comprador{
         }
         $controler->inputs->con_discapacidad = $con_discapacidad;
 
+        $genero = $controler->html->directivas->input_radio_doble(campo: 'genero',
+            checked_default: $checked_default_g,tag: 'Genero', val_1: 'M',val_2: 'F');
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener genero',data:  $genero);
+        }
+        $controler->inputs->genero = $genero;
+
         return $controler->inputs;
     }
 
@@ -509,11 +530,12 @@ class _inm_comprador{
      */
     final public function radios_chk(controlador_inm_comprador|controlador_inm_prospecto $controler): array|stdClass
     {
-        $keys = array('es_segundo_credito','con_discapacidad');
+        $keys = array('es_segundo_credito','con_discapacidad','genero');
         $valida = (new validacion())->valida_existencia_keys(keys: $keys,registro:  $controler->row_upd);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar row upd',data:  $valida);
         }
+
         if(is_array($controler->inputs)){
             return $this->error->error(mensaje: 'Error controler->inputs no esta inicializado',
                 data: $controler->inputs);
@@ -525,7 +547,8 @@ class _inm_comprador{
         }
 
         $radios = $this->radios(checked_default_cd: $checkeds->checked_default_cd,
-            checked_default_esc: $checkeds->checked_default_esc, controler: $controler);
+            checked_default_esc: $checkeds->checked_default_esc, checked_default_g: $checkeds->checked_default_g,
+            controler: $controler);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar radios',data:  $radios);
         }

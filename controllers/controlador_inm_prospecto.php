@@ -1313,7 +1313,7 @@ class controlador_inm_prospecto extends _ctl_formato
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 4, key: 'rfc',
+        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'rfc',
             keys_selects: $keys_selects, place_holder: 'RFC', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
@@ -1350,7 +1350,7 @@ class controlador_inm_prospecto extends _ctl_formato
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 4, key: 'curp',
+        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'curp',
             keys_selects: $keys_selects, place_holder: 'CURP', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
