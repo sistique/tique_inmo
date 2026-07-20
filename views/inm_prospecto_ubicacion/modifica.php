@@ -171,10 +171,6 @@
                             <?php echo $controlador->inputs->conyuge->inm_nacionalidad_id; ?>
                             <?php echo $controlador->inputs->conyuge->inm_ocupacion_id; ?>
 
-                            <!-- Crédito -->
-                            <?php echo $controlador->inputs->conyuge->numero_credito; ?>
-                            <?php echo $controlador->inputs->conyuge->adeudo_hipoteca; ?>
-
                             <!-- Contacto -->
                             <?php echo $controlador->inputs->conyuge->telefono_casa; ?>
                             <?php echo $controlador->inputs->conyuge->telefono_celular; ?>
