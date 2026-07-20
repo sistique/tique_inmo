@@ -93,12 +93,11 @@
                         <div id="apartado_5">
                             <?php echo $controlador->inputs->nombre_empresa_patron; ?>
                             <?php echo $controlador->inputs->nrp_nep; ?>
-                            <?php echo $controlador->inputs->lada_nep; ?>
                             <?php echo $controlador->inputs->numero_nep; ?>
-                            <?php echo $controlador->inputs->extension_nep; ?>
                             <?php echo $controlador->inputs->correo_empresa; ?>
-                            <?php echo $controlador->inputs->inm_sindicato_id; ?>
+                            <?php echo $controlador->inputs->extension_nep; ?>
                             <?php echo $controlador->inputs->area_empresa; ?>
+                            <?php echo $controlador->inputs->inm_sindicato_id; ?>
                             <?php echo $controlador->inputs->direccion_empresa; ?>
 
                             <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
@@ -116,20 +115,7 @@
                             <?php echo $controlador->inputs->inm_co_acreditado->numero; ?>
                             <?php echo $controlador->inputs->inm_co_acreditado->celular; ?>
                             <?php echo $controlador->inputs->inm_co_acreditado->correo; ?>
-                            <div class="control-group col-sm-4">
-                                <label class="control-label" for="inm_attr_tipo_credito_id">Genero</label>
-                                <label class="form-check-label chk">
-                                    <input type="radio" name="co_acreditado[genero]" value="M" class="form-check-input" id="genero"
-                                           title="Genero" <?php echo $checked_genero_co_m; ?>>
-                                    M
-                                </label>
-                                <label class="form-check-label chk">
-                                    <input type="radio" name="co_acreditado[genero]" value="F" class="form-check-input" id="genero"
-                                           title="Genero" <?php echo $checked_genero_co_f; ?>>
-                                    F
-                                </label>
-                            </div>
-
+                            <?php echo $controlador->inputs->inm_co_acreditado->genero; ?>
                             <?php echo $controlador->inputs->inm_co_acreditado->numero_credito; ?>
                             <?php echo $controlador->inputs->inm_co_acreditado->adeudo_hipoteca; ?>
 

@@ -121,18 +121,46 @@
                                                     <div id="apartado_5">
                                                         <?php echo $controlador->inputs->nombre_empresa_patron; ?>
                                                         <?php echo $controlador->inputs->nrp_nep; ?>
-                                                        <?php echo $controlador->inputs->lada_nep; ?>
                                                         <?php echo $controlador->inputs->numero_nep; ?>
                                                         <?php echo $controlador->inputs->extension_nep; ?>
-                                                        <?php echo $controlador->inputs->inm_sindicato_id; ?>
                                                         <?php echo $controlador->inputs->correo_empresa; ?>
                                                         <?php echo $controlador->inputs->area_empresa; ?>
+                                                        <?php echo $controlador->inputs->inm_sindicato_id; ?>
                                                         <?php echo $controlador->inputs->direccion_empresa; ?>
                                                         <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
                                                     </div>
 
                                                     <?php echo $controlador->header_frontend->apartado_6; ?>
-                                                    <div id="apartado_6">
+                                                    <div  id="apartado_6">
+                                                        <?php echo $controlador->inputs->inm_co_acreditado->nss; ?>
+                                                        <?php echo $controlador->inputs->inm_co_acreditado->curp; ?>
+                                                        <?php echo $controlador->inputs->inm_co_acreditado->rfc; ?>
+                                                        <?php echo $controlador->inputs->inm_co_acreditado->nombre; ?>
+                                                        <?php echo $controlador->inputs->inm_co_acreditado->apellido_paterno; ?>
+                                                        <?php echo $controlador->inputs->inm_co_acreditado->apellido_materno; ?>
+                                                        <?php echo $controlador->inputs->inm_co_acreditado->lada; ?>
+                                                        <?php echo $controlador->inputs->inm_co_acreditado->numero; ?>
+                                                        <?php echo $controlador->inputs->inm_co_acreditado->celular; ?>
+                                                        <?php echo $controlador->inputs->inm_co_acreditado->correo; ?>
+                                                        <?php echo $controlador->inputs->inm_co_acreditado->genero; ?>
+                                                        <?php echo $controlador->inputs->inm_co_acreditado->numero_credito; ?>
+                                                        <?php echo $controlador->inputs->inm_co_acreditado->adeudo_hipoteca; ?>
+
+                                                        <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
+
+                                                    </div>
+
+                                                    <?php echo $controlador->header_frontend->apartado_7; ?>
+                                                    <div  id="apartado_7">
+                                                        <?php echo $controlador->inputs->inm_co_acreditado->nombre_empresa_patron; ?>
+                                                        <?php echo $controlador->inputs->inm_co_acreditado->nrp; ?>
+                                                        <?php echo $controlador->inputs->inm_co_acreditado->lada_nep; ?>
+                                                        <?php echo $controlador->inputs->inm_co_acreditado->numero_nep; ?>
+                                                        <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
+                                                    </div>
+
+                                                    <?php echo $controlador->header_frontend->apartado_8; ?>
+                                                    <div id="apartado_8">
                                                         <!-- Identificadores -->
                                                         <?php echo $controlador->inputs->conyuge->curp; ?>
                                                         <?php echo $controlador->inputs->conyuge->rfc; ?>
@@ -155,8 +183,8 @@
                                                         <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
                                                     </div>
 
-                                                    <?php echo $controlador->header_frontend->apartado_7; ?>
-                                                    <div id="apartado_7">
+                                                    <?php echo $controlador->header_frontend->apartado_9; ?>
+                                                    <div id="apartado_9">
                                                         <?php echo $controlador->inputs->beneficiario->inm_tipo_beneficiario_id; ?>
                                                         <?php echo $controlador->inputs->beneficiario->inm_parentesco_id; ?>
                                                         <?php echo $controlador->inputs->beneficiario->nombre; ?>
@@ -194,8 +222,8 @@
                                                         </div>
                                                     </div>
 
-                                                    <?php echo $controlador->header_frontend->apartado_8; ?>
-                                                    <div id="apartado_8">
+                                                    <?php echo $controlador->header_frontend->apartado_10; ?>
+                                                    <div id="apartado_10">
                                                         <?php echo $controlador->inputs->referencia->nombre; ?>
                                                         <?php echo $controlador->inputs->referencia->apellido_paterno; ?>
                                                         <?php echo $controlador->inputs->referencia->apellido_materno; ?>
@@ -242,8 +270,8 @@
                                                         </div>
                                                     </div>
 
-                                                    <?php echo $controlador->header_frontend->apartado_9; ?>
-                                                    <div id="apartado_9">
+                                                    <?php echo $controlador->header_frontend->apartado_11; ?>
+                                                    <div id="apartado_11">
                                                         <?php echo $controlador->inputs->nss_extra; ?>
                                                         <?php echo $controlador->inputs->correo_mi_cuenta_infonavit; ?>
                                                         <?php echo $controlador->inputs->password_mi_cuenta_infonavit; ?>
