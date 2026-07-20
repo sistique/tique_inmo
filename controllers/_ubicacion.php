@@ -543,7 +543,7 @@ class _ubicacion{
         }
 
         $columns_ds = array('dp_pais_descripcion');
-        $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  array(), key: 'dp_pais_id',
+        $keys_selects = $controler->key_select(cols:3, con_registros: true,filtro:  array(), key: 'dp_pais_id',
             keys_selects: array(), id_selected: $data_row->dp_pais_id, label: 'Pais', columns_ds : $columns_ds);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
@@ -554,7 +554,7 @@ class _ubicacion{
 
         $columns_ds = array('dp_estado_descripcion');
 
-        $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  $filtro, key: 'dp_estado_id',
+        $keys_selects = $controler->key_select(cols:3, con_registros: true,filtro:  $filtro, key: 'dp_estado_id',
             keys_selects: $keys_selects, id_selected: $data_row->dp_estado_id, label: 'Estado',
             columns_ds: $columns_ds);
         if(errores::$error){
@@ -566,7 +566,7 @@ class _ubicacion{
 
         $columns_ds = array('dp_municipio_descripcion');
 
-        $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  $filtro, key: 'dp_municipio_id',
+        $keys_selects = $controler->key_select(cols:3, con_registros: true,filtro:  $filtro, key: 'dp_municipio_id',
             keys_selects: $keys_selects, id_selected: $data_row->dp_municipio_id, label: 'Municipio',
             columns_ds: $columns_ds);
         if(errores::$error){
@@ -577,7 +577,7 @@ class _ubicacion{
         $filtro = array();
         $filtro['dp_municipio.id'] = $data_row->dp_municipio_id;
 
-        $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  $filtro, key: 'dp_cp_id',
+        $keys_selects = $controler->key_select(cols:3, con_registros: true,filtro:  $filtro, key: 'dp_cp_id',
             keys_selects: $keys_selects, id_selected:$data_row->dp_cp_id, label: 'CP', columns_ds: $columns_ds);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
@@ -586,7 +586,7 @@ class _ubicacion{
         $columns_ds = array('dp_colonia_descripcion');
         $filtro = array();
         $filtro['dp_cp.id'] = $data_row->dp_cp_id;
-        $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  $filtro,
+        $keys_selects = $controler->key_select(cols:3, con_registros: true,filtro:  $filtro,
             key: 'dp_colonia_postal_id', keys_selects: $keys_selects, id_selected: $data_row->dp_colonia_postal_id,
             label: 'Colonia', columns_ds: $columns_ds);
         if(errores::$error){
