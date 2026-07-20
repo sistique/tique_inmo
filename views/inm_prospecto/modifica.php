@@ -200,15 +200,15 @@
                             <?php echo $controlador->inputs->referencia->nombre; ?>
                             <?php echo $controlador->inputs->referencia->apellido_paterno; ?>
                             <?php echo $controlador->inputs->referencia->apellido_materno; ?>
-                            <?php echo $controlador->inputs->referencia->lada; ?>
                             <?php echo $controlador->inputs->referencia->numero; ?>
                             <?php echo $controlador->inputs->referencia->celular; ?>
                             <?php echo $controlador->inputs->referencia->dp_estado_id; ?>
                             <?php echo $controlador->inputs->referencia->dp_municipio_id; ?>
                             <?php echo $controlador->inputs->referencia->dp_cp_id; ?>
                             <?php echo $controlador->inputs->referencia->dp_colonia_postal_id; ?>
-                            <?php echo $controlador->inputs->referencia->dp_calle_pertenece_id; ?>
-                            <?php echo $controlador->inputs->referencia->numero_dom; ?>
+                            <?php echo $controlador->inputs->referencia->calle; ?>
+                            <?php echo $controlador->inputs->referencia->numero_exterior; ?>
+                            <?php echo $controlador->inputs->referencia->numero_interior; ?>
                             <?php echo $controlador->inputs->referencia->inm_parentesco_id; ?>
                             <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
 
