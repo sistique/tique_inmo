@@ -347,8 +347,6 @@ class inm_co_acreditado_html extends _base {
                                                 stdClass $row_upd = new stdClass(),
                                                 bool $value_vacio = false, bool $required = true): array|string
     {
-
-
         $class_css = array('inm_co_acreditado_nombre_empresa_patron');
 
         return $this->input_text(cols: $cols, disabled: $disabled, name: $name, place_holder: $place_holder,
@@ -361,10 +359,8 @@ class inm_co_acreditado_html extends _base {
                                                 stdClass $row_upd = new stdClass(),
                                                 bool $value_vacio = false, bool $required = true): array|string
     {
-
         return $this->input_text(cols: $cols,disabled:  $disabled,name:  $name,
             place_holder:  $place_holder,row_upd:  $row_upd,value_vacio:  $value_vacio, required: $required);
-
     }
 
     /**
@@ -430,7 +426,7 @@ class inm_co_acreditado_html extends _base {
     {
         $campos = array('apellido_materno','apellido_paterno','celular','correo','curp','extension_nep','lada',
             'lada_nep','nombre', 'nombre_empresa_patron','nrp','nss', 'numero','numero_nep','rfc','numero_credito',
-            'adeudo_hipoteca');
+            'adeudo_hipoteca','genero');
 
         $requireds = array();
 

@@ -194,7 +194,6 @@ class _inm_prospecto{
         }
 
         foreach ($headers as $n_apartado=>$tag_header){
-
             $inputs = $this->data_co_acreditado(controler: $controler,n_apartado:  $n_apartado,tag_header:  $tag_header,
                 row_upd: $row_upd);
 

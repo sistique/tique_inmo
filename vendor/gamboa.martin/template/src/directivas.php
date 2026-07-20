@@ -2522,7 +2522,7 @@ class directivas{
      * echo $html;
      * ```
      */
-    private function radio_doble(int $checked_default,array $class_label, array $class_radio, int $cols,string $for,
+    public function radio_doble(int $checked_default,array $class_label, array $class_radio, int $cols,string $for,
                                  array $ids_css, string $label_html, string $name, string $title, string $val_1,
                                  string $val_2): array|string
     {

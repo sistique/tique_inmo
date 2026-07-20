@@ -2,6 +2,7 @@
 namespace gamboamartin\system;
 
 use base\controller\controler;
+use base\frontend\params_inputs;
 use base\orm\modelo;
 use base\orm\modelo_base;
 use config\generales;
@@ -1800,6 +1801,38 @@ class html_controler
         $div = $this->div_input_text(class_css: $class_css, cols: $cols, disabled: $disabled,
             ids_css: $ids_css, name: $name, place_holder: $place_holder, regex: $regex, required: $required,
             row_upd: $row_upd, title: $title, value_vacio: $value_vacio, value: $value);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al integrar div', data: $div);
+        }
+
+        return $div;
+    }
+
+    final public function input_radio_doble(string $campo, int $checked_default, string $tag, string $val_1,
+                                            string $val_2, int $cols = 6): array|string
+    {
+        $campo = trim($campo);
+        if($campo === ''){
+            return $this->error->error(mensaje: 'Error campo vacio',data:  $campo, es_final: true);
+        }
+        if($checked_default <=0){
+            return $this->error->error(mensaje: 'Error checked_default debe ser mayor a 0', data: $checked_default,
+                es_final: true);
+        }
+        if($checked_default > 2){
+            return $this->error->error(mensaje: 'Error checked_default debe ser menor a 3', data: $checked_default,
+                es_final: true);
+        }
+
+        $params_chk = (new params_inputs())->params_base_chk(campo: $campo,tag:  $tag);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener params_chk',data:  $params_chk);
+        }
+
+        $div = $this->directivas->radio_doble(checked_default: $checked_default,
+            class_label:  $params_chk->class_label,class_radio:  $params_chk->class_radio,cols:$cols,
+            for: $params_chk->for, ids_css: $params_chk->ids_css,label_html:  $params_chk->label_html,
+            name:  $params_chk->name,title:  $params_chk->title,val_1: $val_1,val_2: $val_2);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar div', data: $div);
         }
