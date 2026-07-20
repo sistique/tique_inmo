@@ -14,23 +14,6 @@
         <?php echo $controlador->inputs->inm_attr_tipo_credito_id; ?>
         <?php echo $controlador->inputs->inm_destino_credito_id; ?>
         <?php echo $controlador->inputs->es_segundo_credito; ?>
-
-        <?php
-        $checked_genero_m = 'checked';
-        $checked_genero_f = '';
-        if($controlador->row_upd->genero === 'F'){
-            $checked_genero_m = '';
-            $checked_genero_f = 'checked';
-        }
-
-        $checked_genero_co_m = 'checked';
-        $checked_genero_co_f = '';
-        if($controlador->row_upd->genero_co_acreditado === 'F'){
-            $checked_genero_co_m = '';
-            $checked_genero_co_f = 'checked';
-        }
-        ?>
-
         <?php echo $controlador->inputs->inm_plazo_credito_sc_id; ?>
         <?php echo $controlador->btn; ?>
     </div>
@@ -54,23 +37,8 @@
         <?php echo $controlador->inputs->dp_estado_nacimiento_id; ?>
         <?php echo $controlador->inputs->dp_municipio_nacimiento_id; ?>
         <?php echo $controlador->inputs->inm_nacionalidad_id; ?>
+        <?php echo $controlador->inputs->genero; ?>
 
-        <!-- Género -->
-        <div class="control-group col-sm-6">
-            <label class="control-label" for="inm_attr_tipo_credito_id">Genero</label>
-            <label class="form-check-label chk">
-                <input type="radio" name="genero" value="M"
-                       class="form-check-input" id="genero"
-                       title="Genero" <?php echo $checked_genero_m; ?> >
-                M
-            </label>
-            <label class="form-check-label chk">
-                <input type="radio" name="genero" value="F"
-                       class="form-check-input" id="genero"
-                       title="Genero" <?php echo $checked_genero_f; ?>>
-                F
-            </label>
-        </div>
 
         <!-- Estado civil y ocupación -->
         <?php echo $controlador->inputs->adm_estado_civil_id; ?>
@@ -128,7 +96,6 @@
     <div  id="apartado_5">
 <?php echo $controlador->inputs->nombre_empresa_patron; ?>
 <?php echo $controlador->inputs->nrp_nep; ?>
-<?php echo $controlador->inputs->lada_nep; ?>
 <?php echo $controlador->inputs->numero_nep; ?>
 <?php echo $controlador->inputs->extension_nep; ?>
 <?php echo $controlador->inputs->correo_empresa; ?>
@@ -147,27 +114,12 @@
     <?php echo $controlador->inputs->inm_co_acreditado->nombre; ?>
     <?php echo $controlador->inputs->inm_co_acreditado->apellido_paterno; ?>
     <?php echo $controlador->inputs->inm_co_acreditado->apellido_materno; ?>
-    <?php echo $controlador->inputs->inm_co_acreditado->lada; ?>
     <?php echo $controlador->inputs->inm_co_acreditado->numero; ?>
     <?php echo $controlador->inputs->inm_co_acreditado->celular; ?>
     <?php echo $controlador->inputs->inm_co_acreditado->correo; ?>
-    <div class="control-group col-sm-4">
-        <label class="control-label" for="inm_attr_tipo_credito_id">Genero</label>
-        <label class="form-check-label chk">
-            <input type="radio" name="co_acreditado[genero]" value="M" class="form-check-input" id="genero"
-                   title="Genero" <?php echo $checked_genero_co_m; ?>>
-            M
-        </label>
-        <label class="form-check-label chk">
-            <input type="radio" name="co_acreditado[genero]" value="F" class="form-check-input" id="genero"
-                   title="Genero" <?php echo $checked_genero_co_f; ?>>
-            F
-        </label>
-    </div>
-
+    <?php echo $controlador->inputs->inm_co_acreditado->genero; ?>
     <?php echo $controlador->inputs->inm_co_acreditado->numero_credito; ?>
     <?php echo $controlador->inputs->inm_co_acreditado->adeudo_hipoteca; ?>
-
     <?php echo $controlador->btn; ?>
 
 </div>
@@ -176,7 +128,6 @@
 <div  id="apartado_7">
     <?php echo $controlador->inputs->inm_co_acreditado->nombre_empresa_patron; ?>
     <?php echo $controlador->inputs->inm_co_acreditado->nrp; ?>
-    <?php echo $controlador->inputs->inm_co_acreditado->lada_nep; ?>
     <?php echo $controlador->inputs->inm_co_acreditado->numero_nep; ?>
     <?php echo $controlador->btn; ?>
 </div>
