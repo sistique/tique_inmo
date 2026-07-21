@@ -234,10 +234,6 @@ class inm_prospecto extends _modelo_parent{
         $temp = array();
         foreach ($keys_contacto as $key){
             if(!isset($registro[$key]) || $registro[$key] === '') {
-                if($key === 'lada_com' || $key === 'numero_com'){
-                    $temp['lada_com'] = false;
-                    $temp['numero_com'] = false;
-                }
                 $temp[$key] = false;
                 $registro[$key] = $valores[$key];
             }
@@ -266,26 +262,6 @@ class inm_prospecto extends _modelo_parent{
      */
     public function alta_bd(array $keys_integra_ds = array('codigo', 'descripcion')): array|stdClass
     {
-        $filtro_doc['inm_prospecto.id'] = $this->registro_id;
-        $filtro_doc['doc_tipo_documento.id'] = 10;
-        $existe = (new inm_doc_prospecto(link: $this->link))->existe(filtro: $filtro_doc);
-        if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al obtener datos de bitacora', data: $existe);
-        }
-
-        if(!$existe) {
-            if(trim($_FILES['precalificacion']['name']) !== '') {
-                $_FILES['documento'] = $_FILES['precalificacion'];
-                $registro = array();
-                $registro['inm_prospecto_id'] = $this->registro_id;
-                $registro['doc_tipo_documento_id'] = 10;
-                $r_inm_doc_prospecto = (new inm_doc_prospecto(link: $this->link))->alta_registro(registro: $registro);
-                if (errores::$error) {
-                    return $this->error->error(mensaje: 'Error al insertar datos', data: $r_inm_doc_prospecto);
-                }
-            }
-        }
-
         $resultado = $this->valida_prioridad_campo(registro: $this->registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar datos de contacto default',
@@ -402,6 +378,26 @@ class inm_prospecto extends _modelo_parent{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al registrar elemnto de bitacora prospecto',
                 data: $r_alta_status);
+        }
+
+        $filtro_doc['inm_prospecto.id'] = $r_alta_bd->registro_id;
+        $filtro_doc['doc_tipo_documento.id'] = 10;
+        $existe = (new inm_doc_prospecto(link: $this->link))->existe(filtro: $filtro_doc);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener datos de bitacora', data: $existe);
+        }
+
+        if(!$existe) {
+            if(trim($_FILES['precalificacion']['name']) !== '') {
+                $_FILES['documento'] = $_FILES['precalificacion'];
+                $registro = array();
+                $registro['inm_prospecto_id'] = $r_alta_bd->registro_id;
+                $registro['doc_tipo_documento_id'] = 10;
+                $r_inm_doc_prospecto = (new inm_doc_prospecto(link: $this->link))->alta_registro(registro: $registro);
+                if (errores::$error) {
+                    return $this->error->error(mensaje: 'Error al insertar datos', data: $r_inm_doc_prospecto);
+                }
+            }
         }
 
         return $r_alta_bd;
