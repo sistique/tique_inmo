@@ -294,7 +294,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
 
         $fecha_otorgamiento_credito = $this->html->input_fecha(cols: 3, row_upd: $this->row_upd, value_vacio: false,
             name: 'fecha_otorgamiento_credito', place_holder: 'Fecha Credito',
-            required: false, value: $this->row_upd->fecha_otorgamiento_credito);
+            required: false);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al obtener input', data: $fecha_otorgamiento_credito, header: $header,
                 ws: $ws);
