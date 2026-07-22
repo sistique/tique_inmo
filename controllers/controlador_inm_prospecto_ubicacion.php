@@ -1589,13 +1589,13 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         }
 
         $keys_selects = (new init())->key_select_txt(cols: 1, key: 'numero_exterior',
-            keys_selects: $keys_selects, place_holder: 'Numero Ext', required: false);
+            keys_selects: $keys_selects, place_holder: 'Ext', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
         $keys_selects = (new init())->key_select_txt(cols: 1, key: 'numero_interior',
-            keys_selects: $keys_selects, place_holder: 'Numero Int', required: false);
+            keys_selects: $keys_selects, place_holder: 'Int', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
@@ -1954,7 +1954,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         }
 
         $fecha_otorgamiento_credito = $this->html->input_fecha(cols: 2, row_upd: $this->row_upd, value_vacio: false,
-            name: 'fecha_otorgamiento_credito', place_holder: 'Fecha Otorgamiento Credito',
+            name: 'fecha_otorgamiento_credito', place_holder: 'Fecha Credito',
             required: false, value: $this->row_upd->fecha_otorgamiento_credito);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al obtener input', data: $fecha_otorgamiento_credito, header: $header,
