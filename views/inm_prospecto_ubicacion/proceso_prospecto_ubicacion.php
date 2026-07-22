@@ -108,8 +108,8 @@
                                                         <?php echo $controlador->inputs->numero_credito; ?>
                                                         <?php echo $controlador->inputs->adeudo_hipoteca; ?>
                                                         <?php echo $controlador->inputs->mensualidad; ?>
-                                                        <?php echo $controlador->inputs->inm_tipo_credito_id; ?>
                                                         <?php echo $controlador->inputs->fecha_otorgamiento_credito; ?>
+                                                        <?php echo $controlador->inputs->inm_tipo_credito_id; ?>
                                                         <?php echo $controlador->inputs->monto_devolucion; ?>
                                                         <?php echo $controlador->inputs->correo_mi_cuenta_infonavit; ?>
                                                         <?php echo $controlador->inputs->password_mi_cuenta_infonavit; ?>

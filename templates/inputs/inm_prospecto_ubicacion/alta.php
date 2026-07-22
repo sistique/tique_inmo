@@ -23,6 +23,7 @@
 <?php echo $controlador->inputs->numero_credito; ?>
 <?php echo $controlador->inputs->adeudo_hipoteca; ?>
 <?php echo $controlador->inputs->mensualidad; ?>
+<?php echo $controlador->inputs->fecha_otorgamiento_credito; ?>
 
 <?php echo $controlador->inputs->cuenta_predial; ?>
 <?php echo $controlador->inputs->adeudo_predial; ?>
@@ -30,6 +31,12 @@
 <?php echo $controlador->inputs->adeudo_agua; ?>
 <?php echo $controlador->inputs->cuenta_luz; ?>
 <?php echo $controlador->inputs->adeudo_luz; ?>
+
+<?php echo $controlador->inputs->inm_estado_vivienda_id; ?>
+<?php echo $controlador->inputs->inm_prototipo_id; ?>
+<?php echo $controlador->inputs->inm_complemento_id; ?>
+<?php echo $controlador->inputs->metros_terreno; ?>
+<?php echo $controlador->inputs->metros_construccion; ?>
 
 <?php echo $controlador->inputs->observaciones; ?>
 
