@@ -447,11 +447,8 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
 
         $retorno = new stdClass();
 
-        if($existe->n_registros <= 0) {
+        if($conversion->r_alta_ubicacion !== null){
             $retorno->id_retorno = $conversion->r_alta_ubicacion->registro_id;
-            $retorno->siguiente_view = 'modifica';
-        }else{
-            $retorno->id_retorno = $existe->registros[0]['inm_ubicacion_id'];
             $retorno->siguiente_view = 'modifica';
         }
 
