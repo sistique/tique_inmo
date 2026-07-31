@@ -396,6 +396,18 @@ class inm_prospecto_ubicacion extends _modelo_parent{
             $metros_construccion = $this->registro['metros_construccion'];
         }
 
+        if(!isset($this->registro['adeudo_hipoteca'])){
+            $this->registro['adeudo_hipoteca'] = 0;
+        }
+
+        if(!isset($this->registro['adeudo_predial'])){
+            $this->registro['adeudo_predial'] = 0;
+        }
+
+        if(!isset($this->registro['adeudo_agua'])){
+            $this->registro['adeudo_agua'] = 0;
+        }
+
         if(!isset($this->registro['adeudo_luz'])){
             $this->registro['adeudo_luz'] = 0;
         }
