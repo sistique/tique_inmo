@@ -52,7 +52,7 @@ class dp_cp extends modelo {
         }
 
         if(!isset($this->registro['codigo'])){
-            $this->registro['codigo'] = $this->registro['descripcion'];
+            $this->registro['codigo'] = $this->registro['descripcion']." - ".rand(1000,9999);
         }
 
         $registro = $this->init_alta_bd(registro: $this->registro);
