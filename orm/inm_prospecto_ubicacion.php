@@ -818,12 +818,20 @@ class inm_prospecto_ubicacion extends _modelo_parent{
         if ($suma_devolucion > 0) {
             $devolucion_promedio = $suma_devolucion / $suma_score;
         }
+        $promedio_terreno = 0;
+        if($suma_terreno > 0){
+            $promedio_terreno = $suma_terreno / count($comparables);
+        }
 
-        $promedio_terreno = $suma_terreno / count($comparables);
+        $promedio_construccion = 0;
+        if($suma_construccion > 0){
+            $promedio_construccion = $suma_construccion / count($comparables);
+        }
 
-        $promedio_construccion = $suma_construccion / count($comparables);
-
-        $promedio_adeudo = $suma_adeudo / count($comparables);
+        $promedio_adeudo = 0;
+        if($suma_adeudo > 0){
+            $promedio_adeudo = $suma_adeudo / count($comparables);
+        }
 
         $adeudo_actual =
             $inm_prosp['adeudo_hipoteca'] +
