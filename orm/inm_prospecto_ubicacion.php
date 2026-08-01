@@ -783,7 +783,7 @@ class inm_prospecto_ubicacion extends _modelo_parent{
 
         $comparablesOrdenados = $comparables;
 
-        $comparables = array_values(array_filter($comparables, function($item){
+        $comparables = array_values(array_filter($comparables, function ($item) {
             return $item['score'] >= 60;
         }));
 
@@ -799,7 +799,7 @@ class inm_prospecto_ubicacion extends _modelo_parent{
 
         foreach ($comparables as $comparacion) {
 
-            $peso = $comparacion['score']/100;
+            $peso = $comparacion['score'] / 100;
             $suma_devolucion += $comparacion['inm_prospecto_ubicacion_monto_devolucion'] * $peso;
             $suma_score += $peso;
 
@@ -814,7 +814,10 @@ class inm_prospecto_ubicacion extends _modelo_parent{
                 + $comparacion['inm_prospecto_ubicacion_adeudo_luz'];
         }
 
-        $devolucion_promedio = $suma_devolucion / $suma_score;
+        $devolucion_promedio = 0;
+        if ($suma_devolucion > 0) {
+            $devolucion_promedio = $suma_devolucion / $suma_score;
+        }
 
         $promedio_terreno = $suma_terreno / count($comparables);
 
