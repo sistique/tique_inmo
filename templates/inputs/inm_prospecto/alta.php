@@ -11,3 +11,4 @@
 <?php echo $controlador->inputs->documento; ?>
 
 <?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
+<?php include (new views())->ruta_templates.'botons/submit/alta_bd_otro.php';?>
