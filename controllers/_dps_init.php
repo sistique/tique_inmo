@@ -73,7 +73,7 @@ class _dps_init{
      * @return array
      */
     private function key_con_descripcion(_ctl_base $controler, string $entidad, array $keys_selects, string $label,
-                                         int $cols = 6, stdClass $row_upd, array $columns_ds = array(),
+                                         stdClass $row_upd, int $cols = 6, array $columns_ds = array(),
                                          array $filtro = array()): array
     {
         $entidad = trim($entidad);
