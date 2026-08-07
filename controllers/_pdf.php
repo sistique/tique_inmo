@@ -49,6 +49,7 @@ class _pdf
             return $this->error->error(mensaje: 'Error al importar plantilla', data: $tpl_idx);
         }
         $this->pdf->useTemplate($tpl_idx, null, null, null, null, true);
+
         return $this->pdf;
     }
 
@@ -1054,8 +1055,6 @@ class _pdf
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al escribir en pdf', data: $pdf_exe);
         }
-
-        $this->pdf->Output('solicitud_avaluo.pdf', 'I');
 
         return $pdf;
     }
