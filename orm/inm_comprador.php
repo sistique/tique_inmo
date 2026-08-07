@@ -451,6 +451,68 @@ class inm_comprador extends _modelo_parent{
         $data->inm_rel_co_acreditados = $inm_rel_co_acreditados;
         $data->inm_referencias = $inm_referencias;
         $data->inm_avaluos = $inm_avaluos;
+        $data->nombre_archivo = 'solicitud_infonavit.pdf';
+
+        return $data;
+
+    }
+
+
+    final public function data_solicitud_avaluo_pdf(int $inm_comprador_id): array|stdClass
+    {
+        if($inm_comprador_id<=0){
+            return $this->error->error(mensaje: 'Error al inm_comprador_id debe ser mayor a 0',
+                data: $inm_comprador_id);
+        }
+        $inm_comprador = $this->registro(registro_id: $inm_comprador_id);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener comprador', data: $inm_comprador);
+        }
+
+        $imp_rel_comprador_com_cliente = (new inm_rel_comprador_com_cliente(link: $this->link))
+            ->imp_rel_comprador_com_cliente(inm_comprador_id: $inm_comprador_id);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener imp_rel_comprador_com_cliente',
+                data: $imp_rel_comprador_com_cliente);
+        }
+
+        $com_cliente = (new com_cliente(link: $this->link))->registro(
+            registro_id: $imp_rel_comprador_com_cliente['com_cliente_id']);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener com_cliente', data: $com_cliente);
+        }
+
+        $imp_rel_ubi_comp = (new inm_rel_ubi_comp(link: $this->link))->imp_rel_ubi_comp(
+            inm_comprador_id: $inm_comprador_id);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener imp_rel_ubi_comp', data: $imp_rel_ubi_comp);
+        }
+
+        $inm_conf_empresa = (new inm_conf_empresa(link: $this->link))->inm_conf_empresa(
+            org_empresa_id: $inm_comprador['org_empresa_id']);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener r_inm_conf_empresa', data: $inm_conf_empresa);
+        }
+
+        $inm_rel_co_acreditados = (new inm_co_acreditado(link: $this->link))->inm_co_acreditados(
+            inm_comprador_id: $inm_comprador_id);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener inm_rel_co_acreditados', data: $inm_rel_co_acreditados);
+        }
+
+        $inm_referencias = (new inm_referencia(link: $this->link))->inm_referencias(inm_comprador_id: $inm_comprador_id);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener inm_referencias', data: $inm_referencias);
+        }
+
+        $data = new stdClass();
+        $data->inm_comprador = $inm_comprador;
+        $data->imp_rel_comprador_com_cliente = $imp_rel_comprador_com_cliente;
+        $data->com_cliente = $com_cliente;
+        $data->imp_rel_ubi_comp = $imp_rel_ubi_comp;
+        $data->inm_conf_empresa = $inm_conf_empresa;
+        $data->inm_rel_co_acreditados = $inm_rel_co_acreditados;
+        $data->inm_referencias = $inm_referencias;
         $data->nombre_archivo = 'solicitud_gasto.pdf';
 
         return $data;

@@ -13,12 +13,14 @@ use setasign\Fpdi\Fpdi;
 use stdClass;
 use Throwable;
 
-class _pdf{
+class _pdf
+{
 
     private errores $error;
     private Fpdi $pdf;
 
-    public function __construct(Fpdi $pdf){
+    public function __construct(Fpdi $pdf)
+    {
         $this->error = new errores();
         $this->pdf = $pdf;
     }
@@ -31,18 +33,17 @@ class _pdf{
      * @param bool $plantilla_cargada Si la plantilla no esta cargada la carga por primera vez
      * @return array|Fpdi
      * @version 1.119.1
-
      */
     private function add_template(string $file_plantilla, int $page, string $path_base,
-                                 bool $plantilla_cargada): Fpdi|array
+                                  bool   $plantilla_cargada): Fpdi|array
     {
-        $valida = $this->valida_datos_plantilla(file_plantilla: $file_plantilla,page:  $page,path_base:  $path_base);
-        if(errores::$error){
+        $valida = $this->valida_datos_plantilla(file_plantilla: $file_plantilla, page: $page, path_base: $path_base);
+        if (errores::$error) {
             return $this->error->error(mensaje: 'Error al validar datos de plantilla', data: $valida);
         }
 
         $this->pdf->AddPage();
-        $tpl_idx = $this->tpl_idx(file_plantilla: $file_plantilla, page: $page,path_base:  $path_base,
+        $tpl_idx = $this->tpl_idx(file_plantilla: $file_plantilla, page: $page, path_base: $path_base,
             plantilla_cargada: $plantilla_cargada);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al importar plantilla', data: $tpl_idx);
@@ -59,11 +60,11 @@ class _pdf{
      */
     private function apartado_1(stdClass $data): Fpdi|array
     {
-        $valida = (new valida())->valida_existencia_keys(keys: array('inm_comprador'),registro:  $data);
+        $valida = (new valida())->valida_existencia_keys(keys: array('inm_comprador'), registro: $data);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al validar datos', data: $valida);
         }
-        if(!is_array($data->inm_comprador)){
+        if (!is_array($data->inm_comprador)) {
             return $this->error->error(mensaje: 'Error $data->inm_comprador no es un array', data: $data);
         }
 
@@ -212,12 +213,12 @@ class _pdf{
         $keys_ubicacion['inm_ubicacion_libro'] = array('x' => 142, 'y' => 237);
         $keys_ubicacion['inm_ubicacion_volumen'] = array('x' => 164, 'y' => 237);
 
-        $write = $this->write_data(keys: $keys_ubicacion,row:  $data->imp_rel_ubi_comp);
+        $write = $this->write_data(keys: $keys_ubicacion, row: $data->imp_rel_ubi_comp);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
         }
 
-        if(isset($data->imp_rel_ubi_comp['inm_tipo_vivienda_id']) &&
+        if (isset($data->imp_rel_ubi_comp['inm_tipo_vivienda_id']) &&
             trim($data->imp_rel_ubi_comp['inm_tipo_vivienda_id']) !== '') {
             $pdf_exe = $this->write(valor: 'X', x: $data->imp_rel_ubi_comp['inm_tipo_vivienda_x'],
                 y: $data->imp_rel_ubi_comp['inm_tipo_vivienda_y']);
@@ -226,14 +227,14 @@ class _pdf{
             }
         }
 
-        $write = $this->write(valor: ((int)date('d')), x:105,y: 258);
+        $write = $this->write(valor: ((int)date('d')), x: 105, y: 258);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
         }
 
         $mes_letra = $modelo->mes['espaniol'][date('m')]['nombre'];
 
-        $write = $this->write(valor: $mes_letra, x:128,y: 258);
+        $write = $this->write(valor: $mes_letra, x: 128, y: 258);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
         }
@@ -241,7 +242,7 @@ class _pdf{
         $this->pdf->SetFillColor(255, 255, 255);
         $this->pdf->Rect(182, 254.8, 14, 5, 'F');
 
-        $write = $this->write(valor: date('Y'), x:182,y: 258);
+        $write = $this->write(valor: date('Y'), x: 182, y: 258);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
         }
@@ -352,7 +353,7 @@ class _pdf{
         $keys_ubicacion['dp_municipio_descripcion'] = array('x' => 17, 'y' => 170);
         $keys_ubicacion['dp_cp_descripcion'] = array('x' => 174, 'y' => 170);
 
-        $write = $this->write_data(keys: $keys_ubicacion,row:  $data->imp_rel_ubi_comp);
+        $write = $this->write_data(keys: $keys_ubicacion, row: $data->imp_rel_ubi_comp);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
         }
@@ -362,7 +363,7 @@ class _pdf{
             return $this->error->error(mensaje: 'Error al obtener domicilio_ubicacion', data: $domicilio_ubicacion);
         }
 
-        $write = $this->write(valor: $domicilio_ubicacion, x:107,y: 108);
+        $write = $this->write(valor: $domicilio_ubicacion, x: 107, y: 108);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
         }
@@ -372,26 +373,26 @@ class _pdf{
             return $this->error->error(mensaje: 'Error al obtener ciudad', data: $ciudad);
         }
 
-        $write = $this->write(valor: $ciudad, x:36,y: 229);
+        $write = $this->write(valor: $ciudad, x: 36, y: 229);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
         }
 
-        $write = $this->write(valor: ((int)date('d')), x:115,y: 229);
+        $write = $this->write(valor: ((int)date('d')), x: 115, y: 229);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
         }
 
         $mes_letra = $modelo->mes['espaniol'][date('m')]['nombre'];
 
-        $write = $this->write(valor: $mes_letra, x:128,y: 229);
+        $write = $this->write(valor: $mes_letra, x: 128, y: 229);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
         }
 
         $year = $modelo->year['espaniol'][date('Y')]['abreviado'];
 
-        $write = $this->write(valor: $year, x:178.5,y: 229);
+        $write = $this->write(valor: $year, x: 178.5, y: 229);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
         }
@@ -399,17 +400,168 @@ class _pdf{
         return $pdf;
     }
 
-    private function apartado_gasto_1(stdClass $data, modelo $modelo): Fpdi|array{
+    private function apartado_avaluo_1_damian(stdClass $data, modelo $modelo): Fpdi|array
+    {
+        $valida = (new valida())->valida_existencia_keys(keys: array('inm_comprador'), registro: $data);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al validar datos', data: $valida);
+        }
+        if (!is_array($data->inm_comprador)) {
+            return $this->error->error(mensaje: 'Error $data->inm_comprador no es un array', data: $data);
+        }
+
+        $this->pdf->SetFont('Arial', 'B', 10);
+
+        $pdf = array();
+
+        $keys_cliente = array();
+        $keys_cliente[1] = array('x' => 75.4, 'y' => 38);
+        $keys_cliente[3] = array('x' => 103.7, 'y' => 38);
+        $keys_cliente[4] = array('x' => 152.8, 'y' => 38);
+        $keys_cliente[5] = array('x' => 192.4, 'yX' => 38);
+        $keys_cliente[6] = array('x' => 75.5, 'y' => 38);
+        $keys_cliente[7] = array('x' => 152.8, 'y' => 38);
+
+        foreach ($keys_cliente as $key => $valor) {
+            if ((int)$key === (int)$data->inm_comprador['inm_destino_credito_id']) {
+                $pdf[] = $this->write(valor: 'X', x: $valor['x'], y: $valor['y']);
+                if (errores::$error) {
+                    return $this->error->error(mensaje: 'Error al escribir en pdf', data: $pdf);
+                }
+            }
+        }
+
+        $keys_comprador['inm_comprador_nss'] = array('x' => 90, 'y' => 52);
+        $keys_comprador['inm_comprador_apellido_paterno'] = array('x' => 17, 'y' => 58);
+        $keys_comprador['inm_comprador_apellido_materno'] = array('x' => 17, 'y' => 64);
+        $keys_comprador['inm_comprador_nombre'] = array('x' => 17, 'y' => 69.5);
+        $keys_comprador['inm_comprador_lada_com'] = array('x' => 125, 'y' => 90);
+        $keys_comprador['inm_comprador_numero_com'] = array('x' => 138, 'y' => 90);
+        foreach ($keys_comprador as $key => $valor) {
+            $pdf[] = $this->write(valor: $data->inm_comprador[$key], x: $valor['x'], y: $valor['y']);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al escribir en pdf', data: $pdf);
+            }
+        }
+
+        $domicilio = $this->domicilio(data: $data);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener domicilio', data: $domicilio);
+        }
+
+        $pdf_exe = $this->write(valor: $domicilio, x: 17, y: 78.5);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir domicilio', data: $pdf_exe);
+        }
+
+        $pdf_exe = $this->write(valor: $data->inm_comprador['dp_colonia_descripcion'], x: 17, y: 84);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir domicilio', data: $pdf_exe);
+        }
+
+        $pdf_exe = $this->write(valor: $data->inm_comprador['dp_municipio_descripcion'], x: 110, y: 84);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir domicilio', data: $pdf_exe);
+        }
+
+        $pdf_exe = $this->write(valor: $data->inm_comprador['dp_estado_descripcion'], x: 17, y: 90);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir domicilio', data: $pdf_exe);
+        }
+
+        $pdf_exe = $this->write(valor: $data->inm_comprador['dp_cp_descripcion'], x: 83, y: 90);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir domicilio', data: $pdf_exe);
+        }
+
+        /*$keys_comprador['org_empresa_razon_social']= array('x'=>17,'y'=>131);
+        $keys_comprador['org_empresa_rfc']= array('x'=>23,'y'=>138);
+        $write = $this->write_data(keys: $keys_comprador,row:  $data->inm_comprador);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
+        }*/
+
+        $keys_ubicacion['inm_ubicacion_apellido_paterno'] = array('x' => 17, 'y' => 105);
+        $keys_ubicacion['inm_ubicacion_apellido_materno'] = array('x' => 17, 'y' => 111);
+        $keys_ubicacion['inm_ubicacion_nombre'] = array('x' => 17, 'y' => 117);
+        $keys_ubicacion['inm_ubicacion_rfc'] = array('x' => 23, 'y' => 123);
+        $keys_ubicacion['inm_ubicacion_lada_com'] = array('x' => 125, 'y' => 133);
+        $keys_ubicacion['inm_ubicacion_numero_com'] = array('x' => 138, 'y' => 133);
+
+        $keys_ubicacion['dp_cp_domicilio_descripcion'] = array('x' => 173, 'y' => 125.5);
+        $keys_ubicacion['dp_colonia_domicilio_descripcion'] = array('x' => 107, 'y' => 113.8);
+        $keys_ubicacion['dp_estado_domicilio_descripcion'] = array('x' => 107, 'y' => 125.5);
+        $keys_ubicacion['dp_municipio_domicilio_descripcion'] = array('x' => 107, 'y' => 119.5);
+
+        $keys_ubicacion['inm_ubicacion_calle'] = array('x' => 17, 'y' => 158);
+        $keys_ubicacion['inm_ubicacion_numero_exterior'] = array('x' => 17, 'y' => 164);
+        $keys_ubicacion['inm_ubicacion_numero_interior'] = array('x' => 32.5, 'y' => 164);
+        $keys_ubicacion['inm_ubicacion_lote'] = array('x' => 46, 'y' => 164);
+        $keys_ubicacion['inm_ubicacion_manzana'] = array('x' => 63, 'y' => 164);
+        $keys_ubicacion['dp_colonia_descripcion'] = array('x' => 82, 'y' => 164);
+        $keys_ubicacion['dp_estado_descripcion'] = array('x' => 101, 'y' => 170);
+        $keys_ubicacion['dp_municipio_descripcion'] = array('x' => 17, 'y' => 170);
+        $keys_ubicacion['dp_cp_descripcion'] = array('x' => 174, 'y' => 170);
+
+        $write = $this->write_data(keys: $keys_ubicacion, row: $data->imp_rel_ubi_comp);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
+        }
+
+        $domicilio_ubicacion = $this->domicilio_ubicacion(data: $data);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener domicilio_ubicacion', data: $domicilio_ubicacion);
+        }
+
+        $write = $this->write(valor: $domicilio_ubicacion, x: 107, y: 108);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
+        }
+
+        $ciudad = $this->ciudad(data: $data);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener ciudad', data: $ciudad);
+        }
+
+        $write = $this->write(valor: $ciudad, x: 36, y: 229);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
+        }
+
+        $write = $this->write(valor: ((int)date('d')), x: 115, y: 229);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
+        }
+
+        $mes_letra = $modelo->mes['espaniol'][date('m')]['nombre'];
+
+        $write = $this->write(valor: $mes_letra, x: 128, y: 229);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
+        }
+
+        $year = $modelo->year['espaniol'][date('Y')]['abreviado'];
+
+        $write = $this->write(valor: $year, x: 178.5, y: 229);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
+        }
+
+        return $pdf;
+    }
+
+    private function apartado_gasto_1(stdClass $data, modelo $modelo): Fpdi|array
+    {
         $this->pdf->SetFont('Arial', '', 10);
 
         $tipo_operacion = '';
-        if($_GET['seccion_retorno'] === 'inm_ubicacion'){
+        if ($_GET['seccion_retorno'] === 'inm_ubicacion') {
             $tipo_operacion = 'ADQUISICION';
-        }else{
+        } else {
             $tipo_operacion = 'COMPRAVENTA';
         }
 
-        if($modelo->tabla === 'inm_cheque') {
+        if ($modelo->tabla === 'inm_cheque') {
 
             $this->pdf->SetXY(75.5, 46.5);
             $this->pdf->MultiCell(7, 5.5, "X", 0, 'C',);
@@ -459,37 +611,37 @@ class _pdf{
             $this->pdf->SetXY(141.12, 93.8);
             $this->pdf->MultiCell(63.5, $altura_total,
                 mb_convert_encoding((string)$data->inm_cheque['bn_cuenta_descripcion'], 'ISO-8859-1', 'UTF-8'),
-                1,'C',true);
+                1, 'C', true);
 
             $this->pdf->SetXY(103.5, 127.1);
-            $this->pdf->MultiCell(37.5, 4.5, $texto,0,'C');
-        }else if($modelo->tabla === 'inm_transferencia'){
-            $this->pdf->SetXY(134,46.5);
-            $this->pdf->MultiCell(7,5.5, "X",0,'C');
-            
+            $this->pdf->MultiCell(37.5, 4.5, $texto, 0, 'C');
+        } else if ($modelo->tabla === 'inm_transferencia') {
+            $this->pdf->SetXY(134, 46.5);
+            $this->pdf->MultiCell(7, 5.5, "X", 0, 'C');
+
             $texto = '$' . number_format($data->inm_transferencia['inm_transferencia_monto'], 2,
                     '.', ',');
-    
+
             $this->pdf->SetFont('Arial', '', 9);
-            $this->pdf->SetXY(44.5,52.5);
-            $this->pdf->MultiCell(38,5,  date("d-m-Y"),0,'C');
-    
-            $this->pdf->SetXY(44.5,58);
-            $this->pdf->MultiCell(160.5,5,
-                mb_convert_encoding($tipo_operacion." ".$data->inm_transferencia['inm_transferencia_nombre_beneficiario']
-                    ." - ".$data->inm_transferencia['inm_ubicacion_ubicacion'], 'ISO-8859-1', 'UTF-8'),
-                0,'C');
-    
+            $this->pdf->SetXY(44.5, 52.5);
+            $this->pdf->MultiCell(38, 5, date("d-m-Y"), 0, 'C');
+
+            $this->pdf->SetXY(44.5, 58);
+            $this->pdf->MultiCell(160.5, 5,
+                mb_convert_encoding($tipo_operacion . " " . $data->inm_transferencia['inm_transferencia_nombre_beneficiario']
+                    . " - " . $data->inm_transferencia['inm_ubicacion_ubicacion'], 'ISO-8859-1', 'UTF-8'),
+                0, 'C');
+
             $this->pdf->SetXY(44.5, 63.5);
-            $this->pdf->MultiCell(38,5, $texto,0,'C');
-    
+            $this->pdf->MultiCell(38, 5, $texto, 0, 'C');
+
             $this->pdf->SetXY(44.5, 70);
-            $this->pdf->MultiCell(160.5,5,
+            $this->pdf->MultiCell(160.5, 5,
                 mb_convert_encoding((string)$data->inm_transferencia['inm_transferencia_transferencia'], 'ISO-8859-1', 'UTF-8'),
-                0,'C');
-    
-            $this->pdf->SetXY(164.7,79);
-            $this->pdf->MultiCell(40,5, mb_convert_encoding("TITULACIÓN", 'ISO-8859-1', 'UTF-8'),0,'C');
+                0, 'C');
+
+            $this->pdf->SetXY(164.7, 79);
+            $this->pdf->MultiCell(40, 5, mb_convert_encoding("TITULACIÓN", 'ISO-8859-1', 'UTF-8'), 0, 'C');
 
             $this->pdf->SetFont('Arial', '', 7);
 
@@ -512,37 +664,37 @@ class _pdf{
             $this->pdf->SetXY(141.12, 93.8);
             $this->pdf->MultiCell(63.5, $altura_total,
                 mb_convert_encoding((string)$data->inm_transferencia['bn_cuenta_descripcion'], 'ISO-8859-1', 'UTF-8'),
-                1,'C',true);
+                1, 'C', true);
 
             $this->pdf->SetXY(103.5, 127.1);
-            $this->pdf->MultiCell(37.5, 4.5, $texto,0,'C');
-        }else{
-            $this->pdf->SetXY(195.5,46.5);
-            $this->pdf->MultiCell(9.5,5.5, "X",0,'C');
+            $this->pdf->MultiCell(37.5, 4.5, $texto, 0, 'C');
+        } else {
+            $this->pdf->SetXY(195.5, 46.5);
+            $this->pdf->MultiCell(9.5, 5.5, "X", 0, 'C');
 
             $texto = '$' . number_format($data->inm_efectivo['inm_efectivo_monto'], 2,
                     '.', ',');
 
             $this->pdf->SetFont('Arial', '', 9);
-            $this->pdf->SetXY(44.5,52.5);
-            $this->pdf->MultiCell(38,5,  date("d-m-Y"),0,'C');
+            $this->pdf->SetXY(44.5, 52.5);
+            $this->pdf->MultiCell(38, 5, date("d-m-Y"), 0, 'C');
 
-            $this->pdf->SetXY(44.5,58);
-            $this->pdf->MultiCell(160.5,5,
-                mb_convert_encoding((string)$data->inm_efectivo['inm_efectivo_nombre_beneficiario']." - ".
+            $this->pdf->SetXY(44.5, 58);
+            $this->pdf->MultiCell(160.5, 5,
+                mb_convert_encoding((string)$data->inm_efectivo['inm_efectivo_nombre_beneficiario'] . " - " .
                     $data->inm_efectivo['inm_ubicacion_ubicacion'], 'ISO-8859-1', 'UTF-8'),
-                0,'C');
+                0, 'C');
 
             $this->pdf->SetXY(44.5, 63.5);
-            $this->pdf->MultiCell(38,5, $texto,0,'C');
+            $this->pdf->MultiCell(38, 5, $texto, 0, 'C');
 
             $this->pdf->SetXY(44.5, 70);
-            $this->pdf->MultiCell(160.5,5,
+            $this->pdf->MultiCell(160.5, 5,
                 mb_convert_encoding("", 'ISO-8859-1', 'UTF-8'),
-                0,'C');
+                0, 'C');
 
-            $this->pdf->SetXY(164.7,79);
-            $this->pdf->MultiCell(40,5, mb_convert_encoding("TITULACIÓN", 'ISO-8859-1', 'UTF-8'),0,'C');
+            $this->pdf->SetXY(164.7, 79);
+            $this->pdf->MultiCell(40, 5, mb_convert_encoding("TITULACIÓN", 'ISO-8859-1', 'UTF-8'), 0, 'C');
 
             $this->pdf->SetFont('Arial', '', 7);
 
@@ -565,19 +717,19 @@ class _pdf{
             $this->pdf->SetXY(141.12, 93.8);
             $this->pdf->MultiCell(63.5, $altura_total,
                 mb_convert_encoding("", 'ISO-8859-1', 'UTF-8'),
-                1,'C',true);
+                1, 'C', true);
 
             $this->pdf->SetXY(103.5, 127.1);
-            $this->pdf->MultiCell(37.5, 4.5, $texto,0,'C');
+            $this->pdf->MultiCell(37.5, 4.5, $texto, 0, 'C');
         }
 
         $this->pdf->SetFont('Arial', '', 8.5);
 
         $this->pdf->SetXY(34.5, 154);
-        $this->pdf->MultiCell(50.5,5, "ERIKA CRUZ", 0,'C');
+        $this->pdf->MultiCell(50.5, 5, "ERIKA CRUZ", 0, 'C');
 
         $this->pdf->SetXY(132.5, 154);
-        $this->pdf->MultiCell(50.5,5, "MAURICIO HERNANDEZ", 0,'C');
+        $this->pdf->MultiCell(50.5, 5, "MAURICIO HERNANDEZ", 0, 'C');
 
         return $this->pdf;
     }
@@ -590,27 +742,27 @@ class _pdf{
      */
     private function apartado_2(stdClass $data): array
     {
-        $valida = (new valida())->valida_existencia_keys(keys: array('inm_comprador'),registro:  $data);
+        $valida = (new valida())->valida_existencia_keys(keys: array('inm_comprador'), registro: $data);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al validar datos', data: $valida);
         }
-        if(!is_array($data->inm_comprador)){
+        if (!is_array($data->inm_comprador)) {
             return $this->error->error(mensaje: 'Error $data->inm_comprador no es un array', data: $data);
         }
 
         $write = array();
         $row_condiciones['inm_comprador_descuento_pension_alimenticia_dh'] =
-            array('x'=>77,'y'=>117, 'value_compare'=>0.0);
+            array('x' => 77, 'y' => 117, 'value_compare' => 0.0);
         $row_condiciones['inm_comprador_descuento_pension_alimenticia_fc'] =
-            array('x'=>115,'y'=>117, 'value_compare'=>0.0);
+            array('x' => 115, 'y' => 117, 'value_compare' => 0.0);
         $row_condiciones['inm_comprador_monto_credito_solicitado_dh'] =
-            array('x'=>79,'y'=>131, 'value_compare'=>0.0);
+            array('x' => 79, 'y' => 131, 'value_compare' => 0.0);
         $row_condiciones['inm_comprador_monto_ahorro_voluntario'] =
-            array('x'=>51.5,'y'=>143, 'value_compare'=>0.0);
+            array('x' => 51.5, 'y' => 143, 'value_compare' => 0.0);
 
-        foreach ($row_condiciones as $key =>$row){
-            $pdf = $this->write_condicion(key: $key,row:  $data->inm_comprador,value_compare:  $row['value_compare'],
-                x:  $row['x'],y: $row['y']);
+        foreach ($row_condiciones as $key => $row) {
+            $pdf = $this->write_condicion(key: $key, row: $data->inm_comprador, value_compare: $row['value_compare'],
+                x: $row['x'], y: $row['y']);
             if (errores::$error) {
                 return $this->error->error(mensaje: 'Error al escribir en pdf', data: $pdf);
             }
@@ -627,25 +779,25 @@ class _pdf{
      */
     private function apartado_3(stdClass $data): Fpdi|array
     {
-        if(!isset($data->imp_rel_ubi_comp)){
+        if (!isset($data->imp_rel_ubi_comp)) {
             return $this->error->error(mensaje: 'Error no existe $data->imp_rel_ubi_comp', data: $data);
         }
-        if(!is_array($data->imp_rel_ubi_comp)){
+        if (!is_array($data->imp_rel_ubi_comp)) {
             return $this->error->error(mensaje: 'Error $data->imp_rel_ubi_comp no es un array', data: $data);
         }
 
-        if(!isset($data->inm_comprador)){
+        if (!isset($data->inm_comprador)) {
             return $this->error->error(mensaje: 'Error no existe $data->inm_comprador', data: $data);
         }
-        if(!is_array($data->inm_comprador)){
+        if (!is_array($data->inm_comprador)) {
             return $this->error->error(mensaje: 'Error $data->inm_comprador no es un array', data: $data);
         }
 
-        if(!isset($data->imp_rel_ubi_comp['inm_rel_ubi_comp_precio_operacion'])){
+        if (!isset($data->imp_rel_ubi_comp['inm_rel_ubi_comp_precio_operacion'])) {
             return $this->error->error(
                 mensaje: 'Error no existe $data->imp_rel_ubi_comp[inm_rel_ubi_comp_precio_operacion]', data: $data);
         }
-        if(trim($data->imp_rel_ubi_comp['inm_rel_ubi_comp_precio_operacion']) === ''){
+        if (trim($data->imp_rel_ubi_comp['inm_rel_ubi_comp_precio_operacion']) === '') {
             return $this->error->error(
                 mensaje: 'Error $data->imp_rel_ubi_comp[inm_rel_ubi_comp_precio_operacion] esta vacio', data: $data);
         }
@@ -655,7 +807,7 @@ class _pdf{
             return $this->error->error(mensaje: 'Error al obtener keys_ubicacion', data: $keys_ubicacion);
         }
 
-        $write = $this->write_data(keys: $keys_ubicacion,row:  $data->imp_rel_ubi_comp);
+        $write = $this->write_data(keys: $keys_ubicacion, row: $data->imp_rel_ubi_comp);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
         }
@@ -663,13 +815,13 @@ class _pdf{
         $condiciones = array();
         $condiciones['SI'] = 84;
 
-        $coord = $this->x_y_compare(condiciones: $condiciones,key:  'inm_comprador_con_discapacidad',
-            row:  $data->inm_comprador, x_init:  94.5, y_init: 190);
+        $coord = $this->x_y_compare(condiciones: $condiciones, key: 'inm_comprador_con_discapacidad',
+            row: $data->inm_comprador, x_init: 94.5, y_init: 190);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al obtener coordenadas', data: $coord);
         }
 
-        $pdf = $this->write( valor: 'X', x: $coord->x, y: $coord->y);
+        $pdf = $this->write(valor: 'X', x: $coord->x, y: $coord->y);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al escribir en pdf', data: $pdf);
         }
@@ -679,13 +831,13 @@ class _pdf{
         $condiciones[4] = 114;
         $condiciones[5] = 163;
 
-        $coord = $this->x_y_compare(condiciones: $condiciones,key:  'inm_destino_credito_id',
-            row:  $data->inm_comprador, x_init:  21.5, y_init: 224.5);
+        $coord = $this->x_y_compare(condiciones: $condiciones, key: 'inm_destino_credito_id',
+            row: $data->inm_comprador, x_init: 21.5, y_init: 224.5);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al obtener coordenadas', data: $coord);
         }
 
-        $pdf = $this->write( valor: $data->inm_avaluos['inm_avaluo_valor_avaluo'],
+        $pdf = $this->write(valor: $data->inm_avaluos['inm_avaluo_valor_avaluo'],
             x: $coord->x, y: $coord->y);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al escribir en pdf', data: $pdf);
@@ -694,20 +846,22 @@ class _pdf{
         return $pdf;
     }
 
-    private function apartado_4(stdClass $data){
+    private function apartado_4(stdClass $data)
+    {
         $keys_comprador = $this->keys_comprador();
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al obtener keys_ubicacion', data: $keys_comprador);
         }
 
-        $write = $this->write_data(keys: $keys_comprador,row:  $data->inm_comprador);
+        $write = $this->write_data(keys: $keys_comprador, row: $data->inm_comprador);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
         }
         return $write;
     }
 
-    private function apartado_5(stdClass $data){
+    private function apartado_5(stdClass $data)
+    {
         $write = $this->write_comprador_hoja_3(data: $data);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
@@ -744,17 +898,16 @@ class _pdf{
     }
 
 
-
     private function ciudad(stdClass $data): string
     {
         $ciudad = strtoupper('ZAPOPAN');
-        $ciudad .= ", ".strtoupper('JALISCO');
+        $ciudad .= ", " . strtoupper('JALISCO');
         return $ciudad;
     }
 
     private function domicilio(stdClass $data): string
     {
-        $domicilio = $data->com_cliente['com_cliente_calle'].' '.$data->com_cliente['com_cliente_numero_exterior'];
+        $domicilio = $data->com_cliente['com_cliente_calle'] . ' ' . $data->com_cliente['com_cliente_numero_exterior'];
         $domicilio .= $data->com_cliente['com_cliente_numero_interior'];
 
         return $domicilio;
@@ -763,7 +916,7 @@ class _pdf{
     private function domicilio_ubicacion(stdClass $data): string
     {
         $domicilio = $data->imp_rel_ubi_comp['inm_ubicacion_calle_domicilio'] . ' ';
-        $domicilio .= $data->imp_rel_ubi_comp['inm_ubicacion_numero_exterior_domicilio']. ' ';
+        $domicilio .= $data->imp_rel_ubi_comp['inm_ubicacion_numero_exterior_domicilio'] . ' ';
         $domicilio .= $data->imp_rel_ubi_comp['inm_ubicacion_numero_interior_domicilio'];
 
         return $domicilio;
@@ -778,15 +931,15 @@ class _pdf{
      */
     private function entidades_infonavit(stdClass $data): array
     {
-        $entidades_pdf = array('inm_producto_infonavit','inm_tipo_credito','inm_attr_tipo_credito',
-            'inm_destino_credito','inm_plazo_credito_sc','inm_tipo_discapacidad','inm_persona_discapacidad');
+        $entidades_pdf = array('inm_producto_infonavit', 'inm_tipo_credito', 'inm_attr_tipo_credito',
+            'inm_destino_credito', 'inm_plazo_credito_sc', 'inm_tipo_discapacidad', 'inm_persona_discapacidad');
         $writes = array();
-        foreach ($entidades_pdf as $name_entidad){
-            $valida = (new valida())->valida_existencia_keys(keys: array('inm_comprador'),registro:  $data);
+        foreach ($entidades_pdf as $name_entidad) {
+            $valida = (new valida())->valida_existencia_keys(keys: array('inm_comprador'), registro: $data);
             if (errores::$error) {
                 return $this->error->error(mensaje: 'Error al validar datos', data: $valida);
             }
-            if(!is_array($data->inm_comprador)){
+            if (!is_array($data->inm_comprador)) {
                 return $this->error->error(mensaje: 'Error $data->inm_comprador no es un array', data: $data);
             }
 
@@ -807,15 +960,15 @@ class _pdf{
      */
     private function es_segundo_credito(stdClass $data): Fpdi|array
     {
-        $valida = (new valida())->valida_existencia_keys(keys: array('inm_comprador'),registro:  $data);
+        $valida = (new valida())->valida_existencia_keys(keys: array('inm_comprador'), registro: $data);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al validar datos', data: $valida);
         }
-        if(!is_array($data->inm_comprador)){
+        if (!is_array($data->inm_comprador)) {
             return $this->error->error(mensaje: 'Error $data->inm_comprador no es un array', data: $data);
         }
         $keys = array('inm_comprador_es_segundo_credito');
-        $valida = (new valida())->valida_existencia_keys(keys: $keys,registro:  $data->inm_comprador);
+        $valida = (new valida())->valida_existencia_keys(keys: $keys, registro: $data->inm_comprador);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al validar datos', data: $valida);
         }
@@ -826,7 +979,7 @@ class _pdf{
             $x = 32.1;
         }
 
-        $pdf = $this->write( valor: 'X', x: $x, y: $y);
+        $pdf = $this->write(valor: 'X', x: $x, y: $y);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al escribir en pdf', data: $pdf);
         }
@@ -834,9 +987,10 @@ class _pdf{
     }
 
 
-    private function genera_hoja_1(stdClass $data, string $path_base){
-        $pdf = $this->add_template(file_plantilla: 'templates/solicitud_infonavit.pdf',page:  1,
-            path_base:  $path_base,plantilla_cargada:  false);
+    private function genera_hoja_1(stdClass $data, string $path_base)
+    {
+        $pdf = $this->add_template(file_plantilla: 'templates/solicitud_infonavit.pdf', page: 1,
+            path_base: $path_base, plantilla_cargada: false);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al agregar template', data: $pdf);
         }
@@ -851,16 +1005,17 @@ class _pdf{
         return $pdf;
     }
 
-    private function genera_hoja_avaluo_1_fajardo(stdClass $data, modelo $modelo,string $path_base){
-        $pdf = $this->add_template(file_plantilla: 'templates/solicitud_avaluo_fajardo.pdf',page:  1,
-            path_base:  $path_base,plantilla_cargada:  false);
+    private function genera_hoja_avaluo_1_fajardo(stdClass $data, modelo $modelo, string $path_base)
+    {
+        $pdf = $this->add_template(file_plantilla: 'templates/solicitud_avaluo_fajardo.pdf', page: 1,
+            path_base: $path_base, plantilla_cargada: false);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al agregar template', data: $pdf);
         }
         $pdf->SetFont('Arial', 'B', 10);
         $pdf->SetTextColor(0, 0, 0);
 
-        $pdf_exe = $this->hoja_avaluo_1_fajardo(data: $data,modelo: $modelo);
+        $pdf_exe = $this->hoja_avaluo_1_fajardo(data: $data, modelo: $modelo);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al escribir en pdf', data: $pdf_exe);
         }
@@ -868,16 +1023,17 @@ class _pdf{
         return $pdf;
     }
 
-    private function genera_hoja_avaluo_1_osvaldo(stdClass $data, modelo $modelo,string $path_base){
-        $pdf = $this->add_template(file_plantilla: 'templates/solicitud_avaluo_osvaldo.pdf',page:  1,
-            path_base:  $path_base,plantilla_cargada:  false);
+    private function genera_hoja_avaluo_1_osvaldo(stdClass $data, modelo $modelo, string $path_base)
+    {
+        $pdf = $this->add_template(file_plantilla: 'templates/solicitud_avaluo_osvaldo.pdf', page: 1,
+            path_base: $path_base, plantilla_cargada: false);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al agregar template', data: $pdf);
         }
         $pdf->SetFont('Arial', 'B', 10);
         $pdf->SetTextColor(0, 0, 0);
 
-        $pdf_exe = $this->hoja_avaluo_1_osvaldo(data: $data,modelo: $modelo);
+        $pdf_exe = $this->hoja_avaluo_1_osvaldo(data: $data, modelo: $modelo);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al escribir en pdf', data: $pdf_exe);
         }
@@ -885,9 +1041,30 @@ class _pdf{
         return $pdf;
     }
 
-    private function genera_hoja_gasto_1(stdClass $data, modelo $modelo,string $path_base){
-        $pdf = $this->add_template(file_plantilla: 'templates/solicitud_gasto.pdf',page:  1,
-            path_base:  $path_base,plantilla_cargada:  false);
+    private function genera_hoja_avaluo_1_damian(stdClass $data, modelo $modelo, string $path_base)
+    {
+        $pdf = $this->add_template(file_plantilla: 'templates/solicitud_avaluo_damian.pdf', page: 1,
+            path_base: $path_base, plantilla_cargada: false);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al agregar template', data: $pdf);
+        }
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->SetTextColor(0, 0, 0);
+
+        $pdf_exe = $this->hoja_avaluo_1_damian(data: $data, modelo: $modelo);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $pdf_exe);
+        }
+
+        $this->pdf->Output('solicitud_avaluo.pdf', 'I');
+
+        return $pdf;
+    }
+
+    private function genera_hoja_gasto_1(stdClass $data, modelo $modelo, string $path_base)
+    {
+        $pdf = $this->add_template(file_plantilla: 'templates/solicitud_gasto.pdf', page: 1,
+            path_base: $path_base, plantilla_cargada: false);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al agregar template', data: $pdf);
         }
@@ -895,7 +1072,7 @@ class _pdf{
         $pdf->SetFont('Arial', 'B', 15);
         $pdf->SetTextColor(0, 0, 0);
 
-        $pdf_exe = $this->hoja_gasto_1(data: $data,modelo: $modelo);
+        $pdf_exe = $this->hoja_gasto_1(data: $data, modelo: $modelo);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al escribir en pdf', data: $pdf_exe);
         }
@@ -903,9 +1080,10 @@ class _pdf{
         return $pdf;
     }
 
-    private function genera_hoja_2(stdClass $data, PDO $link, string $path_base){
-        $pdf = $this->add_template(file_plantilla: 'templates/solicitud_infonavit.pdf',page:  2,
-            path_base:  $path_base,plantilla_cargada:  true);
+    private function genera_hoja_2(stdClass $data, PDO $link, string $path_base)
+    {
+        $pdf = $this->add_template(file_plantilla: 'templates/solicitud_infonavit.pdf', page: 2,
+            path_base: $path_base, plantilla_cargada: true);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al agregar template', data: $pdf);
         }
@@ -917,9 +1095,10 @@ class _pdf{
         return $write;
     }
 
-    private function genera_hoja_3(stdClass $data, modelo $modelo, string $path_base){
-        $pdf = $this->add_template(file_plantilla: 'templates/solicitud_infonavit.pdf',page:  3,
-            path_base:  $path_base,plantilla_cargada:  true);
+    private function genera_hoja_3(stdClass $data, modelo $modelo, string $path_base)
+    {
+        $pdf = $this->add_template(file_plantilla: 'templates/solicitud_infonavit.pdf', page: 3,
+            path_base: $path_base, plantilla_cargada: true);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al agregar template', data: $pdf);
         }
@@ -932,12 +1111,13 @@ class _pdf{
         return $write;
     }
 
-    private function get_key_referencias(int $indice){
+    private function get_key_referencias(int $indice)
+    {
         $keys_referencias = (new _keys_selects())->keys_referencias();
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al obtener keys_referencias', data: $keys_referencias);
         }
-        if($indice === 1) {
+        if ($indice === 1) {
             $keys_referencias = (new _keys_selects())->keys_referencias_2();
             if (errores::$error) {
                 return $this->error->error(mensaje: 'Error al obtener keys_referencias', data: $keys_referencias);
@@ -955,22 +1135,22 @@ class _pdf{
      * @return float|array
      * @version 1.129.1
      */
-    private function get_x_var(array $condiciones, string $key_id,array $row, float $x_init): float|array
+    private function get_x_var(array $condiciones, string $key_id, array $row, float $x_init): float|array
     {
         $key_id = trim($key_id);
-        if($key_id === ''){
+        if ($key_id === '') {
             return $this->error->error(mensaje: 'Error key_id esta vacio', data: $key_id);
         }
         $keys = array($key_id);
-        $valida = (new valida())->valida_existencia_keys(keys: $keys,registro:  $row);
-        if(errores::$error){
+        $valida = (new valida())->valida_existencia_keys(keys: $keys, registro: $row);
+        if (errores::$error) {
             return $this->error->error(mensaje: 'Error al validar $row', data: $valida);
         }
         $x = $x_init;
 
         $key_compare = $row[$key_id];
 
-        if(isset($condiciones[$key_compare])){
+        if (isset($condiciones[$key_compare])) {
             $x = $condiciones[$key_compare];
         }
 
@@ -978,8 +1158,9 @@ class _pdf{
 
     }
 
-    private function hoja_avaluo_1_fajardo(stdClass $data, modelo $modelo){
-        $pdf = $this->apartado_avaluo_1_fajardo(data: $data,modelo: $modelo);
+    private function hoja_avaluo_1_fajardo(stdClass $data, modelo $modelo)
+    {
+        $pdf = $this->apartado_avaluo_1_fajardo(data: $data, modelo: $modelo);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al escribir en pdf', data: $pdf);
         }
@@ -987,8 +1168,18 @@ class _pdf{
         return $pdf;
     }
 
-    private function hoja_avaluo_1_osvaldo(stdClass $data, modelo $modelo){
-        $pdf = $this->apartado_avaluo_1_osvaldo(data: $data,modelo: $modelo);
+    private function hoja_avaluo_1_osvaldo(stdClass $data, modelo $modelo)
+    {
+        $pdf = $this->apartado_avaluo_1_osvaldo(data: $data, modelo: $modelo);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $pdf);
+        }
+
+        return $pdf;
+    }
+
+    private function hoja_avaluo_1_damian(stdClass $data, modelo $modelo){
+        $pdf = $this->apartado_avaluo_1_damian(data: $data,modelo: $modelo);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al escribir en pdf', data: $pdf);
         }
@@ -1149,6 +1340,21 @@ class _pdf{
         return $pdf_exe;
     }
 
+    private function hojas_avaluo_damian(stdClass $data, modelo $modelo, string $path_base){
+        $pdf_exe = $this->genera_hoja_avaluo_1_damian(data: $data,modelo: $modelo,path_base: $path_base);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $pdf_exe);
+        }
+
+        $pdf_exe = $this->add_template(file_plantilla: 'templates/solicitud_avaluo_damian.pdf',page:  2,
+            path_base:  $path_base,plantilla_cargada:  false);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al agregar template', data: $pdf_exe);
+        }
+
+        return $pdf_exe;
+    }
+
     private function hojas_gasto(stdClass $data, modelo $modelo, string $path_base){
         $pdf_exe = $this->genera_hoja_gasto_1(data: $data,modelo: $modelo,path_base: $path_base);
         if (errores::$error) {
@@ -1244,7 +1450,8 @@ class _pdf{
 
     final public function solicitud_avaluo(int $inm_comprador_id, string $path_base, modelo $modelo){
 
-        $data = (new inm_comprador(link: $modelo->link))->data_pdf(inm_comprador_id: $inm_comprador_id);
+        $data = (new inm_comprador(link: $modelo->link))->data_solicitud_avaluo_pdf(
+            inm_comprador_id: $inm_comprador_id);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al obtener datos', data: $data);
         }

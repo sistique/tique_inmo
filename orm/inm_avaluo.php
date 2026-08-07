@@ -184,7 +184,7 @@ class inm_avaluo extends _modelo_parent{
 
         if($r_inm_avaluo->n_registros === 0){
             return $this->error->error(
-                mensaje: 'Error no existe inm_rel_ubi_comp',data:  $r_inm_avaluo);
+                mensaje: 'Error no existe inm_avaluo',data:  $r_inm_avaluo);
         }
 
         return $r_inm_avaluo->registros[0];
