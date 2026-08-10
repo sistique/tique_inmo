@@ -834,10 +834,10 @@ class inm_prospecto_ubicacion extends _modelo_parent{
         }
 
         $adeudo_actual =
-            $inm_prosp['adeudo_hipoteca'] +
-            $inm_prosp['adeudo_predial'] +
-            $inm_prosp['adeudo_agua'] +
-            $inm_prosp['adeudo_luz'];
+            (float)$inm_prosp['adeudo_hipoteca'] +
+            (float)$inm_prosp['adeudo_predial'] +
+            (float)$inm_prosp['adeudo_agua'] +
+            (float)$inm_prosp['adeudo_luz'];
 
         $diferencia_adeudo =
             $adeudo_actual -
