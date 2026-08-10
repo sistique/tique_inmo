@@ -844,11 +844,11 @@ class inm_prospecto_ubicacion extends _modelo_parent{
             $promedio_adeudo;
 
         $diferencia_terreno =
-            $metros_terreno -
+            (float)$metros_terreno -
             $promedio_terreno;
 
         $diferencia_construccion =
-            $metros_construccion -
+            (float)$metros_construccion -
             $promedio_construccion;
 
         $devolucion = $devolucion_promedio;
