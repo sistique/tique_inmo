@@ -36,23 +36,7 @@
         <?php echo $controlador->inputs->dp_estado_nacimiento_id; ?>
         <?php echo $controlador->inputs->dp_municipio_nacimiento_id; ?>
         <?php echo $controlador->inputs->inm_nacionalidad_id; ?>
-
-        <!-- Género -->
-        <div class="control-group col-sm-6">
-            <label class="" for="inm_attr_tipo_credito_id">Genero</label>
-            <div class="col-md-12">
-                <label class="form-check-label chk">
-                    <input type="radio" name="genero" value="M" class="form-check-input" id="genero"
-                           title="Genero" checked>
-                    M
-                </label>
-                <label class="form-check-label chk">
-                    <input type="radio" name="genero" value="F" class="form-check-input" id="genero"
-                           title="Genero">
-                    F
-                </label>
-            </div>
-        </div>
+        <?php echo $controlador->inputs->genero; ?>
 
         <!-- Estado civil y ocupación -->
         <?php echo $controlador->inputs->adm_estado_civil_id; ?>
@@ -60,10 +44,8 @@
         <?php echo $controlador->inputs->inm_ocupacion_id; ?>
 
         <!-- Contacto -->
-        <?php echo $controlador->inputs->lada_com; ?>
         <?php echo $controlador->inputs->numero_com; ?>
         <?php echo $controlador->inputs->cel_com; ?>
-        <?php echo $controlador->inputs->telefono_casa; ?>
         <?php echo $controlador->inputs->correo_com; ?>
 
         <!-- Domicilio -->
@@ -106,11 +88,13 @@
     <div  id="apartado_5">
         <?php echo $controlador->inputs->nombre_empresa_patron; ?>
         <?php echo $controlador->inputs->nrp_nep; ?>
-        <?php echo $controlador->inputs->lada_nep; ?>
         <?php echo $controlador->inputs->numero_nep; ?>
         <?php echo $controlador->inputs->extension_nep; ?>
         <?php echo $controlador->inputs->correo_empresa; ?>
+        <?php echo $controlador->inputs->area_empresa; ?>
         <?php echo $controlador->inputs->inm_sindicato_id; ?>
+        <?php echo $controlador->inputs->direccion_empresa; ?>
+
     </div>
 
 

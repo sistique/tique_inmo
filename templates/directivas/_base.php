@@ -448,7 +448,7 @@ class _base extends html_controler{
         }
 
         $sl_dp_estado_nacimiento_id = (new dp_estado_html(html: $controler->html_base))->select_dp_estado_id(
-            cols: 6,con_registros:  true, id_selected:  101,link:  $controler->link, label: 'Estado Nac',
+            cols: 3,con_registros:  true, id_selected:  101,link:  $controler->link, label: 'Estado Nac',
             name: 'dp_estado_nacimiento_id');
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar sl_dp_estado_nacimiento_id',
@@ -459,7 +459,7 @@ class _base extends html_controler{
         $inputs->dp_estado_nacimiento_id = $sl_dp_estado_nacimiento_id;
 
         $sl_dp_municipio_nacimiento_id = (new dp_municipio_html(html: $controler->html_base))->select_dp_municipio_id(
-            cols: 6, con_registros: true, id_selected: 2469, link: $controler->link, filtro: $filtro,
+            cols: 3, con_registros: true, id_selected: 2469, link: $controler->link, filtro: $filtro,
             label: 'Municipio Nac', name: 'dp_municipio_nacimiento_id');
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar sl_dp_municipio_nacimiento_id',
@@ -468,7 +468,7 @@ class _base extends html_controler{
 
         $inputs->dp_municipio_nacimiento_id = $sl_dp_municipio_nacimiento_id;
 
-        $fecha_nacimiento = $controler->html->input_fecha(cols: 12, row_upd: new stdClass(), value_vacio: false,
+        $fecha_nacimiento = $controler->html->input_fecha(cols: 3, row_upd: new stdClass(), value_vacio: false,
             name: 'fecha_nacimiento', place_holder: 'Fecha Nac', value: false);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al fecha_nacimiento input genera',
@@ -476,8 +476,6 @@ class _base extends html_controler{
         }
 
         $inputs->fecha_nacimiento = $fecha_nacimiento;
-
-
 
         $data = new stdClass();
         $data->keys_selects = $keys_selects;

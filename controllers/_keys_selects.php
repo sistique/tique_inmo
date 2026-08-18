@@ -962,12 +962,12 @@ class _keys_selects{
         }
 
         $keys_selects = (new init())->key_select_txt(cols: 2,key: 'nrp',
-            keys_selects:$keys_selects, place_holder: 'Numero de Registro Patronal (NRP)',required: false);
+            keys_selects:$keys_selects, place_holder: 'Numero de Registro Patronal',required: false);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
         $keys_selects = (new init())->key_select_txt(cols: 2,key: 'nrp_nep',
-            keys_selects:$keys_selects, place_holder: 'Numero de Registro Patronal (NRP)',required: false);
+            keys_selects:$keys_selects, place_holder: 'Numero de Registro Patronal',required: false);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
