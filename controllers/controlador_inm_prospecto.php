@@ -1402,7 +1402,7 @@ class controlador_inm_prospecto extends _ctl_formato
         }
 
         $keys_selects = (new init())->key_select_txt(cols: 3, key: 'monto_credito_solicitado_dh',
-            keys_selects: $keys_selects, place_holder: 'Monto Credito Solicitado Derechohabiente', required: false);
+            keys_selects: $keys_selects, place_holder: 'Monto Credito Solicitado Der.', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
