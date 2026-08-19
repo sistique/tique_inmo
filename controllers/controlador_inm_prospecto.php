@@ -1317,13 +1317,13 @@ class controlador_inm_prospecto extends _ctl_formato
         }
 
         $keys_selects = (new init())->key_select_txt(cols: 2, key: 'nombre_empresa_patron',
-            keys_selects: $keys_selects, place_holder: 'Nombre Empresa Patron', required: false);
+            keys_selects: $keys_selects, place_holder: 'Nombre Empresa', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
         $keys_selects = (new init())->key_select_txt(cols: 2, key: 'nrp_nep',
-            keys_selects: $keys_selects, place_holder: 'Numero de Registro Patronal', required: false);
+            keys_selects: $keys_selects, place_holder: 'Registro Patronal', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
@@ -1335,7 +1335,7 @@ class controlador_inm_prospecto extends _ctl_formato
         }
 
         $keys_selects = (new init())->key_select_txt(cols: 2, key: 'numero_nep',
-            keys_selects: $keys_selects, place_holder: 'Numero Tel Empresa', required: false);
+            keys_selects: $keys_selects, place_holder: 'Tel. Empresa', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
