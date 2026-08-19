@@ -1390,13 +1390,13 @@ class controlador_inm_prospecto extends _ctl_formato
         }
 
         $keys_selects = (new init())->key_select_txt(cols: 3, key: 'descuento_pension_alimenticia_dh',
-            keys_selects: $keys_selects, place_holder: 'Desc Pension Alimenticia Derechohabiente', required: false);
+            keys_selects: $keys_selects, place_holder: 'Desc Pension Alimen. Der.', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
         $keys_selects = (new init())->key_select_txt(cols: 3, key: 'descuento_pension_alimenticia_fc',
-            keys_selects: $keys_selects, place_holder: 'Desc Pension Alimenticia Familiar/Corresidente', required: false);
+            keys_selects: $keys_selects, place_holder: 'Desc Pension Alimen. Fam/Cor', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
