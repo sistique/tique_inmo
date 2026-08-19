@@ -16,8 +16,7 @@ class inm_referencia extends _modelo_parent{
             'dp_cp'=>'dp_colonia_postal', 'dp_municipio'=>'dp_cp', 'dp_estado'=>'dp_municipio','dp_pais'=>'dp_estado',
             'dp_colonia'=>'dp_colonia_postal');
 
-        $campos_obligatorios = array('apellido_paterno', 'nombre',
-            'dp_colonia_postal_id','inm_parentesco_id');
+        $campos_obligatorios = array('apellido_paterno', 'nombre','inm_parentesco_id');
 
         $columnas_extra= array();
 
@@ -42,9 +41,7 @@ class inm_referencia extends _modelo_parent{
         $renombres= array();
 
         $atributos_criticos = array('apellido_paterno', 'nombre','dp_colonia_postal_id','inm_parentesco_id');
-
-        $tipo_campos['lada'] = 'lada';
-        $tipo_campos['numero'] = 'tel_sin_lada';
+        
         $tipo_campos['celular'] = 'telefono_mx';
 
         parent::__construct(link: $link, tabla: $tabla, campos_obligatorios: $campos_obligatorios,
@@ -176,24 +173,11 @@ class inm_referencia extends _modelo_parent{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar $registro',data: $valida);
         }
+
         $keys = array('dp_colonia_postal_id');
         $valida = $this->validacion->valida_ids(keys: $keys,registro:  $registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar $registro',data: $valida);
-        }
-
-        if(isset($registro['lada']) && trim($registro['lada']) !== '') {
-            $valida = $this->validacion->valida_lada(lada: $registro['lada']);
-            if (errores::$error) {
-                return $this->error->error(mensaje: 'Error al validar lada', data: $valida);
-            }
-        }
-
-        if(isset($registro['numero']) && trim($registro['numero']) !== '') {
-            $valida = $this->validacion->valida_numero_sin_lada(tel: $registro['numero']);
-            if (errores::$error) {
-                return $this->error->error(mensaje: 'Error al validar numero', data: $valida);
-            }
         }
 
         if(isset($registro['celular']) && trim($registro['celular']) !== '') {
