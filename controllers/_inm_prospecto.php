@@ -392,21 +392,14 @@ class _inm_prospecto{
     private function identificadores_dp(controlador_inm_prospecto $controlador): array
     {
         $row = $controlador->registro;
-        $keys = array('dp_pais_id','dp_estado_id','dp_municipio_id','dp_cp_id','dp_colonia_postal_id');
+        $keys = array('dp_estado_id','dp_municipio_id','dp_cp_id','dp_colonia_postal_id');
         foreach ($keys as $key){
             if(!isset($row[$key])){
                 $row[$key] = -1;
             }
         }
 
-        $identificadores['dp_pais_id']['title'] = 'Pais';
-        $identificadores['dp_pais_id']['cols'] = 3;
-        $identificadores['dp_pais_id']['disabled'] = false;
-        $identificadores['dp_pais_id']['filtro'] = array();
-        $identificadores['dp_pais_id']['columns_ds'] = array('dp_pais_descripcion');
-
         $filtro = array();
-        $filtro['dp_pais.id'] = $row['dp_pais_id'];
         $identificadores['dp_estado_id']['title'] = 'Estado';
         $identificadores['dp_estado_id']['cols'] = 3;
         $identificadores['dp_estado_id']['disabled'] = false;
