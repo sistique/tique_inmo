@@ -4244,6 +4244,31 @@ class instalacion
         }
         $out->inm_reparacion = $inm_reparacion;
 
+        // SAT — Descarga Masiva
+        $inm_sat_cer = $this->inm_sat_cer(link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error integrar inm_sat_cer', data: $inm_sat_cer);
+        }
+        $out->inm_sat_cer = $inm_sat_cer;
+
+        $inm_sat_key = $this->inm_sat_key(link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error integrar inm_sat_key', data: $inm_sat_key);
+        }
+        $out->inm_sat_key = $inm_sat_key;
+
+        $inm_sat_solicitud = $this->inm_sat_solicitud(link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error integrar inm_sat_solicitud', data: $inm_sat_solicitud);
+        }
+        $out->inm_sat_solicitud = $inm_sat_solicitud;
+
+        $inm_sat_paquete = $this->inm_sat_paquete(link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error integrar inm_sat_paquete', data: $inm_sat_paquete);
+        }
+        $out->inm_sat_paquete = $inm_sat_paquete;
+
         return $out;
 
     }
@@ -4816,5 +4841,302 @@ class instalacion
         return $out;
     }
 
+    // =========================================================================
+    // SAT — Descarga Masiva
+    // =========================================================================
+
+    private function _add_inm_sat_cer(PDO $link): array|stdClass
+    {
+        $out  = new stdClass();
+        $init = (new _instalacion(link: $link));
+
+        $create = $init->create_table_new(table: 'inm_sat_cer');
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar tabla inm_sat_cer', data: $create);
+        }
+        $out->create = $create;
+
+        $columnas = new stdClass();
+
+        $columnas->rfc = new stdClass();
+
+        $columnas->descripcion = new stdClass();
+
+        $columnas->ruta_certificado = new stdClass();
+
+        $columnas->numero_serie = new stdClass();
+        $columnas->numero_serie->default = '';
+
+        $columnas->fecha_inicio_vigencia = new stdClass();
+        $columnas->fecha_inicio_vigencia->tipo_dato = 'DATE';
+        $columnas->fecha_inicio_vigencia->default   = '1900-01-01';
+
+        $columnas->fecha_fin_vigencia = new stdClass();
+        $columnas->fecha_fin_vigencia->tipo_dato = 'DATE';
+        $columnas->fecha_fin_vigencia->default   = '1900-01-01';
+
+        $add_colums = $init->add_columns(campos: $columnas, table: 'inm_sat_cer');
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar columnas inm_sat_cer', data: $add_colums);
+        }
+        $out->add_colums = $add_colums;
+
+        return $out;
+    }
+
+    private function inm_sat_cer(PDO $link): array|stdClass
+    {
+        $out = new stdClass();
+
+        $create = $this->_add_inm_sat_cer(link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar tabla inm_sat_cer', data: $create);
+        }
+        $out->create = $create;
+
+        $acl = (new _adm())->integra_acl(
+            adm_menu_descripcion: 'SAT Descarga Masiva',
+            adm_namespace_name: 'gamboamartin/inmuebles',
+            adm_namespace_descripcion: 'gamboa.martin/inmuebles',
+            adm_seccion_descripcion: __FUNCTION__,
+            adm_seccion_pertenece_descripcion: 'inmuebles',
+            adm_sistema_descripcion: 'inmuebles',
+            etiqueta_label: 'Certificados SAT (.cer)',
+            link: $link
+        );
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al obtener acl inm_sat_cer', data: $acl);
+        }
+        $out->acl = $acl;
+
+        return $out;
+    }
+
+    private function _add_inm_sat_key(PDO $link): array|stdClass
+    {
+        $out  = new stdClass();
+        $init = (new _instalacion(link: $link));
+
+        $create = $init->create_table_new(table: 'inm_sat_key');
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar tabla inm_sat_key', data: $create);
+        }
+        $out->create = $create;
+
+        $columnas = new stdClass();
+
+        $columnas->descripcion = new stdClass();
+
+        $columnas->ruta_llave = new stdClass();
+
+        $columnas->contrasenia = new stdClass();
+        $columnas->contrasenia->default = '';
+
+        $add_colums = $init->add_columns(campos: $columnas, table: 'inm_sat_key');
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar columnas inm_sat_key', data: $add_colums);
+        }
+        $out->add_colums = $add_colums;
+
+        $foraneas = array();
+        $foraneas['inm_sat_cer_id'] = new stdClass();
+
+        $result = $init->foraneas(foraneas: $foraneas, table: 'inm_sat_key');
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al ajustar foranea inm_sat_key', data: $result);
+        }
+        $out->foraneas = $result;
+
+        return $out;
+    }
+
+    private function inm_sat_key(PDO $link): array|stdClass
+    {
+        $out = new stdClass();
+
+        $create = $this->_add_inm_sat_key(link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar tabla inm_sat_key', data: $create);
+        }
+        $out->create = $create;
+
+        $acl = (new _adm())->integra_acl(
+            adm_menu_descripcion: 'SAT Descarga Masiva',
+            adm_namespace_name: 'gamboamartin/inmuebles',
+            adm_namespace_descripcion: 'gamboa.martin/inmuebles',
+            adm_seccion_descripcion: __FUNCTION__,
+            adm_seccion_pertenece_descripcion: 'inmuebles',
+            adm_sistema_descripcion: 'inmuebles',
+            etiqueta_label: 'Llaves Privadas SAT (.key)',
+            link: $link
+        );
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al obtener acl inm_sat_key', data: $acl);
+        }
+        $out->acl = $acl;
+
+        return $out;
+    }
+
+    private function _add_inm_sat_solicitud(PDO $link): array|stdClass
+    {
+        $out  = new stdClass();
+        $init = (new _instalacion(link: $link));
+
+        $create = $init->create_table_new(table: 'inm_sat_solicitud');
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar tabla inm_sat_solicitud', data: $create);
+        }
+        $out->create = $create;
+
+        $columnas = new stdClass();
+
+        $columnas->tipo_solicitud = new stdClass();
+        $columnas->tipo_solicitud->default = 'CFDI';
+
+        $columnas->tipo_descarga = new stdClass();
+        $columnas->tipo_descarga->default = 'Recibidos';
+
+        $columnas->tipo_comprobante = new stdClass();
+        $columnas->tipo_comprobante->default = '';
+
+        $columnas->rfc_tercero = new stdClass();
+        $columnas->rfc_tercero->default = '';
+
+        $columnas->fecha_inicio_periodo = new stdClass();
+        $columnas->fecha_inicio_periodo->tipo_dato = 'DATE';
+        $columnas->fecha_inicio_periodo->default   = '1900-01-01';
+
+        $columnas->fecha_fin_periodo = new stdClass();
+        $columnas->fecha_fin_periodo->tipo_dato = 'DATE';
+        $columnas->fecha_fin_periodo->default   = '1900-01-01';
+
+        $columnas->uuid_solicitud = new stdClass();
+        $columnas->uuid_solicitud->default = '';
+
+        $columnas->estatus = new stdClass();
+        $columnas->estatus->default = 'Aceptada';
+
+        $columnas->total_solicitudes = new stdClass();
+        $columnas->total_solicitudes->tipo_dato = 'INT';
+        $columnas->total_solicitudes->default   = '0';
+
+        $add_colums = $init->add_columns(campos: $columnas, table: 'inm_sat_solicitud');
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar columnas inm_sat_solicitud', data: $add_colums);
+        }
+        $out->add_colums = $add_colums;
+
+        $foraneas = array();
+        $foraneas['inm_sat_cer_id'] = new stdClass();
+
+        $result = $init->foraneas(foraneas: $foraneas, table: 'inm_sat_solicitud');
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al ajustar foranea inm_sat_solicitud', data: $result);
+        }
+        $out->foraneas = $result;
+
+        return $out;
+    }
+
+    private function inm_sat_solicitud(PDO $link): array|stdClass
+    {
+        $out = new stdClass();
+
+        $create = $this->_add_inm_sat_solicitud(link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar tabla inm_sat_solicitud', data: $create);
+        }
+        $out->create = $create;
+
+        $acl = (new _adm())->integra_acl(
+            adm_menu_descripcion: 'SAT Descarga Masiva',
+            adm_namespace_name: 'gamboamartin/inmuebles',
+            adm_namespace_descripcion: 'gamboa.martin/inmuebles',
+            adm_seccion_descripcion: __FUNCTION__,
+            adm_seccion_pertenece_descripcion: 'inmuebles',
+            adm_sistema_descripcion: 'inmuebles',
+            etiqueta_label: 'Solicitudes Descarga Masiva SAT',
+            link: $link
+        );
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al obtener acl inm_sat_solicitud', data: $acl);
+        }
+        $out->acl = $acl;
+
+        return $out;
+    }
+
+    private function _add_inm_sat_paquete(PDO $link): array|stdClass
+    {
+        $out  = new stdClass();
+        $init = (new _instalacion(link: $link));
+
+        $create = $init->create_table_new(table: 'inm_sat_paquete');
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar tabla inm_sat_paquete', data: $create);
+        }
+        $out->create = $create;
+
+        $columnas = new stdClass();
+
+        $columnas->id_paquete = new stdClass();
+        $columnas->id_paquete->default = '';
+
+        $columnas->ruta_archivo = new stdClass();
+        $columnas->ruta_archivo->default = '';
+
+        $columnas->total_cfdi = new stdClass();
+        $columnas->total_cfdi->tipo_dato = 'INT';
+        $columnas->total_cfdi->default   = '0';
+
+        $columnas->estatus = new stdClass();
+        $columnas->estatus->default = 'pendiente';
+
+        $add_colums = $init->add_columns(campos: $columnas, table: 'inm_sat_paquete');
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar columnas inm_sat_paquete', data: $add_colums);
+        }
+        $out->add_colums = $add_colums;
+
+        $foraneas = array();
+        $foraneas['inm_sat_solicitud_id'] = new stdClass();
+
+        $result = $init->foraneas(foraneas: $foraneas, table: 'inm_sat_paquete');
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al ajustar foranea inm_sat_paquete', data: $result);
+        }
+        $out->foraneas = $result;
+
+        return $out;
+    }
+
+    private function inm_sat_paquete(PDO $link): array|stdClass
+    {
+        $out = new stdClass();
+
+        $create = $this->_add_inm_sat_paquete(link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar tabla inm_sat_paquete', data: $create);
+        }
+        $out->create = $create;
+
+        $acl = (new _adm())->integra_acl(
+            adm_menu_descripcion: 'SAT Descarga Masiva',
+            adm_namespace_name: 'gamboamartin/inmuebles',
+            adm_namespace_descripcion: 'gamboa.martin/inmuebles',
+            adm_seccion_descripcion: __FUNCTION__,
+            adm_seccion_pertenece_descripcion: 'inmuebles',
+            adm_sistema_descripcion: 'inmuebles',
+            etiqueta_label: 'Paquetes Descarga Masiva SAT',
+            link: $link
+        );
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al obtener acl inm_sat_paquete', data: $acl);
+        }
+        $out->acl = $acl;
+
+        return $out;
+    }
 
 }

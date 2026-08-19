@@ -49,6 +49,7 @@ use gamboamartin\inmuebles\models\inm_llave_control;
 use gamboamartin\inmuebles\html\inm_responsable_html;
 use gamboamartin\gastos\models\gt_proveedor;
 use gamboamartin\plugins\exportador;
+use PhpOffice\PhpWord\TemplateProcessor;
 use gamboamartin\system\_ctl_base;
 use gamboamartin\system\links_menu;
 use gamboamartin\template\html;
@@ -5262,5 +5263,111 @@ class controlador_inm_ubicacion extends _ctl_base {
         }
 
         return $this->registro_id;
+    }
+
+    /**
+     * Genera un documento Word con los campos iniciales de inm_ubicacion
+     * (inm_ubicacion_razon_social e inm_ubicacion_rfc) usando una plantilla .docx.
+     *
+     * Acceso vía: ?seccion=inm_ubicacion&accion=generar_word_campos_iniciales&registro_id=X
+     *
+     * La plantilla debe estar en templates/inm_ubicacion_campos_iniciales.docx
+     * con los marcadores ${inm_ubicacion_razon_social} y ${inm_ubicacion_rfc}.
+     *
+     * @param bool $header Si true redirige en web
+     * @param bool $ws     Si true devuelve JSON
+     * @return array|string
+     */
+    public function generar_word_campos_iniciales(bool $header, bool $ws = false): array|string
+    {
+        // 1. Validar que se haya enviado un registro_id
+        if((int)$this->registro_id <= 0) {
+            return $this->retorno_error(
+                mensaje: 'Error registro_id es requerido para generar el documento Word',
+                data: $this->registro_id,
+                header: $header,
+                ws: $ws
+            );
+        }
+
+        // 2. Obtener el registro de inm_ubicacion
+        $registro = (new inm_ubicacion(link: $this->link))->registro(registro_id: $this->registro_id);
+        if(errores::$error) {
+            return $this->retorno_error(
+                mensaje: 'Error al obtener el registro de inm_ubicacion',
+                data: $registro,
+                header: $header,
+                ws: $ws
+            );
+        }
+
+        // 3. Verificar que la plantilla exista
+        $file_plantilla = 'templates/inm_ubicacion_campos_iniciales.docx';
+        $ruta_plantilla = trim($this->path_base . $file_plantilla);
+        if(!file_exists($ruta_plantilla)) {
+            return $this->retorno_error(
+                mensaje: 'Error no existe la plantilla Word en: ' . $ruta_plantilla,
+                data: $ruta_plantilla,
+                header: $header,
+                ws: $ws
+            );
+        }
+
+        // 4. Sustituir marcadores en la plantilla
+        try {
+            $template = new TemplateProcessor($ruta_plantilla);
+        } catch (\Throwable $e) {
+            return $this->retorno_error(
+                mensaje: 'Error al cargar la plantilla Word',
+                data: $e->getMessage(),
+                header: $header,
+                ws: $ws
+            );
+        }
+
+        $razon_social = trim((string)($registro['inm_ubicacion_razon_social'] ?? ''));
+        $rfc          = trim((string)($registro['inm_ubicacion_rfc'] ?? ''));
+
+        $template->setValue('inm_ubicacion_razon_social', $razon_social);
+        $template->setValue('inm_ubicacion_rfc', $rfc);
+
+        // 5. Generar nombre de archivo de salida temporal
+        $nombre_archivo = 'campos_iniciales_ubicacion_' . $this->registro_id . '_' . date('Ymd_His') . '.docx';
+        $ruta_salida    = trim($this->path_base . 'archivos/temporales/' . $nombre_archivo);
+
+        try {
+            $template->saveAs($ruta_salida);
+        } catch (\Throwable $e) {
+            return $this->retorno_error(
+                mensaje: 'Error al guardar el documento Word generado',
+                data: $e->getMessage(),
+                header: $header,
+                ws: $ws
+            );
+        }
+
+        // 6. Enviar el archivo al navegador para descarga
+        if(!file_exists($ruta_salida)) {
+            return $this->retorno_error(
+                mensaje: 'Error el archivo Word generado no existe en: ' . $ruta_salida,
+                data: $ruta_salida,
+                header: $header,
+                ws: $ws
+            );
+        }
+
+        header('Content-Description: File Transfer');
+        header('Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+        header('Content-Disposition: attachment; filename="' . $nombre_archivo . '"');
+        header('Content-Transfer-Encoding: binary');
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length: ' . filesize($ruta_salida));
+        ob_clean();
+        flush();
+        readfile($ruta_salida);
+        @unlink($ruta_salida);
+        exit;
     }
 }
