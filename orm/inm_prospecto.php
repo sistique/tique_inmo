@@ -623,10 +623,11 @@ class inm_prospecto extends _modelo_parent{
 
     final public function inm_beneficiarios(int $inm_prospecto_id){
         $filtro['inm_prospecto.id'] = $inm_prospecto_id;
-        $r_inm_beneficiario = (new inm_beneficiario(link: $this->link))->filtro_and(filtro: $filtro);
+        $r_inm_beneficiario = (new inm_rel_beneficiario_prospecto(link: $this->link))->filtro_and(filtro: $filtro);
         if(errores::$error){
             return$this->error->error(mensaje: 'Error al obtener beneficiarios', data: $r_inm_beneficiario);
         }
+
         return $r_inm_beneficiario->registros_obj;
     }
 

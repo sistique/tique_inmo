@@ -622,7 +622,7 @@ class _alta_comprador{
      */
     private function valida_base_comprador(array $registro): bool|array
     {
-        if(((isset($registro['lada_nep']) && trim($registro['lada_nep']) !== '') &&
+        /*if(((isset($registro['lada_nep']) && trim($registro['lada_nep']) !== '') &&
                 (isset($registro['numero_nep']) && trim($registro['numero_nep']) !== ''))){
             $keys = array('lada_nep', 'numero_nep');
             $valida = $this->validacion->valida_existencia_keys(keys: $keys, registro: $registro);
@@ -648,7 +648,7 @@ class _alta_comprador{
             if (errores::$error) {
                 return $this->error->error(mensaje: 'Error al validar numero_completo_com', data: $numero_completo_com);
             }
-        }
+        }*/
 
         $valida = $this->validacion->valida_rfc(key: 'rfc',registro:  $registro);
         if(errores::$error){
