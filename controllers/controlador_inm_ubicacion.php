@@ -5305,7 +5305,7 @@ class controlador_inm_ubicacion extends _ctl_base
 
         $keys = ['inm_ubicacion_razon_social', 'inm_ubicacion_ubicacion_completa', 'inm_ubicacion_cel_com',
             'inm_ubicacion_correo_com','fecha_texto'];
-        $registro = (new inm_ubicacion(link: $this->link))->descarga_contrato(
+        $contrato = (new inm_ubicacion(link: $this->link))->descarga_contrato(
             inm_ubicacion_id: $this->registro_id,
             keys: $keys,
             nombre_archivo: $nombre_archivo,
@@ -5314,7 +5314,7 @@ class controlador_inm_ubicacion extends _ctl_base
             ruta_salida: $ruta_salida
         );
         if(errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al obtener el registro de inm_ubicacion', data: $registro,
+            return $this->retorno_error(mensaje: 'Error al obtener el registro de inm_ubicacion', data: $contrato,
                 header: $header, ws: $ws);
         }
 
@@ -5343,7 +5343,7 @@ class controlador_inm_ubicacion extends _ctl_base
             'inm_ubicacion_valor_adquisicion','inm_ubicacion_fecha_otorgamiento_credito','inm_ubicacion_numero_credito',
             'inm_ubicacion_cuenta_predial','inm_prototipo_descripcion','inm_ubicacion_adeudo_agua',
             'inm_ubicacion_adeudo_predial','suma_adeudo','suma_adeudo_texto','fecha_texto'];
-        $registro = (new inm_ubicacion(link: $this->link))->descarga_contrato(
+        $anexo_a = (new inm_ubicacion(link: $this->link))->descarga_contrato(
             inm_ubicacion_id: $this->registro_id,
             keys: $keys,
             nombre_archivo: $nombre_archivo,
@@ -5352,7 +5352,7 @@ class controlador_inm_ubicacion extends _ctl_base
             ruta_salida: $ruta_salida
         );
         if(errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al obtener el registro de inm_ubicacion', data: $registro,
+            return $this->retorno_error(mensaje: 'Error al obtener el registro de inm_ubicacion', data: $anexo_a,
                 header: $header, ws: $ws);
         }
 
