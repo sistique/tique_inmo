@@ -58,14 +58,15 @@ use PDO;
 use stdClass;
 use Throwable;
 
-class controlador_inm_ubicacion extends _ctl_base {
+class controlador_inm_ubicacion extends _ctl_base
+{
 
     use _registro_proceso;
 
     public stdClass $header_frontend;
     public inm_ubicacion_html $html_entidad;
 
-    public string $link_exportar_xls ='';
+    public string $link_exportar_xls = '';
     public string $link_rel_ubi_comp_alta_bd = '';
     public string $link_alta_bitacora = '';
     public string $link_opinion_valor_alta_bd = '';
@@ -110,7 +111,7 @@ class controlador_inm_ubicacion extends _ctl_base {
 
     public string $descripcion_comprobante_transferencia_firmada = '';
     public string $button_inm_doc_ubicacion_descarga_transferencia_firmada = '';
-    public string $button_inm_doc_ubicacion_descarga_zip_transferencia_firmada= '';
+    public string $button_inm_doc_ubicacion_descarga_zip_transferencia_firmada = '';
     public string $button_inm_doc_ubicacion_vista_previa_transferencia_firmada = '';
     public string $button_inm_doc_ubicacion_elimina_bd_transferencia_firmada = '';
 
@@ -150,29 +151,30 @@ class controlador_inm_ubicacion extends _ctl_base {
     public string $fecha_desde_filtro = '';
     public string $fecha_hasta_filtro = '';
     public string $gt_proveedor_id_filtro = '';
+
     public function __construct(PDO      $link, html $html = new \gamboamartin\template_1\html(),
                                 stdClass $paths_conf = new stdClass())
     {
         $modelo = new inm_ubicacion(link: $link);
         $html_ = new inm_ubicacion_html(html: $html);
-        $obj_link = new links_menu(link: $link, registro_id:  $this->registro_id);
+        $obj_link = new links_menu(link: $link, registro_id: $this->registro_id);
 
         $datatables = $this->init_datatable();
-        if(errores::$error){
-            $error = $this->errores->error(mensaje: 'Error al inicializar datatable',data: $datatables);
+        if (errores::$error) {
+            $error = $this->errores->error(mensaje: 'Error al inicializar datatable', data: $datatables);
             print_r($error);
             die('Error');
         }
 
-        parent::__construct(html:$html_, link: $link,modelo:  $modelo, obj_link: $obj_link, datatables: $datatables,
+        parent::__construct(html: $html_, link: $link, modelo: $modelo, obj_link: $obj_link, datatables: $datatables,
             paths_conf: $paths_conf);
         $this->html_entidad = $html_;
 
         $this->header_frontend = new stdClass();
         $this->lista_get_data = true;
 
-        $link_exportar_xls = $this->obj_link->link_con_id(accion: 'exportar_xls',link: $this->link,
-            registro_id:  $this->registro_id,seccion:  $this->tabla);
+        $link_exportar_xls = $this->obj_link->link_con_id(accion: 'exportar_xls', link: $this->link,
+            registro_id: $this->registro_id, seccion: $this->tabla);
         if (errores::$error) {
             $error = $this->errores->error(mensaje: 'Error al generar link', data: $link_exportar_xls);
             print_r($error);
@@ -194,30 +196,30 @@ class controlador_inm_ubicacion extends _ctl_base {
         $this->init_row_upd_desde_proceso();
 
         $r_alta = $this->init_alta();
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al inicializar alta',data:  $r_alta, header: $header,ws:  $ws);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al inicializar alta', data: $r_alta, header: $header, ws: $ws);
         }
 
-        $keys_selects = (new _ubicacion())->init_alta(controler: $this,disableds: array());
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener keys_selects', data:  $keys_selects,
-                header: $header,ws:  $ws);
+        $keys_selects = (new _ubicacion())->init_alta(controler: $this, disableds: array());
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener keys_selects', data: $keys_selects,
+                header: $header, ws: $ws);
         }
 
         // Aplica valores pre-guardados en sesión sobre los keys_selects
         // (respeta cualquier id_selected ya asignado por la lógica de _ubicacion)
         $keys_selects = $this->init_keys_selects_desde_proceso(keys_selects: $keys_selects);
 
-        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'cuenta_predial', keys_selects:$keys_selects,
+        $keys_selects = (new init())->key_select_txt(cols: 12, key: 'cuenta_predial', keys_selects: $keys_selects,
             place_holder: 'Cuenta Predial', required: false);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
         $inputs = $this->inputs(keys_selects: $keys_selects);
-        if(errores::$error){
+        if (errores::$error) {
             return $this->retorno_error(
-                mensaje: 'Error al obtener inputs',data:  $inputs, header: $header,ws:  $ws);
+                mensaje: 'Error al obtener inputs', data: $inputs, header: $header, ws: $ws);
         }
 
         return $r_alta;
@@ -233,18 +235,18 @@ class controlador_inm_ubicacion extends _ctl_base {
     final public function asigna_comprador(bool $header, bool $ws = false): array|stdClass
     {
         $this->inputs = new stdClass();
-        $disableds = array('dp_pais_id','dp_estado_id','dp_municipio_id','dp_cp_id','dp_colonia_postal_id');
+        $disableds = array('dp_pais_id', 'dp_estado_id', 'dp_municipio_id', 'dp_cp_id', 'dp_colonia_postal_id');
         $base_data = (new _ubicacion())->base_view_accion_data(controler: $this, disableds: $disableds,
             funcion: __FUNCTION__);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener base_data',data:  $base_data,
-                header: $header,ws:  $ws);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener base_data', data: $base_data,
+                header: $header, ws: $ws);
         }
 
         $data_compra = (new inm_ubicacion_html(html: $this->html_base))->data_comprador(controler: $this);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener data_compra',data:  $data_compra,
-                header: $header,ws:  $ws);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener data_compra', data: $data_compra,
+                header: $header, ws: $ws);
         }
 
         return $base_data->base_html->r_modifica;
@@ -253,11 +255,11 @@ class controlador_inm_ubicacion extends _ctl_base {
 
     final public function asigna_insumos_gastos(bool $header, bool $ws = false): array|stdClass
     {
-        if(isset($_GET['accion']) && $_GET['accion'] == 'asigna_insumos_gastos') {
+        if (isset($_GET['accion']) && $_GET['accion'] == 'asigna_insumos_gastos') {
             $r_modifica = $this->init_modifica(); // TODO: Change the autogenerated stub
-            if(errores::$error){
+            if (errores::$error) {
                 return $this->retorno_error(
-                    mensaje: 'Error al generar salida de template',data:  $r_modifica,header: $header,ws: $ws);
+                    mensaje: 'Error al generar salida de template', data: $r_modifica, header: $header, ws: $ws);
             }
         }
 
@@ -269,52 +271,52 @@ class controlador_inm_ubicacion extends _ctl_base {
         $this->gt_proveedor_id_filtro = $gt_proveedor_id > 0 ? (string)$gt_proveedor_id : '';
 
         $params_filtro_retorno = array();
-        if($fecha_desde !== ''){
+        if ($fecha_desde !== '') {
             $params_filtro_retorno['fecha_desde'] = $fecha_desde;
         }
-        if($fecha_hasta !== ''){
+        if ($fecha_hasta !== '') {
             $params_filtro_retorno['fecha_hasta'] = $fecha_hasta;
         }
-        if($gt_proveedor_id > 0){
+        if ($gt_proveedor_id > 0) {
             $params_filtro_retorno['gt_proveedor_id'] = $gt_proveedor_id;
         }
 
         $keys_selects = array();
 
         $filtro_fact['inm_factura_compra.asignado_completo'] = 'inactivo';
-        $columns_ds = array('inm_factura_compra_id','inm_factura_compra_descripcion');
+        $columns_ds = array('inm_factura_compra_id', 'inm_factura_compra_descripcion');
         $keys_selects = $this->key_select(cols: 4, con_registros: true, filtro: $filtro_fact, key: 'inm_factura_compra_id',
             keys_selects: $keys_selects, id_selected: -1, label: 'Factura Compra',
             columns_ds: $columns_ds, disabled: false, required: false);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
-                header: $header,ws:  $ws);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects', data: $keys_selects,
+                header: $header, ws: $ws);
         }
 
         $filtro_deta_fac['inm_detalle_factura_compra.asignado_completo'] = 'inactivo';
         $keys_selects = $this->key_select(cols: 4, con_registros: false, filtro: $filtro_deta_fac,
             key: 'inm_detalle_factura_compra_id', keys_selects: $keys_selects, id_selected: -1, label: 'Insumo Factura',
             columns_ds: $columns_ds, required: false);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
-                header: $header,ws:  $ws);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects', data: $keys_selects,
+                header: $header, ws: $ws);
         }
 
-        $columns_ds = array('gt_proveedor_id','gt_proveedor_descripcion');
+        $columns_ds = array('gt_proveedor_id', 'gt_proveedor_descripcion');
         $keys_selects = $this->key_select(cols: 4, con_registros: true, filtro: array(),
             key: 'gt_proveedor_id', keys_selects: $keys_selects, id_selected: $gt_proveedor_id, label: 'Proveedor',
             columns_ds: $columns_ds, required: false);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
-                header: $header,ws:  $ws);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects', data: $keys_selects,
+                header: $header, ws: $ws);
         }
 
-        $base = $this->base_upd(keys_selects: $keys_selects, params: array(),params_ajustados: array());
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
+        $base = $this->base_upd(keys_selects: $keys_selects, params: array(), params_ajustados: array());
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al integrar base', data: $base, header: $header, ws: $ws);
         }
 
-        $columns_ds = array('inm_ubicacion_id','inm_ubicacion_ubicacion');
+        $columns_ds = array('inm_ubicacion_id', 'inm_ubicacion_ubicacion');
         $filtro['inm_ubicacion.id'] = $this->registro_id;
         $inm_prospecto_id = (new inm_ubicacion_html(html: $this->html_base))->select_inm_ubicacion_id(
             cols: 4, con_registros: true, id_selected: $this->registro_id, link: $this->link, columns_ds: $columns_ds,
@@ -322,44 +324,44 @@ class controlador_inm_ubicacion extends _ctl_base {
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al generar input', data: $inm_prospecto_id, header: $header, ws: $ws);
         }
-        $this->inputs->inm_ubicacion_seleccionado_id  = $inm_prospecto_id;
+        $this->inputs->inm_ubicacion_seleccionado_id = $inm_prospecto_id;
 
 
-        $params = array('accion_retorno'=>'asigna_insumos_gastos','seccion_retorno'=>'inm_ubicacion',
-            'id_retorno'=>$this->registro_id);
+        $params = array('accion_retorno' => 'asigna_insumos_gastos', 'seccion_retorno' => 'inm_ubicacion',
+            'id_retorno' => $this->registro_id);
         $params = array_merge($params, $params_filtro_retorno);
-        $link_asigna_insumos_gastos_bd = $this->obj_link->link_con_id(accion:'asigna_insumos_gastos_bd',
-            link: $this->link,registro_id: $this->registro_id,seccion: 'inm_ubicacion',params: $params);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al generar link',data:  $link_asigna_insumos_gastos_bd,
-                header: $header,ws:  $ws);
+        $link_asigna_insumos_gastos_bd = $this->obj_link->link_con_id(accion: 'asigna_insumos_gastos_bd',
+            link: $this->link, registro_id: $this->registro_id, seccion: 'inm_ubicacion', params: $params);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al generar link', data: $link_asigna_insumos_gastos_bd,
+                header: $header, ws: $ws);
         }
 
         $this->link_asigna_insumos_gastos_bd = $link_asigna_insumos_gastos_bd;
 
         $filtro_deta['inm_ubicacion.id'] = $this->registro_id;
-        if($gt_proveedor_id > 0){
+        if ($gt_proveedor_id > 0) {
             $filtro_deta['gt_proveedor.id'] = $gt_proveedor_id;
         }
         $filtro_rango = array();
-        if($fecha_desde !== ''){
+        if ($fecha_desde !== '') {
             $filtro_rango['inm_factura_compra.fecha']['valor1'] = $fecha_desde;
         }
-        if($fecha_hasta !== ''){
+        if ($fecha_hasta !== '') {
             $filtro_rango['inm_factura_compra.fecha']['valor2'] = $fecha_hasta;
         }
 
         $r_inm_movimiento_consumo = (new inm_movimiento_consumo(link: $this->link))->filtro_and(filtro: $filtro_deta,
             filtro_rango: $filtro_rango);
         if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al obtener factura compra',data:  $r_inm_movimiento_consumo,
-                header: $header,ws:  $ws);
+            return $this->retorno_error(mensaje: 'Error al obtener factura compra', data: $r_inm_movimiento_consumo,
+                header: $header, ws: $ws);
         }
 
         $params = array();
-        if(isset($_GET['accion']) && $_GET['accion'] == 'asigna_insumos_gastos') {
-            $params = array('accion_retorno'=>'asigna_insumos_gastos','seccion_retorno'=>'inm_ubicacion',
-                'id_retorno'=>$this->registro_id,);
+        if (isset($_GET['accion']) && $_GET['accion'] == 'asigna_insumos_gastos') {
+            $params = array('accion_retorno' => 'asigna_insumos_gastos', 'seccion_retorno' => 'inm_ubicacion',
+                'id_retorno' => $this->registro_id,);
             $params = array_merge($params, $params_filtro_retorno);
         }
 
@@ -379,7 +381,7 @@ class controlador_inm_ubicacion extends _ctl_base {
             $detalle[] = $inm_movimiento_consumo;
 
             $inm_factura_compra_id = $inm_movimiento_consumo['inm_factura_compra_id'];
-            if(!isset($facturas_movimiento_consumo[$inm_factura_compra_id])){
+            if (!isset($facturas_movimiento_consumo[$inm_factura_compra_id])) {
                 $facturas_movimiento_consumo[$inm_factura_compra_id] = array(
                     'inm_factura_compra_id' => $inm_factura_compra_id,
                     'inm_factura_compra_descripcion' => $inm_movimiento_consumo['inm_factura_compra_descripcion'],
@@ -402,21 +404,21 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $this->movimientos_consumo = $detalle;
         $facturas_movimiento_consumo = array_values($facturas_movimiento_consumo);
-        usort($facturas_movimiento_consumo, function(array $a, array $b){
+        usort($facturas_movimiento_consumo, function (array $a, array $b) {
             $fecha_a = strtotime((string)$a['inm_factura_compra_fecha']);
             $fecha_b = strtotime((string)$b['inm_factura_compra_fecha']);
 
-            if($fecha_a === false && $fecha_b === false){
+            if ($fecha_a === false && $fecha_b === false) {
                 return (int)$a['inm_factura_compra_id'] <=> (int)$b['inm_factura_compra_id'];
             }
-            if($fecha_a === false){
+            if ($fecha_a === false) {
                 return 1;
             }
-            if($fecha_b === false){
+            if ($fecha_b === false) {
                 return -1;
             }
 
-            if($fecha_a === $fecha_b){
+            if ($fecha_a === $fecha_b) {
                 return (int)$a['inm_factura_compra_id'] <=> (int)$b['inm_factura_compra_id'];
             }
 
@@ -452,25 +454,25 @@ class controlador_inm_ubicacion extends _ctl_base {
         return $this->registro;
     }
 
-    public function asigna_insumos_gastos_bd(bool $header, bool $ws = false):array|stdClass
+    public function asigna_insumos_gastos_bd(bool $header, bool $ws = false): array|stdClass
     {
         $this->link->beginTransaction();
 
-        if(!isset($_POST['inm_factura_compra_id']) || trim($_POST['inm_factura_compra_id']) === ''){
+        if (!isset($_POST['inm_factura_compra_id']) || trim($_POST['inm_factura_compra_id']) === '') {
             $this->link->rollBack();
             return $this->retorno_error(mensaje: 'Error no se selecciono ninguna factura'
                 , data: $_POST, header: $header, ws: $ws);
         }
 
-        if(!isset($_POST['inm_ubicacion_id']) || trim($_POST['inm_ubicacion_id']) === ''){
+        if (!isset($_POST['inm_ubicacion_id']) || trim($_POST['inm_ubicacion_id']) === '') {
             $this->link->rollBack();
             return $this->retorno_error(mensaje: 'Error no se selecciono ninguna ubicacion'
                 , data: $_POST, header: $header, ws: $ws);
         }
 
-        if(isset($_POST['factura_completa']) && trim($_POST['factura_completa']) !== '') {
+        if (isset($_POST['factura_completa']) && trim($_POST['factura_completa']) !== '') {
             $filtro_detalle['inm_factura_compra.id'] = $_POST['inm_factura_compra_id'];
-            $r_inm_detalle_factura_compra = (new inm_detalle_factura_compra(link:$this->link))->filtro_and(
+            $r_inm_detalle_factura_compra = (new inm_detalle_factura_compra(link: $this->link))->filtro_and(
                 filtro: $filtro_detalle);
             if (errores::$error) {
                 $this->link->rollBack();
@@ -478,7 +480,7 @@ class controlador_inm_ubicacion extends _ctl_base {
                     header: $header, ws: $ws);
             }
 
-            if($r_inm_detalle_factura_compra->n_registros <= 0){
+            if ($r_inm_detalle_factura_compra->n_registros <= 0) {
                 $this->link->rollBack();
                 return $this->retorno_error(mensaje: 'Error no se selecciono ninguna factura'
                     , data: $r_inm_detalle_factura_compra, header: $header, ws: $ws);
@@ -486,7 +488,7 @@ class controlador_inm_ubicacion extends _ctl_base {
 
             foreach ($r_inm_detalle_factura_compra->registros as $registro_fac) {
                 $filtro_mov['inm_detalle_factura_compra.id'] = $registro_fac['inm_detalle_factura_compra_id'];
-                $r_inm_movimiento_consumo = (new inm_movimiento_consumo(link:$this->link))->filtro_and(
+                $r_inm_movimiento_consumo = (new inm_movimiento_consumo(link: $this->link))->filtro_and(
                     filtro: $filtro_mov);
                 if (errores::$error) {
                     $this->link->rollBack();
@@ -494,7 +496,7 @@ class controlador_inm_ubicacion extends _ctl_base {
                         header: $header, ws: $ws);
                 }
 
-                if($r_inm_movimiento_consumo->n_registros > 0){
+                if ($r_inm_movimiento_consumo->n_registros > 0) {
                     $this->link->rollBack();
                     return $this->retorno_error(mensaje: 'Error un elemento de la factura ya esta asignado a otra factura'
                         , data: $r_inm_movimiento_consumo, header: $header, ws: $ws);
@@ -517,8 +519,8 @@ class controlador_inm_ubicacion extends _ctl_base {
             }
         }
 
-        if(isset($_POST['asigna_insumo']) && trim($_POST['asigna_insumo']) !== '') {
-            $r_inm_detalle_factura_compra = (new inm_detalle_factura_compra(link:$this->link))->registro(
+        if (isset($_POST['asigna_insumo']) && trim($_POST['asigna_insumo']) !== '') {
+            $r_inm_detalle_factura_compra = (new inm_detalle_factura_compra(link: $this->link))->registro(
                 registro_id: $_POST['inm_detalle_factura_compra_id']);
             if (errores::$error) {
                 $this->link->rollBack();
@@ -549,18 +551,17 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $this->link->commit();
 
-        if($header){
+        if ($header) {
             $retorno = $_SERVER['HTTP_REFERER'];
-            header('Location:'.$retorno);
+            header('Location:' . $retorno);
             exit;
         }
-        if($ws){
+        if ($ws) {
             header('Content-Type: application/json');
             try {
                 echo json_encode($r_inm_movimiento_consumo, JSON_THROW_ON_ERROR);
-            }
-            catch (Throwable $e){
-                return $this->retorno_error(mensaje: 'Error al maquetar estados',data: $e, header: $header, ws: $ws);
+            } catch (Throwable $e) {
+                return $this->retorno_error(mensaje: 'Error al maquetar estados', data: $e, header: $header, ws: $ws);
             }
             exit;
         }
@@ -579,22 +580,22 @@ class controlador_inm_ubicacion extends _ctl_base {
     public function asigna_costo(bool $header, bool $ws = false): array|stdClass
     {
 
-        $r_modifica = $this->detalle_costo(header: false,funcion: __FUNCTION__);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al integrar modificacion',data:  $r_modifica,
-                header: $header,ws:  $ws);
+        $r_modifica = $this->detalle_costo(header: false, funcion: __FUNCTION__);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al integrar modificacion', data: $r_modifica,
+                header: $header, ws: $ws);
         }
 
 
         $inputs = (new _ubicacion())->inputs_costo(controler: $this);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al integrar inputs',data:  $inputs, header: $header,ws:  $ws);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al integrar inputs', data: $inputs, header: $header, ws: $ws);
         }
 
-        $link_costo_alta_bd = $this->obj_link->link_alta_bd(link: $this->link,seccion: 'inm_costo');
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener link_costo_alta_bd', data:  $link_costo_alta_bd,
-                header: $header,ws:  $ws);
+        $link_costo_alta_bd = $this->obj_link->link_alta_bd(link: $this->link, seccion: 'inm_costo');
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener link_costo_alta_bd', data: $link_costo_alta_bd,
+                header: $header, ws: $ws);
         }
         $this->link_costo_alta_bd = $link_costo_alta_bd;
 
@@ -614,28 +615,28 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $this->inputs->documento_rppc = $documento_rppc;
 
-        $data_row = $this->modelo->registro(registro_id: $this->registro_id,retorno_obj: true);
-        if(errores::$error){
+        $data_row = $this->modelo->registro(registro_id: $this->registro_id, retorno_obj: true);
+        if (errores::$error) {
             return $this->retorno_error(
-                mensaje: 'Error al obtener registro',data:  $data_row,header: $header,ws: $ws);
+                mensaje: 'Error al obtener registro', data: $data_row, header: $header, ws: $ws);
         }
 
-        $keys_selects = (new _ubicacion())->keys_selects_base(controler: $this,data_row:  $data_row, disableds: array());
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener keys_selects', data:  $keys_selects, header: $header,ws:  $ws);
+        $keys_selects = (new _ubicacion())->keys_selects_base(controler: $this, data_row: $data_row, disableds: array());
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener keys_selects', data: $keys_selects, header: $header, ws: $ws);
         }
 
-        $base = $this->base_upd(keys_selects: $keys_selects, params: array(),params_ajustados: array());
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
+        $base = $this->base_upd(keys_selects: $keys_selects, params: array(), params_ajustados: array());
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al integrar base', data: $base, header: $header, ws: $ws);
         }
 
         $params = array('pestana_general_actual' => 'pestanageneral2', 'pestana_actual' => 'pestana2');
-        $link_validacion_bd = $this->obj_link->link_con_id(accion:'validacion_bd',
-            link: $this->link,registro_id: $this->registro_id,seccion: 'inm_ubicacion',params: $params);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al generar link',data:  $link_validacion_bd,
-                header: $header,ws:  $ws);
+        $link_validacion_bd = $this->obj_link->link_con_id(accion: 'validacion_bd',
+            link: $this->link, registro_id: $this->registro_id, seccion: 'inm_ubicacion', params: $params);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al generar link', data: $link_validacion_bd,
+                header: $header, ws: $ws);
         }
 
         $this->link_validacion_bd = $link_validacion_bd;
@@ -644,12 +645,12 @@ class controlador_inm_ubicacion extends _ctl_base {
         $filtro_inm_doc['inm_ubicacion.id'] = $this->registro_id;
         $filtro_inm_doc['doc_tipo_documento.id'] = 34;
         $r_inm_doc_ubicacion = (new inm_doc_ubicacion(link: $this->link))->filtro_and(filtro: $filtro_inm_doc);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al integrar doc',data:  $r_inm_doc_ubicacion,
-                header: $header,ws:  $ws);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al integrar doc', data: $r_inm_doc_ubicacion,
+                header: $header, ws: $ws);
         }
 
-        if($r_inm_doc_ubicacion->n_registros > 0) {
+        if ($r_inm_doc_ubicacion->n_registros > 0) {
             $button_inm_doc_ubicacion_descarga = $this->html->button_href(accion: 'descarga', etiqueta: 'Descarga',
                 registro_id: $r_inm_doc_ubicacion->registros[0]['inm_doc_ubicacion_id'],
                 seccion: 'inm_doc_ubicacion', style: 'success');
@@ -680,12 +681,12 @@ class controlador_inm_ubicacion extends _ctl_base {
 
             $this->button_inm_doc_ubicacion_descarga_zip = $button_inm_doc_ubicacion_descarga_zip;
 
-            $params = array('accion_retorno'=>'proceso_ubicacion','seccion_retorno'=>'inm_ubicacion',
-                'id_retorno'=>$this->registro_id, 'pestana_general_actual' => 'pestanageneral2',
+            $params = array('accion_retorno' => 'proceso_ubicacion', 'seccion_retorno' => 'inm_ubicacion',
+                'id_retorno' => $this->registro_id, 'pestana_general_actual' => 'pestanageneral2',
                 'pestana_actual' => 'pestana2');
             $button_inm_doc_ubicacion_elimina_bd = $this->html->button_href(accion: 'elimina_bd',
                 etiqueta: 'Elimina', registro_id: $r_inm_doc_ubicacion->registros[0]['inm_doc_ubicacion_id'],
-                seccion: 'inm_doc_ubicacion', style: 'danger',params: $params);
+                seccion: 'inm_doc_ubicacion', style: 'danger', params: $params);
             if (errores::$error) {
                 return $this->retorno_error(mensaje: 'Error al integrar button', data: $button_inm_doc_ubicacion_elimina_bd,
                     header: $header, ws: $ws);
@@ -700,7 +701,7 @@ class controlador_inm_ubicacion extends _ctl_base {
     public function asigna_firmado_por_aprobar(bool $header, bool $ws = false): array|stdClass
     {
         $documento_poder = $this->html->input_file(cols: 12, name: 'poder', row_upd: new stdClass(), value_vacio: false,
-            place_holder: 'Poder',required: false);
+            place_holder: 'Poder', required: false);
         if (errores::$error) {
             return $this->retorno_error(
                 mensaje: 'Error al obtener inputs', data: $documento_poder, header: $header, ws: $ws);
@@ -718,58 +719,58 @@ class controlador_inm_ubicacion extends _ctl_base {
         $this->row_upd->inm_notaria_id = -1;
         $this->row_upd->numero_escritura_poder = '';
         $this->row_upd->fecha_poder = '';
-        if($r_inm_poder->n_registros > 0){
+        if ($r_inm_poder->n_registros > 0) {
             $this->row_upd->inm_notaria_id = $r_inm_poder->registros[0]['inm_poder_inm_notaria_id'];
             $this->row_upd->numero_escritura_poder = $r_inm_poder->registros[0]['inm_poder_numero_escritura_poder'];
             $this->row_upd->fecha_poder = $r_inm_poder->registros[0]['inm_poder_fecha_poder'];
         }
 
-        $data_row = $this->modelo->registro(registro_id: $this->registro_id,retorno_obj: true);
-        if(errores::$error){
+        $data_row = $this->modelo->registro(registro_id: $this->registro_id, retorno_obj: true);
+        if (errores::$error) {
             return $this->retorno_error(
-                mensaje: 'Error al obtener registro',data:  $data_row,header: $header,ws: $ws);
+                mensaje: 'Error al obtener registro', data: $data_row, header: $header, ws: $ws);
         }
 
-        $keys_selects = (new _ubicacion())->keys_selects_base(controler: $this,data_row:  $data_row, disableds: array());
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener keys_selects', data:  $keys_selects, header: $header,ws:  $ws);
+        $keys_selects = (new _ubicacion())->keys_selects_base(controler: $this, data_row: $data_row, disableds: array());
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener keys_selects', data: $keys_selects, header: $header, ws: $ws);
         }
 
-        $columns_ds = array('inm_notaria_id','inm_notaria_descripcion');
-        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_notaria_id',
-            keys_selects:$keys_selects, id_selected: $this->row_upd->inm_notaria_id, label: 'Notaria',
-            columns_ds : $columns_ds);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
-                header: $header,ws:  $ws);
+        $columns_ds = array('inm_notaria_id', 'inm_notaria_descripcion');
+        $keys_selects = $this->key_select(cols: 12, con_registros: true, filtro: array(), key: 'inm_notaria_id',
+            keys_selects: $keys_selects, id_selected: $this->row_upd->inm_notaria_id, label: 'Notaria',
+            columns_ds: $columns_ds);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects', data: $keys_selects,
+                header: $header, ws: $ws);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'numero_escritura_poder', keys_selects:$keys_selects,
+        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'numero_escritura_poder', keys_selects: $keys_selects,
             place_holder: 'No. Escritura Poder');
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
         $fecha = $this->html->input_fecha(cols: 6, row_upd: $this->row_upd, value_vacio: false,
-            name: 'fecha_poder', place_holder: 'Fecha Poder',value: $this->row_upd->fecha_poder);
-        if(errores::$error){
+            name: 'fecha_poder', place_holder: 'Fecha Poder', value: $this->row_upd->fecha_poder);
+        if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al integrar fecha',
-                data:  $fecha, header: $header,ws: $ws);
+                data: $fecha, header: $header, ws: $ws);
         }
 
         $this->inputs->fecha_poder = $fecha;
 
-        $base = $this->base_upd(keys_selects: $keys_selects, params: array(),params_ajustados: array());
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
+        $base = $this->base_upd(keys_selects: $keys_selects, params: array(), params_ajustados: array());
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al integrar base', data: $base, header: $header, ws: $ws);
         }
 
-        $params = array('pestana_general_actual' => 'pestanageneral2','pestana_actual' => 'pestana6');
-        $link_firmado_por_aprobar_bd = $this->obj_link->link_con_id(accion:'firmado_por_aprobar_bd',
-            link: $this->link,registro_id: $this->registro_id,seccion: 'inm_ubicacion',params: $params);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al generar link',data:  $link_firmado_por_aprobar_bd,
-                header: $header,ws:  $ws);
+        $params = array('pestana_general_actual' => 'pestanageneral2', 'pestana_actual' => 'pestana6');
+        $link_firmado_por_aprobar_bd = $this->obj_link->link_con_id(accion: 'firmado_por_aprobar_bd',
+            link: $this->link, registro_id: $this->registro_id, seccion: 'inm_ubicacion', params: $params);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al generar link', data: $link_firmado_por_aprobar_bd,
+                header: $header, ws: $ws);
         }
 
         $this->link_firmado_por_aprobar_bd = $link_firmado_por_aprobar_bd;
@@ -778,12 +779,12 @@ class controlador_inm_ubicacion extends _ctl_base {
         $filtro_inm_doc['inm_ubicacion.id'] = $this->registro_id;
         $filtro_inm_doc['doc_tipo_documento.id'] = 35;
         $r_inm_doc_ubicacion = (new inm_doc_ubicacion(link: $this->link))->filtro_and(filtro: $filtro_inm_doc);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al integrar doc',data:  $r_inm_doc_ubicacion,
-                header: $header,ws:  $ws);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al integrar doc', data: $r_inm_doc_ubicacion,
+                header: $header, ws: $ws);
         }
 
-        if($r_inm_doc_ubicacion->n_registros > 0) {
+        if ($r_inm_doc_ubicacion->n_registros > 0) {
             $button_inm_doc_ubicacion_descarga = $this->html->button_href(accion: 'descarga', etiqueta: 'Descarga',
                 registro_id: $r_inm_doc_ubicacion->registros[0]['inm_doc_ubicacion_id'],
                 seccion: 'inm_doc_ubicacion', style: 'success');
@@ -814,12 +815,12 @@ class controlador_inm_ubicacion extends _ctl_base {
 
             $this->button_inm_doc_ubicacion_descarga_zip_firmado_por_aprobar = $button_inm_doc_ubicacion_descarga_zip;
 
-            $params = array('accion_retorno'=>'proceso_ubicacion','seccion_retorno'=>'inm_ubicacion',
-                'id_retorno'=>$this->registro_id,'pestana_general_actual' => 'pestanageneral2',
+            $params = array('accion_retorno' => 'proceso_ubicacion', 'seccion_retorno' => 'inm_ubicacion',
+                'id_retorno' => $this->registro_id, 'pestana_general_actual' => 'pestanageneral2',
                 'pestana_actual' => 'pestana5');
             $button_inm_doc_ubicacion_elimina_bd = $this->html->button_href(accion: 'elimina_bd',
                 etiqueta: 'Elimina', registro_id: $r_inm_doc_ubicacion->registros[0]['inm_doc_ubicacion_id'],
-                seccion: 'inm_doc_ubicacion', style: 'danger',params: $params);
+                seccion: 'inm_doc_ubicacion', style: 'danger', params: $params);
             if (errores::$error) {
                 return $this->retorno_error(mensaje: 'Error al integrar button', data: $button_inm_doc_ubicacion_elimina_bd,
                     header: $header, ws: $ws);
@@ -843,9 +844,9 @@ class controlador_inm_ubicacion extends _ctl_base {
         }
 
         $documento_poliza_firmada = "";
-        if($r_cheque->n_registros > 0) {
+        if ($r_cheque->n_registros > 0) {
             $documento_poliza_firmada = $this->html->input_file(cols: 12, name: 'poliza_firmada', row_upd: new stdClass(),
-                value_vacio: false, place_holder: 'Poliza Firmada',required: false);
+                value_vacio: false, place_holder: 'Poliza Firmada', required: false);
             if (errores::$error) {
                 return $this->retorno_error(
                     mensaje: 'Error al obtener inputs', data: $documento_poliza_firmada, header: $header, ws: $ws);
@@ -862,7 +863,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         }
 
         $documento_transferencia = "";
-        if($r_transferencia->n_registros > 0) {
+        if ($r_transferencia->n_registros > 0) {
             $documento_transferencia = $this->html->input_file(cols: 12, name: 'transferencia', row_upd: new stdClass(),
                 value_vacio: false, place_holder: 'Comprobante Transferencia', required: false);
             if (errores::$error) {
@@ -882,7 +883,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         }
 
         $documento_poliza_comision_firmada = "";
-        if($r_cheque->n_registros > 0) {
+        if ($r_cheque->n_registros > 0) {
             $documento_poliza_comision_firmada = $this->html->input_file(cols: 12, name: 'poliza_comision_firmada', row_upd: new stdClass(),
                 value_vacio: false, place_holder: 'Poliza Comision Firmada', required: false);
             if (errores::$error) {
@@ -902,7 +903,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         }
 
         $documento_poliza_secundaria_firmada = "";
-        if($r_cheque->n_registros > 0) {
+        if ($r_cheque->n_registros > 0) {
             $documento_poliza_secundaria_firmada = $this->html->input_file(cols: 12, name: 'poliza_secundaria_firmada', row_upd: new stdClass(),
                 value_vacio: false, place_holder: 'Poliza Secundaria Firmada', required: false);
             if (errores::$error) {
@@ -912,30 +913,30 @@ class controlador_inm_ubicacion extends _ctl_base {
         }
         $this->inputs->documento_poliza_secundaria_firmada = $documento_poliza_secundaria_firmada;
 
-        $data_row = $this->modelo->registro(registro_id: $this->registro_id,retorno_obj: true);
-        if(errores::$error){
+        $data_row = $this->modelo->registro(registro_id: $this->registro_id, retorno_obj: true);
+        if (errores::$error) {
             return $this->retorno_error(
-                mensaje: 'Error al obtener registro',data:  $data_row,header: $header,ws: $ws);
+                mensaje: 'Error al obtener registro', data: $data_row, header: $header, ws: $ws);
         }
 
 
-        $keys_selects = (new _ubicacion())->keys_selects_base(controler: $this,data_row:  $data_row, disableds: array());
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener keys_selects', data:  $keys_selects, header: $header,ws:  $ws);
+        $keys_selects = (new _ubicacion())->keys_selects_base(controler: $this, data_row: $data_row, disableds: array());
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener keys_selects', data: $keys_selects, header: $header, ws: $ws);
         }
 
 
-        $base = $this->base_upd(keys_selects: $keys_selects, params: array(),params_ajustados: array());
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
+        $base = $this->base_upd(keys_selects: $keys_selects, params: array(), params_ajustados: array());
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al integrar base', data: $base, header: $header, ws: $ws);
         }
 
-        $params = array('pestana_general_actual' => 'pestanageneral2','pestana_actual' => 'pestana7');
-        $link_firmado_bd = $this->obj_link->link_con_id(accion:'firmado_bd',
-            link: $this->link,registro_id: $this->registro_id,seccion: 'inm_ubicacion',params: $params);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al generar link',data:  $link_firmado_bd,
-                header: $header,ws:  $ws);
+        $params = array('pestana_general_actual' => 'pestanageneral2', 'pestana_actual' => 'pestana7');
+        $link_firmado_bd = $this->obj_link->link_con_id(accion: 'firmado_bd',
+            link: $this->link, registro_id: $this->registro_id, seccion: 'inm_ubicacion', params: $params);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al generar link', data: $link_firmado_bd,
+                header: $header, ws: $ws);
         }
 
         $this->link_firmado_bd = $link_firmado_bd;
@@ -944,12 +945,12 @@ class controlador_inm_ubicacion extends _ctl_base {
         $filtro_inm_doc['inm_ubicacion.id'] = $this->registro_id;
         $filtro_inm_doc['doc_tipo_documento.id'] = 36;
         $r_inm_doc_ubicacion = (new inm_doc_ubicacion(link: $this->link))->filtro_and(filtro: $filtro_inm_doc);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al integrar doc',data:  $r_inm_doc_ubicacion,
-                header: $header,ws:  $ws);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al integrar doc', data: $r_inm_doc_ubicacion,
+                header: $header, ws: $ws);
         }
 
-        if($r_inm_doc_ubicacion->n_registros > 0) {
+        if ($r_inm_doc_ubicacion->n_registros > 0) {
             $this->descripcion_poliza_firmada = 'Poliza Firmada';
             $button_inm_doc_ubicacion_descarga = $this->html->button_href(accion: 'descarga', etiqueta: 'Descarga',
                 registro_id: $r_inm_doc_ubicacion->registros[0]['inm_doc_ubicacion_id'],
@@ -981,12 +982,12 @@ class controlador_inm_ubicacion extends _ctl_base {
 
             $this->button_inm_doc_ubicacion_descarga_zip_firmado = $button_inm_doc_ubicacion_descarga_zip;
 
-            $params = array('accion_retorno'=>'proceso_ubicacion','seccion_retorno'=>'inm_ubicacion',
-                'id_retorno'=>$this->registro_id,'pestana_general_actual' => 'pestanageneral2',
+            $params = array('accion_retorno' => 'proceso_ubicacion', 'seccion_retorno' => 'inm_ubicacion',
+                'id_retorno' => $this->registro_id, 'pestana_general_actual' => 'pestanageneral2',
                 'pestana_actual' => 'pestana6');
             $button_inm_doc_ubicacion_elimina_bd = $this->html->button_href(accion: 'elimina_bd',
                 etiqueta: 'Elimina', registro_id: $r_inm_doc_ubicacion->registros[0]['inm_doc_ubicacion_id'],
-                seccion: 'inm_doc_ubicacion', style: 'danger',params: $params);
+                seccion: 'inm_doc_ubicacion', style: 'danger', params: $params);
             if (errores::$error) {
                 return $this->retorno_error(mensaje: 'Error al integrar button', data: $button_inm_doc_ubicacion_elimina_bd,
                     header: $header, ws: $ws);
@@ -998,12 +999,12 @@ class controlador_inm_ubicacion extends _ctl_base {
         $filtro_inm_doc['inm_ubicacion.id'] = $this->registro_id;
         $filtro_inm_doc['doc_tipo_documento.id'] = 48;
         $r_inm_doc_ubicacion = (new inm_doc_ubicacion(link: $this->link))->filtro_and(filtro: $filtro_inm_doc);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al integrar doc',data:  $r_inm_doc_ubicacion,
-                header: $header,ws:  $ws);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al integrar doc', data: $r_inm_doc_ubicacion,
+                header: $header, ws: $ws);
         }
 
-        if($r_inm_doc_ubicacion->n_registros > 0) {
+        if ($r_inm_doc_ubicacion->n_registros > 0) {
             $this->descripcion_poliza_comision_firmada = 'Poliza Comision Firmada';
             $button_inm_doc_ubicacion_descarga = $this->html->button_href(accion: 'descarga', etiqueta: 'Descarga',
                 registro_id: $r_inm_doc_ubicacion->registros[0]['inm_doc_ubicacion_id'],
@@ -1035,12 +1036,12 @@ class controlador_inm_ubicacion extends _ctl_base {
 
             $this->button_inm_doc_ubicacion_descarga_zip_firmado_comision = $button_inm_doc_ubicacion_descarga_zip;
 
-            $params = array('accion_retorno'=>'proceso_ubicacion','seccion_retorno'=>'inm_ubicacion',
-                'id_retorno'=>$this->registro_id,'pestana_general_actual' => 'pestanageneral2',
+            $params = array('accion_retorno' => 'proceso_ubicacion', 'seccion_retorno' => 'inm_ubicacion',
+                'id_retorno' => $this->registro_id, 'pestana_general_actual' => 'pestanageneral2',
                 'pestana_actual' => 'pestana6');
             $button_inm_doc_ubicacion_elimina_bd = $this->html->button_href(accion: 'elimina_bd',
                 etiqueta: 'Elimina', registro_id: $r_inm_doc_ubicacion->registros[0]['inm_doc_ubicacion_id'],
-                seccion: 'inm_doc_ubicacion', style: 'danger',params: $params);
+                seccion: 'inm_doc_ubicacion', style: 'danger', params: $params);
             if (errores::$error) {
                 return $this->retorno_error(mensaje: 'Error al integrar button', data: $button_inm_doc_ubicacion_elimina_bd,
                     header: $header, ws: $ws);
@@ -1052,12 +1053,12 @@ class controlador_inm_ubicacion extends _ctl_base {
         $filtro_inm_doc['inm_ubicacion.id'] = $this->registro_id;
         $filtro_inm_doc['doc_tipo_documento.id'] = 49;
         $r_inm_doc_ubicacion = (new inm_doc_ubicacion(link: $this->link))->filtro_and(filtro: $filtro_inm_doc);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al integrar doc',data:  $r_inm_doc_ubicacion,
-                header: $header,ws:  $ws);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al integrar doc', data: $r_inm_doc_ubicacion,
+                header: $header, ws: $ws);
         }
 
-        if($r_inm_doc_ubicacion->n_registros > 0) {
+        if ($r_inm_doc_ubicacion->n_registros > 0) {
             $this->descripcion_comprobante_transferencia_firmada = 'Comprobante Transferencia';
             $button_inm_doc_ubicacion_descarga = $this->html->button_href(accion: 'descarga', etiqueta: 'Descarga',
                 registro_id: $r_inm_doc_ubicacion->registros[0]['inm_doc_ubicacion_id'],
@@ -1089,12 +1090,12 @@ class controlador_inm_ubicacion extends _ctl_base {
 
             $this->button_inm_doc_ubicacion_descarga_zip_transferencia_firmada = $button_inm_doc_ubicacion_descarga_zip;
 
-            $params = array('accion_retorno'=>'proceso_ubicacion','seccion_retorno'=>'inm_ubicacion',
-                'id_retorno'=>$this->registro_id,'pestana_general_actual' => 'pestanageneral2',
+            $params = array('accion_retorno' => 'proceso_ubicacion', 'seccion_retorno' => 'inm_ubicacion',
+                'id_retorno' => $this->registro_id, 'pestana_general_actual' => 'pestanageneral2',
                 'pestana_actual' => 'pestana6');
             $button_inm_doc_ubicacion_elimina_bd = $this->html->button_href(accion: 'elimina_bd',
                 etiqueta: 'Elimina', registro_id: $r_inm_doc_ubicacion->registros[0]['inm_doc_ubicacion_id'],
-                seccion: 'inm_doc_ubicacion', style: 'danger',params: $params);
+                seccion: 'inm_doc_ubicacion', style: 'danger', params: $params);
             if (errores::$error) {
                 return $this->retorno_error(mensaje: 'Error al integrar button', data: $button_inm_doc_ubicacion_elimina_bd,
                     header: $header, ws: $ws);
@@ -1106,12 +1107,12 @@ class controlador_inm_ubicacion extends _ctl_base {
         $filtro_inm_doc['inm_ubicacion.id'] = $this->registro_id;
         $filtro_inm_doc['doc_tipo_documento.id'] = 50;
         $r_inm_doc_ubicacion = (new inm_doc_ubicacion(link: $this->link))->filtro_and(filtro: $filtro_inm_doc);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al integrar doc',data:  $r_inm_doc_ubicacion,
-                header: $header,ws:  $ws);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al integrar doc', data: $r_inm_doc_ubicacion,
+                header: $header, ws: $ws);
         }
 
-        if($r_inm_doc_ubicacion->n_registros > 0) {
+        if ($r_inm_doc_ubicacion->n_registros > 0) {
             $this->descripcion_poliza_secundaria_firmada = 'Poliza Secundaria';
             $button_inm_doc_ubicacion_descarga = $this->html->button_href(accion: 'descarga', etiqueta: 'Descarga',
                 registro_id: $r_inm_doc_ubicacion->registros[0]['inm_doc_ubicacion_id'],
@@ -1143,12 +1144,12 @@ class controlador_inm_ubicacion extends _ctl_base {
 
             $this->button_inm_doc_ubicacion_descarga_zip_firmado_poliza_secundaria = $button_inm_doc_ubicacion_descarga_zip;
 
-            $params = array('accion_retorno'=>'proceso_ubicacion','seccion_retorno'=>'inm_ubicacion',
-                'id_retorno'=>$this->registro_id,'pestana_general_actual' => 'pestanageneral2',
+            $params = array('accion_retorno' => 'proceso_ubicacion', 'seccion_retorno' => 'inm_ubicacion',
+                'id_retorno' => $this->registro_id, 'pestana_general_actual' => 'pestanageneral2',
                 'pestana_actual' => 'pestana6');
             $button_inm_doc_ubicacion_elimina_bd = $this->html->button_href(accion: 'elimina_bd',
                 etiqueta: 'Elimina', registro_id: $r_inm_doc_ubicacion->registros[0]['inm_doc_ubicacion_id'],
-                seccion: 'inm_doc_ubicacion', style: 'danger',params: $params);
+                seccion: 'inm_doc_ubicacion', style: 'danger', params: $params);
             if (errores::$error) {
                 return $this->retorno_error(mensaje: 'Error al integrar button', data: $button_inm_doc_ubicacion_elimina_bd,
                     header: $header, ws: $ws);
@@ -1162,13 +1163,13 @@ class controlador_inm_ubicacion extends _ctl_base {
     public function asigna_solicitud_de_recurso(bool $header, bool $ws = false): array|stdClass
     {
 
-        $data_row = $this->modelo->registro(registro_id: $this->registro_id,retorno_obj: true);
-        if(errores::$error){
+        $data_row = $this->modelo->registro(registro_id: $this->registro_id, retorno_obj: true);
+        if (errores::$error) {
             return $this->retorno_error(
-                mensaje: 'Error al obtener registro',data:  $data_row,header: $header,ws: $ws);
+                mensaje: 'Error al obtener registro', data: $data_row, header: $header, ws: $ws);
         }
 
-        if(!isset($this->row_upd->nombre_beneficiario) || $this->row_upd->nombre_beneficiario === ''){
+        if (!isset($this->row_upd->nombre_beneficiario) || $this->row_upd->nombre_beneficiario === '') {
             $this->row_upd->nombre_beneficiario = $data_row->inm_ubicacion_razon_social;
         }
 
@@ -1232,92 +1233,92 @@ class controlador_inm_ubicacion extends _ctl_base {
             $this->row_upd->efectivo = $r_efectivo->registros[0]['inm_efectivo_monto'];
         }*/
 
-        $keys_selects = (new _ubicacion())->keys_selects_base(controler: $this,data_row:  $data_row, disableds: array());
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener keys_selects', data:  $keys_selects, header: $header,ws:  $ws);
+        $keys_selects = (new _ubicacion())->keys_selects_base(controler: $this, data_row: $data_row, disableds: array());
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener keys_selects', data: $keys_selects, header: $header, ws: $ws);
         }
 
-        $columns_ds = array('inm_tipo_gasto_id','inm_tipo_gasto_descripcion');
-        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_tipo_gasto_id',
-            keys_selects:$keys_selects, id_selected:-1, label: 'Tipo Gasto',
-            columns_ds : $columns_ds,required: false);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
-                header: $header,ws:  $ws);
+        $columns_ds = array('inm_tipo_gasto_id', 'inm_tipo_gasto_descripcion');
+        $keys_selects = $this->key_select(cols: 12, con_registros: true, filtro: array(), key: 'inm_tipo_gasto_id',
+            keys_selects: $keys_selects, id_selected: -1, label: 'Tipo Gasto',
+            columns_ds: $columns_ds, required: false);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects', data: $keys_selects,
+                header: $header, ws: $ws);
         }
 
-        $columns_ds = array('inm_tipo_cheque_id','inm_tipo_cheque_descripcion');
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_tipo_cheque_id',
-            keys_selects:$keys_selects, id_selected:-1, label: 'Tipo Cheque',
-            columns_ds : $columns_ds,required: false);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
-                header: $header,ws:  $ws);
+        $columns_ds = array('inm_tipo_cheque_id', 'inm_tipo_cheque_descripcion');
+        $keys_selects = $this->key_select(cols: 6, con_registros: true, filtro: array(), key: 'inm_tipo_cheque_id',
+            keys_selects: $keys_selects, id_selected: -1, label: 'Tipo Cheque',
+            columns_ds: $columns_ds, required: false);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects', data: $keys_selects,
+                header: $header, ws: $ws);
         }
 
-        $columns_ds = array('bn_cuenta_id','bn_cuenta_descripcion');
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'bn_cuenta_id',
-            keys_selects:$keys_selects, id_selected:-1, label: 'Cuenta',
-            columns_ds : $columns_ds,required: false);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
-                header: $header,ws:  $ws);
+        $columns_ds = array('bn_cuenta_id', 'bn_cuenta_descripcion');
+        $keys_selects = $this->key_select(cols: 6, con_registros: true, filtro: array(), key: 'bn_cuenta_id',
+            keys_selects: $keys_selects, id_selected: -1, label: 'Cuenta',
+            columns_ds: $columns_ds, required: false);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects', data: $keys_selects,
+                header: $header, ws: $ws);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'nombre_beneficiario', keys_selects:$keys_selects,
-            place_holder: 'Nombre Beneficiario',required: false);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        $keys_selects = (new init())->key_select_txt(cols: 12, key: 'nombre_beneficiario', keys_selects: $keys_selects,
+            place_holder: 'Nombre Beneficiario', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'monto', keys_selects:$keys_selects,
-            place_holder: 'Monto',required: false);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'monto', keys_selects: $keys_selects,
+            place_holder: 'Monto', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'monto_cheque_secundario', keys_selects:$keys_selects,
-            place_holder: 'Monto Secundario',required: false);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        $keys_selects = (new init())->key_select_txt(cols: 12, key: 'monto_cheque_secundario', keys_selects: $keys_selects,
+            place_holder: 'Monto Secundario', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'monto_transferencia', keys_selects:$keys_selects,
-            place_holder: 'Monto Transferencia',required: false);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        $keys_selects = (new init())->key_select_txt(cols: 12, key: 'monto_transferencia', keys_selects: $keys_selects,
+            place_holder: 'Monto Transferencia', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'monto_comision', keys_selects:$keys_selects,
+        $keys_selects = (new init())->key_select_txt(cols: 12, key: 'monto_comision', keys_selects: $keys_selects,
             place_holder: 'Monto Comision', required: false);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'efectivo', keys_selects:$keys_selects,
+        $keys_selects = (new init())->key_select_txt(cols: 12, key: 'efectivo', keys_selects: $keys_selects,
             place_holder: 'Efectivo', required: false);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $base = $this->base_upd(keys_selects: $keys_selects, params: array(),params_ajustados: array());
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
+        $base = $this->base_upd(keys_selects: $keys_selects, params: array(), params_ajustados: array());
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al integrar base', data: $base, header: $header, ws: $ws);
         }
 
         $filtro['inm_ubicacion.id'] = $this->registro_id;
-        $order = array('inm_cheque.fecha_alta'=>'DESC');
-        $r_inm_cheque = (new inm_rel_cheque_ubicacion(link: $this->link))->filtro_and(filtro: $filtro,order: $order);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener etapas', data: $r_inm_cheque,header: $header,
-                ws:  $ws);
+        $order = array('inm_cheque.fecha_alta' => 'DESC');
+        $r_inm_cheque = (new inm_rel_cheque_ubicacion(link: $this->link))->filtro_and(filtro: $filtro, order: $order);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener etapas', data: $r_inm_cheque, header: $header,
+                ws: $ws);
         }
 
         $registros = array();
-        $params = array('accion_retorno'=>'proceso_ubicacion','seccion_retorno'=>$this->seccion,
-            'id_retorno'=>$this->registro_id);
+        $params = array('accion_retorno' => 'proceso_ubicacion', 'seccion_retorno' => $this->seccion,
+            'id_retorno' => $this->registro_id);
 
-        if(isset($_GET['pestana_general_actual'])){
+        if (isset($_GET['pestana_general_actual'])) {
             $params['pestana_general_actual'] = 'pestanageneral2';
             $params['pestana_actual'] = 'pestana3';
         }
@@ -1325,29 +1326,29 @@ class controlador_inm_ubicacion extends _ctl_base {
             $button = $this->html->button_href(accion: 'elimina_bd', etiqueta: 'Elimina',
                 registro_id: $inm_cheque['inm_cheque_id'], seccion: 'inm_cheque', style: 'danger',
                 params: $params);
-            if(errores::$error){
-                return $this->retorno_error(mensaje: 'Error al integrar button',data:  $button,header: $header,
-                    ws:  $ws);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al integrar button', data: $button, header: $header,
+                    ws: $ws);
             }
             $inm_cheque['elimina_bd'] = $button;
-            
+
             $button = $this->html->button_href(accion: 'solicitud_gasto', etiqueta: 'Solicitud de Gasto',
                 registro_id: $inm_cheque['inm_cheque_id'], seccion: 'inm_cheque', style: 'info',
                 params: $params);
-            if(errores::$error){
-                return $this->retorno_error(mensaje: 'Error al integrar button',data:  $button,header: $header,
-                    ws:  $ws);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al integrar button', data: $button, header: $header,
+                    ws: $ws);
             }
             $inm_cheque['solicitud_gasto'] = $button;
 
             $filtro_rel_doc_che['inm_cheque.id'] = $inm_cheque['inm_cheque_id'];
             $r_rel_doc_cheque = (new inm_rel_doc_cheque_ubicacion(link: $this->link))->filtro_and(filtro: $filtro_rel_doc_che);
             if (errores::$error) {
-                return $this->retorno_error(mensaje: 'Error al obtener inputs', data: $r_rel_doc_cheque,header: $header,
-                    ws:  $ws);
+                return $this->retorno_error(mensaje: 'Error al obtener inputs', data: $r_rel_doc_cheque, header: $header,
+                    ws: $ws);
             }
 
-            if($r_rel_doc_cheque->n_registros > 0){
+            if ($r_rel_doc_cheque->n_registros > 0) {
                 $button_descarga = $this->html->button_href(accion: 'descarga', etiqueta: 'Descarga',
                     registro_id: $r_rel_doc_cheque->registros[0]['inm_doc_ubicacion_id'],
                     seccion: 'inm_doc_ubicacion', style: 'success');
@@ -1372,12 +1373,12 @@ class controlador_inm_ubicacion extends _ctl_base {
                         data: $button_descarga_zip, header: $header, ws: $ws);
                 }
 
-                $params = array('accion_retorno'=>'proceso_ubicacion','seccion_retorno'=>'inm_ubicacion',
-                    'id_retorno'=>$this->registro_id, 'pestana_general_actual' => 'pestanageneral2',
+                $params = array('accion_retorno' => 'proceso_ubicacion', 'seccion_retorno' => 'inm_ubicacion',
+                    'id_retorno' => $this->registro_id, 'pestana_general_actual' => 'pestanageneral2',
                     'pestana_actual' => 'pestana2');
                 $button_elimina_bd = $this->html->button_href(accion: 'elimina_bd',
                     etiqueta: 'Elimina', registro_id: $r_rel_doc_cheque->registros[0]['inm_rel_doc_cheque_ubicacion_id'],
-                    seccion: 'inm_rel_doc_cheque_ubicacion', style: 'danger',params: $params);
+                    seccion: 'inm_rel_doc_cheque_ubicacion', style: 'danger', params: $params);
                 if (errores::$error) {
                     return $this->retorno_error(mensaje: 'Error al integrar button', data: $button_elimina_bd,
                         header: $header, ws: $ws);
@@ -1389,12 +1390,12 @@ class controlador_inm_ubicacion extends _ctl_base {
                     <td>$button_descarga_zip</td>
                     <td>$button_elimina_bd</td>
                     </tr>";
-            }else{
+            } else {
                 $button = $this->html->input_file(cols: 12, name: 'documentos[36][]', row_upd: new stdClass(),
-                    value_vacio: false, place_holder: 'Subir Documento',required: false, con_label: false);
+                    value_vacio: false, place_holder: 'Subir Documento', required: false, con_label: false);
                 if (errores::$error) {
-                    return $this->retorno_error(mensaje: 'Error al obtener inputs', data: $button,header: $header,
-                        ws:  $ws);
+                    return $this->retorno_error(mensaje: 'Error al obtener inputs', data: $button, header: $header,
+                        ws: $ws);
                 }
                 $res = "<tr>
                 <td colspan='6'>$button</td>
@@ -1409,18 +1410,18 @@ class controlador_inm_ubicacion extends _ctl_base {
         $this->cheques = $registros;
 
         $filtro['inm_ubicacion.id'] = $this->registro_id;
-        $order = array('inm_transferencia.fecha_alta'=>'DESC');
-        $r_inm_transferencia = (new inm_rel_transferencia_ubicacion(link: $this->link))->filtro_and(filtro: $filtro,order: $order);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener etapas', data: $r_inm_transferencia,header: $header,
-                ws:  $ws);
+        $order = array('inm_transferencia.fecha_alta' => 'DESC');
+        $r_inm_transferencia = (new inm_rel_transferencia_ubicacion(link: $this->link))->filtro_and(filtro: $filtro, order: $order);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener etapas', data: $r_inm_transferencia, header: $header,
+                ws: $ws);
         }
 
         $registros = array();
-        $params = array('accion_retorno'=>'proceso_ubicacion','seccion_retorno'=>$this->seccion,
-            'id_retorno'=>$this->registro_id);
+        $params = array('accion_retorno' => 'proceso_ubicacion', 'seccion_retorno' => $this->seccion,
+            'id_retorno' => $this->registro_id);
 
-        if(isset($_GET['pestana_general_actual'])){
+        if (isset($_GET['pestana_general_actual'])) {
             $params['pestana_general_actual'] = 'pestanageneral2';
             $params['pestana_actual'] = 'pestana3';
         }
@@ -1428,20 +1429,20 @@ class controlador_inm_ubicacion extends _ctl_base {
             $button = $this->html->button_href(accion: 'elimina_bd', etiqueta: 'Elimina',
                 registro_id: $inm_transferencia['inm_transferencia_id'], seccion: 'inm_transferencia', style: 'danger',
                 params: $params);
-            if(errores::$error){
-                return $this->retorno_error(mensaje: 'Error al integrar button',data:  $button,header: $header,
-                    ws:  $ws);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al integrar button', data: $button, header: $header,
+                    ws: $ws);
             }
             $inm_transferencia['elimina_bd'] = $button;
 
             $filtro_rel_doc_trns['inm_transferencia.id'] = $inm_transferencia['inm_transferencia_id'];
             $r_rel_doc_transferencia = (new inm_rel_doc_transferencia_ubicacion(link: $this->link))->filtro_and(filtro: $filtro_rel_doc_trns);
             if (errores::$error) {
-                return $this->retorno_error(mensaje: 'Error al obtener inputs', data: $r_rel_doc_transferencia,header: $header,
-                    ws:  $ws);
+                return $this->retorno_error(mensaje: 'Error al obtener inputs', data: $r_rel_doc_transferencia, header: $header,
+                    ws: $ws);
             }
 
-            if($r_rel_doc_transferencia->n_registros > 0){
+            if ($r_rel_doc_transferencia->n_registros > 0) {
                 $button_descarga = $this->html->button_href(accion: 'descarga', etiqueta: 'Descarga',
                     registro_id: $r_rel_doc_transferencia->registros[0]['inm_doc_ubicacion_id'],
                     seccion: 'inm_doc_ubicacion', style: 'success');
@@ -1466,12 +1467,12 @@ class controlador_inm_ubicacion extends _ctl_base {
                         data: $button_descarga_zip, header: $header, ws: $ws);
                 }
 
-                $params = array('accion_retorno'=>'proceso_ubicacion','seccion_retorno'=>'inm_ubicacion',
-                    'id_retorno'=>$this->registro_id, 'pestana_general_actual' => 'pestanageneral2',
+                $params = array('accion_retorno' => 'proceso_ubicacion', 'seccion_retorno' => 'inm_ubicacion',
+                    'id_retorno' => $this->registro_id, 'pestana_general_actual' => 'pestanageneral2',
                     'pestana_actual' => 'pestana2');
                 $button_elimina_bd = $this->html->button_href(accion: 'elimina_bd',
                     etiqueta: 'Elimina', registro_id: $r_rel_doc_transferencia->registros[0]['inm_rel_doc_transferencia_ubicacion_id'],
-                    seccion: 'inm_rel_doc_transferencia_ubicacion', style: 'danger',params: $params);
+                    seccion: 'inm_rel_doc_transferencia_ubicacion', style: 'danger', params: $params);
                 if (errores::$error) {
                     return $this->retorno_error(mensaje: 'Error al integrar button', data: $button_elimina_bd,
                         header: $header, ws: $ws);
@@ -1483,12 +1484,12 @@ class controlador_inm_ubicacion extends _ctl_base {
                     <td>$button_descarga_zip</td>
                     <td>$button_elimina_bd</td>
                     </tr>";
-            }else{
+            } else {
                 $button = $this->html->input_file(cols: 12, name: 'documentos[36][]', row_upd: new stdClass(),
-                    value_vacio: false, place_holder: 'Subir Documento',required: false, con_label: false);
+                    value_vacio: false, place_holder: 'Subir Documento', required: false, con_label: false);
                 if (errores::$error) {
-                    return $this->retorno_error(mensaje: 'Error al obtener inputs', data: $button,header: $header,
-                        ws:  $ws);
+                    return $this->retorno_error(mensaje: 'Error al obtener inputs', data: $button, header: $header,
+                        ws: $ws);
                 }
                 $res = "<tr>
                 <td colspan='6'>$button</td>
@@ -1504,18 +1505,18 @@ class controlador_inm_ubicacion extends _ctl_base {
         $this->transferencias = $registros;
 
         $filtro['inm_ubicacion.id'] = $this->registro_id;
-        $order = array('inm_efectivo.fecha_alta'=>'DESC');
-        $r_inm_efectivo = (new inm_rel_efectivo_ubicacion(link: $this->link))->filtro_and(filtro: $filtro,order: $order);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener etapas', data: $r_inm_efectivo,header: $header,
-                ws:  $ws);
+        $order = array('inm_efectivo.fecha_alta' => 'DESC');
+        $r_inm_efectivo = (new inm_rel_efectivo_ubicacion(link: $this->link))->filtro_and(filtro: $filtro, order: $order);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener etapas', data: $r_inm_efectivo, header: $header,
+                ws: $ws);
         }
 
         $registros = array();
-        $params = array('accion_retorno'=>'proceso_ubicacion','seccion_retorno'=>$this->seccion,
-            'id_retorno'=>$this->registro_id);
+        $params = array('accion_retorno' => 'proceso_ubicacion', 'seccion_retorno' => $this->seccion,
+            'id_retorno' => $this->registro_id);
 
-        if(isset($_GET['pestana_general_actual'])){
+        if (isset($_GET['pestana_general_actual'])) {
             $params['pestana_general_actual'] = 'pestanageneral2';
             $params['pestana_actual'] = 'pestana3';
         }
@@ -1523,9 +1524,9 @@ class controlador_inm_ubicacion extends _ctl_base {
             $button = $this->html->button_href(accion: 'elimina_bd', etiqueta: 'Elimina',
                 registro_id: $inm_efectivo['inm_efectivo_id'], seccion: 'inm_efectivo', style: 'danger',
                 params: $params);
-            if(errores::$error){
-                return $this->retorno_error(mensaje: 'Error al integrar button',data:  $button,header: $header,
-                    ws:  $ws);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al integrar button', data: $button, header: $header,
+                    ws: $ws);
             }
             $inm_efectivo['elimina_bd'] = $button;
 
@@ -1535,11 +1536,11 @@ class controlador_inm_ubicacion extends _ctl_base {
         $this->efectivos = $registros;
 
         $params_retorno = array('pestana_general_actual' => 'pestanageneral2', 'pestana_actual' => 'pestana3');
-        $link_solicitud_de_recurso_bd = $this->obj_link->link_con_id(accion:'solicitud_de_recurso_bd',
-            link: $this->link,registro_id: $this->registro_id,seccion: 'inm_ubicacion',params: $params_retorno);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al generar link',data:  $link_solicitud_de_recurso_bd,
-                header: $header,ws:  $ws);
+        $link_solicitud_de_recurso_bd = $this->obj_link->link_con_id(accion: 'solicitud_de_recurso_bd',
+            link: $this->link, registro_id: $this->registro_id, seccion: 'inm_ubicacion', params: $params_retorno);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al generar link', data: $link_solicitud_de_recurso_bd,
+                header: $header, ws: $ws);
         }
 
         $this->link_solicitud_de_recurso_bd = $link_solicitud_de_recurso_bd;
@@ -1551,10 +1552,10 @@ class controlador_inm_ubicacion extends _ctl_base {
     public function asigna_emision_de_recurso(bool $header, bool $ws = false): array|stdClass
     {
 
-        $data_row = $this->modelo->registro(registro_id: $this->registro_id,retorno_obj: true);
-        if(errores::$error){
+        $data_row = $this->modelo->registro(registro_id: $this->registro_id, retorno_obj: true);
+        if (errores::$error) {
             return $this->retorno_error(
-                mensaje: 'Error al obtener registro',data:  $data_row,header: $header,ws: $ws);
+                mensaje: 'Error al obtener registro', data: $data_row, header: $header, ws: $ws);
         }
 
         /*$filtro_che['inm_ubicacion.id'] = $this->registro_id;
@@ -1621,132 +1622,132 @@ class controlador_inm_ubicacion extends _ctl_base {
             $this->row_upd->efectivo = $r_efectivo->registros[0]['inm_efectivo_monto'];
         }*/
 
-        $keys_selects = (new _ubicacion())->keys_selects_base(controler: $this,data_row:  $data_row, disableds: array());
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener keys_selects', data:  $keys_selects, header: $header,ws:  $ws);
+        $keys_selects = (new _ubicacion())->keys_selects_base(controler: $this, data_row: $data_row, disableds: array());
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener keys_selects', data: $keys_selects, header: $header, ws: $ws);
         }
 
         $modelo = new inm_tipo_cheque(link: $this->link);
         $inm_tipo_cheque_id = $this->html->select_catalogo(cols: 6, con_registros: true,
             id_selected: -1, modelo: $modelo, disabled: true,
             id_css: 'inm_tipo_cheque_sl_id', label: 'Tipo Cheque', name: 'inm_tipo_cheque_sl_id');
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $inm_tipo_cheque_id,header: $header, ws:$ws);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener input', data: $inm_tipo_cheque_id, header: $header, ws: $ws);
         }
 
         $this->inputs->inm_tipo_cheque_sl_id = $inm_tipo_cheque_id;
-        
-       $modelo = new bn_cuenta(link: $this->link);
+
+        $modelo = new bn_cuenta(link: $this->link);
         $bn_cuenta_id = $this->html->select_catalogo(cols: 6, con_registros: true, id_selected: -1, modelo: $modelo,
             id_css: 'bn_cuenta_sl_id', label: 'Cuenta', name: 'bn_cuenta_sl_id');
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $bn_cuenta_id,header: $header, ws:$ws);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener input', data: $bn_cuenta_id, header: $header, ws: $ws);
         }
 
         $this->inputs->bn_cuenta_sl_id = $bn_cuenta_id;
 
         $bn_cuenta_id = $this->html->select_catalogo(cols: 6, con_registros: true, id_selected: -1, modelo: $modelo,
             id_css: 'bn_cuenta_sl_trs_id', label: 'Cuenta', name: 'bn_cuenta_sl_trs_id');
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $bn_cuenta_id,header: $header, ws:$ws);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener input', data: $bn_cuenta_id, header: $header, ws: $ws);
         }
 
         $this->inputs->bn_cuenta_sl_trs_id = $bn_cuenta_id;
 
-        $inm_tipo_gasto_sl_id = $this->html->hidden(name:'inm_tipo_gasto_sl_id',value: "");
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $inm_tipo_gasto_sl_id,  header: $header,
+        $inm_tipo_gasto_sl_id = $this->html->hidden(name: 'inm_tipo_gasto_sl_id', value: "");
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener input', data: $inm_tipo_gasto_sl_id, header: $header,
                 ws: $ws);
         }
 
         $this->inputs->inm_tipo_gasto_sl_id = $inm_tipo_gasto_sl_id;
 
-        $registro_ajustar_id = $this->html->hidden(name:'registro_ajustar_id',value: "");
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $registro_ajustar_id,  header: $header,
+        $registro_ajustar_id = $this->html->hidden(name: 'registro_ajustar_id', value: "");
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener input', data: $registro_ajustar_id, header: $header,
                 ws: $ws);
         }
 
         $this->inputs->registro_ajustar_id = $registro_ajustar_id;
 
-        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'nombre_beneficiario_emision', keys_selects:$keys_selects,
-            place_holder: 'Nombre Beneficiario',required: false,disabled: true);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        $keys_selects = (new init())->key_select_txt(cols: 12, key: 'nombre_beneficiario_emision', keys_selects: $keys_selects,
+            place_holder: 'Nombre Beneficiario', required: false, disabled: true);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'numero_cheque', keys_selects:$keys_selects,
-            place_holder: 'No. Cheque',required: false);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        $keys_selects = (new init())->key_select_txt(cols: 12, key: 'numero_cheque', keys_selects: $keys_selects,
+            place_holder: 'No. Cheque', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'monto_emision', keys_selects:$keys_selects,
-            place_holder: 'Monto',required: false,disabled: true);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        $keys_selects = (new init())->key_select_txt(cols: 12, key: 'monto_emision', keys_selects: $keys_selects,
+            place_holder: 'Monto', required: false, disabled: true);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'numero_cheque_secundario',
-            keys_selects:$keys_selects, place_holder: 'No. Cheque Sec', required: false);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        $keys_selects = (new init())->key_select_txt(cols: 12, key: 'numero_cheque_secundario',
+            keys_selects: $keys_selects, place_holder: 'No. Cheque Sec', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'monto_cheque_secundario',
-            keys_selects:$keys_selects, place_holder: 'Monto Secundario',required: false);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        $keys_selects = (new init())->key_select_txt(cols: 12, key: 'monto_cheque_secundario',
+            keys_selects: $keys_selects, place_holder: 'Monto Secundario', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'transferencia', keys_selects:$keys_selects,
-            place_holder: 'Concepto Transferencia',required: false);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'transferencia', keys_selects: $keys_selects,
+            place_holder: 'Concepto Transferencia', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'monto_transferencia_emision',
-            keys_selects:$keys_selects, place_holder: 'Monto Transferencia',required: false, disabled: true);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        $keys_selects = (new init())->key_select_txt(cols: 12, key: 'monto_transferencia_emision',
+            keys_selects: $keys_selects, place_holder: 'Monto Transferencia', required: false, disabled: true);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'numero_cheque_comision', keys_selects:$keys_selects,
+        $keys_selects = (new init())->key_select_txt(cols: 12, key: 'numero_cheque_comision', keys_selects: $keys_selects,
             place_holder: 'No. Cheque Comision', required: false);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'monto_comision', keys_selects:$keys_selects,
+        $keys_selects = (new init())->key_select_txt(cols: 12, key: 'monto_comision', keys_selects: $keys_selects,
             place_holder: 'Monto Comision', required: false);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'efectivo_emision', keys_selects:$keys_selects,
-            place_holder: 'Efectivo', required: false,disabled: true);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        $keys_selects = (new init())->key_select_txt(cols: 12, key: 'efectivo_emision', keys_selects: $keys_selects,
+            place_holder: 'Efectivo', required: false, disabled: true);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $base = $this->base_upd(keys_selects: $keys_selects, params: array(),params_ajustados: array());
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
+        $base = $this->base_upd(keys_selects: $keys_selects, params: array(), params_ajustados: array());
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al integrar base', data: $base, header: $header, ws: $ws);
         }
 
         $filtro['inm_ubicacion.id'] = $this->registro_id;
-        $order = array('inm_cheque.fecha_alta'=>'DESC');
-        $r_inm_cheque = (new inm_rel_cheque_ubicacion(link: $this->link))->filtro_and(filtro: $filtro,order: $order);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener etapas', data: $r_inm_cheque,header: $header,
-                ws:  $ws);
+        $order = array('inm_cheque.fecha_alta' => 'DESC');
+        $r_inm_cheque = (new inm_rel_cheque_ubicacion(link: $this->link))->filtro_and(filtro: $filtro, order: $order);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener etapas', data: $r_inm_cheque, header: $header,
+                ws: $ws);
         }
 
         $registros = array();
-        $params = array('accion_retorno'=>'proceso_ubicacion','seccion_retorno'=>$this->seccion,
-            'id_retorno'=>$this->registro_id);
+        $params = array('accion_retorno' => 'proceso_ubicacion', 'seccion_retorno' => $this->seccion,
+            'id_retorno' => $this->registro_id);
 
-        if(isset($_GET['pestana_general_actual'])){
+        if (isset($_GET['pestana_general_actual'])) {
             $params['pestana_general_actual'] = 'pestanageneral2';
             $params['pestana_actual'] = 'pestana3';
         }
@@ -1754,18 +1755,18 @@ class controlador_inm_ubicacion extends _ctl_base {
             $button = $this->html->button_href(accion: 'elimina_bd', etiqueta: 'Elimina',
                 registro_id: $inm_cheque['inm_rel_cheque_ubicacion_id'], seccion: 'inm_rel_cheque_ubicacion',
                 style: 'danger', params: $params);
-            if(errores::$error){
-                return $this->retorno_error(mensaje: 'Error al integrar button',data:  $button,header: $header,
-                    ws:  $ws);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al integrar button', data: $button, header: $header,
+                    ws: $ws);
             }
             $inm_cheque['elimina_bd'] = $button;
 
             $button = $this->html->button_href(accion: 'solicitud_gasto', etiqueta: 'Solicitud de Gasto',
                 registro_id: $inm_cheque['inm_cheque_id'], seccion: 'inm_cheque', style: 'info  ',
                 params: $params);
-            if(errores::$error){
-                return $this->retorno_error(mensaje: 'Error al integrar button',data:  $button,header: $header,
-                    ws:  $ws);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al integrar button', data: $button, header: $header,
+                    ws: $ws);
             }
             $inm_cheque['solicitud_gasto'] = $button;
 
@@ -1783,11 +1784,11 @@ class controlador_inm_ubicacion extends _ctl_base {
             $filtro_rel_doc_che['inm_cheque.id'] = $inm_cheque['inm_cheque_id'];
             $r_rel_doc_cheque = (new inm_rel_doc_cheque_ubicacion(link: $this->link))->filtro_and(filtro: $filtro_rel_doc_che);
             if (errores::$error) {
-                return $this->retorno_error(mensaje: 'Error al obtener inputs', data: $r_rel_doc_cheque,header: $header,
-                    ws:  $ws);
+                return $this->retorno_error(mensaje: 'Error al obtener inputs', data: $r_rel_doc_cheque, header: $header,
+                    ws: $ws);
             }
 
-            if($r_rel_doc_cheque->n_registros > 0){
+            if ($r_rel_doc_cheque->n_registros > 0) {
                 $button_descarga = $this->html->button_href(accion: 'descarga', etiqueta: 'Descarga',
                     registro_id: $r_rel_doc_cheque->registros[0]['inm_doc_ubicacion_id'],
                     seccion: 'inm_doc_ubicacion', style: 'success');
@@ -1812,12 +1813,12 @@ class controlador_inm_ubicacion extends _ctl_base {
                         data: $button_descarga_zip, header: $header, ws: $ws);
                 }
 
-                $params = array('accion_retorno'=>'proceso_ubicacion','seccion_retorno'=>'inm_ubicacion',
-                    'id_retorno'=>$this->registro_id, 'pestana_general_actual' => 'pestanageneral2',
+                $params = array('accion_retorno' => 'proceso_ubicacion', 'seccion_retorno' => 'inm_ubicacion',
+                    'id_retorno' => $this->registro_id, 'pestana_general_actual' => 'pestanageneral2',
                     'pestana_actual' => 'pestana7');
                 $button_elimina_bd = $this->html->button_href(accion: 'elimina_bd',
                     etiqueta: 'Elimina', registro_id: $r_rel_doc_cheque->registros[0]['inm_rel_doc_cheque_ubicacion_id'],
-                    seccion: 'inm_rel_doc_cheque_ubicacion', style: 'danger',params: $params);
+                    seccion: 'inm_rel_doc_cheque_ubicacion', style: 'danger', params: $params);
                 if (errores::$error) {
                     return $this->retorno_error(mensaje: 'Error al integrar button', data: $button_elimina_bd,
                         header: $header, ws: $ws);
@@ -1841,14 +1842,14 @@ class controlador_inm_ubicacion extends _ctl_base {
                                 </div>
                             </td>
                         </tr>";
-            }else{
+            } else {
                 $name = "documentos_cheques[$inm_cheque[inm_cheque_id]][36][]";
 
                 $button = $this->html->input_file(cols: 12, name: $name, row_upd: $this->row_upd,
-                    value_vacio: false, place_holder: 'Subir Documento',required: false, con_label: false);
+                    value_vacio: false, place_holder: 'Subir Documento', required: false, con_label: false);
                 if (errores::$error) {
-                    return $this->retorno_error(mensaje: 'Error al obtener inputs', data: $button,header: $header,
-                        ws:  $ws);
+                    return $this->retorno_error(mensaje: 'Error al obtener inputs', data: $button, header: $header,
+                        ws: $ws);
                 }
                 $res = "<tr>
                 <td colspan='6'>$button</td>
@@ -1863,19 +1864,19 @@ class controlador_inm_ubicacion extends _ctl_base {
         $this->cheques = $registros;
 
         $filtro['inm_ubicacion.id'] = $this->registro_id;
-        $order = array('inm_transferencia.fecha_alta'=>'DESC');
+        $order = array('inm_transferencia.fecha_alta' => 'DESC');
         $r_inm_transferencia = (new inm_rel_transferencia_ubicacion(link: $this->link))->filtro_and(filtro: $filtro,
             order: $order);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener etapas', data: $r_inm_transferencia,header: $header,
-                ws:  $ws);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener etapas', data: $r_inm_transferencia, header: $header,
+                ws: $ws);
         }
 
         $registros = array();
-        $params = array('accion_retorno'=>'proceso_ubicacion','seccion_retorno'=>$this->seccion,
-            'id_retorno'=>$this->registro_id);
+        $params = array('accion_retorno' => 'proceso_ubicacion', 'seccion_retorno' => $this->seccion,
+            'id_retorno' => $this->registro_id);
 
-        if(isset($_GET['pestana_general_actual'])){
+        if (isset($_GET['pestana_general_actual'])) {
             $params['pestana_general_actual'] = 'pestanageneral2';
             $params['pestana_actual'] = 'pestana3';
         }
@@ -1883,18 +1884,18 @@ class controlador_inm_ubicacion extends _ctl_base {
             $button = $this->html->button_href(accion: 'elimina_bd', etiqueta: 'Elimina',
                 registro_id: $inm_transferencia['inm_rel_transferencia_ubicacion_id'],
                 seccion: 'inm_rel_transferencia_ubicacion', style: 'danger', params: $params);
-            if(errores::$error){
-                return $this->retorno_error(mensaje: 'Error al integrar button',data:  $button,header: $header,
-                    ws:  $ws);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al integrar button', data: $button, header: $header,
+                    ws: $ws);
             }
             $inm_transferencia['elimina_bd'] = $button;
 
             $button = $this->html->button_href(accion: 'solicitud_gasto', etiqueta: 'Solicitud de Gasto',
                 registro_id: $inm_transferencia['inm_transferencia_id'], seccion: 'inm_transferencia', style: 'info  ',
                 params: $params);
-            if(errores::$error){
-                return $this->retorno_error(mensaje: 'Error al integrar button',data:  $button,header: $header,
-                    ws:  $ws);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al integrar button', data: $button, header: $header,
+                    ws: $ws);
             }
             $inm_transferencia['solicitud_gasto'] = $button;
 
@@ -1911,11 +1912,11 @@ class controlador_inm_ubicacion extends _ctl_base {
             $filtro_rel_doc_trns['inm_transferencia.id'] = $inm_transferencia['inm_transferencia_id'];
             $r_rel_doc_transferencia = (new inm_rel_doc_transferencia_ubicacion(link: $this->link))->filtro_and(filtro: $filtro_rel_doc_trns);
             if (errores::$error) {
-                return $this->retorno_error(mensaje: 'Error al obtener inputs', data: $r_rel_doc_transferencia,header: $header,
-                    ws:  $ws);
+                return $this->retorno_error(mensaje: 'Error al obtener inputs', data: $r_rel_doc_transferencia, header: $header,
+                    ws: $ws);
             }
 
-            if($r_rel_doc_transferencia->n_registros > 0){
+            if ($r_rel_doc_transferencia->n_registros > 0) {
                 $button_descarga = $this->html->button_href(accion: 'descarga', etiqueta: 'Descarga',
                     registro_id: $r_rel_doc_transferencia->registros[0]['inm_doc_ubicacion_id'],
                     seccion: 'inm_doc_ubicacion', style: 'success');
@@ -1940,12 +1941,12 @@ class controlador_inm_ubicacion extends _ctl_base {
                         data: $button_descarga_zip, header: $header, ws: $ws);
                 }
 
-                $params = array('accion_retorno'=>'proceso_ubicacion','seccion_retorno'=>'inm_ubicacion',
-                    'id_retorno'=>$this->registro_id, 'pestana_general_actual' => 'pestanageneral2',
+                $params = array('accion_retorno' => 'proceso_ubicacion', 'seccion_retorno' => 'inm_ubicacion',
+                    'id_retorno' => $this->registro_id, 'pestana_general_actual' => 'pestanageneral2',
                     'pestana_actual' => 'pestana7');
                 $button_elimina_bd = $this->html->button_href(accion: 'elimina_bd',
                     etiqueta: 'Elimina', registro_id: $r_rel_doc_transferencia->registros[0]['inm_rel_doc_transferencia_ubicacion_id'],
-                    seccion: 'inm_rel_doc_transferencia_ubicacion', style: 'danger',params: $params);
+                    seccion: 'inm_rel_doc_transferencia_ubicacion', style: 'danger', params: $params);
                 if (errores::$error) {
                     return $this->retorno_error(mensaje: 'Error al integrar button', data: $button_elimina_bd,
                         header: $header, ws: $ws);
@@ -1969,13 +1970,13 @@ class controlador_inm_ubicacion extends _ctl_base {
                                 </div>
                             </td>
                         </tr>";
-            }else{
+            } else {
                 $name = "documentos_transferencias[$inm_transferencia[inm_transferencia_id]][49][]";
                 $button = $this->html->input_file(cols: 12, name: $name, row_upd: $this->row_upd,
-                    value_vacio: false, place_holder: 'Subir Documento',required: false, con_label: false);
+                    value_vacio: false, place_holder: 'Subir Documento', required: false, con_label: false);
                 if (errores::$error) {
-                    return $this->retorno_error(mensaje: 'Error al obtener inputs', data: $button,header: $header,
-                        ws:  $ws);
+                    return $this->retorno_error(mensaje: 'Error al obtener inputs', data: $button, header: $header,
+                        ws: $ws);
                 }
                 $res = "<tr>
                 <td colspan='6'>$button</td>
@@ -1991,18 +1992,18 @@ class controlador_inm_ubicacion extends _ctl_base {
         $this->transferencias = $registros;
 
         $filtro['inm_ubicacion.id'] = $this->registro_id;
-        $order = array('inm_efectivo.fecha_alta'=>'DESC');
-        $r_inm_efectivo = (new inm_rel_efectivo_ubicacion(link: $this->link))->filtro_and(filtro: $filtro,order: $order);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener etapas', data: $r_inm_efectivo,header: $header,
-                ws:  $ws);
+        $order = array('inm_efectivo.fecha_alta' => 'DESC');
+        $r_inm_efectivo = (new inm_rel_efectivo_ubicacion(link: $this->link))->filtro_and(filtro: $filtro, order: $order);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener etapas', data: $r_inm_efectivo, header: $header,
+                ws: $ws);
         }
 
         $registros = array();
-        $params = array('accion_retorno'=>'proceso_ubicacion','seccion_retorno'=>$this->seccion,
-            'id_retorno'=>$this->registro_id);
+        $params = array('accion_retorno' => 'proceso_ubicacion', 'seccion_retorno' => $this->seccion,
+            'id_retorno' => $this->registro_id);
 
-        if(isset($_GET['pestana_general_actual'])){
+        if (isset($_GET['pestana_general_actual'])) {
             $params['pestana_general_actual'] = 'pestanageneral2';
             $params['pestana_actual'] = 'pestana3';
         }
@@ -2010,18 +2011,18 @@ class controlador_inm_ubicacion extends _ctl_base {
             $button = $this->html->button_href(accion: 'elimina_bd', etiqueta: 'Elimina',
                 registro_id: $inm_efectivo['inm_rel_efectivo_ubicacion_id'], seccion: 'inm_rel_efectivo_ubicacion',
                 style: 'danger', params: $params);
-            if(errores::$error){
-                return $this->retorno_error(mensaje: 'Error al integrar button',data:  $button,header: $header,
-                    ws:  $ws);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al integrar button', data: $button, header: $header,
+                    ws: $ws);
             }
             $inm_efectivo['elimina_bd'] = $button;
 
             $button = $this->html->button_href(accion: 'solicitud_gasto', etiqueta: 'Solicitud de Gasto',
                 registro_id: $inm_efectivo['inm_efectivo_id'], seccion: 'inm_efectivo', style: 'info  ',
                 params: $params);
-            if(errores::$error){
-                return $this->retorno_error(mensaje: 'Error al integrar button',data:  $button,header: $header,
-                    ws:  $ws);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al integrar button', data: $button, header: $header,
+                    ws: $ws);
             }
             $inm_efectivo['solicitud_gasto'] = $button;
 
@@ -2036,11 +2037,11 @@ class controlador_inm_ubicacion extends _ctl_base {
             $filtro_rel_doc_efec['inm_efectivo.id'] = $inm_efectivo['inm_efectivo_id'];
             $r_rel_doc_efectivo = (new inm_rel_doc_efectivo_ubicacion(link: $this->link))->filtro_and(filtro: $filtro_rel_doc_efec);
             if (errores::$error) {
-                return $this->retorno_error(mensaje: 'Error al obtener inputs', data: $r_rel_doc_efectivo,header: $header,
-                    ws:  $ws);
+                return $this->retorno_error(mensaje: 'Error al obtener inputs', data: $r_rel_doc_efectivo, header: $header,
+                    ws: $ws);
             }
 
-            if($r_rel_doc_efectivo->n_registros > 0){
+            if ($r_rel_doc_efectivo->n_registros > 0) {
                 $button_descarga = $this->html->button_href(accion: 'descarga', etiqueta: 'Descarga',
                     registro_id: $r_rel_doc_efectivo->registros[0]['inm_doc_ubicacion_id'],
                     seccion: 'inm_doc_ubicacion', style: 'success');
@@ -2065,12 +2066,12 @@ class controlador_inm_ubicacion extends _ctl_base {
                         data: $button_descarga_zip, header: $header, ws: $ws);
                 }
 
-                $params = array('accion_retorno'=>'proceso_ubicacion','seccion_retorno'=>'inm_ubicacion',
-                    'id_retorno'=>$this->registro_id, 'pestana_general_actual' => 'pestanageneral2',
+                $params = array('accion_retorno' => 'proceso_ubicacion', 'seccion_retorno' => 'inm_ubicacion',
+                    'id_retorno' => $this->registro_id, 'pestana_general_actual' => 'pestanageneral2',
                     'pestana_actual' => 'pestana7');
                 $button_elimina_bd = $this->html->button_href(accion: 'elimina_bd',
                     etiqueta: 'Elimina', registro_id: $r_rel_doc_efectivo->registros[0]['inm_rel_doc_efectivo_ubicacion_id'],
-                    seccion: 'inm_rel_doc_efectivo_ubicacion', style: 'danger',params: $params);
+                    seccion: 'inm_rel_doc_efectivo_ubicacion', style: 'danger', params: $params);
                 if (errores::$error) {
                     return $this->retorno_error(mensaje: 'Error al integrar button', data: $button_elimina_bd,
                         header: $header, ws: $ws);
@@ -2094,13 +2095,13 @@ class controlador_inm_ubicacion extends _ctl_base {
                                 </div>
                             </td>
                         </tr>";
-            }else{
+            } else {
                 $name = "documentos_efectivos[$inm_efectivo[inm_efectivo_id]][78][]";
                 $button = $this->html->input_file(cols: 12, name: $name, row_upd: $this->row_upd,
-                    value_vacio: false, place_holder: 'Subir Documento',required: false, con_label: false);
+                    value_vacio: false, place_holder: 'Subir Documento', required: false, con_label: false);
                 if (errores::$error) {
-                    return $this->retorno_error(mensaje: 'Error al obtener inputs', data: $button,header: $header,
-                        ws:  $ws);
+                    return $this->retorno_error(mensaje: 'Error al obtener inputs', data: $button, header: $header,
+                        ws: $ws);
                 }
                 $res = "<tr>
                 <td colspan='6'>$button</td>
@@ -2108,18 +2109,18 @@ class controlador_inm_ubicacion extends _ctl_base {
             }
 
             $inm_efectivo['documento'] = $res;
-            
+
             $registros[] = $inm_efectivo;
         }
 
         $this->efectivos = $registros;
 
-        $params = array('pestana_general_actual' => 'pestanageneral2','pestana_actual' => 'pestana4');
-        $link_emision_de_recurso_bd = $this->obj_link->link_con_id(accion:'emision_de_recurso_bd',
-            link: $this->link,registro_id: $this->registro_id,seccion: 'inm_ubicacion',params: $params);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al generar link',data:  $link_emision_de_recurso_bd,
-                header: $header,ws:  $ws);
+        $params = array('pestana_general_actual' => 'pestanageneral2', 'pestana_actual' => 'pestana4');
+        $link_emision_de_recurso_bd = $this->obj_link->link_con_id(accion: 'emision_de_recurso_bd',
+            link: $this->link, registro_id: $this->registro_id, seccion: 'inm_ubicacion', params: $params);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al generar link', data: $link_emision_de_recurso_bd,
+                header: $header, ws: $ws);
         }
 
         $this->link_emision_de_recurso_bd = $link_emision_de_recurso_bd;
@@ -2131,28 +2132,28 @@ class controlador_inm_ubicacion extends _ctl_base {
     public function asigna_por_firmar(bool $header, bool $ws = false): array|stdClass
     {
 
-        $data_row = $this->modelo->registro(registro_id: $this->registro_id,retorno_obj: true);
-        if(errores::$error){
+        $data_row = $this->modelo->registro(registro_id: $this->registro_id, retorno_obj: true);
+        if (errores::$error) {
             return $this->retorno_error(
-                mensaje: 'Error al obtener registro',data:  $data_row,header: $header,ws: $ws);
+                mensaje: 'Error al obtener registro', data: $data_row, header: $header, ws: $ws);
         }
 
-        $keys_selects = (new _ubicacion())->keys_selects_base(controler: $this,data_row:  $data_row, disableds: array());
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener keys_selects', data:  $keys_selects, header: $header,ws:  $ws);
+        $keys_selects = (new _ubicacion())->keys_selects_base(controler: $this, data_row: $data_row, disableds: array());
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener keys_selects', data: $keys_selects, header: $header, ws: $ws);
         }
 
-        $base = $this->base_upd(keys_selects: $keys_selects, params: array(),params_ajustados: array());
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
+        $base = $this->base_upd(keys_selects: $keys_selects, params: array(), params_ajustados: array());
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al integrar base', data: $base, header: $header, ws: $ws);
         }
 
         $params = array('pestana_general_actual' => 'pestanageneral2', 'pestana_actual' => 'pestana5');
-        $link_por_firmar_bd = $this->obj_link->link_con_id(accion:'por_firmar_bd',
-            link: $this->link,registro_id: $this->registro_id,seccion: 'inm_ubicacion',params: $params);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al generar link',data:  $link_por_firmar_bd,
-                header: $header,ws:  $ws);
+        $link_por_firmar_bd = $this->obj_link->link_con_id(accion: 'por_firmar_bd',
+            link: $this->link, registro_id: $this->registro_id, seccion: 'inm_ubicacion', params: $params);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al generar link', data: $link_por_firmar_bd,
+                header: $header, ws: $ws);
         }
 
         $this->link_por_firmar_bd = $link_por_firmar_bd;
@@ -2199,7 +2200,7 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $hoy = date('Y-m-d\TH:i:s');
         $observaciones = "";
-        if($r_inm_bitacora->n_registros){
+        if ($r_inm_bitacora->n_registros) {
             $hoy = $r_inm_bitacora->registros[0]['inm_bitacora_status_ubicacion_fecha_status'];
             $observaciones = $r_inm_bitacora->registros[0]['inm_bitacora_status_ubicacion_observaciones'];
         }
@@ -2212,22 +2213,22 @@ class controlador_inm_ubicacion extends _ctl_base {
         $this->inputs->fecha = $fecha;
 
         $input_observaciones = $this->html->input_text(cols: 12, disabled: false, name: 'observaciones', place_holder: 'Observaciones',
-            row_upd: new stdClass(), value_vacio: false, required: false,value: $observaciones);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $input_observaciones,  header: $header, ws: $ws);
+            row_upd: new stdClass(), value_vacio: false, required: false, value: $observaciones);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener input', data: $input_observaciones, header: $header, ws: $ws);
         }
 
         $this->inputs->observaciones = $input_observaciones;
 
-        $inm_ubicacion_id = $this->html->hidden(name:'inm_ubicacion_id',value: $this->registro_id);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $inm_ubicacion_id,  header: $header, ws: $ws);
+        $inm_ubicacion_id = $this->html->hidden(name: 'inm_ubicacion_id', value: $this->registro_id);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener input', data: $inm_ubicacion_id, header: $header, ws: $ws);
         }
 
         $this->inputs->inm_ubicacion_id = $inm_ubicacion_id;
 
 
-        $link_alta_bitacora= $this->obj_link->link_alta_bd(link: $this->link, seccion:  'inm_bitacora_status_ubicacion');
+        $link_alta_bitacora = $this->obj_link->link_alta_bd(link: $this->link, seccion: 'inm_bitacora_status_ubicacion');
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al generar link', data: $link_alta_bitacora, header: $header, ws: $ws);
         }
@@ -2241,18 +2242,18 @@ class controlador_inm_ubicacion extends _ctl_base {
     protected function campos_view(): array
     {
         $keys = new stdClass();
-        $keys->inputs = array('descripcion', 'manzana', 'lote','costo_directo','numero_exterior','numero_interior',
-            'calle', 'cuenta_predial','codigo','nombre_beneficiario','nombre_beneficiario_emision','numero_cheque',
-            'monto','numero_cheque_comision', 'monto_comision','numero_escritura_poder', 'nombre','apellido_paterno',
-            'apellido_materno','nss','curp', 'rfc', 'lada_com', 'numero_com', 'cel_com', 'correo_com', 'razon_social',
-            'nivel','recamaras', 'metros_terreno','metros_construccion','adeudo_hipoteca', 'adeudo_predial',
-            'cuenta_agua','adeudo_agua', 'adeudo_luz','monto_devolucion','transferencia','monto_transferencia',
-            'efectivo','numero_cheque_secundario', 'monto_cheque_secundario','numero_credito',
-            'correo_mi_cuenta_infonavit','password_mi_cuenta_infonavit', 'monto_emision','monto_transferencia_emision',
-            'efectivo_emision','numero_exterior_domicilio','numero_interior_domicilio', 'calle_domicilio',
-            'numero_notaria','nombre_notario','plaza_notaria','numero_escritura','libro','volumen','entre_calle_1',
-            'entre_calle_2','entrada','supermanzana','edificio','condominio','etapa','cantidad_detalle',
-            'valor_unitario','total_con_impuesto','subtotal','trasladado','retenido','cantidad_consumo','cuenta_luz',
+        $keys->inputs = array('descripcion', 'manzana', 'lote', 'costo_directo', 'numero_exterior', 'numero_interior',
+            'calle', 'cuenta_predial', 'codigo', 'nombre_beneficiario', 'nombre_beneficiario_emision', 'numero_cheque',
+            'monto', 'numero_cheque_comision', 'monto_comision', 'numero_escritura_poder', 'nombre', 'apellido_paterno',
+            'apellido_materno', 'nss', 'curp', 'rfc', 'lada_com', 'numero_com', 'cel_com', 'correo_com', 'razon_social',
+            'nivel', 'recamaras', 'metros_terreno', 'metros_construccion', 'adeudo_hipoteca', 'adeudo_predial',
+            'cuenta_agua', 'adeudo_agua', 'adeudo_luz', 'monto_devolucion', 'transferencia', 'monto_transferencia',
+            'efectivo', 'numero_cheque_secundario', 'monto_cheque_secundario', 'numero_credito',
+            'correo_mi_cuenta_infonavit', 'password_mi_cuenta_infonavit', 'monto_emision', 'monto_transferencia_emision',
+            'efectivo_emision', 'numero_exterior_domicilio', 'numero_interior_domicilio', 'calle_domicilio',
+            'numero_notaria', 'nombre_notario', 'plaza_notaria', 'numero_escritura', 'libro', 'volumen', 'entre_calle_1',
+            'entre_calle_2', 'entrada', 'supermanzana', 'edificio', 'condominio', 'etapa', 'cantidad_detalle',
+            'valor_unitario', 'total_con_impuesto', 'subtotal', 'trasladado', 'retenido', 'cantidad_consumo', 'cuenta_luz',
             'mensualidad');
         $keys->selects = array();
 
@@ -2282,10 +2283,10 @@ class controlador_inm_ubicacion extends _ctl_base {
         $init_data['org_sucursal'] = "gamboamartin\\organigrama";
         $init_data['gt_proveedor'] = "gamboamartin\\gastos";
 
-        $campos_view = $this->campos_view_base(init_data: $init_data,keys:  $keys);
+        $campos_view = $this->campos_view_base(init_data: $init_data, keys: $keys);
 
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al inicializar campo view',data:  $campos_view);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al inicializar campo view', data: $campos_view);
         }
 
 
@@ -2301,20 +2302,20 @@ class controlador_inm_ubicacion extends _ctl_base {
      * @version 2.181.0
      *
      */
-    public function detalle_costo(bool $header, bool $ws = false, string $funcion='detalle_costo'): array|stdClass
+    public function detalle_costo(bool $header, bool $ws = false, string $funcion = 'detalle_costo'): array|stdClass
     {
 
         $params_get = (new inm_ubicacion_html(html: $this->html_base))->params_get_data(accion_retorno: $funcion,
-            id_retorno: $this->registro_id,seccion_retorno: $this->tabla);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al integrar params_get',data:  $params_get,
-                header: $header,ws:  $ws);
+            id_retorno: $this->registro_id, seccion_retorno: $this->tabla);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al integrar params_get', data: $params_get,
+                header: $header, ws: $ws);
         }
 
-        $base = (new inm_ubicacion_html(html: $this->html_base))->base_costos(controler: $this,funcion: $funcion,
+        $base = (new inm_ubicacion_html(html: $this->html_base))->base_costos(controler: $this, funcion: $funcion,
             params_get: $params_get);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al integrar base', data: $base, header: $header, ws: $ws);
         }
 
 
@@ -2323,7 +2324,7 @@ class controlador_inm_ubicacion extends _ctl_base {
 
     final public function documentos(bool $header, bool $ws = false): array
     {
-        if(isset($_GET['accion']) && $_GET['accion'] == 'documentos') {
+        if (isset($_GET['accion']) && $_GET['accion'] == 'documentos') {
             $template = $this->modifica(header: false);
             if (errores::$error) {
                 return $this->retorno_error(mensaje: 'Error al integrar base', data: $template, header: $header, ws: $ws);
@@ -2337,7 +2338,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         }
 
         $temp = array();
-        foreach ($inm_conf_docs_ubicacion as $docs){
+        foreach ($inm_conf_docs_ubicacion as $docs) {
             $res = "<tr>
             <td>$docs[doc_tipo_documento_descripcion]</td>
             <td>$docs[descarga]</td>
@@ -2345,7 +2346,7 @@ class controlador_inm_ubicacion extends _ctl_base {
             <td>$docs[descarga_zip]</td>
             <td>$docs[elimina_bd]</td>
             </tr>";
-            if(isset($docs['subir_documento'])){
+            if (isset($docs['subir_documento'])) {
                 $res = "<tr>
                 <td>$docs[doc_tipo_documento_descripcion]</td>
                 <td colspan='6'>$docs[subir_documento]</td>
@@ -2357,7 +2358,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         $this->inm_conf_docs_ubicacion = $temp;
 
         $params = array();
-        if(isset($_GET['accion']) && $_GET['accion'] === 'proceso_ubicacion') {
+        if (isset($_GET['accion']) && $_GET['accion'] === 'proceso_ubicacion') {
             $params = array('pestana_general_actual' => 'pestanageneral1',
                 'pestana_actual' => 'pestanaubicacion2');
         }
@@ -2386,27 +2387,28 @@ class controlador_inm_ubicacion extends _ctl_base {
         return $inm_conf_docs_ubicacion;
     }
 
-    public function documentos_bd(bool $header, bool $ws = false): array|stdClass{
-        $inm_doc_ubicacion =  new inm_doc_ubicacion(link: $this->link);
+    public function documentos_bd(bool $header, bool $ws = false): array|stdClass
+    {
+        $inm_doc_ubicacion = new inm_doc_ubicacion(link: $this->link);
 
         $names = array();
-        foreach ($_FILES['documentos']['name'] as $key => $foto){
+        foreach ($_FILES['documentos']['name'] as $key => $foto) {
             $names[$key]['name'] = $foto;
         }
 
-        foreach ($_FILES['documentos']['tmp_name'] as $key => $foto){
+        foreach ($_FILES['documentos']['tmp_name'] as $key => $foto) {
             $names[$key]['tmp_name'] = $foto;
         }
 
         $result = array();
-        foreach ($names as $key => $name){
+        foreach ($names as $key => $name) {
             $valor = array();
-            foreach ($name['name'] as $item => $value){
+            foreach ($name['name'] as $item => $value) {
 
                 $valor['name'] = $name['name'][$item];
                 $valor['tmp_name'] = $name['tmp_name'][$item];
 
-                if($name['name'][$item] !== '' && $name['tmp_name'][$item] !== '') {
+                if ($name['name'][$item] !== '' && $name['tmp_name'][$item] !== '') {
                     $registro['doc_tipo_documento_id'] = $key;
                     $registro['inm_ubicacion_id'] = $this->registro_id;
                     $_FILES['documento'] = $valor;
@@ -2419,19 +2421,20 @@ class controlador_inm_ubicacion extends _ctl_base {
         }
 
         $accion = 'documentos';
-        if(isset($_POST['btn_action_next'])){
+        if (isset($_POST['btn_action_next'])) {
             $accion = $_POST['btn_action_next'];
         }
 
         $params = array();
         if (isset($_GET['pestana_general_actual'])) {
             $params = array('pestana_general_actual' => 'pestanageneral1', 'pestana_actual' => $_GET['pestana_actual']);
-        }        $link_proceso_ubicacion = $this->obj_link->link_con_id(
-            accion: $accion, link: $this->link, registro_id: $this->registro_id, seccion: 'inm_ubicacion',params: $params);
+        }
+        $link_proceso_ubicacion = $this->obj_link->link_con_id(
+            accion: $accion, link: $this->link, registro_id: $this->registro_id, seccion: 'inm_ubicacion', params: $params);
         if (errores::$error) {
             $this->retorno_error(mensaje: 'Error al generar link', data: $link_proceso_ubicacion, header: $header, ws: $ws);
         }
-        if($header) {
+        if ($header) {
             header('Location:' . $link_proceso_ubicacion);
             exit;
         }
@@ -2445,7 +2448,7 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $modelo_cheque = new inm_cheque(link: $this->link);
         $modelo_transferencia = new inm_transferencia(link: $this->link);
-        if(isset($_POST['inm_tipo_gasto_sl_id']) && trim($_POST['inm_tipo_gasto_sl_id']) === '1') {
+        if (isset($_POST['inm_tipo_gasto_sl_id']) && trim($_POST['inm_tipo_gasto_sl_id']) === '1') {
             $r_cheque = $modelo_cheque->registro(registro_id: $_POST['registro_ajustar_id']);
             if (errores::$error) {
                 $this->link->rollBack();
@@ -2466,88 +2469,88 @@ class controlador_inm_ubicacion extends _ctl_base {
                 }
             }
         }
-/*
-        if(isset($_POST['numero_cheque_comision']) && trim($_POST['numero_cheque_comision']) !== '') {
-            $filtro_che['inm_ubicacion.id'] = $this->registro_id;
-            $filtro_che['inm_tipo_cheque.id'] = 2;
-            $r_cheque = (new inm_cheque(link: $this->link))->filtro_and(filtro: $filtro_che);
-            if (errores::$error) {
-                $this->link->rollBack();
-                return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $r_cheque,
-                    header: $header, ws: $ws);
-            }
-
-            if ($r_cheque->n_registros <= 0) {
-                $registro = array();
-                $registro['inm_ubicacion_id'] = $this->registro_id;
-                $registro['numero_cheque'] = $_POST['numero_cheque_comision'];
-                $registro['monto'] = $_POST['monto_comision'];
-                $registro['nombre_beneficiario'] = $_POST['nombre_beneficiario'];
-                $registro['inm_tipo_cheque_id'] = 2;
-                $r_inm_cheque = (new inm_cheque(link: $this->link))->alta_registro(
-                    registro: $registro);
-                if (errores::$error) {
-                    $this->link->rollBack();
-                    return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_cheque,
-                        header: $header, ws: $ws);
-                }
-            } else {
-                $registro = array();
-                $registro['numero_cheque'] = $_POST['numero_cheque_comision'];
-                $registro['monto'] = $_POST['monto_comision'];
-                $registro['nombre_beneficiario'] = $_POST['nombre_beneficiario'];
-                $registro['inm_tipo_cheque_id'] = 2;
-                $r_inm_cheque = (new inm_cheque(link: $this->link))->modifica_bd(
-                    registro: $registro, id: $r_cheque->registros[0]['inm_cheque_id']);
-                if (errores::$error) {
-                    $this->link->rollBack();
-                    return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_cheque,
-                        header: $header, ws: $ws);
-                }
-            }
-        }
-
-        if(isset($_POST['numero_cheque_secundario']) && trim($_POST['numero_cheque_secundario']) !== '') {
-            $filtro_che['inm_ubicacion.id'] = $this->registro_id;
-            $filtro_che['inm_tipo_cheque.id'] = 3;
-            $r_cheque = (new inm_cheque(link: $this->link))->filtro_and(filtro: $filtro_che);
-            if (errores::$error) {
-                $this->link->rollBack();
-                return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $r_cheque,
-                    header: $header, ws: $ws);
-            }
-
-            if ($r_cheque->n_registros <= 0) {
-                $registro = array();
-                $registro['inm_ubicacion_id'] = $this->registro_id;
-                $registro['numero_cheque'] = $_POST['numero_cheque_secundario'];
-                $registro['monto'] = $_POST['monto_cheque_secundario'];
-                $registro['nombre_beneficiario'] = $_POST['nombre_beneficiario'];
-                $registro['inm_tipo_cheque_id'] = 3;
-                $r_inm_cheque = (new inm_cheque(link: $this->link))->alta_registro(
-                    registro: $registro);
-                if (errores::$error) {
-                    $this->link->rollBack();
-                    return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_cheque,
-                        header: $header, ws: $ws);
-                }
-            } else {
-                $registro = array();
-                $registro['numero_cheque'] = $_POST['numero_cheque_secundario'];
-                $registro['monto'] = $_POST['monto_cheque_secundario'];
-                $registro['nombre_beneficiario'] = $_POST['nombre_beneficiario'];
-                $registro['inm_tipo_cheque_id'] = 3;
-                $r_inm_cheque = (new inm_cheque(link: $this->link))->modifica_bd(
-                    registro: $registro, id: $r_cheque->registros[0]['inm_cheque_id']);
-                if (errores::$error) {
-                    $this->link->rollBack();
-                    return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_cheque,
-                        header: $header, ws: $ws);
-                }
-            }
-        }*/
+        /*
+                if(isset($_POST['numero_cheque_comision']) && trim($_POST['numero_cheque_comision']) !== '') {
+                    $filtro_che['inm_ubicacion.id'] = $this->registro_id;
+                    $filtro_che['inm_tipo_cheque.id'] = 2;
+                    $r_cheque = (new inm_cheque(link: $this->link))->filtro_and(filtro: $filtro_che);
+                    if (errores::$error) {
+                        $this->link->rollBack();
+                        return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $r_cheque,
+                            header: $header, ws: $ws);
+                    }
         
-        if(isset($_POST['inm_tipo_gasto_sl_id']) && trim($_POST['inm_tipo_gasto_sl_id']) === '2') {
+                    if ($r_cheque->n_registros <= 0) {
+                        $registro = array();
+                        $registro['inm_ubicacion_id'] = $this->registro_id;
+                        $registro['numero_cheque'] = $_POST['numero_cheque_comision'];
+                        $registro['monto'] = $_POST['monto_comision'];
+                        $registro['nombre_beneficiario'] = $_POST['nombre_beneficiario'];
+                        $registro['inm_tipo_cheque_id'] = 2;
+                        $r_inm_cheque = (new inm_cheque(link: $this->link))->alta_registro(
+                            registro: $registro);
+                        if (errores::$error) {
+                            $this->link->rollBack();
+                            return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_cheque,
+                                header: $header, ws: $ws);
+                        }
+                    } else {
+                        $registro = array();
+                        $registro['numero_cheque'] = $_POST['numero_cheque_comision'];
+                        $registro['monto'] = $_POST['monto_comision'];
+                        $registro['nombre_beneficiario'] = $_POST['nombre_beneficiario'];
+                        $registro['inm_tipo_cheque_id'] = 2;
+                        $r_inm_cheque = (new inm_cheque(link: $this->link))->modifica_bd(
+                            registro: $registro, id: $r_cheque->registros[0]['inm_cheque_id']);
+                        if (errores::$error) {
+                            $this->link->rollBack();
+                            return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_cheque,
+                                header: $header, ws: $ws);
+                        }
+                    }
+                }
+        
+                if(isset($_POST['numero_cheque_secundario']) && trim($_POST['numero_cheque_secundario']) !== '') {
+                    $filtro_che['inm_ubicacion.id'] = $this->registro_id;
+                    $filtro_che['inm_tipo_cheque.id'] = 3;
+                    $r_cheque = (new inm_cheque(link: $this->link))->filtro_and(filtro: $filtro_che);
+                    if (errores::$error) {
+                        $this->link->rollBack();
+                        return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $r_cheque,
+                            header: $header, ws: $ws);
+                    }
+        
+                    if ($r_cheque->n_registros <= 0) {
+                        $registro = array();
+                        $registro['inm_ubicacion_id'] = $this->registro_id;
+                        $registro['numero_cheque'] = $_POST['numero_cheque_secundario'];
+                        $registro['monto'] = $_POST['monto_cheque_secundario'];
+                        $registro['nombre_beneficiario'] = $_POST['nombre_beneficiario'];
+                        $registro['inm_tipo_cheque_id'] = 3;
+                        $r_inm_cheque = (new inm_cheque(link: $this->link))->alta_registro(
+                            registro: $registro);
+                        if (errores::$error) {
+                            $this->link->rollBack();
+                            return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_cheque,
+                                header: $header, ws: $ws);
+                        }
+                    } else {
+                        $registro = array();
+                        $registro['numero_cheque'] = $_POST['numero_cheque_secundario'];
+                        $registro['monto'] = $_POST['monto_cheque_secundario'];
+                        $registro['nombre_beneficiario'] = $_POST['nombre_beneficiario'];
+                        $registro['inm_tipo_cheque_id'] = 3;
+                        $r_inm_cheque = (new inm_cheque(link: $this->link))->modifica_bd(
+                            registro: $registro, id: $r_cheque->registros[0]['inm_cheque_id']);
+                        if (errores::$error) {
+                            $this->link->rollBack();
+                            return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_cheque,
+                                header: $header, ws: $ws);
+                        }
+                    }
+                }*/
+
+        if (isset($_POST['inm_tipo_gasto_sl_id']) && trim($_POST['inm_tipo_gasto_sl_id']) === '2') {
             $r_transferencia = $modelo_transferencia->registro(
                 registro_id: $_POST['registro_ajustar_id']);
             if (errores::$error) {
@@ -2592,7 +2595,7 @@ class controlador_inm_ubicacion extends _ctl_base {
             }
         }*/
 
-        if(isset($_POST['avanza_etapa']) && trim($_POST['avanza_etapa']) !== '') {
+        if (isset($_POST['avanza_etapa']) && trim($_POST['avanza_etapa']) !== '') {
             $filtro_val['inm_ubicacion.id'] = $this->registro_id;
             $r_cheques = (new inm_rel_cheque_ubicacion(link: $this->link))->filtro_and(filtro: $filtro_val);
             if (errores::$error) {
@@ -2614,7 +2617,7 @@ class controlador_inm_ubicacion extends _ctl_base {
                         $cheque['inm_cheque_id'], data: $cheque, header: $header, ws: $ws);
                 }
             }
-            
+
             $r_transferencias = (new inm_rel_transferencia_ubicacion(link: $this->link))->filtro_and(
                 filtro: $filtro_val);
             if (errores::$error) {
@@ -2623,19 +2626,19 @@ class controlador_inm_ubicacion extends _ctl_base {
                     header: $header, ws: $ws);
             }
 
-            foreach ($r_transferencias->registros AS $transferencia){
-                if(!isset($transferencia['inm_transferencia_transferencia']) ||
+            foreach ($r_transferencias->registros as $transferencia) {
+                if (!isset($transferencia['inm_transferencia_transferencia']) ||
                     trim($transferencia['inm_transferencia_transferencia']) === '' ||
                     !isset($transferencia['inm_transferencia_bn_cuenta_id']) ||
-                    trim($transferencia['inm_transferencia_bn_cuenta_id']) === '1'){
+                    trim($transferencia['inm_transferencia_bn_cuenta_id']) === '1') {
                     $this->link->rollBack();
                     return $this->retorno_error(
                         mensaje: 'Error hace falta especificar el concepto de transferencia  o la cuenta de la 
-                        transferencia con id:' .$transferencia['inm_transferencia_id'], data: $transferencia,
+                        transferencia con id:' . $transferencia['inm_transferencia_id'], data: $transferencia,
                         header: $header, ws: $ws);
                 }
             }
-            
+
             $filtro_exi['inm_ubicacion.id'] = $this->registro_id;
             $filtro_exi['inm_status_ubicacion.id'] = 4;
             $existe = (new inm_bitacora_status_ubicacion(link: $this->link))->existe(filtro: $filtro_exi);
@@ -2662,7 +2665,7 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $this->link->commit();
 
-        $params = array('pestana_general_actual' => 'pestanageneral2','pestana_actual' => 'pestana4');
+        $params = array('pestana_general_actual' => 'pestanageneral2', 'pestana_actual' => 'pestana4');
         $link_proceso_ubicacion = $this->obj_link->link_con_id(
             accion: 'proceso_ubicacion', link: $this->link, registro_id: $this->registro_id, seccion: 'inm_ubicacion',
             params: $params);
@@ -2670,7 +2673,7 @@ class controlador_inm_ubicacion extends _ctl_base {
             $this->retorno_error(mensaje: 'Error al generar link', data: $link_proceso_ubicacion, header: $header, ws: $ws);
         }
 
-        if($header) {
+        if ($header) {
             header('Location:' . $link_proceso_ubicacion);
             exit;
         }
@@ -2680,7 +2683,7 @@ class controlador_inm_ubicacion extends _ctl_base {
 
     public function etapa(bool $header, bool $ws = false): array|stdClass
     {
-        if(isset($_GET['accion']) && $_GET['accion'] == 'etapa') {
+        if (isset($_GET['accion']) && $_GET['accion'] == 'etapa') {
             $template = parent::modifica(header: false); // TODO: Change the autogenerated stub
             if (errores::$error) {
                 $this->retorno_error(mensaje: 'Error al generar template', data: $template, header: $header, ws: $ws);
@@ -2692,7 +2695,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         $inm_status_ubicacion_id = (new inm_status_ubicacion_html(html: $this->html_base))->
         select_inm_status_ubicacion_id(cols: 6, con_registros: true, id_selected: -1, link: $this->link,
             columns_ds: $columns_ds,
-            filtro: array('inm_status_ubicacion.es_cancelado'=>'inactivo'), label: 'Status Ubicacion');
+            filtro: array('inm_status_ubicacion.es_cancelado' => 'inactivo'), label: 'Status Ubicacion');
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al obtener selector de etapa', data: $inm_status_ubicacion_id,
                 header: $header, ws: $ws);
@@ -2710,27 +2713,27 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $observaciones = $this->html->input_text(cols: 12, disabled: false, name: 'observaciones',
             place_holder: 'Observaciones', row_upd: new stdClass(), value_vacio: false, required: false);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $observaciones,  header: $header,
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener input', data: $observaciones, header: $header,
                 ws: $ws);
         }
 
         $this->inputs->observaciones = $observaciones;
 
-        $inm_ubicacion_id = $this->html->hidden(name:'inm_ubicacion_id',value: $this->registro_id);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $inm_ubicacion_id,  header: $header,
+        $inm_ubicacion_id = $this->html->hidden(name: 'inm_ubicacion_id', value: $this->registro_id);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener input', data: $inm_ubicacion_id, header: $header,
                 ws: $ws);
         }
 
         $this->inputs->inm_ubicacion_id = $inm_ubicacion_id;
 
         $params = array();
-        if(isset($_GET['accion']) && $_GET['accion'] === 'proceso_ubicacion') {
+        if (isset($_GET['accion']) && $_GET['accion'] === 'proceso_ubicacion') {
             $params = array('pestana_general_actual' => 'pestanageneral1',
                 'pestana_actual' => 'pestanaubicacion5');
         }
-        $link_alta_bitacora= $this->obj_link->link_alta_bd(link: $this->link, seccion: 'inm_bitacora_status_ubicacion',
+        $link_alta_bitacora = $this->obj_link->link_alta_bd(link: $this->link, seccion: 'inm_bitacora_status_ubicacion',
             params: $params);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al generar link', data: $link_alta_bitacora, header: $header,
@@ -2775,7 +2778,7 @@ class controlador_inm_ubicacion extends _ctl_base {
 
     public function reparacion(bool $header, bool $ws = false): array|stdClass
     {
-        if(isset($_GET['accion']) && $_GET['accion'] == 'etapa') {
+        if (isset($_GET['accion']) && $_GET['accion'] == 'etapa') {
             $template = parent::modifica(header: false); // TODO: Change the autogenerated stub
             if (errores::$error) {
                 $this->retorno_error(mensaje: 'Error al generar template', data: $template, header: $header, ws: $ws);
@@ -2794,7 +2797,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         $hoy = date('Y-m-d\TH:i:s');
         $observaciones = "";
         $inm_responsable_id = -1;
-        if($r_inm_reparacion->n_registros > 0){
+        if ($r_inm_reparacion->n_registros > 0) {
             $hoy = $r_inm_reparacion->registros[0]['inm_reparacion_fecha_inicio'];
             $inm_responsable_id = $r_inm_reparacion->registros[0]['inm_responsable_id'];
             $observaciones = $r_inm_reparacion->registros[0]['inm_reparacion_observaciones'];
@@ -2822,22 +2825,22 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $input_observaciones = $this->html->input_text(cols: 12, disabled: false, name: 'observaciones', place_holder: 'Observaciones',
             row_upd: new stdClass(), value_vacio: false, required: false, value: $observaciones);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $input_observaciones,  header: $header, ws: $ws);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener input', data: $input_observaciones, header: $header, ws: $ws);
         }
 
         $this->inputs->observaciones_reparacion = $input_observaciones;
 
-        $inm_ubicacion_id = $this->html->hidden(name:'inm_ubicacion_id',value: $this->registro_id);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $inm_ubicacion_id,  header: $header,
+        $inm_ubicacion_id = $this->html->hidden(name: 'inm_ubicacion_id', value: $this->registro_id);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener input', data: $inm_ubicacion_id, header: $header,
                 ws: $ws);
         }
 
         $this->inputs->inm_ubicacion_id = $inm_ubicacion_id;
 
         $params = array();
-        if(isset($_GET['accion']) && $_GET['accion'] === 'proceso_ubicacion') {
+        if (isset($_GET['accion']) && $_GET['accion'] === 'proceso_ubicacion') {
             $params = array('pestana_general_actual' => 'pestanageneral1',
                 'pestana_actual' => 'pestanaubicacion4');
         }
@@ -2879,7 +2882,7 @@ class controlador_inm_ubicacion extends _ctl_base {
 
     public function llaves(bool $header, bool $ws = false): array|stdClass
     {
-        if(isset($_GET['accion']) && $_GET['accion'] == 'etapa') {
+        if (isset($_GET['accion']) && $_GET['accion'] == 'etapa') {
             $template = parent::modifica(header: false); // TODO: Change the autogenerated stub
             if (errores::$error) {
                 $this->retorno_error(mensaje: 'Error al generar template', data: $template, header: $header, ws: $ws);
@@ -2898,8 +2901,8 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $input_descripcion = $this->html->input_text(cols: 12, disabled: false, name: 'descripcion',
             place_holder: 'Descripcion', row_upd: new stdClass(), value_vacio: false, required: false);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $input_descripcion,  header: $header, ws: $ws);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener input', data: $input_descripcion, header: $header, ws: $ws);
         }
 
         $this->inputs->descripcion_llave = $input_descripcion;
@@ -2914,30 +2917,30 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $input_observaciones = $this->html->input_text(cols: 12, disabled: false, name: 'observaciones', place_holder: 'Observaciones',
             row_upd: new stdClass(), value_vacio: false, required: false, value: "");
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $input_observaciones,  header: $header, ws: $ws);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener input', data: $input_observaciones, header: $header, ws: $ws);
         }
 
         $this->inputs->observaciones_control = $input_observaciones;
 
-        $inm_ubicacion_id = $this->html->hidden(name:'inm_ubicacion_id',value: $this->registro_id);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $inm_ubicacion_id,  header: $header,
+        $inm_ubicacion_id = $this->html->hidden(name: 'inm_ubicacion_id', value: $this->registro_id);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener input', data: $inm_ubicacion_id, header: $header,
                 ws: $ws);
         }
 
         $this->inputs->inm_ubicacion_id = $inm_ubicacion_id;
 
-        $inm_llave_id = $this->html->hidden(name:'inm_llave_id',value: "");
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $inm_llave_id,  header: $header,
+        $inm_llave_id = $this->html->hidden(name: 'inm_llave_id', value: "");
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener input', data: $inm_llave_id, header: $header,
                 ws: $ws);
         }
 
         $this->inputs->inm_llave_id = $inm_llave_id;
 
         $params = array();
-        if(isset($_GET['accion']) && $_GET['accion'] === 'proceso_ubicacion') {
+        if (isset($_GET['accion']) && $_GET['accion'] === 'proceso_ubicacion') {
             $params = array('pestana_general_actual' => 'pestanageneral1',
                 'pestana_actual' => 'pestanaubicacion4');
         }
@@ -2964,7 +2967,7 @@ class controlador_inm_ubicacion extends _ctl_base {
             $responsable = "";
             $fecha_entrega = "";
             $observaciones = "";
-            if($r_inm_llave_control->n_registros > 0){
+            if ($r_inm_llave_control->n_registros > 0) {
                 $responsable = $r_inm_llave_control->registros[0]['inm_responsable_descripcion'];
                 $fecha_entrega = $r_inm_llave_control->registros[0]['inm_llave_control_fecha_entrega'];
                 $observaciones = $r_inm_llave_control->registros[0]['inm_llave_control_observaciones'];
@@ -2976,9 +2979,9 @@ class controlador_inm_ubicacion extends _ctl_base {
 
             $button = $this->html->button_href(accion: 'elimina_bd', etiqueta: 'Elimina',
                 registro_id: $inm_llave['inm_llave_id'], seccion: 'inm_llave', style: 'danger', params: $params);
-            if(errores::$error){
-                return $this->retorno_error(mensaje: 'Error al integrar button',data:  $button,header: $header,
-                    ws:  $ws);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al integrar button', data: $button, header: $header,
+                    ws: $ws);
             }
             $inm_llave['elimina_bd'] = $button;
 
@@ -3047,11 +3050,11 @@ class controlador_inm_ubicacion extends _ctl_base {
                 ws: $ws);
         }
 
-        $ths[] = array('etiqueta'=>'ID', 'campo'=>'inm_ubicacion_id');
-        $ths[] = array('etiqueta'=>'Ubicacion', 'campo'=>'inm_ubicacion_ubicacion');
-        $ths[] = array('etiqueta'=>'CP', 'campo'=>'dp_cp_descripcion');
-        $ths[] = array('etiqueta'=>'Agente', 'campo'=>'com_agente_descripcion');
-        $ths[] = array('etiqueta'=>'Status ubicacion', 'campo'=>'inm_status_ubicacion_descripcion');
+        $ths[] = array('etiqueta' => 'ID', 'campo' => 'inm_ubicacion_id');
+        $ths[] = array('etiqueta' => 'Ubicacion', 'campo' => 'inm_ubicacion_ubicacion');
+        $ths[] = array('etiqueta' => 'CP', 'campo' => 'dp_cp_descripcion');
+        $ths[] = array('etiqueta' => 'Agente', 'campo' => 'com_agente_descripcion');
+        $ths[] = array('etiqueta' => 'Status ubicacion', 'campo' => 'inm_status_ubicacion_descripcion');
 
         /*$keys = array();
         foreach ($ths as $data_th) {
@@ -3087,7 +3090,7 @@ class controlador_inm_ubicacion extends _ctl_base {
                 header: $header, ws: $ws);
         }
 
-        if(!$existe) {
+        if (!$existe) {
             $registro = array();
             $registro['inm_ubicacion_id'] = $this->registro_id;
             $registro['inm_status_ubicacion_id'] = 6;
@@ -3110,7 +3113,7 @@ class controlador_inm_ubicacion extends _ctl_base {
                 header: $header, ws: $ws);
         }
 
-        if($r_inm_doc_ubicacion_reg->n_registros <= 0) {
+        if ($r_inm_doc_ubicacion_reg->n_registros <= 0) {
             $_FILES['documento'] = $_FILES['poder'];
             $registro = array();
             $registro['inm_ubicacion_id'] = $this->registro_id;
@@ -3131,7 +3134,7 @@ class controlador_inm_ubicacion extends _ctl_base {
                 header: $header, ws: $ws);
         }
 
-        if($r_inm_poder->n_registros <= 0) {
+        if ($r_inm_poder->n_registros <= 0) {
             $registro = array();
             $registro['inm_ubicacion_id'] = $this->registro_id;
             $registro['numero_escritura_poder'] = $_POST['numero_escritura_poder'];
@@ -3143,7 +3146,7 @@ class controlador_inm_ubicacion extends _ctl_base {
                 return $this->retorno_error(mensaje: 'Error al insertar datos', data: $result_inm_poder,
                     header: $header, ws: $ws);
             }
-        }else{
+        } else {
             $registro = array();
             $registro['inm_ubicacion_id'] = $this->registro_id;
             $registro['numero_escritura_poder'] = $_POST['numero_escritura_poder'];
@@ -3160,7 +3163,7 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $this->link->commit();
 
-        $params = array('pestana_general_actual' => 'pestanageneral2','pestana_actual' => 'pestana6');
+        $params = array('pestana_general_actual' => 'pestanageneral2', 'pestana_actual' => 'pestana6');
         $link_proceso_ubicacion = $this->obj_link->link_con_id(
             accion: 'proceso_ubicacion', link: $this->link, registro_id: $this->registro_id, seccion: 'inm_ubicacion',
             params: $params);
@@ -3168,7 +3171,7 @@ class controlador_inm_ubicacion extends _ctl_base {
             $this->retorno_error(mensaje: 'Error al generar link', data: $link_proceso_ubicacion, header: $header, ws: $ws);
         }
 
-        if($header) {
+        if ($header) {
             header('Location:' . $link_proceso_ubicacion);
             exit;
         }
@@ -3189,7 +3192,7 @@ class controlador_inm_ubicacion extends _ctl_base {
                 header: $header, ws: $ws);
         }
 
-        if(!$existe) {
+        if (!$existe) {
             $registro = array();
             $registro['inm_ubicacion_id'] = $this->registro_id;
             $registro['inm_status_ubicacion_id'] = 7;
@@ -3212,10 +3215,10 @@ class controlador_inm_ubicacion extends _ctl_base {
                 header: $header, ws: $ws);
         }
 
-        $inm_doc_ubicacion =  new inm_doc_ubicacion(link: $this->link);
+        $inm_doc_ubicacion = new inm_doc_ubicacion(link: $this->link);
 
         $tipos_documento_cheque = array();
-        if(isset($_FILES['documentos_cheques'])) {
+        if (isset($_FILES['documentos_cheques'])) {
             foreach ($_FILES['documentos_cheques']['name'] as $costo => $tipo_documento) {
                 foreach ($tipo_documento as $key => $value) {
                     foreach ($value as $nombre_documento) {
@@ -3234,7 +3237,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         }
 
         $tipos_documento_transferencia = array();
-        if(isset($_FILES['documentos_transferencias'])) {
+        if (isset($_FILES['documentos_transferencias'])) {
             foreach ($_FILES['documentos_transferencias']['name'] as $costo => $tipo_documento) {
                 foreach ($tipo_documento as $key => $value) {
                     foreach ($value as $nombre_documento) {
@@ -3251,9 +3254,9 @@ class controlador_inm_ubicacion extends _ctl_base {
                 }
             }
         }
-        
+
         $tipos_documento_efectivo = array();
-        if(isset($_FILES['documentos_efectivos'])) {
+        if (isset($_FILES['documentos_efectivos'])) {
             foreach ($_FILES['documentos_efectivos']['name'] as $costo => $tipo_documento) {
                 foreach ($tipo_documento as $key => $value) {
                     foreach ($value as $nombre_documento) {
@@ -3272,9 +3275,9 @@ class controlador_inm_ubicacion extends _ctl_base {
         }
 
         $r_rel_doc_ubi_che = array();
-        foreach ($tipos_documento_cheque AS $cheque_id => $doc) {
+        foreach ($tipos_documento_cheque as $cheque_id => $doc) {
             $valor_documento = array();
-            foreach ($doc AS $tipo_documento_id => $value) {
+            foreach ($doc as $tipo_documento_id => $value) {
                 $valor_documento['name'] = $value['name'];
                 $valor_documento['tmp_name'] = $value['tmp_name'];
 
@@ -3304,9 +3307,9 @@ class controlador_inm_ubicacion extends _ctl_base {
         }
 
         $r_rel_doc_ubi_trs = array();
-        foreach ($tipos_documento_transferencia AS $transferencia_id => $doc) {
+        foreach ($tipos_documento_transferencia as $transferencia_id => $doc) {
             $valor_documento = array();
-            foreach ($doc AS $tipo_documento_id => $value) {
+            foreach ($doc as $tipo_documento_id => $value) {
                 $valor_documento['name'] = $value['name'];
                 $valor_documento['tmp_name'] = $value['tmp_name'];
 
@@ -3334,11 +3337,11 @@ class controlador_inm_ubicacion extends _ctl_base {
                 }
             }
         }
-        
+
         $r_rel_doc_ubi_efe = array();
-        foreach ($tipos_documento_efectivo AS $efectivo_id => $doc) {
+        foreach ($tipos_documento_efectivo as $efectivo_id => $doc) {
             $valor_documento = array();
-            foreach ($doc AS $tipo_documento_id => $value) {
+            foreach ($doc as $tipo_documento_id => $value) {
                 $valor_documento['name'] = $value['name'];
                 $valor_documento['tmp_name'] = $value['tmp_name'];
 
@@ -3465,7 +3468,7 @@ class controlador_inm_ubicacion extends _ctl_base {
             $this->retorno_error(mensaje: 'Error al generar link', data: $link_proceso_ubicacion, header: $header, ws: $ws);
         }
 
-        if($header) {
+        if ($header) {
             header('Location:' . $link_proceso_ubicacion);
             exit;
         }
@@ -3486,7 +3489,7 @@ class controlador_inm_ubicacion extends _ctl_base {
 
     final public function fotografias(bool $header, bool $ws = false): array|stdClass
     {
-        if(isset($_GET['accion']) && $_GET['accion'] == 'fotografias') {
+        if (isset($_GET['accion']) && $_GET['accion'] == 'fotografias') {
             $template = $this->modifica(header: false);
             if (errores::$error) {
                 return $this->retorno_error(mensaje: 'Error al integrar base', data: $template, header: $header, ws: $ws);
@@ -3495,28 +3498,28 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $filtro['inm_conf_docs_ubicacion.es_foto'] = 'activo';
         $inm_conf_docs_ubicacion = (new inm_conf_docs_ubicacion(link: $this->link))->filtro_and(
-            columnas: ['doc_tipo_documento_id','doc_tipo_documento_descripcion'], filtro: $filtro);
-        if(errores::$error){
+            columnas: ['doc_tipo_documento_id', 'doc_tipo_documento_descripcion'], filtro: $filtro);
+        if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al obtener inm_conf_docs_prospecto',
-                data:  $inm_conf_docs_ubicacion,header: $header, ws: $ws);
+                data: $inm_conf_docs_ubicacion, header: $header, ws: $ws);
         }
 
         $inputs_fotos = array();
-        foreach ($inm_conf_docs_ubicacion->registros as $registro){
+        foreach ($inm_conf_docs_ubicacion->registros as $registro) {
             $filtro_foto['inm_doc_ubicacion.es_foto'] = 'activo';
             $filtro_foto['doc_tipo_documento.id'] = $registro['doc_tipo_documento_id'];
             $filtro_foto['inm_ubicacion.id'] = $this->registro_id;
             $inm_doc_ubicacion = (new inm_doc_ubicacion(link: $this->link))->filtro_and(
                 filtro: $filtro_foto);
-            if(errores::$error){
+            if (errores::$error) {
                 return $this->retorno_error(mensaje: 'Error al obtener inm_conf_docs_prospecto',
-                    data:  $inm_doc_ubicacion,header: $header, ws: $ws);
+                    data: $inm_doc_ubicacion, header: $header, ws: $ws);
             }
 
             $fotos = array();
-            foreach ($inm_doc_ubicacion->registros as $reg){
+            foreach ($inm_doc_ubicacion->registros as $reg) {
                 $src = $reg['doc_documento_ruta_relativa'];
-                if((new generales())->guarda_archivo_dropbox) {
+                if ((new generales())->guarda_archivo_dropbox) {
                     $guarda = (new _dropbox(link: $this->link))->preview(
                         dropbox_id: $reg['inm_dropbox_ruta_id_dropbox'], extencion: $reg['doc_extension_descripcion']);
                     if (errores::$error) {
@@ -3529,10 +3532,10 @@ class controlador_inm_ubicacion extends _ctl_base {
                     //$ruta_doc = $this->path_base.$guarda->ruta_archivo;
                 }
                 $foto = $this->img_btn_modal(src: $src,
-                    css_id: $registro['doc_tipo_documento_id'],class_css: ['imagen']);
-                if(errores::$error){
+                    css_id: $registro['doc_tipo_documento_id'], class_css: ['imagen']);
+                if (errores::$error) {
                     return $this->retorno_error(mensaje: 'Error al obtener inm_conf_docs_prospecto',
-                        data:  $foto,header: $header, ws: $ws);
+                        data: $foto, header: $header, ws: $ws);
                 }
 
                 $link_elimina_foto_bd = $this->obj_link->link_con_id(
@@ -3565,7 +3568,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         $this->fotos = $inputs_fotos;
 
         $params = array();
-        if(isset($_GET['accion']) && $_GET['accion'] === 'proceso_ubicacion') {
+        if (isset($_GET['accion']) && $_GET['accion'] === 'proceso_ubicacion') {
             $params = array('pestana_general_actual' => 'pestanageneral1',
                 'pestana_actual' => 'pestanaubicacion3');
         }
@@ -3604,27 +3607,28 @@ class controlador_inm_ubicacion extends _ctl_base {
         return $this->inputs;
     }
 
-    public function fotografias_bd(bool $header, bool $ws = false): array|stdClass{
-        $inm_doc_ubicacion =  new inm_doc_ubicacion(link: $this->link);
+    public function fotografias_bd(bool $header, bool $ws = false): array|stdClass
+    {
+        $inm_doc_ubicacion = new inm_doc_ubicacion(link: $this->link);
 
         $names = array();
-        foreach ($_FILES['fotos']['name'] as $key => $foto){
+        foreach ($_FILES['fotos']['name'] as $key => $foto) {
             $names[$key]['name'] = $foto;
         }
 
-        foreach ($_FILES['fotos']['tmp_name'] as $key => $foto){
+        foreach ($_FILES['fotos']['tmp_name'] as $key => $foto) {
             $names[$key]['tmp_name'] = $foto;
         }
 
         $result = array();
-        foreach ($names as $key => $name){
+        foreach ($names as $key => $name) {
             $valor = array();
-            foreach ($name['name'] as $item => $value){
+            foreach ($name['name'] as $item => $value) {
 
                 $valor['name'] = $name['name'][$item];
                 $valor['tmp_name'] = $name['tmp_name'][$item];
 
-                if($name['name'][$item] !== '' && $name['tmp_name'][$item] !== '') {
+                if ($name['name'][$item] !== '' && $name['tmp_name'][$item] !== '') {
                     $registro['doc_tipo_documento_id'] = $key;
                     $registro['inm_ubicacion_id'] = $this->registro_id;
                     $registro['es_foto'] = 'activo';
@@ -3638,19 +3642,20 @@ class controlador_inm_ubicacion extends _ctl_base {
         }
 
         $accion = 'fotografias';
-        if(isset($_POST['btn_action_next'])){
+        if (isset($_POST['btn_action_next'])) {
             $accion = $_POST['btn_action_next'];
         }
 
         $params = array();
         if (isset($_GET['pestana_general_actual'])) {
             $params = array('pestana_general_actual' => 'pestanageneral1', 'pestana_actual' => $_GET['pestana_actual']);
-        }        $link_proceso_ubicacion = $this->obj_link->link_con_id(
-            accion: $accion, link: $this->link, registro_id: $this->registro_id, seccion: 'inm_ubicacion',params: $params);
+        }
+        $link_proceso_ubicacion = $this->obj_link->link_con_id(
+            accion: $accion, link: $this->link, registro_id: $this->registro_id, seccion: 'inm_ubicacion', params: $params);
         if (errores::$error) {
             $this->retorno_error(mensaje: 'Error al generar link', data: $link_proceso_ubicacion, header: $header, ws: $ws);
         }
-        if($header) {
+        if ($header) {
             header('Location:' . $link_proceso_ubicacion);
             exit;
         }
@@ -3658,10 +3663,11 @@ class controlador_inm_ubicacion extends _ctl_base {
         return $result;
     }
 
-    public function get_etapa_actual(bool $header, bool $ws = false){
+    public function get_etapa_actual(bool $header, bool $ws = false)
+    {
         $pestanas = array("ALTA" => "pestana1", "VALIDACION" => "pestana2", "SOLICITUD DE RECURSO" => "pestana3",
-            "EMISION DE RECURSO"=>"pestana4", "POR FIRMAR" => "pestana5", "FIRMADO POR APROBAR" => "pestana6",
-            "FIRMADO" => "pestana7", "CANCELADO"=> "sin_pestana");
+            "EMISION DE RECURSO" => "pestana4", "POR FIRMAR" => "pestana5", "FIRMADO POR APROBAR" => "pestana6",
+            "FIRMADO" => "pestana7", "CANCELADO" => "sin_pestana");
 
         $r_ubicacion = (new inm_ubicacion(link: $this->link))->registro(registro_id: $_POST['id']);
         if (errores::$error) {
@@ -3671,7 +3677,7 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $pestana_actual = '';
         foreach ($pestanas as $key => $value) {
-            if($key === $r_ubicacion['inm_status_ubicacion_descripcion']){
+            if ($key === $r_ubicacion['inm_status_ubicacion_descripcion']) {
                 $pestana_actual = $value;
             }
         }
@@ -3701,31 +3707,32 @@ class controlador_inm_ubicacion extends _ctl_base {
         $columns["inm_status_ubicacion_descripcion"]["titulo"] = "Status Ubicacion";
 
         // Definir los filtros para el datatable
-        $filtro = array("inm_ubicacion.id","inm_ubicacion_ubicacion",'dp_cp.descripcion',
-            'inm_ubicacion.manzana','inm_ubicacion.lote','inm_ubicacion.cuenta_predial',
-            'inm_tipo_ubicacion.descripcion','com_agente.descripcion','inm_status_ubicacion.descripcion');
+        $filtro = array("inm_ubicacion.id", "inm_ubicacion_ubicacion", 'dp_cp.descripcion',
+            'inm_ubicacion.manzana', 'inm_ubicacion.lote', 'inm_ubicacion.cuenta_predial',
+            'inm_tipo_ubicacion.descripcion', 'com_agente.descripcion', 'inm_status_ubicacion.descripcion');
 
         // Crear el objeto Datatables y asignarle las columnas y filtros definidos
         $datatables = new stdClass();
         $datatables->columns = $columns;
         $datatables->filtro = $filtro;
         $datatables->menu_active = true;
-        $datatables->order_sec = array('inm_status_ubicacion.id' => 'ASC','inm_ubicacion.id' => 'DESC');
+        $datatables->order_sec = array('inm_status_ubicacion.id' => 'ASC', 'inm_ubicacion.id' => 'DESC');
 
         return $datatables;
     }
 
-    public function inputs_conyuge(bool $header, controlador_inm_ubicacion $controler, bool $ws = false){
+    public function inputs_conyuge(bool $header, controlador_inm_ubicacion $controler, bool $ws = false)
+    {
 
         $conyuge = new stdClass();
 
         $existe_conyuge = false;
-        if($controler->registro_id > 0) {
+        if ($controler->registro_id > 0) {
             $existe_conyuge = $controler->modelo->existe_conyuge(
                 inm_prospecto_id: $controler->registro_id);
             if (errores::$error) {
                 return $this->retorno_error(mensaje: 'Error al validar si existe conyuge', data: $existe_conyuge,
-                    header: $header, ws:$ws);
+                    header: $header, ws: $ws);
             }
         }
 
@@ -3744,19 +3751,19 @@ class controlador_inm_ubicacion extends _ctl_base {
         $row_upd->dp_municipio_id = -1;
         $row_upd->inm_nacionalidad_id = -1;
         $row_upd->inm_ocupacion_id = -1;
-        if($existe_conyuge){
+        if ($existe_conyuge) {
             $row_upd = $controler->modelo->inm_conyuge(columnas_en_bruto: true,
                 inm_ubicacion_id: $controler->registro_id, link: $controler->link, retorno_obj: true);
-            if(errores::$error){
-                return $this->retorno_error(mensaje: 'Error al obtener datos de conyuge',data:  $row_upd,
-                    header: $header, ws:$ws);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al obtener datos de conyuge', data: $row_upd,
+                    header: $header, ws: $ws);
             }
 
             $dp_municipio_data = (new dp_municipio(link: $controler->link))->registro(
                 registro_id: $row_upd->dp_municipio_id, columnas_en_bruto: true, retorno_obj: true);
-            if(errores::$error){
+            if (errores::$error) {
                 return $this->retorno_error(mensaje: 'Error al obtener datos  dp_municipio_data',
-                    data: $dp_municipio_data, header: $header, ws:$ws);
+                    data: $dp_municipio_data, header: $header, ws: $ws);
             }
             $row_upd->dp_estado_id = $dp_municipio_data->dp_estado_id;
 
@@ -3765,8 +3772,8 @@ class controlador_inm_ubicacion extends _ctl_base {
         $nombre = $controler->html->input_text(cols: 2, disabled: false, name: 'conyuge[nombre]',
             place_holder: 'Nombre', row_upd: $row_upd, value_vacio: false, class_css: array('conyuge_nombre'),
             required: false, value: $row_upd->nombre);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $nombre,header: $header, ws:$ws);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener input', data: $nombre, header: $header, ws: $ws);
         }
 
         $conyuge->nombre = $nombre;
@@ -3774,9 +3781,9 @@ class controlador_inm_ubicacion extends _ctl_base {
         $apellido_paterno = $controler->html->input_text(cols: 2, disabled: false, name: 'conyuge[apellido_paterno]',
             place_holder: 'Apellido Pat', row_upd: $row_upd, value_vacio: false,
             class_css: array('conyuge_apellido_paterno'), required: false, value: $row_upd->apellido_paterno);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $apellido_paterno,header: $header,
-                ws:$ws);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener input', data: $apellido_paterno, header: $header,
+                ws: $ws);
         }
 
         $conyuge->apellido_paterno = $apellido_paterno;
@@ -3784,9 +3791,9 @@ class controlador_inm_ubicacion extends _ctl_base {
         $apellido_materno = $controler->html->input_text(cols: 2, disabled: false, name: 'conyuge[apellido_materno]',
             place_holder: 'Apellido Mat', row_upd: $row_upd, value_vacio: false,
             class_css: array('conyuge_apellido_materno'), required: false, value: $row_upd->apellido_materno);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $apellido_materno,header: $header,
-                ws:$ws);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener input', data: $apellido_materno, header: $header,
+                ws: $ws);
         }
 
         $conyuge->apellido_materno = $apellido_materno;
@@ -3794,8 +3801,8 @@ class controlador_inm_ubicacion extends _ctl_base {
         $curp = $controler->html->input_text(cols: 2, disabled: false, name: 'conyuge[curp]', place_holder: 'CURP',
             row_upd: $row_upd, value_vacio: false, class_css: array('conyuge_curp'), required: false,
             value: $row_upd->curp);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $curp,header: $header, ws:$ws);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener input', data: $curp, header: $header, ws: $ws);
         }
 
         $conyuge->curp = $curp;
@@ -3803,8 +3810,8 @@ class controlador_inm_ubicacion extends _ctl_base {
         $rfc = $controler->html->input_text(cols: 2, disabled: false, name: 'conyuge[rfc]', place_holder: 'RFC',
             row_upd: $row_upd, value_vacio: false, class_css: array('conyuge_rfc'), required: false,
             value: $row_upd->rfc);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $rfc,header: $header, ws:$ws);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener input', data: $rfc, header: $header, ws: $ws);
         }
 
         $conyuge->rfc = $rfc;
@@ -3812,8 +3819,8 @@ class controlador_inm_ubicacion extends _ctl_base {
         $numero_credito = $controler->html->input_text(cols: 2, disabled: false, name: 'conyuge[numero_credito]',
             place_holder: 'Numero Credito', row_upd: $row_upd, value_vacio: false,
             class_css: array('conyuge_numero_credito'), required: false, value: $row_upd->numero_credito);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $numero_credito,header: $header, ws:$ws);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener input', data: $numero_credito, header: $header, ws: $ws);
         }
 
         $conyuge->numero_credito = $numero_credito;
@@ -3821,8 +3828,8 @@ class controlador_inm_ubicacion extends _ctl_base {
         $adeudo_hipoteca = $controler->html->input_text(cols: 2, disabled: false, name: 'conyuge[adeudo_hipoteca]',
             place_holder: 'Adeudo Hipoteca', row_upd: $row_upd, value_vacio: false,
             class_css: array('conyuge_adeudo_hipoteca'), required: false, value: $row_upd->adeudo_hipoteca);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $adeudo_hipoteca,header: $header, ws:$ws);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener input', data: $adeudo_hipoteca, header: $header, ws: $ws);
         }
 
         $conyuge->adeudo_hipoteca = $adeudo_hipoteca;
@@ -3830,9 +3837,9 @@ class controlador_inm_ubicacion extends _ctl_base {
         $telefono_casa = $controler->html->input_text(cols: 2, disabled: false, name: 'conyuge[telefono_casa]',
             place_holder: 'Tel Casa', row_upd: $row_upd, value_vacio: false, class_css: array('conyuge_telefono_casa'),
             required: false, value: $row_upd->telefono_casa);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $telefono_casa,header: $header,
-                ws:$ws);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener input', data: $telefono_casa, header: $header,
+                ws: $ws);
         }
 
         $conyuge->telefono_casa = $telefono_casa;
@@ -3840,9 +3847,9 @@ class controlador_inm_ubicacion extends _ctl_base {
         $telefono_celular = $controler->html->input_text(cols: 2, disabled: false, name: 'conyuge[telefono_celular]',
             place_holder: 'Cel', row_upd: $row_upd, value_vacio: false, class_css: array('conyuge_telefono_celular'),
             required: false, value: $row_upd->telefono_celular);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $telefono_celular,header: $header,
-                ws:$ws);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener input', data: $telefono_celular, header: $header,
+                ws: $ws);
         }
 
         $conyuge->telefono_celular = $telefono_celular;
@@ -3851,8 +3858,8 @@ class controlador_inm_ubicacion extends _ctl_base {
         $dp_estado_id = $controler->html->select_catalogo(cols: 2, con_registros: true,
             id_selected: $row_upd->dp_estado_id, modelo: $modelo, id_css: 'conyuge_dp_estado_id',
             label: 'Estado Nac', name: 'conyuge[dp_estado_id]');
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $dp_estado_id,header: $header, ws:$ws);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener input', data: $dp_estado_id, header: $header, ws: $ws);
         }
 
         $conyuge->dp_estado_id = $dp_estado_id;
@@ -3861,11 +3868,11 @@ class controlador_inm_ubicacion extends _ctl_base {
         $modelo = new dp_municipio(link: $controler->link);
         $dp_municipio_id = $controler->html->select_catalogo(cols: 2, con_registros: true,
             id_selected: $row_upd->dp_municipio_id, modelo: $modelo,
-            filtro: array('dp_estado.id'=>$row_upd->dp_estado_id), id_css: 'conyuge_dp_municipio_id',
+            filtro: array('dp_estado.id' => $row_upd->dp_estado_id), id_css: 'conyuge_dp_municipio_id',
             label: 'Municipio Nac', name: 'conyuge[dp_municipio_id]');
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $dp_municipio_id,header: $header,
-                ws:$ws);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener input', data: $dp_municipio_id, header: $header,
+                ws: $ws);
         }
 
         $conyuge->dp_municipio_id = $dp_municipio_id;
@@ -3874,9 +3881,9 @@ class controlador_inm_ubicacion extends _ctl_base {
         $inm_nacionalidad_id = $controler->html->select_catalogo(cols: 2, con_registros: true,
             id_selected: $row_upd->inm_nacionalidad_id, modelo: $modelo, label: 'Nacionalidad',
             name: 'conyuge[inm_nacionalidad_id]');
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $inm_nacionalidad_id,header: $header,
-                ws:$ws);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener input', data: $inm_nacionalidad_id, header: $header,
+                ws: $ws);
         }
 
         $conyuge->inm_nacionalidad_id = $inm_nacionalidad_id;
@@ -3885,9 +3892,9 @@ class controlador_inm_ubicacion extends _ctl_base {
         $inm_ocupacion_id = $controler->html->select_catalogo(cols: 2, con_registros: true,
             id_selected: $row_upd->inm_ocupacion_id, modelo: $modelo, label: 'Ocupacion',
             name: 'conyuge[inm_ocupacion_id]');
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $inm_ocupacion_id,header: $header,
-                ws:$ws);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener input', data: $inm_ocupacion_id, header: $header,
+                ws: $ws);
         }
 
         $conyuge->inm_ocupacion_id = $inm_ocupacion_id;
@@ -3895,9 +3902,9 @@ class controlador_inm_ubicacion extends _ctl_base {
         $fecha_nacimiento = $controler->html->input_fecha(cols: 2, row_upd: $row_upd,
             value_vacio: false, name: 'conyuge[fecha_nacimiento]', place_holder: 'Fecha Nac', required: false,
             value: $row_upd->fecha_nacimiento);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener fecha_nacimiento',data:  $fecha_nacimiento,
-                header: $header, ws:$ws);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener fecha_nacimiento', data: $fecha_nacimiento,
+                header: $header, ws: $ws);
         }
 
         $conyuge->fecha_nacimiento = $fecha_nacimiento;
@@ -3907,17 +3914,17 @@ class controlador_inm_ubicacion extends _ctl_base {
 
     public function img_btn_modal(string $src, int $css_id, array $class_css = array()): string|array
     {
-        if($css_id<=0){
-            return $this->errores->error('Error $css_id debe ser mayor a 0',$css_id);
+        if ($css_id <= 0) {
+            return $this->errores->error('Error $css_id debe ser mayor a 0', $css_id);
         }
 
         $class_html = '';
-        foreach ($class_css as $class){
-            $class_html.=' '.$class;
+        foreach ($class_css as $class) {
+            $class_html .= ' ' . $class;
         }
 
-        $img = '<img class="img-thumbnail '.$class_html.'" src="'.$src.'" ';
-        $img.= ' role="button" data-toggle="modal" data-target="#img_'.$css_id.'">';
+        $img = '<img class="img-thumbnail ' . $class_html . '" src="' . $src . '" ';
+        $img .= ' role="button" data-toggle="modal" data-target="#img_' . $css_id . '">';
         return $img;
     }
 
@@ -3926,9 +3933,9 @@ class controlador_inm_ubicacion extends _ctl_base {
     {
 
         $r_modifica = $this->init_modifica(); // TODO: Change the autogenerated stub
-        if(errores::$error){
+        if (errores::$error) {
             return $this->retorno_error(
-                mensaje: 'Error al generar salida de template',data:  $r_modifica,header: $header,ws: $ws);
+                mensaje: 'Error al generar salida de template', data: $r_modifica, header: $header, ws: $ws);
         }
 
         $headers = (new _ubicacion())->headers_front(controlador: $this);
@@ -3975,16 +3982,16 @@ class controlador_inm_ubicacion extends _ctl_base {
             'renombre' => 'dp_pais_domicilio');
 
         $data_row = $this->modelo->filtro_and(extra_join: $extra_join, filtro: $filtro_ubi,);
-        if(errores::$error){
+        if (errores::$error) {
             return $this->retorno_error(
-                mensaje: 'Error al obtener registro',data:  $data_row,header: $header,ws: $ws);
+                mensaje: 'Error al obtener registro', data: $data_row, header: $header, ws: $ws);
         }
 
         $data_row = $data_row->registros_obj[0];
 
-        $keys_selects = (new _ubicacion())->keys_selects_base(controler: $this,data_row:  $data_row, disableds: array());
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener keys_selects', data:  $keys_selects, header: $header,ws:  $ws);
+        $keys_selects = (new _ubicacion())->keys_selects_base(controler: $this, data_row: $data_row, disableds: array());
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener keys_selects', data: $keys_selects, header: $header, ws: $ws);
         }
 
         $modelo = new dp_estado(link: $this->link);
@@ -3993,19 +4000,19 @@ class controlador_inm_ubicacion extends _ctl_base {
             id_selected: $data_row->dp_estado_domicilio_id, modelo: $modelo,
             columns_ds: $columns_ds, id_css: 'dp_estado_domicilio_id',
             label: 'Estado Domicilio', name: 'dp_estado_domicilio_id');
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $dp_estado_domicilio_id,header: $header,
-                ws:$ws);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener input', data: $dp_estado_domicilio_id, header: $header,
+                ws: $ws);
         }
 
         $this->inputs->dp_estado_domicilio_id = $dp_estado_domicilio_id;
-        
+
         $modelo = new dp_municipio(link: $this->link);
         $columns_ds = array('dp_municipio_descripcion');
 
         $filtro_select = array();
         $con_registro = false;
-        if($data_row->dp_estado_domicilio_id){
+        if ($data_row->dp_estado_domicilio_id) {
             $filtro_select['dp_estado.id'] = $data_row->dp_estado_domicilio_id;
             $con_registro = true;
         }
@@ -4013,19 +4020,19 @@ class controlador_inm_ubicacion extends _ctl_base {
             id_selected: $data_row->dp_municipio_domicilio_id, modelo: $modelo,
             columns_ds: $columns_ds, filtro: $filtro_select,
             id_css: 'dp_municipio_domicilio_id', label: 'Municipio Domicilio', name: 'dp_municipio_domicilio_id');
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $dp_municipio_domicilio_id,header: $header,
-                ws:$ws);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener input', data: $dp_municipio_domicilio_id, header: $header,
+                ws: $ws);
         }
 
         $this->inputs->dp_municipio_domicilio_id = $dp_municipio_domicilio_id;
-                
+
         $modelo = new dp_cp(link: $this->link);
         $columns_ds = array('dp_cp_descripcion');
 
         $filtro_select = array();
         $con_registro = false;
-        if($data_row->dp_municipio_domicilio_id){
+        if ($data_row->dp_municipio_domicilio_id) {
             $filtro_select['dp_municipio.id'] = $data_row->dp_municipio_domicilio_id;
             $con_registro = true;
         }
@@ -4033,19 +4040,19 @@ class controlador_inm_ubicacion extends _ctl_base {
             id_selected: $data_row->dp_cp_domicilio_id, modelo: $modelo,
             columns_ds: $columns_ds, filtro: $filtro_select,
             id_css: 'dp_cp_domicilio_id', label: 'CP Domicilio', name: 'dp_cp_domicilio_id');
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $dp_cp_domicilio_id,header: $header,
-                ws:$ws);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener input', data: $dp_cp_domicilio_id, header: $header,
+                ws: $ws);
         }
 
         $this->inputs->dp_cp_domicilio_id = $dp_cp_domicilio_id;
-        
+
         $modelo = new dp_colonia_postal(link: $this->link);
         $columns_ds = array('dp_colonia_descripcion');
 
         $filtro_select = array();
         $con_registro = false;
-        if($data_row->dp_cp_domicilio_id){
+        if ($data_row->dp_cp_domicilio_id) {
             $filtro_select['dp_cp.id'] = $data_row->dp_cp_domicilio_id;
             $con_registro = true;
         }
@@ -4053,9 +4060,9 @@ class controlador_inm_ubicacion extends _ctl_base {
             id_selected: $data_row->dp_colonia_postal_domicilio_id, modelo: $modelo,
             columns_ds: $columns_ds, filtro: $filtro_select,
             id_css: 'dp_colonia_postal_domicilio_id', label: 'Colonia Domicilio', name: 'dp_colonia_postal_domicilio_id');
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $dp_colonia_postal_domicilio_id,header: $header,
-                ws:$ws);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener input', data: $dp_colonia_postal_domicilio_id, header: $header,
+                ws: $ws);
         }
 
         $this->inputs->dp_colonia_postal_domicilio_id = $dp_colonia_postal_domicilio_id;
@@ -4069,49 +4076,49 @@ class controlador_inm_ubicacion extends _ctl_base {
         $this->inputs->conyuge = $conyuge;
 
         $co_acreditados = (new inm_ubicacion(link: $this->link))->get_co_acreditados(inm_ubicacion_id: $this->registro_id);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener co_acreditados',data:  $co_acreditados, header: $header,ws:  $ws);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener co_acreditados', data: $co_acreditados, header: $header, ws: $ws);
         }
 
         $inm_co_acreditado = new stdClass();
         $inm_co_acreditado->genero_co_acreditado = 'M';
-        if(count($co_acreditados) === 1){
-            foreach ($co_acreditados[0] AS $co_acred => $value){
+        if (count($co_acreditados) === 1) {
+            foreach ($co_acreditados[0] as $co_acred => $value) {
                 $key_co_acred = "co_acreditado[$co_acred]";
                 $inm_co_acreditado->$key_co_acred = $value;
 
-                if($co_acred === 'genero'){
+                if ($co_acred === 'genero') {
                     $inm_co_acreditado->genero_co_acreditado = $value;
                 }
             }
         }
 
         $headers = (new _ubicacion())->frontend_co_acreditado(controler: $this, row_upd: $inm_co_acreditado);
-        if(errores::$error){
+        if (errores::$error) {
             return $this->retorno_error(
-                mensaje: 'Error al integrar headers',data:  $headers, header: $header,ws:  $ws);
+                mensaje: 'Error al integrar headers', data: $headers, header: $header, ws: $ws);
         }
 
         $fecha_otorgamiento_credito = $this->html->input_fecha(cols: 2, row_upd: $this->row_upd, value_vacio: false,
             name: 'fecha_otorgamiento_credito', place_holder: 'Fecha Otorgamiento Credito',
             required: false, value: $this->row_upd->fecha_otorgamiento_credito);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $fecha_otorgamiento_credito,header: $header,
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener input', data: $fecha_otorgamiento_credito, header: $header,
                 ws: $ws);
         }
 
         $this->inputs->fecha_otorgamiento_credito = $fecha_otorgamiento_credito;
 
-        $base = $this->base_upd(keys_selects: $keys_selects, params: array(),params_ajustados: array());
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
+        $base = $this->base_upd(keys_selects: $keys_selects, params: array(), params_ajustados: array());
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al integrar base', data: $base, header: $header, ws: $ws);
         }
 
-        $btn_collapse_all = $this->html->button_para_java(id_css: 'collapse_all',style:  'primary',
-            tag:  'Ver/Ocultar Todo');
-        if(errores::$error){
+        $btn_collapse_all = $this->html->button_para_java(id_css: 'collapse_all', style: 'primary',
+            tag: 'Ver/Ocultar Todo');
+        if (errores::$error) {
             return $this->retorno_error(
-                mensaje: 'Error al btn_collapse_all',data:  $btn_collapse_all, header: $header,ws:  $ws);
+                mensaje: 'Error al btn_collapse_all', data: $btn_collapse_all, header: $header, ws: $ws);
         }
 
         $this->buttons['btn_collapse_all'] = $btn_collapse_all;
@@ -4146,37 +4153,37 @@ class controlador_inm_ubicacion extends _ctl_base {
     {
         $this->link->beginTransaction();
 
-        $result_conyuge = $this->modelo->transacciona_conyuge(inm_ubicacion_id: $this->registro_id,link: $this->link);
-            if (errores::$error) {
-               $this->link->rollBack();
-                return $this->retorno_error(mensaje: 'Error al modificar inm_prospecto',data:  $result_conyuge,
-                    header: $header,ws:  $ws);
+        $result_conyuge = $this->modelo->transacciona_conyuge(inm_ubicacion_id: $this->registro_id, link: $this->link);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al modificar inm_prospecto', data: $result_conyuge,
+                header: $header, ws: $ws);
         }
 
         $result_co_acreditado = $this->modelo->transacciona_co_acreditado(inm_ubicacion_id: $this->registro_id,
             link: $this->link);
         if (errores::$error) {
             $this->link->rollBack();
-            return $this->retorno_error(mensaje: 'Error al modificar inm_prospecto',data:  $result_co_acreditado,
-                header: $header,ws:  $ws);
+            return $this->retorno_error(mensaje: 'Error al modificar inm_prospecto', data: $result_co_acreditado,
+                header: $header, ws: $ws);
         }
 
-        if(isset($_POST['conyuge']) || isset($_POST['co_acreditado'])){
+        if (isset($_POST['conyuge']) || isset($_POST['co_acreditado'])) {
             unset($_POST['conyuge'], $_POST['co_acreditado']);
         }
 
-        $r_modifica = parent::modifica_bd(header: false,ws:  $ws); // TODO: Change the autogenerated stub
-        if(errores::$error){
+        $r_modifica = parent::modifica_bd(header: false, ws: $ws); // TODO: Change the autogenerated stub
+        if (errores::$error) {
             $this->link->rollBack();
-            return $this->retorno_error(mensaje: 'Error al modificar inm_prospecto',data:  $r_modifica,
-                    header: $header,ws:  $ws);
+            return $this->retorno_error(mensaje: 'Error al modificar inm_prospecto', data: $r_modifica,
+                header: $header, ws: $ws);
         }
 
         $this->link->commit();
 
         $retorno = $_SERVER['HTTP_REFERER'];
 
-        if(isset($_POST['btn_action_next']) && $_POST['btn_action_next'] === 'proceso_ubicacion'){
+        if (isset($_POST['btn_action_next']) && $_POST['btn_action_next'] === 'proceso_ubicacion') {
             $params = array('pestana_general_actual' => 'pestanageneral1', 'pestana_actual' => 'cpestanaubicacion1');
             $link_proceso_ubicacion = $this->obj_link->link_con_id(
                 accion: 'proceso_ubicacion', link: $this->link, registro_id: $this->registro_id, seccion: 'inm_ubicacion',
@@ -4187,17 +4194,16 @@ class controlador_inm_ubicacion extends _ctl_base {
             $retorno = $link_proceso_ubicacion;
         }
 
-        if($header){
-            header('Location:'.$retorno);
+        if ($header) {
+            header('Location:' . $retorno);
             exit;
         }
-        if($ws){
+        if ($ws) {
             header('Content-Type: application/json');
             try {
                 echo json_encode($r_modifica, JSON_THROW_ON_ERROR);
-            }
-            catch (Throwable $e){
-                return $this->retorno_error(mensaje: 'Error al maquetar estados',data: $e, header: $header, ws: $ws);
+            } catch (Throwable $e) {
+                return $this->retorno_error(mensaje: 'Error al maquetar estados', data: $e, header: $header, ws: $ws);
             }
             exit;
         }
@@ -4208,14 +4214,14 @@ class controlador_inm_ubicacion extends _ctl_base {
     public function lista(bool $header, bool $ws = false): array
     {
         $r_lista = parent::lista($header, $ws); // TODO: Change the autogenerated stub
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar datos',data:  $r_lista, header: $header,ws:$ws);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al maquetar datos', data: $r_lista, header: $header, ws: $ws);
         }
 
-        $status_ubicacion = (new inm_status_ubicacion(link:$this->link))->registros();
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener regitros de status', data:  $status_ubicacion,
-                header: $header,ws:$ws);
+        $status_ubicacion = (new inm_status_ubicacion(link: $this->link))->registros();
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener regitros de status', data: $status_ubicacion,
+                header: $header, ws: $ws);
         }
 
         $this->status_ubicacion = $status_ubicacion;
@@ -4226,62 +4232,62 @@ class controlador_inm_ubicacion extends _ctl_base {
     protected function key_selects_txt(array $keys_selects): array
     {
 
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'descripcion', keys_selects:$keys_selects,
+        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'descripcion', keys_selects: $keys_selects,
             place_holder: 'Descripcion');
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 4,key: 'cantidad_detalle', keys_selects:$keys_selects,
-            place_holder: 'Cantidad',disabled: true);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        $keys_selects = (new init())->key_select_txt(cols: 4, key: 'cantidad_detalle', keys_selects: $keys_selects,
+            place_holder: 'Cantidad', disabled: true);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'cantidad_consumo', keys_selects:$keys_selects,
+        $keys_selects = (new init())->key_select_txt(cols: 12, key: 'cantidad_consumo', keys_selects: $keys_selects,
             place_holder: 'Cantidad Consumo', required: false);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 4,key: 'valor_unitario', keys_selects:$keys_selects,
-            place_holder: 'Valor Unitario',disabled: true);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        $keys_selects = (new init())->key_select_txt(cols: 4, key: 'valor_unitario', keys_selects: $keys_selects,
+            place_holder: 'Valor Unitario', disabled: true);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 4,key: 'subtotal', keys_selects:$keys_selects,
-            place_holder: 'Subtotal',disabled: true);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        $keys_selects = (new init())->key_select_txt(cols: 4, key: 'subtotal', keys_selects: $keys_selects,
+            place_holder: 'Subtotal', disabled: true);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 4,key: 'trasladado', keys_selects:$keys_selects,
-            place_holder: 'Trasladado',disabled: true);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        $keys_selects = (new init())->key_select_txt(cols: 4, key: 'trasladado', keys_selects: $keys_selects,
+            place_holder: 'Trasladado', disabled: true);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 4,key: 'retenido', keys_selects:$keys_selects,
-            place_holder: 'Retenido',disabled: true);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        $keys_selects = (new init())->key_select_txt(cols: 4, key: 'retenido', keys_selects: $keys_selects,
+            place_holder: 'Retenido', disabled: true);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 4,key: 'total_con_impuesto', keys_selects:$keys_selects,
-            place_holder: 'Total Con Impuesto',disabled: true);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        $keys_selects = (new init())->key_select_txt(cols: 4, key: 'total_con_impuesto', keys_selects: $keys_selects,
+            place_holder: 'Total Con Impuesto', disabled: true);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
         $keys_selects = (new init())->key_select_txt(cols: 4, key: 'nombre',
-            keys_selects: $keys_selects, place_holder: 'Nombre',required: false);
+            keys_selects: $keys_selects, place_holder: 'Nombre', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
         $keys_selects = (new init())->key_select_txt(cols: 4, key: 'apellido_paterno',
-            keys_selects: $keys_selects, place_holder: 'Apellido Paterno',required: false);
+            keys_selects: $keys_selects, place_holder: 'Apellido Paterno', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
@@ -4315,13 +4321,13 @@ class controlador_inm_ubicacion extends _ctl_base {
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
-        
+
         $keys_selects = (new init())->key_select_txt(cols: 3, key: 'numero_exterior_domicilio',
             keys_selects: $keys_selects, place_holder: 'Numero Exterior Domicilio', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
-        }     
-        
+        }
+
         $keys_selects = (new init())->key_select_txt(cols: 3, key: 'numero_interior_domicilio',
             keys_selects: $keys_selects, place_holder: 'Numero Interior Domicilio', required: false);
         if (errores::$error) {
@@ -4438,20 +4444,20 @@ class controlador_inm_ubicacion extends _ctl_base {
         $keys_selects['correo_com']->regex = $this->validacion->patterns['correo_html5'];
 
         $keys_selects = (new init())->key_select_txt(cols: 12, key: 'razon_social',
-            keys_selects: $keys_selects, place_holder: 'Razon Social',required: false);
+            keys_selects: $keys_selects, place_holder: 'Razon Social', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 3,key: 'manzana', keys_selects:$keys_selects,
-            place_holder: 'Manzana',required: false);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        $keys_selects = (new init())->key_select_txt(cols: 3, key: 'manzana', keys_selects: $keys_selects,
+            place_holder: 'Manzana', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
-        $keys_selects = (new init())->key_select_txt(cols: 3,key: 'lote', keys_selects:$keys_selects,
+        $keys_selects = (new init())->key_select_txt(cols: 3, key: 'lote', keys_selects: $keys_selects,
             place_holder: 'Lote', required: false);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
         $keys_selects = (new init())->key_select_txt(cols: 3, key: 'nivel',
@@ -4484,10 +4490,10 @@ class controlador_inm_ubicacion extends _ctl_base {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'costo_directo', keys_selects:$keys_selects,
+        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'costo_directo', keys_selects: $keys_selects,
             place_holder: 'Costo Directo', required: false);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
         $keys_selects['value'] = 0.0;
 
@@ -4533,45 +4539,45 @@ class controlador_inm_ubicacion extends _ctl_base {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 1,key: 'numero_exterior', keys_selects:$keys_selects,
-            place_holder: 'Exterior',required: false);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        $keys_selects = (new init())->key_select_txt(cols: 1, key: 'numero_exterior', keys_selects: $keys_selects,
+            place_holder: 'Exterior', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
-        $keys_selects = (new init())->key_select_txt(cols: 1,key: 'numero_interior', keys_selects: $keys_selects,
-            place_holder: 'Interior',required: false);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        $keys_selects = (new init())->key_select_txt(cols: 1, key: 'numero_interior', keys_selects: $keys_selects,
+            place_holder: 'Interior', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
         $keys_selects = (new init())->key_select_txt(cols: 4, key: 'calle', keys_selects: $keys_selects,
-            place_holder: 'Calle',required: false);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+            place_holder: 'Calle', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 4,key: 'numero_credito', keys_selects: $keys_selects,
-            place_holder: 'Numero Credito',required: false);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        $keys_selects = (new init())->key_select_txt(cols: 4, key: 'numero_credito', keys_selects: $keys_selects,
+            place_holder: 'Numero Credito', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 2,key: 'correo_mi_cuenta_infonavit', keys_selects: $keys_selects,
-            place_holder: 'Correo Infonavit',required: false);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        $keys_selects = (new init())->key_select_txt(cols: 2, key: 'correo_mi_cuenta_infonavit', keys_selects: $keys_selects,
+            place_holder: 'Correo Infonavit', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 2,key: 'password_mi_cuenta_infonavit', keys_selects: $keys_selects,
-            place_holder: 'Contraseña Infonavit',required: false);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        $keys_selects = (new init())->key_select_txt(cols: 2, key: 'password_mi_cuenta_infonavit', keys_selects: $keys_selects,
+            place_holder: 'Contraseña Infonavit', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 4,key: 'mensualidad', keys_selects: $keys_selects,
-            place_holder: 'Mensualidad',required: false);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        $keys_selects = (new init())->key_select_txt(cols: 4, key: 'mensualidad', keys_selects: $keys_selects,
+            place_holder: 'Mensualidad', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
         return $keys_selects;
@@ -4583,64 +4589,64 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $base_data = (new _ubicacion())->base_view_accion_data(controler: $this, disableds: array(),
             funcion: __FUNCTION__);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener base_data',data:  $base_data, header: $header,ws:  $ws);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener base_data', data: $base_data, header: $header, ws: $ws);
         }
 
 
         $inm_valuador_id = (new inm_valuador_html(html: $this->html_base))->select_inm_valuador_id(cols: 12,
-            con_registros:  true,id_selected:  -1,link:  $this->link);
+            con_registros: true, id_selected: -1, link: $this->link);
 
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener inm_valuador_id',data:  $inm_valuador_id, header: $header,ws:  $ws);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener inm_valuador_id', data: $inm_valuador_id, header: $header, ws: $ws);
         }
 
         $this->inputs->inm_valuador_id = $inm_valuador_id;
 
-        $monto_resultado = $this->html->input_monto(cols: 12,row_upd:  new stdClass(),value_vacio:  false,
-            name: 'monto_resultado',place_holder: 'Monto Resultado');
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener monto_resultado',data:  $monto_resultado, header: $header,ws:  $ws);
+        $monto_resultado = $this->html->input_monto(cols: 12, row_upd: new stdClass(), value_vacio: false,
+            name: 'monto_resultado', place_holder: 'Monto Resultado');
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener monto_resultado', data: $monto_resultado, header: $header, ws: $ws);
         }
 
         $this->inputs->monto_resultado = $monto_resultado;
 
-        $fecha = $this->html->input_fecha(cols: 12,row_upd:  new stdClass(),value_vacio:  false);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener fecha',data:  $fecha, header: $header,ws:  $ws);
+        $fecha = $this->html->input_fecha(cols: 12, row_upd: new stdClass(), value_vacio: false);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener fecha', data: $fecha, header: $header, ws: $ws);
         }
 
         $this->inputs->fecha = $fecha;
 
-        $costo = $this->html->input_monto(cols: 12,row_upd:  new stdClass(),value_vacio:  false,name: 'costo',
+        $costo = $this->html->input_monto(cols: 12, row_upd: new stdClass(), value_vacio: false, name: 'costo',
             place_holder: 'Costo de opinion');
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener monto_resultado',data:  $monto_resultado, header: $header,ws:  $ws);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener monto_resultado', data: $monto_resultado, header: $header, ws: $ws);
         }
 
         $this->inputs->costo = $costo;
 
 
-        $link_opinion_valor_alta_bd = $this->obj_link->link_alta_bd(link: $this->link,seccion: 'inm_opinion_valor');
-        if(errores::$error){
+        $link_opinion_valor_alta_bd = $this->obj_link->link_alta_bd(link: $this->link, seccion: 'inm_opinion_valor');
+        if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al obtener link_opinion_valor_lata_bd',
-                data:  $link_opinion_valor_alta_bd, header: $header,ws:  $ws);
+                data: $link_opinion_valor_alta_bd, header: $header, ws: $ws);
         }
         $this->link_opinion_valor_alta_bd = $link_opinion_valor_alta_bd;
 
         $inm_opiniones_valor = (new inm_ubicacion(link: $this->link))->opiniones_valor(inm_ubicacion_id: $this->registro_id);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener inm_opiniones_valor', data:  $inm_opiniones_valor,
-                header: $header,ws:  $ws);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener inm_opiniones_valor', data: $inm_opiniones_valor,
+                header: $header, ws: $ws);
         }
         $this->inm_opiniones_valor = $inm_opiniones_valor;
 
         $this->n_opiniones_valor = count($this->inm_opiniones_valor);
 
         $monto_opinion_promedio = (new inm_ubicacion(link: $this->link))->monto_opinion_promedio(inm_ubicacion_id: $this->registro_id);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener promedio', data:  $monto_opinion_promedio,
-                header: $header,ws:  $ws);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener promedio', data: $monto_opinion_promedio,
+                header: $header, ws: $ws);
         }
 
         $this->monto_opinion_promedio = $monto_opinion_promedio;
@@ -4653,7 +4659,7 @@ class controlador_inm_ubicacion extends _ctl_base {
     {
         $this->link->beginTransaction();
 
-        if(isset($_POST['inm_tipo_gasto_id']) && trim($_POST['inm_tipo_gasto_id']) === '1') {
+        if (isset($_POST['inm_tipo_gasto_id']) && trim($_POST['inm_tipo_gasto_id']) === '1') {
             $registro = array();
             $registro['inm_ubicacion_id'] = $this->registro_id;
             $registro['monto'] = $_POST['monto'];
@@ -4661,7 +4667,7 @@ class controlador_inm_ubicacion extends _ctl_base {
             $registro['inm_tipo_cheque_id'] = $_POST['inm_tipo_cheque_id'];
             $registro['numero_cheque'] = '';
 
-            if(isset($_POST['numero_cheque'])){
+            if (isset($_POST['numero_cheque'])) {
                 $registro['numero_cheque'] = $_POST['numero_cheque'];
             }
 
@@ -4673,83 +4679,83 @@ class controlador_inm_ubicacion extends _ctl_base {
             }
         }
 
-/*
-        if(isset($_POST['monto_comision']) && trim($_POST['monto_comision']) !== '') {
-            $filtro_che['inm_ubicacion.id'] = $this->registro_id;
-            $filtro_che['inm_tipo_cheque.id'] = $_POST['inm_tipo_cheque_id'];
-            $r_cheque = (new inm_cheque(link: $this->link))->filtro_and(filtro: $filtro_che);
-            if (errores::$error) {
-                $this->link->rollBack();
-                return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $r_cheque,
-                    header: $header, ws: $ws);
-            }
-
-            if ($r_cheque->n_registros <= 0) {
-                $registro = array();
-                $registro['inm_ubicacion_id'] = $this->registro_id;
-                $registro['monto'] = $_POST['monto_comision'];
-                $registro['nombre_beneficiario'] = $_POST['nombre_beneficiario'];
-                $registro['inm_tipo_cheque_id'] = $_POST['inm_tipo_cheque_id'];
-                $r_inm_cheque = (new inm_cheque(link: $this->link))->alta_registro(
-                    registro: $registro);
-                if (errores::$error) {
-                    $this->link->rollBack();
-                    return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_cheque,
-                        header: $header, ws: $ws);
+        /*
+                if(isset($_POST['monto_comision']) && trim($_POST['monto_comision']) !== '') {
+                    $filtro_che['inm_ubicacion.id'] = $this->registro_id;
+                    $filtro_che['inm_tipo_cheque.id'] = $_POST['inm_tipo_cheque_id'];
+                    $r_cheque = (new inm_cheque(link: $this->link))->filtro_and(filtro: $filtro_che);
+                    if (errores::$error) {
+                        $this->link->rollBack();
+                        return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $r_cheque,
+                            header: $header, ws: $ws);
+                    }
+        
+                    if ($r_cheque->n_registros <= 0) {
+                        $registro = array();
+                        $registro['inm_ubicacion_id'] = $this->registro_id;
+                        $registro['monto'] = $_POST['monto_comision'];
+                        $registro['nombre_beneficiario'] = $_POST['nombre_beneficiario'];
+                        $registro['inm_tipo_cheque_id'] = $_POST['inm_tipo_cheque_id'];
+                        $r_inm_cheque = (new inm_cheque(link: $this->link))->alta_registro(
+                            registro: $registro);
+                        if (errores::$error) {
+                            $this->link->rollBack();
+                            return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_cheque,
+                                header: $header, ws: $ws);
+                        }
+                    } else {
+                        $registro = array();
+                        $registro['monto'] = $_POST['monto_comision'];
+                        $registro['nombre_beneficiario'] = $_POST['nombre_beneficiario'];
+                        $registro['inm_tipo_cheque_id'] = $_POST['inm_tipo_cheque_id'];
+                        $r_inm_cheque = (new inm_cheque(link: $this->link))->modifica_bd(
+                            registro: $registro, id: $r_cheque->registros[0]['inm_cheque_id']);
+                        if (errores::$error) {
+                            $this->link->rollBack();
+                            return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_cheque,
+                                header: $header, ws: $ws);
+                        }
+                    }
                 }
-            } else {
-                $registro = array();
-                $registro['monto'] = $_POST['monto_comision'];
-                $registro['nombre_beneficiario'] = $_POST['nombre_beneficiario'];
-                $registro['inm_tipo_cheque_id'] = $_POST['inm_tipo_cheque_id'];
-                $r_inm_cheque = (new inm_cheque(link: $this->link))->modifica_bd(
-                    registro: $registro, id: $r_cheque->registros[0]['inm_cheque_id']);
-                if (errores::$error) {
-                    $this->link->rollBack();
-                    return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_cheque,
-                        header: $header, ws: $ws);
+                if(isset($_POST['monto_cheque_secundario']) && trim($_POST['monto_cheque_secundario']) !== '') {
+                    $filtro_che['inm_ubicacion.id'] = $this->registro_id;
+                    $filtro_che['inm_tipo_cheque.id'] = $_POST['inm_tipo_cheque_id'];
+                    $r_cheque = (new inm_cheque(link: $this->link))->filtro_and(filtro: $filtro_che);
+                    if (errores::$error) {
+                        $this->link->rollBack();
+                        return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $r_cheque,
+                            header: $header, ws: $ws);
+                    }
+        
+                    if ($r_cheque->n_registros <= 0) {
+                        $registro = array();
+                        $registro['inm_ubicacion_id'] = $this->registro_id;
+                        $registro['monto'] = $_POST['monto_cheque_secundario'];
+                        $registro['nombre_beneficiario'] = $_POST['nombre_beneficiario'];
+                        $registro['inm_tipo_cheque_id'] = $_POST['inm_tipo_cheque_id'];
+                        $r_inm_cheque = (new inm_cheque(link: $this->link))->alta_registro(
+                            registro: $registro);
+                        if (errores::$error) {
+                            $this->link->rollBack();
+                            return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_cheque,
+                                header: $header, ws: $ws);
+                        }
+                    } else {
+                        $registro = array();
+                        $registro['monto'] = $_POST['monto_cheque_secundario'];
+                        $registro['nombre_beneficiario'] = $_POST['nombre_beneficiario'];
+                        $registro['inm_tipo_cheque_id'] = $_POST['inm_tipo_cheque_id'];
+                        $r_inm_cheque = (new inm_cheque(link: $this->link))->modifica_bd(
+                            registro: $registro, id: $r_cheque->registros[0]['inm_cheque_id']);
+                        if (errores::$error) {
+                            $this->link->rollBack();
+                            return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_cheque,
+                                header: $header, ws: $ws);
+                        }
+                    }
                 }
-            }
-        }
-        if(isset($_POST['monto_cheque_secundario']) && trim($_POST['monto_cheque_secundario']) !== '') {
-            $filtro_che['inm_ubicacion.id'] = $this->registro_id;
-            $filtro_che['inm_tipo_cheque.id'] = $_POST['inm_tipo_cheque_id'];
-            $r_cheque = (new inm_cheque(link: $this->link))->filtro_and(filtro: $filtro_che);
-            if (errores::$error) {
-                $this->link->rollBack();
-                return $this->retorno_error(mensaje: 'Error al obtener datos de bitacora', data: $r_cheque,
-                    header: $header, ws: $ws);
-            }
-
-            if ($r_cheque->n_registros <= 0) {
-                $registro = array();
-                $registro['inm_ubicacion_id'] = $this->registro_id;
-                $registro['monto'] = $_POST['monto_cheque_secundario'];
-                $registro['nombre_beneficiario'] = $_POST['nombre_beneficiario'];
-                $registro['inm_tipo_cheque_id'] = $_POST['inm_tipo_cheque_id'];
-                $r_inm_cheque = (new inm_cheque(link: $this->link))->alta_registro(
-                    registro: $registro);
-                if (errores::$error) {
-                    $this->link->rollBack();
-                    return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_cheque,
-                        header: $header, ws: $ws);
-                }
-            } else {
-                $registro = array();
-                $registro['monto'] = $_POST['monto_cheque_secundario'];
-                $registro['nombre_beneficiario'] = $_POST['nombre_beneficiario'];
-                $registro['inm_tipo_cheque_id'] = $_POST['inm_tipo_cheque_id'];
-                $r_inm_cheque = (new inm_cheque(link: $this->link))->modifica_bd(
-                    registro: $registro, id: $r_cheque->registros[0]['inm_cheque_id']);
-                if (errores::$error) {
-                    $this->link->rollBack();
-                    return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_cheque,
-                        header: $header, ws: $ws);
-                }
-            }
-        }
-*/
-        if(isset($_POST['inm_tipo_gasto_id']) && trim($_POST['inm_tipo_gasto_id']) === '2') {
+        */
+        if (isset($_POST['inm_tipo_gasto_id']) && trim($_POST['inm_tipo_gasto_id']) === '2') {
             $registro = array();
             $registro['inm_ubicacion_id'] = $this->registro_id;
             $registro['monto'] = $_POST['monto_transferencia'];
@@ -4757,7 +4763,7 @@ class controlador_inm_ubicacion extends _ctl_base {
 
             $registro['numero_transferencia'] = '';
 
-            if(isset($_POST['transferencia'])){
+            if (isset($_POST['transferencia'])) {
                 $registro['numero_transferencia'] = $_POST['transferencia'];
             }
             $r_inm_transferencia = (new inm_rel_transferencia_ubicacion(link: $this->link))->alta_registro(
@@ -4769,7 +4775,7 @@ class controlador_inm_ubicacion extends _ctl_base {
             }
         }
 
-        if(isset($_POST['inm_tipo_gasto_id']) && trim($_POST['inm_tipo_gasto_id']) === '3') {
+        if (isset($_POST['inm_tipo_gasto_id']) && trim($_POST['inm_tipo_gasto_id']) === '3') {
             $registro = array();
             $registro['inm_ubicacion_id'] = $this->registro_id;
             $registro['monto'] = $_POST['efectivo'];
@@ -4783,7 +4789,7 @@ class controlador_inm_ubicacion extends _ctl_base {
             }
         }
 
-        if(isset($_POST['avanza_etapa']) && trim($_POST['avanza_etapa']) !== '') {
+        if (isset($_POST['avanza_etapa']) && trim($_POST['avanza_etapa']) !== '') {
             $filtro_exi['inm_ubicacion.id'] = $this->registro_id;
             $filtro_exi['inm_status_ubicacion.id'] = 3;
             $existe = (new inm_bitacora_status_ubicacion(link: $this->link))->existe(filtro: $filtro_exi);
@@ -4818,7 +4824,7 @@ class controlador_inm_ubicacion extends _ctl_base {
             $this->retorno_error(mensaje: 'Error al generar link', data: $link_proceso_ubicacion, header: $header, ws: $ws);
         }
 
-        if($header) {
+        if ($header) {
             header('Location:' . $link_proceso_ubicacion);
             exit;
         }
@@ -4829,89 +4835,89 @@ class controlador_inm_ubicacion extends _ctl_base {
     public function proceso_ubicacion(bool $header, bool $ws = false): array|stdClass
     {
         $r_modifica = $this->init_modifica(); // TODO: Change the autogenerated stub
-        if(errores::$error){
+        if (errores::$error) {
             return $this->retorno_error(
-                mensaje: 'Error al generar salida de template',data:  $r_modifica,header: $header,ws: $ws);
+                mensaje: 'Error al generar salida de template', data: $r_modifica, header: $header, ws: $ws);
         }
 
         $modifica = $this->modifica($header);
-        if(errores::$error){
+        if (errores::$error) {
             return $this->retorno_error(
-                mensaje: 'Error al generar salida de template',data:  $modifica,header: $header,ws: $ws);
+                mensaje: 'Error al generar salida de template', data: $modifica, header: $header, ws: $ws);
         }
 
         $documentos = $this->documentos($header);
-        if(errores::$error){
+        if (errores::$error) {
             return $this->retorno_error(
-                mensaje: 'Error al generar salida de template',data:  $documentos,header: $header,ws: $ws);
+                mensaje: 'Error al generar salida de template', data: $documentos, header: $header, ws: $ws);
         }
 
         $fotografias = $this->fotografias($header);
-        if(errores::$error){
+        if (errores::$error) {
             return $this->retorno_error(
-                mensaje: 'Error al generar salida de template',data:  $fotografias,header: $header,ws: $ws);
+                mensaje: 'Error al generar salida de template', data: $fotografias, header: $header, ws: $ws);
         }
 
         $reparacion = $this->reparacion($header);
-        if(errores::$error){
+        if (errores::$error) {
             return $this->retorno_error(
-                mensaje: 'Error al generar salida de template',data:  $reparacion,header: $header,ws: $ws);
+                mensaje: 'Error al generar salida de template', data: $reparacion, header: $header, ws: $ws);
         }
 
         $llaves = $this->llaves($header);
-        if(errores::$error){
+        if (errores::$error) {
             return $this->retorno_error(
-                mensaje: 'Error al generar salida de template',data:  $llaves,header: $header,ws: $ws);
+                mensaje: 'Error al generar salida de template', data: $llaves, header: $header, ws: $ws);
         }
 
         $etapa = $this->etapa($header);
-        if(errores::$error){
+        if (errores::$error) {
             return $this->retorno_error(
-                mensaje: 'Error al generar salida de template',data:  $etapa,header: $header,ws: $ws);
+                mensaje: 'Error al generar salida de template', data: $etapa, header: $header, ws: $ws);
         }
 
         $asigna_validacion = $this->asigna_validacion($header);
-        if(errores::$error){
+        if (errores::$error) {
             return $this->retorno_error(
-                mensaje: 'Error al generar salida de template',data:  $asigna_validacion,header: $header,ws: $ws);
+                mensaje: 'Error al generar salida de template', data: $asigna_validacion, header: $header, ws: $ws);
         }
 
         $asigna_solicitud_recurso = $this->asigna_solicitud_de_recurso($header);
-        if(errores::$error){
+        if (errores::$error) {
             return $this->retorno_error(
-                mensaje: 'Error al generar salida de template',data:  $asigna_solicitud_recurso,header: $header,ws: $ws);
+                mensaje: 'Error al generar salida de template', data: $asigna_solicitud_recurso, header: $header, ws: $ws);
         }
 
         $asigna_emision_recurso = $this->asigna_emision_de_recurso($header);
-        if(errores::$error){
+        if (errores::$error) {
             return $this->retorno_error(
-                mensaje: 'Error al generar salida de template',data:  $asigna_emision_recurso,header: $header,ws: $ws);
+                mensaje: 'Error al generar salida de template', data: $asigna_emision_recurso, header: $header, ws: $ws);
         }
 
         $asigna_por_firmar = $this->asigna_por_firmar($header);
-        if(errores::$error){
+        if (errores::$error) {
             return $this->retorno_error(
-                mensaje: 'Error al generar salida de template',data:  $asigna_por_firmar,header: $header,ws: $ws);
+                mensaje: 'Error al generar salida de template', data: $asigna_por_firmar, header: $header, ws: $ws);
         }
 
         $asigna_firmado_por_aprobar = $this->asigna_firmado_por_aprobar($header);
-        if(errores::$error){
+        if (errores::$error) {
             return $this->retorno_error(
-                mensaje: 'Error al generar salida de template',data:  $asigna_firmado_por_aprobar,header: $header,ws: $ws);
+                mensaje: 'Error al generar salida de template', data: $asigna_firmado_por_aprobar, header: $header, ws: $ws);
         }
 
         $asigna_firmado = $this->asigna_firmado($header);
-        if(errores::$error){
+        if (errores::$error) {
             return $this->retorno_error(
-                mensaje: 'Error al generar salida de template',data:  $asigna_firmado,header: $header,ws: $ws);
+                mensaje: 'Error al generar salida de template', data: $asigna_firmado, header: $header, ws: $ws);
         }
 
-        $base = $this->base_upd(keys_selects: $this->keys_selects, params: array(),params_ajustados: array());
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
+        $base = $this->base_upd(keys_selects: $this->keys_selects, params: array(), params_ajustados: array());
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al integrar base', data: $base, header: $header, ws: $ws);
         }
 
-        $columns_ds = array('inm_ubicacion_id','inm_ubicacion_ubicacion');
+        $columns_ds = array('inm_ubicacion_id', 'inm_ubicacion_ubicacion');
         $filtro['inm_ubicacion.id'] = $this->registro_id;
         $inm_prospecto_id = (new inm_ubicacion_html(html: $this->html_base))->select_inm_ubicacion_id(
             cols: 6, con_registros: true, id_selected: $this->registro_id, link: $this->link, columns_ds: $columns_ds,
@@ -4919,7 +4925,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al generar input', data: $inm_prospecto_id, header: $header, ws: $ws);
         }
-        $this->inputs->inm_ubicacion_seleccionado_id  = $inm_prospecto_id;
+        $this->inputs->inm_ubicacion_seleccionado_id = $inm_prospecto_id;
 
         $columns_ds = array('inm_status_ubicacion_descripcion');
         $filtro_status['inm_status_ubicacion.id'] = $this->registro['inm_status_ubicacion_id'];
@@ -4930,7 +4936,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al generar input', data: $inm_status_ubicacion_id, header: $header, ws: $ws);
         }
-        $this->inputs->actual_inm_status_ubicacion_id  = $inm_status_ubicacion_id;
+        $this->inputs->actual_inm_status_ubicacion_id = $inm_status_ubicacion_id;
 
         $btn_action_next = $this->html->hidden('btn_action_next', value: 'proceso_ubicacion');
         if (errores::$error) {
@@ -4970,7 +4976,7 @@ class controlador_inm_ubicacion extends _ctl_base {
                 header: $header, ws: $ws);
         }
 
-        if(!$existe) {
+        if (!$existe) {
             $registro = array();
             $registro['inm_ubicacion_id'] = $this->registro_id;
             $registro['inm_status_ubicacion_id'] = 5;
@@ -4994,7 +5000,7 @@ class controlador_inm_ubicacion extends _ctl_base {
             $this->retorno_error(mensaje: 'Error al generar link', data: $link_proceso_ubicacion, header: $header, ws: $ws);
         }
 
-        if($header) {
+        if ($header) {
             header('Location:' . $link_proceso_ubicacion);
             exit;
         }
@@ -5012,52 +5018,52 @@ class controlador_inm_ubicacion extends _ctl_base {
         $table = 'inm_ubicacion';
 
         $filtro_rango = array();
-        if(!empty($_POST['fecha_inicial'])){
-            $filtro_rango[$table.'.fecha_alta']['valor1'] = $_POST['fecha_inicial'];
+        if (!empty($_POST['fecha_inicial'])) {
+            $filtro_rango[$table . '.fecha_alta']['valor1'] = $_POST['fecha_inicial'];
         }
-        if(!empty($_POST['fecha_final'])) {
+        if (!empty($_POST['fecha_final'])) {
             $filtro_rango[$table . '.fecha_alta']['valor2'] = $_POST['fecha_final'];
         }
 
         $filtro_especial = array();
         $filtros = array();
 
-        if(!empty($_POST['id'])){
-            $filtros[$table.'.id'] = $_POST['id'];
+        if (!empty($_POST['id'])) {
+            $filtros[$table . '.id'] = $_POST['id'];
         }
 
-        if(!empty($_POST['nombre_ubicacion'])){
-            $filtro_especial[1][$table.'.inm_ubicacion_ubicacion']['operador'] = 'LIKE';
-            $filtro_especial[1][$table.'.inm_ubicacion_ubicacion']['valor'] = '%'.$_POST['nombre_ubicacion'].'%';
-            $filtro_especial[1][$table.'.inm_ubicacion_ubicacion']['comparacion'] = 'AND';
+        if (!empty($_POST['nombre_ubicacion'])) {
+            $filtro_especial[1][$table . '.inm_ubicacion_ubicacion']['operador'] = 'LIKE';
+            $filtro_especial[1][$table . '.inm_ubicacion_ubicacion']['valor'] = '%' . $_POST['nombre_ubicacion'] . '%';
+            $filtro_especial[1][$table . '.inm_ubicacion_ubicacion']['comparacion'] = 'AND';
 
             //$filtro_text[$table.'.razon_social'] = $_POST['nombre_ubicacion'];
         }
 
-        if(!empty($_POST['predial'])){
-            $filtro_especial[2][$table.'.cuenta_predial']['operador'] = 'LIKE';
-            $filtro_especial[2][$table.'.cuenta_predial']['valor'] = '%'.$_POST['predial'].'%';
-            $filtro_especial[2][$table.'.cuenta_predial']['comparacion'] = 'AND';
+        if (!empty($_POST['predial'])) {
+            $filtro_especial[2][$table . '.cuenta_predial']['operador'] = 'LIKE';
+            $filtro_especial[2][$table . '.cuenta_predial']['valor'] = '%' . $_POST['predial'] . '%';
+            $filtro_especial[2][$table . '.cuenta_predial']['comparacion'] = 'AND';
 
             //$filtro_text[$table.'.cuenta_predial'] = $_POST['cuenta_predial'];
         }
 
-        if(!empty($_POST['agente'])){
+        if (!empty($_POST['agente'])) {
             $filtro_especial[3]['com_agente.descripcion']['operador'] = 'LIKE';
-            $filtro_especial[3]['com_agente.descripcion']['valor'] = '%'.$_POST['agente'].'%';
+            $filtro_especial[3]['com_agente.descripcion']['valor'] = '%' . $_POST['agente'] . '%';
             $filtro_especial[3]['com_agente.descripcion']['comparacion'] = 'AND';
 
             //$filtro_text['com_agente.descripcion'] = $_POST['agente'];
         }
 
         $in = array();
-        if(!empty($_POST['inm_status_ubicacion'])){
+        if (!empty($_POST['inm_status_ubicacion'])) {
             $array = explode(",", $_POST['inm_status_ubicacion']);
             $in['llave'] = 'inm_status_ubicacion.descripcion';
             $in['values'] = $array;
         }
 
-        $result = (new inm_ubicacion(link: $this->link))->filtro_and(filtro: $filtros,filtro_especial: $filtro_especial,
+        $result = (new inm_ubicacion(link: $this->link))->filtro_and(filtro: $filtros, filtro_especial: $filtro_especial,
             filtro_rango: $filtro_rango, in: $in);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al obtener ubicacions', data: $result);
@@ -5090,7 +5096,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al generar input', data: $inm_prospecto_id, header: $header, ws: $ws);
         }
-        $this->inputs->inm_ubicacion_id  = $inm_prospecto_id;
+        $this->inputs->inm_ubicacion_id = $inm_prospecto_id;
 
         $doc_ids = array_map(function ($registro) {
             return $registro['doc_tipo_documento_id'];
@@ -5106,8 +5112,8 @@ class controlador_inm_ubicacion extends _ctl_base {
             }
 
             $r_doc_tipo_documento = (new doc_tipo_documento(link: $this->link))->filtro_and(in: $in);
-            if(errores::$error){
-                return $this->retorno_error(mensaje: 'Error al Obtener tipos de documento',data:  $r_doc_tipo_documento,
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al Obtener tipos de documento', data: $r_doc_tipo_documento,
                     header: $header, ws: $ws);
             }
             $doc_tipos_documentos = $r_doc_tipo_documento->registros;
@@ -5137,7 +5143,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         $this->inputs->documento = $documento;
 
         $params = array();
-        if(isset($_GET['pestana_general_actual'])) {
+        if (isset($_GET['pestana_general_actual'])) {
             $params = array('pestana_general_actual' => 'pestanageneral1',
                 'pestana_actual' => $_GET['pestana_actual']);
         }
@@ -5151,7 +5157,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         $this->link_inm_doc_ubicacion_alta_bd = $link_alta_doc;
 
         $retorno = 'documentos';
-        if(isset($_GET['pestana_general_actual'])){
+        if (isset($_GET['pestana_general_actual'])) {
             $retorno = 'proceso_ubicacion';
         }
 
@@ -5209,7 +5215,7 @@ class controlador_inm_ubicacion extends _ctl_base {
                 header: $header, ws: $ws);
         }
 
-        if(!$existe) {
+        if (!$existe) {
             $registro = array();
             $registro['inm_ubicacion_id'] = $this->registro_id;
             $registro['inm_status_ubicacion_id'] = 2;
@@ -5232,8 +5238,8 @@ class controlador_inm_ubicacion extends _ctl_base {
                 header: $header, ws: $ws);
         }
 
-        if(!$existe) {
-            if(isset($_FILES['rppc']) && trim($_FILES['rppc']['name']) !== '') {
+        if (!$existe) {
+            if (isset($_FILES['rppc']) && trim($_FILES['rppc']['name']) !== '') {
                 $_FILES['documento'] = $_FILES['rppc'];
                 $registro = array();
                 $registro['inm_ubicacion_id'] = $this->registro_id;
@@ -5257,7 +5263,7 @@ class controlador_inm_ubicacion extends _ctl_base {
             $this->retorno_error(mensaje: 'Error al generar link', data: $link_proceso_ubicacion, header: $header, ws: $ws);
         }
 
-        if($header) {
+        if ($header) {
             header('Location:' . $link_proceso_ubicacion);
             exit;
         }
@@ -5265,22 +5271,8 @@ class controlador_inm_ubicacion extends _ctl_base {
         return $this->registro_id;
     }
 
-    /**
-     * Genera un documento Word con los campos iniciales de inm_ubicacion
-     * (inm_ubicacion_razon_social e inm_ubicacion_rfc) usando una plantilla .docx.
-     *
-     * Acceso vía: ?seccion=inm_ubicacion&accion=generar_word_campos_iniciales&registro_id=X
-     *
-     * La plantilla debe estar en templates/inm_ubicacion_campos_iniciales.docx
-     * con los marcadores ${inm_ubicacion_razon_social} y ${inm_ubicacion_rfc}.
-     *
-     * @param bool $header Si true redirige en web
-     * @param bool $ws     Si true devuelve JSON
-     * @return array|string
-     */
-    public function generar_word_campos_iniciales(bool $header, bool $ws = false): array|string
+    public function genera_contrato_individual(bool $header, bool $ws = false): array|string
     {
-        // 1. Validar que se haya enviado un registro_id
         if((int)$this->registro_id <= 0) {
             return $this->retorno_error(
                 mensaje: 'Error registro_id es requerido para generar el documento Word',
@@ -5302,7 +5294,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         }
 
         // 3. Verificar que la plantilla exista
-        $file_plantilla = 'templates/inm_ubicacion_campos_iniciales.docx';
+        $file_plantilla = 'templates/CONTRATOS ARZEK/INDIVIDUAL/CONTRATO ARZEK INDIVIDUAL.docx';
         $ruta_plantilla = trim($this->path_base . $file_plantilla);
         if(!file_exists($ruta_plantilla)) {
             return $this->retorno_error(
@@ -5325,14 +5317,133 @@ class controlador_inm_ubicacion extends _ctl_base {
             );
         }
 
+        $meses = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre",
+            "noviembre", "diciembre"];
+        $mesActual = $meses[date('n') - 1];
+        $diaActual = date('d');
+        $anioActual = date('Y');
+
+        $fecha = "$diaActual de $mesActual de $anioActual";
+
         $razon_social = trim((string)($registro['inm_ubicacion_razon_social'] ?? ''));
-        $rfc          = trim((string)($registro['inm_ubicacion_rfc'] ?? ''));
+        $ubicacion_completa = trim(ucwords(strtolower(($registro['inm_ubicacion_ubicacion_completa'] ?? ''))));
+        $celular = trim((string)($registro['inm_ubicacion_cel_com'] ?? ''));
+        $correo = trim((string)($registro['inm_ubicacion_correo_com'] ?? ''));
 
         $template->setValue('inm_ubicacion_razon_social', $razon_social);
-        $template->setValue('inm_ubicacion_rfc', $rfc);
+        $template->setValue('inm_ubicacion_ubicacion_completa', $ubicacion_completa);
+        $template->setValue('inm_ubicacion_cel_com', $celular);
+        $template->setValue('inm_ubicacion_correo_com', $correo);
+        $template->setValue('fecha_texto', $fecha);
 
         // 5. Generar nombre de archivo de salida temporal
-        $nombre_archivo = 'campos_iniciales_ubicacion_' . $this->registro_id . '_' . date('Ymd_His') . '.docx';
+        $nombre_archivo = 'CONTRATO ARZEK '. $razon_social .'_' . date('Ymd_His') . '.docx';
+        $ruta_salida    = trim($this->path_base . 'archivos/temporales/' . $nombre_archivo);
+
+        try {
+            $template->saveAs($ruta_salida);
+        } catch (\Throwable $e) {
+            return $this->retorno_error(
+                mensaje: 'Error al guardar el documento Word generado',
+                data: $e->getMessage(),
+                header: $header,
+                ws: $ws
+            );
+        }
+
+        // 6. Enviar el archivo al navegador para descarga
+        if(!file_exists($ruta_salida)) {
+            return $this->retorno_error(
+                mensaje: 'Error el archivo Word generado no existe en: ' . $ruta_salida,
+                data: $ruta_salida,
+                header: $header,
+                ws: $ws
+            );
+        }
+
+        header('Content-Description: File Transfer');
+        header('Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+        header('Content-Disposition: attachment; filename="' . $nombre_archivo . '"');
+        header('Content-Transfer-Encoding: binary');
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length: ' . filesize($ruta_salida));
+        ob_clean();
+        flush();
+        readfile($ruta_salida);
+        @unlink($ruta_salida);
+        exit;
+    }
+
+
+    public function genera_anexo_a(bool $header, bool $ws = false): array|string
+    {
+        if((int)$this->registro_id <= 0) {
+            return $this->retorno_error(
+                mensaje: 'Error registro_id es requerido para generar el documento Word',
+                data: $this->registro_id,
+                header: $header,
+                ws: $ws
+            );
+        }
+
+        // 2. Obtener el registro de inm_ubicacion
+        $registro = (new inm_ubicacion(link: $this->link))->registro(registro_id: $this->registro_id);
+        if(errores::$error) {
+            return $this->retorno_error(
+                mensaje: 'Error al obtener el registro de inm_ubicacion',
+                data: $registro,
+                header: $header,
+                ws: $ws
+            );
+        }
+
+        // 3. Verificar que la plantilla exista
+        $file_plantilla = 'templates/CONTRATOS ARZEK/INDIVIDUAL/CONTRATO ARZEK INDIVIDUAL.docx';
+        $ruta_plantilla = trim($this->path_base . $file_plantilla);
+        if(!file_exists($ruta_plantilla)) {
+            return $this->retorno_error(
+                mensaje: 'Error no existe la plantilla Word en: ' . $ruta_plantilla,
+                data: $ruta_plantilla,
+                header: $header,
+                ws: $ws
+            );
+        }
+
+        // 4. Sustituir marcadores en la plantilla
+        try {
+            $template = new TemplateProcessor($ruta_plantilla);
+        } catch (\Throwable $e) {
+            return $this->retorno_error(
+                mensaje: 'Error al cargar la plantilla Word',
+                data: $e->getMessage(),
+                header: $header,
+                ws: $ws
+            );
+        }
+
+        $meses = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre",
+            "noviembre", "diciembre"];
+        $mesActual = $meses[date('n') - 1];
+        $diaActual = date('d');
+        $anioActual = date('Y');
+
+        $fecha = "$diaActual de $mesActual de $anioActual";
+
+        $razon_social = trim((string)($registro['inm_ubicacion_razon_social'] ?? ''));
+        $ubicacion_completa = trim(ucwords(strtolower(($registro['inm_ubicacion_ubicacion_completa'] ?? ''))));
+        $celular = trim((string)($registro['inm_ubicacion_cel_com'] ?? ''));
+        $correo = trim((string)($registro['inm_ubicacion_correo_com'] ?? ''));
+
+        $template->setValue('inm_ubicacion_razon_social', $razon_social);
+        $template->setValue('inm_ubicacion_ubicacion_completa', $ubicacion_completa);
+        $template->setValue('inm_ubicacion_cel_com', $celular);
+        $template->setValue('inm_ubicacion_correo_com', $correo);
+        $template->setValue('fecha_texto', $fecha);
+
+        // 5. Generar nombre de archivo de salida temporal
+        $nombre_archivo = 'CONTRATO ARZEK '. $razon_social .'_' . date('Ymd_His') . '.docx';
         $ruta_salida    = trim($this->path_base . 'archivos/temporales/' . $nombre_archivo);
 
         try {

@@ -33,9 +33,15 @@ class inm_ubicacion extends _inm_ubicaciones {
 
         $columnas_extra= array();
         $sql = "(CONCAT_WS(' ', inm_ubicacion.calle, inm_ubicacion.numero_exterior, 
-        inm_ubicacion.numero_interior, dp_colonia.descripcion, dp_municipio.descripcion))";
+        inm_ubicacion.numero_interior, dp_colonia.descripcion, dp_cp.descripcion, dp_municipio.descripcion))";
 
         $columnas_extra['inm_ubicacion_ubicacion'] = $sql;
+
+        $sql = "(CONCAT_WS(' ', inm_ubicacion.calle, inm_ubicacion.numero_exterior, 
+        inm_ubicacion.numero_interior, dp_colonia.descripcion, dp_cp.descripcion, dp_municipio.descripcion, 
+        dp_estado.descripcion, dp_pais.descripcion))";
+
+        $columnas_extra['inm_ubicacion_ubicacion_completa'] = $sql;
 
         $renombres= array();
 
@@ -1249,4 +1255,21 @@ class inm_ubicacion extends _inm_ubicaciones {
     }
 
 
+    /*public function anexo_a(int $inm_ubicacion_id, PDO $link): array|stdClass{
+    {
+        if($inm_ubicacion_id <= 0){
+            return $this->error->error(mensaje: 'Error inm_ubicacion_id debe ser mayor a 0',data:  $inm_ubicacion_id);
+        }
+
+        $r_inm_ubicacion = $this->registro(registro_id: $inm_ubicacion_id, retorno_obj: true);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener ubicacion',data:  $r_inm_ubicacion);
+        }
+
+        $data = new stdClass();
+        $data->r_inm_ubicacion = $r_inm_ubicacion;
+
+        return $data;
+
+    }*/
 }
