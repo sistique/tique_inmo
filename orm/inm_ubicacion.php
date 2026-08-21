@@ -44,6 +44,33 @@ class inm_ubicacion extends _inm_ubicaciones {
 
         $columnas_extra['inm_ubicacion_ubicacion_completa'] = $sql;
 
+        $sub_querys = array();
+        $sql = "(
+            SELECT CASE
+                WHEN inm_ubicacion.dp_colonia_postal_domicilio_id IS NOT NULL THEN
+                    CONCAT_WS(' ',
+                        inm_ubicacion.calle_domicilio,
+                        inm_ubicacion.numero_exterior_domicilio,
+                        inm_ubicacion.numero_interior_domicilio,
+                        c.descripcion,
+                        cp.descripcion,
+                        m.descripcion,
+                        e.descripcion,
+                        p.descripcion
+                    )
+                ELSE NULL
+            END
+            FROM dp_colonia_postal dcp
+            INNER JOIN dp_cp cp ON cp.id = dcp.dp_cp_id
+            INNER JOIN dp_colonia c ON c.id = dcp.dp_colonia_id
+            INNER JOIN dp_municipio m ON m.id = cp.dp_municipio_id
+            INNER JOIN dp_estado e ON e.id = m.dp_estado_id
+            INNER JOIN dp_pais p ON p.id = e.dp_pais_id
+            WHERE dcp.id = inm_ubicacion.dp_colonia_postal_domicilio_id
+        )";
+
+        $columnas_extra['inm_ubicacion_domicilio_completo'] = $sql;
+
         $renombres= array();
 
         $atributos_criticos = array('manzana','lote','etapa','inm_tipo_ubicacion_id','n_opiniones_valor',
@@ -51,7 +78,7 @@ class inm_ubicacion extends _inm_ubicaciones {
 
         parent::__construct(link: $link, tabla: $tabla, campos_obligatorios: $campos_obligatorios,
             columnas: $columnas, columnas_extra: $columnas_extra, renombres: $renombres,
-            atributos_criticos: $atributos_criticos);
+            atributos_criticos: $atributos_criticos, sub_querys: $sub_querys);
 
         $this->NAMESPACE = __NAMESPACE__;
         $this->etiqueta = 'Ubicaciones';
