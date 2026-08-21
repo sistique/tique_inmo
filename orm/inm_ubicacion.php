@@ -11,6 +11,7 @@ use gamboamartin\direccion_postal\models\dp_municipio;
 use gamboamartin\errores\errores;
 use gamboamartin\proceso\models\pr_proceso;
 use PDO;
+use PhpOffice\PhpWord\TemplateProcessor;
 use stdClass;
 
 
@@ -1272,4 +1273,65 @@ class inm_ubicacion extends _inm_ubicaciones {
         return $data;
 
     }*/
+
+
+    public function descarga_contrato( int $inm_ubicacion_id, array $keys, string $nombre_archivo, array $reg_ubicacion,
+                                       string $ruta_plantilla, string $ruta_salida): array|stdClass{
+
+        if((int)$inm_ubicacion_id <= 0) {
+            return $this->error->error(mensaje: 'Error registro_id es requerido para generar el documento Word',
+                data: $inm_ubicacion_id);
+        }
+
+        $registro = (new inm_ubicacion(link: $this->link))->registro(registro_id: $inm_ubicacion_id);
+        if(errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener el registro de inm_ubicacion', data: $registro);
+        }
+
+        if(!file_exists($ruta_plantilla)) {
+            return $this->error->error(mensaje: 'Error no existe la plantilla Word en: ' . $ruta_plantilla,
+                data: $ruta_plantilla);
+        }
+
+        try {
+            $template = new TemplateProcessor($ruta_plantilla);
+        } catch (\Throwable $e) {
+            return $this->error->error(mensaje: 'Error al cargar la plantilla Word', data: $e->getMessage());
+        }
+
+        foreach ($keys AS $key){
+            $value = trim((string)$reg_ubicacion[$key] ?? '');
+
+            if($key === 'inm_ubicacion_ubicacion_completa'){
+                $value = ucwords(strtolower($value));
+            }
+
+            $template->setValue($key, $value);
+        }
+
+        try {
+            $template->saveAs($ruta_salida);
+        } catch (\Throwable $e) {
+            return $this->error->error(mensaje: 'Error al guardar el documento Word generado', data: $e->getMessage());
+        }
+
+        if(!file_exists($ruta_salida)) {
+            return $this->error->error(
+                mensaje: 'Error el archivo Word generado no existe en: ' . $ruta_salida, data: $ruta_salida);
+        }
+
+        header('Content-Description: File Transfer');
+        header('Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+        header('Content-Disposition: attachment; filename="' . $nombre_archivo . '"');
+        header('Content-Transfer-Encoding: binary');
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length: ' . filesize($ruta_salida));
+        ob_clean();
+        flush();
+        readfile($ruta_salida);
+        @unlink($ruta_salida);
+        exit;
+    }
 }

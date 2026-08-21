@@ -49,6 +49,7 @@ use gamboamartin\inmuebles\models\inm_llave_control;
 use gamboamartin\inmuebles\html\inm_responsable_html;
 use gamboamartin\gastos\models\gt_proveedor;
 use gamboamartin\plugins\exportador;
+use NumberFormatter;
 use PhpOffice\PhpWord\TemplateProcessor;
 use gamboamartin\system\_ctl_base;
 use gamboamartin\system\links_menu;
@@ -5282,18 +5283,80 @@ class controlador_inm_ubicacion extends _ctl_base
             );
         }
 
-        // 2. Obtener el registro de inm_ubicacion
         $registro = (new inm_ubicacion(link: $this->link))->registro(registro_id: $this->registro_id);
         if(errores::$error) {
-            return $this->retorno_error(
-                mensaje: 'Error al obtener el registro de inm_ubicacion',
-                data: $registro,
-                header: $header,
-                ws: $ws
-            );
+            return $this->retorno_error(mensaje: 'Error al obtener el registro de inm_ubicacion', data: $registro,
+                header: $header, ws: $ws);
         }
 
-        // 3. Verificar que la plantilla exista
+        $meses = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre",
+            "noviembre", "diciembre"];
+        $mesActual = $meses[date('n') - 1];
+        $diaActual = date('d');
+        $anioActual = date('Y');
+
+        $registro['fecha_texto'] = "$diaActual de $mesActual de $anioActual";
+
+        $file_plantilla = 'templates/CONTRATOS ARZEK/INDIVIDUAL/CONTRATO ARZEK INDIVIDUAL.docx';
+        $ruta_plantilla = trim($this->path_base . $file_plantilla);
+
+        $nombre_archivo = 'CONTRATO ARZEK '. $registro['inm_ubicacion_razon_social'] .'_' . date('Ymd_His') . '.docx';
+        $ruta_salida    = trim($this->path_base . 'archivos/temporales/' . $nombre_archivo);
+
+        $keys = ['inm_ubicacion_razon_social', 'inm_ubicacion_ubicacion_completa', 'inm_ubicacion_cel_com',
+            'inm_ubicacion_correo_com','fecha_texto'];
+        $registro = (new inm_ubicacion(link: $this->link))->descarga_contrato(
+            inm_ubicacion_id: $this->registro_id,
+            keys: $keys,
+            nombre_archivo: $nombre_archivo,
+            reg_ubicacion: $registro,
+            ruta_plantilla: $ruta_plantilla,
+            ruta_salida: $ruta_salida
+        );
+        if(errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener el registro de inm_ubicacion', data: $registro,
+                header: $header, ws: $ws);
+        }
+
+        $file_plantilla = 'templates/CONTRATOS ARZEK/INDIVIDUAL/CLIENTE/ANEXO A.docx';
+        $ruta_plantilla = trim($this->path_base . $file_plantilla);
+
+        $nombre_archivo = 'ANEXO A '. $registro['inm_ubicacion_razon_social'] .'_' . date('Ymd_His') . '.docx';
+        $ruta_salida    = trim($this->path_base . 'archivos/temporales/' . $nombre_archivo);
+
+        $registro['suma_adeudo'] = ($registro['inm_ubicacion_adeudo_agua'] ?? 0) +
+            ($registro['inm_ubicacion_adeudo_predial'] ?? 0);
+
+        $pesos = floor($registro['suma_adeudo']);
+        $centavos = round(($registro['suma_adeudo'] - $pesos) * 100);
+
+        $formatter = new NumberFormatter("es", NumberFormatter::SPELLOUT);
+        $texto = ucfirst($formatter->format($pesos));
+
+        $registro['suma_adeudo_texto'] = sprintf("%s pesos %02d/100 M.N.", $texto, $centavos);
+
+        $registro['fecha_texto'] = strtoupper("$diaActual de $mesActual de $anioActual");
+
+        $keys = ['inm_ubicacion_id','inm_ubicacion_razon_social', 'inm_ubicacion_rfc','inm_ubicacion_curp',
+            'inm_ubicacion_ubicacion_completa', 'inm_ubicacion_folio_registro_publico',
+            'inm_ubicacion_numero_escritura', 'inm_ubicacion_numero_notaria', 'inm_ubicacion_nombre_notario',
+            'inm_ubicacion_valor_adquisicion','inm_ubicacion_fecha_otorgamiento_credito','inm_ubicacion_numero_credito',
+            'inm_ubicacion_cuenta_predial','inm_prototipo_descripcion','inm_ubicacion_adeudo_agua',
+            'inm_ubicacion_adeudo_predial','suma_adeudo','suma_adeudo_texto','fecha_texto'];
+        $registro = (new inm_ubicacion(link: $this->link))->descarga_contrato(
+            inm_ubicacion_id: $this->registro_id,
+            keys: $keys,
+            nombre_archivo: $nombre_archivo,
+            reg_ubicacion: $registro,
+            ruta_plantilla: $ruta_plantilla,
+            ruta_salida: $ruta_salida
+        );
+        if(errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener el registro de inm_ubicacion', data: $registro,
+                header: $header, ws: $ws);
+        }
+
+       /* // 3. Verificar que la plantilla exista
         $file_plantilla = 'templates/CONTRATOS ARZEK/INDIVIDUAL/CONTRATO ARZEK INDIVIDUAL.docx';
         $ruta_plantilla = trim($this->path_base . $file_plantilla);
         if(!file_exists($ruta_plantilla)) {
@@ -5373,112 +5436,8 @@ class controlador_inm_ubicacion extends _ctl_base
         flush();
         readfile($ruta_salida);
         @unlink($ruta_salida);
-        exit;
-    }
+        exit;*/
 
-
-    public function genera_anexo_a(bool $header, bool $ws = false): array|string
-    {
-        if((int)$this->registro_id <= 0) {
-            return $this->retorno_error(
-                mensaje: 'Error registro_id es requerido para generar el documento Word',
-                data: $this->registro_id,
-                header: $header,
-                ws: $ws
-            );
-        }
-
-        // 2. Obtener el registro de inm_ubicacion
-        $registro = (new inm_ubicacion(link: $this->link))->registro(registro_id: $this->registro_id);
-        if(errores::$error) {
-            return $this->retorno_error(
-                mensaje: 'Error al obtener el registro de inm_ubicacion',
-                data: $registro,
-                header: $header,
-                ws: $ws
-            );
-        }
-
-        // 3. Verificar que la plantilla exista
-        $file_plantilla = 'templates/CONTRATOS ARZEK/INDIVIDUAL/CONTRATO ARZEK INDIVIDUAL.docx';
-        $ruta_plantilla = trim($this->path_base . $file_plantilla);
-        if(!file_exists($ruta_plantilla)) {
-            return $this->retorno_error(
-                mensaje: 'Error no existe la plantilla Word en: ' . $ruta_plantilla,
-                data: $ruta_plantilla,
-                header: $header,
-                ws: $ws
-            );
-        }
-
-        // 4. Sustituir marcadores en la plantilla
-        try {
-            $template = new TemplateProcessor($ruta_plantilla);
-        } catch (\Throwable $e) {
-            return $this->retorno_error(
-                mensaje: 'Error al cargar la plantilla Word',
-                data: $e->getMessage(),
-                header: $header,
-                ws: $ws
-            );
-        }
-
-        $meses = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre",
-            "noviembre", "diciembre"];
-        $mesActual = $meses[date('n') - 1];
-        $diaActual = date('d');
-        $anioActual = date('Y');
-
-        $fecha = "$diaActual de $mesActual de $anioActual";
-
-        $razon_social = trim((string)($registro['inm_ubicacion_razon_social'] ?? ''));
-        $ubicacion_completa = trim(ucwords(strtolower(($registro['inm_ubicacion_ubicacion_completa'] ?? ''))));
-        $celular = trim((string)($registro['inm_ubicacion_cel_com'] ?? ''));
-        $correo = trim((string)($registro['inm_ubicacion_correo_com'] ?? ''));
-
-        $template->setValue('inm_ubicacion_razon_social', $razon_social);
-        $template->setValue('inm_ubicacion_ubicacion_completa', $ubicacion_completa);
-        $template->setValue('inm_ubicacion_cel_com', $celular);
-        $template->setValue('inm_ubicacion_correo_com', $correo);
-        $template->setValue('fecha_texto', $fecha);
-
-        // 5. Generar nombre de archivo de salida temporal
-        $nombre_archivo = 'CONTRATO ARZEK '. $razon_social .'_' . date('Ymd_His') . '.docx';
-        $ruta_salida    = trim($this->path_base . 'archivos/temporales/' . $nombre_archivo);
-
-        try {
-            $template->saveAs($ruta_salida);
-        } catch (\Throwable $e) {
-            return $this->retorno_error(
-                mensaje: 'Error al guardar el documento Word generado',
-                data: $e->getMessage(),
-                header: $header,
-                ws: $ws
-            );
-        }
-
-        // 6. Enviar el archivo al navegador para descarga
-        if(!file_exists($ruta_salida)) {
-            return $this->retorno_error(
-                mensaje: 'Error el archivo Word generado no existe en: ' . $ruta_salida,
-                data: $ruta_salida,
-                header: $header,
-                ws: $ws
-            );
-        }
-
-        header('Content-Description: File Transfer');
-        header('Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document');
-        header('Content-Disposition: attachment; filename="' . $nombre_archivo . '"');
-        header('Content-Transfer-Encoding: binary');
-        header('Expires: 0');
-        header('Cache-Control: must-revalidate');
-        header('Pragma: public');
-        header('Content-Length: ' . filesize($ruta_salida));
-        ob_clean();
-        flush();
-        readfile($ruta_salida);
-        @unlink($ruta_salida);
-        exit;
+        return $registro;
     }
 }
