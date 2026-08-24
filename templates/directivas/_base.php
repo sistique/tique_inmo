@@ -517,7 +517,7 @@ class _base extends html_controler{
                                     stdClass $row_upd = new stdClass(), bool $value_vacio = false): array|string
     {
 
-        $regex = $this->validacion->patterns['tel_sin_lada_html'];
+        $regex = $this->validacion->patterns['telefono_mx_html'];
         $class_css = array($entidad.'_numero');
 
         return $this->input_text(cols: $cols, disabled: $disabled, name: $name, place_holder: $place_holder,

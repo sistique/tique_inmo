@@ -34,6 +34,7 @@ use gamboamartin\inmuebles\models\inm_nacionalidad;
 use gamboamartin\inmuebles\models\inm_ocupacion;
 use gamboamartin\inmuebles\models\inm_poder;
 use gamboamartin\inmuebles\models\inm_rel_cheque_ubicacion;
+use gamboamartin\inmuebles\models\inm_rel_co_acred_ubi;
 use gamboamartin\inmuebles\models\inm_rel_doc_cheque_ubicacion;
 use gamboamartin\inmuebles\models\inm_rel_doc_efectivo_ubicacion;
 use gamboamartin\inmuebles\models\inm_rel_doc_transferencia_ubicacion;
@@ -5453,16 +5454,29 @@ class controlador_inm_ubicacion extends _ctl_base
         }*/
 
         // CORRESIDENCIAL
+
+        $registro_co_acred = (new inm_rel_co_acred_ubi(link: $this->link))->filtro_and(
+            filtro: array('inm_ubicacion.id'=>$this->registro_id));
+        if(errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener el registro de inm_ubicacion', data: $registro_co_acred,
+                header: $header, ws: $ws);
+        }
+
+        if($registro_co_acred->n_registros > 0) {
+            $registro = array_merge($registro, $registro_co_acred->registros[0]);
+        }
+
         $registro['fecha_texto'] = "$diaActual de $mesActual de $anioActual";
 
-        $file_plantilla = 'templates/CONTRATOS ARZEK/INDIVIDUAL/CONTRATO ARZEK INDIVIDUAL.docx';
+        $file_plantilla = 'templates/CONTRATOS ARZEK/CORRESIDENCIAL/CONTRATO ARZEK CORRESIDENCIAL.docx';
         $ruta_plantilla = trim($this->path_base . $file_plantilla);
 
         $nombre_archivo = 'CONTRATO ARZEK '. $registro['inm_ubicacion_razon_social'] .'_' . date('Ymd_His') . '.docx';
         $ruta_salida    = trim($this->path_base . 'archivos/temporales/' . $nombre_archivo);
 
-        $keys = ['inm_ubicacion_razon_social', 'inm_ubicacion_ubicacion_completa', 'inm_ubicacion_cel_com',
-            'inm_ubicacion_correo_com','fecha_texto'];
+        $keys = ['inm_ubicacion_razon_social','inm_estado_civil_descripcion','inm_ubicacion_ubicacion_completa',
+            'inm_ubicacion_domicilio_completo', 'inm_ubicacion_cel_com', 'inm_co_acreditado_celular',
+            'inm_ubicacion_correo_com', 'inm_co_acreditado_correo','inm_co_acreditado_razon_social','fecha_texto'];
         $contrato = (new inm_ubicacion(link: $this->link))->descarga_contrato(
             inm_ubicacion_id: $this->registro_id,
             keys: $keys,

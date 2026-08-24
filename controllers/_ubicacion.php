@@ -165,11 +165,9 @@ class _ubicacion{
 
         $header_apartado = $this->header_apartado(html_entidad: $controler->html_entidad,n_apartado:  $n_apartado,
             tag_header: $tag_header);
-
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al generar header',data:  $header_apartado);
         }
-
 
         $param = $this->param_header(n_apartado: $n_apartado);
         if(errores::$error){

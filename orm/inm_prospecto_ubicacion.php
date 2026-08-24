@@ -29,7 +29,7 @@ class inm_prospecto_ubicacion extends _modelo_parent{
             'com_medio_prospeccion'=>'com_prospecto', 'adm_usuario'=>'com_agente', 'dp_colonia_postal' => $tabla,
             'dp_cp'=>'dp_colonia_postal','dp_colonia'=>'dp_colonia_postal','dp_municipio'=>'dp_cp',
             'dp_estado'=>'dp_municipio','dp_pais'=>'dp_estado','inm_tipo_credito'=>$tabla,
-            'inm_tipo_vivienda'=>$tabla,'org_sucursal'=>$tabla);
+            'inm_tipo_vivienda'=>$tabla,'org_sucursal'=>$tabla,'inm_estado_civil'=>$tabla);
 
         $campos_obligatorios = array();
 

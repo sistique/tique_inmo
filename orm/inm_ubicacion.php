@@ -28,7 +28,7 @@ class inm_ubicacion extends _inm_ubicaciones {
             'dp_estado'=>'dp_municipio','dp_pais'=>'dp_estado', 'inm_tipo_ubicacion'=>$tabla,
             'inm_status_ubicacion'=>$tabla,'com_agente'=>$tabla,'inm_estado_vivienda'=>$tabla,
             'inm_prototipo'=>$tabla, 'inm_complemento'=>$tabla, 'inm_tipo_credito'=>$tabla, 'inm_tipo_vivienda'=>$tabla,
-            'org_sucursal'=>$tabla);
+            'org_sucursal'=>$tabla,'inm_estado_civil'=>$tabla);
 
         $campos_obligatorios = array('inm_tipo_ubicacion_id');
 

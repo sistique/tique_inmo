@@ -169,7 +169,7 @@ class inm_co_acreditado_html extends _base {
             }
         }
 
-        $cols_4 = array('numero_nep','nombre_empresa_patron', 'nrp');
+        $cols_4 = array('numero_nep','nombre_empresa', 'nrp');
 
         foreach ($cols_4 as $campo){
             if(!isset($cols_css[$campo])){
@@ -358,12 +358,12 @@ class inm_co_acreditado_html extends _base {
 
 
 
-    private function nombre_empresa_patron(int $cols,  string $entidad, bool $disabled = false, string $name = 'nombre_empresa_patron',
+    private function nombre_empresa(int $cols,  string $entidad, bool $disabled = false, string $name = 'nombre_empresa',
                                                 string $place_holder= 'Nombre Empresa',
                                                 stdClass $row_upd = new stdClass(),
                                                 bool $value_vacio = false, bool $required = true): array|string
     {
-        $class_css = array('inm_co_acreditado_nombre_empresa_patron');
+        $class_css = array('inm_co_acreditado_nombre_empresa');
 
         return $this->input_text(cols: $cols, disabled: $disabled, name: $name, place_holder: $place_holder,
             row_upd: $row_upd, value_vacio: $value_vacio, class_css: $class_css,required: $required);
@@ -450,7 +450,7 @@ class inm_co_acreditado_html extends _base {
     private function params_inputs(array $cols_css, array $disableds, bool $integra_prefijo, array $names): array|stdClass
     {
         $campos = array('apellido_materno','apellido_paterno','celular','correo','curp','extension_nep','lada',
-            'lada_nep','nombre', 'nombre_empresa_patron','nrp','nss', 'numero','numero_nep','rfc','numero_credito',
+            'lada_nep','nombre', 'nombre_empresa','nrp','nss', 'numero','numero_nep','rfc','numero_credito',
             'adeudo_hipoteca','genero');
 
         $requireds = array();
