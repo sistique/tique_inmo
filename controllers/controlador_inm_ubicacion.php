@@ -5466,7 +5466,7 @@ class controlador_inm_ubicacion extends _ctl_base
             $registro = array_merge($registro, $registro_co_acred->registros[0]);
         }
 
-        $registro['fecha_texto'] = "$diaActual de $mesActual de $anioActual";
+        /*$registro['fecha_texto'] = "$diaActual de $mesActual de $anioActual";
 
         $file_plantilla = 'templates/CONTRATOS ARZEK/CORRESIDENCIAL/CONTRATO ARZEK CORRESIDENCIAL.docx';
         $ruta_plantilla = trim($this->path_base . $file_plantilla);
@@ -5489,6 +5489,45 @@ class controlador_inm_ubicacion extends _ctl_base
             return $this->retorno_error(mensaje: 'Error al obtener el registro de inm_ubicacion', data: $contrato,
                 header: $header, ws: $ws);
         }
+
+        $file_plantilla = 'templates/CONTRATOS ARZEK/CORRESIDENCIAL/CLIENTE/ANEXO A.docx';
+        $ruta_plantilla = trim($this->path_base . $file_plantilla);
+
+        $nombre_archivo = 'ANEXO A '. $registro['inm_ubicacion_razon_social'] .'_' . date('Ymd_His') . '.docx';
+        $ruta_salida    = trim($this->path_base . 'archivos/temporales/' . $nombre_archivo);
+
+        $registro['suma_adeudo'] = ($registro['inm_ubicacion_adeudo_agua'] ?? 0) +
+            ($registro['inm_ubicacion_adeudo_predial'] ?? 0);
+
+        $pesos = floor($registro['suma_adeudo']);
+        $centavos = round(($registro['suma_adeudo'] - $pesos) * 100);
+
+        $formatter = new NumberFormatter("es", NumberFormatter::SPELLOUT);
+        $texto = ucfirst($formatter->format($pesos));
+
+        $registro['suma_adeudo_texto'] = sprintf("%s pesos %02d/100 M.N.", $texto, $centavos);
+
+        $registro['fecha_texto'] = strtoupper("$diaActual de $mesActual de $anioActual");
+
+        $keys = ['inm_ubicacion_id','inm_ubicacion_razon_social', 'inm_ubicacion_rfc','inm_ubicacion_curp',
+            'inm_ubicacion_ubicacion_completa', 'inm_ubicacion_folio_registro_publico',
+            'inm_ubicacion_numero_escritura', 'inm_ubicacion_numero_notaria', 'inm_ubicacion_nombre_notario',
+            'inm_ubicacion_valor_adquisicion','inm_ubicacion_fecha_otorgamiento_credito','inm_ubicacion_numero_credito',
+            'inm_ubicacion_cuenta_predial','inm_prototipo_descripcion','inm_ubicacion_adeudo_agua',
+            'inm_ubicacion_adeudo_predial','suma_adeudo','suma_adeudo_texto','fecha_texto',
+            'inm_co_acreditado_razon_social','inm_estado_civil_descripcion'];
+        $contrato = (new inm_ubicacion(link: $this->link))->descarga_contrato(
+            inm_ubicacion_id: $this->registro_id,
+            keys: $keys,
+            nombre_archivo: $nombre_archivo,
+            reg_ubicacion: $registro,
+            ruta_plantilla: $ruta_plantilla,
+            ruta_salida: $ruta_salida
+        );
+        if(errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener el registro de inm_ubicacion', data: $contrato,
+                header: $header, ws: $ws);
+        }*/
         
 
         return $registro;
