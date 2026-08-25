@@ -5587,7 +5587,7 @@ class controlador_inm_ubicacion extends _ctl_base
             'inm_ubicacion_folio_registro_publico', 'inm_ubicacion_numero_escritura', 'inm_ubicacion_numero_notaria',
             'inm_ubicacion_nombre_notario', 'inm_ubicacion_cuenta_predial', 'fecha_texto', 'fecha_actual',
             'inm_ubicacion_monto_devolucion', 'monto_devolucion_texto', 'bn_cuenta_cuenta','bn_sucursal_descripcion',
-            'inm_transferencia_transferencia'];
+            'inm_transferencia_transferencia','inm_co_acreditado_razon_social','inm_estado_civil_descripcion'];
         $anexo_a = (new inm_ubicacion(link: $this->link))->descarga_contrato(
             inm_ubicacion_id: $this->registro_id,
             keys: $keys,
