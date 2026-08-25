@@ -5563,7 +5563,7 @@ class controlador_inm_ubicacion extends _ctl_base
         if(errores::$error) {
             return $this->retorno_error(mensaje: 'Error al obtener el registro de inm_ubicacion', data: $anexo_a,
                 header: $header, ws: $ws);
-        }*/
+        }
 
         $file_plantilla = 'templates/CONTRATOS ARZEK/CORRESIDENCIAL/CLIENTE/ANEXO C.docx';
         $ruta_plantilla = trim($this->path_base . $file_plantilla);
@@ -5600,6 +5600,31 @@ class controlador_inm_ubicacion extends _ctl_base
             return $this->retorno_error(mensaje: 'Error al obtener el registro de inm_ubicacion', data: $anexo_a,
                 header: $header, ws: $ws);
         }
+
+        $file_plantilla = 'templates/CONTRATOS ARZEK/CORRESIDENCIAL/CLIENTE/ANEXO C SIN DEVOLUCION.docx';
+        $ruta_plantilla = trim($this->path_base . $file_plantilla);
+
+        $nombre_archivo = 'ANEXO C '. $registro['inm_ubicacion_razon_social'] .'_' . date('Ymd_His') . '.docx';
+        $ruta_salida    = trim($this->path_base . 'archivos/temporales/' . $nombre_archivo);
+
+        $registro['fecha_texto'] = strtoupper("$diaActual de $mesActual de $anioActual");
+
+        $keys = ['inm_ubicacion_id', 'inm_ubicacion_razon_social', 'inm_ubicacion_ubicacion_completa',
+            'inm_ubicacion_folio_registro_publico', 'inm_ubicacion_numero_escritura', 'inm_ubicacion_numero_notaria',
+            'inm_ubicacion_nombre_notario', 'inm_ubicacion_cuenta_predial', 'fecha_texto',
+            'inm_co_acreditado_razon_social','inm_estado_civil_descripcion'];
+        $anexo_a = (new inm_ubicacion(link: $this->link))->descarga_contrato(
+            inm_ubicacion_id: $this->registro_id,
+            keys: $keys,
+            nombre_archivo: $nombre_archivo,
+            reg_ubicacion: $registro,
+            ruta_plantilla: $ruta_plantilla,
+            ruta_salida: $ruta_salida
+        );
+        if(errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener el registro de inm_ubicacion', data: $anexo_a,
+                header: $header, ws: $ws);
+        }*/
 
         return $registro;
     }
