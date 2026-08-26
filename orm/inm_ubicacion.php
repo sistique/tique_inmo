@@ -1302,9 +1302,23 @@ class inm_ubicacion extends _inm_ubicaciones {
     }*/
 
 
-    public function descarga_contrato( int $inm_ubicacion_id, array $keys, string $nombre_archivo, array $reg_ubicacion,
-                                       string $ruta_plantilla, string $ruta_salida): array|stdClass{
-
+    /**
+     * Genera un documento Word a partir de una plantilla y opcionalmente lo descarga o guarda en disco.
+     *
+     * @param int    $inm_ubicacion_id ID del registro de ubicación
+     * @param array  $keys             Claves de campos a sustituir en la plantilla
+     * @param string $nombre_archivo   Nombre del archivo resultante
+     * @param array  $reg_ubicacion    Datos del registro de ubicación
+     * @param string $ruta_plantilla   Ruta absoluta de la plantilla .docx
+     * @param string $ruta_salida      Ruta absoluta donde se guardará el archivo generado
+     * @param bool   $solo_generar     Si es true, solo genera y guarda el archivo; devuelve la ruta. Si es false (por
+     *                                 defecto), descarga el archivo al cliente y termina la ejecución.
+     * @return array|stdClass|string   Error, o la ruta del archivo generado (cuando $solo_generar = true)
+     */
+    public function descarga_contrato(int $inm_ubicacion_id, array $keys, string $nombre_archivo, array $reg_ubicacion,
+                                      string $ruta_plantilla, string $ruta_salida,
+                                      bool $solo_generar = false): array|stdClass|string
+    {
         if((int)$inm_ubicacion_id <= 0) {
             return $this->error->error(mensaje: 'Error registro_id es requerido para generar el documento Word',
                 data: $inm_ubicacion_id);
@@ -1327,7 +1341,7 @@ class inm_ubicacion extends _inm_ubicaciones {
         }
 
         foreach ($keys AS $key){
-            $value = trim((string)$reg_ubicacion[$key] ?? '');
+            $value = trim((string)($reg_ubicacion[$key] ?? ''));
 
             if($key === 'inm_ubicacion_ubicacion_completa'){
                 $value = ucwords(strtolower($value));
@@ -1345,6 +1359,11 @@ class inm_ubicacion extends _inm_ubicaciones {
         if(!file_exists($ruta_salida)) {
             return $this->error->error(
                 mensaje: 'Error el archivo Word generado no existe en: ' . $ruta_salida, data: $ruta_salida);
+        }
+
+        // Modo "solo generar": devolver la ruta sin descargar (para empaquetar en ZIP)
+        if($solo_generar) {
+            return $ruta_salida;
         }
 
         header('Content-Description: File Transfer');

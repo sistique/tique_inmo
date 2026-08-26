@@ -591,6 +591,7 @@ class _inm_comprador{
         $entidades_pref[] = 'inm_sindicato';
         $entidades_pref[] = 'inm_ocupacion';
         $entidades_pref[] = 'org_sucursal';
+        $entidades_pref[] = 'inm_tipo_venta';
 
 
         foreach ($entidades_pref as $entidad){

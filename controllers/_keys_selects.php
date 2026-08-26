@@ -1263,6 +1263,15 @@ class _keys_selects{
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
+        $columns_ds = array();
+        $columns_ds[] = 'inm_tipo_venta_descripcion';
+        $keys_selects = $controler->key_select(cols: 2, con_registros: $con_registros,filtro:  $filtro_tipo_credito,
+            key: 'inm_tipo_venta_id', keys_selects: $keys_selects,
+            id_selected: $row_upd->inm_tipo_venta_id, label: 'Tipo de Credito Especifico', columns_ds: $columns_ds);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
         return $keys_selects;
     }
 

@@ -23,7 +23,7 @@ class inm_comprador extends _modelo_parent{
             'inm_nacionalidad'=>$tabla, 'inm_ocupacion'=>$tabla, 'com_agente'=>$tabla,'inm_status_comprador' => $tabla,
             'inm_tipo_exento' => $tabla, 'inm_notaria' => $tabla, 'dp_colonia_postal'=>$tabla,
             'dp_cp'=>'dp_colonia_postal', 'dp_colonia'=>'dp_colonia_postal', 'dp_municipio'=>'dp_cp',
-            'dp_estado'=>'dp_municipio', 'dp_pais'=>'dp_estado');
+            'dp_estado'=>'dp_municipio', 'dp_pais'=>'dp_estado', 'inm_tipo_venta' => $tabla);
 
         $campos_obligatorios = array('apellido_paterno','bn_cuenta_id','curp', 'descuento_pension_alimenticia_dh',
             'descuento_pension_alimenticia_fc', 'es_segundo_credito', 'inm_attr_tipo_credito_id',

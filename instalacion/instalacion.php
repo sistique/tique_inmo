@@ -4269,6 +4269,12 @@ class instalacion
         }
         $out->inm_sat_paquete = $inm_sat_paquete;
 
+        $inm_tipo_venta = $this->inm_tipo_venta(link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error integrar inm_tipo_venta', data: $inm_tipo_venta);
+        }
+        $out->inm_tipo_venta = $inm_tipo_venta;
+
         return $out;
 
     }
@@ -5135,6 +5141,48 @@ class instalacion
             return (new errores())->error(mensaje: 'Error al obtener acl inm_sat_paquete', data: $acl);
         }
         $out->acl = $acl;
+
+        return $out;
+    }
+
+    private function _add_inm_tipo_venta(PDO $link): array|stdClass
+    {
+        $out = new stdClass();
+        $init = (new _instalacion(link: $link));
+
+        $create = $init->create_table_new(table: 'inm_tipo_venta');
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar tabla', data:  $create);
+        }
+        $out->create = $create;
+
+        return $out;
+    }
+
+    private function inm_tipo_venta(PDO $link): array|stdClass
+    {
+        $out = new stdClass();
+
+        $create = $this->_add_inm_tipo_venta(link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar tabla', data:  $create);
+        }
+        $out->create = $create;
+
+        $adm_menu_descripcion = 'Ventas';
+        $adm_sistema_descripcion = 'inmuebles';
+        $etiqueta_label = 'tipo venta';
+        $adm_seccion_pertenece_descripcion = 'inmuebles';
+        $adm_namespace_descripcion = 'gamboa.martin/inmuebles';
+        $adm_namespace_name = 'gamboamartin/inmuebles';
+
+        $acl = (new _adm())->integra_acl(adm_menu_descripcion: $adm_menu_descripcion,
+            adm_namespace_name: $adm_namespace_name, adm_namespace_descripcion: $adm_namespace_descripcion,
+            adm_seccion_descripcion: __FUNCTION__, adm_seccion_pertenece_descripcion: $adm_seccion_pertenece_descripcion,
+            adm_sistema_descripcion: $adm_sistema_descripcion, etiqueta_label: $etiqueta_label, link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al obtener acl', data:  $acl);
+        }
 
         return $out;
     }

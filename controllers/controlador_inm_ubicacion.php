@@ -5296,336 +5296,391 @@ class controlador_inm_ubicacion extends _ctl_base
         $diaActual = date('d');
         $anioActual = date('Y');
 
-        // INDIVIDUAL
-        /*$registro['fecha_texto'] = "$diaActual de $mesActual de $anioActual";
+        $razon_social = $registro['inm_ubicacion_razon_social'];
+        $ts = date('Ymd_His');
 
-        $file_plantilla = 'templates/CONTRATOS ARZEK/INDIVIDUAL/CONTRATO ARZEK INDIVIDUAL.docx';
-        $ruta_plantilla = trim($this->path_base . $file_plantilla);
-
-        $nombre_archivo = 'CONTRATO ARZEK '. $registro['inm_ubicacion_razon_social'] .'_' . date('Ymd_His') . '.docx';
-        $ruta_salida    = trim($this->path_base . 'archivos/temporales/' . $nombre_archivo);
-
-        $keys = ['inm_ubicacion_razon_social', 'inm_ubicacion_ubicacion_completa', 'inm_ubicacion_cel_com',
-            'inm_ubicacion_correo_com','fecha_texto'];
-        $contrato = (new inm_ubicacion(link: $this->link))->descarga_contrato(
-            inm_ubicacion_id: $this->registro_id,
-            keys: $keys,
-            nombre_archivo: $nombre_archivo,
-            reg_ubicacion: $registro,
-            ruta_plantilla: $ruta_plantilla,
-            ruta_salida: $ruta_salida
-        );
-        if(errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al obtener el registro de inm_ubicacion', data: $contrato,
-                header: $header, ws: $ws);
-        }
-
-        $file_plantilla = 'templates/CONTRATOS ARZEK/INDIVIDUAL/CLIENTE/ANEXO A.docx';
-        $ruta_plantilla = trim($this->path_base . $file_plantilla);
-
-        $nombre_archivo = 'ANEXO A '. $registro['inm_ubicacion_razon_social'] .'_' . date('Ymd_His') . '.docx';
-        $ruta_salida    = trim($this->path_base . 'archivos/temporales/' . $nombre_archivo);
-
-        $registro['suma_adeudo'] = ($registro['inm_ubicacion_adeudo_agua'] ?? 0) +
-            ($registro['inm_ubicacion_adeudo_predial'] ?? 0);
-
-        $pesos = floor($registro['suma_adeudo']);
-        $centavos = round(($registro['suma_adeudo'] - $pesos) * 100);
-
-        $formatter = new NumberFormatter("es", NumberFormatter::SPELLOUT);
-        $texto = ucfirst($formatter->format($pesos));
-
-        $registro['suma_adeudo_texto'] = sprintf("%s pesos %02d/100 M.N.", $texto, $centavos);
-
-        $registro['fecha_texto'] = strtoupper("$diaActual de $mesActual de $anioActual");
-
-        $keys = ['inm_ubicacion_id','inm_ubicacion_razon_social', 'inm_ubicacion_rfc','inm_ubicacion_curp',
-            'inm_ubicacion_ubicacion_completa', 'inm_ubicacion_folio_registro_publico',
-            'inm_ubicacion_numero_escritura', 'inm_ubicacion_numero_notaria', 'inm_ubicacion_nombre_notario',
-            'inm_ubicacion_valor_adquisicion','inm_ubicacion_fecha_otorgamiento_credito','inm_ubicacion_numero_credito',
-            'inm_ubicacion_cuenta_predial','inm_prototipo_descripcion','inm_ubicacion_adeudo_agua',
-            'inm_ubicacion_adeudo_predial','suma_adeudo','suma_adeudo_texto','fecha_texto'];
-        $anexo_a = (new inm_ubicacion(link: $this->link))->descarga_contrato(
-            inm_ubicacion_id: $this->registro_id,
-            keys: $keys,
-            nombre_archivo: $nombre_archivo,
-            reg_ubicacion: $registro,
-            ruta_plantilla: $ruta_plantilla,
-            ruta_salida: $ruta_salida
-        );
-        if(errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al obtener el registro de inm_ubicacion', data: $anexo_a,
-                header: $header, ws: $ws);
-        }
-
-        $file_plantilla = 'templates/CONTRATOS ARZEK/INDIVIDUAL/CLIENTE/ANEXO B.docx';
-        $ruta_plantilla = trim($this->path_base . $file_plantilla);
-
-        $nombre_archivo = 'ANEXO B '. $registro['inm_ubicacion_razon_social'] .'_' . date('Ymd_His') . '.docx';
-        $ruta_salida    = trim($this->path_base . 'archivos/temporales/' . $nombre_archivo);
-
-        $pesos = floor($registro['inm_ubicacion_adeudo_hipoteca']);
-        $centavos = round(($registro['inm_ubicacion_adeudo_hipoteca'] - $pesos) * 100);
-
-        $formatter = new NumberFormatter("es", NumberFormatter::SPELLOUT);
-        $texto = ucfirst($formatter->format($pesos));
-
-        $registro['adeudo_hipoteca_texto'] = sprintf("%s pesos %02d/100 M.N.", $texto, $centavos);
-
-        $registro['fecha_texto'] = "$diaActual de $mesActual de $anioActual";
-
-        $keys = ['inm_ubicacion_razon_social', 'inm_ubicacion_ubicacion_completa',
-            'inm_ubicacion_folio_registro_publico', 'inm_ubicacion_numero_escritura', 'inm_ubicacion_numero_notaria',
-            'inm_ubicacion_nombre_notario', 'inm_ubicacion_plaza_notaria','inm_ubicacion_fecha_otorgamiento_credito',
-            'inm_ubicacion_numero_credito', 'inm_ubicacion_cuenta_predial', 'inm_ubicacion_cel_com',
-            'inm_ubicacion_correo_com', 'inm_ubicacion_domicilio_completo','inm_ubicacion_adeudo_hipoteca',
-            'adeudo_hipoteca_texto', 'fecha_texto'];
-        $anexo_a = (new inm_ubicacion(link: $this->link))->descarga_contrato(
-            inm_ubicacion_id: $this->registro_id,
-            keys: $keys,
-            nombre_archivo: $nombre_archivo,
-            reg_ubicacion: $registro,
-            ruta_plantilla: $ruta_plantilla,
-            ruta_salida: $ruta_salida
-        );
-        if(errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al obtener el registro de inm_ubicacion', data: $anexo_a,
-                header: $header, ws: $ws);
-        }
-
-        $file_plantilla = 'templates/CONTRATOS ARZEK/INDIVIDUAL/CLIENTE/ANEXO C.docx';
-        $ruta_plantilla = trim($this->path_base . $file_plantilla);
-
-        $nombre_archivo = 'ANEXO C '. $registro['inm_ubicacion_razon_social'] .'_' . date('Ymd_His') . '.docx';
-        $ruta_salida    = trim($this->path_base . 'archivos/temporales/' . $nombre_archivo);
-
-        $pesos = floor($registro['inm_ubicacion_monto_devolucion']);
-        $centavos = round(($registro['inm_ubicacion_monto_devolucion'] - $pesos) * 100);
-
-        $formatter = new NumberFormatter("es", NumberFormatter::SPELLOUT);
-        $texto = ucfirst($formatter->format($pesos));
-
-        $registro['monto_devolucion_texto'] = sprintf("%s pesos %02d/100 M.N.", $texto, $centavos);
-
-
-        $registro['fecha_texto'] = strtoupper("$diaActual de $mesActual de $anioActual");
-        $registro['fecha_actual'] = "$diaActual de $mesActual de $anioActual";
-
-        $keys = ['inm_ubicacion_id', 'inm_ubicacion_razon_social', 'inm_ubicacion_ubicacion_completa',
-            'inm_ubicacion_folio_registro_publico', 'inm_ubicacion_numero_escritura', 'inm_ubicacion_numero_notaria',
-            'inm_ubicacion_nombre_notario', 'inm_ubicacion_cuenta_predial', 'fecha_texto', 'fecha_actual',
-            'inm_ubicacion_monto_devolucion', 'monto_devolucion_texto', 'bn_cuenta_cuenta','bn_sucursal_descripcion',
-            'inm_transferencia_transferencia'];
-        $anexo_a = (new inm_ubicacion(link: $this->link))->descarga_contrato(
-            inm_ubicacion_id: $this->registro_id,
-            keys: $keys,
-            nombre_archivo: $nombre_archivo,
-            reg_ubicacion: $registro,
-            ruta_plantilla: $ruta_plantilla,
-            ruta_salida: $ruta_salida
-        );
-        if(errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al obtener el registro de inm_ubicacion', data: $anexo_a,
-                header: $header, ws: $ws);
-        }
-
-        $file_plantilla = 'templates/CONTRATOS ARZEK/INDIVIDUAL/CLIENTE/ANEXO C SIN DEVOLUCION.docx';
-        $ruta_plantilla = trim($this->path_base . $file_plantilla);
-
-        $nombre_archivo = 'ANEXO C '. $registro['inm_ubicacion_razon_social'] .'_' . date('Ymd_His') . '.docx';
-        $ruta_salida    = trim($this->path_base . 'archivos/temporales/' . $nombre_archivo);
-
-        $registro['fecha_texto'] = strtoupper("$diaActual de $mesActual de $anioActual");
-
-        $keys = ['inm_ubicacion_id', 'inm_ubicacion_razon_social', 'inm_ubicacion_ubicacion_completa',
-            'inm_ubicacion_folio_registro_publico', 'inm_ubicacion_numero_escritura', 'inm_ubicacion_numero_notaria',
-            'inm_ubicacion_nombre_notario', 'inm_ubicacion_cuenta_predial', 'fecha_texto'];
-        $anexo_a = (new inm_ubicacion(link: $this->link))->descarga_contrato(
-            inm_ubicacion_id: $this->registro_id,
-            keys: $keys,
-            nombre_archivo: $nombre_archivo,
-            reg_ubicacion: $registro,
-            ruta_plantilla: $ruta_plantilla,
-            ruta_salida: $ruta_salida
-        );
-        if(errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al obtener el registro de inm_ubicacion', data: $anexo_a,
-                header: $header, ws: $ws);
-        }*/
-
-        // CORRESIDENCIAL
-
+        // ──────────────────────────────────────────────────────────────────
+        // Determinar si existe co-acreditado para elegir el tipo de machote
+        // ──────────────────────────────────────────────────────────────────
         $registro_co_acred = (new inm_rel_co_acred_ubi(link: $this->link))->filtro_and(
-            filtro: array('inm_ubicacion.id'=>$this->registro_id));
+            filtro: array('inm_ubicacion.id' => $this->registro_id));
         if(errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al obtener el registro de inm_ubicacion', data: $registro_co_acred,
+            return $this->retorno_error(mensaje: 'Error al obtener co-acreditado', data: $registro_co_acred,
                 header: $header, ws: $ws);
         }
 
-        if($registro_co_acred->n_registros > 0) {
+        $tiene_co_acred = $registro_co_acred->n_registros > 0;
+        if($tiene_co_acred) {
             $registro = array_merge($registro, $registro_co_acred->registros[0]);
         }
 
-        /*$registro['fecha_texto'] = "$diaActual de $mesActual de $anioActual";
+        // Acumulador de rutas: clave = nombre dentro del ZIP, valor = ruta en disco
+        $archivos = [];
 
-        $file_plantilla = 'templates/CONTRATOS ARZEK/CORRESIDENCIAL/CONTRATO ARZEK CORRESIDENCIAL.docx';
-        $ruta_plantilla = trim($this->path_base . $file_plantilla);
+        $tiene_devolucion = isset($registro['inm_ubicacion_monto_devolucion'])
+            && (float)$registro['inm_ubicacion_monto_devolucion'] > 0;
 
-        $nombre_archivo = 'CONTRATO ARZEK '. $registro['inm_ubicacion_razon_social'] .'_' . date('Ymd_His') . '.docx';
-        $ruta_salida    = trim($this->path_base . 'archivos/temporales/' . $nombre_archivo);
+        if($tiene_co_acred) {
+            // ──────────────────────────────────────────────────────────────────
+            // CORRESIDENCIAL
+            // ──────────────────────────────────────────────────────────────────
+            $registro['fecha_texto'] = "$diaActual de $mesActual de $anioActual";
 
-        $keys = ['inm_ubicacion_razon_social','inm_estado_civil_descripcion','inm_ubicacion_ubicacion_completa',
-            'inm_ubicacion_domicilio_completo', 'inm_ubicacion_cel_com', 'inm_co_acreditado_celular',
-            'inm_ubicacion_correo_com', 'inm_co_acreditado_correo','inm_co_acreditado_razon_social','fecha_texto'];
-        $contrato = (new inm_ubicacion(link: $this->link))->descarga_contrato(
-            inm_ubicacion_id: $this->registro_id,
-            keys: $keys,
-            nombre_archivo: $nombre_archivo,
-            reg_ubicacion: $registro,
-            ruta_plantilla: $ruta_plantilla,
-            ruta_salida: $ruta_salida
-        );
-        if(errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al obtener el registro de inm_ubicacion', data: $contrato,
-                header: $header, ws: $ws);
+            // --- Contrato Corresidencial ---
+            $file_plantilla = 'templates/CONTRATOS ARZEK/CORRESIDENCIAL/CONTRATO ARZEK CORRESIDENCIAL.docx';
+            $ruta_plantilla = trim($this->path_base . $file_plantilla);
+            $nombre_archivo = "CONTRATO ARZEK {$razon_social}_{$ts}.docx";
+            $ruta_salida    = trim($this->path_base . 'archivos/temporales/' . $nombre_archivo);
+
+            $keys = ['inm_ubicacion_razon_social','inm_estado_civil_descripcion','inm_ubicacion_ubicacion_completa',
+                'inm_ubicacion_domicilio_completo', 'inm_ubicacion_cel_com', 'inm_co_acreditado_celular',
+                'inm_ubicacion_correo_com', 'inm_co_acreditado_correo','inm_co_acreditado_razon_social','fecha_texto'];
+            $contrato_co = (new inm_ubicacion(link: $this->link))->descarga_contrato(
+                inm_ubicacion_id: $this->registro_id,
+                keys: $keys,
+                nombre_archivo: $nombre_archivo,
+                reg_ubicacion: $registro,
+                ruta_plantilla: $ruta_plantilla,
+                ruta_salida: $ruta_salida,
+                solo_generar: true
+            );
+            if(errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al generar contrato corresidencial', data: $contrato_co,
+                    header: $header, ws: $ws);
+            }
+            $archivos['CONTRATO ARZEK.docx'] = $contrato_co;
+
+            // --- Anexo A Corresidencial ---
+            $registro['suma_adeudo'] = ($registro['inm_ubicacion_adeudo_agua'] ?? 0) +
+                ($registro['inm_ubicacion_adeudo_predial'] ?? 0);
+            $pesos    = floor($registro['suma_adeudo']);
+            $centavos = round(($registro['suma_adeudo'] - $pesos) * 100);
+            $formatter = new NumberFormatter("es", NumberFormatter::SPELLOUT);
+            $texto = ucfirst($formatter->format($pesos));
+            $registro['suma_adeudo_texto'] = sprintf("%s pesos %02d/100 M.N.", $texto, $centavos);
+            $registro['fecha_texto'] = strtoupper("$diaActual de $mesActual de $anioActual");
+
+            $file_plantilla = 'templates/CONTRATOS ARZEK/CORRESIDENCIAL/CLIENTE/ANEXO A.docx';
+            $ruta_plantilla = trim($this->path_base . $file_plantilla);
+            $nombre_archivo = "ANEXO A {$razon_social}_{$ts}.docx";
+            $ruta_salida    = trim($this->path_base . 'archivos/temporales/' . $nombre_archivo);
+
+            $keys = ['inm_ubicacion_id','inm_ubicacion_razon_social', 'inm_ubicacion_rfc','inm_ubicacion_curp',
+                'inm_ubicacion_ubicacion_completa', 'inm_ubicacion_folio_registro_publico',
+                'inm_ubicacion_numero_escritura', 'inm_ubicacion_numero_notaria', 'inm_ubicacion_nombre_notario',
+                'inm_ubicacion_valor_adquisicion','inm_ubicacion_fecha_otorgamiento_credito','inm_ubicacion_numero_credito',
+                'inm_ubicacion_cuenta_predial','inm_prototipo_descripcion','inm_ubicacion_adeudo_agua',
+                'inm_ubicacion_adeudo_predial','suma_adeudo','suma_adeudo_texto','fecha_texto',
+                'inm_co_acreditado_razon_social','inm_estado_civil_descripcion'];
+            $anexo_a_co = (new inm_ubicacion(link: $this->link))->descarga_contrato(
+                inm_ubicacion_id: $this->registro_id,
+                keys: $keys,
+                nombre_archivo: $nombre_archivo,
+                reg_ubicacion: $registro,
+                ruta_plantilla: $ruta_plantilla,
+                ruta_salida: $ruta_salida,
+                solo_generar: true
+            );
+            if(errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al generar Anexo A corresidencial', data: $anexo_a_co,
+                    header: $header, ws: $ws);
+            }
+            $archivos['ANEXO A.docx'] = $anexo_a_co;
+
+            // --- Anexo B Corresidencial ---
+            $pesos    = floor($registro['inm_ubicacion_adeudo_hipoteca']);
+            $centavos = round(($registro['inm_ubicacion_adeudo_hipoteca'] - $pesos) * 100);
+            $formatter = new NumberFormatter("es", NumberFormatter::SPELLOUT);
+            $texto = ucfirst($formatter->format($pesos));
+            $registro['adeudo_hipoteca_texto'] = sprintf("%s pesos %02d/100 M.N.", $texto, $centavos);
+            $registro['fecha_texto'] = "$diaActual de $mesActual de $anioActual";
+
+            $file_plantilla = 'templates/CONTRATOS ARZEK/CORRESIDENCIAL/CLIENTE/ANEXO B.docx';
+            $ruta_plantilla = trim($this->path_base . $file_plantilla);
+            $nombre_archivo = "ANEXO B {$razon_social}_{$ts}.docx";
+            $ruta_salida    = trim($this->path_base . 'archivos/temporales/' . $nombre_archivo);
+
+            $keys = ['inm_ubicacion_razon_social', 'inm_ubicacion_ubicacion_completa',
+                'inm_ubicacion_folio_registro_publico', 'inm_ubicacion_numero_escritura', 'inm_ubicacion_numero_notaria',
+                'inm_ubicacion_nombre_notario', 'inm_ubicacion_plaza_notaria','inm_ubicacion_fecha_otorgamiento_credito',
+                'inm_ubicacion_numero_credito', 'inm_ubicacion_cuenta_predial', 'inm_ubicacion_cel_com',
+                'inm_ubicacion_correo_com', 'inm_ubicacion_domicilio_completo','inm_ubicacion_adeudo_hipoteca',
+                'adeudo_hipoteca_texto', 'fecha_texto','inm_co_acreditado_celular', 'inm_co_acreditado_correo',
+                'inm_co_acreditado_razon_social','inm_estado_civil_descripcion'];
+            $anexo_b_co = (new inm_ubicacion(link: $this->link))->descarga_contrato(
+                inm_ubicacion_id: $this->registro_id,
+                keys: $keys,
+                nombre_archivo: $nombre_archivo,
+                reg_ubicacion: $registro,
+                ruta_plantilla: $ruta_plantilla,
+                ruta_salida: $ruta_salida,
+                solo_generar: true
+            );
+            if(errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al generar Anexo B corresidencial', data: $anexo_b_co,
+                    header: $header, ws: $ws);
+            }
+            $archivos['ANEXO B.docx'] = $anexo_b_co;
+
+            // --- Anexo C Corresidencial (con o sin devolución según corresponda) ---
+            $registro['fecha_texto']  = strtoupper("$diaActual de $mesActual de $anioActual");
+            $registro['fecha_actual'] = "$diaActual de $mesActual de $anioActual";
+
+            if($tiene_devolucion) {
+                $pesos    = floor($registro['inm_ubicacion_monto_devolucion']);
+                $centavos = round(($registro['inm_ubicacion_monto_devolucion'] - $pesos) * 100);
+                $formatter = new NumberFormatter("es", NumberFormatter::SPELLOUT);
+                $texto = ucfirst($formatter->format($pesos));
+                $registro['monto_devolucion_texto'] = sprintf("%s pesos %02d/100 M.N.", $texto, $centavos);
+
+                $file_plantilla = 'templates/CONTRATOS ARZEK/CORRESIDENCIAL/CLIENTE/ANEXO C.docx';
+                $ruta_plantilla = trim($this->path_base . $file_plantilla);
+                $nombre_archivo = "ANEXO C {$razon_social}_{$ts}.docx";
+                $ruta_salida    = trim($this->path_base . 'archivos/temporales/' . $nombre_archivo);
+
+                $keys = ['inm_ubicacion_id', 'inm_ubicacion_razon_social', 'inm_ubicacion_ubicacion_completa',
+                    'inm_ubicacion_folio_registro_publico', 'inm_ubicacion_numero_escritura', 'inm_ubicacion_numero_notaria',
+                    'inm_ubicacion_nombre_notario', 'inm_ubicacion_cuenta_predial', 'fecha_texto', 'fecha_actual',
+                    'inm_ubicacion_monto_devolucion', 'monto_devolucion_texto', 'bn_cuenta_cuenta', 'bn_sucursal_descripcion',
+                    'inm_transferencia_transferencia','inm_co_acreditado_razon_social','inm_estado_civil_descripcion'];
+                $anexo_c_co = (new inm_ubicacion(link: $this->link))->descarga_contrato(
+                    inm_ubicacion_id: $this->registro_id,
+                    keys: $keys,
+                    nombre_archivo: $nombre_archivo,
+                    reg_ubicacion: $registro,
+                    ruta_plantilla: $ruta_plantilla,
+                    ruta_salida: $ruta_salida,
+                    solo_generar: true
+                );
+                if(errores::$error) {
+                    return $this->retorno_error(mensaje: 'Error al generar Anexo C corresidencial', data: $anexo_c_co,
+                        header: $header, ws: $ws);
+                }
+                $archivos['ANEXO C.docx'] = $anexo_c_co;
+            } else {
+                $file_plantilla = 'templates/CONTRATOS ARZEK/CORRESIDENCIAL/CLIENTE/ANEXO C SIN DEVOLUCION.docx';
+                $ruta_plantilla = trim($this->path_base . $file_plantilla);
+                $nombre_archivo = "ANEXO C SIN DEVOLUCION {$razon_social}_{$ts}.docx";
+                $ruta_salida    = trim($this->path_base . 'archivos/temporales/' . $nombre_archivo);
+
+                $keys = ['inm_ubicacion_id', 'inm_ubicacion_razon_social', 'inm_ubicacion_ubicacion_completa',
+                    'inm_ubicacion_folio_registro_publico', 'inm_ubicacion_numero_escritura', 'inm_ubicacion_numero_notaria',
+                    'inm_ubicacion_nombre_notario', 'inm_ubicacion_cuenta_predial', 'fecha_texto',
+                    'inm_co_acreditado_razon_social','inm_estado_civil_descripcion'];
+                $anexo_c_sd_co = (new inm_ubicacion(link: $this->link))->descarga_contrato(
+                    inm_ubicacion_id: $this->registro_id,
+                    keys: $keys,
+                    nombre_archivo: $nombre_archivo,
+                    reg_ubicacion: $registro,
+                    ruta_plantilla: $ruta_plantilla,
+                    ruta_salida: $ruta_salida,
+                    solo_generar: true
+                );
+                if(errores::$error) {
+                    return $this->retorno_error(mensaje: 'Error al generar Anexo C Sin Devolución corresidencial',
+                        data: $anexo_c_sd_co, header: $header, ws: $ws);
+                }
+                $archivos['ANEXO C SIN DEVOLUCION.docx'] = $anexo_c_sd_co;
+            }
+        } else {
+            // ──────────────────────────────────────────────────────────────────
+            // INDIVIDUAL
+            // ──────────────────────────────────────────────────────────────────
+            $registro['fecha_texto'] = "$diaActual de $mesActual de $anioActual";
+
+            // --- Contrato Individual ---
+            $file_plantilla = 'templates/CONTRATOS ARZEK/INDIVIDUAL/CONTRATO ARZEK INDIVIDUAL.docx';
+            $ruta_plantilla = trim($this->path_base . $file_plantilla);
+            $nombre_archivo = "CONTRATO ARZEK {$razon_social}_{$ts}.docx";
+            $ruta_salida    = trim($this->path_base . 'archivos/temporales/' . $nombre_archivo);
+
+            $keys = ['inm_ubicacion_razon_social', 'inm_ubicacion_ubicacion_completa', 'inm_ubicacion_cel_com',
+                'inm_ubicacion_correo_com', 'fecha_texto'];
+            $contrato = (new inm_ubicacion(link: $this->link))->descarga_contrato(
+                inm_ubicacion_id: $this->registro_id,
+                keys: $keys,
+                nombre_archivo: $nombre_archivo,
+                reg_ubicacion: $registro,
+                ruta_plantilla: $ruta_plantilla,
+                ruta_salida: $ruta_salida,
+                solo_generar: true
+            );
+            if(errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al generar contrato individual', data: $contrato,
+                    header: $header, ws: $ws);
+            }
+            $archivos['CONTRATO ARZEK.docx'] = $contrato;
+
+            // --- Anexo A Individual ---
+            $registro['suma_adeudo'] = ($registro['inm_ubicacion_adeudo_agua'] ?? 0) +
+                ($registro['inm_ubicacion_adeudo_predial'] ?? 0);
+            $pesos    = floor($registro['suma_adeudo']);
+            $centavos = round(($registro['suma_adeudo'] - $pesos) * 100);
+            $formatter = new NumberFormatter("es", NumberFormatter::SPELLOUT);
+            $texto = ucfirst($formatter->format($pesos));
+            $registro['suma_adeudo_texto'] = sprintf("%s pesos %02d/100 M.N.", $texto, $centavos);
+            $registro['fecha_texto'] = strtoupper("$diaActual de $mesActual de $anioActual");
+
+            $file_plantilla = 'templates/CONTRATOS ARZEK/INDIVIDUAL/CLIENTE/ANEXO A.docx';
+            $ruta_plantilla = trim($this->path_base . $file_plantilla);
+            $nombre_archivo = "ANEXO A {$razon_social}_{$ts}.docx";
+            $ruta_salida    = trim($this->path_base . 'archivos/temporales/' . $nombre_archivo);
+
+            $keys = ['inm_ubicacion_id','inm_ubicacion_razon_social', 'inm_ubicacion_rfc','inm_ubicacion_curp',
+                'inm_ubicacion_ubicacion_completa', 'inm_ubicacion_folio_registro_publico',
+                'inm_ubicacion_numero_escritura', 'inm_ubicacion_numero_notaria', 'inm_ubicacion_nombre_notario',
+                'inm_ubicacion_valor_adquisicion','inm_ubicacion_fecha_otorgamiento_credito','inm_ubicacion_numero_credito',
+                'inm_ubicacion_cuenta_predial','inm_prototipo_descripcion','inm_ubicacion_adeudo_agua',
+                'inm_ubicacion_adeudo_predial','suma_adeudo','suma_adeudo_texto','fecha_texto'];
+            $anexo_a_ind = (new inm_ubicacion(link: $this->link))->descarga_contrato(
+                inm_ubicacion_id: $this->registro_id,
+                keys: $keys,
+                nombre_archivo: $nombre_archivo,
+                reg_ubicacion: $registro,
+                ruta_plantilla: $ruta_plantilla,
+                ruta_salida: $ruta_salida,
+                solo_generar: true
+            );
+            if(errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al generar Anexo A individual', data: $anexo_a_ind,
+                    header: $header, ws: $ws);
+            }
+            $archivos['ANEXO A.docx'] = $anexo_a_ind;
+
+            // --- Anexo B Individual ---
+            $pesos    = floor($registro['inm_ubicacion_adeudo_hipoteca']);
+            $centavos = round(($registro['inm_ubicacion_adeudo_hipoteca'] - $pesos) * 100);
+            $formatter = new NumberFormatter("es", NumberFormatter::SPELLOUT);
+            $texto = ucfirst($formatter->format($pesos));
+            $registro['adeudo_hipoteca_texto'] = sprintf("%s pesos %02d/100 M.N.", $texto, $centavos);
+            $registro['fecha_texto'] = "$diaActual de $mesActual de $anioActual";
+
+            $file_plantilla = 'templates/CONTRATOS ARZEK/INDIVIDUAL/CLIENTE/ANEXO B.docx';
+            $ruta_plantilla = trim($this->path_base . $file_plantilla);
+            $nombre_archivo = "ANEXO B {$razon_social}_{$ts}.docx";
+            $ruta_salida    = trim($this->path_base . 'archivos/temporales/' . $nombre_archivo);
+
+            $keys = ['inm_ubicacion_razon_social', 'inm_ubicacion_ubicacion_completa',
+                'inm_ubicacion_folio_registro_publico', 'inm_ubicacion_numero_escritura', 'inm_ubicacion_numero_notaria',
+                'inm_ubicacion_nombre_notario', 'inm_ubicacion_plaza_notaria','inm_ubicacion_fecha_otorgamiento_credito',
+                'inm_ubicacion_numero_credito', 'inm_ubicacion_cuenta_predial', 'inm_ubicacion_cel_com',
+                'inm_ubicacion_correo_com', 'inm_ubicacion_domicilio_completo','inm_ubicacion_adeudo_hipoteca',
+                'adeudo_hipoteca_texto', 'fecha_texto'];
+            $anexo_b_ind = (new inm_ubicacion(link: $this->link))->descarga_contrato(
+                inm_ubicacion_id: $this->registro_id,
+                keys: $keys,
+                nombre_archivo: $nombre_archivo,
+                reg_ubicacion: $registro,
+                ruta_plantilla: $ruta_plantilla,
+                ruta_salida: $ruta_salida,
+                solo_generar: true
+            );
+            if(errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al generar Anexo B individual', data: $anexo_b_ind,
+                    header: $header, ws: $ws);
+            }
+            $archivos['ANEXO B.docx'] = $anexo_b_ind;
+
+            // --- Anexo C Individual (con o sin devolución según corresponda) ---
+            $registro['fecha_texto']  = strtoupper("$diaActual de $mesActual de $anioActual");
+            $registro['fecha_actual'] = "$diaActual de $mesActual de $anioActual";
+
+            if($tiene_devolucion) {
+                $pesos    = floor($registro['inm_ubicacion_monto_devolucion']);
+                $centavos = round(($registro['inm_ubicacion_monto_devolucion'] - $pesos) * 100);
+                $formatter = new NumberFormatter("es", NumberFormatter::SPELLOUT);
+                $texto = ucfirst($formatter->format($pesos));
+                $registro['monto_devolucion_texto'] = sprintf("%s pesos %02d/100 M.N.", $texto, $centavos);
+
+                $file_plantilla = 'templates/CONTRATOS ARZEK/INDIVIDUAL/CLIENTE/ANEXO C.docx';
+                $ruta_plantilla = trim($this->path_base . $file_plantilla);
+                $nombre_archivo = "ANEXO C {$razon_social}_{$ts}.docx";
+                $ruta_salida    = trim($this->path_base . 'archivos/temporales/' . $nombre_archivo);
+
+                $keys = ['inm_ubicacion_id', 'inm_ubicacion_razon_social', 'inm_ubicacion_ubicacion_completa',
+                    'inm_ubicacion_folio_registro_publico', 'inm_ubicacion_numero_escritura', 'inm_ubicacion_numero_notaria',
+                    'inm_ubicacion_nombre_notario', 'inm_ubicacion_cuenta_predial', 'fecha_texto', 'fecha_actual',
+                    'inm_ubicacion_monto_devolucion', 'monto_devolucion_texto', 'bn_cuenta_cuenta', 'bn_sucursal_descripcion',
+                    'inm_transferencia_transferencia'];
+                $anexo_c_ind = (new inm_ubicacion(link: $this->link))->descarga_contrato(
+                    inm_ubicacion_id: $this->registro_id,
+                    keys: $keys,
+                    nombre_archivo: $nombre_archivo,
+                    reg_ubicacion: $registro,
+                    ruta_plantilla: $ruta_plantilla,
+                    ruta_salida: $ruta_salida,
+                    solo_generar: true
+                );
+                if(errores::$error) {
+                    return $this->retorno_error(mensaje: 'Error al generar Anexo C individual', data: $anexo_c_ind,
+                        header: $header, ws: $ws);
+                }
+                $archivos['ANEXO C.docx'] = $anexo_c_ind;
+            } else {
+                $file_plantilla = 'templates/CONTRATOS ARZEK/INDIVIDUAL/CLIENTE/ANEXO C SIN DEVOLUCION.docx';
+                $ruta_plantilla = trim($this->path_base . $file_plantilla);
+                $nombre_archivo = "ANEXO C SIN DEVOLUCION {$razon_social}_{$ts}.docx";
+                $ruta_salida    = trim($this->path_base . 'archivos/temporales/' . $nombre_archivo);
+
+                $keys = ['inm_ubicacion_id', 'inm_ubicacion_razon_social', 'inm_ubicacion_ubicacion_completa',
+                    'inm_ubicacion_folio_registro_publico', 'inm_ubicacion_numero_escritura', 'inm_ubicacion_numero_notaria',
+                    'inm_ubicacion_nombre_notario', 'inm_ubicacion_cuenta_predial', 'fecha_texto'];
+                $anexo_c_sd_ind = (new inm_ubicacion(link: $this->link))->descarga_contrato(
+                    inm_ubicacion_id: $this->registro_id,
+                    keys: $keys,
+                    nombre_archivo: $nombre_archivo,
+                    reg_ubicacion: $registro,
+                    ruta_plantilla: $ruta_plantilla,
+                    ruta_salida: $ruta_salida,
+                    solo_generar: true
+                );
+                if(errores::$error) {
+                    return $this->retorno_error(mensaje: 'Error al generar Anexo C Sin Devolución individual',
+                        data: $anexo_c_sd_ind, header: $header, ws: $ws);
+                }
+                $archivos['ANEXO C SIN DEVOLUCION.docx'] = $anexo_c_sd_ind;
+            }
         }
 
-        $file_plantilla = 'templates/CONTRATOS ARZEK/CORRESIDENCIAL/CLIENTE/ANEXO A.docx';
-        $ruta_plantilla = trim($this->path_base . $file_plantilla);
+        // ──────────────────────────────────────────────────────────────────
+        // Empaquetado en ZIP
+        // ──────────────────────────────────────────────────────────────────
+        $tipo_zip   = $tiene_co_acred ? 'corresidencial' : 'individual';
+        $zip_nombre = "CONTRATO {$razon_social} ({$tipo_zip}).zip";
+        $zip_ruta   = trim($this->path_base . 'archivos/temporales/' . $zip_nombre);
 
-        $nombre_archivo = 'ANEXO A '. $registro['inm_ubicacion_razon_social'] .'_' . date('Ymd_His') . '.docx';
-        $ruta_salida    = trim($this->path_base . 'archivos/temporales/' . $nombre_archivo);
-
-        $registro['suma_adeudo'] = ($registro['inm_ubicacion_adeudo_agua'] ?? 0) +
-            ($registro['inm_ubicacion_adeudo_predial'] ?? 0);
-
-        $pesos = floor($registro['suma_adeudo']);
-        $centavos = round(($registro['suma_adeudo'] - $pesos) * 100);
-
-        $formatter = new NumberFormatter("es", NumberFormatter::SPELLOUT);
-        $texto = ucfirst($formatter->format($pesos));
-
-        $registro['suma_adeudo_texto'] = sprintf("%s pesos %02d/100 M.N.", $texto, $centavos);
-
-        $registro['fecha_texto'] = strtoupper("$diaActual de $mesActual de $anioActual");
-
-        $keys = ['inm_ubicacion_id','inm_ubicacion_razon_social', 'inm_ubicacion_rfc','inm_ubicacion_curp',
-            'inm_ubicacion_ubicacion_completa', 'inm_ubicacion_folio_registro_publico',
-            'inm_ubicacion_numero_escritura', 'inm_ubicacion_numero_notaria', 'inm_ubicacion_nombre_notario',
-            'inm_ubicacion_valor_adquisicion','inm_ubicacion_fecha_otorgamiento_credito','inm_ubicacion_numero_credito',
-            'inm_ubicacion_cuenta_predial','inm_prototipo_descripcion','inm_ubicacion_adeudo_agua',
-            'inm_ubicacion_adeudo_predial','suma_adeudo','suma_adeudo_texto','fecha_texto',
-            'inm_co_acreditado_razon_social','inm_estado_civil_descripcion'];
-        $contrato = (new inm_ubicacion(link: $this->link))->descarga_contrato(
-            inm_ubicacion_id: $this->registro_id,
-            keys: $keys,
-            nombre_archivo: $nombre_archivo,
-            reg_ubicacion: $registro,
-            ruta_plantilla: $ruta_plantilla,
-            ruta_salida: $ruta_salida
-        );
-        if(errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al obtener el registro de inm_ubicacion', data: $contrato,
-                header: $header, ws: $ws);
+        $zip = new \ZipArchive();
+        if($zip->open($zip_ruta, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) !== true) {
+            return $this->retorno_error(
+                mensaje: 'Error al crear el archivo ZIP en: ' . $zip_ruta,
+                data: $zip_ruta, header: $header, ws: $ws);
         }
 
-        $file_plantilla = 'templates/CONTRATOS ARZEK/CORRESIDENCIAL/CLIENTE/ANEXO B.docx';
-        $ruta_plantilla = trim($this->path_base . $file_plantilla);
-
-        $nombre_archivo = 'ANEXO B '. $registro['inm_ubicacion_razon_social'] .'_' . date('Ymd_His') . '.docx';
-        $ruta_salida    = trim($this->path_base . 'archivos/temporales/' . $nombre_archivo);
-
-        $pesos = floor($registro['inm_ubicacion_adeudo_hipoteca']);
-        $centavos = round(($registro['inm_ubicacion_adeudo_hipoteca'] - $pesos) * 100);
-
-        $formatter = new NumberFormatter("es", NumberFormatter::SPELLOUT);
-        $texto = ucfirst($formatter->format($pesos));
-
-        $registro['adeudo_hipoteca_texto'] = sprintf("%s pesos %02d/100 M.N.", $texto, $centavos);
-
-        $registro['fecha_texto'] = "$diaActual de $mesActual de $anioActual";
-
-        $keys = ['inm_ubicacion_razon_social', 'inm_ubicacion_ubicacion_completa',
-            'inm_ubicacion_folio_registro_publico', 'inm_ubicacion_numero_escritura', 'inm_ubicacion_numero_notaria',
-            'inm_ubicacion_nombre_notario', 'inm_ubicacion_plaza_notaria','inm_ubicacion_fecha_otorgamiento_credito',
-            'inm_ubicacion_numero_credito', 'inm_ubicacion_cuenta_predial', 'inm_ubicacion_cel_com',
-            'inm_ubicacion_correo_com', 'inm_ubicacion_domicilio_completo','inm_ubicacion_adeudo_hipoteca',
-            'adeudo_hipoteca_texto', 'fecha_texto','inm_co_acreditado_celular', 'inm_co_acreditado_correo',
-            'inm_co_acreditado_razon_social','inm_estado_civil_descripcion'];
-        $anexo_a = (new inm_ubicacion(link: $this->link))->descarga_contrato(
-            inm_ubicacion_id: $this->registro_id,
-            keys: $keys,
-            nombre_archivo: $nombre_archivo,
-            reg_ubicacion: $registro,
-            ruta_plantilla: $ruta_plantilla,
-            ruta_salida: $ruta_salida
-        );
-        if(errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al obtener el registro de inm_ubicacion', data: $anexo_a,
-                header: $header, ws: $ws);
+        foreach($archivos as $nombre_interno => $ruta_archivo) {
+            $zip->addFile($ruta_archivo,  $nombre_interno);
         }
 
-        $file_plantilla = 'templates/CONTRATOS ARZEK/CORRESIDENCIAL/CLIENTE/ANEXO C.docx';
-        $ruta_plantilla = trim($this->path_base . $file_plantilla);
+        $zip->close();
 
-        $nombre_archivo = 'ANEXO C '. $registro['inm_ubicacion_razon_social'] .'_' . date('Ymd_His') . '.docx';
-        $ruta_salida    = trim($this->path_base . 'archivos/temporales/' . $nombre_archivo);
+        // Descargar el ZIP al cliente
+        header('Content-Description: File Transfer');
+        header('Content-Type: application/zip');
+        header('Content-Disposition: attachment; filename="' . $zip_nombre . '"');
+        header('Content-Transfer-Encoding: binary');
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length: ' . filesize($zip_ruta));
+        ob_clean();
+        flush();
+        readfile($zip_ruta);
 
-        $pesos = floor($registro['inm_ubicacion_monto_devolucion']);
-        $centavos = round(($registro['inm_ubicacion_monto_devolucion'] - $pesos) * 100);
-
-        $formatter = new NumberFormatter("es", NumberFormatter::SPELLOUT);
-        $texto = ucfirst($formatter->format($pesos));
-
-        $registro['monto_devolucion_texto'] = sprintf("%s pesos %02d/100 M.N.", $texto, $centavos);
-
-
-        $registro['fecha_texto'] = strtoupper("$diaActual de $mesActual de $anioActual");
-        $registro['fecha_actual'] = "$diaActual de $mesActual de $anioActual";
-
-        $keys = ['inm_ubicacion_id', 'inm_ubicacion_razon_social', 'inm_ubicacion_ubicacion_completa',
-            'inm_ubicacion_folio_registro_publico', 'inm_ubicacion_numero_escritura', 'inm_ubicacion_numero_notaria',
-            'inm_ubicacion_nombre_notario', 'inm_ubicacion_cuenta_predial', 'fecha_texto', 'fecha_actual',
-            'inm_ubicacion_monto_devolucion', 'monto_devolucion_texto', 'bn_cuenta_cuenta','bn_sucursal_descripcion',
-            'inm_transferencia_transferencia','inm_co_acreditado_razon_social','inm_estado_civil_descripcion'];
-        $anexo_a = (new inm_ubicacion(link: $this->link))->descarga_contrato(
-            inm_ubicacion_id: $this->registro_id,
-            keys: $keys,
-            nombre_archivo: $nombre_archivo,
-            reg_ubicacion: $registro,
-            ruta_plantilla: $ruta_plantilla,
-            ruta_salida: $ruta_salida
-        );
-        if(errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al obtener el registro de inm_ubicacion', data: $anexo_a,
-                header: $header, ws: $ws);
+        // Limpieza de archivos temporales
+        @unlink($zip_ruta);
+        foreach($archivos as $ruta_archivo) {
+            @unlink($ruta_archivo);
         }
 
-        $file_plantilla = 'templates/CONTRATOS ARZEK/CORRESIDENCIAL/CLIENTE/ANEXO C SIN DEVOLUCION.docx';
-        $ruta_plantilla = trim($this->path_base . $file_plantilla);
-
-        $nombre_archivo = 'ANEXO C '. $registro['inm_ubicacion_razon_social'] .'_' . date('Ymd_His') . '.docx';
-        $ruta_salida    = trim($this->path_base . 'archivos/temporales/' . $nombre_archivo);
-
-        $registro['fecha_texto'] = strtoupper("$diaActual de $mesActual de $anioActual");
-
-        $keys = ['inm_ubicacion_id', 'inm_ubicacion_razon_social', 'inm_ubicacion_ubicacion_completa',
-            'inm_ubicacion_folio_registro_publico', 'inm_ubicacion_numero_escritura', 'inm_ubicacion_numero_notaria',
-            'inm_ubicacion_nombre_notario', 'inm_ubicacion_cuenta_predial', 'fecha_texto',
-            'inm_co_acreditado_razon_social','inm_estado_civil_descripcion'];
-        $anexo_a = (new inm_ubicacion(link: $this->link))->descarga_contrato(
-            inm_ubicacion_id: $this->registro_id,
-            keys: $keys,
-            nombre_archivo: $nombre_archivo,
-            reg_ubicacion: $registro,
-            ruta_plantilla: $ruta_plantilla,
-            ruta_salida: $ruta_salida
-        );
-        if(errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al obtener el registro de inm_ubicacion', data: $anexo_a,
-                header: $header, ws: $ws);
-        }*/
-
-        return $registro;
+        exit;
     }
 }
