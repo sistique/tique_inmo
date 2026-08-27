@@ -975,3 +975,147 @@ html, body.app-layout-body {
 .sidebar-toggle-btn .bi-list {
     font-size: 1.3rem;
 }
+
+/***** INPUT DOCS AJUSTE *****/
+.drop-zone{
+    font-family:Arial, Helvetica, sans-serif;
+    width:100%;
+    /*min-height:320px;*/
+    border:2px dashed #b8c2cc;
+    border-radius:15px;
+    background:white;
+    display:flex;
+    flex-direction: column;
+    justify-content:center;
+    align-items:center;
+    transition:.2s;
+    overflow:hidden;
+    cursor: pointer;
+}
+
+.widget-form-cart form div.drop-zone,
+.drop-zone {
+    border-bottom: 2px dashed #b8c2cc !important;
+}
+
+.drop-zone.dragover{
+    border-color:#2563eb !important;
+    background:#eff6ff;
+}
+
+.widget-form-cart form .drop-zone.dragover {
+    border-color: #2563eb !important;
+}
+
+#upload-content{
+    text-align:center;
+    padding: 25px;
+}
+
+.upload-icon{
+    font-size:55px;
+    margin-bottom:10px;
+}
+
+#upload-content h3{
+    margin:5px 0;
+    color:#333;
+}
+
+#upload-content p{
+    color:#777;
+    margin-top:8px;
+}
+
+#upload-content span{
+    display:block;
+    margin-top:15px;
+    font-size:13px;
+    color:#999;
+}
+
+/* ===========================
+   PREVIEW
+=========================== */
+.lista-previews {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 15px;
+    width: 100%;
+}
+
+.preview-card {
+    position: relative;
+    background: white;
+    padding: 12px;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.preview-imagen {
+    width: 100%;
+    height: 150px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #eee;
+    background: #f8fafc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.preview-imagen img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.preview-info {
+    margin-top: 10px;
+}
+
+.preview-info h4 {
+    margin: 0;
+    font-size: 14px;
+    color: #222;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.preview-info p {
+    margin: 3px 0 0 0;
+    color: #777;
+    font-size: 12px;
+}
+
+.btn-eliminar {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    width: 28px;
+    height: 28px;
+    border: none;
+    border-radius: 50%;
+    background: #dc2626;
+    color: white;
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-eliminar:hover {
+    background: #b91c1c;
+}
+
+.pdf-loader {
+    color: #666;
+    font-size: 12px;
+    text-align: center;
+    padding: 10px;
+}

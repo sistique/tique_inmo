@@ -26,6 +26,7 @@ use config\views; ?>
 <!-- End JS MAP  -->
 <script src="<?php echo (new views())->url_assets; ?>js/modernizr.custom.js"></script>
 <!-- Start custom template style  -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="<?php echo (new views())->url_assets; ?>js/custom_template_style.js" type="text/javascript"></script>
 <!-- End custom template style   -->
 <script src="<?php echo (new views())->url_assets; ?>libraries/footable-jquery/js/footable.js"></script>

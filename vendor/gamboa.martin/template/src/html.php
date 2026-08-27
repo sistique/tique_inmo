@@ -1448,6 +1448,34 @@ class html{
         return $html;
     }
 
+    final public function file_sec(bool $disabled, string $id_css, string $name,
+                               string $place_holder, bool $required, mixed $value, bool $multiple = false): string|array
+    {
+
+        $valida = $this->valida_params_txt(id_css: $id_css,name:  $name,place_holder:  $place_holder);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar datos', data: $valida);
+        }
+
+        $params = $this->params_txt(disabled: $disabled,id_css:  $id_css,name:  $name,place_holder:  $place_holder,
+            required:  $required, multiple: $multiple);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al generar parametros', data: $params);
+        }
+
+        return "<div id='drop-zone' class='drop-zone'>
+                    <input type='file' name='$params->name'  value='$value' id='$id_css' 
+                    class = 'archivo-sec form-control' $params->disabled $params->required $params->multiple 
+                    style='display:none !important;'>
+                    <div id='upload-content'>
+                        <h3>Arrastra tus documentos aquí</h3>
+                        <p>o haz clic para seleccionar</p>
+                    </div>
+
+                    <div id='lista-previews' class='lista-previews'></div>
+                 </div>";
+    }
+
     /**
      * REG
      * Integra una nueva opción `<option>` dentro del conjunto de opciones de un `<select>`.

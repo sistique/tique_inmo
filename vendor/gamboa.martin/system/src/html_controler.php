@@ -1781,6 +1781,33 @@ class html_controler
         return $div;
     }
 
+    public function input_file_sec(int $cols, string $name, stdClass $row_upd, bool $value_vacio,bool $disabled = false,
+                               string $place_holder = 'Documento', bool $required = true, bool $multiple = false,
+                               bool $con_label = true): array|string
+    {
+
+        if($cols<=0){
+            return $this->error->error(mensaje: 'Error cold debe ser mayor a 0', data: $cols);
+        }
+        if($cols>=13){
+            return $this->error->error(mensaje: 'Error cold debe ser menor o igual a  12', data: $cols);
+        }
+
+        $html =$this->directivas->input_file_sec(disabled: $disabled, name: $name, place_holder: $place_holder,
+            required: $required, row_upd: $row_upd, value_vacio: $value_vacio,multiple: $multiple,
+            con_label: $con_label);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al generar input', data: $html);
+        }
+
+        $div = $this->directivas->html->div_group(cols: $cols,html: $html);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al integrar div', data: $div);
+        }
+
+        return $html;
+    }
+
     final public function input_text(int $cols, bool $disabled, string $name, string $place_holder, stdClass $row_upd,
                                      bool $value_vacio, array $class_css = array(), array $ids_css = array(),
                                      string $regex = '', bool $required = true, string $title = '',

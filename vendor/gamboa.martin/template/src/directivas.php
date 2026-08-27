@@ -1736,6 +1736,32 @@ class directivas{
         return $div;
     }
 
+    final public function input_file_sec(bool $disabled, string $name, string $place_holder, bool $required, stdClass $row_upd,
+                               bool $value_vacio, bool $multiple = false, bool $con_label = true): array|string
+    {
+
+        $valida = $this->valida_etiquetas(name: $name,place_holder:  $place_holder);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar etiquetas', data: $valida);
+        }
+
+        $row_upd_ = $this->init_input(name:$name,place_holder:  $place_holder,row_upd:  $row_upd,value_vacio:  $value_vacio);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al generar row upd', data: $row_upd_);
+        }
+
+        $html= $this->html->file_sec(disabled:$disabled, id_css: $name, name: $name, place_holder: $place_holder,
+            required: $required, value: $row_upd_->$name,multiple: $multiple);
+
+
+        $div = $this->div_label(html:$html, name: $name, place_holder: $place_holder, con_label: $con_label);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al integrar div', data: $div);
+        }
+
+        return $div;
+    }
+
     /**
      * Genera un input de tipo monto requerido
      * @param bool $disabled Si disabled deja el input deshabilitado
