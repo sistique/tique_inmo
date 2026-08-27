@@ -74,13 +74,13 @@ dropZones.forEach(dropZone => {
 
     // Procesa y agrega los archivos a esta dropzone
     function procesarArchivos(nuevosArchivos) {
-        const permitidos = ["application/pdf", "image/jpeg", "image/png"];
+        //const permitidos = ["application/pdf", "image/jpeg", "image/png"];
 
         nuevosArchivos.forEach(file => {
-            if (!permitidos.includes(file.type)) {
+            /*if (!permitidos.includes(file.type)) {
                 alert(`El archivo "${file.name}" no es permitido.`);
                 return;
-            }
+            }*/
 
             const existe = archivosLista.some(a => a.name === file.name && a.size === file.size);
             if (existe) return;
