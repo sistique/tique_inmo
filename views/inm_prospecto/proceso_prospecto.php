@@ -287,6 +287,7 @@
                                         <div class="col-md-12">
                                             <div class="widget widget-box box-container widget-mylistings">
                                                 <form enctype="multipart/form-data" method="post" action="<?php echo $controlador->link_documento_bd; ?>" class="form-additional">
+                                                    <div class="content_table">
                                                     <table class="table table-striped">
                                                         <thead>
                                                         <tr>
@@ -304,6 +305,7 @@
                                                         }?>
                                                         </tbody>
                                                     </table>
+                                                    </div>
                                                     <?php echo $controlador->inputs->btn_action_next; ?>
                                                     <?php echo $controlador->inputs->id_retorno; ?>
                                                     <?php echo $controlador->inputs->seccion_retorno; ?>

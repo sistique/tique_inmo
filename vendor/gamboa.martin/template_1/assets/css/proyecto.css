@@ -977,6 +977,10 @@ html, body.app-layout-body {
 }
 
 /***** INPUT DOCS AJUSTE *****/
+.content_table{
+    overflow-x: auto;
+}
+
 .drop-zone{
     font-family:Arial, Helvetica, sans-serif;
     width:100%;
