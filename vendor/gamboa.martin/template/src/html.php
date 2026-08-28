@@ -1468,7 +1468,7 @@ class html{
                     class = 'archivo-sec form-control' $params->disabled $params->required $params->multiple 
                     style='display:none !important;'>
                     <div id='upload-content'>
-                        <h3>Arrastra tus documentos aquí</h3>
+                        <h5>Arrastra tus documentos aquí</h5>
                         <p>o haz clic para seleccionar</p>
                     </div>
 

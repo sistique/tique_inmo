@@ -984,7 +984,6 @@ html, body.app-layout-body {
 .drop-zone{
     font-family:Arial, Helvetica, sans-serif;
     width:100%;
-    /*min-height:320px;*/
     border:2px dashed #b8c2cc;
     border-radius:15px;
     background:white;
@@ -1013,7 +1012,7 @@ html, body.app-layout-body {
 
 #upload-content{
     text-align:center;
-    padding: 25px;
+    padding: 3px;
 }
 
 .upload-icon{
@@ -1021,14 +1020,15 @@ html, body.app-layout-body {
     margin-bottom:10px;
 }
 
-#upload-content h3{
+#upload-content h5{
     margin:5px 0;
     color:#333;
 }
 
 #upload-content p{
     color:#777;
-    margin-top:8px;
+    margin-top: 2px;
+    margin-bottom: 2px !important;
 }
 
 #upload-content span{

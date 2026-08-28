@@ -257,7 +257,7 @@ class _inm_prospecto_ubicacion{
             return $this->error->error(mensaje: 'Error al integrar button',data:  $button);
         }
 
-        $button = $controler->html->input_file(cols: 12, name:
+        $button = $controler->html->input_file_sec(cols: 12, name:
             'documentos['.$doc_tipo_documento['doc_tipo_documento_id'].'][]',
             row_upd: new stdClass(), value_vacio: false, place_holder: 'Subir Documento',required: false,
             con_label: false);

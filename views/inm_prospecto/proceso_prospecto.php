@@ -8,22 +8,12 @@
 
             <div class="col-lg-12">
                 <?php include (new views())->ruta_templates."head/title.php"; ?>
-                <?php include (new views())->ruta_templates."head/subtitulo.php"; ?>
-                <?php include (new views())->ruta_templates."mensajes.php"; ?>
 
                 <div class="widget  widget-box box-container form-main widget-form-cart" id="form">
-
-                    <div id="pestanasgeneral">
-                        <ul id="listageneral">
-                            <li id="pestanageneral1"><a href='javascript:cambiarPestannaGeneral(pestanasgeneral,pestanageneral1,pestanasprospecto);'>PROSPECTO</a></li>
-                        </ul>
-                    </div>
-                    <body onload="javascript:cambiarPestannaGeneral_inicial(pestanasgeneral);
+                    <body onload="
                     javascript:cambiarPestanna_inicialprospecto(pestanasprospecto);
                     javascript:inicializa_estado_civil();">
-                    <div id="contenidopestanasgeneral">
-                        <div class="contengeneral" id="cpestanageneral1">
-                            <div id="pestanasprospecto">
+                    <div id="pestanasprospecto">
                                 <ul id="listaprospecto">
                                     <li id="pestanaprospecto1"><a href='javascript:cambiarPestanna(pestanasprospecto,pestanaprospecto1);'>MODIFICA</a></li>
                                     <li id="pestanaprospecto2"><a href='javascript:cambiarPestanna(pestanasprospecto,pestanaprospecto2);'>DOCUMENTOS</a></li>
@@ -31,7 +21,7 @@
                                     <li id="pestanaprospecto4"><a href='javascript:cambiarPestanna(pestanasprospecto,pestanaprospecto4);'>ETAPA MANUAL</a></li>
                                 </ul>
                             </div>
-                            <div id="contenidopestanasprospecto">
+                    <div id="contenidopestanasprospecto">
                                 <div class="conten" id="cpestanaprospecto1">
                                     <div class="row">
                                         <div class="col-lg-12">
@@ -153,7 +143,7 @@
 
                                                     <?php echo $controlador->header_frontend->apartado_7; ?>
                                                     <div  id="apartado_7">
-                                                        <?php echo $controlador->inputs->inm_co_acreditado->nombre_empresa_patron; ?>
+                                                        <?php echo $controlador->inputs->inm_co_acreditado->nombre_empresa; ?>
                                                         <?php echo $controlador->inputs->inm_co_acreditado->nrp; ?>
                                                         <?php echo $controlador->inputs->inm_co_acreditado->numero_nep; ?>
                                                         <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
@@ -417,8 +407,6 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

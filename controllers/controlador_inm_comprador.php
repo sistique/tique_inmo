@@ -278,7 +278,7 @@ class controlador_inm_comprador extends _ctl_base {
      * @param bool $ws Si ws muestra resultado en json
      * @return array|string
      */
-    public function alta(bool $header, bool $ws = false): array|string
+    public function alta(bool $header, bool $ws = falseok ): array|string
     {
         // Restaura $this->row_upd desde sesión antes de init_alta() para que
         // tanto los inputs de texto como los selects muestren los valores previos
