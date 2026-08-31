@@ -1353,13 +1353,13 @@ class controlador_inm_prospecto extends _ctl_formato
         }
 
         $keys_selects = (new init())->key_select_txt(cols: 3, key: 'numero_exterior',
-            keys_selects: $keys_selects, place_holder: 'Ext', required: false);
+            keys_selects: $keys_selects, place_holder: 'Ext Dom.', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
         $keys_selects = (new init())->key_select_txt(cols: 3, key: 'numero_interior',
-            keys_selects: $keys_selects, place_holder: 'Int', required: false);
+            keys_selects: $keys_selects, place_holder: 'Int Dom.', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
@@ -1457,7 +1457,7 @@ class controlador_inm_prospecto extends _ctl_formato
         $keys_selects['correo_empresa']->regex = $this->validacion->patterns['correo_html5'];
 
         $keys_selects = (new init())->key_select_txt(cols: 6, key: 'calle',
-            keys_selects: $keys_selects, place_holder: 'Calle', required: false);
+            keys_selects: $keys_selects, place_holder: 'Calle Dom.', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
