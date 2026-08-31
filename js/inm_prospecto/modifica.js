@@ -850,3 +850,44 @@ sl_adm_estado_civil_id.change(function () {
         }
     });*/
 });
+
+let descuento_pension_alimenticia_dh = $("#descuento_pension_alimenticia_dh");
+let descuento_pension_alimenticia_fc = $("#descuento_pension_alimenticia_fc");
+let monto_credito_solicitado_dh = $("#monto_credito_solicitado_dh");
+let monto_ahorro_voluntario = $("#monto_ahorro_voluntario");
+let sub_cuenta = $("#sub_cuenta");
+let monto_final = $("#monto_final");
+let descuento = $("#descuento");
+let puntos = $("#puntos");
+
+// Campos que manejan montos
+let campos_monto = $(
+    "#descuento_pension_alimenticia_dh, " +
+    "#descuento_pension_alimenticia_fc, " +
+    "#monto_credito_solicitado_dh, " +
+    "#monto_ahorro_voluntario, " +
+    "#sub_cuenta," +
+    "#monto_final, " +
+    "#descuento"
+);
+
+// Limpiar monto al escribir o pegar
+campos_monto.on('input', function () {
+
+    let valor = $(this).val();
+
+    valor = valor
+        .replace(/\$/g, '')       // Quitar $
+        .replace(/,/g, '')        // Quitar comas
+        .replace(/[^\d.]/g, '');  // Quitar caracteres no válidos
+
+    // Evitar múltiples puntos decimales
+    let partes = valor.split('.');
+
+    if (partes.length > 2) {
+        valor = partes[0] + '.' + partes.slice(1).join('');
+    }
+
+    $(this).val(valor);
+});
+
