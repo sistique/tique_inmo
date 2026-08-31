@@ -233,6 +233,13 @@ class controlador_inm_prospecto extends _ctl_formato
                 header: $header, ws: $ws);
         }
 
+        $keys_selects = $this->key_select(cols: 3, con_registros: true, filtro: array(), key: 'inm_tipo_venta_id',
+            keys_selects: $keys_selects, id_selected: -1, label: 'Tipo de Venta');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects', data: $keys_selects,
+                header: $header, ws: $ws);
+        }
+
         $inputs = $this->inputs(keys_selects: $keys_selects);
         if (errores::$error) {
             return $this->retorno_error(
@@ -270,7 +277,41 @@ class controlador_inm_prospecto extends _ctl_formato
         }
 
         $this->inputs->apellido_materno = $apellido_materno;
+        
+        $devolucion = $this->html->input_text(cols: 3, disabled: false, name: 'devolucion',
+            place_holder: 'Devolucion', row_upd: new stdClass(), value_vacio: false, required: false);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $devolucion,  header: $header, ws: $ws);
+        }
 
+        $this->inputs->devolucion = $devolucion;    
+        
+        $numero_com = $this->html->input_text(cols: 2, disabled: false, name: 'numero_com',
+            place_holder: 'Telefono', row_upd: new stdClass(), value_vacio: false,
+            regex: $this->validacion->patterns['telefono_mx_html'], required: false);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $numero_com,  header: $header, ws: $ws);
+        }
+
+        $this->inputs->numero_com = $numero_com;    
+        
+        $cel_com = $this->html->input_text(cols: 2, disabled: false, name: 'cel_com',
+            place_holder: 'Celular', row_upd: new stdClass(), value_vacio: false,
+            regex: $this->validacion->patterns['telefono_mx_html'], required: false);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $cel_com,  header: $header, ws: $ws);
+        }
+
+        $this->inputs->cel_com = $cel_com;
+        
+        $correo_com = $this->html->input_text(cols: 2, disabled: false, name: 'correo_com',
+            place_holder: 'Correo', row_upd: new stdClass(), value_vacio: false,
+            regex: $this->validacion->patterns['correo_html5'], required: false);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $correo_com,  header: $header, ws: $ws);
+        }
+
+        $this->inputs->correo_com = $correo_com;
 
         $documento = $this->html->input_file(cols: 12, name: 'precalificacion', row_upd: new stdClass(),
             value_vacio: false, place_holder: 'Precalificacion', required: false);
@@ -328,7 +369,7 @@ class controlador_inm_prospecto extends _ctl_formato
             'numero_nep', 'extension_nep', 'nss', 'curp', 'rfc', 'numero_exterior', 'numero_interior', 'observaciones',
             'sub_cuenta', 'monto_final', 'descuento', 'puntos', 'telefono_casa', 'correo_empresa',
             'correo_mi_cuenta_infonavit', 'password_mi_cuenta_infonavit', 'nss_extra', 'liga_red_social', 'area_empresa',
-            'texto_exterior', 'texto_interior', 'documentos', 'receptor', 'asunto', 'mensaje','calle');
+            'texto_exterior', 'texto_interior', 'documentos', 'receptor', 'asunto', 'mensaje','calle','devolucion');
 
         $keys->selects = array();
 
@@ -352,6 +393,7 @@ class controlador_inm_prospecto extends _ctl_formato
         $init_data['inm_ocupacion'] = "gamboamartin\\inmuebles";
         $init_data['com_tipo_direccion'] = "gamboamartin\\comercial";
         $init_data['org_sucursal'] = "gamboamartin\\organigrama";
+        $init_data['inm_tipo_venta'] = "gamboamartin\\inmuebles";
 
         $init_data = (new _base_paquete())->init_data_domicilio(init_data: $init_data);
         if (errores::$error) {
@@ -1370,7 +1412,6 @@ class controlador_inm_prospecto extends _ctl_formato
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-
         $keys_selects = (new init())->key_select_txt(cols: 6, key: 'texto_interior',
             keys_selects: $keys_selects, place_holder: 'Numero Int', required: false);
         if (errores::$error) {
@@ -1462,6 +1503,11 @@ class controlador_inm_prospecto extends _ctl_formato
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
+        $keys_selects = (new init())->key_select_txt(cols: 12, key: 'devolucion',
+            keys_selects: $keys_selects, place_holder: 'Devolucion', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
 
         return $keys_selects;
     }

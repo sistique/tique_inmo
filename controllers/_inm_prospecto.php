@@ -381,6 +381,11 @@ class _inm_prospecto{
         $identificadores['com_tipo_direccion_id']['disabled'] = false;
         $identificadores['com_tipo_direccion_id']['columns_ds'] = array('com_tipo_direccion_descripcion');
 
+        $identificadores['inm_tipo_venta_id']['title'] = 'Tipo Venta';
+        $identificadores['inm_tipo_venta_id']['cols'] = 2;
+        $identificadores['inm_tipo_venta_id']['disabled'] = false;
+        $identificadores['inm_tipo_venta_id']['columns_ds'] = array('inm_tipo_venta_descripcion');
+
         return $identificadores;
     }
 
@@ -484,7 +489,7 @@ class _inm_prospecto{
         $identificadores['inm_tipo_credito_id']['columns_ds'] = array('inm_tipo_credito_descripcion');
         
         $identificadores['inm_attr_tipo_credito_id']['title'] = 'Tipo de Credito Especifico';
-        $identificadores['inm_attr_tipo_credito_id']['cols'] = 3;
+        $identificadores['inm_attr_tipo_credito_id']['cols'] = 2;
         $identificadores['inm_attr_tipo_credito_id']['disabled'] = false;
         $identificadores['inm_attr_tipo_credito_id']['columns_ds'] = array('inm_attr_tipo_credito_descripcion');
         $identificadores['inm_attr_tipo_credito_id']['con_registros'] = $con_registros;
@@ -772,7 +777,8 @@ class _inm_prospecto{
      */
     public function integra_keys_selects_comercial(controlador_inm_prospecto|controlador_inm_prospecto_ubicacion $controlador, array $keys_selects): array
     {
-        $keys = array('com_agente_id','com_tipo_prospecto_id','com_medio_prospeccion_id', 'com_prospecto_id');
+        $keys = array('com_agente_id','com_tipo_prospecto_id','com_medio_prospeccion_id', 'com_prospecto_id',
+            'inm_tipo_venta_id');
         $valida = $this->validacion->valida_ids(keys: $keys,registro:  $controlador->registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al valida controlador registro',data:  $valida);
@@ -801,12 +807,12 @@ class _inm_prospecto{
     private function keys_selects_comercial(controlador_inm_prospecto|controlador_inm_prospecto_ubicacion $controlador, array $filtro,
                                            array $keys_selects): array
     {
-        $keys = array('com_agente_id','com_tipo_prospecto_id','com_medio_prospeccion_id', 'com_prospecto_id');
+        $keys = array('com_agente_id','com_tipo_prospecto_id','com_medio_prospeccion_id', 'com_prospecto_id',
+            'inm_tipo_venta_id');
         $valida = $this->validacion->valida_ids(keys: $keys,registro:  $controlador->registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al valida controlador registro',data:  $valida);
         }
-
 
         $identificadores = $this->identificadores_comercial(filtro: $filtro);
         if(errores::$error){
@@ -855,7 +861,6 @@ class _inm_prospecto{
      */
     private function keys_selects_infonavit(controlador_inm_prospecto $controlador, array $keys_selects): array
     {
-
         $valida = $this->valida_base(controlador: $controlador);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
@@ -865,7 +870,6 @@ class _inm_prospecto{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
-
 
         $identificadores = $this->identificadores_infonavit(controlador: $controlador);
         if(errores::$error){

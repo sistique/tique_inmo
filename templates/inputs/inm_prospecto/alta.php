@@ -7,6 +7,8 @@
 <?php echo $controlador->inputs->numero_com; ?>
 <?php echo $controlador->inputs->cel_com; ?>
 <?php echo $controlador->inputs->correo_com; ?>
+<?php echo $controlador->inputs->inm_tipo_venta_id; ?>
+<?php echo $controlador->inputs->devolucion; ?>
 <?php echo $controlador->inputs->observaciones; ?>
 <?php echo $controlador->inputs->documento; ?>
 

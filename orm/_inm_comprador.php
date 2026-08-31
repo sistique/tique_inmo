@@ -499,7 +499,7 @@ class _inm_comprador{
         }
 
         $es_segundo_credito = $controler->html->directivas->input_radio_doble(campo: 'es_segundo_credito',
-            checked_default: $checked_default_esc,tag: 'Es Segundo Credito', val_1: 'SI',val_2: 'NO', cols: 3);
+            checked_default: $checked_default_esc,tag: 'Es Segundo Credito', val_1: 'SI',val_2: 'NO', cols: 2);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener es_segundo_credito',data:  $es_segundo_credito);
         }
