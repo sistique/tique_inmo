@@ -93,7 +93,7 @@
 
                         <?php echo $controlador->header_frontend->apartado_5; ?>
                         <div id="apartado_5">
-                            <?php echo $controlador->inputs->nombre_empresa; ?>
+                            <?php echo $controlador->inputs->nombre_empresa_patron; ?>
                             <?php echo $controlador->inputs->nrp_nep; ?>
                             <?php echo $controlador->inputs->numero_nep; ?>
                             <?php echo $controlador->inputs->correo_empresa; ?>
@@ -126,7 +126,7 @@
 
                         <?php echo $controlador->header_frontend->apartado_7; ?>
                         <div  id="apartado_7">
-                            <?php echo $controlador->inputs->inm_co_acreditado->nombre_empresa_patron; ?>
+                            <?php echo $controlador->inputs->inm_co_acreditado->nombre_empresa; ?>
                             <?php echo $controlador->inputs->inm_co_acreditado->nrp; ?>
                             <?php echo $controlador->inputs->inm_co_acreditado->numero_nep; ?>
                             <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
