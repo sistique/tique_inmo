@@ -579,13 +579,20 @@ sl_inm_tipo_credito_id.change(function () {
         data: {'id':tipo_credito_id},
         url: 'index.php?seccion=inm_tipo_credito&accion=get_attr_tipos_credito&ws=1&session_id='+session_id,
         success: function(data_r) {
+            let valor_id = -1;
+
             sl_inm_attr_tipo_credito_id.empty();
             integra_new_option('#inm_attr_tipo_credito_id','Seleccione una tipo credito','-1');
             $.each(data_r.registros, function( index, tipo_credito ) {
                 integra_new_option('#inm_attr_tipo_credito_id',tipo_credito.inm_attr_tipo_credito_descripcion,
                     tipo_credito.inm_attr_tipo_credito_id);
+
+                if(data_r.registros.length === 1){
+                    valor_id = tipo_credito.inm_attr_tipo_credito_id;
+                }
             });
-            sl_inm_attr_tipo_credito_id.val('-1');
+
+            sl_inm_attr_tipo_credito_id.val(valor_id);
             sl_inm_attr_tipo_credito_id.selectpicker('refresh');
         },
         error: function() {
@@ -628,13 +635,19 @@ sl_adm_estado_civil_id.change(function () {
         data: {'id':estado_civil_id},
         url: 'index.php?seccion=inm_estado_civil&accion=get_estados_civiles&ws=1&session_id='+session_id,
         success: function(data_r) {
+            let valor_id = -1;
+
             sl_inm_estado_civil_id.empty();
             integra_new_option('#inm_estado_civil_id','Seleccione una estado civil','-1');
             $.each(data_r.registros, function( index, estado_civil ) {
                 integra_new_option('#inm_estado_civil_id',estado_civil.inm_estado_civil_descripcion,
                     estado_civil.inm_estado_civil_id);
+
+                if(data_r.registros.length === 1){
+                    valor_id = estado_civil.inm_estado_civil_id;
+                }
             });
-            sl_inm_estado_civil_id.val('-1');
+            sl_inm_estado_civil_id.val(valor_id);
             sl_inm_estado_civil_id.selectpicker('refresh');
         },
         error: function() {

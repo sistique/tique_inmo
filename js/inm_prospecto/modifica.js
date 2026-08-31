@@ -752,17 +752,101 @@ sl_inm_tipo_credito_id.change(function () {
         data: {'id':tipo_credito_id},
         url: 'index.php?seccion=inm_tipo_credito&accion=get_attr_tipos_credito&ws=1&session_id='+session_id,
         success: function(data_r) {
+            let valor_id = -1;
+
             sl_inm_attr_tipo_credito_id.empty();
             integra_new_option('#inm_attr_tipo_credito_id','Seleccione una tipo credito','-1');
             $.each(data_r.registros, function( index, tipo_credito ) {
                 integra_new_option('#inm_attr_tipo_credito_id',tipo_credito.inm_attr_tipo_credito_descripcion,
                     tipo_credito.inm_attr_tipo_credito_id);
+
+                if(data_r.registros.length === 1){
+                    valor_id = tipo_credito.inm_attr_tipo_credito_id;
+                }
             });
-            sl_inm_attr_tipo_credito_id.val('-1');
+
+            sl_inm_attr_tipo_credito_id.val(valor_id);
             sl_inm_attr_tipo_credito_id.selectpicker('refresh');
         },
         error: function() {
             alert("No se ha podido obtener la información");
         }
     });
+});
+
+
+let sl_adm_estado_civil_id = $("#adm_estado_civil_id");
+let sl_inm_estado_civil_id = $("#inm_estado_civil_id");
+
+/*function inicializa_estado_civil(){
+    estado_civil_id = sl_adm_estado_civil_id.val();
+
+    $.ajax({
+        type: "POST",
+        data: {'id':estado_civil_id},
+        url: 'index.php?seccion=inm_estado_civil&accion=get_estado_civil&ws=1&session_id='+session_id,
+        success: function(data_r) {
+            if(data_r.adm_estado_civil_descripcion === "CASADO"){
+                apartado_8.toggle();
+                collapse_a8.off("click").click(function () {
+                    apartado_8.toggle();
+                });
+            }else{
+                apartado_8.hide();
+                collapse_a8.off("click");
+            }
+        },
+        error: function() {
+            alert("No se ha podido obtener la información");
+        }
+    });
+}*/
+sl_adm_estado_civil_id.change(function () {
+    estado_civil_id = $(this).val();
+
+    $.ajax({
+        type: "POST",
+        data: {'id':estado_civil_id},
+        url: 'index.php?seccion=inm_estado_civil&accion=get_estados_civiles&ws=1&session_id='+session_id,
+        success: function(data_r) {
+            let valor_id = -1;
+
+            sl_inm_estado_civil_id.empty();
+            integra_new_option('#inm_estado_civil_id','Seleccione una estado civil','-1');
+            $.each(data_r.registros, function( index, estado_civil ) {
+                integra_new_option('#inm_estado_civil_id',estado_civil.inm_estado_civil_descripcion,
+                    estado_civil.inm_estado_civil_id);
+
+                if(data_r.registros.length === 1){
+                    valor_id = estado_civil.inm_estado_civil_id;
+                }
+            });
+
+            sl_inm_estado_civil_id.val(valor_id);
+            sl_inm_estado_civil_id.selectpicker('refresh');
+        },
+        error: function() {
+            alert("No se ha podido obtener la información");
+        }
+    });
+
+    /*$.ajax({
+        type: "POST",
+        data: {'id':estado_civil_id},
+        url: 'index.php?seccion=inm_estado_civil&accion=get_estado_civil&ws=1&session_id='+session_id,
+        success: function(data_r) {
+            if(data_r.adm_estado_civil_descripcion === "CASADO"){
+                apartado_8.toggle();
+                collapse_a8.off("click").click(function () {
+                    apartado_8.toggle();
+                });
+            }else{
+                apartado_8.hide();
+                collapse_a8.off("click");
+            }
+        },
+        error: function() {
+            alert("No se ha podido obtener la información");
+        }
+    });*/
 });
