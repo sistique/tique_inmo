@@ -78,7 +78,7 @@ class inm_ubicacion extends _inm_ubicaciones {
 
         parent::__construct(link: $link, tabla: $tabla, campos_obligatorios: $campos_obligatorios,
             columnas: $columnas, columnas_extra: $columnas_extra, renombres: $renombres,
-            atributos_criticos: $atributos_criticos, sub_querys: $sub_querys);
+            sub_querys: $sub_querys, atributos_criticos: $atributos_criticos);
 
         $this->NAMESPACE = __NAMESPACE__;
         $this->etiqueta = 'Ubicaciones';
