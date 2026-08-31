@@ -120,7 +120,7 @@
 <?php echo $controlador->header_frontend->apartado_7; ?>
     <div id="apartado_7">
 
-        <?php echo $controlador->inputs->nombre_empresa_patron; ?>
+        <?php echo $controlador->inputs->nombre_empresa; ?>
         <?php echo $controlador->inputs->nrp_nep; ?>
         <?php echo $controlador->inputs->lada_nep; ?>
         <?php echo $controlador->inputs->numero_nep; ?>
