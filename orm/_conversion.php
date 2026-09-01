@@ -74,6 +74,12 @@ class _conversion{
         if(!isset($inm_comprador_ins['curp'] )){
             $inm_comprador_ins['curp'] = 'XEXX010101MNEXXXA8';
         }
+        if(!isset($inm_comprador_ins['lada_nep'] )){
+            $inm_comprador_ins['lada_nep'] = '33';
+        }
+        if(!isset($inm_comprador_ins['numero_nep'] )){
+            $inm_comprador_ins['numero_nep'] = '33333333';
+        }
         if(!isset($inm_comprador_ins['nombre_empresa_patron'] )){
             $inm_comprador_ins['nombre_empresa_patron'] = 'POR DEFINIR';
         }
@@ -133,10 +139,10 @@ class _conversion{
             return $this->error->error(mensaje: 'Error al inicializar inm_comprador', data: $inm_comprador_ins);
         }
 
-        /*$inm_comprador_ins = $this->defaults_alta_comprador(inm_comprador_ins: $inm_comprador_ins);
+        $inm_comprador_ins = $this->defaults_alta_comprador(inm_comprador_ins: $inm_comprador_ins);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener inm_comprador_ins', data: $inm_comprador_ins);
-        }*/
+        }
 
         $inm_comprador_ins = $this->integra_ids_prefs(inm_comprador_ins: $inm_comprador_ins,link: $link);
         if(errores::$error){
@@ -285,10 +291,10 @@ class _conversion{
         $inm_comprador_modelo->desde_prospecto = true;
 
         $r_alta_comprador = $inm_comprador_modelo->alta_registro(registro: $inm_comprador_ins);
-
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al insertar cliente', data: $r_alta_comprador);
         }
+
         return $r_alta_comprador;
     }
 
