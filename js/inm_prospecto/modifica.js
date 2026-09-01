@@ -634,6 +634,7 @@ let apartado_8 = $("#apartado_8");
 let apartado_9 = $("#apartado_9");
 let apartado_10 = $("#apartado_10");
 let apartado_11 = $("#apartado_11");
+let apartado_12 = $("#apartado_12");
 
 let collapse_a1 = $("#collapse_a1");
 let collapse_a2 = $("#collapse_a2");
@@ -646,6 +647,7 @@ let collapse_a8 = $("#collapse_a8");
 let collapse_a9 = $("#collapse_a9");
 let collapse_a10 = $("#collapse_a10");
 let collapse_a11 = $("#collapse_a11");
+let collapse_a12 = $("#collapse_a12");
 
 
 apartado_1.show();
@@ -659,6 +661,7 @@ apartado_8.show();
 apartado_9.show();
 apartado_10.show();
 apartado_11.show();
+apartado_12.show();
 
 collapse_a1.click(function() {
     apartado_1.toggle();
@@ -707,6 +710,11 @@ collapse_a11.click(function() {
 
 });
 
+collapse_a12.click(function() {
+    apartado_12.toggle();
+
+});
+
 let todo_aculto = true;
 
 $("#collapse_all").click(function() {
@@ -722,6 +730,7 @@ $("#collapse_all").click(function() {
         apartado_9.hide();
         apartado_10.hide();
         apartado_11.hide();
+        apartado_12.hide();
         todo_aculto = false;
     }
     else{
@@ -736,6 +745,7 @@ $("#collapse_all").click(function() {
         apartado_9.show();
         apartado_10.show();
         apartado_11.show();
+        apartado_12.show();
         todo_aculto = true;
     }
 
