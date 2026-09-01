@@ -57,6 +57,7 @@
                             <?php echo $controlador->inputs->cel_com; ?>
                             <?php echo $controlador->inputs->correo_com; ?>
 
+                            <!-- Domicilio fiscal -->
                             <?php echo $controlador->inputs->dp_estado_id; ?>
                             <?php echo $controlador->inputs->dp_municipio_id; ?>
                             <?php echo $controlador->inputs->dp_cp_id; ?>
@@ -64,6 +65,15 @@
                             <?php echo $controlador->inputs->calle; ?>
                             <?php echo $controlador->inputs->numero_exterior; ?>
                             <?php echo $controlador->inputs->numero_interior; ?>
+
+                            <!-- Domicilio del cliente -->
+                            <?php echo $controlador->inputs->dp_estado_domicilio_id; ?>
+                            <?php echo $controlador->inputs->dp_municipio_domicilio_id; ?>
+                            <?php echo $controlador->inputs->dp_cp_domicilio_id; ?>
+                            <?php echo $controlador->inputs->dp_colonia_postal_domicilio_id; ?>
+                            <?php echo $controlador->inputs->calle_domicilio; ?>
+                            <?php echo $controlador->inputs->numero_exterior_domicilio; ?>
+                            <?php echo $controlador->inputs->numero_interior_domicilio; ?>
 
                             <?php echo $controlador->inputs->observaciones; ?>
 

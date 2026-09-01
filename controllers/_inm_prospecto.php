@@ -405,7 +405,7 @@ class _inm_prospecto{
         }
 
         $filtro = array();
-        $identificadores['dp_estado_id']['title'] = 'Estado Dom.';
+        $identificadores['dp_estado_id']['title'] = 'Estado Fiscal';
         $identificadores['dp_estado_id']['cols'] = 3;
         $identificadores['dp_estado_id']['disabled'] = false;
         $identificadores['dp_estado_id']['filtro'] = $filtro;
@@ -414,7 +414,7 @@ class _inm_prospecto{
 
         $filtro = array();
         $filtro['dp_estado.id'] = $row['dp_estado_id'];
-        $identificadores['dp_municipio_id']['title'] = 'Municipio Dom.';
+        $identificadores['dp_municipio_id']['title'] = 'Municipio Fiscal';
         $identificadores['dp_municipio_id']['cols'] = 3;
         $identificadores['dp_municipio_id']['disabled'] = false;
         $identificadores['dp_municipio_id']['filtro'] = $filtro;
@@ -424,7 +424,7 @@ class _inm_prospecto{
 
         $filtro = array();
         $filtro['dp_municipio.id'] = $row['dp_municipio_id'];
-        $identificadores['dp_cp_id']['title'] = 'CP Dom.';
+        $identificadores['dp_cp_id']['title'] = 'CP Fiscal';
         $identificadores['dp_cp_id']['cols'] = 3;
         $identificadores['dp_cp_id']['disabled'] = false;
         $identificadores['dp_cp_id']['filtro'] = $filtro;
@@ -434,7 +434,7 @@ class _inm_prospecto{
 
         $filtro = array();
         $filtro['dp_cp.id'] = $row['dp_cp_id'];
-        $identificadores['dp_colonia_postal_id']['title'] = 'Colonia Dom.';
+        $identificadores['dp_colonia_postal_id']['title'] = 'Colonia Fiscal';
         $identificadores['dp_colonia_postal_id']['cols'] = 3;
         $identificadores['dp_colonia_postal_id']['disabled'] = false;
         $identificadores['dp_colonia_postal_id']['filtro'] = $filtro;

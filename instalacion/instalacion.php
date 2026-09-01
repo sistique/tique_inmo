@@ -251,6 +251,13 @@ class instalacion
         $columnas->numero_interior = new stdClass();
         $columnas->numero_interior->default = 'SN';
 
+        $columnas->calle_domicilio = new stdClass();
+        $columnas->numero_exterior_domicilio = new stdClass();
+        $columnas->numero_exterior_domicilio->default = 'SN';
+
+        $columnas->numero_interior_domicilio = new stdClass();
+        $columnas->numero_interior_domicilio->default = 'SN';
+
         $columnas->observaciones = new stdClass();
         $columnas->observaciones->tipo_dato = 'TEXT';
 
@@ -308,6 +315,10 @@ class instalacion
         $foraneas['dp_calle_pertenece_id'] = new stdClass();
         $foraneas['dp_municipio_id'] = new stdClass();
         $foraneas['dp_municipio_id']->name_indice_opt = 'dp_municipio_nacimiento_id';
+        $foraneas['dp_estado_domicilio_id'] = new stdClass();
+        $foraneas['dp_municipio_domicilio_id'] = new stdClass();
+        $foraneas['dp_cp_domicilio_id'] = new stdClass();
+        $foraneas['dp_colonia_postal_domicilio_id'] = new stdClass();
         $foraneas['inm_nacionalidad_id'] = new stdClass();
         $foraneas['inm_ocupacion_id'] = new stdClass();
         $foraneas['inm_sindicato_id'] = new stdClass();
