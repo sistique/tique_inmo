@@ -285,7 +285,7 @@ class _conversion{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener id_pref', data: $inm_comprador_ins);
         }
-        //print_r($inm_comprador_ins);exit;
+
         $inm_comprador_modelo = new inm_comprador(link: $modelo->link);
 
         $inm_comprador_modelo->desde_prospecto = true;
@@ -888,7 +888,8 @@ class _conversion{
             'inm_tipo_discapacidad_id','inm_persona_discapacidad_id','inm_estado_civil_id',
             'inm_institucion_hipotecaria_id','inm_sindicato_id','dp_municipio_nacimiento_id','fecha_nacimiento',
             'sub_cuenta','monto_final','descuento','puntos','inm_nacionalidad_id','inm_ocupacion_id','telefono_casa',
-            'correo_empresa','org_sucursal_id', 'dp_colonia_postal_id', 'rfc');
+            'correo_empresa','org_sucursal_id', 'dp_colonia_postal_id', 'rfc','numero_exterior','numero_interior',
+            'calle');
     }
 
     /**

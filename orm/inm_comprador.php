@@ -233,15 +233,15 @@ class inm_comprador extends _modelo_parent{
                     return $this->error->error(mensaje: 'Error al insertar inm_rel_prospecto_cliente_ins', data: $r_alta_rel);
                 }
             }
-        }
 
-        if(!isset($registro_entrada['cp'])){
-            $inm_prospecto = (new inm_comprador(link: $this->link))->inm_prospecto(inm_comprador_id: $r_alta_bd->registro_id);
-            if (errores::$error) {
-                return $this->error->error(mensaje: 'Error al obtener prospecto', data: $inm_prospecto);
+            if(!isset($registro_entrada['cp'])){
+                $inm_prospecto = (new inm_comprador(link: $this->link))->inm_prospecto(inm_comprador_id: $r_alta_bd->registro_id);
+                if (errores::$error) {
+                    return $this->error->error(mensaje: 'Error al obtener prospecto', data: $inm_prospecto);
+                }
+                $registro_entrada['cp'] = $inm_prospecto->dp_cp_codigo;
+                $registro_entrada['dp_municipio_id'] = $inm_prospecto->dp_municipio_id;
             }
-            $registro_entrada['cp'] = $inm_prospecto->dp_cp_codigo;
-            $registro_entrada['dp_municipio_id'] = $inm_prospecto->dp_municipio_id;
         }
 
         $transacciones = (new _alta_comprador())->posterior_alta(
