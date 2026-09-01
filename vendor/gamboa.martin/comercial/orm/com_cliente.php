@@ -224,7 +224,7 @@ class com_cliente extends _modelo_parent
             return $this->error->error(mensaje: 'Error al insertar sucursal', data: $alta_sucursal);
         }
 
-        if(trim($_FILES['documento']['name']) !== '') {
+        if(isset($_FILES['documento']) && trim($_FILES['documento']['name']) !== '') {
             $inserta_documento = $this->registra_documento_cliente(com_cliente: $r_alta_bd->registro_id);
             if (errores::$error) {
                 return $this->error->error(mensaje: 'Error al insertar documento para cliente', data: $inserta_documento);
