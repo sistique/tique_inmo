@@ -1171,115 +1171,230 @@ class controlador_inm_prospecto extends _ctl_formato
 
     public function generales(bool $header, bool $ws = false): array|stdClass
     {
-
-        $inm_prospecto = (new _generales())->inm_prospecto(inm_prospecto_id: $this->registro_id, link: $this->link);
+        $inm_prospecto = $this->init_datos_prospecto(header: $header, ws: $ws);
         if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al ajusta prospecto', data: $inm_prospecto, header: $header, ws: $ws);
+            return $this->retorno_error(mensaje: 'Error al inicializar datos del prospecto',
+                data: $inm_prospecto, header: $header, ws: $ws);
         }
 
+        $inm_conyuge = $this->init_conyuge(datos_prospecto: $inm_prospecto, header: $header, ws: $ws);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al inicializar cónyuge',
+                data: $inm_conyuge, header: $header, ws: $ws);
+        }
 
-        $this->registro = new stdClass();
-        $this->registro->inm_prospecto = $inm_prospecto;
+        $inm_tipo_beneficiarios = $this->init_beneficiarios_agrupados(header: $header, ws: $ws);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al inicializar beneficiarios agrupados',
+                data: $inm_tipo_beneficiarios, header: $header, ws: $ws);
+        }
 
+        $inm_referencias = $this->init_referencias(header: $header, ws: $ws);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al inicializar referencias',
+                data: $inm_referencias, header: $header, ws: $ws);
+        }
 
+        $this->registro->inm_conyuge            = $inm_conyuge;
+        $this->registro->inm_tipo_beneficiarios  = $inm_tipo_beneficiarios;
+        $this->registro->inm_referencias         = $inm_referencias;
+
+        return new stdClass();
+    }
+
+    /**
+     * Obtiene y almacena en $this->registro los datos base del prospecto y sus co-acreditados.
+     * @return array|stdClass  Datos del prospecto o error
+     */
+    private function init_datos_prospecto(bool $header, bool $ws): array|stdClass
+    {
+        $inm_prospecto = (new _generales())->inm_prospecto(
+            inm_prospecto_id: $this->registro_id, link: $this->link
+        );
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al ajustar prospecto',
+                data: $inm_prospecto, header: $header, ws: $ws);
+        }
+
+        $this->registro                    = new stdClass();
+        $this->registro->inm_prospecto     = $inm_prospecto;
+
+        $inm_co_acreditados = (new inm_prospecto(link: $this->link))->inm_co_acreditados(
+            inm_prospecto_id: $this->registro_id
+        );
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener co-acreditados',
+                data: $inm_co_acreditados, header: $header, ws: $ws);
+        }
+
+        $this->registro->inm_beneficiarios = $inm_co_acreditados;
+
+        return $inm_prospecto;
+    }
+
+    /**
+     * Inicializa y enriquece los datos del cónyuge del prospecto.
+     * Si no existe cónyuge devuelve un stdClass vacío inicializado.
+     * @param stdClass $datos_prospecto  Fila del prospecto (para tomar estado civil)
+     * @return array|stdClass            Datos del cónyuge enriquecidos o error
+     */
+    private function init_conyuge(stdClass $datos_prospecto, bool $header, bool $ws): array|stdClass
+    {
         $inm_conyuge = (new _generales())->inm_conyuge_init();
         if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al al inicializar inm_conyuge', data: $inm_conyuge, header: $header, ws: $ws);
+            return $this->retorno_error(mensaje: 'Error al inicializar inm_conyuge',
+                data: $inm_conyuge, header: $header, ws: $ws);
         }
 
-        $existe_conyuge = (new inm_prospecto(link: $this->link))->existe_conyuge(inm_prospecto_id: $this->registro_id);
+        $existe_conyuge = (new inm_prospecto(link: $this->link))->existe_conyuge(
+            inm_prospecto_id: $this->registro_id
+        );
         if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al validar si existe inm_conyuge', data: $existe_conyuge, header: $header, ws: $ws);
+            return $this->retorno_error(mensaje: 'Error al validar existencia de cónyuge',
+                data: $existe_conyuge, header: $header, ws: $ws);
         }
 
         if ($existe_conyuge) {
-            $inm_conyuge = (new inm_prospecto(link: $this->link))->inm_conyuge(inm_prospecto_id: $this->registro_id);
+            $inm_conyuge = $this->enriquece_conyuge(
+                datos_prospecto: $datos_prospecto, header: $header, ws: $ws
+            );
             if (errores::$error) {
-                return $this->retorno_error(mensaje: 'Error al obtener inm_conyuge', data: $inm_conyuge, header: $header, ws: $ws);
+                return $this->retorno_error(mensaje: 'Error al enriquecer datos del cónyuge',
+                    data: $inm_conyuge, header: $header, ws: $ws);
             }
-            $edad = (new calculo())->edad_hoy(fecha_nacimiento: $inm_conyuge->inm_conyuge_fecha_nacimiento);
-            if (errores::$error) {
-                return $this->retorno_error(mensaje: 'Error al obtener edad', data: $edad, header: $header, ws: $ws);
-            }
-            $inm_conyuge->inm_conyuge_edad = $edad;
-            $inm_conyuge->inm_conyuge_edad .= ' AÑOS';
-
-            $inm_conyuge->inm_conyuge_estado_civil = $inm_prospecto->inm_estado_civil_descripcion;
         }
 
-
-        $nombre_completo = (new _generales())->nombre_completo(name_entidad: 'inm_conyuge', row: $inm_conyuge);
+        $nombre_completo = (new _generales())->nombre_completo(
+            name_entidad: 'inm_conyuge', row: $inm_conyuge
+        );
         if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al obtener nombre_completo', data: $nombre_completo, header: $header, ws: $ws);
+            return $this->retorno_error(mensaje: 'Error al obtener nombre completo del cónyuge',
+                data: $nombre_completo, header: $header, ws: $ws);
         }
-
         $inm_conyuge->inm_conyuge_nombre_completo = $nombre_completo;
 
-
-        $lugar_fecha_nac = (new _generales())->data_nacimiento(entidad_edo: 'dp_estado', entidad_mun: 'dp_municipio', entidad_name: 'inm_conyuge', row: $inm_conyuge);
+        $lugar_fecha_nac = (new _generales())->data_nacimiento(
+            entidad_edo: 'dp_estado', entidad_mun: 'dp_municipio',
+            entidad_name: 'inm_conyuge', row: $inm_conyuge
+        );
         if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al obtener lugar_fecha_nac', data: $lugar_fecha_nac, header: $header, ws: $ws);
+            return $this->retorno_error(mensaje: 'Error al obtener lugar y fecha de nacimiento del cónyuge',
+                data: $lugar_fecha_nac, header: $header, ws: $ws);
         }
-
         $inm_conyuge->inm_conyuge_lugar_fecha_nac = $lugar_fecha_nac;
 
+        return $inm_conyuge;
+    }
 
-        $inm_tipo_beneficiarios = (new inm_tipo_beneficiario(link: $this->link))->registros_activos(retorno_obj: true);
-
+    /**
+     * Obtiene los datos del cónyuge desde BD y agrega edad y estado civil.
+     * Solo se llama cuando ya se verificó que el cónyuge existe.
+     * @param stdClass $datos_prospecto  Fila del prospecto (para estado civil)
+     * @return array|stdClass            Datos del cónyuge o error
+     */
+    private function enriquece_conyuge(stdClass $datos_prospecto, bool $header, bool $ws): array|stdClass
+    {
+        $inm_conyuge = (new inm_prospecto(link: $this->link))->inm_conyuge(
+            inm_prospecto_id: $this->registro_id
+        );
         if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al obtener inm_tipo_beneficiarios', data: $inm_tipo_beneficiarios,
-                header: $header, ws: $ws);
+            return $this->retorno_error(mensaje: 'Error al obtener inm_conyuge',
+                data: $inm_conyuge, header: $header, ws: $ws);
         }
 
-        $inm_beneficiarios = (new inm_prospecto(link: $this->link))->inm_beneficiarios(inm_prospecto_id: $this->registro_id);
+        $edad = (new calculo())->edad_hoy(fecha_nacimiento: $inm_conyuge->inm_conyuge_fecha_nacimiento);
         if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al obtener inm_beneficiarios', data: $inm_beneficiarios,
-                header: $header, ws: $ws);
+            return $this->retorno_error(mensaje: 'Error al calcular edad del cónyuge',
+                data: $edad, header: $header, ws: $ws);
+        }
+
+        $inm_conyuge->inm_conyuge_edad        = $edad . ' AÑOS';
+        $inm_conyuge->inm_conyuge_estado_civil = $datos_prospecto->inm_estado_civil_descripcion;
+
+        return $inm_conyuge;
+    }
+
+    /**
+     * Obtiene los tipos de beneficiario y agrupa dentro de cada tipo
+     * los beneficiarios del prospecto con su nombre completo calculado.
+     * @return array|stdClass  Array de tipos de beneficiario con sus beneficiarios o error
+     */
+    private function init_beneficiarios_agrupados(bool $header, bool $ws): array|stdClass
+    {
+        $inm_tipo_beneficiarios = (new inm_tipo_beneficiario(link: $this->link))->registros_activos(
+            retorno_obj: true
+        );
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener tipos de beneficiario',
+                data: $inm_tipo_beneficiarios, header: $header, ws: $ws);
+        }
+
+        $inm_beneficiarios = (new inm_prospecto(link: $this->link))->inm_beneficiarios(
+            inm_prospecto_id: $this->registro_id
+        );
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener beneficiarios del prospecto',
+                data: $inm_beneficiarios, header: $header, ws: $ws);
         }
 
         foreach ($inm_tipo_beneficiarios as $indice => $inm_tipo_beneficiario) {
-            if (!isset($inm_tipo_beneficiario->inm_beneficiarios)) {
-                $inm_tipo_beneficiario->inm_beneficiarios = array();
-            }
-            foreach ($inm_beneficiarios as $inm_beneficiario) {
+            $inm_tipo_beneficiario->inm_beneficiarios ??= array();
 
-                $nombre_completo = (new _generales())->nombre_completo(name_entidad: 'inm_beneficiario', row: $inm_beneficiario);
+            foreach ($inm_beneficiarios as $inm_beneficiario) {
+                $nombre_completo = (new _generales())->nombre_completo(
+                    name_entidad: 'inm_beneficiario', row: $inm_beneficiario
+                );
                 if (errores::$error) {
-                    return $this->retorno_error(mensaje: 'Error al obtener nombre_completo', data: $nombre_completo, header: $header, ws: $ws);
+                    return $this->retorno_error(mensaje: 'Error al obtener nombre del beneficiario',
+                        data: $nombre_completo, header: $header, ws: $ws);
                 }
                 $inm_beneficiario->inm_beneficiario_nombre_completo = $nombre_completo;
 
-                if ((int)$inm_beneficiario->inm_tipo_beneficiario_id === (int)$inm_tipo_beneficiario->inm_tipo_beneficiario_id) {
+                if ((int)$inm_beneficiario->inm_tipo_beneficiario_id
+                    === (int)$inm_tipo_beneficiario->inm_tipo_beneficiario_id
+                ) {
                     $inm_tipo_beneficiario->inm_beneficiarios[] = $inm_beneficiario;
                 }
-                $inm_tipo_beneficiarios[$indice] = $inm_tipo_beneficiario;
             }
+
+            $inm_tipo_beneficiarios[$indice] = $inm_tipo_beneficiario;
         }
-        $this->registro->inm_conyuge = $inm_conyuge;
-        $this->registro->inm_tipo_beneficiarios = $inm_tipo_beneficiarios;
 
+        return $inm_tipo_beneficiarios;
+    }
 
-        $inm_referencias = (new inm_prospecto(link: $this->link))->inm_referencias(inm_prospecto_id: $this->registro_id);
+    /**
+     * Obtiene las referencias del prospecto y enriquece cada una con
+     * nombre completo, teléfono y celular normalizados.
+     * @return array|stdClass  Array de referencias enriquecidas o error
+     */
+    private function init_referencias(bool $header, bool $ws): array|stdClass
+    {
+        $inm_referencias = (new inm_prospecto(link: $this->link))->inm_referencias(
+            inm_prospecto_id: $this->registro_id
+        );
         if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al obtener inm_referencias', data: $inm_referencias,
-                header: $header, ws: $ws);
+            return $this->retorno_error(mensaje: 'Error al obtener referencias del prospecto',
+                data: $inm_referencias, header: $header, ws: $ws);
         }
 
         foreach ($inm_referencias as $indice => $inm_referencia) {
-            $nombre_completo = (new _generales())->nombre_completo(name_entidad: 'inm_referencia_prospecto', row: $inm_referencia);
+            $nombre_completo = (new _generales())->nombre_completo(
+                name_entidad: 'inm_referencia', row: $inm_referencia
+            );
             if (errores::$error) {
-                return $this->retorno_error(mensaje: 'Error al obtener nombre_completo', data: $nombre_completo, header: $header, ws: $ws);
+                return $this->retorno_error(mensaje: 'Error al obtener nombre de la referencia',
+                    data: $nombre_completo, header: $header, ws: $ws);
             }
+
             $inm_referencia->inm_referencia_prospecto_nombre_completo = $nombre_completo;
-            $inm_referencia->inm_referencia_prospecto_telefono = $inm_referencia->inm_referencia_prospecto_lada;
-            $inm_referencia->inm_referencia_prospecto_telefono .= $inm_referencia->inm_referencia_prospecto_numero;
+            $inm_referencia->inm_referencia_prospecto_telefono         = $inm_referencia->inm_referencia_numero;
+            $inm_referencia->inm_referencia_prospecto_celular          = $inm_referencia->inm_referencia_celular;
 
             $inm_referencias[$indice] = $inm_referencia;
         }
 
-        $this->registro->inm_referencias = $inm_referencias;
-
-        return new stdClass();
+        return $inm_referencias;
     }
 
     protected function key_selects_txt(array $keys_selects, int $cols_descripcion = 12): array
@@ -1655,7 +1770,7 @@ class controlador_inm_prospecto extends _ctl_formato
             return $this->retorno_error(mensaje: 'Error al generar inputs', data: $inputs, header: $header, ws: $ws);
         }
 
-        $co_acreditados = (new inm_prospecto(link: $this->link))->get_co_acreditados(
+        $co_acreditados = (new inm_prospecto(link: $this->link))->inm_co_acreditados(
             inm_prospecto_id: $this->registro_id);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener co_acreditados',data:  $co_acreditados,
