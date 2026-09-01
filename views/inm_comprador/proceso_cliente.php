@@ -9,13 +9,6 @@
             <div class="col-lg-12">
 
                 <?php include (new views())->ruta_templates."head/title.php"; ?>
-
-                <div class="widget-header">
-                    <h2><?php echo $controlador->accion_titulo." - ID: ".$controlador->registro_id; ?></h2>
-                </div>
-
-                <?php /*include (new views())->ruta_templates."head/subtitulo.php"; */ ?>
-                <?php include (new views())->ruta_templates."mensajes.php"; ?>
                 <div class="widget  widget-box box-container form-main widget-form-cart" id="form">
 
                     <?php echo $controlador->inputs->inm_comprador_seleccionado_id; ?>

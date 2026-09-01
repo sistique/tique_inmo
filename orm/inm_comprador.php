@@ -67,8 +67,8 @@ class inm_comprador extends _modelo_parent{
 
         $tipo_campos['lada_com'] = 'lada';
         $tipo_campos['lada_nep'] = 'lada';
-        $tipo_campos['numero_nep'] = 'tel_sin_lada';
-        $tipo_campos['numero_com'] = 'tel_sin_lada';
+        $tipo_campos['numero_nep'] = 'telefono_mx';
+        $tipo_campos['numero_com'] = 'telefono_mx';
         $tipo_campos['curp'] = 'curp';
         $tipo_campos['nss'] = 'nss';
         $tipo_campos['cel_com'] = 'telefono_mx';
