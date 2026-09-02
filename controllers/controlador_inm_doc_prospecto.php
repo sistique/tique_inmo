@@ -371,8 +371,57 @@ class controlador_inm_doc_prospecto extends _ctl_formato {
         $this->inputs->inm_doc_prospecto_id = $inm_doc_prospecto_id;
 
         return $registro;
+    }
 
+    public function vista_previa_expediente(bool $header, bool $ws = false): array|string|stdClass
+    {
+        $registro = $this->modelo->registro(registro_id: $this->registro_id, retorno_obj: true);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener documento',data:  $registro,header:  $header,
+                ws:  $ws);
+        }
 
+        $ruta_doc = $this->url_base."$registro->doc_documento_ruta_relativa";
+
+        if((new generales())->guarda_archivo_dropbox) {
+            $guarda = (new _dropbox(link: $this->link))->preview(dropbox_id: $registro->inm_dropbox_ruta_id_dropbox,
+                extencion: $registro->doc_extension_descripcion);
+            if (errores::$error) {
+                return $this->retorno_error('Error al guardar archivo', $guarda, header: $header,
+                    ws: $ws);
+            }
+
+            $ruta_doc = $guarda->ruta_mostrar;
+        }
+        $this->ruta_doc = $ruta_doc;
+
+        if($registro->doc_extension_es_imagen === 'activo') {
+            $this->es_imagen = true;
+        }
+        if($registro->doc_extension_descripcion === 'pdf'){
+            $this->es_pdf = true;
+        }
+
+        $this->inputs = new stdClass();
+
+        $button_inm_doc_prospecto_descarga = $this->html->button_href(accion: 'descarga',etiqueta:  'Descarga',
+            registro_id:  $this->registro_id,
+            seccion:  $this->seccion,style:  'success');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al integrar button',data:  $button_inm_doc_prospecto_descarga,
+                header: $header,ws:  $ws);
+        }
+
+        $this->button_inm_doc_prospecto_descarga = $button_inm_doc_prospecto_descarga;
+
+        $inm_doc_prospecto_id = $this->html->hidden(name:'inm_doc_prospecto_id',value: $this->registro_id);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al in_registro_id',data:  $inm_doc_prospecto_id,
+                header: $header,ws:  $ws);
+        }
+        $this->inputs->inm_doc_prospecto_id = $inm_doc_prospecto_id;
+
+        return $registro;
     }
 
 
