@@ -83,7 +83,7 @@ class inm_conf_empresa extends _modelo_parent{
         if($org_empresa_id<=0){
             return $this->error->error(mensaje: 'Error org_empresa_id debe ser mayor a 0',data:  $org_empresa_id);
         }
-        $filtro['org_empresa.id'] = $org_empresa_id;
+        $filtro['org_empresa.id'] = 1;
 
         $r_inm_conf_empresa = $this->filtro_and(filtro:$filtro);
         if(errores::$error){
