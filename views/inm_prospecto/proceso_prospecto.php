@@ -284,10 +284,14 @@
                                                     <thead>
                                                     <tr>
                                                         <th>Tipo Documento</th>
+                                                        <?php
+                                                        if($controlador->ver_descripcion){
+                                                        ?>
                                                         <th>Descarga</th>
                                                         <th>Vista Previa</th>
                                                         <th>Zip</th>
                                                         <th>Elimina</th>
+                                                        <?php } ?>
                                                     </tr>
                                                     </thead>
                                                     <tbody>

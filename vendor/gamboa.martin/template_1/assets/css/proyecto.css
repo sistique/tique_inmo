@@ -981,19 +981,26 @@ html, body.app-layout-body {
     overflow-x: auto;
 }
 
-.drop-zone{
-    font-family:Arial, Helvetica, sans-serif;
-    width:100%;
-    border:2px dashed #b8c2cc;
-    border-radius:15px;
-    background:white;
-    display:flex;
-    flex-direction: column;
-    justify-content:center;
-    align-items:center;
-    transition:.2s;
-    overflow:hidden;
+.drop-zone {
+    font-family: Arial, Helvetica, sans-serif;
+    width: 100%;
+    border: 2px dashed #b8c2cc;
+    border-radius: 15px;
+    background: white;
+
+    /* Configuración Flexbox alineada en fila y envolvente */
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 15px;
+    padding: 0px 15px;
+
+    transition: .2s;
+    overflow: hidden;
     cursor: pointer;
+    box-sizing: border-box;
 }
 
 .widget-form-cart form div.drop-zone,
@@ -1010,9 +1017,11 @@ html, body.app-layout-body {
     border-color: #2563eb !important;
 }
 
-#upload-content{
-    text-align:center;
-    padding: 3px;
+#upload-content {
+    text-align: center;
+    padding: 10px;
+    /* Crece para abarcar el espacio libre restante y tiene un mínimo de ancho */
+    flex: 1 1 200px;
 }
 
 .upload-icon{
@@ -1029,6 +1038,7 @@ html, body.app-layout-body {
     color:#777;
     margin-top: 2px;
     margin-bottom: 2px !important;
+    max-width: 100%;
 }
 
 #upload-content span{
@@ -1042,10 +1052,12 @@ html, body.app-layout-body {
    PREVIEW
 =========================== */
 .lista-previews {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    display: flex;
+    flex-wrap: wrap;
     gap: 15px;
-    width: 100%;
+    /* Se ajusta según el contenido sin forzar el 100% de inicio */
+    width: auto;
+    max-width: 100%;
 }
 
 .preview-card {
@@ -1055,6 +1067,8 @@ html, body.app-layout-body {
     border-radius: 12px;
     border: 1px solid #e2e8f0;
     box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    width: 220px; /* Ancho fijo para mantener tarjetas uniformes en Flex */
+    flex-shrink: 0;
 }
 
 .preview-imagen {

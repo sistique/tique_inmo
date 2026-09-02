@@ -1467,12 +1467,13 @@ class html{
                     <input type='file' name='$params->name'  value='$value' id='$id_css' 
                     class = 'archivo-sec form-control' $params->disabled $params->required $params->multiple 
                     style='display:none !important;'>
+
+                    <div id='lista-previews' class='lista-previews'></div>
+
                     <div id='upload-content'>
                         <h5>Arrastra tus documentos aquí</h5>
                         <p>o haz clic para seleccionar</p>
                     </div>
-
-                    <div id='lista-previews' class='lista-previews'></div>
                  </div>";
     }
 

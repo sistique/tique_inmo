@@ -91,6 +91,7 @@ class controlador_inm_prospecto extends _ctl_formato
     public array $acciones_headers = array();
     public array $status_prospecto = array();
     public bool $es_agente = false;
+    public bool $ver_descripcion = false;
 
 
     public function __construct(PDO $link, html $html = new \gamboamartin\template_1\html(),
@@ -520,7 +521,9 @@ class controlador_inm_prospecto extends _ctl_formato
             return $this->retorno_error(mensaje: 'Error al integrar buttons', data: $inm_conf_docs_prospecto, header: $header, ws: $ws);
         }
 
+        $ver_descripcion = false;
         $temp = array();
+        //print_r($inm_conf_docs_prospecto);Exit;
         foreach ($inm_conf_docs_prospecto as $docs){
             $res = "<tr>
             <td>$docs[doc_tipo_documento_descripcion]</td>
@@ -534,10 +537,13 @@ class controlador_inm_prospecto extends _ctl_formato
                 <td>$docs[doc_tipo_documento_descripcion]</td>
                 <td colspan='4'>$docs[subir_documento]</td>
                 </tr>";
+            }else{
+                $ver_descripcion = true;
             }
             $temp[] = $res;
         }
 
+        $this->ver_descripcion = $ver_descripcion;
         $this->inm_conf_docs_prospecto = $temp;
 
         $params = array();
