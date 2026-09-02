@@ -698,10 +698,7 @@ $(document).on("click", "a[title='Vista Previa']", function (event) {
             var viewContent = tempDiv.find(".view");
             inm_doc_prospecto_id = inputdoc.val();
 
-            /*$("#myModal .content").html(inputdoc);
-            $("#myModal .content").html(viewContent);*/
             $("#myModal .content").html('');
-            $("#myModal .content").append(inputdoc);
             $("#myModal .content").append(viewContent);
             modal.showModal();
             loaderOverlay.remove();
@@ -738,7 +735,7 @@ modal.addEventListener('click', function (event) {
 
         $.ajax({
             type: "POST",
-            data: {id:inm_doc_prospecto_id},
+            data: {id: inm_doc_prospecto_id},
             url: 'index.php?seccion=inm_doc_prospecto&accion=elimina_temporal&ws=1&session_id='+session_id,
             success: function(data_r) {
                 console.log(data_r);

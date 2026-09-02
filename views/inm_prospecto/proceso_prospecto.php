@@ -429,9 +429,16 @@
 
 <dialog id="myModal">
     <span class="close-btn" id="closeModalBtn">&times;</span>
-    <h2>Vista Previa</h2>
-    <div class="content">
-    </div>
+
+    <button type="button" class="preview-arrow preview-prev" id="previewPrev">
+        &#10094;
+    </button>
+
+    <div class="content"></div>
+
+    <button type="button" class="preview-arrow preview-next" id="previewNext">
+        &#10095;
+    </button>
 </dialog>
 
 <div id="myModal" class="modal">

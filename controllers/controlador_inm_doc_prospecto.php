@@ -330,7 +330,7 @@ class controlador_inm_doc_prospecto extends _ctl_formato {
                 ws:  $ws);
         }
 
-        $ruta_doc = $this->url_base."$registro->doc_documento_ruta_relativa";
+            $ruta_doc = $this->url_base."$registro->doc_documento_ruta_relativa";
 
         if((new generales())->guarda_archivo_dropbox) {
             $guarda = (new _dropbox(link: $this->link))->preview(dropbox_id: $registro->inm_dropbox_ruta_id_dropbox,
@@ -351,66 +351,7 @@ class controlador_inm_doc_prospecto extends _ctl_formato {
             $this->es_pdf = true;
         }
 
-        $row_upd = new stdClass();
-        $row_upd->nss = $registro->inm_prospecto_nss;
-        $row_upd->curp = $registro->inm_prospecto_curp;
-        $row_upd->apellido_paterno = $registro->inm_prospecto_apellido_paterno;
-        $row_upd->apellido_materno = $registro->inm_prospecto_apellido_materno;
-        $row_upd->nombre = $registro->inm_prospecto_nombre;
-
-
-        $com_tipo_prospecto_descripcion = $this->html->input_text_required(cols: 12,disabled: true,
-            name: 'com_tipo_prospecto_descripcion', place_holder: 'Tipo de Cliente',row_upd: $row_upd,
-            value_vacio: false);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $com_tipo_prospecto_descripcion,
-                header:  $header, ws:  $ws);
-        }
-        $nss = $this->html->input_text_required(cols: 4,disabled: true,name: 'nss',place_holder: 'NSS',
-            row_upd:$row_upd,value_vacio: false);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $nss,header:  $header,
-                ws:  $ws);
-        }
-        $curp = $this->html->input_text_required(cols: 4,disabled: true,name: 'curp',place_holder: 'CURP',
-            row_upd:$row_upd,value_vacio: false);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $curp,header:  $header,
-                ws:  $ws);
-        }
-        $rfc = $this->html->input_text_required(cols: 4,disabled: true,name: 'rfc',place_holder: 'RFC',
-            row_upd:$row_upd,value_vacio: false);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $rfc,header:  $header,
-                ws:  $ws);
-        }
-        $apellido_paterno = $this->html->input_text_required(cols: 6,disabled: true,name: 'apellido_paterno',
-            place_holder: 'AP',row_upd:$row_upd,value_vacio: false);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $apellido_paterno,header:  $header,
-                ws:  $ws);
-        }
-        $apellido_materno = $this->html->input_text_required(cols: 6,disabled: true,name: 'apellido_materno',
-            place_holder: 'AM',row_upd:$row_upd,value_vacio: false);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $apellido_materno,header:  $header,
-                ws:  $ws);
-        }
-        $nombre = $this->html->input_text_required(cols: 12,disabled: true,name: 'nombre',place_holder: 'Nombre',
-            row_upd:$row_upd,value_vacio: false);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $nombre,header:  $header,
-                ws:  $ws);
-        }
-
         $this->inputs = new stdClass();
-        $this->inputs->nss = $nss;
-        $this->inputs->com_tipo_prospecto_descripcion = $com_tipo_prospecto_descripcion;
-        $this->inputs->curp = $curp;
-        $this->inputs->rfc = $rfc;
-        $this->inputs->apellido_paterno = $apellido_paterno;
-        $this->inputs->apellido_materno = $apellido_materno;
-        $this->inputs->nombre = $nombre;
 
         $button_inm_doc_prospecto_descarga = $this->html->button_href(accion: 'descarga',etiqueta:  'Descarga',
             registro_id:  $this->registro_id,

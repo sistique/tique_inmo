@@ -523,7 +523,6 @@ class controlador_inm_prospecto extends _ctl_formato
 
         $ver_descripcion = false;
         $temp = array();
-        //print_r($inm_conf_docs_prospecto);Exit;
         foreach ($inm_conf_docs_prospecto as $docs){
             $res = "<tr>
             <td class='td-doc'><div class='descripcion-doc'>$docs[doc_tipo_documento_descripcion]</div></td>
