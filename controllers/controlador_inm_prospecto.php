@@ -526,7 +526,7 @@ class controlador_inm_prospecto extends _ctl_formato
         //print_r($inm_conf_docs_prospecto);Exit;
         foreach ($inm_conf_docs_prospecto as $docs){
             $res = "<tr>
-            <td>$docs[doc_tipo_documento_descripcion]</td>
+            <td class='td-doc'><div class='descripcion-doc'>$docs[doc_tipo_documento_descripcion]</div></td>
             <td>$docs[descarga]</td>
             <td>$docs[vista_previa]</td>
             <td>$docs[descarga_zip]</td>
@@ -534,7 +534,7 @@ class controlador_inm_prospecto extends _ctl_formato
             </tr>";
             if(isset($docs['subir_documento'])){
                 $res = "<tr>
-                <td>$docs[doc_tipo_documento_descripcion]</td>
+                <td class='td-doc'><div class='descripcion-doc'>$docs[doc_tipo_documento_descripcion]</div></td>
                 <td colspan='4'>$docs[subir_documento]</td>
                 </tr>";
             }else{

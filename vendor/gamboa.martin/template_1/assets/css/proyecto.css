@@ -977,6 +977,16 @@ html, body.app-layout-body {
 }
 
 /***** INPUT DOCS AJUSTE *****/
+.descripcion-doc{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.td-doc{
+    vertical-align: middle !important;
+}
+
 .content_table{
     overflow-x: auto;
 }
