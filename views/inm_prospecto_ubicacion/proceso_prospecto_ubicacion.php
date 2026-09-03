@@ -195,7 +195,7 @@
                                                         <?php echo $controlador->inputs->conyuge->dp_municipio_id; ?>
                                                         <?php echo $controlador->inputs->conyuge->inm_nacionalidad_id; ?>
                                                         <?php echo $controlador->inputs->conyuge->inm_ocupacion_id; ?>
-                                                        
+
                                                         <!-- Contacto -->
                                                         <?php echo $controlador->inputs->conyuge->telefono_casa; ?>
                                                         <?php echo $controlador->inputs->conyuge->telefono_celular; ?>
