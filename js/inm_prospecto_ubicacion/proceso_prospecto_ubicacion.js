@@ -611,7 +611,7 @@ $("#collapse_all").click(function() {
 
 });
 
-let sl_inm_tipo_credito_id = $("#inm_tipo_credito_id");
+/*let sl_inm_tipo_credito_id = $("#inm_tipo_credito_id");
 
 function inicializa_conyuge(){
     tipo_credito_id = sl_inm_tipo_credito_id.val();
@@ -662,7 +662,7 @@ sl_inm_tipo_credito_id.change(function () {
             alert("No se ha podido obtener la información");
         }
     });
-});
+});*/
 
 /***** Modal Documentos *****/
 
