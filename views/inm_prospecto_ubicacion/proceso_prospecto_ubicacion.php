@@ -11,13 +11,7 @@
                 <?php //include (new views())->ruta_templates."head/subtitulo.php"; ?>
                 <?php include (new views())->ruta_templates."mensajes.php"; ?>
                 <div class="widget  widget-box box-container form-main widget-form-cart" id="form">
-
-                    <div id="pestanasgeneral">
-                        <ul id="listageneral">
-                            <li id="pestanageneral1"><a href='javascript:cambiarPestannaGeneral(pestanasgeneral,pestanageneral1,pestanasubicacion);'>PROSPECTO UBICACION</a></li>
-                        </ul>
-                    </div>
-                    <body onload="javascript:cambiarPestannaGeneral_inicial(pestanasgeneral);
+                    <body onload="
                     javascript:valor_inicial();
                     javascript:inicializa_conyuge();
                     javascript:cambiarPestanna_inicialubicacion(pestanasubicacion);">
