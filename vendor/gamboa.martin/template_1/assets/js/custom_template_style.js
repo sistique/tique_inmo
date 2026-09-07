@@ -192,3 +192,101 @@ function formatearBytes(bytes) {
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + tamaños[i];
 }
+
+/** MODAL DOCUENTOS **/
+
+
+var modal = document.getElementById("myModal");
+var closeBtn = document.getElementById("closeModalBtn");
+var ruta_docs = document.getElementById("ruta-docs");
+
+var documentos = JSON.parse(ruta_docs.textContent);
+
+var indice = 0;
+
+function mostrarDocumento(inm_doc_id) {
+    const documento = documentos.find(
+        (elemento, ind) => {
+            if (Number(elemento.inm_doc_id) === Number(inm_doc_id)) {
+                indice = ind;
+                return true;
+            }
+
+            return false;
+        }
+    );
+
+    if (!documento) {
+        console.error("Documento no encontrado:", inm_doc_id);
+        return;
+    }
+
+    $("#myModal .content .view").attr("src", documento.ruta_doc);
+
+    $("#previewCounter").text("Documento " + (indice + 1) + " de " + documentos.length);
+}
+
+function siguiente() {
+    indice++;
+    if (indice >= documentos.length) {
+        indice = 0;
+    }
+
+    mostrarDocumentoPorIndice();
+}
+
+function anterior() {
+    indice--;
+    if (indice < 0) {
+        indice = documentos.length - 1;
+    }
+
+    mostrarDocumentoPorIndice();
+}
+
+function mostrarDocumentoPorIndice() {
+    const documento = documentos[indice];
+    if (!documento) {
+        console.error("Documento no encontrado en índice:", indice);
+        return;
+    }
+
+    $("#myModal .content .view").attr("src", documento.ruta_doc);
+
+    $("#previewCounter").text(
+        "Documento " + (indice + 1) + " de " + documentos.length
+    );
+}
+
+$(document).on("click", "a[id='vista_previa']", function (event) {
+    event.preventDefault();
+
+    var loaderOverlay = $('<div class="loader-overlay"><div class="loader"></div></div>');
+    $('body').append(loaderOverlay);
+
+    mostrarDocumento($(this).attr('data-value'));
+
+    modal.showModal();
+    loaderOverlay.remove();
+});
+
+closeBtn.onclick = function () {
+    $("#myModal .content .view").attr("src", "");
+
+    modal.close();
+}
+
+modal.addEventListener('click', function (event) {
+    if (event.target === modal) {
+        $("#myModal .content .view").attr("src", "");
+        modal.close();
+    }
+});
+
+$("#previewPrev").on("click", function() {
+    anterior();
+});
+
+$("#previewNext").on("click", function() {
+    siguiente();
+});

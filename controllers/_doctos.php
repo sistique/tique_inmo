@@ -82,7 +82,7 @@ class _doctos{
 
     final public function documentos_de_prospecto(int $inm_prospecto_id, PDO $link, bool $todos, array $tipos_documentos){
 
-        $inm_prospecto = (new inm_prospecto(link: $link))->registro(registro_id: $inm_prospecto_id,retorno_obj: true);
+        /*$inm_prospecto = (new inm_prospecto(link: $link))->registro(registro_id: $inm_prospecto_id,retorno_obj: true);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al Obtener prospecto',data:  $inm_prospecto);
         }
@@ -145,10 +145,9 @@ class _doctos{
         $r_inm_conf_docs_prospecto = (new inm_conf_docs_prospecto(link: $link))->filtro_and(filtro: $filtro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al Obtener configuraciones',data:  $r_inm_conf_docs_prospecto);
-        }
+        }*/
 
         $in = array();
-
         if (count($tipos_documentos) > 0) {
             $in['llave'] = 'doc_tipo_documento.id';
             $in['values'] = $tipos_documentos;

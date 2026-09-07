@@ -646,7 +646,8 @@ class html_controler
      * @return string|array
      * @version 11.9.0
      */
-    final public function button_para_java(string $id_css, string $style, string $tag): string|array
+    final public function button_para_java(string $id_css, string $style, string $tag, string $css_extra ='',
+                                           string $data_value = ''): string|array
     {
         $style = trim($style);
         if ($style === '') {
@@ -660,7 +661,7 @@ class html_controler
         if ($tag === '') {
             return $this->error->error(mensaje: 'Error tag esta vacio', data: $tag);
         }
-        return "<a class='btn btn-$style' role='button' id='$id_css'>$tag</a>";
+        return "<a class='btn btn-$style $css_extra' role='button' id='$id_css' data-value='$data_value'>$tag</a>";
 
     }
 

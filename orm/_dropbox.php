@@ -175,6 +175,14 @@ class _dropbox
 
         $archivo_local = $path_base.'archivos/temporales/'.$dropbox_id.'.'.$extencion;
 
+        $ruta_mostrar = new stdClass();
+        $ruta_mostrar->ruta_mostrar = $generales->url_base . 'archivos/temporales/' . $dropbox_id . '.' . $extencion;
+        $ruta_mostrar->ruta_archivo = 'archivos/temporales/' . $dropbox_id . '.' . $extencion;
+
+        if (is_file($archivo_local)) {
+            return $ruta_mostrar;
+        }
+
         $token = $this->obten_token();
         if (errores::$error) {
             $error = (new errores())->error(mensaje: 'Error al obtener registro token', data: $token);
@@ -200,67 +208,21 @@ class _dropbox
 
         $response = curl_exec($ch);
 
-        $ruta_mostrar = new stdClass();
         if (curl_errno($ch)) {
             echo 'Error de cURL: ' . curl_error($ch);
-        } else {
-            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-            if ($httpCode === 200) {
-                file_put_contents($archivo_local, $response);
-                $ruta_mostrar->ruta_mostrar = $generales->url_base.'archivos/temporales/'.$dropbox_id.'.'.$extencion;
-                $ruta_mostrar->ruta_archivo = 'archivos/temporales/'.$dropbox_id.'.'.$extencion;
-                //echo "<iframe src=\"$ruta_mostrar\" width=\"100%\" height=\"600px\"></iframe>";
-            } else {
-                echo "❌ Error al descargar. Código HTTP: $httpCode\n";
-                echo "Respuesta: $response\n";
-            }
         }
-        //unlink($archivo_local);
+
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        if ($httpCode === 200) {
+            file_put_contents($archivo_local, $response);
+        } else {
+            echo "❌ Error al descargar. Código HTTP: $httpCode\n";
+            echo "Respuesta: $response\n";
+        }
+
         curl_close($ch);
 
         return $ruta_mostrar;
-
-        /*$token = $this->obten_token();
-        if (errores::$error) {
-            $error = (new errores())->error(mensaje: 'Error al obtener registro token', data: $token);
-            print_r($error);
-            exit;
-        }
-
-        $data = [
-            'path' => $dropbox_id
-        ];
-
-        $headers = [
-            'Authorization: Bearer ' . $token,
-            'Content-Type: application/json',
-        ];
-
-        $ch = curl_init(self::PREVIEW);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-
-        $response = curl_exec($ch);
-
-        curl_close($ch);
-
-        if ($response) {
-            $decoded = json_decode($response, true);
-            $link = $decoded['link'] ?? null;
-
-            if ($link) {
-                echo "✅ Link temporal obtenido:\n$link\n";
-                echo "<iframe src=\"$link\" width=\"100%\" height=\"600px\"></iframe>";
-            } else {
-                echo "❌ Error: no se pudo obtener el enlace\n$response";
-            }
-        } else {
-            echo "❌ Error de conexión con la API de Dropbox.";
-        }
-
-        return $response;*/
     }
 
     public function delete(string $dropbox_id): bool{

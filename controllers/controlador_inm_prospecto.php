@@ -90,6 +90,7 @@ class controlador_inm_prospecto extends _ctl_formato
     public array $referencias = array();
     public array $acciones_headers = array();
     public array $status_prospecto = array();
+    public string $ruta_docs = '';
     public bool $es_agente = false;
     public bool $ver_descripcion = false;
 
@@ -516,14 +517,15 @@ class controlador_inm_prospecto extends _ctl_formato
             }
         }
 
-        $inm_conf_docs_prospecto = (new _inm_prospecto())->integra_inm_documentos(controler: $this);
+        $result_docs = (new _inm_prospecto())->integra_inm_documentos(controler: $this);
         if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al integrar buttons', data: $inm_conf_docs_prospecto, header: $header, ws: $ws);
+            return $this->retorno_error(mensaje: 'Error al integrar buttons', data: $result_docs, header: $header, ws: $ws);
         }
 
         $ver_descripcion = false;
         $temp = array();
-        foreach ($inm_conf_docs_prospecto as $docs){
+        $ruta_docs = array();
+        foreach ($result_docs as $docs){
             $res = "<tr>
             <td class='td-doc'><div class='descripcion-doc'>$docs[doc_tipo_documento_descripcion]</div></td>
             <td>$docs[descarga]</td>
@@ -538,11 +540,17 @@ class controlador_inm_prospecto extends _ctl_formato
                 </tr>";
             }else{
                 $ver_descripcion = true;
+                $doc_temp = array();
+                $doc_temp['inm_doc_id'] = $docs['inm_doc_prospecto_id'];
+                $doc_temp['ruta_doc'] = $docs['ruta_doc'];
+                $ruta_docs[] = $doc_temp;
             }
+
             $temp[] = $res;
         }
 
         $this->ver_descripcion = $ver_descripcion;
+        $this->ruta_docs = '<div id="ruta-docs" hidden>' . json_encode($ruta_docs) . '</div>';
         $this->inm_conf_docs_prospecto = $temp;
 
         $params = array();
@@ -558,24 +566,6 @@ class controlador_inm_prospecto extends _ctl_formato
         }
 
         $this->link_documento_bd = $link_documento_bd;
-
-        /*$keys_selects = $this->init_selects_inputs();
-        if (errores::$error) {return $this->errores->error(mensaje: 'Error al inicializar selects', data: $keys_selects);
-        }
-
-        $keys_selects['com_tipo_prospecto_id']->id_selected = $this->registro['com_tipo_prospecto_id'];
-
-        $base = $this->base_upd(keys_selects: $keys_selects, params: array(), params_ajustados: array());
-        if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al integrar base', data: $base, header: $header, ws: $ws);
-        }
-
-        $this->row_upd->asunto = "TU MENSAJE";
-        $this->row_upd->mensaje = "TU MENSAJE";
-        $this->inm_conf_docs_prospecto = $inm_conf_docs_prospecto;
-*/
-        //print_r($this->row_upd);
-
 
         return $this->inputs;
     }
