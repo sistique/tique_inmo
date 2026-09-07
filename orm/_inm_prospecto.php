@@ -481,11 +481,75 @@ class _inm_prospecto{
             return $this->error->error(mensaje: 'Error al obtener inm_prospecto',data:  $inm_prospecto);
         }
 
+        $filtro['inm_conf_docs_prospecto.es_foto'] = 'inactivo';
+        $filtro['inm_conf_docs_prospecto.con_conyuge'] = 'inactivo';
+        $filtro['inm_conf_docs_prospecto.con_co_acreditado'] = 'inactivo';
+        $filtro['inm_conf_docs_prospecto.con_beneficiario'] = 'inactivo';
+        $filtro['inm_institucion_hipotecaria.id'] = $inm_prospecto['inm_institucion_hipotecaria_id'];
+
         $inm_conf_docs_prospecto = (new inm_conf_docs_prospecto(link: $controler->link))->filtro_and(
-            filtro: array('inm_institucion_hipotecaria_id' => $inm_prospecto['inm_institucion_hipotecaria_id']));
+            filtro: $filtro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener inm_conf_docs_prospecto',data:  $inm_conf_docs_prospecto);
         }
+
+        $existe_conyuge = (new inm_rel_conyuge_prospecto(link: $controler->link))->existe(
+            filtro: array('inm_prospecto.id' => $controler->registro_id));
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener inm_conf_docs_prospecto',data:  $existe_conyuge);
+        }
+
+        if($existe_conyuge){
+            $filtro['inm_conf_docs_prospecto.con_conyuge'] = 'activo';
+            $inm_conf_docs_prospecto_conyuge = (new inm_conf_docs_prospecto(link: $controler->link))->filtro_and(
+                filtro: $filtro);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al obtener inm_conf_docs_co_acred',
+                    data:  $inm_conf_docs_prospecto_conyuge);
+            }
+
+            $inm_conf_docs_prospecto->registros = array_merge($inm_conf_docs_prospecto->registros,
+                $inm_conf_docs_prospecto_conyuge->registros);
+        }
+
+        $existe_co_acreditado = (new inm_rel_co_acred_prosp(link: $controler->link))->existe(
+            filtro: array('inm_prospecto.id' => $controler->registro_id));
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener inm_conf_docs_prospecto',data:  $existe_co_acreditado);
+        }
+
+        if($existe_co_acreditado){
+            $filtro['inm_conf_docs_prospecto.con_co_acreditado'] = 'activo';
+            $inm_conf_docs_prospecto_co_acreditado = (new inm_conf_docs_prospecto(link: $controler->link))->filtro_and(
+                filtro: $filtro);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al obtener inm_conf_docs_co_acred',
+                    data:  $inm_conf_docs_prospecto_co_acreditado);
+            }
+
+            $inm_conf_docs_prospecto->registros = array_merge($inm_conf_docs_prospecto->registros,
+                $inm_conf_docs_prospecto_co_acreditado->registros);
+        }
+
+        /*$existe_beneficiario = (new inm_rel_beneficiario_prospecto(link: $controler->link))->filtro_and(
+            filtro: array('inm_prospecto.id' => $controler->registro_id));
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener inm_conf_docs_prospecto',data:  $existe_beneficiario);
+        }
+
+        if($existe_beneficiario->n_registros > 0){
+            foreach ()
+            $filtro['inm_conf_docs_prospecto.con_beneficiario'] = 'activo';
+            $inm_conf_docs_prospecto_beneficiario = (new inm_conf_docs_prospecto(link: $controler->link))->filtro_and(
+                filtro: $filtro);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al obtener inm_conf_docs_co_acred',
+                    data:  $inm_conf_docs_prospecto_beneficiario);
+            }
+
+            $inm_conf_docs_prospecto->registros = array_merge($inm_conf_docs_prospecto->registros,
+                $inm_conf_docs_prospecto_beneficiario->registros);
+        }*/
 
         $doc_ids = array_map(function($registro) {
             return $registro['doc_tipo_documento_id'];

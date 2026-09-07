@@ -417,7 +417,7 @@ class inm_co_acreditado_html extends _base {
                                 bool $value_vacio = false, bool $required = true): array|string
     {
 
-        $regex = $this->validacion->patterns['tel_sin_lada_html'];
+        $regex = $this->validacion->patterns['telefono_mx_html'];
 
         return $this->input_text(cols: $cols,disabled:  $disabled,name:  $name,
             place_holder:  $place_holder,row_upd:  $row_upd,value_vacio:  $value_vacio,regex: $regex,

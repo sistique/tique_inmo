@@ -30,7 +30,6 @@ class _inm_prospecto{
     {
         $header_apartado = $this->header_apartado(html_entidad: $controler->html_entidad,n_apartado:  $n_apartado,
             tag_header: $tag_header);
-
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al generar header',data:  $header_apartado);
         }
@@ -196,7 +195,6 @@ class _inm_prospecto{
         foreach ($headers as $n_apartado=>$tag_header){
             $inputs = $this->data_co_acreditado(controler: $controler,n_apartado:  $n_apartado,tag_header:  $tag_header,
                 row_upd: $row_upd);
-
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error al generar inputs co acreditado',data:  $inputs);
             }

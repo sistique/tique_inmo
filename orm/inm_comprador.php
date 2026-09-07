@@ -718,6 +718,7 @@ class inm_comprador extends _modelo_parent{
             }
             $co_acreditados[] = $co_acreditado;
         }
+
         return $co_acreditados;
 
     }

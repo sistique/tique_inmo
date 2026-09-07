@@ -608,8 +608,18 @@ class inm_prospecto extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al obtener inm_rel_co_acredit',data:  $r_inm_rel_co_acredit);
         }
 
-        return $r_inm_rel_co_acredit->registros;
+        $rels = $r_inm_rel_co_acredit->registros;
+        $co_acreditados = array();
+        foreach ($rels as $rel){
+            $co_acreditado = (new inm_co_acreditado(link: $this->link))->registro(
+                registro_id: $rel['inm_co_acreditado_id'],columnas_en_bruto: true);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al obtener co_acreditado',data:  $co_acreditado);
+            }
+            $co_acreditados[] = $co_acreditado;
+        }
 
+        return $co_acreditados;
     }
 
     final public function inm_beneficiarios(int $inm_prospecto_id){
