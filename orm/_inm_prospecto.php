@@ -500,9 +500,10 @@ class _inm_prospecto{
         }
 
         if($existe_conyuge){
-            $filtro['inm_conf_docs_prospecto.con_conyuge'] = 'activo';
+            $filtro_con['inm_conf_docs_prospecto.con_conyuge'] = 'activo';
+            $filtro_con['inm_institucion_hipotecaria.id'] = $inm_prospecto['inm_institucion_hipotecaria_id'];
             $inm_conf_docs_prospecto_conyuge = (new inm_conf_docs_prospecto(link: $controler->link))->filtro_and(
-                filtro: $filtro);
+                filtro: $filtro_con);
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error al obtener inm_conf_docs_co_acred',
                     data:  $inm_conf_docs_prospecto_conyuge);
@@ -519,9 +520,10 @@ class _inm_prospecto{
         }
 
         if($existe_co_acreditado){
-            $filtro['inm_conf_docs_prospecto.con_co_acreditado'] = 'activo';
+            $filtro_co['inm_conf_docs_prospecto.con_co_acreditado'] = 'activo';
+            $filtro_co['inm_institucion_hipotecaria.id'] = $inm_prospecto['inm_institucion_hipotecaria_id'];
             $inm_conf_docs_prospecto_co_acreditado = (new inm_conf_docs_prospecto(link: $controler->link))->filtro_and(
-                filtro: $filtro);
+                filtro: $filtro_co);
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error al obtener inm_conf_docs_co_acred',
                     data:  $inm_conf_docs_prospecto_co_acreditado);
