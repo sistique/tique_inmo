@@ -92,7 +92,11 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
     public array $fotos = array();
     public array $status_prospecto_ubicacion = array();
 
+    public string $ruta_docs = '';
     public bool $es_agente = false;
+
+    public bool $ver_descripcion = false;
+
 
     public function __construct(PDO $link, html $html = new \gamboamartin\template_1\html(),
                                 stdClass $paths_conf = new stdClass())
@@ -473,15 +477,17 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
             }
         }
 
-        $inm_conf_docs_prospecto = (new _inm_prospecto_ubicacion())->integra_inm_documentos(controler: $this);
+        $result_docs = (new _inm_prospecto_ubicacion())->integra_inm_documentos(controler: $this);
         if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al integrar buttons', data: $inm_conf_docs_prospecto, header: $header, ws: $ws);
+            return $this->retorno_error(mensaje: 'Error al integrar buttons', data: $result_docs, header: $header, ws: $ws);
         }
 
+        $ver_descripcion = false;
         $temp = array();
-        foreach ($inm_conf_docs_prospecto as $docs){
+        $ruta_docs = array();
+        foreach ($result_docs as $docs){
             $res = "<tr>
-            <td>$docs[doc_tipo_documento_descripcion]</td>
+            <td class='td-doc'><div class='descripcion-doc'>$docs[doc_tipo_documento_descripcion]</div></td>
             <td>$docs[descarga]</td>
             <td>$docs[vista_previa]</td>
             <td>$docs[descarga_zip]</td>
@@ -489,13 +495,22 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
             </tr>";
             if(isset($docs['subir_documento'])){
                 $res = "<tr>
-                <td>$docs[doc_tipo_documento_descripcion]</td>
+                <td class='td-doc'><div class='descripcion-doc'>$docs[doc_tipo_documento_descripcion]</div></td>
                 <td colspan='4'>$docs[subir_documento]</td>
                 </tr>";
+            }else{
+                $ver_descripcion = true;
+                $doc_temp = array();
+                $doc_temp['inm_doc_id'] = $docs['inm_doc_id'];
+                $doc_temp['ruta_doc'] = $docs['ruta_doc'];
+                $ruta_docs[] = $doc_temp;
             }
+
             $temp[] = $res;
         }
 
+        $this->ver_descripcion = $ver_descripcion;
+        $this->ruta_docs = '<div id="ruta-docs" hidden>' . json_encode($ruta_docs) . '</div>';
         $this->inm_conf_docs_prospecto = $temp;
 
         $params = array();
@@ -653,7 +668,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
                 $fotos[$registro['doc_tipo_documento_id']][] = $contenedor;
             }
 
-            $documento = $this->html->input_file(cols: 12, name: "fotos[$registro[doc_tipo_documento_id]][]",
+            $documento = $this->html->input_file_sec(cols: 12, name: "fotos[$registro[doc_tipo_documento_id]][]",
                 row_upd: new stdClass(), value_vacio: false, place_holder: $registro['doc_tipo_documento_descripcion'],
                 required: false, multiple: true);
             if (errores::$error) {

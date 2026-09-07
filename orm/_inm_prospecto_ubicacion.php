@@ -1,6 +1,7 @@
 <?php
 namespace gamboamartin\inmuebles\models;
 
+use config\generales;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\controllers\_doctos;
 use gamboamartin\inmuebles\controllers\controlador_inm_comprador;
@@ -28,9 +29,25 @@ class _inm_prospecto_ubicacion{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar button',data:  $button);
         }
-        $inm_conf_docs_prospecto[$indice][$accion] = $button;
+        $inm_conf_docs_prospecto[$accion] = $button;
         return $inm_conf_docs_prospecto;
     }
+
+    private function button_para_java(string $accion, controlador_inm_prospecto_ubicacion $controler, string $id_css,
+                                      array $inm_conf_docs_prospecto, string $style, string $tag,
+                                      string $css_extra = '', string $data_value = ''): array
+    {
+        $button = $controler->html->button_para_java(id_css: $id_css, style: $style, tag: $tag, css_extra: $css_extra,
+            data_value: $data_value);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al integrar button',data:  $button);
+        }
+
+        $inm_conf_docs_prospecto[$accion] = $button;
+
+        return $inm_conf_docs_prospecto;
+    }
+
 
     final public function button_del(controlador_inm_prospecto_ubicacion $controler, int $indice, int $inm_prospecto_id,
                                 array $inm_conf_docs_prospecto, array $inm_doc_prospecto){
@@ -67,12 +84,14 @@ class _inm_prospecto_ubicacion{
             return $this->error->error(mensaje: 'Error al integrar button',data:  $inm_conf_docs_prospecto);
         }
 
-        $inm_conf_docs_prospecto = $this->button(accion: 'vista_previa', controler: $controler,
-            etiqueta: 'Vista Previa', indice: $indice, inm_doc_prospecto_id: $inm_doc_prospecto['inm_doc_prospecto_ubicacion_id'],
-            inm_conf_docs_prospecto: $inm_conf_docs_prospecto, target: '_blank',css_extra: $css_extra);
+        $css_extra_vp = 'boton-accion'.' col-sm-12';
+        $inm_conf_docs_prospecto = $this->button_para_java(accion: 'vista_previa', controler: $controler,
+            id_css: 'vista_previa', inm_conf_docs_prospecto: $inm_conf_docs_prospecto, style: 'success',
+            tag: 'Vista Previa', css_extra: $css_extra_vp, data_value: $inm_doc_prospecto['inm_doc_prospecto_ubicacion_id']);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar button',data:  $inm_conf_docs_prospecto);
         }
+
 
         $inm_conf_docs_prospecto = $this->button(accion: 'descarga_zip', controler: $controler,
             etiqueta: 'ZIP', indice: $indice, inm_doc_prospecto_id: $inm_doc_prospecto['inm_doc_prospecto_ubicacion_id'],
@@ -238,11 +257,11 @@ class _inm_prospecto_ubicacion{
 
     private function integra_button_default(string $button, int $indice, array $inm_conf_docs_prospecto): array
     {
-        $inm_conf_docs_prospecto[$indice]['descarga'] = $button;
-        $inm_conf_docs_prospecto[$indice]['vista_previa'] = $button;
-        $inm_conf_docs_prospecto[$indice]['descarga_zip'] = $button;
-        $inm_conf_docs_prospecto[$indice]['elimina_bd'] = $button;
-        $inm_conf_docs_prospecto[$indice]['subir_documento'] = $button;
+        $inm_conf_docs_prospecto['descarga'] = $button;
+        $inm_conf_docs_prospecto['vista_previa'] = $button;
+        $inm_conf_docs_prospecto['descarga_zip'] = $button;
+        $inm_conf_docs_prospecto['elimina_bd'] = $button;
+        $inm_conf_docs_prospecto['subir_documento'] = $button;
         return $inm_conf_docs_prospecto;
     }
 
@@ -281,7 +300,6 @@ class _inm_prospecto_ubicacion{
 
         $filtro['inm_conf_docs_prospecto_ubicacion.es_foto'] = 'inactivo';
         $inm_conf_docs_prospecto = (new inm_conf_docs_prospecto_ubicacion(link: $controler->link))->filtro_and(
-            columnas: ['doc_tipo_documento_id'],
             filtro: $filtro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener inm_conf_docs_prospecto',data:  $inm_conf_docs_prospecto);
@@ -301,14 +319,64 @@ class _inm_prospecto_ubicacion{
             return $this->error->error(mensaje: 'Error al obtener inm_docs_prospecto',data:  $inm_docs_prospecto);
         }
 
-        $inm_docs_prospecto = $this->inm_conf_docs_prospecto(controler: $controler,inm_docs_prospecto:  $inm_docs_prospecto,
-            tipos_documentos: $doc_ids);
+        $documentos_indexados = [];
 
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al integrar buttons',data:  $inm_docs_prospecto);
+        foreach ($inm_docs_prospecto as $documento) {
+            $doc_tipo_documento_id = (int) $documento['doc_tipo_documento_id'];
+
+            $documentos_indexados[$doc_tipo_documento_id] = $documento;
         }
 
-        return $inm_docs_prospecto;
+        $result = array();
+
+        foreach ($inm_conf_docs_prospecto->registros as $indice => $doc_tipo_documento){
+            $doc_tipo_documento_id = (int) $doc_tipo_documento['doc_tipo_documento_id'];
+
+            if(isset($documentos_indexados[$doc_tipo_documento_id])){
+                $documento_existente = $documentos_indexados[$doc_tipo_documento_id];
+
+                $ruta_doc = (new generales())->url_base."$documento_existente[doc_documento_ruta_relativa]";
+
+                if((new generales())->guarda_archivo_dropbox) {
+                    $guarda = (new _dropbox(link: $controler->link))->preview(
+                        dropbox_id: $documento_existente['inm_dropbox_ruta_id_dropbox'],
+                        extencion: $documento_existente['doc_extension_descripcion']);
+                    if (errores::$error) {
+                        return $this->error->error('Error al guardar archivo', $guarda);
+                    }
+
+                    $ruta_doc = $guarda->ruta_mostrar;
+                }
+
+                $salida_doc = $this->buttons_base(
+                    controler: $controler, indice:  $indice, inm_prospecto_id:  $controler->registro_id,
+                    inm_conf_docs_prospecto:  $doc_tipo_documento,inm_doc_prospecto:  $documento_existente);
+                if(errores::$error){
+                    return $this->error->error(mensaje: 'Error al integrar button',data:  $salida_doc);
+                }
+
+                $salida_doc['ruta_doc'] = $ruta_doc;
+                $salida_doc['inm_doc_id'] = $documento_existente['inm_doc_prospecto_ubicacion_id'];
+            }else{
+                $button = $controler->html->input_file_sec(cols: 12, name:
+                    'documentos['.$doc_tipo_documento['doc_tipo_documento_id'].'][]',
+                    row_upd: new stdClass(), value_vacio: false, place_holder: 'Subir Documento',required: false,
+                    con_label: false);
+                if (errores::$error) {
+                    return $this->error->error(mensaje: 'Error al obtener inputs', data: $button);
+                }
+
+                $salida_doc = $this->integra_button_default(button: $button,
+                    indice:  $indice, inm_conf_docs_prospecto:  $doc_tipo_documento);
+                if(errores::$error){
+                    return $this->error->error(mensaje: 'Error al integrar button',data:  $salida_doc);
+                }
+            }
+
+            $result[$indice] = $salida_doc;
+        }
+
+        return $result;
     }
 
 

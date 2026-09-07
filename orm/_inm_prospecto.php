@@ -538,7 +538,7 @@ class _inm_prospecto{
                 }
 
                 $salida_doc['ruta_doc'] = $ruta_doc;
-                $salida_doc['inm_doc_prospecto_id'] = $documento_existente['inm_doc_prospecto_id'];
+                $salida_doc['inm_doc_id'] = $documento_existente['inm_doc_prospecto_id'];
             }else{
                 $button = $controler->html->input_file_sec(cols: 12, name:
                     'documentos['.$doc_tipo_documento['doc_tipo_documento_id'].'][]',

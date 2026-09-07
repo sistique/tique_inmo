@@ -541,7 +541,7 @@ class controlador_inm_prospecto extends _ctl_formato
             }else{
                 $ver_descripcion = true;
                 $doc_temp = array();
-                $doc_temp['inm_doc_id'] = $docs['inm_doc_prospecto_id'];
+                $doc_temp['inm_doc_id'] = $docs['inm_doc_id'];
                 $doc_temp['ruta_doc'] = $docs['ruta_doc'];
                 $ruta_docs[] = $doc_temp;
             }

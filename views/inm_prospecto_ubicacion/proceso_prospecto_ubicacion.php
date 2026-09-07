@@ -9,10 +9,8 @@
             <div class="col-lg-12">
                 <?php include (new views())->ruta_templates."head/title.php"; ?>
                 <?php //include (new views())->ruta_templates."head/subtitulo.php"; ?>
-                <?php include (new views())->ruta_templates."mensajes.php"; ?>
                 <div class="widget  widget-box box-container form-main widget-form-cart" id="form">
                     <body onload="
-                    javascript:valor_inicial();
                     javascript:inicializa_conyuge();
                     javascript:cambiarPestanna_inicialubicacion(pestanasubicacion);">
                     <div id="contenidopestanasgeneral">
@@ -229,6 +227,7 @@
                                                             </tbody>
                                                         </table>
                                                     </div>
+                                                    <?php echo $controlador->ruta_docs; ?>
                                                     <?php echo $controlador->inputs->btn_action_next; ?>
                                                     <?php echo $controlador->inputs->id_retorno; ?>
                                                     <?php echo $controlador->inputs->seccion_retorno; ?>
@@ -250,7 +249,6 @@
                                         <div class="col-lg-12">
                                             <div class="widget  widget-box box-container form-main widget-form-cart" id="form">
                                                 <form enctype="multipart/form-data" method="post" action="<?php echo $controlador->link_fotografia_bd; ?>" class="form-additional">
-                                                    <?php include (new views())->ruta_templates."head/subtitulo.php"; ?>
                                                     <?php foreach ($controlador->fotos as $registro){ ?>
                                                         <div class="col-lg-12 contorno"  data-doc_tipo_documento_id ="<?php echo $registro['doc_tipo_documento_id']; ?>" >
                                                             <?php echo $registro['input']; ?>
@@ -385,12 +383,26 @@
 
 <dialog id="myModal">
     <span class="close-btn" id="closeModalBtn">&times;</span>
-    <h2>Vista Previa</h2>
+
+    <button type="button" class="preview-arrow preview-prev" id="previewPrev">
+        &#10094;
+    </button>
+
     <div class="content">
+        <iframe class="col-md-12 view" height="100%" src="<?php echo $controlador->ruta_doc; ?>"></iframe>
     </div>
+
+    <button type="button" class="preview-arrow preview-next" id="previewNext">
+        &#10095;
+    </button>
+
+    <div class="preview-counter" id="previewCounter">
+        Documento 1 de 1
+    </div>
+
 </dialog>
 
-<div id="myModal" class="modal">
+<div id="myModalImg" class="modal">
     <div class="modal-content">
         <span class="close-button">&times;</span>
         <img class="imagen_modal">
