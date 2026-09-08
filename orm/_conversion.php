@@ -880,7 +880,7 @@ class _conversion{
      */
     private function keys_data_prospecto(): array
     {
-        return array('inm_producto_infonavit_id','inm_attr_tipo_credito_id','inm_destino_credito_id',
+        return array('id','inm_producto_infonavit_id','inm_attr_tipo_credito_id','inm_destino_credito_id',
             'es_segundo_credito','inm_plazo_credito_sc_id','descuento_pension_alimenticia_dh',
             'descuento_pension_alimenticia_fc','monto_credito_solicitado_dh','monto_ahorro_voluntario','nss','curp',
             'nombre','apellido_paterno','apellido_materno','con_discapacidad','nombre_empresa_patron','nrp_nep',
