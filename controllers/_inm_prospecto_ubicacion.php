@@ -330,15 +330,20 @@ class _inm_prospecto_ubicacion{
     private function identificadores_comercial(array $filtro): array
     {
         $identificadores['org_sucursal_id']['title'] = 'Empresa';
-        $identificadores['org_sucursal_id']['cols'] = 6;
+        $identificadores['org_sucursal_id']['cols'] = 4;
         $identificadores['org_sucursal_id']['disabled'] = false;
         $identificadores['org_sucursal_id']['columns_ds'] = array('org_sucursal_descripcion_select');
 
         $identificadores['com_agente_id']['title'] = 'Agente';
-        $identificadores['com_agente_id']['cols'] = 6;
+        $identificadores['com_agente_id']['cols'] = 4;
         $identificadores['com_agente_id']['disabled'] = false;
         $identificadores['com_agente_id']['filtro'] = $filtro;
         $identificadores['com_agente_id']['columns_ds'] = array();
+
+        $identificadores['inm_tipo_compra_id']['title'] = 'Tipo de Compra';
+        $identificadores['inm_tipo_compra_id']['cols'] = 4;
+        $identificadores['inm_tipo_compra_id']['disabled'] = false;
+        $identificadores['inm_tipo_compra_id']['columns_ds'] = array('inm_tipo_compra_descripcion');
 
         $identificadores['com_tipo_prospecto_id']['title'] = 'Tipo de prospecto';
         $identificadores['com_tipo_prospecto_id']['cols'] = 12;

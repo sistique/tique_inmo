@@ -368,6 +368,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         $init_data['inm_tipo_credito'] = "gamboamartin\\inmuebles";
         $init_data['inm_tipo_vivienda'] = "gamboamartin\\inmuebles";
         $init_data['org_sucursal'] = "gamboamartin\\organigrama";
+        $init_data['inm_tipo_compra'] = "gamboamartin\\inmuebles";
 
         $init_data = (new _base_paquete())->init_data_domicilio(init_data: $init_data);
         if (errores::$error) {
