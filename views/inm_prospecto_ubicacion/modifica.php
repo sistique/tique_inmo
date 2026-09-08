@@ -176,6 +176,20 @@
                             <?php echo $controlador->inputs->conyuge->telefono_celular; ?>
                             <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
                         </div>
+                        
+                        <?php echo $controlador->header_frontend->apartado_9; ?>
+                        <div id="apartado_9">
+                            <?php echo $controlador->inputs->dp_estado_fiscal_id; ?>
+                            <?php echo $controlador->inputs->dp_municipio_fiscal_id; ?>
+                            <?php echo $controlador->inputs->dp_cp_fiscal_id; ?>
+                            <?php echo $controlador->inputs->dp_colonia_postal_fiscal_id; ?>
+                            <?php echo $controlador->inputs->calle_fiscal; ?>
+                            <?php echo $controlador->inputs->numero_exterior_fiscal; ?>
+                            <?php echo $controlador->inputs->numero_interior_fiscal; ?>
+
+
+                            <?php include (new views())->ruta_templates.'botons/submit/modifica_bd.php';?>
+                        </div>
                     </form>
                 </div>
 

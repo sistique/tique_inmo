@@ -317,6 +317,7 @@ class _inm_prospecto_ubicacion{
         $headers['6'] = '6. CO ACREDITADO';
         $headers['7'] = '7. CO ACREDITADO LABORAL';
         $headers['8'] = '8. CONYUGE';
+        $headers['9'] = '9. FISCAL';
 
         return $headers;
     }

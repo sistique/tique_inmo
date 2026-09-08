@@ -345,7 +345,8 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
             'calle','correo_mi_cuenta_infonavit','password_mi_cuenta_infonavit','numero_credito','entre_calle_1',
             'entre_calle_2','entrada','supermanzana','edificio','condominio','numero_notaria','nombre_notario',
             'plaza_notaria','numero_escritura','libro','volumen','calle_domicilio','numero_exterior_domicilio',
-            'numero_interior_domicilio','etapa','mensualidad','cuenta_luz');
+            'numero_interior_domicilio','etapa','mensualidad','cuenta_luz', 'calle_fiscal','numero_exterior_fiscal',
+            'numero_interior_fiscal');
 
         $keys->selects = array();
 
@@ -1677,6 +1678,24 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
+        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'calle_fiscal',
+            keys_selects: $keys_selects, place_holder: 'Calle Fiscal', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 3, key: 'numero_exterior_fiscal',
+            keys_selects: $keys_selects, place_holder: 'No. Ext Fiscal', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 3, key: 'numero_interior_fiscal',
+            keys_selects: $keys_selects, place_holder: 'No. Int Fiscal', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+
         $keys_selects = (new init())->key_select_txt(cols: 3, key: 'etapa',
             keys_selects: $keys_selects, place_holder: 'Etapa', required: false);
         if (errores::$error) {
@@ -2178,6 +2197,124 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         }
 
         $this->inputs->dp_colonia_postal_domicilio_id = $dp_colonia_postal_domicilio_id;
+
+        $filtro_ubi['inm_prospecto_ubicacion.id'] = $this->registro_id;
+        $extra_join['dp_colonia_postal'] = array(
+            'key' => 'id',
+            'enlace' => 'inm_prospecto_ubicacion',
+            'key_enlace' => 'dp_colonia_postal_fiscal_id',
+            'renombre' => 'dp_colonia_postal_fiscal');
+
+        $extra_join['dp_cp'] = array(
+            'key' => 'id',
+            'enlace' => 'dp_colonia_postal_fiscal',
+            'key_enlace' => 'dp_cp_id',
+            'renombre' => 'dp_cp_fiscal');
+
+        $extra_join['dp_colonia'] = array(
+            'key' => 'id',
+            'enlace' => 'dp_colonia_postal_fiscal',
+            'key_enlace' => 'dp_colonia_id',
+            'renombre' => 'dp_colonia_fiscal');
+
+        $extra_join['dp_municipio'] = array(
+            'key' => 'id',
+            'enlace' => 'dp_cp_fiscal',
+            'key_enlace' => 'dp_municipio_id',
+            'renombre' => 'dp_municipio_fiscal');
+
+        $extra_join['dp_estado'] = array(
+            'key' => 'id',
+            'enlace' => 'dp_municipio_fiscal',
+            'key_enlace' => 'dp_estado_id',
+            'renombre' => 'dp_estado_fiscal');
+
+        $extra_join['dp_pais'] = array(
+            'key' => 'id',
+            'enlace' => 'dp_estado_fiscal',
+            'key_enlace' => 'dp_pais_id',
+            'renombre' => 'dp_pais_fiscal');
+
+        $data_row = $this->modelo->filtro_and(extra_join: $extra_join, filtro: $filtro_ubi,);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener registro',data:  $data_row,header: $header,ws: $ws);
+        }
+
+        $data_row = $data_row->registros_obj[0];
+
+        $modelo = new dp_estado(link: $this->link);
+        $columns_ds = array('dp_estado_descripcion');
+        $dp_estado_fiscal_id = $this->html->select_catalogo(cols: 3, con_registros: true,
+            id_selected: $data_row->dp_estado_fiscal_id, modelo: $modelo,
+            columns_ds: $columns_ds, id_css: 'dp_estado_fiscal_id',
+            label: 'Estado fiscal', name: 'dp_estado_fiscal_id');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $dp_estado_fiscal_id,header: $header,
+                ws:$ws);
+        }
+
+        $this->inputs->dp_estado_fiscal_id = $dp_estado_fiscal_id;
+
+        $modelo = new dp_municipio(link: $this->link);
+        $columns_ds = array('dp_municipio_descripcion');
+
+        $filtro_select = array();
+        $con_registro = false;
+        if($data_row->dp_estado_fiscal_id){
+            $filtro_select['dp_estado.id'] = $data_row->dp_estado_fiscal_id;
+            $con_registro = true;
+        }
+        $dp_municipio_fiscal_id = $this->html->select_catalogo(cols: 3, con_registros: $con_registro,
+            id_selected: $data_row->dp_municipio_fiscal_id, modelo: $modelo,
+            columns_ds: $columns_ds, filtro: $filtro_select,
+            id_css: 'dp_municipio_fiscal_id', label: 'Municipio fiscal', name: 'dp_municipio_fiscal_id');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $dp_municipio_fiscal_id,header: $header,
+                ws:$ws);
+        }
+
+        $this->inputs->dp_municipio_fiscal_id = $dp_municipio_fiscal_id;
+
+        $modelo = new dp_cp(link: $this->link);
+        $columns_ds = array('dp_cp_descripcion');
+
+        $filtro_select = array();
+        $con_registro = false;
+        if($data_row->dp_municipio_fiscal_id){
+            $filtro_select['dp_municipio.id'] = $data_row->dp_municipio_fiscal_id;
+            $con_registro = true;
+        }
+        $dp_cp_fiscal_id = $this->html->select_catalogo(cols: 3, con_registros: $con_registro,
+            id_selected: $data_row->dp_cp_fiscal_id, modelo: $modelo,
+            columns_ds: $columns_ds, filtro: $filtro_select,
+            id_css: 'dp_cp_fiscal_id', label: 'CP fiscal', name: 'dp_cp_fiscal_id');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $dp_cp_fiscal_id,header: $header,
+                ws:$ws);
+        }
+
+        $this->inputs->dp_cp_fiscal_id = $dp_cp_fiscal_id;
+
+        $modelo = new dp_colonia_postal(link: $this->link);
+        $columns_ds = array('dp_colonia_descripcion');
+
+        $filtro_select = array();
+        $con_registro = false;
+        if($data_row->dp_cp_fiscal_id){
+            $filtro_select['dp_cp.id'] = $data_row->dp_cp_fiscal_id;
+            $con_registro = true;
+        }
+        $dp_colonia_postal_fiscal_id = $this->html->select_catalogo(cols: 3, con_registros: $con_registro,
+            id_selected: $data_row->dp_colonia_postal_fiscal_id, modelo: $modelo,
+            columns_ds: $columns_ds, filtro: $filtro_select,
+            id_css: 'dp_colonia_postal_fiscal_id', label: 'Colonia fiscal', name: 'dp_colonia_postal_fiscal_id');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $dp_colonia_postal_fiscal_id,header: $header,
+                ws:$ws);
+        }
+
+        $this->inputs->dp_colonia_postal_fiscal_id = $dp_colonia_postal_fiscal_id;
 
         return $r_modifica;
     }
