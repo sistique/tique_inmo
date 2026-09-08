@@ -167,8 +167,9 @@ echo "<style>
 
 #myModal{
     width: 100%;
-    height: 80%;
+    height: 90%;
     padding: 25px;
+    overflow: auto;
 }
 
 #table-inm_producto{
