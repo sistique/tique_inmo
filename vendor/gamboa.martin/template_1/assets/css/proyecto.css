@@ -1212,7 +1212,7 @@ dialog h2 {
 }
 
 #myModal {
-    position: relative;
+    position: fixed;
     width: 90%;
     max-width: 1700px;
     height: 95vh;
