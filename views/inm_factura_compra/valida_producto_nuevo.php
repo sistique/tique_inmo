@@ -168,10 +168,15 @@ echo "<style>
 #myModal{
     width: 100%;
     height: 80%;
+    padding: 25px;
 }
 
 #table-inm_producto{
     width: 100% !important;
+}
+
+#myModal .close-btn{
+    top: 0px;
 }
 
 .close-btn{
