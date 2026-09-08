@@ -928,6 +928,7 @@ class controlador_inm_prospecto extends _ctl_formato
             $columns["inm_prospecto_monto_credito_solicitado_dh"]["titulo"] = "Precalificacion";
             $columns["com_agente_descripcion"]["titulo"] = "Agente";
         }
+        $columns["inm_tipo_venta_descripcion"]["titulo"] = "Tipo Venta";
         $columns["inm_status_prospecto_descripcion"]["titulo"] = "Status Prospecto";
 
 
