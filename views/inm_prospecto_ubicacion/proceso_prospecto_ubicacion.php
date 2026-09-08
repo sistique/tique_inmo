@@ -8,10 +8,9 @@
 
             <div class="col-lg-12">
                 <?php include (new views())->ruta_templates."head/title.php"; ?>
-                <?php //include (new views())->ruta_templates."head/subtitulo.php"; ?>
                 <div class="widget  widget-box box-container form-main widget-form-cart" id="form">
                     <body onload="
-                    javascript:inicializa_conyuge();
+                    javascript:inicializa_co_acreditado();
                     javascript:cambiarPestanna_inicialubicacion(pestanasubicacion);">
                     <div id="contenidopestanasgeneral">
                         <div class="contengeneral" id="cpestanageneral1">

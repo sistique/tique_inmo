@@ -299,10 +299,48 @@ class _inm_prospecto_ubicacion{
         }
 
         $filtro['inm_conf_docs_prospecto_ubicacion.es_foto'] = 'inactivo';
+        $filtro['inm_conf_docs_prospecto_ubicacion.con_conyuge'] = 'inactivo';
+        $filtro['inm_conf_docs_prospecto_ubicacion.con_co_acreditado'] = 'inactivo';
         $inm_conf_docs_prospecto = (new inm_conf_docs_prospecto_ubicacion(link: $controler->link))->filtro_and(
             filtro: $filtro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener inm_conf_docs_prospecto',data:  $inm_conf_docs_prospecto);
+        }
+
+        $existe_conyuge = (new inm_rel_conyuge_prospecto_ubicacion(link: $controler->link))->existe(
+            filtro: array('inm_prospecto_ubicacion.id' => $controler->registro_id));
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener inm_conf_docs_prospecto',data:  $existe_conyuge);
+        }
+
+        if($existe_conyuge){
+            $filtro_con['inm_conf_docs_prospecto_ubicacion.con_conyuge'] = 'inactivo';
+            $inm_conf_docs_prospecto_conyuge = (new inm_conf_docs_prospecto_ubicacion(link: $controler->link))->filtro_and(filtro: $filtro_con);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al obtener inm_conf_docs_prospecto',data:  $inm_conf_docs_prospecto);
+            }
+
+            $inm_conf_docs_prospecto->registros = array_merge($inm_conf_docs_prospecto->registros,
+                $inm_conf_docs_prospecto_conyuge->registros);
+        }
+
+        $existe_co_acreditado = (new inm_rel_co_acred_prosp_ubi(link: $controler->link))->existe(
+            filtro: array('inm_prospecto_ubicacion.id' => $controler->registro_id));
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener inm_conf_docs_prospecto',data:  $existe_co_acreditado);
+        }
+
+        if($existe_co_acreditado){
+            $filtro_co['inm_conf_docs_prospecto_ubicacion.con_co_acreditado'] = 'activo';
+            $inm_conf_docs_prospecto_co_acreditado = (new inm_conf_docs_prospecto_ubicacion(link: $controler->link))->filtro_and(
+                filtro: $filtro_co);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al obtener inm_conf_docs_prospecto',
+                    data:  $inm_conf_docs_prospecto_co_acreditado);
+            }
+
+            $inm_conf_docs_prospecto->registros = array_merge($inm_conf_docs_prospecto->registros,
+                $inm_conf_docs_prospecto_co_acreditado->registros);
         }
 
         $doc_ids = array_map(function($registro) {

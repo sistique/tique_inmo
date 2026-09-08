@@ -613,7 +613,7 @@ $("#collapse_all").click(function() {
 
 let sl_inm_tipo_credito_id = $("#inm_tipo_credito_id");
 
-function inicializa_conyuge(){
+function inicializa_co_acreditado(){
     tipo_credito_id = sl_inm_tipo_credito_id.val();
 
     $.ajax({
@@ -622,14 +622,22 @@ function inicializa_conyuge(){
         url: 'index.php?seccion=inm_tipo_credito&accion=get_tipo_credito&ws=1&session_id='+session_id,
         success: function(data_r) {
             if(data_r.inm_tipo_credito_muestra_conyuge === "activo"){
-                apartado_8.toggle();
-                collapse_a8.off("click").click(function () {
-                    apartado_8.toggle();
+                apartado_6.toggle();
+                collapse_a6.off("click").click(function () {
+                    apartado_6.toggle();
                 });
-            }else{
-                apartado_8.hide();
 
-                collapse_a8.off("click");
+                apartado_7.toggle();
+                collapse_a7.off("click").click(function () {
+                    apartado_7.toggle();
+                });
+
+            }else{
+                apartado_6.hide();
+                apartado_7.hide();
+
+                collapse_a6.off("click");
+                collapse_a7.off("click");
             }
         },
         error: function() {
@@ -647,15 +655,22 @@ sl_inm_tipo_credito_id.change(function () {
         url: 'index.php?seccion=inm_tipo_credito&accion=get_tipo_credito&ws=1&session_id='+session_id,
         success: function(data_r) {
             if(data_r.inm_tipo_credito_muestra_conyuge === "activo"){
-                apartado_8.toggle();
+                apartado_6.toggle();
+                apartado_7.toggle();
 
-                collapse_a8.off("click").click(function () {
-                    apartado_8.toggle();
+                collapse_a6.off("click").click(function () {
+                    apartado_6.toggle();
+                });
+
+                collapse_a7.off("click").click(function () {
+                    apartado_7.toggle();
                 });
             }else{
-                apartado_8.hide();
+                apartado_6.hide();
+                apartado_7.hide();
 
-                collapse_a8.off("click");
+                collapse_a6.off("click");
+                collapse_a7.off("click");
             }
         },
         error: function() {
