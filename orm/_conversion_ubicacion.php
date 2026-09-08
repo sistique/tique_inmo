@@ -506,7 +506,7 @@ class _conversion_ubicacion{
      */
     private function keys_data_prospecto_ubicacion(): array
     {
-        return array('lote', 'manzana', 'costo_directo', 'numero_exterior', 'numero_interior', 'etapa',
+        return array('id','lote', 'manzana', 'costo_directo', 'numero_exterior', 'numero_interior', 'etapa',
             'cuenta_predial', 'n_opiniones_valor', 'monto_opinion_promedio', 'costo', 'com_tipo_prospecto_id',
             'com_prospecto_id', 'com_direccion_id', 'nss', 'curp', 'nombre', 'apellido_paterno', 'apellido_materno',
             'nombre_completo_valida', 'adeudo_hipoteca', 'adeudo_predial', 'adeudo_agua', 'adeudo_luz',
