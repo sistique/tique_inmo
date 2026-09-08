@@ -82,7 +82,6 @@ class controlador_inm_prospecto extends _ctl_formato
     public string $link_envia_documentos = '';
     public string $link_exportar_xls ='';
 
-
     public array $inm_conf_docs_prospecto = array();
 
     public array $direcciones = array();
@@ -573,12 +572,14 @@ class controlador_inm_prospecto extends _ctl_formato
     public function documentos_bd(bool $header, bool $ws = false): array|stdClass{
         $inm_doc_prospecto =  new inm_doc_prospecto(link: $this->link);
 
+        $documentos = $_FILES['documentos'];
+
         $names = array();
-        foreach ($_FILES['documentos']['name'] as $key => $foto){
+        foreach ($documentos['name'] as $key => $foto){
             $names[$key]['name'] = $foto;
         }
 
-        foreach ($_FILES['documentos']['tmp_name'] as $key => $foto){
+        foreach ($documentos['tmp_name'] as $key => $foto){
             $names[$key]['tmp_name'] = $foto;
         }
 

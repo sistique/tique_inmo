@@ -484,7 +484,7 @@ class _inm_prospecto{
         $filtro['inm_conf_docs_prospecto.es_foto'] = 'inactivo';
         $filtro['inm_conf_docs_prospecto.con_conyuge'] = 'inactivo';
         $filtro['inm_conf_docs_prospecto.con_co_acreditado'] = 'inactivo';
-        $filtro['inm_conf_docs_prospecto.con_beneficiario'] = 'inactivo';
+        $filtro['inm_conf_docs_prospecto.con_beneficiario'] = '0';
         $filtro['inm_institucion_hipotecaria.id'] = $inm_prospecto['inm_institucion_hipotecaria_id'];
 
         $inm_conf_docs_prospecto = (new inm_conf_docs_prospecto(link: $controler->link))->filtro_and(
@@ -533,25 +533,41 @@ class _inm_prospecto{
                 $inm_conf_docs_prospecto_co_acreditado->registros);
         }
 
-        /*$existe_beneficiario = (new inm_rel_beneficiario_prospecto(link: $controler->link))->filtro_and(
+        $beneficiario = (new inm_rel_beneficiario_prospecto(link: $controler->link))->filtro_and(
             filtro: array('inm_prospecto.id' => $controler->registro_id));
         if(errores::$error){
-            return $this->error->error(mensaje: 'Error al obtener inm_conf_docs_prospecto',data:  $existe_beneficiario);
+            return $this->error->error(mensaje: 'Error al obtener inm_conf_docs_prospecto',data:  $beneficiario);
         }
 
-        if($existe_beneficiario->n_registros > 0){
-            foreach ()
-            $filtro['inm_conf_docs_prospecto.con_beneficiario'] = 'activo';
-            $inm_conf_docs_prospecto_beneficiario = (new inm_conf_docs_prospecto(link: $controler->link))->filtro_and(
-                filtro: $filtro);
-            if(errores::$error){
-                return $this->error->error(mensaje: 'Error al obtener inm_conf_docs_co_acred',
-                    data:  $inm_conf_docs_prospecto_beneficiario);
-            }
+        if($beneficiario->n_registros > 0){
+            $cont_ben = 1;
+            foreach ($beneficiario->registros as $beneficiario_registro){
+                $filtro_bene['inm_conf_docs_prospecto.con_beneficiario'] = $cont_ben;
+                $inm_conf_docs_prospecto_beneficiario = (new inm_conf_docs_prospecto(link: $controler->link))->filtro_and(
+                    filtro: $filtro_bene);
+                if(errores::$error){
+                    return $this->error->error(mensaje: 'Error al obtener inm_conf_docs_co_acred',
+                        data:  $inm_conf_docs_prospecto_beneficiario);
+                }
 
-            $inm_conf_docs_prospecto->registros = array_merge($inm_conf_docs_prospecto->registros,
-                $inm_conf_docs_prospecto_beneficiario->registros);
-        }*/
+                $registros_docs = array();
+                foreach ($inm_conf_docs_prospecto_beneficiario->registros as $doc_bene){
+                    $grupo_docs_bene = $doc_bene;
+                    $grupo_docs_bene['doc_tipo_documento_descripcion'] = $doc_bene['doc_tipo_documento_descripcion']
+                        .' '. $beneficiario_registro['inm_beneficiario_nombre']
+                        .' '. $beneficiario_registro['inm_beneficiario_apellido_paterno']
+                        .' '. $beneficiario_registro['inm_beneficiario_apellido_materno'];
+
+                    $registros_docs[] = $grupo_docs_bene;
+                }
+
+
+                $inm_conf_docs_prospecto->registros = array_merge($inm_conf_docs_prospecto->registros,
+                    $registros_docs);
+
+                $cont_ben++;
+            }
+        }
 
         $doc_ids = array_map(function($registro) {
             return $registro['doc_tipo_documento_id'];
@@ -606,8 +622,9 @@ class _inm_prospecto{
                 $salida_doc['ruta_doc'] = $ruta_doc;
                 $salida_doc['inm_doc_id'] = $documento_existente['inm_doc_prospecto_id'];
             }else{
-                $button = $controler->html->input_file_sec(cols: 12, name:
-                    'documentos['.$doc_tipo_documento['doc_tipo_documento_id'].'][]',
+                $nombre_input = 'documentos['.$doc_tipo_documento['doc_tipo_documento_id'].'][]';
+
+                $button = $controler->html->input_file_sec(cols: 12, name: $nombre_input,
                     row_upd: new stdClass(), value_vacio: false, place_holder: 'Subir Documento',required: false,
                     con_label: false);
                 if (errores::$error) {
