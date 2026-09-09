@@ -55,27 +55,25 @@ class inm_prospecto extends _modelo_parent{
             exit;
         }
 
+        $com_agente = (new com_agente(link: $link))->filtro_and(
+            filtro: array('adm_usuario.id'=>$_SESSION['usuario_id']));
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al obtener adm_usuario ',data:  $com_agente);
+            print_r($error);
+            exit;
+        }
 
-        /*$sql = "( IFNULL ((SELECT
-                    adm_usuario_permitido.id 
-                    FROM com_agente AS com_agente_permitido 
-                    LEFT JOIN adm_usuario AS adm_usuario_permitido ON  com_agente_permitido.adm_usuario_id = adm_usuario_permitido.id
-                    LEFT JOIN com_rel_agente ON com_rel_agente.com_agente_id = com_agente_permitido.id 
-                    WHERE  adm_usuario_permitido.id = $_SESSION[usuario_id] AND 
-                    com_rel_agente.com_prospecto_id = com_prospecto.id),-1) )";*/
-
-        $sql = "(IFNULL ((SELECT
-				adm_usuario_permitido.id
-			FROM
-				com_agente AS com_agente_permitido
-				LEFT JOIN adm_usuario AS adm_usuario_permitido ON com_agente_permitido.adm_usuario_id = adm_usuario_permitido.id
-			WHERE
-				adm_usuario_permitido.id = $_SESSION[usuario_id]
-				AND com_agente_permitido.id = com_prospecto.com_agente_id),- 1))";
-
-
-        if($adm_usuario['adm_grupo_root'] === 'activo'){
-            $sql = $_SESSION['usuario_id'];
+        $sql = $_SESSION['usuario_id'];
+        if($com_agente->n_registros > 0){
+            if($com_agente->registros[0]['com_agente_base_completa'] === 'inactivo'){
+                $sql = "(IFNULL ((SELECT
+                    adm_usuario_permitido.id
+                FROM
+                    com_agente AS com_agente_permitido
+                    LEFT JOIN adm_usuario AS adm_usuario_permitido ON com_agente_permitido.adm_usuario_id = adm_usuario_permitido.id
+                WHERE
+                    adm_usuario_permitido.id = $_SESSION[usuario_id]
+                    AND com_agente_permitido.id = com_prospecto.com_agente_id),- 1))";            }
         }
 
         $columnas_extra['usuario_permitido_id'] = $sql;
