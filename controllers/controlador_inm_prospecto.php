@@ -2053,6 +2053,23 @@ class controlador_inm_prospecto extends _ctl_formato
 
         $this->inputs->dp_colonia_postal_domicilio_id = $dp_colonia_postal_domicilio_id;
 
+        $modelo = new com_agente(link: $this->link);
+        $columns_ds = array('com_agente_descripcion');
+
+        $in = array();
+        $in['llave'] = 'com_tipo_agente.descripcion';
+        $in['values'] = array('VENDEDOR','GERENTE VENTAS','PREDETERMINADO');
+        $com_agente_cerrador_id = $this->html->select_catalogo(cols: 2, con_registros: true,
+            id_selected: $data_row->com_agente_cerrador_id, modelo: $modelo,
+            columns_ds: $columns_ds, id_css: 'com_agente_cerrador_id',
+            label: 'Cerrador', name: 'com_agente_cerrador_id', in: $in);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $com_agente_cerrador_id,header: $header,
+                ws:$ws);
+        }
+
+        $this->inputs->com_agente_cerrador_id = $com_agente_cerrador_id;
+
         $this->keys_selects = array_merge($keys_selects, $this->keys_selects);
 
         return $r_modifica;

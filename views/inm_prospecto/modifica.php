@@ -15,6 +15,7 @@
                         <div id="apartado_1">
                             <?php echo $controlador->inputs->org_sucursal_id; ?>
                             <?php echo $controlador->inputs->com_agente_id; ?>
+                            <?php echo $controlador->inputs->com_agente_cerrador_id; ?>
                             <?php echo $controlador->inputs->com_tipo_prospecto_id; ?>
                             <?php echo $controlador->inputs->inm_tipo_venta_id; ?>
                             <?php echo $controlador->inputs->inm_institucion_hipotecaria_id; ?>

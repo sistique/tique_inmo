@@ -238,33 +238,46 @@ class _inm_prospecto{
             if($identificador === ''){
                 return $this->error->error(mensaje: 'Error identificador esta vacio',data:  $identificador);
             }
+
             if(!is_array($data)){
                 return $this->error->error(mensaje: 'Error data debe ser un array',data:  $data);
             }
+
             $filtro = array();
             if(isset($data['filtro'])){
                 $filtro = $data['filtro'];
             }
+
             $cols = 12;
             if(isset($data['cols'])){
                 $cols = $data['cols'];
             }
+
             $id_selected = -1;
             if(isset($controlador->registro[$identificador])){
                 $id_selected = $controlador->registro[$identificador];
             }
+
             $title = $identificador;
             if(isset($data['title'])){
                 $title = $data['title'];
             }
+
             $disabled = false;
             if(isset($data['disabled'])){
                 $disabled = $data['disabled'];
             }
+
             $columns_ds = array();
             if(isset($data['columns_ds'])){
                 $columns_ds = $data['columns_ds'];
             }
+
+            $in = array();
+            if(isset($data['in'])){
+                $in = $data['in'];
+            }
+
             $con_registros = true;
             if(isset($data['con_registros'])){
                 $con_registros = $data['con_registros'];
@@ -277,7 +290,7 @@ class _inm_prospecto{
 
             $keys_selects = $controlador->key_select(cols: $cols, con_registros: $con_registros, filtro: $filtro,
                 key: $identificador, keys_selects: $keys_selects, id_selected: $id_selected, label: $title,
-                columns_ds: $columns_ds, disabled: $disabled, required: $required);
+                columns_ds: $columns_ds, disabled: $disabled, in: $in, required: $required);
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
             }
@@ -359,6 +372,8 @@ class _inm_prospecto{
         $identificadores['com_agente_id']['disabled'] = false;
         $identificadores['com_agente_id']['filtro'] = $filtro;
         $identificadores['com_agente_id']['columns_ds'] = array();
+        $identificadores['com_agente_id']['in'] = array('llave'=>'com_tipo_agente.descripcion',
+            'values'=>array('PROSPECTADOR', 'PREDETERMINADO'));
 
         $identificadores['com_tipo_prospecto_id']['title'] = 'Tipo de prospecto';
         $identificadores['com_tipo_prospecto_id']['cols'] = 2;
@@ -495,7 +510,7 @@ class _inm_prospecto{
         $identificadores['inm_attr_tipo_credito_id']['filtro'] = $filtro_tipo_credito;
 
         $identificadores['inm_destino_credito_id']['title'] = 'Destino de Credito';
-        $identificadores['inm_destino_credito_id']['cols'] = 3;
+        $identificadores['inm_destino_credito_id']['cols'] = 2;
         $identificadores['inm_destino_credito_id']['disabled'] = false;
         $identificadores['inm_destino_credito_id']['columns_ds'] = array('inm_destino_credito_descripcion');
 
@@ -515,7 +530,7 @@ class _inm_prospecto{
         }
 
         $identificadores['inm_plazo_credito_sc_id']['title'] = 'Plazo de Segundo Credito';
-        $identificadores['inm_plazo_credito_sc_id']['cols'] = 3;
+        $identificadores['inm_plazo_credito_sc_id']['cols'] = 2;
         $identificadores['inm_plazo_credito_sc_id']['disabled'] = $disabled;
         $identificadores['inm_plazo_credito_sc_id']['columns_ds'] = array('inm_plazo_credito_sc_descripcion');
 
