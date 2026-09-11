@@ -116,6 +116,11 @@ echo "<style>
             <div class="filtros-avanzados">
                 <div class="filtro-grupo col-md-12">
                     <div class="col-md-2">
+                        <label for="ID">ID</label>
+                        <input type="text" id="id" data-tipo="filtro" data-filtro_campo="inm_prospecto.id" placeholder="Ej: 1">
+                    </div>
+                    
+                    <div class="col-md-2">
                         <label>Status Prospecto</label>
                         <select class="form-control basic-multiple" id="inm_status_prospecto" name="inm_status_prospecto[]"
                                 data-tipo="in" data-filtro_campo="inm_status_prospecto.descripcion" multiple
@@ -141,9 +146,13 @@ echo "<style>
                     <?php
                     if(!$controlador->es_agente){
                         echo '<div class="col-md-2">
-                                    <label for="agente">Agente</label>
+                                    <label for="agente">Prospectador</label>
                                     <input type="text" id="agente" data-tipo="filtro" data-filtro_campo="com_agente.descripcion" placeholder="Ej: JUAN PEREZ">
                                 </div>';
+                        echo "<div class='col-md-2'>
+                                    <label for='agente_cerrador'>Cerrador</label>
+                                    <input type='text' id='agente_cerrador' data-tipo='filtro' data-filtro_campo='" . $controlador->modelo->columnas_extra['com_agente_cerrador_descripcion'] . "' placeholder='Ej: JUAN PEREZ'>
+                                </div>";
                     }
                     ?>
                     <div class="col-md-2">
@@ -162,10 +171,12 @@ echo "<style>
                 <button id="filtrar">Filtrar</button>
                 <button id="limpiar">Limpiar</button>
                 <form method="post" action="<?php echo $controlador->link_exportar_xls; ?>" enctype="multipart/form-data">
+                    <input type="hidden" name="id" id="hidden_id">
                     <input type="hidden" name="inm_status_prospecto" id="hidden_inm_status_prospecto">
                     <input type="hidden" name="nombre_prospecto" id="hidden_nombre_prospecto">
                     <input type="hidden" name="nss" id="hidden_nss">
                     <input type="hidden" name="agente" id="hidden_agente">
+                    <input type="hidden" name="agente_cerrador" id="hidden_agente_cerrador">
                     <input type="hidden" name="fecha_inicial" id="hidden_fecha_inicio">
                     <input type="hidden" name="fecha_final" id="hidden_fecha_fin">
                     <button id="descargar_excel">Descargar Excel</button>

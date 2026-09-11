@@ -354,7 +354,7 @@ class _inm_prospecto{
         $identificadores['org_sucursal_id']['disabled'] = false;
         $identificadores['org_sucursal_id']['columns_ds'] = array();
 
-        $identificadores['com_agente_id']['title'] = 'Agente';
+        $identificadores['com_agente_id']['title'] = 'Prospectador';
         $identificadores['com_agente_id']['cols'] = 2;
         $identificadores['com_agente_id']['disabled'] = false;
         $identificadores['com_agente_id']['filtro'] = $filtro;

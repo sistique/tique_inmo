@@ -78,6 +78,22 @@ class inm_prospecto extends _modelo_parent{
 
         $columnas_extra['usuario_permitido_id'] = $sql;
 
+        $sql = "( IFNULL ((SELECT
+                        com_agente_cerrador.id 
+                    FROM 
+                        com_agente AS com_agente_cerrador
+                    WHERE  com_agente_cerrador.id = inm_prospecto.com_agente_cerrador_id), -1) )";
+
+        $columnas_extra['com_agente_cerrador_id'] = $sql;
+
+        $sql = "( IFNULL ((SELECT
+                        com_agente_cerrador.descripcion 
+                    FROM 
+                        com_agente AS com_agente_cerrador
+                    WHERE  com_agente_cerrador.id = inm_prospecto.com_agente_cerrador_id), -1) )";
+
+        $columnas_extra['com_agente_cerrador_descripcion'] = $sql;
+
         $atributos_criticos = array('com_prospecto_id','razon_social','rfc',
             'numero_exterior','numero_interior','inm_sindicato_id','dp_municipio_nacimiento_id','observaciones',
             'fecha_nacimiento','monto_final','sub_cuenta','descuento','puntos','inm_nacionalidad_id',
@@ -261,38 +277,38 @@ class inm_prospecto extends _modelo_parent{
     public function alta_bd(array $keys_integra_ds = array('codigo', 'descripcion')): array|stdClass
     {
         $resultado = $this->valida_prioridad_campo(registro: $this->registro);
-        if(errores::$error){
+        if (errores::$error) {
             return $this->error->error(mensaje: 'Error al validar datos de contacto default',
-                data:  $resultado);
+                data: $resultado);
         }
 
-        if($resultado['resultado_completo']){
-            return $this->error->error(mensaje: 'Error al no existe ningun dato de contacto',data:  $resultado);
+        if ($resultado['resultado_completo']) {
+            return $this->error->error(mensaje: 'Error al no existe ningun dato de contacto', data: $resultado);
         }
 
         $this->registro = $resultado['registro'];
 
-        $keys = array('nombre','apellido_paterno','numero_com','lada_com');
-        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $this->registro);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
+        $keys = array('nombre', 'apellido_paterno', 'numero_com', 'lada_com');
+        $valida = $this->validacion->valida_existencia_keys(keys: $keys, registro: $this->registro);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al validar registro', data: $valida);
         }
 
-        if(!isset($this->registro['com_agente_id'])){
+        if (!isset($this->registro['com_agente_id'])) {
             $filtro_tipo_agente['com_tipo_agente.descripcion'] = 'PREDETERMINADO';
             $r_agente = (new com_agente(link: $this->link))->filtro_and(filtro: $filtro_tipo_agente);
-            if(errores::$error){
-                return $this->error->error(mensaje: 'Error al maquetar row',data:  $r_agente);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al maquetar row', data: $r_agente);
             }
 
             $this->registro['com_agente_id'] = $r_agente->registros[0]['com_agente_id'];
         }
 
-        if(!isset($this->registro['com_tipo_prospecto_id'])){
+        if (!isset($this->registro['com_tipo_prospecto_id'])) {
             $filtro_tipo_prosp['com_tipo_prospecto.descripcion'] = 'VENTA DE VIVIENDA';
             $r_tipo_prospecto = (new com_tipo_prospecto(link: $this->link))->filtro_and(filtro: $filtro_tipo_prosp);
-            if(errores::$error){
-                return $this->error->error(mensaje: 'Error al maquetar row',data:  $r_tipo_prospecto);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al maquetar row', data: $r_tipo_prospecto);
             }
 
             $this->registro['com_tipo_prospecto_id'] = $r_tipo_prospecto->registros[0]['com_tipo_prospecto_id'];
@@ -300,27 +316,27 @@ class inm_prospecto extends _modelo_parent{
 
         $filtro_agente['adm_usuario.id'] = $_SESSION['usuario_id'];
         $r_agente = (new com_agente(link: $this->link))->filtro_and(filtro: $filtro_agente);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al insertar prospecto',data:  $r_agente);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al insertar prospecto', data: $r_agente);
         }
 
-        $this->registro['org_sucursal_id']  = -1;
+        $this->registro['org_sucursal_id'] = -1;
         $this->registro['com_agente_id'] = -1;
-        if($r_agente->n_registros > 0){
+        if ($r_agente->n_registros > 0) {
             $this->registro['com_agente_id'] = $r_agente->registros[0]['com_agente_id'];
             $this->registro['org_sucursal_id'] = $r_agente->registros[0]['org_sucursal_id'];
         }
 
 
-        if(!isset($this->registro['apellido_materno'])){
+        if (!isset($this->registro['apellido_materno'])) {
             $this->registro['apellido_materno'] = '';
         }
 
-        if((int)$this->registro['com_agente_id'] === -1){
+        if ((int)$this->registro['com_agente_id'] === -1) {
             $this->registro['com_agente_id'] = 1;
         }
 
-        if((int)$this->registro['org_sucursal_id'] === -1){
+        if ((int)$this->registro['org_sucursal_id'] === -1) {
             $this->registro['org_sucursal_id'] = 1;
         }
 
@@ -330,15 +346,52 @@ class inm_prospecto extends _modelo_parent{
             trim($this->registro['apellido_materno'])
         ]));
 
-        $entidades = array('inm_producto_infonavit','inm_attr_tipo_credito','inm_destino_credito',
-            'inm_plazo_credito_sc','inm_tipo_discapacidad','inm_persona_discapacidad','inm_estado_civil',
-            'inm_institucion_hipotecaria','inm_sindicato','inm_nacionalidad','inm_ocupacion');
+        $entidades = array('inm_producto_infonavit', 'inm_attr_tipo_credito', 'inm_destino_credito',
+            'inm_plazo_credito_sc', 'inm_tipo_discapacidad', 'inm_persona_discapacidad', 'inm_estado_civil',
+            'inm_institucion_hipotecaria', 'inm_sindicato', 'inm_nacionalidad', 'inm_ocupacion');
         $registro = (new _prospecto())->previo_alta(modelo: $this, registro: $this->registro, entidades: $entidades);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al maquetar row',data:  $registro);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al maquetar row', data: $registro);
         }
-        
+
         $this->registro = $registro;
+
+        $filtro_ultimo['inm_prospecto.cambio_cerrador'] = 'inactivo';
+        $ultimo_registro = $this->obten_datos_ultimo_registro(filtro: $filtro_ultimo);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener el movimiento del empleado', data: $ultimo_registro);
+        }
+
+        $filtro_agentes = array('com_agente.aplica_ruleta' => 'activo');
+        $order = array('com_agente.id' => 'ASC');
+        $com_agente = (new com_agente(link: $this->link))->filtro_and(filtro: $filtro_agentes, order: $order);
+        if (errores::$error) {
+            $error = (new errores())->error(mensaje: 'Error al obtener adm_usuario ', data: $com_agente);
+            print_r($error);
+            exit;
+        }
+
+        $ultimo_agente_id = $ultimo_registro['inm_prospecto_com_agente_cerrador_id'] ?? null;
+        $indice_ultimo = null;
+        foreach ($com_agente->registros as $indice => $agente) {
+            if ((int)$agente['com_agente_id'] === (int)$ultimo_agente_id) {
+                $indice_ultimo = $indice;
+                break;
+            }
+        }
+
+        if ($indice_ultimo === null) {
+            $agente_asignado = $com_agente->registros[0];
+        } else {
+            $siguiente_indice = $indice_ultimo + 1;
+            if ($siguiente_indice >= count($com_agente->registros)) {
+                $siguiente_indice = 0;
+            }
+
+            $agente_asignado = $com_agente->registros[$siguiente_indice];
+        }
+
+        $this->registro['com_agente_cerrador_id'] = $agente_asignado['com_agente_id'];
 
         $r_alta_bd = parent::alta_bd(keys_integra_ds: $keys_integra_ds); // TODO: Change the autogenerated stub
         if(errores::$error){
@@ -346,11 +399,11 @@ class inm_prospecto extends _modelo_parent{
         }
 
         $con_rel_agente = new com_rel_agente($this->link);
-        if(!isset($this->registro['com_agente_id'])){
-            $this->registro['com_agente_id'] = 1;
+        if(!isset($this->registro['com_agente_cerrador_id'])){
+            $this->registro['com_agente_cerrador_id'] = 1;
         }
 
-        $registro_rel['com_agente_id'] = $this->registro['com_agente_id'];
+        $registro_rel['com_agente_id'] = $this->registro['com_agente_cerrador_id'];
         $registro_rel['com_prospecto_id'] = $this->registro['com_prospecto_id'];
 
         $result = $con_rel_agente->alta_registro(registro: $registro_rel);

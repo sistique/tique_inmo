@@ -843,28 +843,44 @@ class controlador_inm_prospecto extends _ctl_formato
 
         $filtro_especial = array();
 
+        if(!empty($_POST['id'])){
+            $filtro_especial[0][$table.'.id']['operador'] = 'LIKE';
+            $filtro_especial[0][$table.'.id']['valor'] = '%'.$_POST['id'].'%';
+            $filtro_especial[0][$table.'.id']['comparacion'] = 'AND';
+
+            //$filtro_text[$table.'.razon_social'] = $_POST['nombre_prospecto'];
+        }
+
         if(!empty($_POST['nombre_prospecto'])){
-            $filtro_especial[0][$table.'.razon_social']['operador'] = 'LIKE';
-            $filtro_especial[0][$table.'.razon_social']['valor'] = '%'.$_POST['nombre_prospecto'].'%';
-            $filtro_especial[0][$table.'.razon_social']['comparacion'] = 'AND';
+            $filtro_especial[1][$table.'.razon_social']['operador'] = 'LIKE';
+            $filtro_especial[1][$table.'.razon_social']['valor'] = '%'.$_POST['nombre_prospecto'].'%';
+            $filtro_especial[1][$table.'.razon_social']['comparacion'] = 'AND';
 
             //$filtro_text[$table.'.razon_social'] = $_POST['nombre_prospecto'];
         }
 
         if(!empty($_POST['nss'])){
-            $filtro_especial[1][$table.'.nss']['operador'] = 'LIKE';
-            $filtro_especial[1][$table.'.nss']['valor'] = '%'.$_POST['nss'].'%';
-            $filtro_especial[1][$table.'.nss']['comparacion'] = 'AND';
+            $filtro_especial[2][$table.'.nss']['operador'] = 'LIKE';
+            $filtro_especial[2][$table.'.nss']['valor'] = '%'.$_POST['nss'].'%';
+            $filtro_especial[2][$table.'.nss']['comparacion'] = 'AND';
 
             $filtro_text[$table.'.nss'] = $_POST['nss'];
         }
 
         if(!empty($_POST['agente'])){
-            $filtro_especial[2]['com_agente.descripcion']['operador'] = 'LIKE';
-            $filtro_especial[2]['com_agente.descripcion']['valor'] = '%'.$_POST['agente'].'%';
-            $filtro_especial[2]['com_agente.descripcion']['comparacion'] = 'AND';
+            $filtro_especial[3]['com_agente.descripcion']['operador'] = 'LIKE';
+            $filtro_especial[3]['com_agente.descripcion']['valor'] = '%'.$_POST['agente'].'%';
+            $filtro_especial[3]['com_agente.descripcion']['comparacion'] = 'AND';
 
             $filtro_text['com_agente.descripcion'] = $_POST['agente'];
+        }
+
+        if(!empty($_POST['agente_cerrador'])){
+            $filtro_especial[4]['com_agente_cerrador_descripcion']['operador'] = 'LIKE';
+            $filtro_especial[4]['com_agente_cerrador_descripcion']['valor'] = '%'.$_POST['agente_cerrador'].'%';
+            $filtro_especial[4]['com_agente_cerrador_descripcion']['comparacion'] = 'AND';
+
+            $filtro_text['com_agente_cerrador_descripcion'] = $_POST['agente'];
         }
 
         $in = array();
@@ -914,6 +930,7 @@ class controlador_inm_prospecto extends _ctl_formato
     {
 
         $filtro_agente['adm_usuario.id'] = $_SESSION['usuario_id'];
+        $filtro_agente['com_agente.base_completa'] = 'activo';
         $existe = (new com_agente(link: $link))->existe(filtro: $filtro_agente);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al insertar prospecto',data:  $existe);
@@ -926,15 +943,16 @@ class controlador_inm_prospecto extends _ctl_formato
         $columns["inm_prospecto_password_mi_cuenta_infonavit"]["titulo"] = "Contraseña";
         if(!$existe){
             $columns["inm_prospecto_monto_credito_solicitado_dh"]["titulo"] = "Precalificacion";
-            $columns["com_agente_descripcion"]["titulo"] = "Agente";
+            $columns["com_agente_descripcion"]["titulo"] = "Prospectador";
         }
+        $columns["com_agente_cerrador_descripcion"]["titulo"] = "Cerrador";
         $columns["inm_tipo_venta_descripcion"]["titulo"] = "Tipo Venta";
         $columns["inm_status_prospecto_descripcion"]["titulo"] = "Status Prospecto";
 
 
         $filtro = array("inm_prospecto.id", "inm_prospecto.razon_social", 'inm_prospecto.nss',
             'inm_prospecto.monto_credito_solicitado_dh','inm_prospecto.fecha_alta', 'com_agente.descripcion',
-            'inm_status_prospecto.descripcion');
+            'com_agente_cerrador_descripcion', 'inm_status_prospecto.descripcion');
 
         $datatables = new stdClass();
         $datatables->columns = $columns;
@@ -1648,6 +1666,7 @@ class controlador_inm_prospecto extends _ctl_formato
     public function lista(bool $header, bool $ws = false): array
     {
         $filtro_agente['adm_usuario.id'] = $_SESSION['usuario_id'];
+        $filtro_agente['com_agente.base_completa'] = 'activo';
         $existe = (new com_agente(link: $this->link))->existe(filtro: $filtro_agente);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al insertar prospecto',data:  $existe, header: $header,
