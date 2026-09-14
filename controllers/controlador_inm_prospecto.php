@@ -752,7 +752,7 @@ class controlador_inm_prospecto extends _ctl_formato
             return $this->retorno_error(mensaje: 'Error al obtener input',data:  $observaciones,  header: $header, ws: $ws);
         }
 
-        $this->inputs->observaciones = $observaciones;
+        $this->inputs->observaciones_etapa = $observaciones;
 
         $inm_prospecto_id = $this->html->hidden(name:'inm_prospecto_id',value: $this->registro_id);
         if(errores::$error){
@@ -2056,13 +2056,18 @@ class controlador_inm_prospecto extends _ctl_formato
         $modelo = new com_agente(link: $this->link);
         $columns_ds = array('com_agente_descripcion');
 
+        $filtro = (new \gamboamartin\inmuebles\controllers\_inm_prospecto())->genera_filtro_user(link: $this->link);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener filtro ',data:  $filtro, header: $header,
+                ws:$ws);
+        }
+
         $in = array();
         $in['llave'] = 'com_tipo_agente.descripcion';
         $in['values'] = array('VENDEDOR','GERENTE VENTAS','PREDETERMINADO');
         $com_agente_cerrador_id = $this->html->select_catalogo(cols: 2, con_registros: true,
-            id_selected: $data_row->com_agente_cerrador_id, modelo: $modelo,
-            columns_ds: $columns_ds, id_css: 'com_agente_cerrador_id',
-            label: 'Cerrador', name: 'com_agente_cerrador_id', in: $in);
+            id_selected: $data_row->com_agente_cerrador_id, modelo: $modelo, columns_ds: $columns_ds, filtro: $filtro,
+            id_css: 'com_agente_cerrador_id', label: 'Cerrador', name: 'com_agente_cerrador_id', in: $in);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener input',data:  $com_agente_cerrador_id,header: $header,
                 ws:$ws);

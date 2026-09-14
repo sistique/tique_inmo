@@ -716,6 +716,19 @@ $("#collapse_all").click(function() {
 
 });
 
+let chk_es_segundo_credito = $(".es_segundo_credito");
+chk_es_segundo_credito.change(function () {
+    let es_segundo_credito = $(this).val();
+
+    if (es_segundo_credito === 'SI') {
+        sl_inm_plazo_credito_sc_id.prop('disabled', false);
+    } else {
+        sl_inm_plazo_credito_sc_id.val(7);
+        sl_inm_plazo_credito_sc_id.prop('disabled', true);
+    }
+    sl_inm_plazo_credito_sc_id.selectpicker('refresh');
+});
+
 let sl_inm_tipo_credito_id = $("#inm_tipo_credito_id");
 
 function inicializa_co_acreditado(){

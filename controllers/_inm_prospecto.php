@@ -208,7 +208,7 @@ class _inm_prospecto{
      * @return array
      * @version 2.260.2
      */
-    private function genera_filtro_user(PDO $link): array
+    public function genera_filtro_user(PDO $link): array
     {
         $adm_usuario = (new adm_usuario(link: $link))->registro(registro_id: $_SESSION['usuario_id'],
             columnas: array('adm_grupo_root'));
@@ -220,6 +220,7 @@ class _inm_prospecto{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener filtro ',data:  $filtro);
         }
+
         return $filtro;
     }
 

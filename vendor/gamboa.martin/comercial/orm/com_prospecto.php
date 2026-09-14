@@ -286,6 +286,7 @@ class com_prospecto extends _modelo_parent{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar si existe relacion',data:  $existe);
         }
+
         $alta_com_rel_agente = false;
         if(!$existe){
             $alta_com_rel_agente = $this->inserta_com_rel_agente(com_agente_id: $com_agente_id,
@@ -295,7 +296,6 @@ class com_prospecto extends _modelo_parent{
             }
         }
         return $alta_com_rel_agente;
-
     }
 
     final public function tiene_cliente(int $com_prospecto_id)

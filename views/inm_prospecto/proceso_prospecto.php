@@ -380,7 +380,7 @@
                                                     <?php echo $controlador->inputs->inm_prospecto_id; ?>
                                                     <?php echo $controlador->inputs->inm_status_prospecto_id; ?>
                                                     <?php echo $controlador->inputs->fecha; ?>
-                                                    <?php echo $controlador->inputs->observaciones; ?>
+                                                    <?php echo $controlador->inputs->observaciones_etapa; ?>
 
                                                     <?php echo $controlador->inputs->btn_action_next; ?>
                                                     <?php echo $controlador->inputs->id_retorno; ?>
