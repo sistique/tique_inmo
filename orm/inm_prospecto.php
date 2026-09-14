@@ -73,7 +73,20 @@ class inm_prospecto extends _modelo_parent{
                     LEFT JOIN adm_usuario AS adm_usuario_permitido ON com_agente_permitido.adm_usuario_id = adm_usuario_permitido.id
                 WHERE
                     adm_usuario_permitido.id = $_SESSION[usuario_id]
-                    AND com_agente_permitido.id = com_prospecto.com_agente_id),- 1))";            }
+                    AND com_agente_permitido.id = com_prospecto.com_agente_id),- 1))";
+
+                if($com_agente->registros[0]['com_tipo_agente_descripcion'] === 'VENDEDOR'){
+                    $sql = "(IFNULL ((SELECT
+                        adm_usuario_permitido.id
+                    FROM
+                        com_agente AS com_agente_permitido
+                        LEFT JOIN adm_usuario AS adm_usuario_permitido ON com_agente_permitido.adm_usuario_id = adm_usuario_permitido.id
+                    WHERE
+                        adm_usuario_permitido.id = $_SESSION[usuario_id]
+                        AND com_agente_permitido.id = inm_prospecto.com_agente_cerrador_id),- 1))";
+                }
+            }
+
         }
 
         $columnas_extra['usuario_permitido_id'] = $sql;

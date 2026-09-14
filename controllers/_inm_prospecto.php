@@ -3,6 +3,7 @@ namespace gamboamartin\inmuebles\controllers;
 
 use base\controller\init;
 use gamboamartin\administrador\models\adm_usuario;
+use gamboamartin\comercial\models\com_agente;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_co_acreditado_html;
 use gamboamartin\inmuebles\html\inm_prospecto_html;
@@ -799,9 +800,22 @@ class _inm_prospecto{
             return $this->error->error(mensaje: 'Error al valida controlador registro',data:  $valida);
         }
 
-        $filtro = $this->genera_filtro_user(link: $controlador->link);
+        $com_agente = (new com_agente($controlador->link))->filtro_and(
+            filtro: array('adm_usuario.id'=>$_SESSION['usuario_id']));
         if(errores::$error){
-            return $this->error->error(mensaje: 'Error al obtener filtro ',data:  $filtro);
+            $error = (new errores())->error(mensaje: 'Error al obtener adm_usuario ',data:  $com_agente);
+            print_r($error);
+            exit;
+        }
+
+        $filtro = array();
+        if($com_agente->n_registros > 0){
+            $agente = $com_agente->registros[0];
+
+            $tipos_agente = ['GERENTE VENTAS','VENDEDOR', 'PROSPECTADOR'];
+            if (in_array($agente['com_tipo_agente_descripcion'], $tipos_agente, true)) {
+                $filtro['com_agente.id'] =  $controlador->registro['com_agente_id'];
+            }
         }
 
         $keys_selects = $this->keys_selects_comercial(controlador: $controlador,filtro: $filtro,

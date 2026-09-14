@@ -144,7 +144,7 @@ echo "<style>
                                placeholder="Ej: 9999999999">
                     </div>
                     <?php
-                    if(!$controlador->es_agente){
+                    if($controlador->es_agente){
                         echo '<div class="col-md-2">
                                     <label for="agente">Prospectador</label>
                                     <input type="text" id="agente" data-tipo="filtro" data-filtro_campo="com_agente.descripcion" placeholder="Ej: JUAN PEREZ">

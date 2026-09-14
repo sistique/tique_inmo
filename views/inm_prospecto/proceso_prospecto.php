@@ -17,7 +17,10 @@
                                 <ul id="listaprospecto">
                                     <li id="pestanaprospecto1"><a href='javascript:cambiarPestanna(pestanasprospecto,pestanaprospecto1);'>MODIFICA</a></li>
                                     <li id="pestanaprospecto2"><a href='javascript:cambiarPestanna(pestanasprospecto,pestanaprospecto2);'>DOCUMENTOS</a></li>
-                                    <li id="pestanaprospecto3"><a href='javascript:cambiarPestanna(pestanasprospecto,pestanaprospecto3);'>INTEGRA RELACION</a></li>
+                                    <?php
+                                    if($controlador->es_agente){?>
+                                        <li id="pestanaprospecto3"><a href='javascript:cambiarPestanna(pestanasprospecto,pestanaprospecto3);'>INTEGRA RELACION</a></li>
+                                    <?php } ?>
                                     <li id="pestanaprospecto4"><a href='javascript:cambiarPestanna(pestanasprospecto,pestanaprospecto4);'>ETAPA MANUAL</a></li>
                                 </ul>
                             </div>
@@ -332,13 +335,13 @@
                                         <div class="col-lg-12">
                                             <div class="widget  widget-box box-container form-main widget-form-cart" id="form">
                                                 <form method="post" action="<?php echo $controlador->link_alta_integra_relacion_bd; ?>" class="form-additional">
-                                                    <?php echo $controlador->inputs->razon_social; ?>
-                                                    <?php echo $controlador->inputs->com_agente_id; ?>
+                                                    <?php //echo $controlador->inputs->razon_social; ?>
+                                                    <?php //echo $controlador->inputs->com_agente_id; ?>
 
                                                     <?php echo $controlador->inputs->btn_action_next; ?>
                                                     <?php echo $controlador->inputs->id_retorno; ?>
                                                     <?php echo $controlador->inputs->seccion_retorno; ?>
-                                                    <?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
+                                                    <?php //include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
                                                 </form>
 
                                             </div>

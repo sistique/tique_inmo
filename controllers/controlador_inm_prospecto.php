@@ -735,6 +735,18 @@ class controlador_inm_prospecto extends _ctl_formato
             $disabled = true;
         }
 
+        $filtro_agente['adm_usuario.id'] = $_SESSION['usuario_id'];
+        $filtro_agente['com_agente.base_completa'] = 'activo';
+        $existe = (new com_agente(link: $this->link))->existe(filtro: $filtro_agente);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al insertar prospecto',data:  $existe, header: $header,
+                ws:$ws);
+        }
+
+        if($existe){
+            $this->es_agente = true;
+        }
+
         $this->inputs->inm_status_prospecto_id = $inm_status_prospecto_id;
 
         $hoy = date('Y-m-d\TH:i:s');
@@ -2054,20 +2066,36 @@ class controlador_inm_prospecto extends _ctl_formato
         $this->inputs->dp_colonia_postal_domicilio_id = $dp_colonia_postal_domicilio_id;
 
         $modelo = new com_agente(link: $this->link);
-        $columns_ds = array('com_agente_descripcion');
 
-        $filtro = (new \gamboamartin\inmuebles\controllers\_inm_prospecto())->genera_filtro_user(link: $this->link);
+        $com_agente = $modelo->filtro_and(
+            filtro: array('adm_usuario.id'=>$_SESSION['usuario_id']));
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener filtro ',data:  $filtro, header: $header,
-                ws:$ws);
+            $error = (new errores())->error(mensaje: 'Error al obtener adm_usuario ',data:  $com_agente);
+            print_r($error);
+            exit;
         }
 
+        $filtro = array();
+        if($com_agente->n_registros > 0){
+            $agente = $com_agente->registros[0];
+            if ($agente['adm_grupo_solo_mi_info'] === 'activo') {
+                $filtro['adm_usuario.id'] = $_SESSION['usuario_id'];
+            }
+
+            $tipos_agente = ['VENDEDOR', 'PROSPECTADOR'];
+            if (in_array($agente['com_tipo_agente_descripcion'], $tipos_agente, true)) {
+                $filtro['com_agente.id'] = $this->row_upd->com_agente_cerrador_id;
+            }
+        }
+
+        $columns_ds = array('com_agente_descripcion');
         $in = array();
         $in['llave'] = 'com_tipo_agente.descripcion';
         $in['values'] = array('VENDEDOR','GERENTE VENTAS','PREDETERMINADO');
         $com_agente_cerrador_id = $this->html->select_catalogo(cols: 2, con_registros: true,
-            id_selected: $data_row->com_agente_cerrador_id, modelo: $modelo, columns_ds: $columns_ds, filtro: $filtro,
-            id_css: 'com_agente_cerrador_id', label: 'Cerrador', name: 'com_agente_cerrador_id', in: $in);
+            id_selected: $this->row_upd->com_agente_cerrador_id, modelo: $modelo, columns_ds: $columns_ds,
+            filtro: $filtro, id_css: 'com_agente_cerrador_id', label: 'Cerrador', name: 'com_agente_cerrador_id',
+            in: $in);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener input',data:  $com_agente_cerrador_id,header: $header,
                 ws:$ws);

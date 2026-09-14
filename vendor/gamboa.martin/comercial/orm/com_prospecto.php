@@ -63,11 +63,11 @@ class com_prospecto extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al insertar',data:  $r_alta_bd);
         }
 
-        $alta_com_rel_agente = $this->inserta_com_rel_agente(com_agente_id:$r_alta_bd->registro_puro->com_agente_id,
+        /*$alta_com_rel_agente = $this->inserta_com_rel_agente(com_agente_id:$r_alta_bd->registro_puro->com_agente_id,
             com_prospecto_id:$r_alta_bd->registro_id);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al insertar alta_com_rel_agente',data:  $alta_com_rel_agente);
-        }
+        }*/
 
         $filtro = array();
         $filtro['pr_proceso.descripcion'] = 'PROSPECCION';
