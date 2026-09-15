@@ -1141,7 +1141,7 @@ class inm_prospecto_ubicacion extends _modelo_parent{
             return $this->error->error(mensaje: 'Error id es menor a 0',data:  $id);
         }
 
-        if($registro['fecha_otorgamiento_credito'] === '0000-00-00'){
+        if(isset($registro['fecha_otorgamiento_credito']) && $registro['fecha_otorgamiento_credito'] === '0000-00-00'){
             unset($registro['fecha_otorgamiento_credito']);
         }
 
