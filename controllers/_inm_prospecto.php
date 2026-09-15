@@ -375,7 +375,7 @@ class _inm_prospecto{
         $identificadores['com_agente_id']['filtro'] = $filtro;
         $identificadores['com_agente_id']['columns_ds'] = array();
         $identificadores['com_agente_id']['in'] = array('llave'=>'com_tipo_agente.descripcion',
-            'values'=>array('PROSPECTADOR', 'PREDETERMINADO'));
+            'values'=>array('PREDETERMINADO','GERENTE VENTAS','VENDEDOR', 'PROSPECTADOR'));
 
         $identificadores['com_tipo_prospecto_id']['title'] = 'Tipo de prospecto';
         $identificadores['com_tipo_prospecto_id']['cols'] = 2;
@@ -812,7 +812,7 @@ class _inm_prospecto{
         if($com_agente->n_registros > 0){
             $agente = $com_agente->registros[0];
 
-            $tipos_agente = ['GERENTE VENTAS','VENDEDOR', 'PROSPECTADOR'];
+            $tipos_agente = ['PREDETERMINADO','GERENTE VENTAS','VENDEDOR', 'PROSPECTADOR'];
             if (in_array($agente['com_tipo_agente_descripcion'], $tipos_agente, true)) {
                 $filtro['com_agente.id'] =  $controlador->registro['com_agente_id'];
             }

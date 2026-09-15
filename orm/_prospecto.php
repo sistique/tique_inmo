@@ -486,7 +486,6 @@ class _prospecto{
             return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
         }
 
-
         $com_prospecto_ins = $this->com_prospecto_ins(registro: $registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar com_prospecto',data:  $com_prospecto_ins);

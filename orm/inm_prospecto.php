@@ -307,14 +307,83 @@ class inm_prospecto extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al validar registro', data: $valida);
         }
 
-        if (!isset($this->registro['com_agente_id'])) {
-            $filtro_tipo_agente['com_tipo_agente.descripcion'] = 'PREDETERMINADO';
-            $r_agente = (new com_agente(link: $this->link))->filtro_and(filtro: $filtro_tipo_agente);
+        $filtro_agente['adm_usuario.id'] = $_SESSION['usuario_id'];
+        $r_agente = (new com_agente(link: $this->link))->filtro_and(filtro: $filtro_agente);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener agente del usuario', data: $r_agente);
+        }
+
+        $agente_usuario = null;
+        if ($r_agente->n_registros > 0) {
+            $agente_usuario = $r_agente->registros[0];
+        }
+
+        $filtro_tipo_agente['com_tipo_agente.descripcion'] = 'PREDETERMINADO';
+        $r_predeterminado = (new com_agente(link: $this->link))->filtro_and(filtro: $filtro_tipo_agente);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener agente predeterminado', data: $r_predeterminado);
+        }
+
+        if ($r_predeterminado->n_registros === 0) {
+            return $this->error->error(mensaje: 'No se encontró agente predeterminado', data: $r_predeterminado);
+        }
+
+        $agente_predeterminado = $r_predeterminado->registros[0];
+
+        $tipo_agente = $agente_usuario['com_tipo_agente_descripcion'] ?? null;
+
+        if ($tipo_agente === 'PROSPECTADOR') {
+            $this->registro['com_agente_id'] = $agente_usuario['com_agente_id'];
+            $this->registro['org_sucursal_id'] = $agente_usuario['org_sucursal_id'];
+
+            $filtro_ultimo['inm_prospecto.cambio_cerrador'] = 'inactivo';
+            $ultimo_registro = $this->obten_datos_ultimo_registro( filtro: $filtro_ultimo );
             if (errores::$error) {
-                return $this->error->error(mensaje: 'Error al maquetar row', data: $r_agente);
+                return $this->error->error( mensaje: 'Error al obtener el último cerrador', data: $ultimo_registro );
             }
 
-            $this->registro['com_agente_id'] = $r_agente->registros[0]['com_agente_id'];
+            $filtro_agentes = [ 'com_agente.aplica_ruleta' => 'activo' ];
+            $order = [ 'com_agente.id' => 'ASC' ];
+            $r_agentes_ruleta = (new com_agente(link: $this->link))->filtro_and( filtro: $filtro_agentes, order: $order );
+            if (errores::$error) {
+                return $this->error->error( mensaje: 'Error al obtener agentes de la ruleta', data: $r_agentes_ruleta );
+            }
+
+            if ($r_agentes_ruleta->n_registros === 0) {
+                $this->registro['com_agente_cerrador_id'] = $agente_predeterminado['com_agente_id'];
+            } else {
+                $ultimo_agente_id = $ultimo_registro['inm_prospecto_com_agente_cerrador_id'] ?? null;
+                $indice_ultimo = null;
+                foreach ($r_agentes_ruleta->registros as $indice => $agente) {
+                    if ( (int)$agente['com_agente_id'] === (int)$ultimo_agente_id ) {
+                        $indice_ultimo = $indice;
+                        break;
+                    }
+                }
+                if ($indice_ultimo === null) {
+                   $agente_asignado = $r_agentes_ruleta->registros[0];
+                } else {
+                    $siguiente_indice = $indice_ultimo + 1;
+                    if ( $siguiente_indice >= count($r_agentes_ruleta->registros) ) {
+                        $siguiente_indice = 0;
+                    }
+                    $agente_asignado = $r_agentes_ruleta->registros[$siguiente_indice];
+                }
+                $this->registro['com_agente_cerrador_id'] = $agente_asignado['com_agente_id'];
+            }
+        } elseif ($tipo_agente === 'VENDEDOR' || $tipo_agente === 'GERENTE VENTAS') {
+            $this->registro['com_agente_id'] = $agente_usuario['com_agente_id'];
+            $this->registro['com_agente_cerrador_id'] = $agente_usuario['com_agente_id'];
+            $this->registro['org_sucursal_id'] = $agente_usuario['org_sucursal_id'];
+            $this->registro['cambio_cerrador'] = 'activo';
+        }else {
+            $this->registro['com_agente_id'] = $agente_predeterminado['com_agente_id'];
+            $this->registro['com_agente_cerrador_id'] = $agente_predeterminado['com_agente_id'];
+            if (isset($agente_predeterminado['org_sucursal_id'])) {
+                $this->registro['org_sucursal_id'] = $agente_predeterminado['org_sucursal_id'];
+            }
+
+            $this->registro['cambio_cerrador'] = 'activo';
         }
 
         if (!isset($this->registro['com_tipo_prospecto_id'])) {
@@ -327,27 +396,10 @@ class inm_prospecto extends _modelo_parent{
             $this->registro['com_tipo_prospecto_id'] = $r_tipo_prospecto->registros[0]['com_tipo_prospecto_id'];
         }
 
-        $filtro_agente['adm_usuario.id'] = $_SESSION['usuario_id'];
-        $r_agente = (new com_agente(link: $this->link))->filtro_and(filtro: $filtro_agente);
-        if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al insertar prospecto', data: $r_agente);
-        }
-
-        $this->registro['org_sucursal_id'] = -1;
-        $this->registro['com_agente_id'] = -1;
-        if ($r_agente->n_registros > 0) {
-            $this->registro['com_agente_id'] = $r_agente->registros[0]['com_agente_id'];
-            $this->registro['org_sucursal_id'] = $r_agente->registros[0]['org_sucursal_id'];
-        }
-
-
         if (!isset($this->registro['apellido_materno'])) {
             $this->registro['apellido_materno'] = '';
         }
 
-        if ((int)$this->registro['com_agente_id'] === -1) {
-            $this->registro['com_agente_id'] = 1;
-        }
 
         if ((int)$this->registro['org_sucursal_id'] === -1) {
             $this->registro['org_sucursal_id'] = 1;
@@ -368,43 +420,6 @@ class inm_prospecto extends _modelo_parent{
         }
 
         $this->registro = $registro;
-
-        $filtro_ultimo['inm_prospecto.cambio_cerrador'] = 'inactivo';
-        $ultimo_registro = $this->obten_datos_ultimo_registro(filtro: $filtro_ultimo);
-        if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al obtener el movimiento del empleado', data: $ultimo_registro);
-        }
-
-        $filtro_agentes = array('com_agente.aplica_ruleta' => 'activo');
-        $order = array('com_agente.id' => 'ASC');
-        $com_agente = (new com_agente(link: $this->link))->filtro_and(filtro: $filtro_agentes, order: $order);
-        if (errores::$error) {
-            $error = (new errores())->error(mensaje: 'Error al obtener adm_usuario ', data: $com_agente);
-            print_r($error);
-            exit;
-        }
-
-        $ultimo_agente_id = $ultimo_registro['inm_prospecto_com_agente_cerrador_id'] ?? null;
-        $indice_ultimo = null;
-        foreach ($com_agente->registros as $indice => $agente) {
-            if ((int)$agente['com_agente_id'] === (int)$ultimo_agente_id) {
-                $indice_ultimo = $indice;
-                break;
-            }
-        }
-
-        if ($indice_ultimo === null) {
-            $agente_asignado = $com_agente->registros[0];
-        } else {
-            $siguiente_indice = $indice_ultimo + 1;
-            if ($siguiente_indice >= count($com_agente->registros)) {
-                $siguiente_indice = 0;
-            }
-
-            $agente_asignado = $com_agente->registros[$siguiente_indice];
-        }
-
-        $this->registro['com_agente_cerrador_id'] = $agente_asignado['com_agente_id'];
 
         $r_alta_bd = parent::alta_bd(keys_integra_ds: $keys_integra_ds); // TODO: Change the autogenerated stub
         if(errores::$error){
@@ -819,14 +834,15 @@ class inm_prospecto extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al insertar datos', data: $inm_prospecto_anterior);
         }
 
-        $r_modifica =  parent::modifica_bd(registro: $registro,id:  $id,reactiva:  $reactiva,
+        $r_modifica = parent::modifica_bd(registro: $registro,id:  $id,reactiva:  $reactiva,
             keys_integra_ds:  $keys_integra_ds); // TODO: Change the autogenerated stub
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al modificar prospecto',data:  $r_modifica);
         }
 
-        if(isset($registro['com_agente_id'])){
-            $r_modifica->registro_puro->com_agente_id = $registro['com_agente_id'];
+        $r_modifica->registro_puro->com_agente_id = $registro['com_agente_id'];
+        if(!isset($registro['com_agente_id'])){
+            $r_modifica->registro_puro->com_agente_id = $inm_prospecto_anterior['com_agente_id'];
         }
 
         if(isset($registro['com_agente_cerrador_id']) &&
