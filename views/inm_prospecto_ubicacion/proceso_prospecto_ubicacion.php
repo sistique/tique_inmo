@@ -71,6 +71,7 @@
                                                         <?php echo $controlador->inputs->inm_complemento_id; ?>
 
                                                         <!-- Identificadores de la unidad -->
+                                                        <?php echo $controlador->inputs->folio_registro_publico; ?>
                                                         <?php echo $controlador->inputs->lote; ?>
                                                         <?php echo $controlador->inputs->nivel; ?>
                                                         <?php echo $controlador->inputs->entrada; ?>
@@ -97,11 +98,12 @@
 
                                                     <?php echo $controlador->header_frontend->apartado_3; ?>
                                                     <div id="apartado_3">
+                                                        <?php echo $controlador->inputs->inm_tipo_credito_id; ?>
                                                         <?php echo $controlador->inputs->numero_credito; ?>
+                                                        <?php echo $controlador->inputs->monto_credito; ?>
                                                         <?php echo $controlador->inputs->adeudo_hipoteca; ?>
                                                         <?php echo $controlador->inputs->mensualidad; ?>
                                                         <?php echo $controlador->inputs->fecha_otorgamiento_credito; ?>
-                                                        <?php echo $controlador->inputs->inm_tipo_credito_id; ?>
                                                         <?php echo $controlador->inputs->monto_devolucion; ?>
                                                         <?php echo $controlador->inputs->correo_mi_cuenta_infonavit; ?>
                                                         <?php echo $controlador->inputs->password_mi_cuenta_infonavit; ?>

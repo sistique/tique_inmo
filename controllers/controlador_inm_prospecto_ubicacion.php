@@ -255,7 +255,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
 
         $keys_selects = $this->key_select(cols: 3, con_registros: true, filtro: array(),
             key: 'inm_estado_vivienda_id', keys_selects: $keys_selects, id_selected: -1,
-            label: 'Estado Vivienda', columns_ds:  array('inm_estado_vivienda_descripcion'));
+            label: 'Estado Vivienda', columns_ds:  array('inm_estado_vivienda_descripcion'), required: false);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects', data: $keys_selects,
                 header: $header, ws: $ws);
@@ -263,7 +263,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
 
         $keys_selects = $this->key_select(cols: 3, con_registros: true, filtro: array(),
             key: 'inm_prototipo_id', keys_selects: $keys_selects, id_selected: -1,
-            label: 'Prototipo',columns_ds: array('inm_prototipo_descripcion'));
+            label: 'Prototipo',columns_ds: array('inm_prototipo_descripcion'),  required: false);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects', data: $keys_selects,
                 header: $header, ws: $ws);
@@ -271,7 +271,15 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
 
         $keys_selects = $this->key_select(cols: 2, con_registros: true, filtro: array(),
             key: 'inm_complemento_id', keys_selects: $keys_selects, id_selected: -1,
-            label: 'Complemento', columns_ds: array('inm_complemento_descripcion'));
+            label: 'Complemento', columns_ds: array('inm_complemento_descripcion'), required: false);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects', data: $keys_selects,
+                header: $header, ws: $ws);
+        }
+
+        $keys_selects = $this->key_select(cols: 2, con_registros: true, filtro: array(),
+            key: 'inm_tipo_credito_id', keys_selects: $keys_selects, id_selected: -1,
+            label: 'Tipo Credito', columns_ds: array('inm_tipo_credito_descripcion'), required: false);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects', data: $keys_selects,
                 header: $header, ws: $ws);
@@ -296,7 +304,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
                 mensaje: 'Error al obtener inputs', data: $inputs, header: $header, ws: $ws);
         }
 
-        $fecha_otorgamiento_credito = $this->html->input_fecha(cols: 3, row_upd: $this->row_upd, value_vacio: false,
+        $fecha_otorgamiento_credito = $this->html->input_fecha(cols: 2, row_upd: $this->row_upd, value_vacio: false,
             name: 'fecha_otorgamiento_credito', place_holder: 'Fecha Credito',
             required: false);
         if (errores::$error) {
@@ -340,13 +348,13 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
             'fecha_nacimiento', 'sub_cuenta', 'monto_final', 'descuento', 'puntos', 'telefono_casa', 'correo_empresa',
             'correo_mi_cuenta_infonavit', 'password_mi_cuenta_infonavit', 'nss_extra', 'liga_red_social', 'area_empresa',
             'texto_exterior', 'texto_interior', 'documentos', 'receptor', 'asunto', 'mensaje','manzana','lote',
-            'cuenta_predial', 'adeudo_hipoteca','adeudo_predial', 'cuenta_agua', 'adeudo_agua',
+            'cuenta_predial', 'adeudo_hipoteca', 'monto_credito','adeudo_predial', 'cuenta_agua', 'adeudo_agua',
             'adeudo_luz','monto_devolucion', 'nivel','recamaras','metros_terreno', 'metros_construccion','cp','colonia',
             'calle','correo_mi_cuenta_infonavit','password_mi_cuenta_infonavit','numero_credito','entre_calle_1',
             'entre_calle_2','entrada','supermanzana','edificio','condominio','numero_notaria','nombre_notario',
             'plaza_notaria','numero_escritura','libro','volumen','calle_domicilio','numero_exterior_domicilio',
             'numero_interior_domicilio','etapa','mensualidad','cuenta_luz', 'calle_fiscal','numero_exterior_fiscal',
-            'numero_interior_fiscal');
+            'numero_interior_fiscal','folio_registro_publico');
 
         $keys->selects = array();
 
@@ -1427,7 +1435,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         if(!$existe){
             $columns["com_agente_descripcion"]["titulo"] = "Agente";
         }
-        $columns["inm_status_prospecto_ubicacion_descripcion"]["titulo"] = "Status Prospecto Ubicacion";
+        $columns["inm_status_prospecto_ubicacion_descripcion"]["titulo"] = "Status Prospecto";
 
 
         $filtro = array("inm_prospecto_ubicacion.id", "inm_prospecto_ubicacion_ubicacion","com_prospecto.razon_social",
@@ -1769,6 +1777,13 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
+
+        $keys_selects = (new init())->key_select_txt(cols: 3, key: 'folio_registro_publico',
+            keys_selects: $keys_selects, place_holder: 'Folio Reg. Pub.', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+
         $keys_selects = (new init())->key_select_txt(cols: 6, key: 'descuento',
             keys_selects: $keys_selects, place_holder: 'Descuento', required: false);
         if (errores::$error) {
@@ -1780,8 +1795,14 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 3, key: 'adeudo_hipoteca',
-            keys_selects: $keys_selects, place_holder: 'Adeudo Hipoteca', required: false);
+        $keys_selects = (new init())->key_select_txt(cols: 2, key: 'adeudo_hipoteca',
+            keys_selects: $keys_selects, place_holder: 'Saldo Credito', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 2, key: 'monto_credito',
+            keys_selects: $keys_selects, place_holder: 'Monto Credito', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
@@ -1822,7 +1843,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 3, key: 'monto_devolucion',
+        $keys_selects = (new init())->key_select_txt(cols: 4, key: 'monto_devolucion',
             keys_selects: $keys_selects, place_holder: 'Monto Devolucion', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
@@ -1858,19 +1879,19 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 4, key: 'recamaras',
+        $keys_selects = (new init())->key_select_txt(cols: 3, key: 'recamaras',
             keys_selects: $keys_selects, place_holder: 'Recamaras', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 4, key: 'metros_terreno',
+        $keys_selects = (new init())->key_select_txt(cols: 3, key: 'metros_terreno',
             keys_selects: $keys_selects, place_holder: 'Metros Terreno', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 4, key: 'metros_construccion',
+        $keys_selects = (new init())->key_select_txt(cols: 3, key: 'metros_construccion',
             keys_selects: $keys_selects, place_holder: 'Metros Construccion', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
@@ -1927,25 +1948,25 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
 
         $keys_selects['correo_empresa']->regex = $this->validacion->patterns['correo_html5'];
 
-        $keys_selects = (new init())->key_select_txt(cols: 3,key: 'numero_credito', keys_selects: $keys_selects,
+        $keys_selects = (new init())->key_select_txt(cols: 2,key: 'numero_credito', keys_selects: $keys_selects,
             place_holder: 'Numero Credito',required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 3,key: 'mensualidad', keys_selects: $keys_selects,
+        $keys_selects = (new init())->key_select_txt(cols: 2,key: 'mensualidad', keys_selects: $keys_selects,
             place_holder: 'Mensualidad',required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 3,key: 'correo_mi_cuenta_infonavit', keys_selects: $keys_selects,
+        $keys_selects = (new init())->key_select_txt(cols: 4,key: 'correo_mi_cuenta_infonavit', keys_selects: $keys_selects,
             place_holder: 'Correo Infonavit',required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 3,key: 'password_mi_cuenta_infonavit', keys_selects: $keys_selects,
+        $keys_selects = (new init())->key_select_txt(cols: 4,key: 'password_mi_cuenta_infonavit', keys_selects: $keys_selects,
             place_holder: 'Contraseña Infonavit',required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
@@ -2032,7 +2053,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
             return $this->retorno_error(mensaje: 'Error al generar headers', data: $headers, header: $header, ws: $ws);
         }
 
-        $fecha_otorgamiento_credito = $this->html->input_fecha(cols: 3, row_upd: $this->row_upd, value_vacio: false,
+        $fecha_otorgamiento_credito = $this->html->input_fecha(cols: 2, row_upd: $this->row_upd, value_vacio: false,
             name: 'fecha_otorgamiento_credito', place_holder: 'Fecha Credito',
             required: false, value: $this->row_upd->fecha_otorgamiento_credito);
         if (errores::$error) {

@@ -20,7 +20,9 @@
 <?php echo $controlador->inputs->entre_calle_1; ?>
 <?php echo $controlador->inputs->entre_calle_2; ?>
 
+<?php echo $controlador->inputs->inm_tipo_credito_id; ?>
 <?php echo $controlador->inputs->numero_credito; ?>
+<?php echo $controlador->inputs->monto_credito; ?>
 <?php echo $controlador->inputs->adeudo_hipoteca; ?>
 <?php echo $controlador->inputs->mensualidad; ?>
 <?php echo $controlador->inputs->fecha_otorgamiento_credito; ?>
