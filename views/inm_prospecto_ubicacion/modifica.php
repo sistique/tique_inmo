@@ -97,6 +97,7 @@
                         <?php echo $controlador->header_frontend->apartado_4; ?>
                         <div id="apartado_4">
                             <?php echo $controlador->inputs->razon_social; ?>
+                            <?php echo $controlador->inputs->inm_estado_civil_id; ?>
 
                             <!-- Domicilio del titular -->
                             <?php echo $controlador->inputs->dp_estado_domicilio_id; ?>

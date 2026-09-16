@@ -17,8 +17,7 @@
                                 <ul id="listaprospecto">
                                     <li id="pestanaprospecto1"><a href='javascript:cambiarPestanna(pestanasprospecto,pestanaprospecto1);'>MODIFICA</a></li>
                                     <li id="pestanaprospecto2"><a href='javascript:cambiarPestanna(pestanasprospecto,pestanaprospecto2);'>DOCUMENTOS</a></li>
-                                    <?php
-                                    if($controlador->es_agente){?>
+                                    <?php if($controlador->es_agente){?>
                                         <li id="pestanaprospecto3"><a href='javascript:cambiarPestanna(pestanasprospecto,pestanaprospecto3);'>INTEGRA RELACION</a></li>
                                     <?php } ?>
                                     <li id="pestanaprospecto4"><a href='javascript:cambiarPestanna(pestanasprospecto,pestanaprospecto4);'>ETAPA MANUAL</a></li>

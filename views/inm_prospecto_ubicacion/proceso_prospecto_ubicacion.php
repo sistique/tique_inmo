@@ -19,7 +19,9 @@
                                     <li id="pestanaubicacion1"><a href='javascript:cambiarPestanna(pestanasubicacion,pestanaubicacion1);'>MODIFICA</a></li>
                                     <li id="pestanaubicacion2"><a href='javascript:cambiarPestanna(pestanasubicacion,pestanaubicacion2);'>DOCUMENTOS</a></li>
                                     <li id="pestanaubicacion3"><a href='javascript:cambiarPestanna(pestanasubicacion,pestanaubicacion3);'>FOTOGRAFIAS</a></li>
-                                    <li id="pestanaubicacion4"><a href='javascript:cambiarPestanna(pestanasubicacion,pestanaubicacion4);'>INTEGRA RELACION</a></li>
+                                    <?php if(!$controlador->es_agente){?>
+                                        <li id="pestanaubicacion4"><a href='javascript:cambiarPestanna(pestanasubicacion,pestanaubicacion4);'>RESPONSABLE</a></li>
+                                    <?php } ?>
                                     <li id="pestanaubicacion5"><a href='javascript:cambiarPestanna(pestanasubicacion,pestanaubicacion5);'>ETAPA MANUAL</a></li>
                                 </ul>
                             </div>
@@ -113,6 +115,7 @@
                                                     <?php echo $controlador->header_frontend->apartado_4; ?>
                                                     <div id="apartado_4">
                                                         <?php echo $controlador->inputs->razon_social; ?>
+                                                        <?php echo $controlador->inputs->inm_estado_civil_id; ?>
 
                                                         <!-- Domicilio del titular -->
                                                         <?php echo $controlador->inputs->dp_estado_domicilio_id; ?>
@@ -298,15 +301,15 @@
                                         <div class="col-lg-12">
                                             <div class="widget  widget-box box-container form-main widget-form-cart" id="form">
                                                 <form method="post" action="<?php echo $controlador->link_alta_integra_relacion_bd; ?>" class="form-additional">
-                                                    <?php echo $controlador->inputs->razon_social; ?>
-                                                    <?php echo $controlador->inputs->inm_prospecto_ubicacion_ubicacion; ?>
-                                                    <?php echo $controlador->inputs->com_agente_id; ?>
+                                                    <?php //echo controlador->inputs->razon_social; ?>
+                                                    <?php //echo $controlador->inputs->inm_prospecto_ubicacion_ubicacion; ?>
+                                                    <?php //echo $controlador->inputs->com_agente_id; ?>
 
                                                     <?php echo $controlador->inputs->btn_action_next; ?>
                                                     <?php echo $controlador->inputs->id_retorno; ?>
                                                     <?php echo $controlador->inputs->seccion_retorno; ?>
 
-                                                    <?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
+                                                    <?php //include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
                                                 </form>
                                             </div>
                                         </div>
@@ -345,7 +348,7 @@
                                                     <?php echo $controlador->inputs->inm_prospecto_ubicacion_id; ?>
                                                     <?php echo $controlador->inputs->inm_status_prospecto_ubicacion_id; ?>
                                                     <?php echo $controlador->inputs->fecha; ?>
-                                                    <?php echo $controlador->inputs->observaciones; ?>
+                                                    <?php echo $controlador->inputs->observaciones_etapa; ?>
 
                                                     <?php echo $controlador->inputs->btn_action_next; ?>
                                                     <?php echo $controlador->inputs->id_retorno; ?>

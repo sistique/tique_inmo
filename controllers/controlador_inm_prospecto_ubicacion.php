@@ -377,6 +377,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         $init_data['inm_tipo_vivienda'] = "gamboamartin\\inmuebles";
         $init_data['org_sucursal'] = "gamboamartin\\organigrama";
         $init_data['inm_tipo_compra'] = "gamboamartin\\inmuebles";
+        $init_data['inm_estado_civil'] = "gamboamartin\\inmuebles";
 
         $init_data = (new _base_paquete())->init_data_domicilio(init_data: $init_data);
         if (errores::$error) {
@@ -802,6 +803,17 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
             }
         }
 
+        $filtro_agente['adm_usuario.id'] = $_SESSION['usuario_id'];
+        $existe = (new com_agente(link: $this->link))->existe(filtro: $filtro_agente);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al insertar prospecto',data:  $existe, header: $header,
+                ws:$ws);
+        }
+
+        if($existe){
+            $this->es_agente = true;
+        }
+
         $columns_ds[] = 'inm_status_prospecto_ubicacion_descripcion';
 
         $inm_status_prospecto_ubicacion_id = (new inm_status_prospecto_ubicacion_html(html: $this->html_base))->
@@ -829,7 +841,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
                 ws: $ws);
         }
 
-        $this->inputs->observaciones = $observaciones;
+        $this->inputs->observaciones_etapa = $observaciones;
 
         $inm_prospecto_ubicacion_id = $this->html->hidden(name:'inm_prospecto_ubicacion_id',value: $this->registro_id);
         if(errores::$error){
@@ -1585,7 +1597,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
 
         $keys_selects['correo_com']->regex = $this->validacion->patterns['correo_html5'];
 
-        $keys_selects = (new init())->key_select_txt(cols: 12, key: 'razon_social',
+        $keys_selects = (new init())->key_select_txt(cols: 9, key: 'razon_social',
             keys_selects: $keys_selects, place_holder: 'Razon Social');
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
