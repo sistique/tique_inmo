@@ -2458,7 +2458,7 @@ class controlador_inm_ubicacion extends _ctl_base
         $this->link_documento_bd = $link_documento_bd;
 
         $button_descarga_expediente = $this->html->button_href(accion: 'descarga_expediente',
-            etiqueta: 'Expediente', registro_id: $this->registro_id, seccion: 'inm_prospecto_ubicacion',
+            etiqueta: 'Expediente', registro_id: $this->registro_id, seccion: 'inm_ubicacion',
             style: 'success');
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al integrar button',
@@ -3678,7 +3678,7 @@ class controlador_inm_ubicacion extends _ctl_base
         $this->link_fotografia_bd = $link_fotografia_bd;
 
         $button_descarga_fotos = $this->html->button_href(accion: 'descarga_fotos',
-            etiqueta: 'Fotos', registro_id: $this->registro_id, seccion: 'inm_prospecto_ubicacion',
+            etiqueta: 'Fotos', registro_id: $this->registro_id, seccion: 'inm_ubicacion',
             style: 'success');
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al integrar button',
