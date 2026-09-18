@@ -101,6 +101,7 @@ class controlador_inm_comprador extends _ctl_base {
 
     public string $buttons_base = '';
 
+    public string $button_descarga_expediente = '';
     public string $link_documento_bd ='';
     public string $link_exportar_xls ='';
     public string $link_inm_doc_comprador_alta_bd = '';
@@ -3514,6 +3515,16 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         $this->link_documento_bd = $link_documento_bd;
+
+        $button_descarga_expediente = $this->html->button_href(accion: 'descarga_expediente',
+            etiqueta: 'Expediente', registro_id: $this->registro_id, seccion: 'inm_comprador',
+            style: 'success');
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al integrar button',
+                data: $button_descarga_expediente, header: $header, ws: $ws);
+        }
+
+        $this->button_descarga_expediente = $button_descarga_expediente;
 
         return $inm_conf_docs_comprador;
 

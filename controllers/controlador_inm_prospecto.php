@@ -74,6 +74,7 @@ class controlador_inm_prospecto extends _ctl_formato
     public string $link_alta_bitacora = '';
     public array $etapas = array();
     public array $relaciones = array();
+    public string $button_descarga_expediente = '';
     public string $link_documento_bd = '';
     public string $link_alta_integra_relacion_bd = '';
     public string $link_inm_doc_prospecto_alta_bd = '';
@@ -637,6 +638,16 @@ class controlador_inm_prospecto extends _ctl_formato
         }
 
         $this->link_documento_bd = $link_documento_bd;
+
+        $button_descarga_expediente = $this->html->button_href(accion: 'descarga_expediente',
+            etiqueta: 'Expediente', registro_id: $this->registro_id, seccion: 'inm_prospecto',
+            style: 'success');
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al integrar button',
+                data: $button_descarga_expediente, header: $header, ws: $ws);
+        }
+
+        $this->button_descarga_expediente = $button_descarga_expediente;
 
         return $this->inputs;
     }
