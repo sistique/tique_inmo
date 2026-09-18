@@ -82,6 +82,8 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
     public string $link_alta_bitacora = '';
 
     public string $link_alta_integra_relacion_bd = '';
+    public string $button_descarga_expediente = '';
+    public string $button_descarga_fotos = '';
 
     public array $inm_conf_docs_prospecto = array();
 
@@ -618,6 +620,16 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
 
         $this->link_documento_bd = $link_documento_bd;
 
+        $button_descarga_expediente = $this->html->button_href(accion: 'descarga_expediente',
+            etiqueta: 'Expediente', registro_id: $this->registro_id, seccion: 'inm_prospecto_ubicacion',
+            style: 'success');
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al integrar button',
+                data: $button_descarga_expediente, header: $header, ws: $ws);
+        }
+
+        $this->button_descarga_expediente = $button_descarga_expediente;
+
 
         /*$keys_selects = $this->init_selects_inputs();
         if (errores::$error) {return $this->errores->error(mensaje: 'Error al inicializar selects', data: $keys_selects);
@@ -788,6 +800,16 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         }
 
         $this->link_fotografia_bd = $link_fotografia_bd;
+
+        $button_descarga_fotos = $this->html->button_href(accion: 'descarga_fotos',
+            etiqueta: 'Fotos', registro_id: $this->registro_id, seccion: 'inm_prospecto_ubicacion',
+            style: 'success');
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al integrar button',
+                data: $button_descarga_fotos, header: $header, ws: $ws);
+        }
+
+        $this->button_descarga_fotos = $button_descarga_fotos;
 
         return $this->inputs;
     }

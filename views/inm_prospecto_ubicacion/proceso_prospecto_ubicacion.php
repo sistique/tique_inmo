@@ -225,6 +225,9 @@
                                 <div class="conten" id="cpestanaubicacion2">
                                     <div class="row">
                                         <div class="col-md-12">
+                                            <?php echo $controlador->button_descarga_expediente; ?>
+                                        </div>
+                                        <div class="col-md-12">
                                             <div class="widget widget-box box-container widget-mylistings">
                                                 <form enctype="multipart/form-data" method="post" action="<?php echo $controlador->link_documento_bd; ?>" class="form-additional">
                                                     <div class="content_table">
@@ -265,6 +268,10 @@
                                 </div>
                                 <div class="conten" id="cpestanaubicacion3">
                                     <div class="row">
+                                        <div class="col-md-12">
+                                            <?php echo $controlador->button_descarga_fotos; ?>
+                                        </div>
+
                                         <div class="col-lg-12">
                                             <div class="widget  widget-box box-container form-main widget-form-cart" id="form">
                                                 <form enctype="multipart/form-data" method="post" action="<?php echo $controlador->link_fotografia_bd; ?>" class="form-additional">

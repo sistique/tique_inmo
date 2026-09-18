@@ -618,6 +618,12 @@ class compresor{
     public static function descarga_zip_multiple(array $archivos, string $name_zip): array
     {
         $errores = new errores();
+
+        if (empty($archivos)) {
+            http_response_code(204);
+            exit;
+        }
+
         $name_file_zip = $name_zip.'.zip';
         $zip = compresor::comprime_archivos(archivos: $archivos);
         if(errores::$error){
