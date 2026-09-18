@@ -11,6 +11,7 @@ namespace gamboamartin\inmuebles\controllers;
 use base\controller\init;
 use config\generales;
 use gamboamartin\banco\models\bn_cuenta;
+use gamboamartin\compresor\compresor;
 use gamboamartin\direccion_postal\models\dp_colonia_postal;
 use gamboamartin\direccion_postal\models\dp_cp;
 use gamboamartin\direccion_postal\models\dp_estado;
@@ -2293,6 +2294,87 @@ class controlador_inm_ubicacion extends _ctl_base
 
 
         return $campos_view;
+    }
+
+    public function descarga_expediente(bool $header, bool $ws = false){
+        $comprime = $this->descarga_archivos(es_foto: 'inactivo', prefijo_zip: 'EXPEDIENTE', header: $header, ws: $ws);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener documento',data:  $comprime,header:  $header,
+                ws:  $ws);
+        }
+
+        return $comprime;
+    }
+
+    public function descarga_fotos(bool $header, bool $ws = false){
+        $comprime = $this->descarga_archivos(es_foto: 'activo', prefijo_zip: 'FOTOS', header: $header, ws: $ws);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener documento',data:  $comprime,header:  $header,
+                ws:  $ws);
+        }
+
+        return $comprime;
+    }
+
+    public function descarga_archivos(string $es_foto, string $prefijo_zip, bool $header, bool $ws = false){
+        $registro = $this->modelo->registro(registro_id: $this->registro_id, retorno_obj: true);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener documento',data:  $registro,header:  $header,
+                ws:  $ws);
+        }
+
+        $filtro['inm_conf_docs_ubicacion.es_foto'] = $es_foto;
+        $inm_conf_docs_prospecto = (new inm_conf_docs_ubicacion(link: $this->link))->filtro_and(
+            filtro: $filtro);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener inm_conf_docs_prospecto',
+                data:  $inm_conf_docs_prospecto,header:  $header, ws:  $ws);
+        }
+
+        $archivos = array();
+        foreach ($inm_conf_docs_prospecto->registros as $conf_doc) {
+            $filtro_doc['doc_tipo_documento.id'] = $conf_doc['doc_tipo_documento_id'];
+            $filtro_doc['inm_ubicacion.id'] = $this->registro_id;
+            $docs = (new inm_doc_ubicacion(link: $this->link))->filtro_and(filtro: $filtro_doc);
+            if(errores::$error){
+                return $this->retorno_error(mensaje: 'Error al obtener documento',data:  $docs,header:  $header,
+                    ws:  $ws);
+            }
+
+            $cont = 0;
+            foreach ($docs->registros_obj as $doc){
+
+                $ruta_doc = $this->path_base."$doc->doc_documento_ruta_relativa";
+
+                if((new generales())->guarda_archivo_dropbox) {
+                    $guarda = (new _dropbox(link: $this->link))->preview(dropbox_id: $doc->inm_dropbox_ruta_id_dropbox,
+                        extencion: $doc->doc_extension_descripcion);
+                    if (errores::$error) {
+                        return $this->retorno_error('Error al guardar archivo', $guarda, header: $header,
+                            ws: $ws);
+                    }
+
+                    $ruta_doc = $this->path_base.$guarda->ruta_archivo;
+                }
+                $archivos[$ruta_doc] = $doc->doc_tipo_documento_descripcion . '.' . $doc->doc_extension_descripcion;
+
+                if(count($docs->registros_obj) > 1){
+                    $archivos[$ruta_doc] = $doc->doc_tipo_documento_descripcion . ' (' . ++$cont . ')' . '.' . $doc->doc_extension_descripcion;
+                }
+            }
+        }
+
+        $name = $registro->inm_ubicacion_id.".".$registro->inm_ubicacion_nombre;
+        $name .= " ".$registro->inm_ubicacion_apellido_paterno;
+        $name .= " ".$registro->inm_ubicacion_apellido_materno;
+
+        $comprime = compresor::descarga_zip_multiple(archivos: $archivos, name_zip: $prefijo_zip.' '.$name);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al comprimir file',data:  $comprime,header:  $header,
+                ws:  $ws);
+        }
+
+        return $comprime;
     }
 
     /**
