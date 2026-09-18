@@ -294,7 +294,7 @@
                                  <div class="conten" id="cpestanacliente2">
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <?php echo $controlador->$button_descarga_expediente; ?>
+                                            <?php echo $controlador->button_descarga_expediente; ?>
                                         </div>
                                         <div class="col-md-12">
                                             <div class="widget widget-box box-container widget-mylistings">
