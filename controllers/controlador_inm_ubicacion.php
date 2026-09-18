@@ -125,6 +125,8 @@ class controlador_inm_ubicacion extends _ctl_base
     public string $button_inm_doc_ubicacion_descarga_zip_firmado_poliza_secundaria = '';
     public string $button_inm_doc_ubicacion_elimina_bd_firmado_poliza_secundaria = '';
 
+    public string $button_descarga_expediente = '';
+    public string $button_descarga_fotos = '';
 
     public string $link_fotografia_bd = '';
     public string $link_documento_bd = '';
@@ -2455,6 +2457,16 @@ class controlador_inm_ubicacion extends _ctl_base
 
         $this->link_documento_bd = $link_documento_bd;
 
+        $button_descarga_expediente = $this->html->button_href(accion: 'descarga_expediente',
+            etiqueta: 'Expediente', registro_id: $this->registro_id, seccion: 'inm_prospecto_ubicacion',
+            style: 'success');
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al integrar button',
+                data: $button_descarga_expediente, header: $header, ws: $ws);
+        }
+
+        $this->button_descarga_expediente = $button_descarga_expediente;
+
         //$keys_selects['com_tipo_ubicacion_id']->id_selected = $this->registro['com_tipo_ubicacion_id'];
 
         /*$base = $this->base_upd(keys_selects: $keys_selects, params: array(), params_ajustados: array());
@@ -3664,6 +3676,16 @@ class controlador_inm_ubicacion extends _ctl_base
         }
 
         $this->link_fotografia_bd = $link_fotografia_bd;
+
+        $button_descarga_fotos = $this->html->button_href(accion: 'descarga_fotos',
+            etiqueta: 'Fotos', registro_id: $this->registro_id, seccion: 'inm_prospecto_ubicacion',
+            style: 'success');
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al integrar button',
+                data: $button_descarga_fotos, header: $header, ws: $ws);
+        }
+
+        $this->button_descarga_fotos = $button_descarga_fotos;
 
         $retorno = 'fotografias';
         $btn_action_next = $this->html->hidden('btn_action_next', value: $retorno);

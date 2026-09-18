@@ -213,6 +213,9 @@
                                 <div class="conten" id="cpestanaubicacion2">
                                     <div class="row">
                                         <div class="col-md-12">
+                                            <?php echo $controlador->button_descarga_expediente; ?>
+                                        </div>
+                                        <div class="col-md-12">
                                             <div class="widget widget-box box-container widget-mylistings">
                                                 <form enctype="multipart/form-data" method="post" action="<?php echo $controlador->link_documento_bd; ?>" class="form-additional">
                                                     <div class="content_table">
@@ -251,27 +254,33 @@
                                     </div>-->
                                 </div>
                                 <div class="conten" id="cpestanaubicacion3">
-                                    <form enctype="multipart/form-data" method="post" action="<?php echo $controlador->link_fotografia_bd; ?>" class="form-additional">
-                                        <?php foreach ($controlador->fotos as $registro){ ?>
-                                            <div class="col-lg-12 contorno"  data-doc_tipo_documento_id ="<?php echo $registro['doc_tipo_documento_id']; ?>" >
-                                                <?php echo $registro['input']; ?>
-                                                <?php foreach ($registro['fotos'] as $foto){
-                                                    foreach ($foto as $img){?>
-                                                        <div class="col-lg-6 contenedor_img" data-doc_documento_id ="<?php echo $img['doc_documento_id']; ?>">
-                                                            <?php echo $img['input']; ?>
-                                                            <a class="btn btn-danger elimina_img"  data-inm_doc_ubicacion_id =
-                                                            "<?php echo $img['inm_doc_ubicacion_id']; ?>">Elimina</a>.
-                                                        </div>
-                                                    <?php       }
-                                                }
-                                                ?>
-                                            </div>
-                                        <?php } ?>
-                                        <?php echo $controlador->inputs->btn_action_next; ?>
-                                        <?php echo $controlador->inputs->id_retorno; ?>
-                                        <?php echo $controlador->inputs->seccion_retorno; ?>
-                                        <?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
-                                    </form>
+                                    <div class="col-md-12">
+                                        <?php echo $controlador->button_descarga_fotos; ?>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <form enctype="multipart/form-data" method="post" action="<?php echo $controlador->link_fotografia_bd; ?>" class="form-additional">
+                                            <?php foreach ($controlador->fotos as $registro){ ?>
+                                                <div class="col-lg-12 contorno"  data-doc_tipo_documento_id ="<?php echo $registro['doc_tipo_documento_id']; ?>" >
+                                                    <?php echo $registro['input']; ?>
+                                                    <?php foreach ($registro['fotos'] as $foto){
+                                                        foreach ($foto as $img){?>
+                                                            <div class="col-lg-6 contenedor_img" data-doc_documento_id ="<?php echo $img['doc_documento_id']; ?>">
+                                                                <?php echo $img['input']; ?>
+                                                                <a class="btn btn-danger elimina_img"  data-inm_doc_ubicacion_id =
+                                                                "<?php echo $img['inm_doc_ubicacion_id']; ?>">Elimina</a>.
+                                                            </div>
+                                                        <?php       }
+                                                    }
+                                                    ?>
+                                                </div>
+                                            <?php } ?>
+                                            <?php echo $controlador->inputs->btn_action_next; ?>
+                                            <?php echo $controlador->inputs->id_retorno; ?>
+                                            <?php echo $controlador->inputs->seccion_retorno; ?>
+                                            <?php echo $controlador->button_descarga_fotos; ?>
+                                            <?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
+                                        </form>
+                                    </div>
                                 </div>
                                 <div class="conten" id="cpestanaubicacion4">
                                     <div class="row">
