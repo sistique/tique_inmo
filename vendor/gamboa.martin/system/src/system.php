@@ -233,6 +233,10 @@ class system extends controlador_base
         foreach ($this->acciones_visibles_permitidas as $indice => $accion_vis) {
             if ($this->accion === 'lista') {
                 $mostrar = $accion_vis->adm_accion_descripcion === 'alta';
+
+                if($accion_vis->adm_accion_descripcion === 'importa'){
+                    $mostrar = true;
+                }
             } else {
                 $mostrar = $accion_vis->adm_accion_descripcion === 'lista';
             }
@@ -1045,7 +1049,7 @@ class system extends controlador_base
     final public function importa(bool $header = true, bool $ws = false): array|stdClass
     {
         $this->inputs = new stdClass();
-        $input_file = $this->html->input_file(cols: 12, name: 'doc_origen', row_upd: new stdClass(), value_vacio: false);
+        $input_file = $this->html->input_file_sec(cols: 12, name: 'doc_origen', row_upd: new stdClass(), value_vacio: false);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al generar input', data: $input_file, header: $header, ws: $ws);
         }
@@ -1055,7 +1059,7 @@ class system extends controlador_base
         return $this->inputs;
     }
 
-    final public function importa_previo(bool $header = true, bool $ws = false): array|stdClass
+    public function importa_previo(bool $header = true, bool $ws = false): array|stdClass
     {
 
         $doc = (new _doc())->doc_importa(doc_tipo_documento_id: $this->doc_tipo_documento_id,
@@ -1083,7 +1087,7 @@ class system extends controlador_base
         return $columnas_xls;
     }
 
-    final public function importa_previo_muestra(bool $header = true, bool $ws = false): array|stdClass
+    public function importa_previo_muestra(bool $header = true, bool $ws = false): array|stdClass
     {
 
         $doc_documento = $this->modelo_doc_documento->registro(registro_id: $_GET['doc_documento_id'],

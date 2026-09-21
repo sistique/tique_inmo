@@ -3849,7 +3849,8 @@ section.page-body .h4 {
 }
 
 .breadcrumb>li+li::before {
-    content: ">";
+    content: "" !important;
+    padding: 0px !important;
 }
 /* [/END] Breadcrumb */
 

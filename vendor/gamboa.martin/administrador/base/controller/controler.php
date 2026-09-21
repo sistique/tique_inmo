@@ -113,6 +113,7 @@ class controler{
     public string $params_importa = '';
 
     public string $input_params_importa = '';
+    public string $html_mapeo = '';
 
     public function __construct(PDO $link){
         $this->link = $link;

@@ -23,6 +23,7 @@ use gamboamartin\direccion_postal\models\dp_cp;
 use gamboamartin\direccion_postal\models\dp_estado;
 use gamboamartin\direccion_postal\models\dp_municipio;
 use gamboamartin\direccion_postal\models\dp_pais;
+use gamboamartin\documento\models\doc_documento;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_prospecto_ubicacion_html;
 use gamboamartin\inmuebles\html\inm_status_prospecto_ubicacion_html;
@@ -45,7 +46,10 @@ use gamboamartin\inmuebles\models\inm_rel_ubicacion_prospecto_ubicacion;
 use gamboamartin\inmuebles\models\inm_status_prospecto_ubicacion;
 use gamboamartin\inmuebles\models\inm_tipo_beneficiario;
 use gamboamartin\plugins\exportador;
+use gamboamartin\plugins\files;
+use gamboamartin\plugins\Importador;
 use gamboamartin\proceso\html\pr_etapa_proceso_html;
+use gamboamartin\system\_importador\_xls;
 use gamboamartin\system\actions;
 use gamboamartin\system\links_menu;
 use gamboamartin\template\html;
@@ -141,6 +145,8 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         }
 
         $this->link_exportar_xls = $link_exportar_xls;
+
+        $this->modelo_doc_documento = new doc_documento(link: $link);
     }
 
     /**
@@ -878,6 +884,133 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
 
     public function elimina_foto_bd(){
 
+    }
+
+    public function importa_previo(bool $header = true, bool $ws = false): array|stdClass
+    {
+        $ruta_absoluta_directorio = (new generales())->path_base.'archivos/temporales/';
+
+        if(!is_dir($ruta_absoluta_directorio) && !mkdir($ruta_absoluta_directorio) &&
+            !is_dir($ruta_absoluta_directorio)) {
+            return $this->retorno_error(mensaje: 'Error crear directorio', data: $ruta_absoluta_directorio,
+                header: $header, ws: $ws);
+        }
+
+        if ($_FILES['doc_origen']['error'] !== UPLOAD_ERR_OK) {
+            die('Error al subir el archivo.');
+        }
+
+        $extensionesPermitidas = ['xls', 'xlsx', 'csv'];
+        $extensionArchivo = pathinfo($_FILES['doc_origen']['name'], PATHINFO_EXTENSION);
+
+        if (!in_array(strtolower($extensionArchivo), $extensionesPermitidas)) {
+            die('Extensión no válida. Solo se permiten archivos de Excel.');
+        }
+
+        $mimesPermitidas = [
+            'application/vnd.ms-excel', // .xls
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // .xlsx
+            'text/csv', // .csv
+            'application/csv'
+        ];
+
+        if (!in_array($_FILES['doc_origen']['type'], $mimesPermitidas)) {
+            die('El tipo MIME del archivo no es válido.');
+        }
+
+        $ruta_absoluta_directorio .= strtolower($_FILES['doc_origen']['name']);
+
+        $guarda = (new files())->guarda_archivo_fisico(
+            contenido_file: file_get_contents($_FILES['doc_origen']['tmp_name']), ruta_file: $ruta_absoluta_directorio);
+        if (errores::$error) {
+            return $this->retorno_error('Error al guardar archivo', $guarda, header: $header, ws: $ws);
+        }
+
+        $datos_xls = (new Importador())->leer(ruta_absoluta: $ruta_absoluta_directorio);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener datos',data:  $datos_xls, header: $header, ws: $ws);
+        }
+        
+        $campos_formulario = ['nss', 'nombre', 'apellido_paterno', 'apellido_materno', 'numero_telefono','celular','correo',
+            'estado','municipio','cp','colonia','calle','ext','int','entre_calle_1','entre_calle_2','tipo_credito',
+            'numero_credito','monto_credito','saldo_credito','mensualidad','fecha_credito','cuenta_predial',
+            'adeudo_predial','cuenta_agua','adeudo_agua','cuenta_luz','adeudo_luz','estado_vivienda','prototipo',
+            'complemento','metros_terreno','metros_construccion','observaciones'];
+
+        $html_mapeo = '';
+
+        foreach ($campos_formulario as $campo) {
+            $name        = "$campo";
+            $name_input  = "input_$campo";
+            $placeholder = implode(' ', array_map('ucfirst', explode('_', $campo)));
+
+            $select  = '<select name="' . htmlspecialchars($name) . '" id="' . htmlspecialchars($name)
+                . '" class="select-mapeo" data-target="' . htmlspecialchars($name_input) . '">';
+            $select .= '<option value="">Selecciona una opcion</option>';
+
+            $sugerida = $this->buscar_columna_sugerida($campo, $datos_xls->columns);
+
+            foreach ($datos_xls->columns as $col) {
+                $selected = ($col === $sugerida) ? ' selected' : '';
+
+                $valor_preview = '';
+                if (count($datos_xls->rows) > 0) {
+                    $valor_preview = $datos_xls->rows[0]->$col ?? '';
+                }
+
+                $select .= '<option value="' . htmlspecialchars($col) . '" '. $selected .' data-preview="'
+                    . htmlspecialchars($valor_preview) . '">' . htmlspecialchars($col) . '</option>';
+            }
+
+            $select .= '</select>';
+
+            $input = '<input type="text" name="' . htmlspecialchars($name_input) . '" class="form-control" '
+                . 'id="' . htmlspecialchars($name_input) . '" placeholder="' . htmlspecialchars($placeholder) . '" '
+                . 'title="' . htmlspecialchars($placeholder) . '" value="" disabled>';
+
+            $html_mapeo .= '<tr>';
+            $html_mapeo .= '<td>' . htmlspecialchars($placeholder) . '</td>';
+            $html_mapeo .= '<td>' . $select . '</td>';
+            $html_mapeo .= '<td>' . $input . '</td>';
+            $html_mapeo .= '</tr>';
+        }
+
+        $this->html_mapeo = $html_mapeo;
+
+        return $datos_xls;
+    }
+
+    public function importa_previo_muestra(bool $header = true, bool $ws = false): array|stdClass
+    {
+        print_r($_POST);exit;
+
+    }
+
+    function normalizar(string $texto): string
+    {
+        $texto = mb_strtolower($texto, 'UTF-8');
+        $texto = str_replace(['_', '-', ' '], '', $texto);
+        $texto = strtr($texto, ['á'=>'a','é'=>'e','í'=>'i','ó'=>'o','ú'=>'u','ñ'=>'n']);
+        return $texto;
+    }
+
+    function buscar_columna_sugerida(string $campo, array $columnas): ?string
+    {
+        $campo_normalizado = $this->normalizar($campo);
+        foreach ($columnas as $col) {
+            if ($this->normalizar($col) === $campo_normalizado) {
+                return $col;
+            }
+        }
+
+        foreach ($columnas as $col) {
+            $col_normalizada = $this->normalizar($col);
+            if (str_contains($col_normalizada, $campo_normalizado) || str_contains($campo_normalizado, $col_normalizada)) {
+                return $col;
+            }
+        }
+
+        return null;
     }
 
     public function img_btn_modal(string $src, int $css_id, array $class_css = array()): string|array
