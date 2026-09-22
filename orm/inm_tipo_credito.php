@@ -3,7 +3,9 @@
 namespace gamboamartin\inmuebles\models;
 
 use base\orm\_modelo_parent;
+use gamboamartin\errores\errores;
 use PDO;
+use stdClass;
 
 
 class inm_tipo_credito extends _modelo_parent{
@@ -27,5 +29,26 @@ class inm_tipo_credito extends _modelo_parent{
         $this->etiqueta = 'Tipo de Credito';
     }
 
+    public function get_tipo_credito_id(string $nombre_tipo_credito): array|stdClass|null|int
+    {
+        if ($nombre_tipo_credito === '') {
+            return null;
+        }
 
+        $filtro_especial = array();
+        $filtro_especial[0]['inm_tipo_credito.descripcion']['operador'] = 'LIKE';
+        $filtro_especial[0]['inm_tipo_credito.descripcion']['valor'] = '%' . $nombre_tipo_credito . '%';
+        $filtro_especial[0]['inm_tipo_credito.descripcion']['comparacion'] = 'AND';
+
+        $r_tipo_credito = $this->filtro_and(filtro_especial: $filtro_especial);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener tipo_credito',data:  $r_tipo_credito);
+        }
+
+        if(count($r_tipo_credito->registros) === 0){
+            return null;
+        }
+
+        return $r_tipo_credito->registros[0]['inm_tipo_credito_id'];
+    }
 }

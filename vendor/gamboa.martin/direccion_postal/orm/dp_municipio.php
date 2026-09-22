@@ -81,6 +81,26 @@ class dp_municipio extends modelo {
         return $registro;
     }
 
+    public function get_municipio_id(string $nombre_municipio, int $dp_estado_id): array|stdClass|null|int
+    {
+        if ($nombre_municipio === '') {
+            return null;
+        }
+
+        $filtro['dp_municipio.descripcion'] = $nombre_municipio;
+        $filtro['dp_estado.id'] = $dp_estado_id;
+        $r_municipio = $this->filtro_and(filtro: $filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener municipio',data:  $r_municipio);
+        }
+
+        if(count($r_municipio->registros) === 0){
+            return null;
+        }
+
+        return $r_municipio->registros[0]['dp_municipio_id'];
+    }
+
     private function limpia_campos(array $registro, array $campos_limpiar): array
     {
         foreach ($campos_limpiar as $valor) {

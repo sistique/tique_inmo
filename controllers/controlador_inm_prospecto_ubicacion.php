@@ -18,6 +18,7 @@ use gamboamartin\comercial\models\com_prospecto;
 use gamboamartin\comercial\models\com_rel_agente;
 use gamboamartin\comercial\models\com_tipo_prospecto;
 use gamboamartin\compresor\compresor;
+use gamboamartin\direccion_postal\models\dp_colonia;
 use gamboamartin\direccion_postal\models\dp_colonia_postal;
 use gamboamartin\direccion_postal\models\dp_cp;
 use gamboamartin\direccion_postal\models\dp_estado;
@@ -33,18 +34,22 @@ use gamboamartin\inmuebles\models\_email;
 use gamboamartin\inmuebles\models\_inm_prospecto;
 use gamboamartin\inmuebles\models\_upd_prospecto;
 use gamboamartin\inmuebles\models\inm_beneficiario;
+use gamboamartin\inmuebles\models\inm_complemento;
 use gamboamartin\inmuebles\models\inm_conf_docs_prospecto;
 use gamboamartin\inmuebles\models\_inm_prospecto_ubicacion;
 use gamboamartin\inmuebles\models\inm_conf_docs_prospecto_ubicacion;
 use gamboamartin\inmuebles\models\inm_doc_prospecto;
 use gamboamartin\inmuebles\models\inm_doc_prospecto_ubicacion;
 use gamboamartin\inmuebles\models\inm_doc_ubicacion;
+use gamboamartin\inmuebles\models\inm_estado_vivienda;
 use gamboamartin\inmuebles\models\inm_prospecto;
 use gamboamartin\inmuebles\models\inm_prospecto_ubicacion;
+use gamboamartin\inmuebles\models\inm_prototipo;
 use gamboamartin\inmuebles\models\inm_rel_referencia_prospecto;
 use gamboamartin\inmuebles\models\inm_rel_ubicacion_prospecto_ubicacion;
 use gamboamartin\inmuebles\models\inm_status_prospecto_ubicacion;
 use gamboamartin\inmuebles\models\inm_tipo_beneficiario;
+use gamboamartin\inmuebles\models\inm_tipo_credito;
 use gamboamartin\plugins\exportador;
 use gamboamartin\plugins\files;
 use gamboamartin\plugins\Importador;
@@ -930,7 +935,9 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener datos',data:  $datos_xls, header: $header, ws: $ws);
         }
-        
+
+        $_SESSION['datos_xls'] = $datos_xls;
+
         $campos_formulario = ['nss', 'nombre', 'apellido_paterno', 'apellido_materno', 'numero_telefono','celular','correo',
             'estado','municipio','cp','colonia','calle','ext','int','entre_calle_1','entre_calle_2','tipo_credito',
             'numero_credito','monto_credito','saldo_credito','mensualidad','fecha_credito','cuenta_predial',
@@ -982,8 +989,21 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
 
     public function importa_previo_muestra(bool $header = true, bool $ws = false): array|stdClass
     {
-        print_r($_POST);exit;
+        $datosXls = $_SESSION['datos_xls'];
+        $mapeo = $_POST;
 
+        unset($mapeo['btn_action_next']);
+
+        $registrosProcesados = $this->procesarImportacion(link: $this->link, datosXls: $datosXls, post: $mapeo,
+            header: $header, ws: $ws);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener datos',data:  $registrosProcesados, header: $header,
+                ws: $ws);
+        }
+
+        print_r($registrosProcesados);exit;
+
+        $_SESSION['registros_procesados'] = $registrosProcesados;
     }
 
     function normalizar(string $texto): string
@@ -1012,6 +1032,248 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
 
         return null;
     }
+
+    function normalizarMayusculas(?string $valor): string
+    {
+        $valor = trim((string)$valor);
+        return mb_strtoupper($valor, 'UTF-8');
+    }
+
+    function limpiar(?string $valor): string
+    {
+        return trim((string)$valor);
+    }
+
+    function normalizarRegistro(array $registro): array
+    {
+        $camposMayusculas = [
+            'nombre',
+            'apellido_paterno',
+            'apellido_materno',
+            'estado',
+            'municipio',
+            'colonia',
+            'calle',
+            'entre_calle_1',
+            'entre_calle_2',
+        ];
+
+        foreach ($camposMayusculas as $campo) {
+            if (array_key_exists($campo, $registro)) {
+                $registro[$campo] = $this->normalizarMayusculas($registro[$campo]);
+            }
+        }
+
+        if (array_key_exists('correo', $registro)) {
+            $registro['correo'] = strtolower($this->limpiar($registro['correo']));
+        }
+
+        $camposLimpieza = ['nss', 'numero_telefono', 'celular', 'cp', 'ext', 'int'];
+        foreach ($camposLimpieza as $campo) {
+            if (array_key_exists($campo, $registro)) {
+                $registro[$campo] = $this->limpiar($registro[$campo]);
+            }
+        }
+
+        return $registro;
+    }
+
+
+    function validarRegistro(PDO $link, array $registro, bool $duplicadoEnArchivo = false,
+                             array $otrasFilasConMismoNss = []): array {
+        $errores = [];
+        $advertencias = [];
+
+        if (empty($registro['nss'])) {
+            $errores[] = 'El NSS es obligatorio.';
+        }
+
+        $duplicado = false;
+        if (!empty($registro['nss'])) {
+            $duplicado = (new inm_prospecto_ubicacion(link: $link))->existe_nss(nss: $registro['nss']);
+            if ($duplicado) {
+                $errores[] = "El NSS {$registro['nss']} ya existe en la base de datos (no se insertará de nuevo).";
+            }
+        }
+
+        if ($duplicadoEnArchivo) {
+            $filasHumanas = array_map(fn($i) => $i + 1, $otrasFilasConMismoNss);
+            $errores[] = "El NSS {$registro['nss']} está repetido en el mismo archivo (filas: " . implode(', ', $filasHumanas) . "). Solo debe insertarse una vez.";
+        }
+
+        if (empty($registro['nombre'])) {
+            $errores[] = 'El nombre es obligatorio.';
+        }
+        if (empty($registro['apellido_paterno'])) {
+            $errores[] = 'El apellido paterno es obligatorio.';
+        }
+
+        $dp_estado_id = null;
+        $dp_municipio_id = null;
+        $dp_cp_id = null;
+        $dp_colonia_id = null;
+        $dp_colonia_postal_id = null;
+
+        if (empty($registro['cp'])) {
+            $errores[] = 'El CP no fue proporcionado.';
+        } else {
+            $r_cp = (new dp_cp($link))->get_cp_id(nombre_cp: $registro['cp']);
+
+            if ($r_cp === null) {
+                $errores[] = "El CP \"{$registro['cp']}\" no existe en el catálogo y no se dará de alta.";
+            } else {
+                $dp_cp_id = $r_cp['dp_cp_id'];
+                $dp_municipio_id = $r_cp['dp_municipio_id'];
+                $dp_estado_id    = $r_cp['dp_estado_id'];
+            }
+        }
+
+        if (empty($registro['colonia'])) {
+            $errores[] = 'La colonia no fue proporcionada.';
+        } else {
+            $dp_colonia_id = (new dp_colonia($link))->get_colonia_id(nombre_colonia: $registro['colonia']);
+            if ($dp_colonia_id === null) {
+                $errores[] = "La colonia \"{$registro['colonia']}\" no existe en el catálogo y no se dará de alta.";
+            }
+        }
+
+        if ($dp_cp_id !== null && $dp_colonia_id !== null) {
+            $dp_colonia_postal_id = (new dp_colonia_postal($link))->get_colonia_postal_id(dp_cp_id: $dp_cp_id,
+                dp_colonia_id: $dp_colonia_id);
+            if ($dp_colonia_postal_id === null) {
+                $errores[] = "La combinación CP \"{$registro['cp']}\" + colonia \"{$registro['colonia']}\" no está registrada en dp_colonia_postal y no se dará de alta.";
+            }
+        } elseif (!empty($registro['colonia']) && !empty($registro['cp'])) {
+            $errores[] = 'No se puede validar dp_colonia_postal porque el CP o la colonia no se encontraron de forma individual.';
+        }
+
+        if (!empty($registro['estado']) && $dp_estado_id !== null) {
+            $dp_estado_id_excel = (new dp_estado($link))->get_estado_id(nombre_estado: $registro['estado']);
+            if ($dp_estado_id_excel !== null && (int)$dp_estado_id_excel !== (int)$dp_estado_id) {
+                $advertencias[] = "El estado del Excel (\"{$registro['estado']}\") no coincide con el estado correspondiente al CP {$registro['cp']}.";
+            }
+        }
+
+        if (!empty($registro['municipio']) && $dp_municipio_id !== null) {
+            $dp_municipio_id_excel = (new dp_municipio($link))->get_municipio_id(nombre_municipio: $registro['municipio'], dp_estado_id: $dp_estado_id);
+            if ($dp_municipio_id_excel !== null && (int)$dp_municipio_id_excel !== (int)$dp_municipio_id) {
+                $advertencias[] = "El municipio del Excel (\"{$registro['municipio']}\") no coincide con el municipio correspondiente al CP {$registro['cp']}.";
+            }
+        }
+
+        // Validación de campos relacionados con catálogos
+
+        $inm_tipo_credito_id = null;
+        if (!empty($registro['tipo_credito'])) {
+            $inm_tipo_credito_id = (new inm_tipo_credito($link))->get_tipo_credito_id(nombre_tipo_credito: $registro['tipo_credito']);
+            if ($inm_tipo_credito_id === null) {
+                $advertencias[] = "El tipo de crédito \"{$registro['tipo_credito']}\" no existe en el catálogo y no se dará de alta.";
+            }
+        }
+
+        $inm_estado_vivienda_id = null;
+        if (!empty($registro['estado_vivienda'])) {
+            $inm_estado_vivienda_id = (new inm_estado_vivienda($link))->get_estado_vivienda_id(nombre_estado_vivienda: $registro['estado_vivienda']);
+            if ($inm_estado_vivienda_id === null) {
+                $advertencias[] = "El estado de vivienda \"{$registro['estado_vivienda']}\" no existe en el catálogo y no se dará de alta.";
+            }
+        }
+
+        $inm_prototipo_id = null;
+        if (!empty($registro['prototipo'])) {
+            $inm_prototipo_id = (new inm_prototipo($link))->get_prototipo_id(nombre_prototipo: $registro['prototipo']);
+            if ($inm_prototipo_id === null) {
+                $advertencias[] = "El prototipo \"{$registro['prototipo']}\" no existe en el catálogo y no se dará de alta.";
+            }
+        }
+
+        $inm_complemento_id = null;
+        if (!empty($registro['complemento'])) {
+            $inm_complemento_id = (new inm_complemento($link))->get_complemento_id(nombre_complemento: $registro['complemento']);
+            if ($inm_complemento_id === null) {
+                $advertencias[] = "El complemento \"{$registro['complemento']}\" no existe en el catálogo y no se dará de alta.";
+            }
+        }
+
+        return [
+            'errores'                => $errores,
+            'advertencias'           => $advertencias,
+            'valido'                 => empty($errores),
+            'dp_estado_id'           => $dp_estado_id,
+            'dp_municipio_id'        => $dp_municipio_id,
+            'dp_cp_id'               => $dp_cp_id,
+            'dp_colonia_id'          => $dp_colonia_id,
+            'dp_colonia_postal_id'   => $dp_colonia_postal_id,
+            'inm_tipo_credito_id'    => $inm_tipo_credito_id,
+            'inm_estado_vivienda_id' => $inm_estado_vivienda_id,
+            'inm_prototipo_id'       => $inm_prototipo_id,
+            'inm_complemento_id'     => $inm_complemento_id,
+            'duplicado'              => $duplicado,
+        ];
+    }
+    function construirMapeo(array $post): array
+    {
+        $mapeo = $post;
+        $camposControl = ['btn_action_next', 'csrf_token'];
+        foreach ($camposControl as $campo) {
+            unset($mapeo[$campo]);
+        }
+
+        return $mapeo;
+    }
+
+    function procesarImportacion(PDO $link, $datosXls, array $post, bool $header = true, bool $ws = false): array
+    {
+        $mapeo = $this->construirMapeo($post);
+
+        $registrosClasificados = [];
+        foreach ($datosXls->rows as $indiceFila => $fila) {
+            $registro = array_map(function ($columnaExcel) use ($fila) {
+                return $fila->$columnaExcel ?? '';
+            }, $mapeo);
+            $registrosClasificados[$indiceFila] = $this->normalizarRegistro(registro: $registro);
+        }
+
+        $ocurrenciasNss = [];
+        foreach ($registrosClasificados as $indiceFila => $registro) {
+            $nss = $registro['nss'] ?? '';
+            if ($nss === '') {
+                continue;
+            }
+            $ocurrenciasNss[$nss][] = $indiceFila;
+        }
+
+        $resultado = [];
+        foreach ($registrosClasificados as $indiceFila => $registro) {
+            $nss = $registro['nss'] ?? '';
+            $filasConMismoNss = $ocurrenciasNss[$nss] ?? [];
+            $duplicadoEnArchivo = count($filasConMismoNss) > 1;
+
+            $validacion = $this->validarRegistro(link: $link, registro: $registro, duplicadoEnArchivo: $duplicadoEnArchivo,
+                otrasFilasConMismoNss: array_diff($filasConMismoNss, [$indiceFila]));
+
+            $resultado[] = [
+                'fila'       => $indiceFila + 1,
+                'datos'      => $registro,
+                'advertencias' => $validacion['advertencias'],
+                'errores'    => $validacion['errores'],
+                'valido'     => $validacion['valido'],
+                'dp_estado_id' => $validacion['dp_estado_id'],
+                'dp_municipio_id' => $validacion['dp_municipio_id'],
+                'dp_cp_id' => $validacion['dp_cp_id'],
+                'dp_colonia_id' => $validacion['dp_colonia_id'],
+                'dp_colonia_postal_id' => $validacion['dp_colonia_postal_id'],
+                'inm_tipo_credito_id' => $validacion['inm_tipo_credito_id'],
+                'inm_estado_vivienda_id' => $validacion['inm_estado_vivienda_id'],
+                'inm_prototipo_id' => $validacion['inm_prototipo_id'],
+                'inm_complemento_id' => $validacion['inm_complemento_id'],
+                'duplicado'  => $validacion['duplicado'],
+            ];
+        }
+
+        return $resultado;
+    }
+
 
     public function img_btn_modal(string $src, int $css_id, array $class_css = array()): string|array
     {

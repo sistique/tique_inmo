@@ -166,6 +166,24 @@ class dp_colonia_postal extends _base {
         return $registro;
     }
 
+
+    public function get_colonia_postal_id(int $dp_cp_id, int $dp_colonia_id): array|stdClass|null|int
+    {
+
+        $filtro['dp_cp.id'] = $dp_cp_id;
+        $filtro['dp_colonia.id'] = $dp_colonia_id;
+        $r_colonia_postal = $this->filtro_and(filtro: $filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener colonia',data:  $r_colonia_postal);
+        }
+
+        if(count($r_colonia_postal->registros) === 0){
+            return null;
+        }
+
+        return $r_colonia_postal->registros[0]['dp_colonia_postal_id'];
+    }
+
     private function init_alta_bd(array $registro): array
     {
         $registro = $this->predeterminados(registro: $registro);

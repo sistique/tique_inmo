@@ -108,4 +108,22 @@ class dp_estado extends modelo {
         return (int)$id_predeterminado;
     }
 
+    public function get_estado_id(string $nombre_estado): array|stdClass|null|int
+    {
+        if ($nombre_estado === '') {
+            return null;
+        }
+
+        $filtro['dp_estado.descripcion'] = $nombre_estado;
+        $r_estado = $this->filtro_and(filtro: $filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener estado',data:  $r_estado);
+        }
+
+        if(count($r_estado->registros) === 0){
+            return null;
+        }
+
+        return $r_estado->registros[0]['dp_estado_id'];
+    }
 }

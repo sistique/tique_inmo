@@ -104,6 +104,25 @@ class dp_cp extends modelo {
         return $registro;
     }
 
+    public function get_cp_id(string $nombre_cp): array|stdClass|null|int
+    {
+        if ($nombre_cp === '') {
+            return null;
+        }
+
+        $filtro['dp_cp.descripcion'] = $nombre_cp;
+        $r_cp = $this->filtro_and(filtro: $filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener cp',data:  $r_cp);
+        }
+
+        if(count($r_cp->registros) === 0){
+            return null;
+        }
+
+        return $r_cp->registros[0];
+    }
+
     private function init_alta_bd(array $registro): array
     {
         $keys = array('descripcion','codigo');

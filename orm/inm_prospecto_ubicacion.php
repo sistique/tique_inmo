@@ -709,6 +709,21 @@ class inm_prospecto_ubicacion extends _modelo_parent{
         return $existe_conyuge;
     }
 
+    function existe_nss(string $nss): bool
+    {
+        if ($nss === '') {
+            return false;
+        }
+
+        $filtro['inm_prospecto_ubicacion.nss'] = $nss;
+        $existe_prospecto_ubicacion = (new inm_prospecto_ubicacion(link: $this->link))->existe(filtro: $filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar si existe conyuge',data:  $existe_prospecto_ubicacion);
+        }
+
+        return $existe_prospecto_ubicacion;
+    }
+
     public function genera_devolucion_sugerida(int $dp_colonia_postal_id, int $inm_prototipo_id,
                                                int $inm_estado_vivienda_id, string $metros_terreno,
                                                string $metros_construccion, array $inm_prosp)

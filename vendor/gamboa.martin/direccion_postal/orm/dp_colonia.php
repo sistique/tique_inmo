@@ -47,4 +47,23 @@ class dp_colonia extends _modelo_parent {
         return $registro;
     }
 
+    public function get_colonia_id(string $nombre_colonia): array|stdClass|null|int
+    {
+        if ($nombre_colonia === '') {
+            return null;
+        }
+
+        $filtro['dp_colonia.descripcion'] = $nombre_colonia;
+        $r_colonia = $this->filtro_and(filtro: $filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener colonia',data:  $r_colonia);
+        }
+
+        if(count($r_colonia->registros) === 0){
+            return null;
+        }
+
+        return $r_colonia->registros[0]['dp_colonia_id'];
+    }
+
 }
