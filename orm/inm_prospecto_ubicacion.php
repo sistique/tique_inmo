@@ -46,7 +46,7 @@ class inm_prospecto_ubicacion extends _modelo_parent{
         $columnas_extra['pr_etapa_descripcion'] = $sql;
 
         $sql = "(CONCAT_WS(' ', inm_prospecto_ubicacion.calle, inm_prospecto_ubicacion.numero_exterior, 
-        inm_prospecto_ubicacion.numero_interior, dp_colonia.descripcion, dp_municipio.descripcion))";
+        inm_prospecto_ubicacion.numero_interior, dp_colonia.descripcion, dp_cp.descripcion, dp_municipio.descripcion))";
 
         $columnas_extra['inm_prospecto_ubicacion_ubicacion'] = $sql;
 

@@ -1640,18 +1640,20 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         }
 
         $ths[] = array('etiqueta'=>'ID', 'campo'=>'inm_prospecto_ubicacion_id');
-        $ths[] = array('etiqueta'=>'prospecto_ubicacion', 'campo'=>'inm_prospecto_ubicacion_ubicacion');
-        $ths[] = array('etiqueta'=>'CP', 'campo'=>'dp_cp_descripcion');
+        $ths[] = array('etiqueta'=>'Ubicacion', 'campo'=>'inm_prospecto_ubicacion_ubicacion');
+        $ths[] = array('etiqueta'=>'Nss', 'campo'=>'inm_prospecto_ubicacion_nss');
+        $ths[] = array('etiqueta'=>'Nombre', 'campo'=>'com_prospecto_razon_social');
+        $ths[] = array('etiqueta'=>'Fecha', 'campo'=>'inm_prospecto_ubicacion_fecha_alta');
         $ths[] = array('etiqueta'=>'Agente', 'campo'=>'com_agente_descripcion');
         $ths[] = array('etiqueta'=>'Status prospecto_ubicacion', 'campo'=>'inm_status_prospecto_ubicacion_descripcion');
 
-        $keys = array();
+        /*$keys = array();
         foreach ($ths as $data_th) {
             $keys[] = $data_th['campo'];
-        }
+        }*/
 
         $keys_hojas['Prospecto Ubicaciones'] = new stdClass();
-        $keys_hojas['Prospecto Ubicaciones']->keys = $keys;
+        $keys_hojas['Prospecto Ubicaciones']->keys = $ths;
         $keys_hojas['Prospecto Ubicaciones']->registros = $registros->registros;
 
         $moneda = array();
