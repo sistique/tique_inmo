@@ -220,6 +220,14 @@ class system extends controlador_base
             die('Error');
         }
         $this->link_importa_previo_muestra = $link_importa_previo_muestra;
+        
+        $link_importa_duplicado = $this->obj_link->link_sin_id(accion: 'importa_duplicado', link: $link, seccion: $this->seccion);
+        if (errores::$error) {
+            $error = $this->errores->error(mensaje: 'Error al cargar link importa_duplicado previo', data: $link_importa_duplicado);
+            print_r($error);
+            die('Error');
+        }
+        $this->link_importa_duplicado = $link_importa_duplicado;
 
         $link_importa_previo_muestra_bd = $this->obj_link->link_sin_id(accion: 'importa_previo_muestra_bd', link: $link, seccion: $this->seccion);
         if (errores::$error) {
@@ -1135,7 +1143,7 @@ class system extends controlador_base
         return $this->inputs;
     }
 
-    final public function importa_previo_muestra_bd(bool $header = true, bool $ws = false): array|stdClass
+    public function importa_previo_muestra_bd(bool $header = true, bool $ws = false): array|stdClass
     {
 
         $doc_documento = $this->modelo_doc_documento->registro(registro_id: $_GET['doc_documento_id'],

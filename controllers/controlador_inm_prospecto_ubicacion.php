@@ -54,6 +54,7 @@ use gamboamartin\plugins\exportador;
 use gamboamartin\plugins\files;
 use gamboamartin\plugins\Importador;
 use gamboamartin\proceso\html\pr_etapa_proceso_html;
+use gamboamartin\system\_importador\_importa;
 use gamboamartin\system\_importador\_xls;
 use gamboamartin\system\actions;
 use gamboamartin\system\links_menu;
@@ -938,11 +939,11 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
 
         $_SESSION['datos_xls'] = $datos_xls;
 
-        $campos_formulario = ['nss', 'nombre', 'apellido_paterno', 'apellido_materno', 'numero_telefono','celular','correo',
-            'estado','municipio','cp','colonia','calle','ext','int','entre_calle_1','entre_calle_2','tipo_credito',
-            'numero_credito','monto_credito','saldo_credito','mensualidad','fecha_credito','cuenta_predial',
-            'adeudo_predial','cuenta_agua','adeudo_agua','cuenta_luz','adeudo_luz','estado_vivienda','prototipo',
-            'complemento','metros_terreno','metros_construccion','observaciones'];
+        $campos_formulario = ['nss', 'nombre', 'apellido_paterno', 'apellido_materno', 'numero_com','cel_com',
+            'correo_com', 'estado','municipio','cp','colonia','calle','ext','int','entre_calle_1','entre_calle_2',
+            'tipo_credito', 'numero_credito','monto_credito','saldo_credito','mensualidad','fecha_credito',
+            'cuenta_predial', 'adeudo_predial','cuenta_agua','adeudo_agua','cuenta_luz','adeudo_luz','estado_vivienda',
+            'prototipo', 'complemento','metros_terreno','metros_construccion','observaciones'];
 
         $html_mapeo = '';
 
@@ -959,6 +960,18 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
 
             foreach ($datos_xls->columns as $col) {
                 $selected = ($col === $sugerida) ? ' selected' : '';
+
+                if($col === 'Telefono' && $campo === 'numero_com'){
+                    $selected = ' selected';
+                }
+
+                if($col === 'Celular' && $campo === 'cel_com'){
+                    $selected = ' selected';
+                }
+
+                if($col === 'Correo' && $campo === 'correo_com'){
+                    $selected = ' selected';
+                }
 
                 $valor_preview = '';
                 if (count($datos_xls->rows) > 0) {
@@ -994,16 +1007,244 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
 
         unset($mapeo['btn_action_next']);
 
-        $registrosProcesados = $this->procesarImportacion(link: $this->link, datosXls: $datosXls, post: $mapeo,
-            header: $header, ws: $ws);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener datos',data:  $registrosProcesados, header: $header,
-                ws: $ws);
+        if(!isset($_SESSION['registros_procesados'])) {
+            $registrosProcesados = $this->procesarImportacion(link: $this->link, datosXls: $datosXls, post: $mapeo,
+                header: $header, ws: $ws);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al obtener datos', data: $registrosProcesados, header: $header,
+                    ws: $ws);
+            }
+
+            $_SESSION['registros_procesados'] = $registrosProcesados;
         }
 
-        print_r($registrosProcesados);exit;
+        $totales = [
+            'total'        => count($_SESSION['registros_procesados']),
+            'validos'      => 0,
+            'con_errores'  => 0,
+            'duplicados'   => 0,
+        ];
 
-        $_SESSION['registros_procesados'] = $registrosProcesados;
+        $campos_formulario = ['nss', 'nombre', 'apellido_paterno', 'apellido_materno', 'numero_com','cel_com',
+            'correo_com', 'estado','municipio','cp','colonia','calle','ext','int','entre_calle_1','entre_calle_2',
+            'tipo_credito', 'numero_credito','monto_credito','saldo_credito','mensualidad','fecha_credito',
+            'cuenta_predial', 'adeudo_predial','cuenta_agua','adeudo_agua','cuenta_luz','adeudo_luz','estado_vivienda',
+            'prototipo', 'complemento','metros_terreno','metros_construccion','observaciones'];
+
+        $ths = array();
+        $ths[] = 'Fila';
+        $ths[] = 'Estado';
+        foreach ($campos_formulario as $campo) {
+            $placeholder = implode(' ', array_map('ucfirst', explode('_', $campo)));
+
+            $ths[] = htmlspecialchars($placeholder);
+        }
+        $this->ths = $ths;
+
+        $campos_index = ['dp_estado_id', 'dp_municipio_id','dp_cp_id','dp_colonia_id',
+            'dp_colonia_postal_id','inm_tipo_credito_id','inm_estado_vivienda_id','inm_prototipo_id',
+            'inm_complemento_id'];
+
+        $html_mapeo = '';
+        foreach ($_SESSION['registros_procesados'] as $registro) {
+
+            if (!empty($registro['valido'])) {
+                $totales['validos']++;
+            }
+            if (!empty($registro['errores'])) {
+                $totales['con_errores']++;
+            }
+            if (!empty($registro['duplicados'])) {
+                $totales['duplicados']++;
+            }
+
+            $html_mapeo .= '<tr>';
+
+            $html_mapeo .= '<td>' . $registro['fila'] . '</td>';
+
+            $html_mapeo .= '<td class="celda-estatus">';
+            if (!empty($registro['errores'])) {
+                $titulo = htmlspecialchars(implode(' | ', $registro['errores']));
+                $html_mapeo .= "<span class=\"icono ico-error\" title=\"{$titulo}\">❌</span> ";
+            }
+            if (!empty($registro['advertencias'])) {
+                $titulo = htmlspecialchars(implode(' | ', $registro['advertencias']));
+                $html_mapeo .= "<span class=\"icono ico-advertencia\" title=\"{$titulo}\">⚠️</span> ";
+            }
+            if (!empty($registro['duplicados'])) {
+                $titulo = htmlspecialchars(implode(' | ', $registro['duplicados']));
+                $html_mapeo .= "<span class=\"icono ico-duplicado\" title=\"{$titulo}\">🔁</span> ";
+            }
+            if (empty($registro['errores']) && empty($registro['advertencias']) && empty($registro['duplicados'])) {
+                $html_mapeo .= '<span class="icono ico-ok" title="Sin observaciones">✅</span>';
+            }
+            $html_mapeo .= '</td>';
+
+            foreach ($campos_formulario as $campo) {
+                $valor = htmlspecialchars($registro['datos'][$campo] ?? '');
+                $placeholder = implode(' ', array_map('ucfirst', explode('_', $campo)));
+
+                $html_mapeo .= '<td>';
+                $html_mapeo .= "<input type=\"text\" name=\"correccion[{$registro['fila']}][{$campo}]\" placeholder=\"{$placeholder}\" value=\"{$valor}\">";
+                $html_mapeo .= '</td>';
+            }
+
+            foreach ($campos_index as $campo) {
+                $valor = htmlspecialchars($registro['datos'][$campo] ?? '');
+                $placeholder = implode(' ', array_map('ucfirst', explode('_', $campo)));
+
+                $html_mapeo .= "<input type=\"hidden\" name=\"correccion[{$registro['fila']}][{$campo}]\" placeholder=\"{$placeholder}\" value=\"{$valor}\">";
+            }
+
+            $html_mapeo .= '</tr>';
+        }
+
+        $this->html_mapeo = $html_mapeo;
+        $this->totales = $totales;
+
+        return $_SESSION['registros_procesados'];
+    }
+
+    public function importa_duplicado(bool $header = true, bool $ws = false)
+    {
+        if($_POST['btn_action_next'] === 'Validar') {
+            $registrosClasificados = $_POST['correccion'];
+
+            foreach ($registrosClasificados as $indiceFila => $fila) {
+                $registrosClasificados[$indiceFila] = $this->normalizarRegistro(registro: $fila);
+            }
+
+            $ocurrenciasNss = [];
+            foreach ($registrosClasificados as $indiceFila => $registro) {
+                $nss = $registro['nss'] ?? '';
+                if ($nss === '') {
+                    continue;
+                }
+                $ocurrenciasNss[$nss][] = $indiceFila;
+            }
+
+            $primeraAparicion = array_map(function ($filas) {
+                return min($filas);
+            }, $ocurrenciasNss);
+
+            $resultado = [];
+            foreach ($registrosClasificados as $indiceFila => $registro) {
+                $nss = $registro['nss'] ?? '';
+                $filasConMismoNss = $ocurrenciasNss[$nss] ?? [];
+                $duplicadoEnArchivo = count($filasConMismoNss) > 1;
+                $esPrimeraAparicion = $primeraAparicion[$nss] === $indiceFila;
+
+                $validacion = $this->validarRegistro(link: $this->link, registro: $registro,
+                    duplicadoEnArchivo: $duplicadoEnArchivo, esPrimeraAparicion: $esPrimeraAparicion,
+                    otrasFilasConMismoNss: array_diff($filasConMismoNss, [$indiceFila]));
+
+                $keys = array('dp_estado_id', 'dp_municipio_id', 'dp_cp_id', 'dp_colonia_id', 'dp_colonia_postal_id',
+                    'inm_tipo_credito_id', 'inm_estado_vivienda_id', 'inm_prototipo_id', 'inm_complemento_id');
+                foreach ($keys as $key) {
+                    $registro[$key] = $validacion[$key];
+                }
+
+                $resultado[] = [
+                    'fila'       => $indiceFila,
+                    'datos'      => $registro,
+                    'advertencias' => $validacion['advertencias'],
+                    'errores'    => $validacion['errores'],
+                    'valido'     => $validacion['valido'],
+                    'duplicados' => $validacion['duplicados'],
+                    'duplicado'  => $validacion['duplicado'],
+                    'inm_prospecto_ubicacion_id'  => $validacion['inm_prospecto_ubicacion_id']
+                ];
+            }
+
+            $_SESSION['registros_procesados'] = $resultado;
+
+            $link_importa_previo_muestra = $this->obj_link->link_sin_id(accion: 'importa_previo_muestra',
+                link: $this->link, seccion: $this->seccion);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error crear directorio', data: $link_importa_previo_muestra,
+                    header: $header, ws: $ws);
+            }
+
+            if($header) {
+                header('Location:' . $link_importa_previo_muestra);
+                exit;
+            }
+        }
+
+        return $header;
+    }
+
+    public function importa_previo_muestra_bd(bool $header = true, bool $ws = false): array|stdClass
+    {
+        $this->link->beginTransaction();
+
+        $altas = [];
+        foreach ($_SESSION['registros_procesados'] as $row){
+            $registro = $row['datos'];
+
+            foreach ($registro as $key => $val){
+                if($val === null){
+                    unset($registro[$key]);
+                }
+            }
+
+            if(!empty($row['errores'])){
+                continue;
+            }
+
+            if($_POST['estrategia'] === 'omitir' && $row['duplicado']){
+                continue;
+            }else if ($_POST['estrategia'] === 'actualizar' && $row['duplicado']){
+
+                $inm_prospecto_ubicacion_id =  $row['inm_prospecto_ubicacion_id'];
+                if(empty($row['inm_prospecto_ubicacion_id'])) {
+                    $inm_prospecto_ubicacion = (new inm_prospecto_ubicacion(link: $this->link))->existe_nss(nss: $registro['nss']);
+                    if(errores::$error){
+                        $this->link->rollBack();
+                        return $this->error->error(mensaje: 'Error al validar prospecto',data:  $inm_prospecto_ubicacion);
+                    }
+                    if($inm_prospecto_ubicacion->n_registros > 0){
+                        $inm_prospecto_ubicacion_id = $inm_prospecto_ubicacion->registros[0]['inm_prospecto_ubicacion_id'];
+                    }
+                }
+
+                $r_update = (new inm_prospecto_ubicacion(link: $this->link))->modifica_bd(registro: $registro,
+                    id: $inm_prospecto_ubicacion_id);
+                if(errores::$error){
+                    $this->link->rollBack();
+                    return $this->retorno_error(mensaje: 'Error al obtener documento', data: $r_update, header: $header,
+                        ws: $ws);
+                }
+
+                continue;
+            }
+
+            $r_alta = (new inm_prospecto_ubicacion(link: $this->link))->alta_registro(registro: $registro);
+            if(errores::$error){
+                $this->link->rollBack();
+                return $this->retorno_error(mensaje: 'Error al obtener documento', data: $r_alta, header: $header,
+                    ws: $ws);
+            }
+
+            $altas[] = $r_alta;
+        }
+
+        $this->link->commit();
+
+        unset($_SESSION['registros_procesados']);
+
+        $link_lista = $this->obj_link->link_sin_id(accion: 'lista', link: $this->link, seccion: $this->seccion);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error crear directorio', data: $link_lista,
+                header: $header, ws: $ws);
+        }
+
+        if($header) {
+            header('Location:' . $link_lista);
+            exit;
+        }
+
+        return $altas;
     }
 
     function normalizar(string $texto): string
@@ -1080,25 +1321,31 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
 
 
     function validarRegistro(PDO $link, array $registro, bool $duplicadoEnArchivo = false,
-                             array $otrasFilasConMismoNss = []): array {
+                             bool $esPrimeraAparicion = false, array $otrasFilasConMismoNss = []): array {
         $errores = [];
         $advertencias = [];
+        $duplicados = [];
 
         if (empty($registro['nss'])) {
             $errores[] = 'El NSS es obligatorio.';
         }
 
         $duplicado = false;
+        $inm_prospecto_ubicacion_id = null;
         if (!empty($registro['nss'])) {
-            $duplicado = (new inm_prospecto_ubicacion(link: $link))->existe_nss(nss: $registro['nss']);
-            if ($duplicado) {
-                $errores[] = "El NSS {$registro['nss']} ya existe en la base de datos (no se insertará de nuevo).";
+            $inm_prospecto_ubicacion = (new inm_prospecto_ubicacion(link: $link))->existe_nss(nss: $registro['nss']);
+
+            if($inm_prospecto_ubicacion->n_registros > 0){
+                $duplicado = true;
+                $duplicados[] = "El NSS {$registro['nss']} ya existe en la base de datos (no se insertará de nuevo).";
+                $inm_prospecto_ubicacion_id = $inm_prospecto_ubicacion->registros[0]['inm_prospecto_ubicacion_id'];
             }
         }
 
-        if ($duplicadoEnArchivo) {
+        if ($duplicadoEnArchivo && !$esPrimeraAparicion) {
+            $duplicado = true;
             $filasHumanas = array_map(fn($i) => $i + 1, $otrasFilasConMismoNss);
-            $errores[] = "El NSS {$registro['nss']} está repetido en el mismo archivo (filas: " . implode(', ', $filasHumanas) . "). Solo debe insertarse una vez.";
+            $duplicados[] = "El NSS {$registro['nss']} está repetido en el mismo archivo (filas: " . implode(', ', $filasHumanas) . "). Solo debe insertarse una vez.";
         }
 
         if (empty($registro['nombre'])) {
@@ -1141,7 +1388,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
             $dp_colonia_postal_id = (new dp_colonia_postal($link))->get_colonia_postal_id(dp_cp_id: $dp_cp_id,
                 dp_colonia_id: $dp_colonia_id);
             if ($dp_colonia_postal_id === null) {
-                $errores[] = "La combinación CP \"{$registro['cp']}\" + colonia \"{$registro['colonia']}\" no está registrada en dp_colonia_postal y no se dará de alta.";
+                $errores[] = "La combinación CP \"{$registro['cp']}\" + colonia \"{$registro['colonia']}\" no está registrado y no se dará de alta.";
             }
         } elseif (!empty($registro['colonia']) && !empty($registro['cp'])) {
             $errores[] = 'No se puede validar dp_colonia_postal porque el CP o la colonia no se encontraron de forma individual.';
@@ -1150,14 +1397,14 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         if (!empty($registro['estado']) && $dp_estado_id !== null) {
             $dp_estado_id_excel = (new dp_estado($link))->get_estado_id(nombre_estado: $registro['estado']);
             if ($dp_estado_id_excel !== null && (int)$dp_estado_id_excel !== (int)$dp_estado_id) {
-                $advertencias[] = "El estado del Excel (\"{$registro['estado']}\") no coincide con el estado correspondiente al CP {$registro['cp']}.";
+                $advertencias[] = "El estado \"{$registro['estado']}\" no coincide con el estado correspondiente al CP {$registro['cp']}.";
             }
         }
 
         if (!empty($registro['municipio']) && $dp_municipio_id !== null) {
             $dp_municipio_id_excel = (new dp_municipio($link))->get_municipio_id(nombre_municipio: $registro['municipio'], dp_estado_id: $dp_estado_id);
             if ($dp_municipio_id_excel !== null && (int)$dp_municipio_id_excel !== (int)$dp_municipio_id) {
-                $advertencias[] = "El municipio del Excel (\"{$registro['municipio']}\") no coincide con el municipio correspondiente al CP {$registro['cp']}.";
+                $advertencias[] = "El municipio \"{$registro['municipio']}\" no coincide con el municipio correspondiente al CP {$registro['cp']}.";
             }
         }
 
@@ -1167,7 +1414,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         if (!empty($registro['tipo_credito'])) {
             $inm_tipo_credito_id = (new inm_tipo_credito($link))->get_tipo_credito_id(nombre_tipo_credito: $registro['tipo_credito']);
             if ($inm_tipo_credito_id === null) {
-                $advertencias[] = "El tipo de crédito \"{$registro['tipo_credito']}\" no existe en el catálogo y no se dará de alta.";
+                $advertencias[] = "El tipo de crédito \"{$registro['tipo_credito']}\" no existe en el catálogo";
             }
         }
 
@@ -1175,7 +1422,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         if (!empty($registro['estado_vivienda'])) {
             $inm_estado_vivienda_id = (new inm_estado_vivienda($link))->get_estado_vivienda_id(nombre_estado_vivienda: $registro['estado_vivienda']);
             if ($inm_estado_vivienda_id === null) {
-                $advertencias[] = "El estado de vivienda \"{$registro['estado_vivienda']}\" no existe en el catálogo y no se dará de alta.";
+                $advertencias[] = "El estado de vivienda \"{$registro['estado_vivienda']}\" no existe en el catálogo";
             }
         }
 
@@ -1183,7 +1430,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         if (!empty($registro['prototipo'])) {
             $inm_prototipo_id = (new inm_prototipo($link))->get_prototipo_id(nombre_prototipo: $registro['prototipo']);
             if ($inm_prototipo_id === null) {
-                $advertencias[] = "El prototipo \"{$registro['prototipo']}\" no existe en el catálogo y no se dará de alta.";
+                $advertencias[] = "El prototipo \"{$registro['prototipo']}\" no existe en el catálogo";
             }
         }
 
@@ -1191,24 +1438,26 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         if (!empty($registro['complemento'])) {
             $inm_complemento_id = (new inm_complemento($link))->get_complemento_id(nombre_complemento: $registro['complemento']);
             if ($inm_complemento_id === null) {
-                $advertencias[] = "El complemento \"{$registro['complemento']}\" no existe en el catálogo y no se dará de alta.";
+                $advertencias[] = "El complemento \"{$registro['complemento']}\" no existe en el catálogo";
             }
         }
 
         return [
-            'errores'                => $errores,
-            'advertencias'           => $advertencias,
-            'valido'                 => empty($errores),
-            'dp_estado_id'           => $dp_estado_id,
-            'dp_municipio_id'        => $dp_municipio_id,
-            'dp_cp_id'               => $dp_cp_id,
-            'dp_colonia_id'          => $dp_colonia_id,
-            'dp_colonia_postal_id'   => $dp_colonia_postal_id,
-            'inm_tipo_credito_id'    => $inm_tipo_credito_id,
-            'inm_estado_vivienda_id' => $inm_estado_vivienda_id,
-            'inm_prototipo_id'       => $inm_prototipo_id,
-            'inm_complemento_id'     => $inm_complemento_id,
-            'duplicado'              => $duplicado,
+            'errores'                   => $errores,
+            'advertencias'              => $advertencias,
+            'duplicados'                => $duplicados,
+            'valido'                    => (empty($errores) && empty($duplicados)),
+            'dp_estado_id'              => $dp_estado_id,
+            'dp_municipio_id'           => $dp_municipio_id,
+            'dp_cp_id'                  => $dp_cp_id,
+            'dp_colonia_id'             => $dp_colonia_id,
+            'dp_colonia_postal_id'      => $dp_colonia_postal_id,
+            'inm_tipo_credito_id'       => $inm_tipo_credito_id,
+            'inm_estado_vivienda_id'    => $inm_estado_vivienda_id,
+            'inm_prototipo_id'          => $inm_prototipo_id,
+            'inm_complemento_id'        => $inm_complemento_id,
+            'inm_prospecto_ubicacion_id'=> $inm_prospecto_ubicacion_id,
+            'duplicado'                 => $duplicado,
         ];
     }
     function construirMapeo(array $post): array
@@ -1243,14 +1492,25 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
             $ocurrenciasNss[$nss][] = $indiceFila;
         }
 
+        $primeraAparicion = array_map(function ($filas) {
+            return min($filas);
+        }, $ocurrenciasNss);
+
         $resultado = [];
         foreach ($registrosClasificados as $indiceFila => $registro) {
             $nss = $registro['nss'] ?? '';
             $filasConMismoNss = $ocurrenciasNss[$nss] ?? [];
             $duplicadoEnArchivo = count($filasConMismoNss) > 1;
+            $esPrimeraAparicion = $primeraAparicion[$nss] === $indiceFila;
 
             $validacion = $this->validarRegistro(link: $link, registro: $registro, duplicadoEnArchivo: $duplicadoEnArchivo,
-                otrasFilasConMismoNss: array_diff($filasConMismoNss, [$indiceFila]));
+                esPrimeraAparicion: $esPrimeraAparicion, otrasFilasConMismoNss: array_diff($filasConMismoNss, [$indiceFila]));
+
+            $keys = array('dp_estado_id', 'dp_municipio_id', 'dp_cp_id', 'dp_colonia_id', 'dp_colonia_postal_id',
+                'inm_tipo_credito_id', 'inm_estado_vivienda_id', 'inm_prototipo_id', 'inm_complemento_id');
+            foreach ($keys as $key) {
+                $registro[$key] = $validacion[$key];
+            }
 
             $resultado[] = [
                 'fila'       => $indiceFila + 1,
@@ -1258,16 +1518,9 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
                 'advertencias' => $validacion['advertencias'],
                 'errores'    => $validacion['errores'],
                 'valido'     => $validacion['valido'],
-                'dp_estado_id' => $validacion['dp_estado_id'],
-                'dp_municipio_id' => $validacion['dp_municipio_id'],
-                'dp_cp_id' => $validacion['dp_cp_id'],
-                'dp_colonia_id' => $validacion['dp_colonia_id'],
-                'dp_colonia_postal_id' => $validacion['dp_colonia_postal_id'],
-                'inm_tipo_credito_id' => $validacion['inm_tipo_credito_id'],
-                'inm_estado_vivienda_id' => $validacion['inm_estado_vivienda_id'],
-                'inm_prototipo_id' => $validacion['inm_prototipo_id'],
-                'inm_complemento_id' => $validacion['inm_complemento_id'],
+                'duplicados' => $validacion['duplicados'],
                 'duplicado'  => $validacion['duplicado'],
+                'inm_prospecto_ubicacion_id'  => $validacion['inm_prospecto_ubicacion_id']
             ];
         }
 
@@ -1531,6 +1784,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         if (isset($_GET['pestana_general_actual'])) {
             $params = array('pestana_general_actual' => 'pestanageneral1', 'pestana_actual' => $_GET['pestana_actual']);
         }
+
         $link_integra_relacion_bd = $this->obj_link->link_con_id(
             accion: $accion, link: $this->link, registro_id: $this->registro_id,
             seccion: 'inm_prospecto_ubicacion',params: $params);

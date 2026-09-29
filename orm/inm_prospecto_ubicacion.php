@@ -709,14 +709,10 @@ class inm_prospecto_ubicacion extends _modelo_parent{
         return $existe_conyuge;
     }
 
-    function existe_nss(string $nss): bool
+    function existe_nss(string $nss): stdClass|array
     {
-        if ($nss === '') {
-            return false;
-        }
-
         $filtro['inm_prospecto_ubicacion.nss'] = $nss;
-        $existe_prospecto_ubicacion = (new inm_prospecto_ubicacion(link: $this->link))->existe(filtro: $filtro);
+        $existe_prospecto_ubicacion = (new inm_prospecto_ubicacion(link: $this->link))->filtro_and(filtro: $filtro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar si existe conyuge',data:  $existe_prospecto_ubicacion);
         }

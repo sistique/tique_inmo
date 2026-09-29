@@ -74,6 +74,8 @@ class controler{
 
     public string $link_importa_previo = '';
     public string $link_importa_previo_muestra = '';
+    public string $link_importa_duplicado = '';
+    public string $link_importa_valida_de_nuevo = '';
     public string $link_importa_previo_muestra_bd = '';
 
     public string $link_google_calendar_redirect = '';
@@ -114,6 +116,7 @@ class controler{
 
     public string $input_params_importa = '';
     public string $html_mapeo = '';
+    public array $totales = array();
 
     public function __construct(PDO $link){
         $this->link = $link;
