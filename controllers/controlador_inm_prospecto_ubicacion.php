@@ -1630,6 +1630,14 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
 
     public function exportar_xls(bool $header, bool $ws = false)
     {
+
+        $filtro_agente['adm_usuario.id'] = $_SESSION['usuario_id'];
+        $filtro_agente['com_agente.base_completa'] = 'inactivo';
+        $existe = (new com_agente(link: $link))->existe(filtro: $filtro_agente);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al insertar prospecto',data:  $existe);
+        }
+
         $nombre_hojas = array('Prospecto Ubicaciones');
         $keys_hojas = array();
 
@@ -1644,7 +1652,9 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         $ths[] = array('etiqueta'=>'Nss', 'campo'=>'inm_prospecto_ubicacion_nss');
         $ths[] = array('etiqueta'=>'Nombre', 'campo'=>'com_prospecto_razon_social');
         $ths[] = array('etiqueta'=>'Fecha', 'campo'=>'inm_prospecto_ubicacion_fecha_alta');
-        $ths[] = array('etiqueta'=>'Agente', 'campo'=>'com_agente_descripcion');
+        if(!$existe) {
+            $ths[] = array('etiqueta' => 'Agente', 'campo' => 'com_agente_descripcion');
+        }
         $ths[] = array('etiqueta'=>'Status prospecto_ubicacion', 'campo'=>'inm_status_prospecto_ubicacion_descripcion');
 
         /*$keys = array();
