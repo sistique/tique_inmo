@@ -940,10 +940,11 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         $_SESSION['datos_xls'] = $datos_xls;
 
         $campos_formulario = ['nss', 'nombre', 'apellido_paterno', 'apellido_materno', 'numero_com','cel_com',
-            'correo_com', 'estado','municipio','cp','colonia','calle','ext','int','entre_calle_1','entre_calle_2',
-            'tipo_credito', 'numero_credito','monto_credito','saldo_credito','mensualidad','fecha_credito',
-            'cuenta_predial', 'adeudo_predial','cuenta_agua','adeudo_agua','cuenta_luz','adeudo_luz','estado_vivienda',
-            'prototipo', 'complemento','metros_terreno','metros_construccion','observaciones'];
+            'correo_com', 'estado','municipio','cp','colonia','calle','numero_exterior','numero_interior',
+            'entre_calle_1','entre_calle_2', 'tipo_credito', 'numero_credito','monto_credito','adeudo_hipoteca',
+            'mensualidad','fecha_otorgamiento_credito', 'cuenta_predial', 'adeudo_predial','cuenta_agua','adeudo_agua',
+            'cuenta_luz','adeudo_luz','estado_vivienda', 'prototipo', 'complemento','metros_terreno',
+            'metros_construccion','observaciones'];
 
         $html_mapeo = '';
 
@@ -970,6 +971,14 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
                 }
 
                 if($col === 'Correo' && $campo === 'correo_com'){
+                    $selected = ' selected';
+                }
+
+                if($col === 'Saldo Credito' && $campo === 'adeudo_hipoteca'){
+                    $selected = ' selected';
+                }
+
+                if($col === 'Fecha Credito' && $campo === 'fecha_otorgamiento_credito'){
                     $selected = ' selected';
                 }
 
@@ -1026,10 +1035,11 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         ];
 
         $campos_formulario = ['nss', 'nombre', 'apellido_paterno', 'apellido_materno', 'numero_com','cel_com',
-            'correo_com', 'estado','municipio','cp','colonia','calle','ext','int','entre_calle_1','entre_calle_2',
-            'tipo_credito', 'numero_credito','monto_credito','saldo_credito','mensualidad','fecha_credito',
-            'cuenta_predial', 'adeudo_predial','cuenta_agua','adeudo_agua','cuenta_luz','adeudo_luz','estado_vivienda',
-            'prototipo', 'complemento','metros_terreno','metros_construccion','observaciones'];
+            'correo_com', 'estado','municipio','cp','colonia','calle','numero_exterior','numero_interior',
+            'entre_calle_1','entre_calle_2', 'tipo_credito', 'numero_credito','monto_credito','adeudo_hipoteca',
+            'mensualidad','fecha_otorgamiento_credito', 'cuenta_predial', 'adeudo_predial','cuenta_agua','adeudo_agua',
+            'cuenta_luz','adeudo_luz','estado_vivienda', 'prototipo', 'complemento','metros_terreno',
+            'metros_construccion','observaciones'];
 
         $ths = array();
         $ths[] = 'Fila';
