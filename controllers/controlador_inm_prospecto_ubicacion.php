@@ -894,6 +894,11 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
 
     public function importa_previo(bool $header = true, bool $ws = false): array|stdClass
     {
+        unset(
+            $_SESSION['registros_procesados'],
+            $_SESSION['datos_xls']
+        );
+
         $ruta_absoluta_directorio = (new generales())->path_base.'archivos/temporales/';
 
         if(!is_dir($ruta_absoluta_directorio) && !mkdir($ruta_absoluta_directorio) &&
@@ -1242,7 +1247,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
 
         $this->link->commit();
 
-        unset($_SESSION['registros_procesados']);
+        unset($_SESSION['registros_procesados'], $_SESSION['datos_xls']);
 
         $link_lista = $this->obj_link->link_sin_id(accion: 'lista', link: $this->link, seccion: $this->seccion);
         if (errores::$error) {
@@ -1316,20 +1321,48 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
             }
         }
 
-        if (array_key_exists('correo', $registro)) {
-            $registro['correo'] = strtolower($this->limpiar($registro['correo']));
+        if (array_key_exists('correo_com', $registro)) {
+            $registro['correo_com'] = strtolower($this->limpiar($registro['correo_com']));
         }
 
-        $camposLimpieza = ['nss', 'numero_telefono', 'celular', 'cp', 'ext', 'int'];
+        $camposLimpieza = ['nss', 'numero_com', 'cel_com', 'cp', 'numero_exterior', 'numero_interior'];
         foreach ($camposLimpieza as $campo) {
             if (array_key_exists($campo, $registro)) {
                 $registro[$campo] = $this->limpiar($registro[$campo]);
             }
         }
 
+        if (array_key_exists('fecha_otorgamiento_credito', $registro)) {
+            $registro['fecha_otorgamiento_credito'] = $this->normalizarFecha($registro['fecha_otorgamiento_credito']);
+        }
+
         return $registro;
     }
 
+    private function normalizarFecha($valor): ?string
+    {
+        $valor = trim((string) $valor);
+
+        if ($valor === '') {
+            return null;
+        }
+
+        $valor = preg_split('/[T\s]/', $valor)[0];
+        $valor = preg_replace('/[\/\.\-]+/', '-', $valor);
+        if (preg_match('/^(\d{4})-(\d{1,2})-(\d{1,2})$/', $valor, $m)) {
+            [$anio, $mes, $dia] = [$m[1], $m[2], $m[3]];
+        } elseif (preg_match('/^(\d{1,2})-(\d{1,2})-(\d{4})$/', $valor, $m)) {
+            [$dia, $mes, $anio] = [$m[1], $m[2], $m[3]];
+        } else {
+            return null;
+        }
+
+        if (!checkdate((int) $mes, (int) $dia, (int) $anio)) {
+            return null;
+        }
+
+        return sprintf('%04d-%02d-%02d', $anio, $mes, $dia);
+    }
 
     function validarRegistro(PDO $link, array $registro, bool $duplicadoEnArchivo = false,
                              bool $esPrimeraAparicion = false, array $otrasFilasConMismoNss = []): array {
