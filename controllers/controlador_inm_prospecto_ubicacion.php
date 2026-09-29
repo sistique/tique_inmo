@@ -1201,7 +1201,8 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
                     $inm_prospecto_ubicacion = (new inm_prospecto_ubicacion(link: $this->link))->existe_nss(nss: $registro['nss']);
                     if(errores::$error){
                         $this->link->rollBack();
-                        return $this->error->error(mensaje: 'Error al validar prospecto',data:  $inm_prospecto_ubicacion);
+                        return $this->retorno_error(mensaje: 'Error al validar prospecto',
+                            data: $inm_prospecto_ubicacion, header: $header, ws: $ws);
                     }
                     if($inm_prospecto_ubicacion->n_registros > 0){
                         $inm_prospecto_ubicacion_id = $inm_prospecto_ubicacion->registros[0]['inm_prospecto_ubicacion_id'];
@@ -2185,6 +2186,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
     {
 
         $filtro_agente['adm_usuario.id'] = $_SESSION['usuario_id'];
+        $filtro_agente['com_agente.base_completa'] = 'inactivo';
         $existe = (new com_agente(link: $link))->existe(filtro: $filtro_agente);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al insertar prospecto',data:  $existe);
@@ -3217,6 +3219,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
     {
 
         $filtro_agente['adm_usuario.id'] = $_SESSION['usuario_id'];
+        $filtro_agente['com_agente.base_completa'] = 'inactivo';
         $existe = (new com_agente(link: $this->link))->existe(filtro: $filtro_agente);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al insertar prospecto',data:  $existe, header: $header,
