@@ -1633,7 +1633,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
 
         $filtro_agente['adm_usuario.id'] = $_SESSION['usuario_id'];
         $filtro_agente['com_agente.base_completa'] = 'inactivo';
-        $existe = (new com_agente(link: $link))->existe(filtro: $filtro_agente);
+        $existe = (new com_agente(link: $this->link))->existe(filtro: $filtro_agente);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al insertar prospecto',data:  $existe);
         }
