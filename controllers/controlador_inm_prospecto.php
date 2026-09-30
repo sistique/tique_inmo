@@ -46,8 +46,11 @@ use gamboamartin\inmuebles\models\inm_prospecto;
 use gamboamartin\inmuebles\models\inm_rel_beneficiario_prospecto;
 use gamboamartin\inmuebles\models\inm_rel_referencia_prospecto;
 use gamboamartin\inmuebles\models\inm_status_prospecto;
+use gamboamartin\inmuebles\models\inm_tipo_venta;
 use gamboamartin\inmuebles\models\inm_tipo_beneficiario;
 use gamboamartin\plugins\exportador;
+use gamboamartin\plugins\files;
+use gamboamartin\plugins\Importador;
 use gamboamartin\proceso\html\pr_etapa_proceso_html;
 use gamboamartin\system\actions;
 use gamboamartin\system\links_menu;
@@ -91,6 +94,9 @@ class controlador_inm_prospecto extends _ctl_formato
     public array $referencias = array();
     public array $acciones_headers = array();
     public array $status_prospecto = array();
+    public array $totales = array();
+    public array $ths = array();
+    public string $html_mapeo = '';
     public string $ruta_docs = '';
     public bool $es_agente = false;
     public bool $ver_descripcion = false;
@@ -707,6 +713,532 @@ class controlador_inm_prospecto extends _ctl_formato
         return $result;
     }
 
+    public function importa_previo(bool $header = true, bool $ws = false): array|stdClass
+    {
+        unset($_SESSION['registros_procesados'], $_SESSION['datos_xls']);
+
+        $ruta_absoluta_directorio = (new generales())->path_base.'archivos/temporales/';
+        if (!is_dir($ruta_absoluta_directorio) && !mkdir($ruta_absoluta_directorio) &&
+            !is_dir($ruta_absoluta_directorio)) {
+            return $this->retorno_error(mensaje: 'Error crear directorio', data: $ruta_absoluta_directorio,
+                header: $header, ws: $ws);
+        }
+
+        if ($_FILES['doc_origen']['error'] !== UPLOAD_ERR_OK) {
+            die('Error al subir el archivo.');
+        }
+
+        $extensionesPermitidas = ['xls', 'xlsx', 'csv'];
+        $extensionArchivo = pathinfo($_FILES['doc_origen']['name'], PATHINFO_EXTENSION);
+        if (!in_array(strtolower($extensionArchivo), $extensionesPermitidas, true)) {
+            die('Extension no valida. Solo se permiten archivos de Excel.');
+        }
+
+        $mimesPermitidas = [
+            'application/vnd.ms-excel',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'text/csv',
+            'application/csv'
+        ];
+
+        if (!in_array($_FILES['doc_origen']['type'], $mimesPermitidas, true)) {
+            die('El tipo MIME del archivo no es valido.');
+        }
+
+        $ruta_absoluta_directorio .= strtolower($_FILES['doc_origen']['name']);
+        $guarda = (new files())->guarda_archivo_fisico(
+            contenido_file: file_get_contents($_FILES['doc_origen']['tmp_name']), ruta_file: $ruta_absoluta_directorio);
+        if (errores::$error) {
+            return $this->retorno_error('Error al guardar archivo', $guarda, header: $header, ws: $ws);
+        }
+
+        $datos_xls = (new Importador())->leer(ruta_absoluta: $ruta_absoluta_directorio);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener datos', data: $datos_xls, header: $header, ws: $ws);
+        }
+
+        $_SESSION['datos_xls'] = $datos_xls;
+
+        $campos_formulario = [
+            'nss', 'nombre', 'apellido_paterno', 'apellido_materno', 'numero_com', 'cel_com', 'correo_com',
+            'tipo_venta', 'devolucion', 'observaciones'
+        ];
+
+        $html_mapeo = '';
+        foreach ($campos_formulario as $campo) {
+            $name = "$campo";
+            $name_input = "input_$campo";
+            $placeholder = implode(' ', array_map('ucfirst', explode('_', $campo)));
+
+            $select = '<select name="' . htmlspecialchars($name) . '" id="' . htmlspecialchars($name)
+                . '" class="select-mapeo" data-target="' . htmlspecialchars($name_input) . '">';
+            $select .= '<option value="">Selecciona una opcion</option>';
+
+            $sugerida = $this->buscar_columna_sugerida($campo, $datos_xls->columns);
+            foreach ($datos_xls->columns as $col) {
+                $selected = ($col === $sugerida) ? ' selected' : '';
+
+                if ($col === 'Telefono' && $campo === 'numero_com') {
+                    $selected = ' selected';
+                }
+                if ($col === 'Celular' && $campo === 'cel_com') {
+                    $selected = ' selected';
+                }
+                if ($col === 'Correo' && $campo === 'correo_com') {
+                    $selected = ' selected';
+                }
+                if ($col === 'Tipo de Venta' && $campo === 'tipo_venta') {
+                    $selected = ' selected';
+                }
+
+                $valor_preview = '';
+                if (count($datos_xls->rows) > 0) {
+                    $valor_preview = $datos_xls->rows[0]->$col ?? '';
+                }
+
+                $select .= '<option value="' . htmlspecialchars($col) . '" ' . $selected . ' data-preview="'
+                    . htmlspecialchars($valor_preview) . '">' . htmlspecialchars($col) . '</option>';
+            }
+
+            $select .= '</select>';
+
+            $input = '<input type="text" name="' . htmlspecialchars($name_input) . '" class="form-control" '
+                . 'id="' . htmlspecialchars($name_input) . '" placeholder="' . htmlspecialchars($placeholder) . '" '
+                . 'title="' . htmlspecialchars($placeholder) . '" value="" disabled>';
+
+            $html_mapeo .= '<tr>';
+            $html_mapeo .= '<td>' . htmlspecialchars($placeholder) . '</td>';
+            $html_mapeo .= '<td>' . $select . '</td>';
+            $html_mapeo .= '<td>' . $input . '</td>';
+            $html_mapeo .= '</tr>';
+        }
+
+        $this->html_mapeo = $html_mapeo;
+        return $datos_xls;
+    }
+
+    public function importa_previo_muestra(bool $header = true, bool $ws = false): array|stdClass
+    {
+        $datosXls = $_SESSION['datos_xls'];
+        $mapeo = $_POST;
+        unset($mapeo['btn_action_next']);
+
+        if (!isset($_SESSION['registros_procesados'])) {
+            $registrosProcesados = $this->procesarImportacion(link: $this->link, datosXls: $datosXls, post: $mapeo,
+                header: $header, ws: $ws);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al obtener datos', data: $registrosProcesados,
+                    header: $header, ws: $ws);
+            }
+            $_SESSION['registros_procesados'] = $registrosProcesados;
+        }
+
+        $totales = ['total' => count($_SESSION['registros_procesados']), 'validos' => 0, 'con_errores' => 0,
+            'duplicados' => 0];
+
+        $campos_formulario = [
+            'nss', 'nombre', 'apellido_paterno', 'apellido_materno', 'numero_com', 'cel_com', 'correo_com',
+            'tipo_venta', 'devolucion', 'observaciones'
+        ];
+
+        $ths = ['Fila', 'Estado'];
+        foreach ($campos_formulario as $campo) {
+            $ths[] = htmlspecialchars(implode(' ', array_map('ucfirst', explode('_', $campo))));
+        }
+        $this->ths = $ths;
+
+        $campos_index = ['inm_tipo_venta_id'];
+        $html_mapeo = '';
+        foreach ($_SESSION['registros_procesados'] as $registro) {
+            if (!empty($registro['valido'])) {
+                $totales['validos']++;
+            }
+            if (!empty($registro['errores'])) {
+                $totales['con_errores']++;
+            }
+            if (!empty($registro['duplicados'])) {
+                $totales['duplicados']++;
+            }
+
+            $html_mapeo .= '<tr>';
+            $html_mapeo .= '<td>' . $registro['fila'] . '</td>';
+
+            $html_mapeo .= '<td class="celda-estatus">';
+            if (!empty($registro['errores'])) {
+                $titulo = htmlspecialchars(implode(' | ', $registro['errores']));
+                $html_mapeo .= "<span class=\"icono ico-error\" title=\"{$titulo}\">&#10060;</span> ";
+            }
+            if (!empty($registro['advertencias'])) {
+                $titulo = htmlspecialchars(implode(' | ', $registro['advertencias']));
+                $html_mapeo .= "<span class=\"icono ico-advertencia\" title=\"{$titulo}\">&#9888;</span> ";
+            }
+            if (!empty($registro['duplicados'])) {
+                $titulo = htmlspecialchars(implode(' | ', $registro['duplicados']));
+                $html_mapeo .= "<span class=\"icono ico-duplicado\" title=\"{$titulo}\">&#128257;</span> ";
+            }
+            if (empty($registro['errores']) && empty($registro['advertencias']) && empty($registro['duplicados'])) {
+                $html_mapeo .= '<span class="icono ico-ok" title="Sin observaciones">&#9989;</span>';
+            }
+            $html_mapeo .= '</td>';
+
+            foreach ($campos_formulario as $campo) {
+                $valor = htmlspecialchars($registro['datos'][$campo] ?? '');
+                $placeholder = implode(' ', array_map('ucfirst', explode('_', $campo)));
+                $html_mapeo .= '<td><input type="text" name="correccion[' . $registro['fila'] . '][' . $campo
+                    . ']" placeholder="' . $placeholder . '" value="' . $valor . '"></td>';
+            }
+
+            foreach ($campos_index as $campo) {
+                $valor = htmlspecialchars($registro['datos'][$campo] ?? '');
+                $html_mapeo .= '<input type="hidden" name="correccion[' . $registro['fila'] . '][' . $campo
+                    . ']" value="' . $valor . '">';
+            }
+
+            $html_mapeo .= '</tr>';
+        }
+
+        $this->html_mapeo = $html_mapeo;
+        $this->totales = $totales;
+        return $_SESSION['registros_procesados'];
+    }
+
+    public function importa_duplicado(bool $header = true, bool $ws = false)
+    {
+        if ($_POST['btn_action_next'] === 'Validar') {
+            $registrosClasificados = $_POST['correccion'];
+            foreach ($registrosClasificados as $indiceFila => $fila) {
+                $registrosClasificados[$indiceFila] = $this->normalizarRegistro(registro: $fila);
+            }
+
+            $ocurrenciasNss = [];
+            foreach ($registrosClasificados as $indiceFila => $registro) {
+                $nss = $registro['nss'] ?? '';
+                if ($nss === '') {
+                    continue;
+                }
+                $ocurrenciasNss[$nss][] = $indiceFila;
+            }
+
+            $primeraAparicion = array_map(static function ($filas) {
+                return min($filas);
+            }, $ocurrenciasNss);
+
+            $resultado = [];
+            foreach ($registrosClasificados as $indiceFila => $registro) {
+                $nss = $registro['nss'] ?? '';
+                $filasConMismoNss = $ocurrenciasNss[$nss] ?? [];
+                $duplicadoEnArchivo = count($filasConMismoNss) > 1;
+                $esPrimeraAparicion = isset($primeraAparicion[$nss]) && $primeraAparicion[$nss] === $indiceFila;
+
+                $validacion = $this->validarRegistroImportacion(link: $this->link, registro: $registro,
+                    duplicadoEnArchivo: $duplicadoEnArchivo, esPrimeraAparicion: $esPrimeraAparicion,
+                    otrasFilasConMismoNss: array_diff($filasConMismoNss, [$indiceFila]));
+
+                $registro['inm_tipo_venta_id'] = $validacion['inm_tipo_venta_id'];
+
+                $resultado[] = [
+                    'fila' => $indiceFila,
+                    'datos' => $registro,
+                    'advertencias' => $validacion['advertencias'],
+                    'errores' => $validacion['errores'],
+                    'valido' => $validacion['valido'],
+                    'duplicados' => $validacion['duplicados'],
+                    'duplicado' => $validacion['duplicado'],
+                    'inm_prospecto_id' => $validacion['inm_prospecto_id']
+                ];
+            }
+
+            $_SESSION['registros_procesados'] = $resultado;
+
+            $link_importa_previo_muestra = $this->obj_link->link_sin_id(accion: 'importa_previo_muestra',
+                link: $this->link, seccion: $this->seccion);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al generar link', data: $link_importa_previo_muestra,
+                    header: $header, ws: $ws);
+            }
+
+            if ($header) {
+                header('Location:' . $link_importa_previo_muestra);
+                exit;
+            }
+        }
+
+        return $header;
+    }
+
+    public function importa_previo_muestra_bd(bool $header = true, bool $ws = false): array|stdClass
+    {
+        $this->link->beginTransaction();
+
+        $altas = [];
+        foreach ($_SESSION['registros_procesados'] as $row) {
+            $registro = $row['datos'];
+
+            foreach ($registro as $key => $val) {
+                if ($val === null) {
+                    unset($registro[$key]);
+                }
+            }
+
+            if (!empty($registro['tipo_venta'])) {
+                unset($registro['tipo_venta']);
+            }
+
+            if (!empty($row['errores'])) {
+                continue;
+            }
+
+            if ($_POST['estrategia'] === 'omitir' && $row['duplicado']) {
+                continue;
+            }
+
+            if ($_POST['estrategia'] === 'actualizar' && $row['duplicado']) {
+                $inm_prospecto_id = $row['inm_prospecto_id'] ?? null;
+                if (empty($inm_prospecto_id)) {
+                    $inm_prospecto = $this->registroPorNss(nss: $registro['nss'] ?? '', link: $this->link);
+                    if (errores::$error) {
+                        $this->link->rollBack();
+                        return $this->retorno_error(mensaje: 'Error al validar prospecto', data: $inm_prospecto,
+                            header: $header, ws: $ws);
+                    }
+                    if ($inm_prospecto->n_registros > 0) {
+                        $inm_prospecto_id = $inm_prospecto->registros[0]['inm_prospecto_id'];
+                    }
+                }
+
+                $r_update = (new inm_prospecto(link: $this->link))->modifica_bd(registro: $registro, id: $inm_prospecto_id);
+                if (errores::$error) {
+                    $this->link->rollBack();
+                    return $this->retorno_error(mensaje: 'Error al actualizar prospecto', data: $r_update,
+                        header: $header, ws: $ws);
+                }
+
+                continue;
+            }
+
+            $r_alta = (new inm_prospecto(link: $this->link))->alta_registro(registro: $registro);
+            if (errores::$error) {
+                $this->link->rollBack();
+                return $this->retorno_error(mensaje: 'Error al insertar prospecto', data: $r_alta, header: $header,
+                    ws: $ws);
+            }
+
+            $altas[] = $r_alta;
+        }
+
+        $this->link->commit();
+        unset($_SESSION['registros_procesados'], $_SESSION['datos_xls']);
+
+        $link_lista = $this->obj_link->link_sin_id(accion: 'lista', link: $this->link, seccion: $this->seccion);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al generar link lista', data: $link_lista,
+                header: $header, ws: $ws);
+        }
+
+        if ($header) {
+            header('Location:' . $link_lista);
+            exit;
+        }
+
+        return $altas;
+    }
+
+    private function normalizar(string $texto): string
+    {
+        $texto = mb_strtolower($texto, 'UTF-8');
+        $texto = (string)iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $texto);
+        $texto = str_replace(['_', '-', ' '], '', $texto);
+        return $texto;
+    }
+
+    private function buscar_columna_sugerida(string $campo, array $columnas): ?string
+    {
+        $campo_normalizado = $this->normalizar($campo);
+        foreach ($columnas as $col) {
+            if ($this->normalizar((string)$col) === $campo_normalizado) {
+                return $col;
+            }
+        }
+
+        foreach ($columnas as $col) {
+            $col_normalizada = $this->normalizar((string)$col);
+            if (str_contains($col_normalizada, $campo_normalizado) || str_contains($campo_normalizado, $col_normalizada)) {
+                return $col;
+            }
+        }
+
+        return null;
+    }
+
+    private function normalizarMayusculas(?string $valor): string
+    {
+        $valor = trim((string)$valor);
+        return mb_strtoupper($valor, 'UTF-8');
+    }
+
+    private function limpiar(?string $valor): string
+    {
+        return trim((string)$valor);
+    }
+
+    private function normalizarRegistro(array $registro): array
+    {
+        $camposMayusculas = ['nombre', 'apellido_paterno', 'apellido_materno', 'tipo_venta'];
+        foreach ($camposMayusculas as $campo) {
+            if (array_key_exists($campo, $registro)) {
+                $registro[$campo] = $this->normalizarMayusculas($registro[$campo]);
+            }
+        }
+
+        if (array_key_exists('correo_com', $registro)) {
+            $registro['correo_com'] = strtolower($this->limpiar($registro['correo_com']));
+        }
+
+        $camposLimpieza = ['nss', 'numero_com', 'cel_com', 'devolucion'];
+        foreach ($camposLimpieza as $campo) {
+            if (array_key_exists($campo, $registro)) {
+                $registro[$campo] = $this->limpiar($registro[$campo]);
+            }
+        }
+
+        return $registro;
+    }
+
+    private function registroPorNss(string $nss, PDO $link): stdClass|array
+    {
+        $filtro = ['inm_prospecto.nss' => $nss];
+        return (new inm_prospecto(link: $link))->filtro_and(filtro: $filtro);
+    }
+
+    private function validarRegistroImportacion(PDO $link, array $registro, bool $duplicadoEnArchivo = false,
+                                               bool $esPrimeraAparicion = false,
+                                               array $otrasFilasConMismoNss = []): array
+    {
+        $errores = [];
+        $advertencias = [];
+        $duplicados = [];
+
+        if (empty($registro['nss'])) {
+            $errores[] = 'El NSS es obligatorio.';
+        }
+        if (empty($registro['nombre'])) {
+            $errores[] = 'El nombre es obligatorio.';
+        }
+        if (empty($registro['apellido_paterno'])) {
+            $errores[] = 'El apellido paterno es obligatorio.';
+        }
+
+        $duplicado = false;
+        $inm_prospecto_id = null;
+        if (!empty($registro['nss'])) {
+            $inm_prospecto = $this->registroPorNss(nss: $registro['nss'], link: $link);
+            if (errores::$error) {
+                return $this->errores->error(mensaje: 'Error al validar NSS', data: $inm_prospecto);
+            }
+
+            if ($inm_prospecto->n_registros > 0) {
+                $duplicado = true;
+                $duplicados[] = 'El NSS ' . $registro['nss'] . ' ya existe en la base de datos.';
+                $inm_prospecto_id = $inm_prospecto->registros[0]['inm_prospecto_id'];
+            }
+        }
+
+        if ($duplicadoEnArchivo && !$esPrimeraAparicion) {
+            $duplicado = true;
+            $filasHumanas = array_map(static function ($i) {
+                return $i + 1;
+            }, $otrasFilasConMismoNss);
+            $duplicados[] = 'El NSS ' . ($registro['nss'] ?? '') . ' esta repetido en el archivo (filas: '
+                . implode(', ', $filasHumanas) . ').';
+        }
+
+        $inm_tipo_venta_id = null;
+        if (!empty($registro['tipo_venta'])) {
+            $filtro_tipo = ['inm_tipo_venta.descripcion' => $registro['tipo_venta']];
+            $tipo = (new inm_tipo_venta(link: $link))->filtro_and(filtro: $filtro_tipo);
+            if (errores::$error) {
+                return $this->errores->error(mensaje: 'Error al obtener tipo de venta', data: $tipo);
+            }
+
+            if ($tipo->n_registros <= 0) {
+                $advertencias[] = 'El tipo de venta "' . $registro['tipo_venta'] . '" no existe en el catalogo.';
+            } else {
+                $inm_tipo_venta_id = $tipo->registros[0]['inm_tipo_venta_id'];
+            }
+        }
+
+        return [
+            'errores' => $errores,
+            'advertencias' => $advertencias,
+            'duplicados' => $duplicados,
+            'valido' => (empty($errores) && empty($duplicados)),
+            'inm_tipo_venta_id' => $inm_tipo_venta_id,
+            'inm_prospecto_id' => $inm_prospecto_id,
+            'duplicado' => $duplicado,
+        ];
+    }
+
+    private function construirMapeo(array $post): array
+    {
+        $mapeo = $post;
+        unset($mapeo['btn_action_next'], $mapeo['csrf_token']);
+        return $mapeo;
+    }
+
+    private function procesarImportacion(PDO $link, $datosXls, array $post, bool $header = true,
+                                         bool $ws = false): array
+    {
+        $mapeo = $this->construirMapeo($post);
+
+        $registrosClasificados = [];
+        foreach ($datosXls->rows as $indiceFila => $fila) {
+            $registro = array_map(static function ($columnaExcel) use ($fila) {
+                return $fila->$columnaExcel ?? '';
+            }, $mapeo);
+            $registrosClasificados[$indiceFila] = $this->normalizarRegistro(registro: $registro);
+        }
+
+        $ocurrenciasNss = [];
+        foreach ($registrosClasificados as $indiceFila => $registro) {
+            $nss = $registro['nss'] ?? '';
+            if ($nss === '') {
+                continue;
+            }
+            $ocurrenciasNss[$nss][] = $indiceFila;
+        }
+
+        $primeraAparicion = array_map(static function ($filas) {
+            return min($filas);
+        }, $ocurrenciasNss);
+
+        $resultado = [];
+        foreach ($registrosClasificados as $indiceFila => $registro) {
+            $nss = $registro['nss'] ?? '';
+            $filasConMismoNss = $ocurrenciasNss[$nss] ?? [];
+            $duplicadoEnArchivo = count($filasConMismoNss) > 1;
+            $esPrimeraAparicion = isset($primeraAparicion[$nss]) && $primeraAparicion[$nss] === $indiceFila;
+
+            $validacion = $this->validarRegistroImportacion(link: $link, registro: $registro,
+                duplicadoEnArchivo: $duplicadoEnArchivo, esPrimeraAparicion: $esPrimeraAparicion,
+                otrasFilasConMismoNss: array_diff($filasConMismoNss, [$indiceFila]));
+
+            $registro['inm_tipo_venta_id'] = $validacion['inm_tipo_venta_id'];
+
+            $resultado[] = [
+                'fila' => $indiceFila + 1,
+                'datos' => $registro,
+                'advertencias' => $validacion['advertencias'],
+                'errores' => $validacion['errores'],
+                'valido' => $validacion['valido'],
+                'duplicados' => $validacion['duplicados'],
+                'duplicado' => $validacion['duplicado'],
+                'inm_prospecto_id' => $validacion['inm_prospecto_id']
+            ];
+        }
+
+        return $resultado;
+    }
+
     final public function envia_documentos(bool $header, bool $ws = false): array|string
     {
         $campos_necesarios = $this->valida_campos($_POST);
@@ -1033,7 +1565,7 @@ class controlador_inm_prospecto extends _ctl_formato
 
         $columns["inm_prospecto_id"]["titulo"] = "Id";
         $columns["inm_prospecto_nss"]["titulo"] = "NSS";
-        $columns["inm_prospecto_razon_social"]["titulo"] = "Nombre";
+        $columns["com_prospecto_razon_social"]["titulo"] = "Nombre";
         $columns["inm_prospecto_fecha_alta"]["titulo"] = "Fecha Alta";
         $columns["inm_prospecto_password_mi_cuenta_infonavit"]["titulo"] = "Contraseña";
         if(!$existe){

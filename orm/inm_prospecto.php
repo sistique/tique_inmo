@@ -242,6 +242,12 @@ class inm_prospecto extends _modelo_parent{
         }
         $registro->rfc = $r_modifica->registro_actualizado->com_prospecto_rfc;
 
+        $registro->razon_social = implode(' ', array_filter([
+            trim($registro->nombre),
+            trim($registro->apellido_paterno),
+            trim($registro->apellido_materno)
+        ]));
+
         if($registro->nss === ''){
             $registro->nss = '99999999999';
         }
@@ -840,7 +846,12 @@ class inm_prospecto extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al modificar prospecto',data:  $r_modifica);
         }
 
-        $r_modifica->registro_puro->com_agente_id = $registro['com_agente_id'];
+        $prospecto = $this->registro(registro_id: $id);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al modificar prospecto',data:  $prospecto);
+        }
+
+        $r_modifica->registro_puro->com_agente_id = $prospecto['com_agente_id'];
         if(!isset($registro['com_agente_id'])){
             $r_modifica->registro_puro->com_agente_id = $inm_prospecto_anterior['com_agente_id'];
         }
