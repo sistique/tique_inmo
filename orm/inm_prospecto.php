@@ -406,6 +406,16 @@ class inm_prospecto extends _modelo_parent{
             $this->registro['apellido_materno'] = '';
         }
 
+        if (!isset($this->registro['inm_tipo_venta_id'])) {
+            $filtro_tipo_venta['inm_tipo_venta.descripcion'] = 'DEVOLUCION';
+            $r_tipo_venta = (new inm_tipo_venta(link: $this->link))->filtro_and(filtro: $filtro_tipo_venta);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al maquetar row', data: $r_tipo_venta);
+            }
+
+            $this->registro['inm_tipo_venta_id'] = $r_tipo_venta->registros[0]['inm_tipo_venta_id'];
+        }
+
 
         if ((int)$this->registro['org_sucursal_id'] === -1) {
             $this->registro['org_sucursal_id'] = 1;

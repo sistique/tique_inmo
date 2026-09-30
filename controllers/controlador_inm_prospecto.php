@@ -1431,13 +1431,13 @@ class controlador_inm_prospecto extends _ctl_formato
         $ths[] = array('etiqueta'=>'Agente', 'campo'=>'com_agente_descripcion');
         $ths[] = array('etiqueta'=>'Status Prospecto', 'campo'=>'inm_status_prospecto_descripcion');
 
-        $keys = array();
+        /*$keys = array();
         foreach ($ths as $data_th) {
             $keys[] = $data_th['campo'];
-        }
+        }*/
 
         $keys_hojas['Prospectos'] = new stdClass();
-        $keys_hojas['Prospectos']->keys = $keys;
+        $keys_hojas['Prospectos']->keys = $ths;
         $keys_hojas['Prospectos']->registros = $registros->registros;
 
 
