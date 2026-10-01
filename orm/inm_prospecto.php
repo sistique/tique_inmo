@@ -338,7 +338,7 @@ class inm_prospecto extends _modelo_parent{
 
         $tipo_agente = $agente_usuario['com_tipo_agente_descripcion'] ?? null;
 
-        if ($tipo_agente === 'PROSPECTADOR') {
+        if ($tipo_agente === 'PROSPECTADOR' || $tipo_agente === 'GERENTE PROSPECCION') {
             $this->registro['com_agente_id'] = $agente_usuario['com_agente_id'];
             $this->registro['org_sucursal_id'] = $agente_usuario['org_sucursal_id'];
 

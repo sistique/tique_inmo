@@ -1568,7 +1568,7 @@ class controlador_inm_prospecto extends _ctl_formato
         $columns["com_prospecto_razon_social"]["titulo"] = "Nombre";
         $columns["inm_prospecto_fecha_alta"]["titulo"] = "Fecha Alta";
         $columns["inm_prospecto_password_mi_cuenta_infonavit"]["titulo"] = "Contraseña";
-        if(!$existe){
+        if($existe){
             $columns["inm_prospecto_monto_credito_solicitado_dh"]["titulo"] = "Precalificacion";
             $columns["com_agente_descripcion"]["titulo"] = "Prospectador";
         }
@@ -2698,7 +2698,7 @@ class controlador_inm_prospecto extends _ctl_formato
             }
 
             $tipos_agente = ['VENDEDOR', 'PROSPECTADOR'];
-            if (in_array($agente['com_tipo_agente_descripcion'], $tipos_agente, true)) {
+            if (in_array($agente['com_tipo_agente_descripcion'], $tipos_agente, true) ) {
                 $filtro['com_agente.id'] = $this->row_upd->com_agente_cerrador_id;
             }
         }
