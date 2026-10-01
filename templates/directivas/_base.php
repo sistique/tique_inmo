@@ -1,6 +1,7 @@
 <?php
 namespace gamboamartin\inmuebles\html;
 
+use gamboamartin\comercial\models\com_agente;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\controllers\controlador_inm_comprador;
 use gamboamartin\inmuebles\controllers\controlador_inm_prospecto;
@@ -8,6 +9,7 @@ use gamboamartin\inmuebles\controllers\controlador_inm_prospecto_ubicacion;
 use gamboamartin\inmuebles\controllers\controlador_inm_ubicacion;
 use gamboamartin\inmuebles\models\_inm_comprador;
 use gamboamartin\system\html_controler;
+use html\com_agente_html;
 use html\dp_calle_pertenece_html;
 use html\dp_colonia_postal_html;
 use html\dp_cp_html;
@@ -476,6 +478,19 @@ class _base extends html_controler{
         }
 
         $inputs->fecha_nacimiento = $fecha_nacimiento;
+
+        $in = array();
+        $in['llave'] = 'com_tipo_agente.descripcion';
+        $in['values'] = array('VENDEDOR','GERENTE VENTAS','PREDETERMINADO');
+        $sl_com_agente_cerrador_id = (new com_agente_html(html: $controler->html_base))->select_com_agente_id(
+            cols: 2, con_registros: true, id_selected: -1, link: $controler->link, in: $in, label: 'Cerrador',
+            name: 'com_agente_cerrador_id');
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al integrar sl_com_agente_cerrador_id',
+                data:  $sl_com_agente_cerrador_id);
+        }
+
+        $inputs->com_agente_cerrador_id = $sl_com_agente_cerrador_id;
 
         $data = new stdClass();
         $data->keys_selects = $keys_selects;

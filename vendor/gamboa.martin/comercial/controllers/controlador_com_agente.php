@@ -106,7 +106,7 @@ class controlador_com_agente extends _base_sin_cod
     public function get_agente(bool $header, bool $ws = true): array|stdClass
     {
         $keys['org_sucursal'] = array('id','descripcion','codigo','codigo_bis');
-        $keys['com_tipo_agente'] = array('es_comprador','es_vendedor');
+        $keys['com_tipo_agente'] = array('es_comprador','es_vendedor','es_prospectador');
 
         $salida = $this->get_out(header: $header,keys: $keys, ws: $ws);
         if(errores::$error){

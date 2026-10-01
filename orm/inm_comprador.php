@@ -168,6 +168,22 @@ class inm_comprador extends _modelo_parent{
 
         $columnas_extra['inm_fecha_status'] = $sql;
 
+        $sql = "( IFNULL ((SELECT
+                        com_agente_cerrador.id 
+                    FROM 
+                        com_agente AS com_agente_cerrador
+                    WHERE  com_agente_cerrador.id = inm_comprador.com_agente_cerrador_id), -1) )";
+
+        $columnas_extra['com_agente_cerrador_id'] = $sql;
+
+        $sql = "( IFNULL ((SELECT
+                        com_agente_cerrador.descripcion 
+                    FROM 
+                        com_agente AS com_agente_cerrador
+                    WHERE  com_agente_cerrador.id = inm_comprador.com_agente_cerrador_id), -1) )";
+
+        $columnas_extra['com_agente_cerrador_descripcion'] = $sql;
+
         parent::__construct(link: $link, tabla: $tabla, campos_obligatorios: $campos_obligatorios,
             columnas: $columnas, columnas_extra: $columnas_extra, renombres: $renombres,
             tipo_campos: $tipo_campos, atributos_criticos: $atributos_criticos,

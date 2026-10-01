@@ -1177,7 +1177,7 @@ class _keys_selects{
 
         $columns_ds = array();
         $columns_ds[] = 'inm_destino_credito_descripcion';
-        $keys_selects = $controler->key_select(cols: 5, con_registros: true,filtro:  array(),
+        $keys_selects = $controler->key_select(cols: 3, con_registros: true,filtro:  array(),
             key: 'inm_destino_credito_id', keys_selects: $keys_selects, id_selected: $row_upd->inm_destino_credito_id,
             label: 'Destino del Credito', columns_ds: $columns_ds);
         if(errores::$error){
@@ -1189,7 +1189,7 @@ class _keys_selects{
             $disabled = true;
         }
 
-        $keys_selects = $controler->key_select(cols: 4, con_registros: true,filtro:  array(),
+        $keys_selects = $controler->key_select(cols: 3, con_registros: true,filtro:  array(),
             key: 'inm_plazo_credito_sc_id', keys_selects: $keys_selects,
             id_selected: $row_upd->inm_plazo_credito_sc_id, label: 'Plazo Segundo Credito', disabled: $disabled);
         if(errores::$error){
@@ -1250,6 +1250,15 @@ class _keys_selects{
         }
 
         $columns_ds = array();
+        $columns_ds[] = 'inm_tipo_venta_descripcion';
+        $keys_selects = $controler->key_select(cols: 2, con_registros: true,filtro:  array(),
+            key: 'inm_tipo_venta_id', keys_selects: $keys_selects, id_selected: $row_upd->inm_tipo_venta_id,
+            label: 'Tipo de Venta', columns_ds: $columns_ds);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $columns_ds = array();
         $columns_ds[] = 'com_agente_descripcion';
         $filtro_agente['org_sucursal.id'] = $row_upd->org_sucursal_id;
 
@@ -1257,7 +1266,7 @@ class _keys_selects{
         $in['llave'] = 'com_tipo_agente.descripcion';
         $in['values'] = array('PREDETERMINADO','VENDEDOR');
         $keys_selects = $controler->key_select(cols: 2, con_registros: true,filtro: $filtro_agente,
-            key: 'com_agente_id', keys_selects: $keys_selects, id_selected: $row_upd->com_agente_id, label: 'Agente',
+            key: 'com_agente_id', keys_selects: $keys_selects, id_selected: $row_upd->com_agente_id, label: 'Prospectador',
             columns_ds: $columns_ds, in: $in);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);

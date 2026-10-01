@@ -75,6 +75,7 @@ use gamboamartin\system\_ctl_base;
 use gamboamartin\system\links_menu;
 use gamboamartin\template\html;
 use gamboamartin\validacion\validacion;
+use html\com_agente_html;
 use html\doc_tipo_documento_html;
 use html\dp_estado_html;
 use html\dp_municipio_html;
@@ -282,7 +283,7 @@ class controlador_inm_comprador extends _ctl_base {
      * @param bool $ws Si ws muestra resultado en json
      * @return array|string
      */
-    public function alta(bool $header, bool $ws = falseok ): array|string
+    public function alta(bool $header, bool $ws = false): array|string
     {
         // Restaura $this->row_upd desde sesión antes de init_alta() para que
         // tanto los inputs de texto como los selects muestren los valores previos
@@ -2923,6 +2924,7 @@ class controlador_inm_comprador extends _ctl_base {
         $init_data['bn_cuenta'] = "gamboamartin\\banco";
         $init_data['adm_estado_civil'] = "gamboamartin\\administrador";
         $init_data['inm_tipo_credito'] = "gamboamartin\\inmuebles";
+        $init_data['inm_tipo_venta'] = "gamboamartin\\inmuebles";
 
         $campos_view = $this->campos_view_base(init_data: $init_data,keys:  $keys);
         if(errores::$error){
@@ -4391,6 +4393,16 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         $this->inputs->fecha_nacimiento = $fecha_nacimiento;
+
+        $sl_com_agente_id = (new com_agente_html(html: $this->html_base))->select_com_agente_id(
+            cols: 2, con_registros: true, id_selected: $this->registro['com_agente_cerrador_id'],
+            link: $this->link, label: 'Cerrador', name: 'com_agente_cerrador_id');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al integrar sl_com_agente_id',
+                data:  $sl_com_agente_id, header: $header,ws: $ws);
+        }
+
+        $this->inputs->com_agente_cerrador_id = $sl_com_agente_id;
 
         $btn_collapse_all = $this->html->button_para_java(id_css: 'collapse_all',style:  'primary',
             tag:  'Ver/Ocultar Todo');

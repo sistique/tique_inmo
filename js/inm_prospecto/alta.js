@@ -150,7 +150,7 @@ function get_agente(org_sucursal_id = '',com_agente_id = '', name_selector_depen
     let sl_com_agente_id = $(name_selector_dependiente);
 
     let url = "index.php?seccion=com_agente&ws=1&accion=get_agente&org_sucursal_id="+org_sucursal_id+
-        "&com_tipo_agente_es_vendedor=activo&session_id="+session_id;
+        "&com_tipo_agente_es_prospectador=activo&session_id="+session_id;
 
     $.ajax({
         type: 'GET',
