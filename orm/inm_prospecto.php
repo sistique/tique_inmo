@@ -483,7 +483,7 @@ class inm_prospecto extends _modelo_parent{
         }
 
         if(!$existe) {
-            if(trim($_FILES['precalificacion']['name']) !== '') {
+            if(isset($_FILES['precalificacion']) && trim($_FILES['precalificacion']['name']) !== '') {
                 $_FILES['documento'] = $_FILES['precalificacion'];
                 $registro = array();
                 $registro['inm_prospecto_id'] = $r_alta_bd->registro_id;
