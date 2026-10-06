@@ -761,7 +761,8 @@ class controlador_inm_prospecto extends _ctl_formato
 
         $campos_formulario = [
             'nss', 'nombre', 'apellido_paterno', 'apellido_materno', 'numero_com', 'cel_com', 'correo_com',
-            'tipo_venta', 'devolucion', 'observaciones'
+            'tipo_venta', 'devolucion', 'observaciones', 'fecha_nacimiento' , 'monto_final' , 'sub_cuenta' ,
+            'descuento' , 'agente_cerrador'
         ];
 
         $html_mapeo = '';
@@ -935,6 +936,7 @@ class controlador_inm_prospecto extends _ctl_formato
                     otrasFilasConMismoNss: array_diff($filasConMismoNss, [$indiceFila]));
 
                 $registro['inm_tipo_venta_id'] = $validacion['inm_tipo_venta_id'];
+                $registro['com_agente_cerrador_id'] = $validacion['com_agente_cerrador_id'];
 
                 $resultado[] = [
                     'fila' => $indiceFila,
@@ -982,6 +984,10 @@ class controlador_inm_prospecto extends _ctl_formato
 
             if (!empty($registro['tipo_venta'])) {
                 unset($registro['tipo_venta']);
+            }
+
+            if (!empty($registro['agente_cerrador'])) {
+                unset($registro['agente_cerrador']);
             }
 
             if (!empty($row['errores'])) {
@@ -1166,6 +1172,25 @@ class controlador_inm_prospecto extends _ctl_formato
                 $inm_tipo_venta_id = $tipo->registros[0]['inm_tipo_venta_id'];
             }
         }
+        
+        $com_agente_cerrador_id = null;
+        if (!empty($registro['agente_cerrador'])) {
+            $filtro_agente = ['com_agente.descripcion' => $registro['agente_cerrador']];
+
+            $in = array();
+            $in['llave'] = 'com_tipo_agente.descripcion';
+            $in['values'] = array('VENDEDOR','GERENTE VENTAS','PREDETERMINADO');
+            $agente = (new com_agente(link: $link))->filtro_and(filtro: $filtro_agente, in: $in);
+            if (errores::$error) {
+                return $this->errores->error(mensaje: 'Error al obtener cerrador', data: $agente);
+            }
+
+            if ($agente->n_registros <= 0) {
+                $advertencias[] = 'El cerrador "' . $registro['agente_cerrador'] . '" no existe en el catalogo.';
+            } else {
+                $com_agente_cerrador_id = $agente->registros[0]['com_agente_id'];
+            }
+        }
 
         return [
             'errores' => $errores,
@@ -1173,6 +1198,7 @@ class controlador_inm_prospecto extends _ctl_formato
             'duplicados' => $duplicados,
             'valido' => (empty($errores) && empty($duplicados)),
             'inm_tipo_venta_id' => $inm_tipo_venta_id,
+            'com_agente_cerrador_id' => $com_agente_cerrador_id,
             'inm_prospecto_id' => $inm_prospecto_id,
             'duplicado' => $duplicado,
         ];
@@ -1223,6 +1249,7 @@ class controlador_inm_prospecto extends _ctl_formato
                 otrasFilasConMismoNss: array_diff($filasConMismoNss, [$indiceFila]));
 
             $registro['inm_tipo_venta_id'] = $validacion['inm_tipo_venta_id'];
+            $registro['com_agente_cerrador_id'] = $validacion['com_agente_cerrador_id'];
 
             $resultado[] = [
                 'fila' => $indiceFila + 1,
@@ -1351,16 +1378,14 @@ class controlador_inm_prospecto extends _ctl_formato
         }
 
         $filtro_agente['adm_usuario.id'] = $_SESSION['usuario_id'];
-        $filtro_agente['com_agente.base_completa'] = 'activo';
+        $filtro_agente['com_agente.base_completa'] = 'inactivo';
         $existe = (new com_agente(link: $this->link))->existe(filtro: $filtro_agente);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al insertar prospecto',data:  $existe, header: $header,
                 ws:$ws);
         }
 
-        if($existe){
-            $this->es_agente = true;
-        }
+        $this->es_agente = $existe;
 
         $this->inputs->inm_status_prospecto_id = $inm_status_prospecto_id;
 
@@ -1557,7 +1582,7 @@ class controlador_inm_prospecto extends _ctl_formato
     {
 
         $filtro_agente['adm_usuario.id'] = $_SESSION['usuario_id'];
-        $filtro_agente['com_agente.base_completa'] = 'activo';
+        $filtro_agente['com_agente.base_completa'] = 'inactivo';
         $existe = (new com_agente(link: $link))->existe(filtro: $filtro_agente);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al insertar prospecto',data:  $existe);
@@ -1568,7 +1593,7 @@ class controlador_inm_prospecto extends _ctl_formato
         $columns["com_prospecto_razon_social"]["titulo"] = "Nombre";
         $columns["inm_prospecto_fecha_alta"]["titulo"] = "Fecha Alta";
         $columns["inm_prospecto_password_mi_cuenta_infonavit"]["titulo"] = "Contraseña";
-        if($existe){
+        if(!$existe){
             $columns["inm_prospecto_monto_credito_solicitado_dh"]["titulo"] = "Precalificacion";
             $columns["com_agente_descripcion"]["titulo"] = "Prospectador";
         }
@@ -2293,16 +2318,14 @@ class controlador_inm_prospecto extends _ctl_formato
     public function lista(bool $header, bool $ws = false): array
     {
         $filtro_agente['adm_usuario.id'] = $_SESSION['usuario_id'];
-        $filtro_agente['com_agente.base_completa'] = 'activo';
+        $filtro_agente['com_agente.base_completa'] = 'inactivo';
         $existe = (new com_agente(link: $this->link))->existe(filtro: $filtro_agente);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al insertar prospecto',data:  $existe, header: $header,
                 ws:$ws);
         }
 
-        if($existe){
-            $this->es_agente = true;
-        }
+        $this->es_agente = $existe;
 
         $r_lista = parent::lista($header, $ws); // TODO: Change the autogenerated stub
         if(errores::$error){
