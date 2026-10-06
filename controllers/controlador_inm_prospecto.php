@@ -791,6 +791,9 @@ class controlador_inm_prospecto extends _ctl_formato
                 if ($col === 'Tipo de Venta' && $campo === 'tipo_venta') {
                     $selected = ' selected';
                 }
+                if ($col === 'Agente Cerrador' && $campo === 'agente_cerrador') {
+                    $selected = ' selected';
+                }
 
                 $valor_preview = '';
                 if (count($datos_xls->rows) > 0) {
@@ -839,7 +842,8 @@ class controlador_inm_prospecto extends _ctl_formato
 
         $campos_formulario = [
             'nss', 'nombre', 'apellido_paterno', 'apellido_materno', 'numero_com', 'cel_com', 'correo_com',
-            'tipo_venta', 'devolucion', 'observaciones'
+            'tipo_venta', 'devolucion', 'observaciones', 'fecha_nacimiento' , 'monto_final' , 'sub_cuenta' ,
+            'descuento' , 'agente_cerrador'
         ];
 
         $ths = ['Fila', 'Estado'];
@@ -1089,7 +1093,7 @@ class controlador_inm_prospecto extends _ctl_formato
 
     private function normalizarRegistro(array $registro): array
     {
-        $camposMayusculas = ['nombre', 'apellido_paterno', 'apellido_materno', 'tipo_venta'];
+        $camposMayusculas = ['nombre', 'apellido_paterno', 'apellido_materno', 'tipo_venta', 'agente_cerrador'];
         foreach ($camposMayusculas as $campo) {
             if (array_key_exists($campo, $registro)) {
                 $registro[$campo] = $this->normalizarMayusculas($registro[$campo]);
@@ -1100,14 +1104,44 @@ class controlador_inm_prospecto extends _ctl_formato
             $registro['correo_com'] = strtolower($this->limpiar($registro['correo_com']));
         }
 
-        $camposLimpieza = ['nss', 'numero_com', 'cel_com', 'devolucion'];
+        $camposLimpieza = ['nss', 'numero_com', 'cel_com', 'devolucion', 'monto_final', 'sub_cuenta', 'descuento',
+            'observaciones'];
         foreach ($camposLimpieza as $campo) {
             if (array_key_exists($campo, $registro)) {
                 $registro[$campo] = $this->limpiar($registro[$campo]);
             }
         }
 
+        if (array_key_exists('fecha_nacimiento', $registro)) {
+            $registro['fecha_nacimiento'] = $this->normalizarFecha($registro['fecha_nacimiento']);
+        }
+
         return $registro;
+    }
+
+    private function normalizarFecha($valor): ?string
+    {
+        $valor = trim((string) $valor);
+
+        if ($valor === '') {
+            return null;
+        }
+
+        $valor = preg_split('/[T\s]/', $valor)[0];
+        $valor = preg_replace('/[\/\.\-]+/', '-', $valor);
+        if (preg_match('/^(\d{4})-(\d{1,2})-(\d{1,2})$/', $valor, $m)) {
+            [$anio, $mes, $dia] = [$m[1], $m[2], $m[3]];
+        } elseif (preg_match('/^(\d{1,2})-(\d{1,2})-(\d{4})$/', $valor, $m)) {
+            [$dia, $mes, $anio] = [$m[1], $m[2], $m[3]];
+        } else {
+            return null;
+        }
+
+        if (!checkdate((int) $mes, (int) $dia, (int) $anio)) {
+            return null;
+        }
+
+        return sprintf('%04d-%02d-%02d', $anio, $mes, $dia);
     }
 
     private function registroPorNss(string $nss, PDO $link): stdClass|array

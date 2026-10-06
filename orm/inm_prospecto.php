@@ -342,40 +342,42 @@ class inm_prospecto extends _modelo_parent{
             $this->registro['com_agente_id'] = $agente_usuario['com_agente_id'];
             $this->registro['org_sucursal_id'] = $agente_usuario['org_sucursal_id'];
 
-            $filtro_ultimo['inm_prospecto.cambio_cerrador'] = 'inactivo';
-            $ultimo_registro = $this->obten_datos_ultimo_registro( filtro: $filtro_ultimo );
-            if (errores::$error) {
-                return $this->error->error( mensaje: 'Error al obtener el último cerrador', data: $ultimo_registro );
-            }
-
-            $filtro_agentes = [ 'com_agente.aplica_ruleta' => 'activo' ];
-            $order = [ 'com_agente.id' => 'ASC' ];
-            $r_agentes_ruleta = (new com_agente(link: $this->link))->filtro_and( filtro: $filtro_agentes, order: $order );
-            if (errores::$error) {
-                return $this->error->error( mensaje: 'Error al obtener agentes de la ruleta', data: $r_agentes_ruleta );
-            }
-
-            if ($r_agentes_ruleta->n_registros === 0) {
-                $this->registro['com_agente_cerrador_id'] = $agente_predeterminado['com_agente_id'];
-            } else {
-                $ultimo_agente_id = $ultimo_registro['inm_prospecto_com_agente_cerrador_id'] ?? null;
-                $indice_ultimo = null;
-                foreach ($r_agentes_ruleta->registros as $indice => $agente) {
-                    if ( (int)$agente['com_agente_id'] === (int)$ultimo_agente_id ) {
-                        $indice_ultimo = $indice;
-                        break;
-                    }
+            if(!isset($this->registro['com_agente_cerrador_id'])) {
+                $filtro_ultimo['inm_prospecto.cambio_cerrador'] = 'inactivo';
+                $ultimo_registro = $this->obten_datos_ultimo_registro( filtro: $filtro_ultimo );
+                if (errores::$error) {
+                    return $this->error->error( mensaje: 'Error al obtener el último cerrador', data: $ultimo_registro );
                 }
-                if ($indice_ultimo === null) {
-                   $agente_asignado = $r_agentes_ruleta->registros[0];
+
+                $filtro_agentes = [ 'com_agente.aplica_ruleta' => 'activo' ];
+                $order = [ 'com_agente.id' => 'ASC' ];
+                $r_agentes_ruleta = (new com_agente(link: $this->link))->filtro_and( filtro: $filtro_agentes, order: $order );
+                if (errores::$error) {
+                    return $this->error->error( mensaje: 'Error al obtener agentes de la ruleta', data: $r_agentes_ruleta );
+                }
+
+                if ($r_agentes_ruleta->n_registros === 0) {
+                    $this->registro['com_agente_cerrador_id'] = $agente_predeterminado['com_agente_id'];
                 } else {
-                    $siguiente_indice = $indice_ultimo + 1;
-                    if ( $siguiente_indice >= count($r_agentes_ruleta->registros) ) {
-                        $siguiente_indice = 0;
+                    $ultimo_agente_id = $ultimo_registro['inm_prospecto_com_agente_cerrador_id'] ?? null;
+                    $indice_ultimo = null;
+                    foreach ($r_agentes_ruleta->registros as $indice => $agente) {
+                        if ( (int)$agente['com_agente_id'] === (int)$ultimo_agente_id ) {
+                            $indice_ultimo = $indice;
+                            break;
+                        }
                     }
-                    $agente_asignado = $r_agentes_ruleta->registros[$siguiente_indice];
+                    if ($indice_ultimo === null) {
+                       $agente_asignado = $r_agentes_ruleta->registros[0];
+                    } else {
+                        $siguiente_indice = $indice_ultimo + 1;
+                        if ( $siguiente_indice >= count($r_agentes_ruleta->registros) ) {
+                            $siguiente_indice = 0;
+                        }
+                        $agente_asignado = $r_agentes_ruleta->registros[$siguiente_indice];
+                    }
+                    $this->registro['com_agente_cerrador_id'] = $agente_asignado['com_agente_id'];
                 }
-                $this->registro['com_agente_cerrador_id'] = $agente_asignado['com_agente_id'];
             }
         } elseif ($tipo_agente === 'VENDEDOR' || $tipo_agente === 'GERENTE VENTAS') {
             $this->registro['com_agente_id'] = $agente_usuario['com_agente_id'];
@@ -384,7 +386,11 @@ class inm_prospecto extends _modelo_parent{
             $this->registro['cambio_cerrador'] = 'activo';
         }else {
             $this->registro['com_agente_id'] = $agente_predeterminado['com_agente_id'];
-            $this->registro['com_agente_cerrador_id'] = $agente_predeterminado['com_agente_id'];
+            
+            if(!isset($this->registro['com_agente_cerrador_id'])) {
+                $this->registro['com_agente_cerrador_id'] = $agente_predeterminado['com_agente_id'];
+            }
+
             if (isset($agente_predeterminado['org_sucursal_id'])) {
                 $this->registro['org_sucursal_id'] = $agente_predeterminado['org_sucursal_id'];
             }
@@ -849,6 +855,24 @@ class inm_prospecto extends _modelo_parent{
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al insertar datos', data: $inm_prospecto_anterior);
         }
+
+        $filtro_agente['adm_usuario.id'] = $_SESSION['usuario_id'];
+        $r_agente = (new com_agente(link: $this->link))->filtro_and(filtro: $filtro_agente);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener agente del usuario', data: $r_agente);
+        }
+
+        $agente_usuario = null;
+        if ($r_agente->n_registros > 0) {
+            $agente_usuario = $r_agente->registros[0];
+        }
+
+        $tipo_agente = $agente_usuario['com_tipo_agente_descripcion'] ?? null;
+
+        if($tipo_agente === 'PROSPECTADOR'){
+            unset($registro['com_agente_cerrador_id']);
+        }
+
         if(isset($registro['com_agente_cerrador_id']) &&
             (int)$inm_prospecto_anterior['com_agente_cerrador_id'] !== (int)$registro['com_agente_cerrador_id']){
             $registro['cambio_cerrador'] = 'activo';
