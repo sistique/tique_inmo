@@ -2748,7 +2748,7 @@ class controlador_inm_prospecto extends _ctl_formato
         }
 
         $filtro = array();
-        if($com_agente->n_registros > 0){
+        /*if($com_agente->n_registros > 0){
             $agente = $com_agente->registros[0];
             if ($agente['adm_grupo_solo_mi_info'] === 'activo') {
                 $filtro['adm_usuario.id'] = $_SESSION['usuario_id'];
@@ -2758,7 +2758,7 @@ class controlador_inm_prospecto extends _ctl_formato
             if (in_array($agente['com_tipo_agente_descripcion'], $tipos_agente, true) ) {
                 $filtro['com_agente.id'] = $this->row_upd->com_agente_cerrador_id;
             }
-        }
+        }*/
 
         $columns_ds = array('com_agente_descripcion');
         $in = array();
