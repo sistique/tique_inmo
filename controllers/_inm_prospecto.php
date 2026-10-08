@@ -377,9 +377,11 @@ class _inm_prospecto{
         $identificadores['com_agente_id']['in'] = array('llave'=>'com_tipo_agente.descripcion',
             'values'=>array('PREDETERMINADO','GERENTE VENTAS','VENDEDOR', 'PROSPECTADOR', 'GERENTE PROSPECCION'));
 
+        $filtro_prosp['com_tipo_prospecto.es_venta'] = 'activo';
         $identificadores['com_tipo_prospecto_id']['title'] = 'Tipo de prospecto';
         $identificadores['com_tipo_prospecto_id']['cols'] = 2;
         $identificadores['com_tipo_prospecto_id']['disabled'] = false;
+        $identificadores['com_tipo_prospecto_id']['filtro'] = $filtro_prosp;
         $identificadores['com_tipo_prospecto_id']['columns_ds'] = array('com_tipo_prospecto_descripcion');
 
         $identificadores['com_medio_prospeccion_id']['title'] = 'Medio Prospeccion';
