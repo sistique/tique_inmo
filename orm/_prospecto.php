@@ -639,6 +639,18 @@ class _prospecto{
             }
         }
 
+        if(isset($registro['nss'])){
+            $filtro_duplicado['inm_prospecto.nss'] = $registro['nss'];
+            $r_modifica = $modelo->filtro_and(filtro: $filtro_duplicado);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al obtener prospectos duplicados', data: $r_modifica);
+            }
+
+            if($r_modifica->n_registros > 0){
+                return $this->error->error(mensaje: 'Error el prospecto ya existe' ,data:  $registro);
+            }
+        }
+
         return $registro;
     }
 
