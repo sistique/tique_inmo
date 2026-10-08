@@ -55,6 +55,7 @@ class _conversion{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener prospecto', data: $inm_prospecto);
         }
+
         $data = new stdClass();
         $data->inm_prospecto = $inm_prospecto;
         $data->inm_prospecto_completo = $inm_prospecto_completo;
@@ -129,6 +130,11 @@ class _conversion{
             return $this->error->error(mensaje: 'Error $data->inm_prospecto_completo debe ser un objeto', data: $data);
         }
 
+        $keys = $this->valida_campos_obligatorios(data: $data);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error con campos obligatorios', data: $keys);
+        }
+
         $keys = $this->keys_data_prospecto();
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener keys', data: $keys);
@@ -159,8 +165,32 @@ class _conversion{
      * Inicializa inm_comprador en vacio
      * @param stdClass $data datos para asignacion
      * @param array $keys Keys para inicializar
-     * @return array
+     * @return stdClass
      */
+    private function valida_campos_obligatorios(stdClass $data): array|stdClass
+    {
+        $keys_valida = [
+            ['campo'=>'nss', 'mensaje' => 'Error no existe NSS'],
+            ['campo'=>'curp', 'mensaje' => 'Error no existe CURP'],
+            ['campo'=>'nombre', 'mensaje' => 'Error no existe Nombre'],
+            ['campo'=>'apellido_paterno', 'mensaje' => 'Error no existe Apellido Paterno'],
+            ['campo'=>'apellido_paterno', 'mensaje' => 'Error no existe Apellido Paterno'],
+            ['campo'=>'fecha_nacimiento', 'mensaje' => 'Error no existe Fecha de Nacimiento'],
+            ['campo'=>'genero', 'mensaje' => 'Error no existe Género'],
+            ['campo'=>'dp_colonia_postal_id', 'mensaje' => 'Error no existe Direccion Fiscal'],
+            ['campo'=>'calle', 'mensaje' => 'Error no existe Calle de la Direccion Fiscal'],
+            ['campo'=>'numero_exterior', 'mensaje' => 'Error no existe Numero Exterior de la Direccion Fiscal'],
+        ];
+
+        foreach ($keys_valida as $key){
+            if(!isset($data->inm_prospecto->{$key['campo']})){
+                return $this->error->error(mensaje: $key['mensaje'], data: $data);
+            }
+        }
+
+        return $data;
+    }
+
     private function inm_comprador_ins_init(stdClass $data, array $keys): array
     {
         if(!isset($data->inm_prospecto)){
@@ -268,6 +298,7 @@ class _conversion{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al verificar comprador existente', data: $comprador_existente);
         }
+
         if($comprador_existente->existe){
             return $this->error->error(
                 mensaje: 'El prospecto ya tiene un comprador registrado (inm_comprador_id: '
@@ -283,7 +314,7 @@ class _conversion{
 
         $inm_comprador_ins = $this->inm_comprador_ins(data: $data,link: $modelo->link);
         if(errores::$error){
-            return $this->error->error(mensaje: 'Error al obtener id_pref', data: $inm_comprador_ins);
+            return $this->error->error(mensaje: 'Error al maquetar registro cliente', data: $inm_comprador_ins);
         }
 
         $inm_comprador_modelo = new inm_comprador(link: $modelo->link);
@@ -849,11 +880,13 @@ class _conversion{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar key', data: $valida);
         }
+
         if(!isset($data->inm_prospecto->$key)){
-            return $this->error->error(mensaje: 'Error no existe atributo', data: $key);
+            return $this->error->error(mensaje: 'Error no existe atributo '.$key, data: $key);
         }
 
         $inm_comprador_ins[$key] = $data->inm_prospecto->$key;
+
         return $inm_comprador_ins;
     }
 

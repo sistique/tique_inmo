@@ -523,7 +523,6 @@ class inm_prospecto extends _modelo_parent{
 
         $r_alta_rel = (new _conversion())->inserta_rel_prospecto_cliente(
             inm_comprador_id: $r_alta_comprador->registro_id,inm_prospecto_id:  $inm_prospecto_id,link: $this->link);
-
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al insertar inm_rel_prospecto_cliente_ins', data: $r_alta_rel);
         }
