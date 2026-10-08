@@ -194,11 +194,10 @@ class inm_prospecto extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al modificar prospecto',data:  $nombre_completo_valida);
         }
 
-
-        $valida = $this->valida_prospecto_repetido_nombre(nombre_completo_valida: $nombre_completo_valida);
+        /*$valida = $this->valida_prospecto_repetido_nombre(nombre_completo_valida: $nombre_completo_valida);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar prospecto repetido por nombre',data:  $valida);
-        }
+        }*/
 
         return $r_modifica_nombre_completo_valida;
     }
