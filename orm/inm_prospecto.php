@@ -398,8 +398,10 @@ class inm_prospecto extends _modelo_parent{
         }
 
         if (!isset($this->registro['com_tipo_prospecto_id'])) {
-            $filtro_tipo_prosp['com_tipo_prospecto.predeterminado'] = 'activo';
-            $r_tipo_prospecto = (new com_tipo_prospecto(link: $this->link))->filtro_and(filtro: $filtro_tipo_prosp);
+            $filtro_tipo_prosp['com_tipo_prospecto.es_venta'] = 'activo';
+            $order_tipo_prosp = array('com_tipo_prospecto.id' => 'ASC');
+            $r_tipo_prospecto = (new com_tipo_prospecto(link: $this->link))->filtro_and(filtro: $filtro_tipo_prosp,
+                order: $order_tipo_prosp);
             if (errores::$error) {
                 return $this->error->error(mensaje: 'Error al maquetar row', data: $r_tipo_prospecto);
             }
