@@ -761,8 +761,8 @@ class controlador_inm_prospecto extends _ctl_formato
 
         $campos_formulario = [
             'nss', 'nombre', 'apellido_paterno', 'apellido_materno', 'numero_com', 'cel_com', 'correo_com',
-            'tipo_venta', 'devolucion', 'observaciones', 'fecha_nacimiento' , 'monto_final' , 'sub_cuenta' ,
-            'descuento' , 'agente_cerrador'
+            'tipo_venta', 'devolucion', 'observaciones', 'fecha_nacimiento' , 'monto_credito_solicitado_dh' ,
+            'sub_cuenta' , 'descuento' , 'agente_cerrador'
         ];
 
         $html_mapeo = '';
@@ -792,6 +792,10 @@ class controlador_inm_prospecto extends _ctl_formato
                     $selected = ' selected';
                 }
                 if ($col === 'Agente Cerrador' && $campo === 'agente_cerrador') {
+                    $selected = ' selected';
+                }
+
+                if ($col === 'Monto Final' && $campo === 'monto_credito_solicitado_dh') {
                     $selected = ' selected';
                 }
 
@@ -842,8 +846,8 @@ class controlador_inm_prospecto extends _ctl_formato
 
         $campos_formulario = [
             'nss', 'nombre', 'apellido_paterno', 'apellido_materno', 'numero_com', 'cel_com', 'correo_com',
-            'tipo_venta', 'devolucion', 'observaciones', 'fecha_nacimiento' , 'monto_final' , 'sub_cuenta' ,
-            'descuento' , 'agente_cerrador'
+            'tipo_venta', 'devolucion', 'observaciones', 'fecha_nacimiento' , 'monto_credito_solicitado_dh' ,
+            'sub_cuenta' , 'descuento' , 'agente_cerrador'
         ];
 
         $ths = ['Fila', 'Estado'];
@@ -1486,8 +1490,13 @@ class controlador_inm_prospecto extends _ctl_formato
         $ths[] = array('etiqueta'=>'Nombre Prospecto', 'campo'=>'inm_prospecto_razon_social');
         $ths[] = array('etiqueta'=>'NSS', 'campo'=>'inm_prospecto_nss');
         $ths[] = array('etiqueta'=>'Precalificacion', 'campo'=>'inm_prospecto_monto_credito_solicitado_dh');
+        $ths[] = array('etiqueta'=>'Sub Cuenta', 'campo'=>'inm_prospecto_sub_cuenta');
+        $ths[] = array('etiqueta'=>'Descuento', 'campo'=>'inm_prospecto_descuento');
         $ths[] = array('etiqueta'=>'Fecha Alta', 'campo'=>'inm_prospecto_fecha_alta');
-        $ths[] = array('etiqueta'=>'Agente', 'campo'=>'com_agente_descripcion');
+        $ths[] = array('etiqueta'=>'Celular', 'campo'=>'inm_prospecto_cel_com');
+        $ths[] = array('etiqueta'=>'Telefono', 'campo'=>'inm_prospecto_numero_com');
+        $ths[] = array('etiqueta'=>'Prospectador', 'campo'=>'com_agente_descripcion');
+        $ths[] = array('etiqueta'=>'Cerrador', 'campo'=>'com_agente_cerrador_descripcion');
         $ths[] = array('etiqueta'=>'Status Prospecto', 'campo'=>'inm_status_prospecto_descripcion');
 
         /*$keys = array();
@@ -1586,6 +1595,17 @@ class controlador_inm_prospecto extends _ctl_formato
             filtro_rango: $filtro_rango, in: $in);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al obtener prospectos', data: $result);
+        }
+
+        $res = new stdClass();
+        foreach ($result->registros as $registro){
+            $com_prospecto = (new com_prospecto(link: $this->link))->registro(
+                registro_id: $registro['com_prospecto_id']);
+            if(errores::$error){
+                return $this->errores->error(mensaje: 'Error al obtener com_prospecto',data:  $com_prospecto);
+            }
+
+            $res->registros[] = array_merge($registro, $com_prospecto);
         }
 
         return $result;
