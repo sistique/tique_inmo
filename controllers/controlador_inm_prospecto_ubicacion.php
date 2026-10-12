@@ -49,6 +49,7 @@ use gamboamartin\inmuebles\models\inm_rel_referencia_prospecto;
 use gamboamartin\inmuebles\models\inm_rel_ubicacion_prospecto_ubicacion;
 use gamboamartin\inmuebles\models\inm_status_prospecto_ubicacion;
 use gamboamartin\inmuebles\models\inm_tipo_beneficiario;
+use gamboamartin\inmuebles\models\inm_tipo_compra;
 use gamboamartin\inmuebles\models\inm_tipo_credito;
 use gamboamartin\plugins\exportador;
 use gamboamartin\plugins\files;
@@ -946,10 +947,10 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
 
         $campos_formulario = ['nss', 'nombre', 'apellido_paterno', 'apellido_materno', 'numero_com','cel_com',
             'correo_com', 'estado','municipio','cp','colonia','calle','numero_exterior','numero_interior',
-            'entre_calle_1','entre_calle_2', 'tipo_credito', 'numero_credito','monto_credito','adeudo_hipoteca',
-            'mensualidad','fecha_otorgamiento_credito', 'cuenta_predial', 'adeudo_predial','cuenta_agua','adeudo_agua',
-            'cuenta_luz','adeudo_luz','estado_vivienda', 'prototipo', 'complemento','metros_terreno',
-            'metros_construccion','observaciones'];
+            'entre_calle_1','entre_calle_2', 'tipo_compra', 'tipo_credito', 'numero_credito','monto_credito',
+            'adeudo_hipoteca', 'mensualidad','fecha_otorgamiento_credito', 'cuenta_predial', 'adeudo_predial',
+            'cuenta_agua','adeudo_agua', 'cuenta_luz','adeudo_luz','estado_vivienda', 'prototipo', 'complemento',
+            'metros_terreno', 'metros_construccion','observaciones'];
 
         $html_mapeo = '';
 
@@ -1041,10 +1042,10 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
 
         $campos_formulario = ['nss', 'nombre', 'apellido_paterno', 'apellido_materno', 'numero_com','cel_com',
             'correo_com', 'estado','municipio','cp','colonia','calle','numero_exterior','numero_interior',
-            'entre_calle_1','entre_calle_2', 'tipo_credito', 'numero_credito','monto_credito','adeudo_hipoteca',
-            'mensualidad','fecha_otorgamiento_credito', 'cuenta_predial', 'adeudo_predial','cuenta_agua','adeudo_agua',
-            'cuenta_luz','adeudo_luz','estado_vivienda', 'prototipo', 'complemento','metros_terreno',
-            'metros_construccion','observaciones'];
+            'entre_calle_1','entre_calle_2', 'tipo_compra', 'tipo_credito', 'numero_credito','monto_credito',
+            'adeudo_hipoteca', 'mensualidad','fecha_otorgamiento_credito', 'cuenta_predial', 'adeudo_predial',
+            'cuenta_agua','adeudo_agua', 'cuenta_luz','adeudo_luz','estado_vivienda', 'prototipo', 'complemento',
+            'metros_terreno', 'metros_construccion','observaciones'];
 
         $ths = array();
         $ths[] = 'Fila';
@@ -1154,7 +1155,8 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
                     otrasFilasConMismoNss: array_diff($filasConMismoNss, [$indiceFila]));
 
                 $keys = array('dp_estado_id', 'dp_municipio_id', 'dp_cp_id', 'dp_colonia_id', 'dp_colonia_postal_id',
-                    'inm_tipo_credito_id', 'inm_estado_vivienda_id', 'inm_prototipo_id', 'inm_complemento_id');
+                    'inm_tipo_credito_id', 'inm_tipo_compra_id','inm_estado_vivienda_id', 'inm_prototipo_id',
+                    'inm_complemento_id');
                 foreach ($keys as $key) {
                     $registro[$key] = $validacion[$key];
                 }
@@ -1462,6 +1464,14 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
             }
         }
 
+        $inm_tipo_compra_id = null;
+        if (!empty($registro['tipo_compra'])) {
+            $inm_tipo_compra_id = (new inm_tipo_compra($link))->get_tipo_compra_id(nombre_tipo_compra: $registro['tipo_compra']);
+            if ($inm_tipo_compra_id === null) {
+                $advertencias[] = "El tipo de crédito \"{$registro['tipo_compra']}\" no existe en el catálogo";
+            }
+        }
+
         $inm_estado_vivienda_id = null;
         if (!empty($registro['estado_vivienda'])) {
             $inm_estado_vivienda_id = (new inm_estado_vivienda($link))->get_estado_vivienda_id(nombre_estado_vivienda: $registro['estado_vivienda']);
@@ -1497,6 +1507,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
             'dp_colonia_id'             => $dp_colonia_id,
             'dp_colonia_postal_id'      => $dp_colonia_postal_id,
             'inm_tipo_credito_id'       => $inm_tipo_credito_id,
+            'inm_tipo_compra_id'       => $inm_tipo_compra_id,
             'inm_estado_vivienda_id'    => $inm_estado_vivienda_id,
             'inm_prototipo_id'          => $inm_prototipo_id,
             'inm_complemento_id'        => $inm_complemento_id,
@@ -1551,7 +1562,8 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
                 esPrimeraAparicion: $esPrimeraAparicion, otrasFilasConMismoNss: array_diff($filasConMismoNss, [$indiceFila]));
 
             $keys = array('dp_estado_id', 'dp_municipio_id', 'dp_cp_id', 'dp_colonia_id', 'dp_colonia_postal_id',
-                'inm_tipo_credito_id', 'inm_estado_vivienda_id', 'inm_prototipo_id', 'inm_complemento_id');
+                'inm_tipo_credito_id','inm_tipo_compra_id', 'inm_estado_vivienda_id', 'inm_prototipo_id',
+                'inm_complemento_id');
             foreach ($keys as $key) {
                 $registro[$key] = $validacion[$key];
             }
