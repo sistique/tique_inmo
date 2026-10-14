@@ -179,7 +179,7 @@ class inm_prospecto_ubicacion extends _modelo_parent{
         return $accion;
     }
 
-    private function ajusta_co_acreditado(stdClass $datos, int $inm_prospecto_ubicacion_id, PDO $link): array|stdClass
+    public function ajusta_co_acreditado(stdClass $datos, int $inm_prospecto_ubicacion_id, PDO $link): array|stdClass
     {
         if(!$datos->existe) {
             $r_inm_rel_co_acreditado_prospecto_ubicacion_bd = $this->inserta_co_acreditado(co_acreditado: $datos->row,
@@ -940,7 +940,7 @@ class inm_prospecto_ubicacion extends _modelo_parent{
         return $data;
     }
 
-    private function inserta_co_acreditado(array $co_acreditado, int $inm_prospecto_ubicacion_id, PDO $link): array|stdClass
+    public function inserta_co_acreditado(array $co_acreditado, int $inm_prospecto_ubicacion_id, PDO $link): array|stdClass
     {
         $keys = array('nombre','apellido_paterno');
         $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $co_acreditado);
@@ -1113,7 +1113,7 @@ class inm_prospecto_ubicacion extends _modelo_parent{
         return $alta_inm_prospecto_proceso;
     }
 
-    private function modifica_co_acreditado(array $co_acreditado, int $inm_prospecto_ubicacion_id, PDO $link): array|stdClass
+    public function modifica_co_acreditado(array $co_acreditado, int $inm_prospecto_ubicacion_id, PDO $link): array|stdClass
     {
         if($inm_prospecto_ubicacion_id<=0){
             return $this->error->error(mensaje: 'Error inm__id debe ser mayor a 0', data:  $inm_prospecto_ubicacion_id);

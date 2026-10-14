@@ -950,7 +950,29 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
             'entre_calle_1','entre_calle_2', 'tipo_compra', 'tipo_credito', 'numero_credito','monto_credito',
             'adeudo_hipoteca', 'mensualidad','fecha_otorgamiento_credito', 'cuenta_predial', 'adeudo_predial',
             'cuenta_agua','adeudo_agua', 'cuenta_luz','adeudo_luz','estado_vivienda', 'prototipo', 'complemento',
-            'metros_terreno', 'metros_construccion','observaciones'];
+            'metros_terreno', 'metros_construccion','observaciones','nss_co_acreditado', 'nombre_co_acreditado',
+            'apellido_paterno_co_acreditado', 'apellido_materno_co_acreditado', 'numero_co_acreditado',
+            'celular_co_acreditado', 'correo_co_acreditado', 'numero_credito_co_acreditado',
+            'monto_credito_co_acreditado', 'adeudo_hipoteca_co_acreditado', 'descuento_co_acreditado'];
+
+        $campos_por_columna = [
+            'Telefono' => 'numero_com',
+            'Celular' => 'cel_com',
+            'Correo' => 'correo_com',
+            'Saldo Credito' => 'adeudo_hipoteca',
+            'Fecha Credito' => 'fecha_otorgamiento_credito',
+            'NSS Co Acreditado' => 'nss_co_acreditado',
+            'Nombre Co Acreditado' => 'nombre_co_acreditado',
+            'Apellido Paterno Co Acreditado' => 'apellido_paterno_co_acreditado',
+            'Apellido Materno Co Acreditado' => 'apellido_materno_co_acreditado',
+            'Telefono Co Acreditado' => 'numero_co_acreditado',
+            'Celular Co Acreditado' => 'celular_co_acreditado',
+            'Correo Co Acreditado' => 'correo_co_acreditado',
+            'Numero Credito Co Acreditado' => 'numero_credito_co_acreditado',
+            'Monto Credito Co Acreditado' => 'monto_credito_co_acreditado',
+            'Saldo Credito Co Acreditado' => 'adeudo_hipoteca_co_acreditado',
+            'Descuento Co Acreditado' => 'descuento_co_acreditado',
+        ];
 
         $html_mapeo = '';
 
@@ -968,23 +990,8 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
             foreach ($datos_xls->columns as $col) {
                 $selected = ($col === $sugerida) ? ' selected' : '';
 
-                if($col === 'Telefono' && $campo === 'numero_com'){
-                    $selected = ' selected';
-                }
-
-                if($col === 'Celular' && $campo === 'cel_com'){
-                    $selected = ' selected';
-                }
-
-                if($col === 'Correo' && $campo === 'correo_com'){
-                    $selected = ' selected';
-                }
-
-                if($col === 'Saldo Credito' && $campo === 'adeudo_hipoteca'){
-                    $selected = ' selected';
-                }
-
-                if($col === 'Fecha Credito' && $campo === 'fecha_otorgamiento_credito'){
+                if (isset($campos_por_columna[$col])
+                    && $campos_por_columna[$col] === $campo) {
                     $selected = ' selected';
                 }
 
@@ -1040,6 +1047,11 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
             'duplicados'   => 0,
         ];
 
+        $campos_co_acred = ['nss_co_acreditado', 'nombre_co_acreditado', 'apellido_paterno_co_acreditado',
+            'apellido_materno_co_acreditado', 'numero_co_acreditado', 'celular_co_acreditado', 'correo_co_acreditado',
+            'numero_credito_co_acreditado', 'monto_credito_co_acreditado', 'adeudo_hipoteca_co_acreditado',
+            'descuento_co_acreditado'];
+
         $campos_formulario = ['nss', 'nombre', 'apellido_paterno', 'apellido_materno', 'numero_com','cel_com',
             'correo_com', 'estado','municipio','cp','colonia','calle','numero_exterior','numero_interior',
             'entre_calle_1','entre_calle_2', 'tipo_compra', 'tipo_credito', 'numero_credito','monto_credito',
@@ -1047,10 +1059,13 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
             'cuenta_agua','adeudo_agua', 'cuenta_luz','adeudo_luz','estado_vivienda', 'prototipo', 'complemento',
             'metros_terreno', 'metros_construccion','observaciones'];
 
+
+        $campos_completos = array_merge($campos_formulario, $campos_co_acred);
+
         $ths = array();
         $ths[] = 'Fila';
         $ths[] = 'Estado';
-        foreach ($campos_formulario as $campo) {
+        foreach ($campos_completos as $campo) {
             $placeholder = implode(' ', array_map('ucfirst', explode('_', $campo)));
 
             $ths[] = htmlspecialchars($placeholder);
@@ -1098,6 +1113,15 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
 
             foreach ($campos_formulario as $campo) {
                 $valor = htmlspecialchars($registro['datos'][$campo] ?? '');
+                $placeholder = implode(' ', array_map('ucfirst', explode('_', $campo)));
+
+                $html_mapeo .= '<td>';
+                $html_mapeo .= "<input type=\"text\" name=\"correccion[{$registro['fila']}][{$campo}]\" placeholder=\"{$placeholder}\" value=\"{$valor}\">";
+                $html_mapeo .= '</td>';
+            }
+
+            foreach ($campos_co_acred as $campo) {
+                $valor = htmlspecialchars($registro['co_acreditado'][$campo] ?? '');
                 $placeholder = implode(' ', array_map('ucfirst', explode('_', $campo)));
 
                 $html_mapeo .= '<td>';
@@ -1161,14 +1185,25 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
                     $registro[$key] = $validacion[$key];
                 }
 
+                $keys_co_acred = ['nss_co_acreditado', 'nombre_co_acreditado', 'apellido_paterno_co_acreditado',
+                    'apellido_materno_co_acreditado', 'numero_co_acreditado', 'celular_co_acreditado',
+                    'correo_co_acreditado', 'numero_credito_co_acreditado', 'monto_credito_co_acreditado',
+                    'adeudo_hipoteca_co_acreditado', 'descuento_co_acreditado'];
+                $co_acreditado = array();
+                foreach ($keys_co_acred as $key) {
+                    $co_acreditado[$key] = $registro[$key];
+                    unset($registro[$key]);
+                }
+
                 $resultado[] = [
-                    'fila'       => $indiceFila,
+                    'fila'       => $indiceFila + 1,
                     'datos'      => $registro,
                     'advertencias' => $validacion['advertencias'],
                     'errores'    => $validacion['errores'],
                     'valido'     => $validacion['valido'],
                     'duplicados' => $validacion['duplicados'],
                     'duplicado'  => $validacion['duplicado'],
+                    'co_acreditado'  => $co_acreditado,
                     'inm_prospecto_ubicacion_id'  => $validacion['inm_prospecto_ubicacion_id']
                 ];
             }
@@ -1195,15 +1230,47 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
     {
         $this->link->beginTransaction();
 
+        $campos_por_columna = [
+            'nss_co_acreditado' => 'nss',
+            'nombre_co_acreditado' => 'nombre',
+            'apellido_paterno_co_acreditado' => 'apellido_paterno',
+            'apellido_materno_co_acreditado' => 'apellido_materno',
+            'numero_co_acreditado' => 'numero',
+            'celular_co_acreditado' => 'celular',
+            'correo_co_acreditado' => 'correo',
+            'numero_credito_co_acreditado' => 'numero_credito',
+            'monto_credito_co_acreditado' => 'monto_credito',
+            'adeudo_hipoteca_co_acreditado' => 'adeudo_hipoteca',
+            'descuento_co_acreditado' => 'descuento',
+        ];
         $altas = [];
         foreach ($_SESSION['registros_procesados'] as $row){
             $registro = $row['datos'];
+            $_POST['co_acreditado'] = $row['co_acreditado'];
+            $tiene_dato = false;
 
             foreach ($registro as $key => $val){
-                if($val === null){
+                if($val === null || $val === ''){
                     unset($registro[$key]);
                 }
             }
+
+            $temp = array();
+            foreach ($campos_por_columna as $key => $val){
+                if(isset($_POST['co_acreditado'][$key])){
+                    $temp[$val] = $_POST['co_acreditado'][$key];
+                    unset($_POST['co_acreditado'][$key]);
+                }
+            }
+
+            foreach ($temp as $key => $val){
+                if($val === null || $val === ''){
+                    unset($temp[$key]);
+                }else{
+                    $tiene_dato = true;
+                }
+            }
+            $_POST['co_acreditado'] = $temp;
 
             if(!empty($row['errores'])){
                 continue;
@@ -1234,17 +1301,29 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
                         ws: $ws);
                 }
 
-                continue;
+            } else {
+                $r_alta = (new inm_prospecto_ubicacion(link: $this->link))->alta_registro(registro: $registro);
+                if (errores::$error) {
+                    $this->link->rollBack();
+                    return $this->retorno_error(mensaje: 'Error al obtener documento', data: $r_alta, header: $header,
+                        ws: $ws);
+                }
+                $inm_prospecto_ubicacion_id = $r_alta->registro_id;
+
+                $altas[] = $r_alta;
             }
 
-            $r_alta = (new inm_prospecto_ubicacion(link: $this->link))->alta_registro(registro: $registro);
-            if(errores::$error){
-                $this->link->rollBack();
-                return $this->retorno_error(mensaje: 'Error al obtener documento', data: $r_alta, header: $header,
-                    ws: $ws);
+            if($tiene_dato) {
+                $result_co_acreditado = (new inm_prospecto_ubicacion(link: $this->link))->transacciona_co_acreditado(
+                    inm_prospecto_ubicacion_id: $inm_prospecto_ubicacion_id,
+                    link: $this->link
+                );
+                if (errores::$error) {
+                    $this->link->rollBack();
+                    return $this->retorno_error(mensaje: 'Error al modificar co acreditado',
+                        data: $result_co_acreditado, header: $header, ws: $ws);
+                }
             }
-
-            $altas[] = $r_alta;
         }
 
         $this->link->commit();
@@ -1568,6 +1647,16 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
                 $registro[$key] = $validacion[$key];
             }
 
+            $keys_co_acred = ['nss_co_acreditado', 'nombre_co_acreditado', 'apellido_paterno_co_acreditado',
+                'apellido_materno_co_acreditado', 'numero_co_acreditado', 'celular_co_acreditado',
+                'correo_co_acreditado', 'numero_credito_co_acreditado', 'monto_credito_co_acreditado',
+                'adeudo_hipoteca_co_acreditado', 'descuento_co_acreditado'];
+            $co_acreditado = array();
+            foreach ($keys_co_acred as $key) {
+                $co_acreditado[$key] = $registro[$key];
+                unset($registro[$key]);
+            }
+
             $resultado[] = [
                 'fila'       => $indiceFila + 1,
                 'datos'      => $registro,
@@ -1576,6 +1665,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
                 'valido'     => $validacion['valido'],
                 'duplicados' => $validacion['duplicados'],
                 'duplicado'  => $validacion['duplicado'],
+                'co_acreditado'  => $co_acreditado,
                 'inm_prospecto_ubicacion_id'  => $validacion['inm_prospecto_ubicacion_id']
             ];
         }
