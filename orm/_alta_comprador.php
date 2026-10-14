@@ -418,7 +418,7 @@ class _alta_comprador{
         }
         if(!isset($registro_entrada['cat_sat_tipo_persona_id'])|| $registro_entrada['cat_sat_tipo_persona_id'] === '' ||
             (int)$registro_entrada['cat_sat_tipo_persona_id'] === -1){
-            $registro_entrada['cat_sat_tipo_persona_id'] = 5;
+            $registro_entrada['cat_sat_tipo_persona_id'] = 2;
         }
         if(!isset($registro_entrada['cat_sat_uso_cfdi_id'])|| $registro_entrada['cat_sat_uso_cfdi_id'] === '' ||
             (int)$registro_entrada['cat_sat_uso_cfdi_id'] === -1){
