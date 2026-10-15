@@ -1795,12 +1795,16 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         $ths[] = array('etiqueta'=>'ID', 'campo'=>'inm_prospecto_ubicacion_id');
         $ths[] = array('etiqueta'=>'Ubicacion', 'campo'=>'inm_prospecto_ubicacion_ubicacion');
         $ths[] = array('etiqueta'=>'Nss', 'campo'=>'inm_prospecto_ubicacion_nss');
+        $ths[] = array('etiqueta'=>'RFC', 'campo'=>'inm_prospecto_ubicacion_rfc');
+        $ths[] = array('etiqueta'=>'CURP', 'campo'=>'inm_prospecto_ubicacion_curp');
         $ths[] = array('etiqueta'=>'Nombre', 'campo'=>'com_prospecto_razon_social');
-        $ths[] = array('etiqueta'=>'Fecha', 'campo'=>'inm_prospecto_ubicacion_fecha_alta');
+        $ths[] = array('etiqueta'=>'Fecha Alta', 'campo'=>'inm_prospecto_ubicacion_fecha_alta');
         if(!$existe) {
             $ths[] = array('etiqueta' => 'Agente', 'campo' => 'com_agente_descripcion');
         }
-        $ths[] = array('etiqueta'=>'Status prospecto_ubicacion', 'campo'=>'inm_status_prospecto_ubicacion_descripcion');
+        $ths[] = array('etiqueta'=>'Status', 'campo'=>'inm_status_prospecto_ubicacion_descripcion');
+        $ths[] = array('etiqueta'=>'Observaciones Generales', 'campo'=>'inm_prospecto_ubicacion_observaciones');
+        $ths[] = array('etiqueta'=>'URL', 'campo'=>'inm_prospecto_ubicacion_url');
 
         /*$keys = array();
         foreach ($ths as $data_th) {

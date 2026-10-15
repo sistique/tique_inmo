@@ -904,7 +904,7 @@ class _conversion{
             'inm_institucion_hipotecaria_id','inm_sindicato_id','dp_municipio_nacimiento_id','fecha_nacimiento',
             'sub_cuenta','monto_final','descuento','puntos','inm_nacionalidad_id','inm_ocupacion_id','telefono_casa',
             'correo_empresa','org_sucursal_id', 'dp_colonia_postal_id', 'rfc','numero_exterior','numero_interior',
-            'calle');
+            'calle', 'inm_tipo_venta_id','com_agente_id','com_agente_cerrador_id');
     }
 
     /**
