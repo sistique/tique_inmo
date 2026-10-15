@@ -137,12 +137,21 @@ class datos{
                 $numero_columna);
         }
 
+        $celda = $columnas[$numero_columna] . $fila;
+
+        try {
+            $libro->getActiveSheet()->getStyle($celda)->getBorders()->getOutline()
+                ->setBorderStyle(Border::BORDER_THIN);
+        } catch (Throwable $e){
+            return $this->error->error('Error al asignar dato', $e);
+        }
+
         if( isset($registro[$campo]) ) {
             if(is_array($registro[$campo])){
                 return $this->error->error('Error $registro['.$campo.'] debe ser un string', $registro);
             }
+
             $valor = trim($registro[$campo]);
-            $celda = $columnas[$numero_columna] . $fila;
 
             $estilo = (new estilos())->estilos_format(path_base: $path_base,valor:  $valor);
             if(errores::$error){
@@ -157,14 +166,12 @@ class datos{
                 $libro->getActiveSheet()->getStyle($celda)->applyFromArray($estilo_contenido);
                 $libro->getActiveSheet()->getStyle($celda)->getFill()
                     ->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB($color_contenido);
-                $libro->getActiveSheet()->getStyle($celda)->getBorders()->getOutline()
-                    ->setBorderStyle(Border::BORDER_THIN);
+
                 if($estilo) {
                     $libro->getActiveSheet()->getStyle($celda)->getNumberFormat()->setFormatCode(
                         $estilos[$estilo]);
                 }
-            }
-            catch (Throwable $e){
+            } catch (Throwable $e){
                 return $this->error->error('Error al asignar dato', $e);
             }
         }
