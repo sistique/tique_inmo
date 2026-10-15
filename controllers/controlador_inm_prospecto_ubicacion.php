@@ -1793,11 +1793,20 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         }
 
         $ths[] = array('etiqueta'=>'ID', 'campo'=>'inm_prospecto_ubicacion_id');
-        $ths[] = array('etiqueta'=>'Ubicacion', 'campo'=>'inm_prospecto_ubicacion_ubicacion');
         $ths[] = array('etiqueta'=>'Nss', 'campo'=>'inm_prospecto_ubicacion_nss');
+        $ths[] = array('etiqueta'=>'Numero de Credito', 'campo'=>'inm_prospecto_ubicacion_numero_credito');
+        $ths[] = array('etiqueta'=>'Nombre', 'campo'=>'com_prospecto_razon_social');
+        $ths[] = array('etiqueta'=>'Telefono', 'campo'=>'inm_prospecto_ubicacion_numero_com');
+        $ths[] = array('etiqueta'=>'Celular', 'campo'=>'inm_prospecto_ubicacion_cel_com');
+
+        $ths[] = array('etiqueta'=>'Monto Credito', 'campo'=>'inm_prospecto_ubicacion_monto_credito');
+        $ths[] = array('etiqueta'=>'Saldo Credito', 'campo'=>'inm_prospecto_ubicacion_adeudo_hipoteca');
+        $ths[] = array('etiqueta'=>'Descuento', 'campo'=>'inm_prospecto_ubicacion_mensualidad');
+        $ths[] = array('etiqueta'=>'Fecha Credito', 'campo'=>'inm_prospecto_ubicacion_fecha_otorgamiento_credito');
+
+        $ths[] = array('etiqueta'=>'Direccion', 'campo'=>'inm_prospecto_ubicacion_ubicacion');
         $ths[] = array('etiqueta'=>'RFC', 'campo'=>'inm_prospecto_ubicacion_rfc');
         $ths[] = array('etiqueta'=>'CURP', 'campo'=>'inm_prospecto_ubicacion_curp');
-        $ths[] = array('etiqueta'=>'Nombre', 'campo'=>'com_prospecto_razon_social');
         $ths[] = array('etiqueta'=>'Fecha Alta', 'campo'=>'inm_prospecto_ubicacion_fecha_alta');
         if(!$existe) {
             $ths[] = array('etiqueta' => 'Agente', 'campo' => 'com_agente_descripcion');
