@@ -1,6 +1,7 @@
 <?php
 namespace gamboamartin\inmuebles\models;
 
+use config\generales;
 use gamboamartin\banco\models\bn_cuenta;
 use gamboamartin\documento\models\doc_tipo_documento;
 use gamboamartin\errores\errores;
@@ -27,12 +28,15 @@ class _inm_comprador{
                                  int $inm_doc_comprador_id, array $inm_conf_docs_comprador, array $params = array(),
                                  string $style = 'success', string $target = '', string $css_extra = ''): array
     {
-        $button = $controler->html->button_href(accion: $accion, etiqueta: $etiqueta, registro_id: $inm_doc_comprador_id,
-            seccion: 'inm_doc_comprador', style: $style, css_extra: $css_extra, params: $params, target: $target);
+        $button = $controler->html->button_href(accion: $accion, etiqueta: $etiqueta,
+            registro_id: $inm_doc_comprador_id, seccion: 'inm_doc_comprador', style: $style, css_extra: $css_extra,
+            params: $params, target: $target);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar button',data:  $button);
         }
-        $inm_conf_docs_comprador[$indice][$accion] = $button;
+
+        $inm_conf_docs_comprador[$accion] = $button;
+
         return $inm_conf_docs_comprador;
     }
 
@@ -53,10 +57,10 @@ class _inm_comprador{
         $inm_conf_docs_comprador = (new _inm_comprador())->button(accion: 'elimina_bd', controler: $controler,
             etiqueta: 'Elimina', indice: $indice, inm_doc_comprador_id: $inm_doc_comprador['inm_doc_comprador_id'],
             inm_conf_docs_comprador: $inm_conf_docs_comprador, params: $params, style: 'danger',css_extra: $css_extra);
-
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar button',data:  $inm_conf_docs_comprador);
         }
+
         return $inm_conf_docs_comprador;
     }
 
@@ -66,7 +70,6 @@ class _inm_comprador{
         $inm_conf_docs_comprador = $this->button(accion: 'descarga', controler: $controler,
             etiqueta: 'Descarga', indice: $indice, inm_doc_comprador_id: $inm_doc_comprador['inm_doc_comprador_id'],
             inm_conf_docs_comprador: $inm_conf_docs_comprador,css_extra: $css_extra);
-
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar button',data:  $inm_conf_docs_comprador);
         }
@@ -74,7 +77,6 @@ class _inm_comprador{
         $inm_conf_docs_comprador = $this->button(accion: 'vista_previa', controler: $controler,
             etiqueta: 'Vista Previa', indice: $indice, inm_doc_comprador_id: $inm_doc_comprador['inm_doc_comprador_id'],
             inm_conf_docs_comprador: $inm_conf_docs_comprador, target: '_blank',css_extra: $css_extra);
-
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar button',data:  $inm_conf_docs_comprador);
         }
@@ -82,10 +84,10 @@ class _inm_comprador{
         $inm_conf_docs_comprador = $this->button(accion: 'descarga_zip', controler: $controler,
             etiqueta: 'ZIP', indice: $indice, inm_doc_comprador_id: $inm_doc_comprador['inm_doc_comprador_id'],
             inm_conf_docs_comprador: $inm_conf_docs_comprador,css_extra: $css_extra);
-
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar button',data:  $inm_conf_docs_comprador);
         }
+
         return $inm_conf_docs_comprador;
     }
 
@@ -94,7 +96,6 @@ class _inm_comprador{
     {
         $inm_conf_docs_comprador = $this->buttons(controler: $controler,indice:  $indice,
             inm_conf_docs_comprador:  $inm_conf_docs_comprador,inm_doc_comprador:  $inm_doc_comprador);
-
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar button',data:  $inm_conf_docs_comprador);
         }
@@ -102,7 +103,6 @@ class _inm_comprador{
         $inm_conf_docs_comprador = $this->button_del(controler: $controler,indice:  $indice,
             inm_comprador_id:  $inm_comprador_id,inm_conf_docs_comprador:  $inm_conf_docs_comprador,
             inm_doc_comprador:  $inm_doc_comprador);
-
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar button',data:  $inm_conf_docs_comprador);
         }
@@ -318,11 +318,11 @@ class _inm_comprador{
 
     private function integra_button_default(string $button, int $indice, array $inm_conf_docs_comprador): array
     {
-        $inm_conf_docs_comprador[$indice]['descarga'] = $button;
-        $inm_conf_docs_comprador[$indice]['vista_previa'] = $button;
-        $inm_conf_docs_comprador[$indice]['descarga_zip'] = $button;
-        $inm_conf_docs_comprador[$indice]['elimina_bd'] = $button;
-        $inm_conf_docs_comprador[$indice]['subir_documento'] = $button;
+        $inm_conf_docs_comprador['descarga'] = $button;
+        $inm_conf_docs_comprador['vista_previa'] = $button;
+        $inm_conf_docs_comprador['descarga_zip'] = $button;
+        $inm_conf_docs_comprador['elimina_bd'] = $button;
+        $inm_conf_docs_comprador['subir_documento'] = $button;
 
         return $inm_conf_docs_comprador;
     }
@@ -361,80 +361,168 @@ class _inm_comprador{
     }
 
     final public function integra_inm_documentos(controlador_inm_comprador $controler){
-        $inm_docs_comprador = (new inm_doc_comprador(link: $controler->link))->inm_docs_comprador(
-            inm_comprador_id: $controler->registro_id, tipos_documentos: array());
+        $inm_comprador = (new inm_comprador(link: $controler->link))->registro(registro_id: $controler->registro_id);
         if(errores::$error){
-            return $this->error->error(mensaje: 'Error al obtener documentos',data:  $inm_docs_comprador);
+            return $this->error->error(mensaje: 'Error al obtener inm_comprador',data:  $inm_comprador);
         }
-
+        
         $filtro['inm_conf_docs_comprador.es_foto'] = 'inactivo';
         $filtro['inm_conf_docs_comprador.con_conyuge'] = 'inactivo';
         $filtro['inm_conf_docs_comprador.con_co_acreditado'] = 'inactivo';
-        $inm_conf_docs_prospecto = (new inm_conf_docs_comprador(link: $controler->link))->filtro_and(
-            columnas: ['doc_tipo_documento_id'],filtro: $filtro);
+        $filtro['inm_conf_docs_comprador.con_beneficiario'] = '0';
+        $filtro['inm_institucion_hipotecaria.id'] = $inm_comprador['inm_institucion_hipotecaria_id'];
+        $inm_conf_docs_comprador = (new inm_conf_docs_comprador(link: $controler->link))->filtro_and(
+            filtro: $filtro);
         if(errores::$error){
-            return $this->error->error(mensaje: 'Error al obtener inm_conf_docs_prospecto',data:  $inm_conf_docs_prospecto);
+            return $this->error->error(mensaje: 'Error al obtener inm_conf_docs_comprador',
+                data:  $inm_conf_docs_comprador);
         }
-
-        $doc_ids = array_map(function($registro) {
-            return $registro['doc_tipo_documento_id'];
-        }, $inm_conf_docs_prospecto->registros);
 
         $existe_conyuge = (new inm_rel_conyuge_comprador(link: $controler->link))->existe(
             filtro: array('inm_comprador.id' => $controler->registro_id));
         if(errores::$error){
-            return $this->error->error(mensaje: 'Error al obtener inm_conf_docs_prospecto',data:  $existe_conyuge);
+            return $this->error->error(mensaje: 'Error al validar conyuge',data:  $existe_conyuge);
         }
 
         if($existe_conyuge){
-            $filtro_conyuge['inm_conf_docs_comprador.con_conyuge'] = 'activo';
+            $filtro_con['inm_conf_docs_comprador.con_conyuge'] = 'activo';
+            $filtro_con['inm_institucion_hipotecaria.id'] = $inm_comprador['inm_institucion_hipotecaria_id'];
             $inm_conf_docs_conyuge = (new inm_conf_docs_comprador(link: $controler->link))->filtro_and(
-                columnas: ['doc_tipo_documento_id'],filtro: $filtro_conyuge);
+                filtro: $filtro_con);
             if(errores::$error){
-                return $this->error->error(mensaje: 'Error al obtener inm_conf_docs_co_acred',
+                return $this->error->error(mensaje: 'Error al obtener inm_conf_docs_conyuge',
                     data:  $inm_conf_docs_conyuge);
             }
 
-            $doc_conyuge_ids = array_map(function($registro) {
-                return $registro['doc_tipo_documento_id'];
-            }, $inm_conf_docs_conyuge->registros);
-
-            $doc_ids = array_merge($doc_ids, $doc_conyuge_ids);
+            $inm_conf_docs_comprador->registros = array_merge($inm_conf_docs_comprador->registros,
+                $inm_conf_docs_conyuge->registros);
         }
 
         $existe_co_acred = (new inm_rel_co_acred(link: $controler->link))->existe(
             filtro: array('inm_comprador.id' => $controler->registro_id));
         if(errores::$error){
-            return $this->error->error(mensaje: 'Error al obtener inm_conf_docs_prospecto',data:  $existe_co_acred);
+            return $this->error->error(mensaje: 'Error al validar co_acreditado',data:  $existe_co_acred);
         }
 
         if($existe_co_acred){
-            $filtro_co_acred['inm_conf_docs_comprador.con_co_acreditado'] = 'activo';
+            $filtro_co['inm_conf_docs_comprador.con_co_acreditado'] = 'activo';
+            $filtro_co['inm_institucion_hipotecaria.id'] = $inm_comprador['inm_institucion_hipotecaria_id'];
             $inm_conf_docs_co_acred = (new inm_conf_docs_comprador(link: $controler->link))->filtro_and(
-                columnas: ['doc_tipo_documento_id'],filtro: $filtro_co_acred);
+                filtro: $filtro_co);
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error al obtener inm_conf_docs_co_acred',
                     data:  $inm_conf_docs_co_acred);
             }
 
-            $doc_co_acred_ids = array_map(function($registro) {
-                return $registro['doc_tipo_documento_id'];
-            }, $inm_conf_docs_co_acred->registros);
-
-            $doc_ids = array_merge($doc_ids, $doc_co_acred_ids);
+            $inm_conf_docs_comprador->registros = array_merge($inm_conf_docs_comprador->registros,
+                $inm_conf_docs_co_acred->registros);
         }
+
+        $beneficiarios = (new inm_rel_beneficiario_comprador(link: $controler->link))->filtro_and(
+            filtro: array('inm_comprador.id' => $controler->registro_id));
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener beneficiarios',data:  $beneficiarios);
+        }
+
+        if($beneficiarios->n_registros > 0){
+            $cont_ben = 1;
+            foreach ($beneficiarios->registros as $beneficiario_registro){
+                $filtro_bene['inm_conf_docs_comprador.con_beneficiario'] = $cont_ben;
+                $inm_conf_docs_beneficiario = (new inm_conf_docs_comprador(link: $controler->link))->filtro_and(
+                    filtro: $filtro_bene);
+                if(errores::$error){
+                    return $this->error->error(mensaje: 'Error al obtener docs de beneficiario',
+                        data:  $inm_conf_docs_beneficiario);
+                }
+
+                $registros_docs = array();
+                foreach ($inm_conf_docs_beneficiario->registros as $doc_bene){
+                    $grupo_docs_bene = $doc_bene;
+                    $grupo_docs_bene['doc_tipo_documento_descripcion'] = $doc_bene['doc_tipo_documento_descripcion']
+                        .' '. $beneficiario_registro['inm_beneficiario_nombre']
+                        .' '. $beneficiario_registro['inm_beneficiario_apellido_paterno']
+                        .' '. $beneficiario_registro['inm_beneficiario_apellido_materno'];
+
+                    $registros_docs[] = $grupo_docs_bene;
+                }
+
+                $inm_conf_docs_comprador->registros = array_merge($inm_conf_docs_comprador->registros,
+                    $registros_docs);
+
+                $cont_ben++;
+            }
+        }
+
+        $doc_ids = array_map(function($registro) {
+            return $registro['doc_tipo_documento_id'];
+        }, $inm_conf_docs_comprador->registros);
 
         if (count($doc_ids) <= 0) {
             return array();
         }
 
-        $inm_conf_docs_comprador = $this->inm_conf_docs_comprador(controler: $controler,
-            inm_docs_comprador:  $inm_docs_comprador,tipos_documentos: $doc_ids);
-
+        $inm_docs_comprador = (new inm_doc_comprador(link: $controler->link))->inm_docs_comprador(
+            inm_comprador_id: $controler->registro_id, tipos_documentos: $doc_ids);
         if(errores::$error){
-            return $this->error->error(mensaje: 'Error al integrar buttons',data:  $inm_conf_docs_comprador);
+            return $this->error->error(mensaje: 'Error al obtener inm_docs_comprador',data:  $inm_docs_comprador);
         }
-        return $inm_conf_docs_comprador;
+
+        $documentos_indexados = [];
+        foreach ($inm_docs_comprador as $documento) {
+            $doc_tipo_documento_id = (int) $documento['doc_tipo_documento_id'];
+            $documentos_indexados[$doc_tipo_documento_id] = $documento;
+        }
+
+        $result = array();
+        foreach ($inm_conf_docs_comprador->registros as $indice => $doc_tipo_documento){
+            $doc_tipo_documento_id = (int) $doc_tipo_documento['doc_tipo_documento_id'];
+
+            if(isset($documentos_indexados[$doc_tipo_documento_id])){
+                $documento_existente = $documentos_indexados[$doc_tipo_documento_id];
+
+                $ruta_doc = (new generales())->url_base."$documento_existente[doc_documento_ruta_relativa]";
+
+                if((new generales())->guarda_archivo_dropbox) {
+                    $guarda = (new _dropbox(link: $controler->link))->preview(
+                        dropbox_id: $documento_existente['inm_dropbox_ruta_id_dropbox'],
+                        extencion: $documento_existente['doc_extension_descripcion']);
+                    if (errores::$error) {
+                        return $this->error->error('Error al guardar archivo', $guarda);
+                    }
+
+                    $ruta_doc = $guarda->ruta_mostrar;
+                }
+
+                $salida_doc = $this->buttons_base(controler: $controler, indice:  $indice,
+                    inm_comprador_id:  $controler->registro_id, inm_conf_docs_comprador:  $doc_tipo_documento,
+                    inm_doc_comprador:  $documento_existente);
+                if(errores::$error){
+                    return $this->error->error(mensaje: 'Error al integrar button',data:  $salida_doc);
+                }
+
+                $salida_doc['ruta_doc'] = $ruta_doc;
+                $salida_doc['inm_doc_id'] = $documento_existente['inm_doc_comprador_id'];
+            }else{
+                $nombre_input = 'documentos['.$doc_tipo_documento['doc_tipo_documento_id'].'][]';
+
+                $button = $controler->html->input_file_sec(cols: 12, name: $nombre_input,
+                    row_upd: new stdClass(), value_vacio: false, place_holder: 'Subir Documento',required: false,
+                    con_label: false);
+                if (errores::$error) {
+                    return $this->error->error(mensaje: 'Error al obtener inputs', data: $button);
+                }
+
+                $salida_doc = $this->integra_button_default(button: $button,
+                    indice:  $indice, inm_conf_docs_comprador:  $doc_tipo_documento);
+                if(errores::$error){
+                    return $this->error->error(mensaje: 'Error al integrar button',data:  $salida_doc);
+                }
+            }
+
+            $result[$indice] = $salida_doc;
+        }
+
+        return $result;
     }
 
     /**

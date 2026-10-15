@@ -241,6 +241,9 @@ class controlador_inm_comprador extends _ctl_base {
     public array $notas_credito = array();
     public array $complementos_pago = array();
 
+    public string $ruta_docs = '';
+
+    public bool $ver_descripcion = false;
 
 
     public function __construct(PDO      $link, html $html = new \gamboamartin\template_1\html(),
@@ -482,8 +485,11 @@ class controlador_inm_comprador extends _ctl_base {
         $filtro_rel_ubi['inm_rel_ubi_comp.status'] = 'activo';
 
         $in_ubi = array();
-        $in_ubi['llave'] = 'inm_ubicacion.id';
-        $in_ubi['values'] = $rel_ubis_fir;
+        if(!empty($rel_ubis_fir)){
+            $in_ubi['llave'] = 'inm_ubicacion.id';
+            $in_ubi['values'] = $rel_ubis_fir;
+        }
+
         $r_inm_rel_ubi_comp = (new inm_rel_ubi_comp(link: $this->link))->filtro_and(filtro: $filtro_rel_ubi, in: $in_ubi);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener inputs_hidden',data:  $inputs, header: $header,ws:  $ws);
@@ -495,8 +501,11 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         $not_in = array();
-        $not_in['llave'] = 'inm_ubicacion.id';
-        $not_in['values'] = $temporal;
+        if(!empty($temporal)){
+            $not_in['llave'] = 'inm_ubicacion.id';
+            $not_in['values'] = $temporal;
+        }
+
         $inm_ubicacion_id = (new _inm_comprador())->inm_ubicacion_id_input(controler: $this, in: $in_ubi,
             not_in: $not_in);
         if(errores::$error){
@@ -3469,7 +3478,7 @@ class controlador_inm_comprador extends _ctl_base {
         return $comprime;
     }
 
-    final public function documentos(bool $header, bool $ws = false): array
+    final public function documentos(bool $header, bool $ws = false): array|stdClass
     {
 
         if(isset($_GET['accion']) && $_GET['accion'] == 'documentos') {
@@ -3479,15 +3488,17 @@ class controlador_inm_comprador extends _ctl_base {
             }
         }
 
-        $inm_conf_docs_comprador = (new _inm_comprador())->integra_inm_documentos(controler: $this);
+        $result_docs = (new _inm_comprador())->integra_inm_documentos(controler: $this);
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al integrar buttons',data:  $inm_conf_docs_comprador, header: $header,ws:  $ws);
+            return $this->retorno_error(mensaje: 'Error al integrar buttons',data:  $result_docs, header: $header,ws:  $ws);
         }
 
+        $ver_descripcion = false;
         $temp = array();
-        foreach ($inm_conf_docs_comprador as $docs){
+        $ruta_docs = array();
+        foreach ($result_docs as $docs){
             $res = "<tr>
-            <td>$docs[doc_tipo_documento_descripcion]</td>
+            <td class='td-doc'><div class='descripcion-doc'>$docs[doc_tipo_documento_descripcion]</div></td>
             <td>$docs[descarga]</td>
             <td>$docs[vista_previa]</td>
             <td>$docs[descarga_zip]</td>
@@ -3495,13 +3506,22 @@ class controlador_inm_comprador extends _ctl_base {
             </tr>";
             if(isset($docs['subir_documento'])){
                 $res = "<tr>
-                <td>$docs[doc_tipo_documento_descripcion]</td>
+                <td class='td-doc'><div class='descripcion-doc'>$docs[doc_tipo_documento_descripcion]</div></td>
                 <td colspan='4'>$docs[subir_documento]</td>
                 </tr>";
+            }else{
+                $ver_descripcion = true;
+                $doc_temp = array();
+                $doc_temp['inm_doc_id'] = $docs['inm_doc_id'];
+                $doc_temp['ruta_doc'] = $docs['ruta_doc'];
+                $ruta_docs[] = $doc_temp;
             }
+
             $temp[] = $res;
         }
 
+        $this->ver_descripcion = $ver_descripcion;
+        $this->ruta_docs = '<div id="ruta-docs" hidden>' . json_encode($ruta_docs) . '</div>';
         $this->inm_conf_docs_comprador = $temp;
 
         $params = array();
@@ -3528,7 +3548,7 @@ class controlador_inm_comprador extends _ctl_base {
 
         $this->button_descarga_expediente = $button_descarga_expediente;
 
-        return $inm_conf_docs_comprador;
+        return $this->inputs;
 
     }
 

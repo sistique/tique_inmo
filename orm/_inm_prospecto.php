@@ -486,7 +486,6 @@ class _inm_prospecto{
         $filtro['inm_conf_docs_prospecto.con_co_acreditado'] = 'inactivo';
         $filtro['inm_conf_docs_prospecto.con_beneficiario'] = '0';
         $filtro['inm_institucion_hipotecaria.id'] = $inm_prospecto['inm_institucion_hipotecaria_id'];
-
         $inm_conf_docs_prospecto = (new inm_conf_docs_prospecto(link: $controler->link))->filtro_and(
             filtro: $filtro);
         if(errores::$error){
