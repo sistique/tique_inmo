@@ -79,7 +79,7 @@ class _conversion{
             $inm_comprador_ins['lada_nep'] = '33';
         }
         if(!isset($inm_comprador_ins['numero_nep'] )){
-            $inm_comprador_ins['numero_nep'] = '33333333';
+            $inm_comprador_ins['numero_nep'] = '3333333333';
         }
         if(!isset($inm_comprador_ins['nombre_empresa_patron'] )){
             $inm_comprador_ins['nombre_empresa_patron'] = 'POR DEFINIR';
@@ -88,24 +88,6 @@ class _conversion{
             $inm_comprador_ins['nrp_nep'] = 'POR DEFINIR';
         }
 
-        if($inm_comprador_ins['nss'] === ''){
-            $inm_comprador_ins['nss'] = '99999999999';
-        }
-        if($inm_comprador_ins['curp'] === ''){
-            $inm_comprador_ins['curp'] = 'XEXX010101MNEXXXA8';
-        }
-        if($inm_comprador_ins['lada_nep'] === ''){
-            $inm_comprador_ins['lada_nep'] = '33';
-        }
-        if($inm_comprador_ins['numero_nep'] === ''){
-            $inm_comprador_ins['numero_nep'] = '33333333';
-        }
-        if($inm_comprador_ins['nombre_empresa_patron'] === ''){
-            $inm_comprador_ins['nombre_empresa_patron'] = 'POR DEFINIR';
-        }
-        if($inm_comprador_ins['nrp_nep'] === ''){
-            $inm_comprador_ins['nrp_nep'] = 'POR DEFINIR';
-        }
         return $inm_comprador_ins;
     }
 
