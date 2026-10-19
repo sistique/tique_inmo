@@ -279,13 +279,13 @@ class _inm_comprador{
      * @version 1.103.1
      */
     final public function inm_ubicacion_id_input(
-        controlador_inm_comprador $controler, array $extra_params_keys = array(),
+        controlador_inm_comprador $controler, bool $con_registros = true, array $extra_params_keys = array(),
         array $registros = array(),array $in = array(), array $not_in = array()): array|string
     {
         $columns_ds = array('inm_ubicacion_id','inm_ubicacion_ubicacion');
 
         $inm_ubicacion_id = (new inm_ubicacion_html(html: $controler->html_base))->select_inm_ubicacion_id(
-            cols: 12, con_registros: true,id_selected: -1,link:  $controler->link, columns_ds: $columns_ds,
+            cols: 12, con_registros: $con_registros,id_selected: -1,link:  $controler->link, columns_ds: $columns_ds,
             extra_params_keys: $extra_params_keys, registros: $registros,in: $in,not_in: $not_in);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al inm_ubicacion_id',data:  $inm_ubicacion_id);

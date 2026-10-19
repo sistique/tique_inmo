@@ -1303,7 +1303,7 @@ class inm_ubicacion extends _inm_ubicaciones {
         }
 
         $filtro = array('inm_ubicacion.status' => 'activo');
-        $in = array('llave' => 'inm_ubicacion.inm_status_ubicacion_id', 'values' => $etapas);
+        $in = array('llave' => 'inm_status_ubicacion.id', 'values' => $etapas);
         $r_inm_ubicacion = $this->filtro_and(filtro: $filtro, in: $in);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener ubicaciones por etapa', data: $r_inm_ubicacion);

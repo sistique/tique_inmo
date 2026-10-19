@@ -534,8 +534,13 @@ class controlador_inm_comprador extends _ctl_base {
                 data: $registros_disponibles, header: $header, ws: $ws);
         }
 
+        $con_registros = false;
+        if(count($registros_disponibles) > 0) {
+            $con_registros = true;
+        }
+
         $inm_ubicacion_id = (new _inm_comprador())->inm_ubicacion_id_input(controler: $this,
-            registros: $registros_disponibles);
+            con_registros: $con_registros, registros: $registros_disponibles);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al generar input inm_ubicacion_id con sugerencias',
                 data:  $inm_ubicacion_id, header: $header, ws:  $ws);
