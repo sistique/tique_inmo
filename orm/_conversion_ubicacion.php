@@ -602,6 +602,7 @@ class _conversion_ubicacion{
             'monto_devolucion',
             'correo_mi_cuenta_infonavit',
             'password_mi_cuenta_infonavit',
+            'estimacion_avaluo',
 
             /* Apartado 4 */
             'razon_social',
@@ -797,6 +798,7 @@ class _conversion_ubicacion{
             ['campo'=>'adeudo_hipoteca', 'mensaje' => 'Error no existe Saldo de Credito'],
             ['campo'=>'mensualidad', 'mensaje' => 'Error no existe Mensualidad de Credito'],
             ['campo'=>'fecha_otorgamiento_credito', 'mensaje' => 'Error no existe Fecha de Otorgamiento de Credito'],
+            ['campo'=>'estimacion_avaluo', 'mensaje' => 'Error no existe Estimación de Avaluo'],
 
             /* Apartado 4 */
             ['campo'=>'dp_colonia_postal_domicilio_id', 'mensaje' => 'Error no existe Domicilio'],

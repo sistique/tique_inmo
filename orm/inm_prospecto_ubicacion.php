@@ -413,7 +413,18 @@ class inm_prospecto_ubicacion extends _modelo_parent{
             $this->registro['adeudo_luz'] = 0;
         }
 
-        $devolucion = $this->genera_devolucion_sugerida(dp_colonia_postal_id: $this->registro['dp_colonia_postal_id'],
+        $estimacion_avaluo = $this->genera_estimacion_avaluo_sugerida(
+            dp_colonia_postal_id: $this->registro['dp_colonia_postal_id'],
+            inm_prototipo_id: $this->registro['inm_prototipo_id'],
+            inm_prosp: $this->registro);
+        if (errores::$error) {
+            return  $this->error->error(mensaje: 'Error al insertar datos', data: $estimacion_avaluo);
+        }
+
+        $this->registro['estimacion_avaluo'] = $estimacion_avaluo;
+        
+        $devolucion = $this->genera_devolucion_sugerida(
+            dp_colonia_postal_id: $this->registro['dp_colonia_postal_id'],
             inm_prototipo_id: $this->registro['inm_prototipo_id'],
             inm_estado_vivienda_id: $this->registro['inm_estado_vivienda_id'],
             metros_terreno: $metros_terreno,
@@ -874,6 +885,111 @@ class inm_prospecto_ubicacion extends _modelo_parent{
         return $devolucion;
     }
 
+    public function genera_estimacion_avaluo_sugerida(int $dp_colonia_postal_id, int $inm_prototipo_id,
+                                                      array $inm_prosp)
+    {
+        $estimacion = $this->promedio_avaluo_por_ubicacion(
+            dp_colonia_postal_id: $dp_colonia_postal_id,
+            inm_prototipo_id: $inm_prototipo_id
+        );
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener estimacion por inm_ubicacion', data: $estimacion);
+        }
+
+        if ($estimacion <= 0) {
+            $estimacion = $this->promedio_estimacion_por_prospecto(
+                dp_colonia_postal_id: $dp_colonia_postal_id,
+                inm_prototipo_id: $inm_prototipo_id
+            );
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al obtener estimacion por inm_prospecto_ubicacion', data: $estimacion);
+            }
+        }
+
+        return $estimacion > 0 ? $estimacion : 0;
+    }
+
+    private function promedio_avaluo_por_ubicacion(int $dp_colonia_postal_id, int $inm_prototipo_id): float|array
+    {
+        $filtro = array();
+        $filtro['dp_colonia_postal.id'] = $dp_colonia_postal_id;
+        $filtro['inm_prototipo.id'] = $inm_prototipo_id;
+
+        $order = array('inm_ubicacion.fecha_alta' => 'DESC');
+        $r_ubicaciones = (new inm_ubicacion(link: $this->link))->filtro_and(filtro: $filtro, order: $order);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener inm_ubicacion', data: $r_ubicaciones);
+        }
+
+        return $this->promedio_valor_positivo_de_registros(
+            registros: $r_ubicaciones->registros,
+            keys_valor: array('valor_avaluo', 'inm_ubicacion_valor_avaluo'),
+            minimo: 3
+        );
+    }
+
+    private function promedio_estimacion_por_prospecto(int $dp_colonia_postal_id, int $inm_prototipo_id): float|array
+    {
+        $filtro = array();
+        $filtro['dp_colonia_postal.id'] = $dp_colonia_postal_id;
+        $filtro['inm_prototipo.id'] = $inm_prototipo_id;
+
+        $order = array('inm_prospecto_ubicacion.fecha_alta' => 'DESC');
+        $r_prospectos = $this->filtro_and(filtro: $filtro, order: $order);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener inm_prospecto_ubicacion', data: $r_prospectos);
+        }
+
+        return $this->promedio_valor_positivo_de_registros(
+            registros: $r_prospectos->registros,
+            keys_valor: array('estimacion_avaluo', 'inm_prospecto_ubicacion_estimacion_avaluo'),
+            minimo: 3
+        );
+    }
+
+    private function promedio_valor_positivo_de_registros(array $registros, array $keys_valor, int $minimo = 3): float
+    {
+        $valores = array();
+        foreach ($registros as $registro) {
+            $valor = $this->valor_positivo_registro(registro: $registro, keys_valor: $keys_valor);
+            if ($valor === null) {
+                continue;
+            }
+
+            $valores[] = $valor;
+            if (count($valores) >= $minimo) {
+                break;
+            }
+        }
+
+        if (count($valores) < $minimo) {
+            return 0;
+        }
+
+        return array_sum($valores) / count($valores);
+    }
+
+    private function valor_positivo_registro(array $registro, array $keys_valor): ?float
+    {
+        foreach ($keys_valor as $key_valor) {
+            if (!array_key_exists($key_valor, $registro)) {
+                continue;
+            }
+
+            $valor = $registro[$key_valor];
+            if ($valor === null || $valor === '') {
+                continue;
+            }
+
+            $valor = (float)$valor;
+            if ($valor > 0) {
+                return $valor;
+            }
+        }
+
+        return null;
+    }
+
     /**
      * Obtiene los datos del cliente de fc basados en el comprador
      * @param int $inm_prospecto_id
@@ -1168,7 +1284,6 @@ class inm_prospecto_ubicacion extends _modelo_parent{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al modificar prospecto',data:  $upd);
         }
-
 
         return $r_modifica;
     }

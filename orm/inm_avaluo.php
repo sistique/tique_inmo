@@ -52,8 +52,10 @@ class inm_avaluo extends _modelo_parent{
             return $this->error->error(mensaje: 'Error no existe relacion ubicacion',data:  $r_inm_rel_ubi_comp);
         }
 
+        $inm_ubicacion_id = $r_inm_rel_ubi_comp->registros[0]['inm_ubicacion_id'];
+
         $filtro_doc = array();
-        $filtro_doc['inm_ubicacion.id'] = $r_inm_rel_ubi_comp->registros[0]['inm_ubicacion_id'];
+        $filtro_doc['inm_ubicacion.id'] = $inm_ubicacion_id;
         $filtro_doc['doc_tipo_documento.id'] = 35;
         $r_inm_doc_ubicacion_reg = (new inm_doc_ubicacion(link: $this->link))->filtro_and(filtro: $filtro_doc);
         if (errores::$error) {
@@ -64,7 +66,7 @@ class inm_avaluo extends _modelo_parent{
             if(trim($_FILES['poder']['name']) !== '') {
                 $_FILES['documento'] = $_FILES['poder'];
                 $registro = array();
-                $registro['inm_ubicacion_id'] = $r_inm_rel_ubi_comp->registros[0]['inm_ubicacion_id'];
+                $registro['inm_ubicacion_id'] = $inm_ubicacion_id;
                 $registro['doc_tipo_documento_id'] = 35;
                 $r_inm_doc_ubicacion = (new inm_doc_ubicacion(link: $this->link))->alta_registro(registro: $registro);
                 if (errores::$error) {
@@ -161,6 +163,15 @@ class inm_avaluo extends _modelo_parent{
                 registro: $registro_alta);
             if (errores::$error) {
                 return $this->error->error(mensaje: 'Error al insertar datos', data: $r_inm_bitacora_status_comprador);
+            }
+        }
+
+        if(isset($this->registro['valor_avaluo'])){
+            $registros_mod['valor_avaluo'] = $this->registro['valor_avaluo'];
+            $r_modifica_ubicacion = (new inm_ubicacion(link: $this->link))->modifica_bd(registro: $registros_mod,
+                id: $inm_ubicacion_id);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al insertar datos', data: $r_modifica_ubicacion);
             }
         }
 

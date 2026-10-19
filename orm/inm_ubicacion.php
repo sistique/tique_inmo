@@ -1260,6 +1260,163 @@ class inm_ubicacion extends _inm_ubicaciones {
     }
 
     /**
+     * Recomienda ubicaciones por cercania de ganancia esperada.
+     *
+     * Regla de ganancia: precalificacion - estimacion_avaluo.
+     * - Filtra ubicaciones activas en etapa FIRMADAS o FIRMADAS POR APROBAR.
+     * - Si la ganancia supera el objetivo, prioriza mayor ganancia a menor.
+     * - Si no supera el objetivo, ordena por cercania absoluta al objetivo.
+     *
+     * @param int $inm_comprador_id Comprador actual
+     * @param float $ganancia_esperada Monto esperado de ganancia (ej. 120000)
+     * @param array $etapas Etapas validas de ubicacion
+     * @return array
+     */
+    final public function mejores_ubicaciones_por_ganancia(
+        int $inm_comprador_id,
+        float $ganancia_esperada,
+        array $etapas = array('FIRMADAS POR APROBAR','FIRMADAS')
+    ): array {
+        if($inm_comprador_id <= 0){
+            return $this->error->error(mensaje: 'Error inm_comprador_id debe ser mayor a 0', data: $inm_comprador_id);
+        }
+        if($ganancia_esperada < 0){
+            return $this->error->error(mensaje: 'Error ganancia_esperada debe ser mayor o igual a 0', data: $ganancia_esperada);
+        }
+        if(count($etapas) === 0){
+            return $this->error->error(mensaje: 'Error etapas no puede estar vacio', data: $etapas);
+        }
+
+        $inm_comprador = (new inm_comprador(link: $this->link))->registro(
+            registro_id: $inm_comprador_id, retorno_obj: true
+        );
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener comprador', data: $inm_comprador);
+        }
+
+        $monto_precalificacion = $this->monto_numerico_campos(
+            registro: $inm_comprador,
+            campos: array('monto_credito_solicitado_dh', 'inm_comprador_monto_credito_solicitado_dh')
+        );
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener monto de precalificacion', data: $monto_precalificacion);
+        }
+
+        $filtro = array('inm_ubicacion.status' => 'activo');
+        $in = array('llave' => 'inm_ubicacion.etapa', 'values' => $etapas);
+        $r_inm_ubicacion = $this->filtro_and(filtro: $filtro, in: $in);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener ubicaciones por etapa', data: $r_inm_ubicacion);
+        }
+
+        // Excluye ubicaciones ya relacionadas con un cliente activo.
+        $ids_ubicacion = array();
+        foreach ($r_inm_ubicacion->registros as $ubicacion){
+            if(isset($ubicacion['inm_ubicacion_id']) && (int)$ubicacion['inm_ubicacion_id'] > 0){
+                $ids_ubicacion[] = (int)$ubicacion['inm_ubicacion_id'];
+            }
+        }
+
+        $ubicaciones_asignadas = array();
+        if(count($ids_ubicacion) > 0){
+            $filtro_rel = array('inm_rel_ubi_comp.status' => 'activo');
+            $in_rel = array('llave' => 'inm_ubicacion.id', 'values' => $ids_ubicacion);
+            $r_rel = (new inm_rel_ubi_comp(link: $this->link))->filtro_and(filtro: $filtro_rel, in: $in_rel);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al obtener ubicaciones ya asignadas', data: $r_rel);
+            }
+
+            foreach ($r_rel->registros as $rel){
+                if(isset($rel['inm_ubicacion_id']) && (int)$rel['inm_ubicacion_id'] > 0){
+                    $ubicaciones_asignadas[(int)$rel['inm_ubicacion_id']] = true;
+                }
+            }
+        }
+
+        $resultado = array();
+        foreach ($r_inm_ubicacion->registros as $ubicacion){
+            $inm_ubicacion_id = (int)($ubicacion['inm_ubicacion_id'] ?? 0);
+            if($inm_ubicacion_id <= 0){
+                continue;
+            }
+            if(isset($ubicaciones_asignadas[$inm_ubicacion_id])){
+                continue;
+            }
+
+            $estimacion_avaluo = $this->monto_numerico_campos(
+                registro: $ubicacion,
+                campos: array('estimacion_avaluo', 'inm_ubicacion_estimacion_avaluo')
+            );
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al obtener estimacion_avaluo de ubicacion', data: $estimacion_avaluo);
+            }
+
+            $ganancia = round($monto_precalificacion - $estimacion_avaluo, 2);
+            $diferencia_objetivo = round(abs($ganancia_esperada - $ganancia), 2);
+
+            $ubicacion['monto_precalificacion'] = round($monto_precalificacion, 2);
+            $ubicacion['estimacion_avaluo'] = round($estimacion_avaluo, 2);
+            $ubicacion['ganancia_calculada'] = $ganancia;
+            $ubicacion['diferencia_objetivo_ganancia'] = $diferencia_objetivo;
+            $ubicacion['supera_ganancia_objetivo'] = $ganancia > $ganancia_esperada;
+
+            $resultado[] = $ubicacion;
+        }
+
+        usort($resultado, function(array $a, array $b) use ($ganancia_esperada) {
+            $a_supera = (bool)$a['supera_ganancia_objetivo'];
+            $b_supera = (bool)$b['supera_ganancia_objetivo'];
+
+            if($a_supera && $b_supera){
+                return $b['ganancia_calculada'] <=> $a['ganancia_calculada'];
+            }
+
+            if($a_supera !== $b_supera){
+                return $a_supera ? -1 : 1;
+            }
+
+            $cmp = $a['diferencia_objetivo_ganancia'] <=> $b['diferencia_objetivo_ganancia'];
+            if($cmp !== 0){
+                return $cmp;
+            }
+
+            $a_dist = abs($a['ganancia_calculada'] - $ganancia_esperada);
+            $b_dist = abs($b['ganancia_calculada'] - $ganancia_esperada);
+            return $a_dist <=> $b_dist;
+        });
+
+        return array_values($resultado);
+    }
+
+    /**
+     * Obtiene un valor numerico desde distintos posibles nombres de campo.
+     *
+     * @param array|stdClass $registro Registro origen
+     * @param array $campos Campos candidatos
+     * @return float|array
+     */
+    private function monto_numerico_campos(array|stdClass $registro, array $campos): float|array
+    {
+        if(count($campos) === 0){
+            return $this->error->error(mensaje: 'Error campos no puede estar vacio', data: $campos);
+        }
+
+        foreach ($campos as $campo){
+            if(is_array($registro) && isset($registro[$campo]) && is_numeric($registro[$campo])){
+                return (float)$registro[$campo];
+            }
+            if($registro instanceof stdClass && isset($registro->$campo) && is_numeric($registro->$campo)){
+                return (float)$registro->$campo;
+            }
+        }
+
+        return $this->error->error(mensaje: 'Error no fue posible obtener monto numerico de los campos enviados', data: array(
+            'campos' => $campos,
+            'registro' => $registro
+        ));
+    }
+
+    /**
      * Valida que la entrada de consulta de precios sea valida
      * @param array|stdClass $inm_comprador Datos de comprador
      * @param array|stdClass $inm_ubicacion Datos de ubicacion
@@ -1381,3 +1538,4 @@ class inm_ubicacion extends _inm_ubicaciones {
         exit;
     }
 }
+
