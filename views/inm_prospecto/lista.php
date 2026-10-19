@@ -117,7 +117,7 @@ echo "<style>
                 <div class="filtro-grupo col-md-12">
                     <div class="col-md-2">
                         <label for="ID">ID</label>
-                        <input type="text" id="id" data-tipo="filtro" data-filtro_campo="inm_prospecto.id" placeholder="Ej: 1">
+                        <input type="text" id="id" data-tipo="data" data-filtro_campo="inm_prospecto.id" placeholder="Ej: 1">
                     </div>
                     
                     <div class="col-md-2">

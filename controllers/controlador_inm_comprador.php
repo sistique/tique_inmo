@@ -5893,7 +5893,7 @@ class controlador_inm_comprador extends _ctl_base {
                     mensaje: 'Error al obtener registro',data:  $elimina_documentos,header: $header,ws: $ws);
             }
             $nota_credito['elimina_bd'] = $elimina_documentos;
-
++
             $notas_credito[] = $nota_credito;
         }
 

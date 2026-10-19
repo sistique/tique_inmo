@@ -112,9 +112,9 @@ class _conversion{
             return $this->error->error(mensaje: 'Error $data->inm_prospecto_completo debe ser un objeto', data: $data);
         }
 
-        $keys = $this->valida_campos_obligatorios(data: $data);
+        $valida = $this->valida_campos_obligatorios(data: $data);
         if(errores::$error){
-            return $this->error->error(mensaje: 'Error con campos obligatorios', data: $keys);
+            return $this->error->error(mensaje: 'Error con campos obligatorios', data: $valida);
         }
 
         $keys = $this->keys_data_prospecto();
@@ -156,12 +156,11 @@ class _conversion{
             ['campo'=>'curp', 'mensaje' => 'Error no existe CURP'],
             ['campo'=>'nombre', 'mensaje' => 'Error no existe Nombre'],
             ['campo'=>'apellido_paterno', 'mensaje' => 'Error no existe Apellido Paterno'],
-            ['campo'=>'apellido_paterno', 'mensaje' => 'Error no existe Apellido Paterno'],
             ['campo'=>'fecha_nacimiento', 'mensaje' => 'Error no existe Fecha de Nacimiento'],
             ['campo'=>'genero', 'mensaje' => 'Error no existe Género'],
-            ['campo'=>'dp_colonia_postal_id', 'mensaje' => 'Error no existe Direccion Fiscal'],
+            /*['campo'=>'dp_colonia_postal_id', 'mensaje' => 'Error no existe Direccion Fiscal'],
             ['campo'=>'calle', 'mensaje' => 'Error no existe Calle de la Direccion Fiscal'],
-            ['campo'=>'numero_exterior', 'mensaje' => 'Error no existe Numero Exterior de la Direccion Fiscal'],
+            ['campo'=>'numero_exterior', 'mensaje' => 'Error no existe Numero Exterior de la Direccion Fiscal'],*/
         ];
 
         foreach ($keys_valida as $key){

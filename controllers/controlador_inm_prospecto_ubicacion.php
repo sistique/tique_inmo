@@ -370,7 +370,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
             'entre_calle_2','entrada','supermanzana','edificio','condominio','numero_notaria','nombre_notario',
             'plaza_notaria','numero_escritura','libro','volumen','calle_domicilio','numero_exterior_domicilio',
             'numero_interior_domicilio','etapa','mensualidad','cuenta_luz', 'calle_fiscal','numero_exterior_fiscal',
-            'numero_interior_fiscal','folio_registro_publico');
+            'numero_interior_fiscal','folio_registro_publico','url','estimacion_avaluo');
 
         $keys->selects = array();
 
@@ -1796,7 +1796,6 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         $ths[] = array('etiqueta'=>'Nss', 'campo'=>'inm_prospecto_ubicacion_nss');
         $ths[] = array('etiqueta'=>'Numero de Credito', 'campo'=>'inm_prospecto_ubicacion_numero_credito');
         $ths[] = array('etiqueta'=>'Nombre', 'campo'=>'com_prospecto_razon_social');
-        $ths[] = array('etiqueta'=>'Telefono', 'campo'=>'inm_prospecto_ubicacion_numero_com');
         $ths[] = array('etiqueta'=>'Celular', 'campo'=>'inm_prospecto_ubicacion_cel_com');
 
         $ths[] = array('etiqueta'=>'Monto Credito', 'campo'=>'inm_prospecto_ubicacion_monto_credito');
@@ -1807,6 +1806,8 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         $ths[] = array('etiqueta'=>'Direccion', 'campo'=>'inm_prospecto_ubicacion_ubicacion');
         $ths[] = array('etiqueta'=>'RFC', 'campo'=>'inm_prospecto_ubicacion_rfc');
         $ths[] = array('etiqueta'=>'CURP', 'campo'=>'inm_prospecto_ubicacion_curp');
+        $ths[] = array('etiqueta'=>'Telefono', 'campo'=>'inm_prospecto_ubicacion_numero_com');
+
         $ths[] = array('etiqueta'=>'Fecha Alta', 'campo'=>'inm_prospecto_ubicacion_fecha_alta');
         if(!$existe) {
             $ths[] = array('etiqueta' => 'Agente', 'campo' => 'com_agente_descripcion');
@@ -2368,7 +2369,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         $columns["com_prospecto_razon_social"]["titulo"] = "Nombre";
         $columns["inm_prospecto_ubicacion_fecha_alta"]["titulo"] = "Fecha Alta";
         if(!$existe){
-            $columns["com_agente_descripcion"]["titulo"] = "Agente";
+            $columns["com_agente_descripcion"]["titulo"] = "Prospectador";
         }
         $columns["inm_status_prospecto_ubicacion_descripcion"]["titulo"] = "Status Prospecto";
 
@@ -2778,7 +2779,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 4, key: 'monto_devolucion',
+        $keys_selects = (new init())->key_select_txt(cols: 3, key: 'monto_devolucion',
             keys_selects: $keys_selects, place_holder: 'Monto Devolucion', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
@@ -2895,14 +2896,14 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 4,key: 'correo_mi_cuenta_infonavit', keys_selects: $keys_selects,
-            place_holder: 'Correo Infonavit',required: false);
+        $keys_selects = (new init())->key_select_txt(cols: 3,key: 'correo_mi_cuenta_infonavit',
+            keys_selects: $keys_selects, place_holder: 'Correo Infonavit',required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 4,key: 'password_mi_cuenta_infonavit', keys_selects: $keys_selects,
-            place_holder: 'Contraseña Infonavit',required: false);
+        $keys_selects = (new init())->key_select_txt(cols: 3,key: 'password_mi_cuenta_infonavit',
+            keys_selects: $keys_selects, place_holder: 'Contraseña Infonavit',required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
@@ -2934,6 +2935,18 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
 
         $keys_selects = (new init())->key_select_txt(cols: 6, key: 'cuenta_predial',
             keys_selects: $keys_selects, place_holder: 'Cuenta Predial', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 12, key: 'url',
+            keys_selects: $keys_selects, place_holder: 'URL Mapa', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 3, key: 'estimacion_avaluo',
+            keys_selects: $keys_selects, place_holder: 'Estimación de Avaluo', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }

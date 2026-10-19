@@ -6,6 +6,7 @@ use gamboamartin\comercial\models\com_medio_prospeccion;
 use gamboamartin\comercial\models\com_tipo_agente;
 use gamboamartin\comercial\models\com_tipo_prospecto;
 use gamboamartin\direccion_postal\models\dp_calle_pertenece;
+use gamboamartin\direccion_postal\models\dp_colonia_postal;
 use gamboamartin\errores\errores;
 use gamboamartin\validacion\validacion;
 use PDO;
@@ -62,8 +63,37 @@ class _conversion_ubicacion{
      * @param array $inm_ubicacion_ins ubicacion registro
      * @return array
      */
-    private function defaults_alta_ubicacion(array $inm_ubicacion_ins): array
+    private function defaults_alta_ubicacion(array $inm_ubicacion_ins, PDO $link): array
     {
+        if(!isset($inm_ubicacion_ins['dp_colonia_postal_fiscal_id'])){
+            $filtro_dp_colonia_postal['dp_colonia_postal.predeterminado'] = 'activo';
+            $r_colonia_postal = (new dp_colonia_postal(link: $link))->filtro_and(filtro: $filtro_dp_colonia_postal);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al maquetar row',data:  $r_colonia_postal);
+            }
+
+            $inm_ubicacion_ins['dp_colonia_postal_fiscal_id'] = $r_colonia_postal->registros[0]['dp_colonia_postal_id'];
+        }
+
+        if(!isset($inm_ubicacion_ins['inm_tipo_ubicacion_id'])){
+            $filtro_inm_tipo_ubicacion['inm_tipo_ubicacion.descripcion'] = 'PODER';
+            $r_colonia_postal = (new inm_tipo_ubicacion(link: $link))->filtro_and(filtro: $filtro_inm_tipo_ubicacion);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al maquetar row',data:  $r_colonia_postal);
+            }
+
+            $inm_ubicacion_ins['inm_tipo_ubicacion_id'] = $r_colonia_postal->registros[0]['inm_tipo_ubicacion_id'];
+        }
+
+        if(!isset($inm_ubicacion_ins['inm_tipo_vivienda_id'])){
+            $filtro_inm_tipo_vivienda['inm_tipo_vivienda.descripcion'] = 'USADA';
+            $r_colonia_postal = (new inm_tipo_vivienda(link: $link))->filtro_and(filtro: $filtro_inm_tipo_vivienda);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al maquetar row',data:  $r_colonia_postal);
+            }
+
+            $inm_ubicacion_ins['inm_tipo_vivienda_id'] = $r_colonia_postal->registros[0]['inm_tipo_vivienda_id'];
+        }
 
         return $inm_ubicacion_ins;
     }
@@ -89,6 +119,11 @@ class _conversion_ubicacion{
             return $this->error->error(mensaje: 'Error $data->inm_prospecto_completo debe ser un objeto', data: $data);
         }
 
+        $valida = $this->valida_campos_obligatorios(data: $data);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error con campos obligatorios', data: $valida);
+        }
+
         $keys = $this->keys_data_prospecto_ubicacion();
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener keys', data: $keys);
@@ -99,16 +134,13 @@ class _conversion_ubicacion{
             return $this->error->error(mensaje: 'Error al inicializar inm_ubicacion', data: $inm_ubicacion_ins);
         }
 
-        $inm_ubicacion_ins = $this->defaults_alta_ubicacion(inm_ubicacion_ins: $inm_ubicacion_ins);
+        $inm_ubicacion_ins = $this->defaults_alta_ubicacion(inm_ubicacion_ins: $inm_ubicacion_ins, link: $link);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener inm_ubicacion_ins', data: $inm_ubicacion_ins);
         }
 
-        if(!isset($inm_ubicacion_ins['inm_tipo_ubicacion_id'])){
-            $inm_ubicacion_ins['inm_tipo_ubicacion_id'] = '1';
-        }
-
-        $keys_necesarios = array('dp_colonia_postal_id','inm_tipo_ubicacion_id');
+        $keys_necesarios = array('dp_colonia_postal_id','inm_tipo_ubicacion_id','dp_colonia_postal_fiscal_id',
+            'inm_tipo_vivienda_id');
         $valida = (new validacion())->valida_existencia_keys(keys: $keys_necesarios,registro:  $inm_ubicacion_ins);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar row upd',data:  $valida);
@@ -245,7 +277,7 @@ class _conversion_ubicacion{
 
         $inm_ubicacion_ins = $this->inm_ubicacion_ins(data: $data,link: $modelo->link);
         if(errores::$error){
-            return $this->error->error(mensaje: 'Error al obtener id_pref', data: $inm_ubicacion_ins);
+            return $this->error->error(mensaje: 'Error al obtener maquetar registro', data: $inm_ubicacion_ins);
         }
 
         $inm_ubicacion_modelo = new inm_ubicacion(link: $modelo->link);
@@ -506,19 +538,96 @@ class _conversion_ubicacion{
      */
     private function keys_data_prospecto_ubicacion(): array
     {
-        return array('id','lote', 'manzana', 'costo_directo', 'numero_exterior', 'numero_interior', 'etapa',
-            'cuenta_predial', 'n_opiniones_valor', 'monto_opinion_promedio', 'costo', 'com_tipo_prospecto_id',
-            'com_prospecto_id', 'com_direccion_id', 'nss', 'curp', 'nombre', 'apellido_paterno', 'apellido_materno',
-            'nombre_completo_valida', 'adeudo_hipoteca', 'adeudo_predial', 'adeudo_agua', 'adeudo_luz',
-            'monto_devolucion', 'cuenta_agua', 'nivel', 'recamaras', 'metros_terreno', 'metros_construccion',
-            'razon_social', 'rfc', 'observaciones', 'fecha_otorgamiento_credito', 'inm_prototipo_id',
-            'inm_complemento_id', 'inm_estado_vivienda_id', 'lada_com', 'numero_com', 'cel_com', 'correo_com',
-            'inm_status_prospecto_ubicacion_id', 'calle', 'dp_colonia_postal_id', 'org_sucursal_id',
-            'inm_tipo_vivienda_id', 'inm_tipo_credito_id', 'numero_credito', 'correo_mi_cuenta_infonavit',
-            'password_mi_cuenta_infonavit', 'entrada', 'supermanzana', 'edificio', 'condominio', 'numero_notaria',
-            'nombre_notario', 'plaza_notaria', 'numero_escritura', 'libro', 'volumen',
-            'dp_colonia_postal_domicilio_id', 'calle_domicilio', 'numero_exterior_domicilio',
-            'numero_interior_domicilio');
+        return array(
+            'id',
+            'costo_directo',
+            'n_opiniones_valor',
+            'monto_opinion_promedio',
+            'costo',
+            'com_tipo_prospecto_id',
+            'com_prospecto_id',
+            'com_direccion_id',
+            'nombre_completo_valida',
+            'lada_com',
+            'inm_status_prospecto_ubicacion_id',
+
+            /* Apartado 1 */
+            'org_sucursal_id',
+            'com_agente_id',
+            'inm_tipo_compra_id',
+            'nss',
+            'nombre',
+            'apellido_paterno',
+            'apellido_materno',
+            'curp',
+            'rfc',
+            'observaciones',
+
+            /* Apartado 2 */
+            'dp_colonia_postal_id',
+            'calle',
+            'numero_exterior',
+            'numero_interior',
+            'inm_tipo_vivienda_id',
+            'inm_estado_vivienda_id',
+            'inm_prototipo_id',
+            'inm_complemento_id',
+            'folio_registro_publico',
+            'lote',
+            'nivel',
+            'entrada',
+            'manzana',
+            'supermanzana',
+            'edificio',
+            'condominio',
+            'etapa',
+            'recamaras',
+            'metros_terreno',
+            'metros_construccion',
+            'numero_notaria',
+            'plaza_notaria',
+            'nombre_notario',
+            'numero_escritura',
+            'libro',
+            'volumen',
+            'url',
+
+            /* Apartado 3 */
+            'inm_tipo_credito_id',
+            'numero_credito',
+            'monto_credito',
+            'adeudo_hipoteca',
+            'mensualidad',
+            'fecha_otorgamiento_credito',
+            'monto_devolucion',
+            'correo_mi_cuenta_infonavit',
+            'password_mi_cuenta_infonavit',
+
+            /* Apartado 4 */
+            'razon_social',
+            'inm_estado_civil_id',
+            'dp_colonia_postal_domicilio_id',
+            'calle_domicilio',
+            'numero_exterior_domicilio',
+            'numero_interior_domicilio',
+            'numero_com',
+            'cel_com',
+            'correo_com',
+
+            /* Apartado 5 */
+            'cuenta_predial',
+            'adeudo_predial',
+            'cuenta_agua',
+            'adeudo_agua',
+            'cuenta_luz',
+            'adeudo_luz',
+
+            /* Apartado 9 */
+            'dp_colonia_postal_fiscal_id',
+            'calle_fiscal',
+            'numero_exterior_fiscal',
+            'numero_interior_fiscal',
+        );
     }
 
     /**
@@ -660,5 +769,47 @@ class _conversion_ubicacion{
             return $this->error->error(mensaje: 'Error key debe ser un texto', data: $key);
         }
         return true;
+    }
+
+    private function valida_campos_obligatorios(stdClass $data): array|stdClass
+    {
+        $keys_valida = [
+            /* Apartado 1 */
+            ['campo'=>'nss', 'mensaje' => 'Error no existe NSS'],
+            ['campo'=>'curp', 'mensaje' => 'Error no existe CURP'],
+            ['campo'=>'nombre', 'mensaje' => 'Error no existe Nombre'],
+            ['campo'=>'apellido_paterno', 'mensaje' => 'Error no existe Apellido Paterno'],
+
+            /* Apartado 2 */
+            ['campo'=>'dp_colonia_postal_id', 'mensaje' => 'Error no existe Direccion de Ubicacion'],
+            ['campo'=>'inm_prototipo_id', 'mensaje' => 'Error no existe Prototipo'],
+            ['campo'=>'folio_registro_publico', 'mensaje' => 'Error no existe Folio de Registro Publico'],
+            ['campo'=>'numero_notaria', 'mensaje' => 'Error no existe Numero de Notaria'],
+            ['campo'=>'plaza_notaria', 'mensaje' => 'Error no existe Plaza de Notaria'],
+            ['campo'=>'nombre_notario', 'mensaje' => 'Error no existe Nombre de Notario'],
+            ['campo'=>'numero_escritura', 'mensaje' => 'Error no existe Numero de Escritura'],
+            ['campo'=>'libro', 'mensaje' => 'Error no existe Libro de Escritura'],
+
+            /* Apartado 3 */
+            ['campo'=>'inm_tipo_credito_id', 'mensaje' => 'Error no existe Tipo de Credito'],
+            ['campo'=>'numero_credito', 'mensaje' => 'Error no existe Numero de Credito'],
+            ['campo'=>'monto_credito', 'mensaje' => 'Error no existe Monto de Credito'],
+            ['campo'=>'adeudo_hipoteca', 'mensaje' => 'Error no existe Saldo de Credito'],
+            ['campo'=>'mensualidad', 'mensaje' => 'Error no existe Mensualidad de Credito'],
+            ['campo'=>'fecha_otorgamiento_credito', 'mensaje' => 'Error no existe Fecha de Otorgamiento de Credito'],
+
+            /* Apartado 4 */
+            ['campo'=>'dp_colonia_postal_domicilio_id', 'mensaje' => 'Error no existe Domicilio'],
+            ['campo'=>'calle_domicilio', 'mensaje' => 'Error no existe Calle del Domicilio'],
+            ['campo'=>'numero_exterior_domicilio', 'mensaje' => 'Error no existe Numero Exterior del Domicilio'],
+        ];
+
+        foreach ($keys_valida as $key){
+            if(!isset($data->inm_prospecto_ubicacion->{$key['campo']})){
+                return $this->error->error(mensaje: $key['mensaje'], data: $data);
+            }
+        }
+
+        return $data;
     }
 }

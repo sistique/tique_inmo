@@ -13,7 +13,12 @@
         <div class="contenedor_completo">
             <div class="filtros-avanzados">
                 <div class="filtro-grupo col-md-12">
-                    <div class="col-md-3">
+                    <div class="col-md-1">
+                        <label for="ID">ID</label>
+                        <input type="text" id="id" data-tipo="data" data-filtro_campo="inm_prospecto_ubicacion.id" placeholder="Ej: 1">
+                    </div>
+
+                    <div class="col-md-2">
                         <label>Status Prospecto Ubicacion</label>
                         <select class="form-control basic-multiple" id="inm_status_prospecto_ubicacion" name="inm_status_prospecto_ubicacion[]"
                                 data-tipo="in" data-filtro_campo="inm_status_prospecto_ubicacion.descripcion" multiple
@@ -41,7 +46,7 @@
                     <?php
                         if(!$controlador->es_agente){
                             echo '<div class="col-md-2">
-                                    <label for="agente">Agente</label>
+                                    <label for="agente">Prospectador</label>
                                     <input type="text" id="agente" data-tipo="filtro" data-filtro_campo="com_agente.descripcion" placeholder="Ej: JUAN PEREZ">
                                 </div>';
                         }
@@ -58,6 +63,7 @@
                 <button id="filtrar">Filtrar</button>
                 <button id="limpiar">Limpiar</button>
                 <form method="post" action="<?php echo $controlador->link_exportar_xls; ?>" enctype="multipart/form-data">
+                    <input type="hidden" name="id" id="hidden_id">
                     <input type="hidden" name="inm_status_prospecto_ubicacion" id="hidden_inm_status_prospecto_ubicacion">
                     <input type="hidden" name="nombre_prospecto_ubicacion" id="hidden_nombre_prospecto_ubicacion">
                     <input type="hidden" name="ubicacion" id="hidden_ubicacion">

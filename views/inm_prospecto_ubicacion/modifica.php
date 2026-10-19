@@ -76,6 +76,7 @@
                             <?php echo $controlador->inputs->numero_escritura; ?>
                             <?php echo $controlador->inputs->libro; ?>
                             <?php echo $controlador->inputs->volumen; ?>
+                            <?php echo $controlador->inputs->url; ?>
                             <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
                         </div>
 
@@ -91,6 +92,7 @@
                             <?php echo $controlador->inputs->monto_devolucion; ?>
                             <?php echo $controlador->inputs->correo_mi_cuenta_infonavit; ?>
                             <?php echo $controlador->inputs->password_mi_cuenta_infonavit; ?>
+                            <?php echo $controlador->inputs->estimacion_avaluo; ?>
                             <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
                         </div>
 

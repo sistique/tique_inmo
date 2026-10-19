@@ -72,7 +72,7 @@ $links_menu = (new links_menu(link:$controlador->link, registro_id: -1))->links;
         </header>
         <?php endif; ?>
 
-        <main class="app-main">
+        <main class="app-main" id="app-main">
             <div class="app-main-inner">
                 <?php include($data->include_action); ?>
             </div>
@@ -107,6 +107,7 @@ if($data->js_view_aplica_include){
     var MOBILE_BP   = 768;   // px — off-canvas
     var TABLET_BP   = 900;   // px — hover-expand
 
+    var appMain     = document.getElementById('app-main');
     var sidebar     = document.getElementById('app-sidebar');
     var appBody     = document.getElementById('app-body');
     var toggleBtn   = document.getElementById('sidebar-toggle-btn');
@@ -163,6 +164,28 @@ if($data->js_view_aplica_include){
     }
 
     if (toggleBtn)   toggleBtn.addEventListener('click', onToggleClick);
+
+    if (appMain) {
+        appMain.addEventListener('mouseenter', function () {
+            if (isMobile()) {
+                closeMobile();
+            } else {
+                // Cerrar el menú si está expandido
+                if (!sidebar.classList.contains('collapsed')) {
+                    toggleDesktop();
+                }
+            }
+        });
+    }
+
+    /*if (sidebar) {
+        sidebar.addEventListener('mouseenter', function () {
+            if (!isMobile()) {
+                toggleDesktop();
+            }
+        });
+    }*/
+
     if (collapseBtn) collapseBtn.addEventListener('click', toggleDesktop);
 
     /* ── Backdrop click → cerrar mobile ─────────────────────── */
