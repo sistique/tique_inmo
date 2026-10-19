@@ -138,9 +138,9 @@ class inm_co_acreditado extends _modelo_parent{
         }
 
         if(isset($inm_co_acreditado['numero']) && trim($inm_co_acreditado['numero']) !== '') {
-            $valida_numero = $this->validacion->valida_pattern('tel_sin_lada', $inm_co_acreditado['numero']);
+            $valida_numero = $this->validacion->valida_pattern('telefono_mx', $inm_co_acreditado['numero']);
             if (!$valida_numero) {
-                return $this->error->error(mensaje: 'Error al validar numero', data: $this->validacion->patterns['tel_sin_lada']);
+                return $this->error->error(mensaje: 'Error al validar numero', data: $this->validacion->patterns['telefono_mx']);
             }
         }
 
