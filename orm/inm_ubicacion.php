@@ -1275,7 +1275,7 @@ class inm_ubicacion extends _inm_ubicaciones {
     final public function mejores_ubicaciones_por_ganancia(
         int $inm_comprador_id,
         float $ganancia_esperada,
-        array $etapas = array('FIRMADAS POR APROBAR','FIRMADAS')
+        array $etapas = array('6','7')
     ): array {
         if($inm_comprador_id <= 0){
             return $this->error->error(mensaje: 'Error inm_comprador_id debe ser mayor a 0', data: $inm_comprador_id);
@@ -1303,7 +1303,7 @@ class inm_ubicacion extends _inm_ubicaciones {
         }
 
         $filtro = array('inm_ubicacion.status' => 'activo');
-        $in = array('llave' => 'inm_ubicacion.etapa', 'values' => $etapas);
+        $in = array('llave' => 'inm_ubicacion.inm_status_ubicacion_id', 'values' => $etapas);
         $r_inm_ubicacion = $this->filtro_and(filtro: $filtro, in: $in);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener ubicaciones por etapa', data: $r_inm_ubicacion);

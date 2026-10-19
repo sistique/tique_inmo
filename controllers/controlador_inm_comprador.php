@@ -465,6 +465,7 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al obtener inputs_hidden',data:  $inputs, header: $header,ws:  $ws);
         }
 
+        /*
         $filtro_ubi['inm_ubicacion.status'] = 'activo';
 
         $in_ubi = array();
@@ -511,6 +512,33 @@ class controlador_inm_comprador extends _ctl_base {
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al inm_ubicacion_id',data:  $inm_ubicacion_id,
                 header: $header,ws:  $ws);
+        }
+        */
+
+        $ganancia_esperada = 120000.0;
+        if(isset($_GET['ganancia_esperada']) && is_numeric($_GET['ganancia_esperada'])){
+            $ganancia_esperada = (float)$_GET['ganancia_esperada'];
+        }
+
+        if($ganancia_esperada < 0){
+            return $this->retorno_error(mensaje: 'Error ganancia_esperada no puede ser negativa',
+                data: $ganancia_esperada, header: $header, ws: $ws);
+        }
+
+        $registros_disponibles = (new inm_ubicacion(link: $this->link))->mejores_ubicaciones_por_ganancia(
+            inm_comprador_id: $this->registro_id,
+            ganancia_esperada: $ganancia_esperada
+        );
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener ubicaciones sugeridas por ganancia',
+                data: $registros_disponibles, header: $header, ws: $ws);
+        }
+
+        $inm_ubicacion_id = (new _inm_comprador())->inm_ubicacion_id_input(controler: $this,
+            registros: $registros_disponibles);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al generar input inm_ubicacion_id con sugerencias',
+                data:  $inm_ubicacion_id, header: $header, ws:  $ws);
         }
 
         $this->inputs->inm_ubicacion_util_id = $inm_ubicacion_id;
