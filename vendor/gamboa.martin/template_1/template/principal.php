@@ -165,7 +165,7 @@ if($data->js_view_aplica_include){
 
     if (toggleBtn)   toggleBtn.addEventListener('click', onToggleClick);
 
-    if (appMain) {
+    /*if (appMain) {
         appMain.addEventListener('mouseenter', function () {
             if (isMobile()) {
                 closeMobile();
@@ -176,7 +176,7 @@ if($data->js_view_aplica_include){
                 }
             }
         });
-    }
+    }*/
 
     /*if (sidebar) {
         sidebar.addEventListener('mouseenter', function () {
