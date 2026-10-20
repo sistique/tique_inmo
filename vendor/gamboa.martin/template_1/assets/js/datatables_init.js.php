@@ -74,23 +74,26 @@ datatable = function (identificador, columns, columnDefs, data, filtro_in, dom) 
 
 document.addEventListener("DOMContentLoaded", function () {
     // Delegación de eventos en el tbody para manejar los botones dentro de la DataTable
-    document.querySelector("tbody").addEventListener("click", function (event) {
-        let button = event.target.closest(".dropdown-toggle");
+    let tableBody = document.querySelector("tbody");
+    if (tableBody) {
+        tableBody.addEventListener("click", function (event) {
+            let button = event.target.closest(".dropdown-toggle");
 
-        if (button) {
-            let dropdownMenu = button.nextElementSibling;
+            if (button) {
+                let dropdownMenu = button.nextElementSibling;
 
-            // Cerrar otros dropdowns abiertos
-            document.querySelectorAll(".dropdown-menu").forEach(menu => {
-                if (menu !== dropdownMenu) {
-                    menu.classList.remove("show");
-                }
-            });
+                // Cerrar otros dropdowns abiertos
+                document.querySelectorAll(".dropdown-menu").forEach(menu => {
+                    if (menu !== dropdownMenu) {
+                        menu.classList.remove("show");
+                    }
+                });
 
-            // Alternar la visibilidad del dropdown actual
-            dropdownMenu.classList.toggle("show");
-        }
-    });
+                // Alternar la visibilidad del dropdown actual
+                dropdownMenu.classList.toggle("show");
+            }
+        });
+    }
 
     // Cerrar dropdowns si se hace clic fuera
     document.addEventListener("click", function (event) {

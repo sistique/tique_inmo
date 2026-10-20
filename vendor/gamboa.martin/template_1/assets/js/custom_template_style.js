@@ -199,8 +199,11 @@ function formatearBytes(bytes) {
 var modal = document.getElementById("myModal");
 var closeBtn = document.getElementById("closeModalBtn");
 var ruta_docs = document.getElementById("ruta-docs");
+var documentos = [];
 
-var documentos = JSON.parse(ruta_docs.textContent);
+if (ruta_docs) {
+    documentos = JSON.parse(ruta_docs.textContent);
+}
 
 var indice = 0;
 
@@ -270,18 +273,22 @@ $(document).on("click", "a[id='vista_previa']", function (event) {
     loaderOverlay.remove();
 });
 
-closeBtn.onclick = function () {
-    $("#myModal .content .view").attr("src", "");
-
-    modal.close();
-}
-
-modal.addEventListener('click', function (event) {
-    if (event.target === modal) {
+if(closeBtn) {
+    closeBtn.onclick = function () {
         $("#myModal .content .view").attr("src", "");
+
         modal.close();
     }
-});
+}
+
+if(modal) {
+    modal.addEventListener('click', function (event) {
+        if (event.target === modal) {
+            $("#myModal .content .view").attr("src", "");
+            modal.close();
+        }
+    });
+}
 
 $("#previewPrev").on("click", function() {
     anterior();

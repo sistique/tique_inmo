@@ -165,26 +165,30 @@ if($data->js_view_aplica_include){
 
     if (toggleBtn)   toggleBtn.addEventListener('click', onToggleClick);
 
-    /*if (appMain) {
+    if (appMain) {
         appMain.addEventListener('mouseenter', function () {
-            if (isMobile()) {
-                closeMobile();
-            } else {
-                // Cerrar el menú si está expandido
-                if (!sidebar.classList.contains('collapsed')) {
-                    toggleDesktop();
-                }
+            if (!isMobile()) {
+                if (sidebar) sidebar.classList.add('collapsed');
+                if (appBody) appBody.classList.add('sidebar-collapsed');
+
+                localStorage.setItem('sb_collapsed', '1');
             }
         });
-    }*/
+    }
 
-    /*if (sidebar) {
+    if (sidebar) {
         sidebar.addEventListener('mouseenter', function () {
             if (!isMobile()) {
-                toggleDesktop();
+                sidebar.classList.remove('collapsed');
+
+                if (appBody) {
+                    appBody.classList.remove('sidebar-collapsed');
+                }
+
+                localStorage.setItem('sb_collapsed', '0');
             }
         });
-    }*/
+    }
 
     if (collapseBtn) collapseBtn.addEventListener('click', toggleDesktop);
 
