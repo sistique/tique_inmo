@@ -819,6 +819,11 @@
                                         <div class="col-lg-3">
                                             <?php echo $controlador->button_solicitud_avaluo; ?>
                                         </div>
+                                        <?php if($controlador->existe_valuador){ ?>
+                                            <div class="col-lg-3">
+                                                <?php echo $controlador->button_envia_correo; ?>
+                                            </div>
+                                        <?php } ?>
                                     </div>
                                 </div>
                                 <div class="conten" id="cpestana4">
@@ -1365,6 +1370,81 @@
         Documento 1 de 1
     </div>
 
+</dialog>
+
+<!-- HTML DEL MODAL -->
+<dialog id="myModalMail">
+    <form method="post" action="<?php echo $controlador->link_envia_correo_bd; ?>" class="form-additional"
+          enctype="multipart/form-data" id="mailForm" style="display:flex;flex-direction:column;height:100%;margin:0">
+
+        <div class="mm-header">
+            <span><!--Nuevo correo--></span>
+            <span class="mm-actions">
+                <button type="button" id="mmMax" title="Maximizar">⤢</button>
+                <button type="button" id="mmClose" title="Cerrar">✕</button>
+            </span>
+        </div>
+
+        <div class="mm-row">
+            <label>Para</label>
+            <input type="text" id="mmTo" name="to" placeholder="correo1@ej.com, correo2@ej.com"
+                    value="<?php echo $controlador->receptor; ?>">
+            <span class="mm-toggles">
+                <button type="button" data-toggle="mmCcRow">CC</button>
+                <button type="button" data-toggle="mmBccRow">CCO</button>
+            </span>
+        </div>
+
+        <div class="mm-row hidden" id="mmCcRow">
+            <label>CC</label>
+            <input type="text" id="mmCc" name="cc" placeholder="correo1@ej.com, correo2@ej.com">
+        </div>
+        <div class="mm-row hidden" id="mmBccRow">
+            <label>CCO</label>
+            <input type="text" id="mmBcc" name="bcc" placeholder="correo1@ej.com, correo2@ej.com">
+        </div>
+
+        <div class="mm-row">
+            <label>Asunto</label>
+            <input type="text" id="mmSubject" name="subject" value="<?php echo $controlador->asunto_avaluo; ?>">
+        </div>
+
+        <div class="mm-body" id="mmEditor" contenteditable="true"><?php echo $controlador->mensaje_avaluo; ?></div>
+
+        <div class="mm-toolbar">
+            <button type="button" data-cmd="undo" title="Deshacer">↶</button>
+            <button type="button" data-cmd="redo" title="Rehacer">↷</button>
+            <span class="sep"></span>
+            <button type="button" data-cmd="bold" title="Negrita"><b>B</b></button>
+            <button type="button" data-cmd="italic" title="Cursiva"><i>I</i></button>
+            <button type="button" data-cmd="underline" title="Subrayado"><u>U</u></button>
+            <span class="sep"></span>
+            <button type="button" data-cmd="insertUnorderedList" title="Viñetas">☰</button>
+            <button type="button" data-cmd="insertOrderedList" title="Numeración">1.</button>
+            <button type="button" data-cmd="outdent" title="Reducir sangría">⇤</button>
+            <button type="button" data-cmd="indent" title="Aumentar sangría">⇥</button>
+            <span class="sep"></span>
+            <select id="mmSize" title="Tamaño">
+                <option value="2">9pt</option>
+                <option value="3" selected>11pt</option>
+                <option value="4">13pt</option>
+                <option value="5">18pt</option>
+                <option value="6">24pt</option>
+            </select>
+            <button type="button" data-cmd="removeFormat" title="Quitar formato">Tx</button>
+            <button type="button" id="mmImg" title="Imagen">🖼</button>
+        </div>
+
+        <div class="mm-files" id="mmFiles"></div>
+
+        <div class="mm-footer">
+            <button type="button" class="mm-send" id="mmSend">Enviar</button>
+            <button type="button" class="mm-icon" id="mmAttach" title="Adjuntar">📎</button>
+            <input type="file" class="files" id="mmFileInput" name="adjuntos[]" multiple hidden>
+            <input type="file" class="files" id="mmImgInput" accept="image/*" hidden>
+            <!-- <span class="mm-status" id="mmStatus"></span> -->
+        </div>
+    </form>
 </dialog>
 
 

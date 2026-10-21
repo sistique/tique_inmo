@@ -21,6 +21,10 @@ class inm_rel_ubi_comp extends _modelo_parent{
         $campos_obligatorios = array('inm_comprador_id','inm_ubicacion_id','precio_operacion');
 
         $columnas_extra= array();
+        $sql = "(CONCAT_WS(' ', inm_comprador.nombre, inm_comprador.apellido_paterno, inm_comprador.apellido_materno))";
+
+        $columnas_extra['inm_comprador_razon_social'] = $sql;
+
         $sql = "(CONCAT_WS(' ', inm_ubicacion.calle, inm_ubicacion.numero_exterior, 
         inm_ubicacion.numero_interior, dp_colonia.descripcion, dp_municipio.descripcion))";
 

@@ -1759,3 +1759,123 @@ $('#inm_conf_cuenta_notaria_id').change(function (){
         $('#nombre_beneficiario').val(beneficiario);
     }
 });
+
+/***** Modal Enviar Correo *****/
+
+(function () {
+    const dlg = document.getElementById('myModalMail');
+    const $ = id => document.getElementById(id);
+    const editor = $('mmEditor'), status = $('mmStatus');
+    let files = [], draftTimer, savedAt = null;
+    const DRAFT_KEY = 'mailDraft';
+
+    // ---- Abrir / cerrar ----
+    window.openMailModal = function (opts = {}) {
+        const d = JSON.parse(localStorage.getItem(DRAFT_KEY) || 'null');
+        $('mmTo').value = opts.to ?? d?.to ?? '';
+        $('mmSubject').value = opts.subject ?? d?.subject ?? '';
+        editor.innerHTML = opts.body ?? d?.body ?? '';
+        files = []; renderFiles();
+        status.textContent = '';
+        dlg.showModal();
+        ($('mmTo').value ? editor : $('mmTo')).focus();
+    };
+    window.closeMailModal = () => dlg.close();
+    $('mmClose').onclick = () => dlg.close();
+    $('mmMax').onclick = () => dlg.classList.toggle('max');
+    dlg.addEventListener('click', e => { if (e.target === dlg) { /* no cerrar al hacer clic fuera */ } });
+
+    // ---- CC / CCO ----
+    dlg.querySelectorAll('[data-toggle]').forEach(b =>
+        b.onclick = () => $(b.dataset.toggle).classList.toggle('hidden'));
+
+    // ---- Barra de formato ----
+    dlg.querySelectorAll('[data-cmd]').forEach(b => {
+        b.onmousedown = e => e.preventDefault();           // no perder la selección
+        b.onclick = () => { document.execCommand(b.dataset.cmd); editor.focus(); };
+    });
+    $('mmSize').onchange = e => { document.execCommand('fontSize', false, e.target.value); editor.focus(); };
+    $('mmImg').onclick = () => $('mmImgInput').click();
+    $('mmImgInput').onchange = e => {
+        const f = e.target.files[0]; if (!f) return;
+        const r = new FileReader();
+        r.onload = () => { editor.focus(); document.execCommand('insertImage', false, r.result); };
+        r.readAsDataURL(f); e.target.value = '';
+    };
+
+    // ---- Adjuntos ----
+    $('mmAttach').onclick = () => $('mmFileInput').click();
+    $('mmFileInput').onchange = e => { files.push(...e.target.files); e.target.value = ''; renderFiles(); };
+    function renderFiles() {
+        $('mmFiles').textContent = files.length ? '📎 ' + files.map(f => f.name).join(', ') : '';
+    }
+
+    // ---- Borrador automático ----
+    function saveDraft() {
+        localStorage.setItem(DRAFT_KEY, JSON.stringify({
+            to: $('mmTo').value, subject: $('mmSubject').value, body: editor.innerHTML
+        }));
+        savedAt = Date.now(); status.textContent = 'Guardado hace unos segundos';
+    }
+    ['mmTo', 'mmSubject'].forEach(id => $(id).addEventListener('input', queueDraft));
+    editor.addEventListener('input', queueDraft);
+    function queueDraft() { clearTimeout(draftTimer); draftTimer = setTimeout(saveDraft, 1500); }
+
+    // ---- Enviar ----
+    $('mmSend').onclick = async () => {
+        if (!$('mmTo').value.trim()) { alert('Escribe al menos un destinatario.'); return; }
+        const fd = new FormData();
+        fd.append('from', $('mmFrom').value);
+        fd.append('to', $('mmTo').value);
+        fd.append('cc', $('mmCc').value);
+        fd.append('bcc', $('mmBcc').value);
+        fd.append('subject', $('mmSubject').value);
+        fd.append('body', editor.innerHTML);
+        files.forEach(f => fd.append('adjuntos[]', f));
+
+        $('mmSend').disabled = true; status.style.color = '#555'; status.textContent = 'Enviando…';
+        try {
+            const res = await fetch('enviar_correo.php', { method: 'POST', body: fd });
+            const json = await res.json();
+            if (!json.ok) throw new Error(json.error || 'Error al enviar');
+            localStorage.removeItem(DRAFT_KEY);
+            dlg.close();
+            alert('Correo enviado');
+        } catch (err) {
+            status.style.color = '#c0392b'; status.textContent = err.message;
+        } finally { $('mmSend').disabled = false; }
+    };
+})();
+
+const modalmail = document.getElementById("myModalMail");
+const closemailBtn = document.getElementById("closeModalMailBtn");
+const enviacorreo = document.getElementById("envia_correo");
+
+enviacorreo.addEventListener("click", function(event) {
+    event.preventDefault();
+
+    // Crear y mostrar el loader en JS nativo
+    const loaderOverlay = document.createElement("div");
+    loaderOverlay.className = "loader-overlay";
+    loaderOverlay.innerHTML = '<div class="loader"></div>';
+    document.body.appendChild(loaderOverlay);
+
+    modalmail.showModal();
+
+    // Remover el loader (si debe quitarse inmediatamente)
+    loaderOverlay.remove();
+});
+
+closemailBtn.addEventListener("click", function() {
+    modalmail.close();
+});
+
+if(modalmail) {
+    modalmail.addEventListener("click", function(event) {
+        const cajaInterna = modalmail.querySelector(".modalmail-content");
+
+        if (cajaInterna && !cajaInterna.contains(event.target)) {
+            modalmail.close();
+        }
+    });
+}

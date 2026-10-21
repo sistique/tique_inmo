@@ -1258,16 +1258,34 @@ class _keys_selects{
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
+        $com_agente = (new com_agente($controler->link))->filtro_and(
+            filtro: array('adm_usuario.id'=>$_SESSION['usuario_id']));
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al obtener adm_usuario ',data:  $com_agente);
+            print_r($error);
+            exit;
+        }
+
+        $filtro_agente = array();
+        if($com_agente->n_registros > 0){
+            $agente = $com_agente->registros[0];
+
+            $tipos_agente = ['PREDETERMINADO','GERENTE VENTAS','VENDEDOR', 'PROSPECTADOR', 'GERENTE PROSPECCION'];
+            if (in_array($agente['com_tipo_agente_descripcion'], $tipos_agente, true)) {
+                $filtro_agente['com_agente.id'] =  $controler->registro['com_agente_id'];
+            }
+        }
+
+
         $columns_ds = array();
         $columns_ds[] = 'com_agente_descripcion';
-        $filtro_agente['org_sucursal.id'] = $row_upd->org_sucursal_id;
 
-        $in = array();
-        $in['llave'] = 'com_tipo_agente.descripcion';
-        $in['values'] = array('PREDETERMINADO','VENDEDOR');
+        $in = array('llave'=>'com_tipo_agente.descripcion',
+            'values'=>array('PREDETERMINADO','GERENTE VENTAS','VENDEDOR', 'PROSPECTADOR', 'GERENTE PROSPECCION'));
+
         $keys_selects = $controler->key_select(cols: 2, con_registros: true,filtro: $filtro_agente,
-            key: 'com_agente_id', keys_selects: $keys_selects, id_selected: $row_upd->com_agente_id, label: 'Prospectador',
-            columns_ds: $columns_ds, in: $in);
+            key: 'com_agente_id', keys_selects: $keys_selects, id_selected: $row_upd->com_agente_id,
+            label: 'Prospectador', columns_ds: $columns_ds, in: $in);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }

@@ -15,6 +15,7 @@ use gamboamartin\cat_sat\models\cat_sat_moneda;
 use gamboamartin\cat_sat\models\cat_sat_tipo_de_comprobante;
 use gamboamartin\cat_sat\models\cat_sat_tipo_relacion;
 use gamboamartin\cat_sat\models\cat_sat_uso_cfdi;
+use gamboamartin\comercial\models\com_agente;
 use gamboamartin\comercial\models\com_producto;
 use gamboamartin\comercial\models\com_sucursal;
 use gamboamartin\comercial\models\com_tipo_cambio;
@@ -99,12 +100,17 @@ class controlador_inm_comprador extends _ctl_base {
     public array $cheques = array();
     public array $transferencias = array();
     public array $efectivos = array();
+    public bool $existe_valuador = false;
 
     public string $buttons_base = '';
+    public string $receptor = '';
+    public string $asunto_avaluo = '';
+    public string $mensaje_avaluo = '';
 
     public string $button_descarga_expediente = '';
     public string $link_documento_bd ='';
     public string $link_exportar_xls ='';
+    public string $link_envia_correo_bd ='';
     public string $link_inm_doc_comprador_alta_bd = '';
     public string $link_alta_bitacora = '';
 
@@ -227,6 +233,7 @@ class controlador_inm_comprador extends _ctl_base {
 
     /* BOTON DE DESCARGA SOLICITUD AVALUO */
     public string $button_solicitud_avaluo = '';
+    public string $button_envia_correo = '';
 
     public inm_comprador_html $html_entidad;
 
@@ -2708,6 +2715,7 @@ class controlador_inm_comprador extends _ctl_base {
         $inm_valuador_id = -1;
         if($registro_valuador->n_registros > 0){
             $inm_valuador_id = $registro_valuador->registros[0]['inm_valuador_id'];
+            $this->existe_valuador = true;
         }
 
         $keys_selects = (new _keys_selects())->key_selects_asigna_ubicacion(controler: $this);
@@ -2738,8 +2746,105 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
         }
 
+        /* Correo */
+        if($registro_valuador->n_registros > 0) {
+            $correo = $registro_valuador->registros[0]['gt_proveedor_correo'];
+
+            $imp_rel_comprador_com_cliente = (new inm_rel_comprador_com_cliente(link: $this->link))
+                ->imp_rel_comprador_com_cliente(inm_comprador_id: $this->registro_id);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al obtener imp_rel_comprador_com_cliente',
+                    data: $imp_rel_comprador_com_cliente, header: $header, ws: $ws);
+            }
+
+            $imp_rel_ubi_comp = (new inm_rel_ubi_comp(link: $this->link))->imp_rel_ubi_comp(
+                inm_comprador_id: $this->registro_id);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al obtener imp_rel_ubi_comp', data: $imp_rel_ubi_comp,
+                    header: $header, ws: $ws);
+            }
+
+            $inm_co_acreditados = (new _inm_comprador())->inm_co_acreditados(inm_comprador_id: $this->registro_id,
+                link: $this->link);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al obtener compradores', data: $inm_co_acreditados,
+                    header: $header, ws: $ws);
+            }
+
+            $co_acreditado_nombre_completo = '';
+            if(count($inm_co_acreditados) > 0) {
+                $co_acreditado_nombre_completo = "y $inm_co_acreditados[0][inm_co_acreditado_nombre] $inm_co_acreditados[0][inm_co_acreditado_apellido_paterno] $inm_co_acreditados[0][inm_co_acreditado_apellido_materno]";
+            }
+
+            $this->receptor = $correo;
+            $this->asunto_avaluo = "DOCS PARA AVALUÓ: $imp_rel_ubi_comp[inm_ubicacion_ubicacion]";
+
+            $this->mensaje_avaluo = "
+                <p>
+                    Buen día, esperando se encuentren de la mejor manera, envío documentación
+                    requerida para la elaboración de avalúo, el inmueble está ubicado en
+                    <strong>{$imp_rel_ubi_comp['inm_ubicacion_ubicacion']}</strong>,
+                    de antemano gracias por su apoyo.
+                </p>
+                
+                <p>
+                    <strong>VENDEDOR:</strong>
+                    {$imp_rel_ubi_comp['inm_comprador_razon_social']}
+                    {$co_acreditado_nombre_completo}.<br>
+                
+                    <strong>COMPRADOR:</strong>
+                    {$imp_rel_ubi_comp['inm_ubicacion_razon_social']}.
+                </p>
+                
+                <strong>DATOS DEL INMUEBLE:</strong>
+                
+                <ul>
+                    <li>
+                        PRECIO DE VENTA:
+                        $" . number_format(
+                            (float)$imp_rel_ubi_comp['inm_rel_ubi_comp_precio_operacion'],
+                    2
+                        ) . "
+                    </li>
+                    <li>
+                        NÚMERO DE RECÁMARAS:
+                        {$imp_rel_ubi_comp['inm_ubicacion_recamaras']}
+                    </li>
+                    <li>
+                        NÚMERO DE BAÑOS:
+                        {$imp_rel_ubi_comp['inm_ubicacion_baños']}
+                    </li>
+                    <li>
+                        ESTACIONAMIENTOS:
+                        {$imp_rel_ubi_comp['inm_ubicacion_estacionamientos']}
+                    </li>
+                    <li>
+                        GEOLOCALIZACIÓN:
+                        {$imp_rel_ubi_comp['inm_ubicacion_longitud']},
+                        {$imp_rel_ubi_comp['inm_ubicacion_latitud']}
+                    </li>
+                    <li>
+                        <a href=\"{$imp_rel_ubi_comp['inm_ubicacion_url']}\" target=\"_blank\">
+                            {$imp_rel_ubi_comp['inm_ubicacion_url']}
+                        </a>
+                    </li>
+                    <li>
+                        ENTRE CALLES:
+                        {$imp_rel_ubi_comp['inm_ubicacion_entre_calle_1']}
+                        Y
+                        {$imp_rel_ubi_comp['inm_ubicacion_entre_calle_2']}
+                    </li>
+                </ul>
+                
+                <p>
+                    Nos apoya en hacernos llegar el avaluó previo a cerrarlo, necesitamos saber el valor antes de cerrarlo.
+                </p>
+            ";
+
+        }
+
         $params = array();
-        if(isset($_GET['accion']) && $_GET['accion'] == 'proceso_cliente') {
+        if (isset($_GET['accion']) && $_GET['accion'] == 'proceso_cliente') {
             $params = array('pestana_general_actual' => 'pestanageneral2', 'pestana_actual' => 'pestana3');
         }
         $link_inm_rel_cliente_valuador_alta_bd = $this->obj_link->link_alta_bd(link: $this->link,
@@ -2750,14 +2855,18 @@ class controlador_inm_comprador extends _ctl_base {
         }
         $this->link_inm_rel_cliente_valuador_alta_bd = $link_inm_rel_cliente_valuador_alta_bd;
 
-        /*$this->link_inm_rel_cliente_valuador_alta_bd = $link_inm_rel_cliente_valuador_alta_bd;
-        $filtro['com_cliente.id'] = $registro->registros[0]['com_cliente_id'];
-        $inm_clientes_valuadores = (new inm_rel_cliente_valuador($this->link))->filtro_and(filtro: $filtro);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener compradores',data:  $inm_clientes_valuadores,
-                header: $header,ws:  $ws);
+        $params = array();
+        if(isset($_GET['accion']) && $_GET['accion'] === 'proceso_cliente') {
+            $params = array('pestana_general_actual' => 'pestanageneral2', 'pestana_actual' => 'pestana3');
         }
-        $this->inm_clientes_valuadores = (array)$inm_clientes_valuadores->registros;*/
+        $link_envia_correo_bd = $this->obj_link->link_con_id(
+            accion: 'envia_correo_bd', link: $this->link, registro_id: $this->registro_id, seccion: 'inm_comprador',
+            params: $params);
+        if (errores::$error) {
+            $this->retorno_error(mensaje: 'Error al generar link', data: $link_envia_correo_bd, header: $header, ws: $ws);
+        }
+
+        $this->link_envia_correo_bd = $link_envia_correo_bd;
 
         $button_solicitud_avaluo = $this->html->button_href(accion: 'solicitud_avaluo',
             etiqueta: 'Solicitud Avaluo', registro_id: $this->registro_id, seccion: 'inm_comprador',
@@ -2769,6 +2878,14 @@ class controlador_inm_comprador extends _ctl_base {
 
         $this->button_solicitud_avaluo = $button_solicitud_avaluo;
 
+        $button_envia_correo = $this->html->button_para_java(id_css: 'envia_correo', style: 'success',
+            tag:  'Enviar Correo', css_extra: 'col-sm-12');
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al btn_collapse_all',data:  $button_envia_correo, header: $header,ws:  $ws);
+        }
+
+        $this->button_envia_correo = $button_envia_correo;
 
         $this->keys_selects = array_merge($keys_selects, $this->keys_selects);
 
@@ -3782,6 +3899,28 @@ class controlador_inm_comprador extends _ctl_base {
 
     }
 
+    public function envia_correo_bd(bool $header, bool $ws = false)
+    {
+        $this->link->beginTransaction();
+
+        $this->link->commit();
+
+        $params = array('pestana_general_actual' => 'pestanageneral2');
+        $link_proceso_comprador = $this->obj_link->link_con_id(
+            accion: 'proceso_cliente', link: $this->link, registro_id: $this->registro_id, seccion: 'inm_comprador',
+            params: $params);
+        if (errores::$error) {
+            $this->retorno_error(mensaje: 'Error al generar link', data: $link_proceso_comprador, header: $header, ws: $ws);
+        }
+
+        if($header) {
+            header('Location:' . $link_proceso_comprador);
+            exit;
+        }
+
+        return $this->registro_id;
+    }
+
     public function formato_excel(bool $header, bool $ws = false): array|stdClass
     {
         $template = parent::modifica(header: false); // TODO: Change the autogenerated stub
@@ -3848,7 +3987,8 @@ class controlador_inm_comprador extends _ctl_base {
         $columns["inm_comprador_id"]["titulo"] = "Id";
         $columns["inm_comprador_razon_social"]["titulo"] = "Nombre";
         $columns["inm_ubicacion_completa"]["titulo"] = "Ubicacion";
-        $columns["com_agente_descripcion"]["titulo"] = "Agente";
+        $columns["com_agente_descripcion"]["titulo"] = "Prospectador";
+        $columns["com_agente_cerrador_descripcion"]["titulo"] = "Cerrador";
         $columns["inm_comprador_comentarios"]["titulo"] = "Comentarios";
         $columns["inm_comprador_nss"]["titulo"] = "NSS";
         $columns["inm_comprador_monto_credito_solicitado_dh"]["titulo"] = "Precalificacion";
@@ -4447,15 +4587,43 @@ class controlador_inm_comprador extends _ctl_base {
 
         $this->inputs->fecha_nacimiento = $fecha_nacimiento;
 
-        $sl_com_agente_id = (new com_agente_html(html: $this->html_base))->select_com_agente_id(
-            cols: 2, con_registros: true, id_selected: $this->registro['com_agente_cerrador_id'],
-            link: $this->link, label: 'Cerrador', name: 'com_agente_cerrador_id');
+        $modelo = new com_agente(link: $this->link);
+
+        $com_agente = $modelo->filtro_and(
+            filtro: array('adm_usuario.id'=>$_SESSION['usuario_id']));
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al integrar sl_com_agente_id',
-                data:  $sl_com_agente_id, header: $header,ws: $ws);
+            $error = (new errores())->error(mensaje: 'Error al obtener adm_usuario ',data:  $com_agente);
+            print_r($error);
+            exit;
         }
 
-        $this->inputs->com_agente_cerrador_id = $sl_com_agente_id;
+        $filtro = array();
+        /*if($com_agente->n_registros > 0){
+            $agente = $com_agente->registros[0];
+            if ($agente['adm_grupo_solo_mi_info'] === 'activo') {
+                $filtro['adm_usuario.id'] = $_SESSION['usuario_id'];
+            }
+
+            $tipos_agente = ['VENDEDOR', 'PROSPECTADOR'];
+            if (in_array($agente['com_tipo_agente_descripcion'], $tipos_agente, true) ) {
+                $filtro['com_agente.id'] = $this->row_upd->com_agente_cerrador_id;
+            }
+        }*/
+
+        $columns_ds = array('com_agente_descripcion');
+        $in = array();
+        $in['llave'] = 'com_tipo_agente.descripcion';
+        $in['values'] = array('VENDEDOR','GERENTE VENTAS','PREDETERMINADO');
+        $com_agente_cerrador_id = $this->html->select_catalogo(cols: 2, con_registros: true,
+            id_selected: $this->row_upd->com_agente_cerrador_id, modelo: $modelo, columns_ds: $columns_ds,
+            filtro: $filtro, id_css: 'com_agente_cerrador_id', label: 'Cerrador', name: 'com_agente_cerrador_id',
+            in: $in);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $com_agente_cerrador_id,header: $header,
+                ws:$ws);
+        }
+
+        $this->inputs->com_agente_cerrador_id = $com_agente_cerrador_id;
 
         $btn_collapse_all = $this->html->button_para_java(id_css: 'collapse_all',style:  'primary',
             tag:  'Ver/Ocultar Todo');
