@@ -1280,6 +1280,11 @@ class inm_prospecto_ubicacion extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al modificar prospecto',data:  $r_modifica);
         }
 
+        if(isset($registro['com_agente_id'])){
+            $r_modifica->registro_puro->com_agente_id = $registro['com_agente_id'];
+        }
+
+
         $upd = $this->post_upd(id: $id,keys_integra_ds:  $keys_integra_ds,r_modifica:  $r_modifica,reactiva:  $reactiva);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al modificar prospecto',data:  $upd);
