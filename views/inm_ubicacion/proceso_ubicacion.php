@@ -45,6 +45,7 @@
                                         <div id="apartado_1">
                                             <?php echo $controlador->inputs->org_sucursal_id; ?>
                                             <?php echo $controlador->inputs->com_agente_id; ?>
+                                            <?php echo $controlador->inputs->inm_tipo_compra_id; ?>
 
                                             <!-- Identificadores -->
                                             <?php echo $controlador->inputs->nss; ?>
@@ -442,6 +443,7 @@
                                         <div id="apartado_1">
                                             <?php echo $controlador->inputs->org_sucursal_id; ?>
                                             <?php echo $controlador->inputs->com_agente_id; ?>
+                                            <?php echo $controlador->inputs->inm_tipo_compra_id; ?>
 
                                             <!-- Identificadores -->
                                             <?php echo $controlador->inputs->nss; ?>

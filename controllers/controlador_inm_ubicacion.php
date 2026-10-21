@@ -744,20 +744,20 @@ class controlador_inm_ubicacion extends _ctl_base
         $columns_ds = array('inm_notaria_id', 'inm_notaria_descripcion');
         $keys_selects = $this->key_select(cols: 12, con_registros: true, filtro: array(), key: 'inm_notaria_id',
             keys_selects: $keys_selects, id_selected: $this->row_upd->inm_notaria_id, label: 'Notaria',
-            columns_ds: $columns_ds);
+            columns_ds: $columns_ds, required: false);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects', data: $keys_selects,
                 header: $header, ws: $ws);
         }
 
         $keys_selects = (new init())->key_select_txt(cols: 6, key: 'numero_escritura_poder', keys_selects: $keys_selects,
-            place_holder: 'No. Escritura Poder');
+            place_holder: 'No. Escritura Poder', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
         $fecha = $this->html->input_fecha(cols: 6, row_upd: $this->row_upd, value_vacio: false,
-            name: 'fecha_poder', place_holder: 'Fecha Poder', value: $this->row_upd->fecha_poder);
+            name: 'fecha_poder', place_holder: 'Fecha Poder', required: false, value: $this->row_upd->fecha_poder);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al integrar fecha',
                 data: $fecha, header: $header, ws: $ws);
@@ -2285,6 +2285,7 @@ class controlador_inm_ubicacion extends _ctl_base
         $init_data['inm_factura_compra'] = "gamboamartin\\inmuebles";
         $init_data['inm_detalle_factura_compra'] = "gamboamartin\\inmuebles";
         $init_data['inm_tipo_vivienda'] = "gamboamartin\\inmuebles";
+        $init_data['inm_tipo_compra'] = "gamboamartin\\inmuebles";
         $init_data['org_sucursal'] = "gamboamartin\\organigrama";
         $init_data['gt_proveedor'] = "gamboamartin\\gastos";
 
@@ -3209,16 +3210,18 @@ class controlador_inm_ubicacion extends _ctl_base
                 header: $header, ws: $ws);
         }
 
-        if ($r_inm_doc_ubicacion_reg->n_registros <= 0) {
-            $_FILES['documento'] = $_FILES['poder'];
-            $registro = array();
-            $registro['inm_ubicacion_id'] = $this->registro_id;
-            $registro['doc_tipo_documento_id'] = 35;
-            $r_inm_doc_ubicacion = (new inm_doc_ubicacion(link: $this->link))->alta_registro(registro: $registro);
-            if (errores::$error) {
-                $this->link->rollBack();
-                return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_doc_ubicacion,
-                    header: $header, ws: $ws);
+        if(isset($_FILES['poder']) && $_FILES['poder']['error'] === UPLOAD_ERR_OK) {
+            if ($r_inm_doc_ubicacion_reg->n_registros <= 0) {
+                $_FILES['documento'] = $_FILES['poder'];
+                $registro = array();
+                $registro['inm_ubicacion_id'] = $this->registro_id;
+                $registro['doc_tipo_documento_id'] = 35;
+                $r_inm_doc_ubicacion = (new inm_doc_ubicacion(link: $this->link))->alta_registro(registro: $registro);
+                if (errores::$error) {
+                    $this->link->rollBack();
+                    return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_doc_ubicacion,
+                        header: $header, ws: $ws);
+                }
             }
         }
 
@@ -3230,30 +3233,40 @@ class controlador_inm_ubicacion extends _ctl_base
                 header: $header, ws: $ws);
         }
 
-        if ($r_inm_poder->n_registros <= 0) {
-            $registro = array();
-            $registro['inm_ubicacion_id'] = $this->registro_id;
-            $registro['numero_escritura_poder'] = $_POST['numero_escritura_poder'];
-            $registro['fecha_poder'] = $_POST['fecha_poder'];
-            $registro['inm_notaria_id'] = $_POST['inm_notaria_id'];
-            $result_inm_poder = (new inm_poder(link: $this->link))->alta_registro(registro: $registro);
-            if (errores::$error) {
-                $this->link->rollBack();
-                return $this->retorno_error(mensaje: 'Error al insertar datos', data: $result_inm_poder,
-                    header: $header, ws: $ws);
+        $keys = array('numero_escritura_poder', 'fecha_poder', 'inm_notaria_id');
+        $sin_valor = false;
+        foreach ($keys as $key) {
+            if (!isset($_POST[$key]) || trim($_POST[$key]) === '') {
+                $sin_valor = true;
             }
-        } else {
-            $registro = array();
-            $registro['inm_ubicacion_id'] = $this->registro_id;
-            $registro['numero_escritura_poder'] = $_POST['numero_escritura_poder'];
-            $registro['fecha_poder'] = $_POST['fecha_poder'];
-            $registro['inm_notaria_id'] = $_POST['inm_notaria_id'];
-            $result_inm_poder = (new inm_poder(link: $this->link))->modifica_bd(registro: $registro,
-                id: $r_inm_poder->registros[0]['inm_poder_id']);
-            if (errores::$error) {
-                $this->link->rollBack();
-                return $this->retorno_error(mensaje: 'Error al insertar datos', data: $result_inm_poder,
-                    header: $header, ws: $ws);
+        }
+
+        if(!$sin_valor) {
+            if ($r_inm_poder->n_registros <= 0) {
+                $registro = array();
+                $registro['inm_ubicacion_id'] = $this->registro_id;
+                $registro['numero_escritura_poder'] = $_POST['numero_escritura_poder'];
+                $registro['fecha_poder'] = $_POST['fecha_poder'];
+                $registro['inm_notaria_id'] = $_POST['inm_notaria_id'];
+                $result_inm_poder = (new inm_poder(link: $this->link))->alta_registro(registro: $registro);
+                if (errores::$error) {
+                    $this->link->rollBack();
+                    return $this->retorno_error(mensaje: 'Error al insertar datos', data: $result_inm_poder,
+                        header: $header, ws: $ws);
+                }
+            } else {
+                $registro = array();
+                $registro['inm_ubicacion_id'] = $this->registro_id;
+                $registro['numero_escritura_poder'] = $_POST['numero_escritura_poder'];
+                $registro['fecha_poder'] = $_POST['fecha_poder'];
+                $registro['inm_notaria_id'] = $_POST['inm_notaria_id'];
+                $result_inm_poder = (new inm_poder(link: $this->link))->modifica_bd(registro: $registro,
+                    id: $r_inm_poder->registros[0]['inm_poder_id']);
+                if (errores::$error) {
+                    $this->link->rollBack();
+                    return $this->retorno_error(mensaje: 'Error al insertar datos', data: $result_inm_poder,
+                        header: $header, ws: $ws);
+                }
             }
         }
 

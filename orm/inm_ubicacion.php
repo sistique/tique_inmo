@@ -879,7 +879,7 @@ class inm_ubicacion extends _inm_ubicaciones {
             return $this->error->error(mensaje: 'Error id debe ser mayor a 0',data: $registro);
         }
 
-        if($registro['fecha_otorgamiento_credito'] === '0000-00-00'){
+        if(isset($registro['fecha_otorgamiento_credito']) && $registro['fecha_otorgamiento_credito'] === '0000-00-00'){
             unset($registro['fecha_otorgamiento_credito']);
         }
 

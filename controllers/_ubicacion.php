@@ -1,6 +1,7 @@
 <?php
 namespace gamboamartin\inmuebles\controllers;
 
+use gamboamartin\comercial\models\com_agente;
 use gamboamartin\direccion_postal\models\dp_pais;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_co_acreditado_html;
@@ -593,7 +594,7 @@ class _ubicacion{
 
         $columns_ds = array();
         $columns_ds[] = 'org_sucursal_descripcion';
-        $keys_selects = $controler->key_select(cols: 6, con_registros: true,filtro:  array(),
+        $keys_selects = $controler->key_select(cols: 4, con_registros: true,filtro:  array(),
             key: 'org_sucursal_id', keys_selects: $keys_selects,
             id_selected: $data_row->org_sucursal_id, label: 'Empresa',
             columns_ds: $columns_ds);
@@ -601,19 +602,42 @@ class _ubicacion{
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $columns_ds = array();
-        $columns_ds[] = 'com_agente_descripcion';
-        $filtro_agente['org_sucursal.id'] = $data_row->org_sucursal_id;
+        $com_agente = (new com_agente($controler->link))->filtro_and(
+            filtro: array('adm_usuario.id'=>$_SESSION['usuario_id']));
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al obtener adm_usuario ',data:  $com_agente);
+            print_r($error);
+            exit;
+        }
 
-        $in = array();
-        $in['llave'] = 'com_tipo_agente.descripcion';
-        $in['values'] = array('PREDETERMINADO','COMPRADOR');
-        $keys_selects = $controler->key_select(cols: 6, con_registros: true,filtro: $filtro_agente,
+        $filtro_agente = array();
+        if($com_agente->n_registros > 0){
+            $agente = $com_agente->registros[0];
+
+            $tipos_agente = ['PREDETERMINADO','COMPRADOR', 'PROSPECTADOR', 'GERENTE PROSPECCION'];
+            if (in_array($agente['com_tipo_agente_descripcion'], $tipos_agente, true)) {
+                $filtro_agente['com_agente.id'] =  $controler->registro['com_agente_id'];
+            }
+        }
+
+        $columns_ds = array('com_agente_descripcion');
+        $in = array('llave'=>'com_tipo_agente.descripcion',
+            'values'=>array('PREDETERMINADO','COMPRADOR', 'PROSPECTADOR', 'GERENTE PROSPECCION'));
+        $keys_selects = $controler->key_select(cols: 4, con_registros: true,filtro: $filtro_agente,
             key: 'com_agente_id', keys_selects: $keys_selects, id_selected: $data_row->com_agente_id, label: 'Agente',
             columns_ds: $columns_ds, in: $in, required: false);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
+
+
+        $columns_ds = array('inm_tipo_compra_descripcion');
+        $keys_selects = $controler->key_select(cols: 4, con_registros: true,filtro:  array(), key: 'inm_tipo_compra_id',
+            keys_selects: $keys_selects, id_selected: $data_row->inm_tipo_compra_id, label: 'Estado Vivienda', columns_ds : $columns_ds);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+        $keys_selects['inm_tipo_compra_id']->required = false;
 
 
         $columns_ds = array('inm_estado_vivienda_descripcion');
