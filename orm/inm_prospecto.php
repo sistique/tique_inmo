@@ -889,9 +889,9 @@ class inm_prospecto extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al modificar prospecto',data:  $prospecto);
         }
 
-        $r_modifica->registro_puro->com_agente_id = $prospecto['com_agente_id'];
-        if(!isset($registro['com_agente_id'])){
-            $r_modifica->registro_puro->com_agente_id = $inm_prospecto_anterior['com_agente_id'];
+        $r_modifica->registro_puro->com_agente_id = $inm_prospecto_anterior['com_agente_id'];
+        if(isset($registro['com_agente_id'])){
+            $r_modifica->registro_puro->com_agente_id = $registro['com_agente_id'];
         }
 
         if(isset($registro['com_agente_cerrador_id']) &&
