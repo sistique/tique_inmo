@@ -65,7 +65,8 @@ class _conversion_ubicacion{
      */
     private function defaults_alta_ubicacion(array $inm_ubicacion_ins, PDO $link): array
     {
-        if(!isset($inm_ubicacion_ins['dp_colonia_postal_fiscal_id'])){
+        if(!isset($inm_ubicacion_ins['dp_colonia_postal_fiscal_id']) ||
+            $inm_ubicacion_ins['dp_colonia_postal_fiscal_id'] === ''){
             $filtro_dp_colonia_postal['dp_colonia_postal.predeterminado'] = 'activo';
             $r_colonia_postal = (new dp_colonia_postal(link: $link))->filtro_and(filtro: $filtro_dp_colonia_postal);
             if(errores::$error){
@@ -75,7 +76,7 @@ class _conversion_ubicacion{
             $inm_ubicacion_ins['dp_colonia_postal_fiscal_id'] = $r_colonia_postal->registros[0]['dp_colonia_postal_id'];
         }
 
-        if(!isset($inm_ubicacion_ins['inm_tipo_ubicacion_id'])){
+        if(!isset($inm_ubicacion_ins['inm_tipo_ubicacion_id']) || $inm_ubicacion_ins['inm_tipo_ubicacion_id'] === ''){
             $filtro_inm_tipo_ubicacion['inm_tipo_ubicacion.descripcion'] = 'PODER';
             $r_colonia_postal = (new inm_tipo_ubicacion(link: $link))->filtro_and(filtro: $filtro_inm_tipo_ubicacion);
             if(errores::$error){
@@ -85,7 +86,7 @@ class _conversion_ubicacion{
             $inm_ubicacion_ins['inm_tipo_ubicacion_id'] = $r_colonia_postal->registros[0]['inm_tipo_ubicacion_id'];
         }
 
-        if(!isset($inm_ubicacion_ins['inm_tipo_vivienda_id'])){
+        if(!isset($inm_ubicacion_ins['inm_tipo_vivienda_id']) || $inm_ubicacion_ins['inm_tipo_vivienda_id'] === ''){
             $filtro_inm_tipo_vivienda['inm_tipo_vivienda.descripcion'] = 'USADA';
             $r_colonia_postal = (new inm_tipo_vivienda(link: $link))->filtro_and(filtro: $filtro_inm_tipo_vivienda);
             if(errores::$error){
@@ -501,8 +502,13 @@ class _conversion_ubicacion{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar key '. $key, data: $valida);
         }
+
         if(!property_exists($data->inm_prospecto_ubicacion, $key)){
-            return $this->error->error(mensaje: 'Error no existe atributo '. $key, data: $key);
+            if(!property_exists($data->inm_prospecto_ubicacion_completo, $key)){
+                return $this->error->error(mensaje: 'Error no existe atributo '. $key, data: $key);
+            }
+
+            $data->inm_prospecto_ubicacion->$key = $data->inm_prospecto_ubicacion_completo->$key;
         }
 
         if(is_null($data->inm_prospecto_ubicacion->$key)){
@@ -510,6 +516,7 @@ class _conversion_ubicacion{
         }
 
         $inm_ubicacion_ins[$key] = $data->inm_prospecto_ubicacion->$key;
+
         return $inm_ubicacion_ins;
     }
 
