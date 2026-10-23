@@ -784,7 +784,7 @@ class _conversion_ubicacion{
             /* Apartado 2 */
             ['campo'=>'dp_colonia_postal_id', 'mensaje' => 'Error no existe Direccion de Ubicacion'],
             ['campo'=>'inm_prototipo_id', 'mensaje' => 'Error no existe Prototipo'],
-            ['campo'=>'folio_registro_publico', 'mensaje' => 'Error no existe Folio de Registro Publico'],
+            //['campo'=>'folio_registro_publico', 'mensaje' => 'Error no existe Folio de Registro Publico'],
             ['campo'=>'numero_notaria', 'mensaje' => 'Error no existe Numero de Notaria'],
             ['campo'=>'plaza_notaria', 'mensaje' => 'Error no existe Plaza de Notaria'],
             ['campo'=>'nombre_notario', 'mensaje' => 'Error no existe Nombre de Notario'],
