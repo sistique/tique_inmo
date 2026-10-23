@@ -499,10 +499,10 @@ class _conversion_ubicacion{
         $key = trim($key);
         $valida = $this->valida_key(key: $key);
         if(errores::$error){
-            return $this->error->error(mensaje: 'Error al validar key', data: $valida);
+            return $this->error->error(mensaje: 'Error al validar key '. $key, data: $valida);
         }
         if(!property_exists($data->inm_prospecto_ubicacion, $key)){
-            return $this->error->error(mensaje: 'Error no existe atributo', data: $key);
+            return $this->error->error(mensaje: 'Error no existe atributo '. $key, data: $key);
         }
 
         if(is_null($data->inm_prospecto_ubicacion->$key)){
