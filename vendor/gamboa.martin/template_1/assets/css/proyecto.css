@@ -9,6 +9,9 @@
     margin: 0 0 0 20px;
 }
 
+input[type=checkbox], input[type=radio] {
+    margin: 0px !important;
+}
 
 .boton-accion {
     min-width: 275px; /* o el valor que necesites */
