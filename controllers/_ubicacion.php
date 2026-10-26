@@ -350,6 +350,7 @@ class _ubicacion{
         $headers['6'] = '6. CO ACREDITADO';
         $headers['7'] = '7. CO ACREDITADO LABORAL';
         $headers['8'] = '8. CONYUGE';
+        $headers['9'] = '9. FISCAL';
 
         return $headers;
     }
@@ -675,7 +676,7 @@ class _ubicacion{
         $keys_selects['inm_complemento_id']->required = false;
 
         $columns_ds = array('inm_tipo_credito_descripcion');
-        $keys_selects = $controler->key_select(cols: 4, con_registros: true,filtro:  array(),
+        $keys_selects = $controler->key_select(cols: 2, con_registros: true,filtro:  array(),
             key: 'inm_tipo_credito_id', keys_selects: $keys_selects,
             id_selected: $data_row->inm_tipo_credito_id, label: 'Tipo Credito', columns_ds : $columns_ds);
         if(errores::$error){

@@ -80,6 +80,7 @@
                                             <?php echo $controlador->inputs->inm_complemento_id; ?>
 
                                             <!-- Identificadores de la unidad -->
+                                            <?php echo $controlador->inputs->unidad_privativa; ?>
                                             <?php echo $controlador->inputs->lote; ?>
                                             <?php echo $controlador->inputs->nivel; ?>
                                             <?php echo $controlador->inputs->entrada; ?>
@@ -88,9 +89,12 @@
                                             <?php echo $controlador->inputs->edificio; ?>
                                             <?php echo $controlador->inputs->condominio; ?>
                                             <?php echo $controlador->inputs->etapa; ?>
+                                            <?php echo $controlador->inputs->folio_registro_publico; ?>
 
                                             <!-- Dimensiones -->
                                             <?php echo $controlador->inputs->recamaras; ?>
+                                            <?php echo $controlador->inputs->baños; ?>
+                                            <?php echo $controlador->inputs->estacionamientos; ?>
                                             <?php echo $controlador->inputs->metros_terreno; ?>
                                             <?php echo $controlador->inputs->metros_construccion; ?>
 
@@ -101,21 +105,25 @@
                                             <?php echo $controlador->inputs->numero_escritura; ?>
                                             <?php echo $controlador->inputs->libro; ?>
                                             <?php echo $controlador->inputs->volumen; ?>
+                                            <?php echo $controlador->inputs->url; ?>
+                                            <?php echo $controlador->inputs->longitud; ?>
+                                            <?php echo $controlador->inputs->latitud; ?>
 
                                             <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
                                         </div>
 
                                         <?php echo $controlador->header_frontend->apartado_3; ?>
                                         <div id="apartado_3">
+                                            <?php echo $controlador->inputs->inm_tipo_credito_id; ?>
                                             <?php echo $controlador->inputs->numero_credito; ?>
+                                            <?php echo $controlador->inputs->monto_credito; ?>
                                             <?php echo $controlador->inputs->adeudo_hipoteca; ?>
                                             <?php echo $controlador->inputs->mensualidad; ?>
-
-                                            <?php echo $controlador->inputs->inm_tipo_credito_id; ?>
                                             <?php echo $controlador->inputs->fecha_otorgamiento_credito; ?>
                                             <?php echo $controlador->inputs->monto_devolucion; ?>
                                             <?php echo $controlador->inputs->correo_mi_cuenta_infonavit; ?>
                                             <?php echo $controlador->inputs->password_mi_cuenta_infonavit; ?>
+                                            <?php echo $controlador->inputs->estimacion_avaluo; ?>
                                             <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
                                         </div>
 
@@ -204,11 +212,25 @@
                                             <?php echo $controlador->inputs->conyuge->telefono_casa; ?>
                                             <?php echo $controlador->inputs->conyuge->telefono_celular; ?>
 
+                                            <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
+                                        </div>
+
+                                        <?php echo $controlador->header_frontend->apartado_9; ?>
+                                        <div id="apartado_9">
+                                            <?php echo $controlador->inputs->dp_estado_fiscal_id; ?>
+                                            <?php echo $controlador->inputs->dp_municipio_fiscal_id; ?>
+                                            <?php echo $controlador->inputs->dp_cp_fiscal_id; ?>
+                                            <?php echo $controlador->inputs->dp_colonia_postal_fiscal_id; ?>
+                                            <?php echo $controlador->inputs->calle_fiscal; ?>
+                                            <?php echo $controlador->inputs->numero_exterior_fiscal; ?>
+                                            <?php echo $controlador->inputs->numero_interior_fiscal; ?>
+
                                             <?php echo $controlador->inputs->btn_action_next; ?>
                                             <?php echo $controlador->inputs->id_retorno; ?>
                                             <?php echo $controlador->inputs->seccion_retorno; ?>
+
+                                            <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
                                         </div>
-                                        <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
                                     </form>
                                 </div>
                                 <div class="conten" id="cpestanaubicacion2">
@@ -478,6 +500,7 @@
                                             <?php echo $controlador->inputs->inm_complemento_id; ?>
 
                                             <!-- Identificadores de la unidad -->
+                                            <?php echo $controlador->inputs->unidad_privativa; ?>
                                             <?php echo $controlador->inputs->lote; ?>
                                             <?php echo $controlador->inputs->nivel; ?>
                                             <?php echo $controlador->inputs->entrada; ?>
@@ -486,9 +509,12 @@
                                             <?php echo $controlador->inputs->edificio; ?>
                                             <?php echo $controlador->inputs->condominio; ?>
                                             <?php echo $controlador->inputs->etapa; ?>
+                                            <?php echo $controlador->inputs->folio_registro_publico; ?>
 
                                             <!-- Dimensiones -->
                                             <?php echo $controlador->inputs->recamaras; ?>
+                                            <?php echo $controlador->inputs->baños; ?>
+                                            <?php echo $controlador->inputs->estacionamientos; ?>
                                             <?php echo $controlador->inputs->metros_terreno; ?>
                                             <?php echo $controlador->inputs->metros_construccion; ?>
 
@@ -499,20 +525,25 @@
                                             <?php echo $controlador->inputs->numero_escritura; ?>
                                             <?php echo $controlador->inputs->libro; ?>
                                             <?php echo $controlador->inputs->volumen; ?>
+                                            <?php echo $controlador->inputs->url; ?>
+                                            <?php echo $controlador->inputs->longitud; ?>
+                                            <?php echo $controlador->inputs->latitud; ?>
 
                                             <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
                                         </div>
 
                                         <?php echo $controlador->header_frontend->apartado_3; ?>
                                         <div id="apartado_3">
+                                            <?php echo $controlador->inputs->inm_tipo_credito_id; ?>
                                             <?php echo $controlador->inputs->numero_credito; ?>
+                                            <?php echo $controlador->inputs->monto_credito; ?>
                                             <?php echo $controlador->inputs->adeudo_hipoteca; ?>
                                             <?php echo $controlador->inputs->mensualidad; ?>
-                                            <?php echo $controlador->inputs->inm_tipo_credito_id; ?>
                                             <?php echo $controlador->inputs->fecha_otorgamiento_credito; ?>
                                             <?php echo $controlador->inputs->monto_devolucion; ?>
                                             <?php echo $controlador->inputs->correo_mi_cuenta_infonavit; ?>
                                             <?php echo $controlador->inputs->password_mi_cuenta_infonavit; ?>
+                                            <?php echo $controlador->inputs->estimacion_avaluo; ?>
                                             <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
                                         </div>
 
@@ -600,8 +631,22 @@
                                             <!-- Contacto -->
                                             <?php echo $controlador->inputs->conyuge->telefono_casa; ?>
                                             <?php echo $controlador->inputs->conyuge->telefono_celular; ?>
+
+                                            <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
                                         </div>
-                                        <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
+
+                                        <?php echo $controlador->header_frontend->apartado_9; ?>
+                                        <div id="apartado_9">
+                                            <?php echo $controlador->inputs->dp_estado_fiscal_id; ?>
+                                            <?php echo $controlador->inputs->dp_municipio_fiscal_id; ?>
+                                            <?php echo $controlador->inputs->dp_cp_fiscal_id; ?>
+                                            <?php echo $controlador->inputs->dp_colonia_postal_fiscal_id; ?>
+                                            <?php echo $controlador->inputs->calle_fiscal; ?>
+                                            <?php echo $controlador->inputs->numero_exterior_fiscal; ?>
+                                            <?php echo $controlador->inputs->numero_interior_fiscal; ?>
+
+                                            <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
+                                        </div>
                                     </form>
                                 </div>
                                 <div class="conten" id="cpestana2">

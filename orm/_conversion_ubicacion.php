@@ -579,7 +579,7 @@ class _conversion_ubicacion{
             'inm_estado_vivienda_id',
             'inm_prototipo_id',
             'inm_complemento_id',
-            'folio_registro_publico',
+            'unidad_privativa',
             'lote',
             'nivel',
             'entrada',
@@ -588,7 +588,10 @@ class _conversion_ubicacion{
             'edificio',
             'condominio',
             'etapa',
+            'folio_registro_publico',
             'recamaras',
+            'baños',
+            'estacionamientos',
             'metros_terreno',
             'metros_construccion',
             'numero_notaria',
@@ -598,6 +601,8 @@ class _conversion_ubicacion{
             'libro',
             'volumen',
             'url',
+            'latitud',
+            'longitud',
 
             /* Apartado 3 */
             'inm_tipo_credito_id',

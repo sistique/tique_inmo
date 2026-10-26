@@ -348,10 +348,20 @@ let sl_dp_municipio_domicilio_id = $("#dp_municipio_domicilio_id");
 let sl_dp_cp_domicilio_id = $("#dp_cp_domicilio_id");
 let sl_dp_colonia_postal_domicilio_id = $("#dp_colonia_postal_domicilio_id");
 
+let sl_dp_estado_fiscal_id = $("#dp_estado_fiscal_id");
+let sl_dp_municipio_fiscal_id = $("#dp_municipio_fiscal_id");
+let sl_dp_cp_fiscal_id = $("#dp_cp_fiscal_id");
+let sl_dp_colonia_postal_fiscal_id = $("#dp_colonia_postal_fiscal_id");
+
 let dp_estado_domicilio_id = -1;
 let dp_municipio_domicilio_id = -1;
 let dp_cp_domicilio_id = -1;
 let dp_colonia_postal_domicilio_id = -1;
+
+let dp_estado_fiscal_id = -1;
+let dp_municipio_fiscal_id = -1;
+let dp_cp_fiscal_id = -1;
+let dp_colonia_postal_fiscal_id = -1;
 
 let numero_exterior = $("#numero_exterior");
 let numero_interior = $("#numero_interior");
@@ -453,6 +463,21 @@ sl_dp_municipio_domicilio_id.change(function(){
 sl_dp_cp_domicilio_id.change(function(){
     dp_cp_domicilio_id = sl_dp_cp_domicilio_id.val();
     dp_asigna_colonias_postales_domicilio(dp_cp_domicilio_id,'','#dp_colonia_postal_domicilio_id');
+});
+
+sl_dp_estado_fiscal_id.change(function(){
+    dp_estado_fiscal_id = $(this).val();
+    dp_asigna_municipios_fiscal(dp_estado_fiscal_id, '','#dp_municipio_fiscal_id');
+});
+
+sl_dp_municipio_fiscal_id.change(function(){
+    dp_municipio_fiscal_id = sl_dp_municipio_fiscal_id.val();
+    dp_asigna_cps_fiscal(dp_municipio_fiscal_id,'','#dp_cp_fiscal_id');
+});
+
+sl_dp_cp_fiscal_id.change(function(){
+    dp_cp_fiscal_id = sl_dp_cp_fiscal_id.val();
+    dp_asigna_colonias_postales_fiscal(dp_cp_fiscal_id,'','#dp_colonia_postal_fiscal_id');
 });
 
 sl_conyuge_dp_estado_id.change(function () {
@@ -685,6 +710,77 @@ function dp_asigna_colonias_postales_domicilio(dp_cp_id = '',dp_colonia_postal_i
     });
 }
 
+function dp_asigna_municipios_fiscal(dp_estado_id = '', dp_municipio_id = '', selector = "#dp_municipio_id") {
+
+    let sl_dp_municipio_id = $(selector);
+
+    let url = "index.php?seccion=dp_municipio&ws=1&accion=get_municipio&dp_estado_id=" + dp_estado_id + "&session_id=" + session_id;
+
+    $.ajax({
+        type: 'GET',
+        url: url,
+    }).done(function (data) {
+        console.log(data);
+        sl_dp_municipio_id.empty();
+
+        integra_new_option(selector, 'Seleccione un municipio', '-1');
+
+        $.each(data.registros, function (index, dp_municipio) {
+            integra_new_option(selector, dp_municipio.dp_municipio_descripcion, dp_municipio.dp_municipio_id);
+        });
+        sl_dp_municipio_id.val(dp_municipio_id);
+        sl_dp_municipio_id.selectpicker('refresh');
+    }).fail(function (jqXHR, textStatus, errorThrown) {
+        alert('Error al ejecutar');
+        console.log("The following error occured: " + textStatus + " " + errorThrown);
+    });
+
+}
+
+function dp_asigna_cps_fiscal(dp_municipio_id = '',dp_cp_id = '', selector = "#dp_cp_id"){
+
+    let sl_dp_cp_id = $(selector);
+
+    let url = "index.php?seccion=dp_cp&ws=1&accion=get_cp&dp_municipio_id="+dp_municipio_id+"&session_id="+session_id;
+    $.ajax({
+        type: 'GET',
+        url: url,
+    }).done(function( data ) {
+        console.log(data);
+        sl_dp_cp_id.empty();
+        integra_new_option(selector,'Seleccione un cp','-1');
+        $.each(data.registros, function( index, dp_cp ) {
+            integra_new_option(selector,dp_cp.dp_cp_descripcion,dp_cp.dp_cp_id);
+        });
+        sl_dp_cp_id.val(dp_cp_id);
+        sl_dp_cp_id.selectpicker('refresh');
+    }).fail(function (){
+        alert('Error al ejecutar');
+    });
+}
+
+function dp_asigna_colonias_postales_fiscal(dp_cp_id = '',dp_colonia_postal_id = '', selector="#dp_colonia_postal_id"){
+
+    let sl_dp_colonia_postal_id = $(selector);
+
+    let url = "index.php?seccion=dp_colonia_postal&ws=1&accion=get_colonia_postal&dp_cp_id="+dp_cp_id+"&session_id="+session_id;
+    $.ajax({
+        type: 'GET',
+        url: url,
+    }).done(function( data ) {
+        console.log(data);
+        sl_dp_colonia_postal_id.empty();
+        integra_new_option(selector,'Seleccione una colonia','-1');
+        $.each(data.registros, function( index, dp_colonia_postal ) {
+            integra_new_option(selector,dp_colonia_postal.dp_colonia_descripcion,dp_colonia_postal.dp_colonia_postal_id);
+        });
+        sl_dp_colonia_postal_id.val(dp_colonia_postal_id);
+        sl_dp_colonia_postal_id.selectpicker('refresh');
+    }).fail(function (){
+        alert('Error al ejecutar');
+    });
+}
+
 let apartado_1 = $("#apartado_1");
 let apartado_2 = $("#apartado_2");
 let apartado_3 = $("#apartado_3");
@@ -693,6 +789,7 @@ let apartado_5 = $("#apartado_5");
 let apartado_6 = $("#apartado_6");
 let apartado_7 = $("#apartado_7");
 let apartado_8 = $("#apartado_8");
+let apartado_9 = $("#apartado_9");
 
 let collapse_a1 = $("#collapse_a1");
 let collapse_a2 = $("#collapse_a2");
@@ -702,6 +799,7 @@ let collapse_a5 = $("#collapse_a5");
 let collapse_a6 = $("#collapse_a6");
 let collapse_a7 = $("#collapse_a7");
 let collapse_a8 = $("#collapse_a8");
+let collapse_a9 = $("#collapse_a9");
 
 apartado_1.show();
 apartado_2.show();
@@ -711,6 +809,7 @@ apartado_5.show();
 apartado_6.hide();
 apartado_7.hide();
 apartado_8.hide();
+apartado_9.hide();
 
 collapse_a1.click(function() {
     apartado_1.toggle();
@@ -746,6 +845,11 @@ collapse_a8.click(function() {
 
 });
 
+collapse_a9.click(function() {
+    apartado_9.toggle();
+
+});
+
 let todo_aculto = true;
 
 $("#collapse_all").click(function() {
@@ -758,6 +862,7 @@ $("#collapse_all").click(function() {
         apartado_6.hide();
         apartado_7.hide();
         apartado_8.hide();
+        apartado_9.hide();
         todo_aculto = false;
     }
     else{
@@ -769,6 +874,7 @@ $("#collapse_all").click(function() {
         apartado_6.show();
         apartado_7.show();
         apartado_8.show();
+        apartado_9.show();
         todo_aculto = true;
     }
 });

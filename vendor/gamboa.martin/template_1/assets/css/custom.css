@@ -664,7 +664,8 @@ body .select-secondary .dropdown-menu li:hover a {
     border: 1px solid rgba(116, 116, 116, 0.1);
     border-radius: 0;
     color: white;
-    height: 60px;
+    height: 40px;
+    padding-bottom: 0px !important;
 }
 
 .selectpicker-secondary {

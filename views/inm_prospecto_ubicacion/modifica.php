@@ -54,7 +54,7 @@
                             <?php echo $controlador->inputs->inm_complemento_id; ?>
 
                             <!-- Identificadores de la unidad -->
-                            <?php echo $controlador->inputs->folio_registro_publico; ?>
+                            <?php echo $controlador->inputs->unidad_privativa; ?>
                             <?php echo $controlador->inputs->lote; ?>
                             <?php echo $controlador->inputs->nivel; ?>
                             <?php echo $controlador->inputs->entrada; ?>
@@ -63,9 +63,12 @@
                             <?php echo $controlador->inputs->edificio; ?>
                             <?php echo $controlador->inputs->condominio; ?>
                             <?php echo $controlador->inputs->etapa; ?>
+                            <?php echo $controlador->inputs->folio_registro_publico; ?>
 
                             <!-- Dimensiones -->
                             <?php echo $controlador->inputs->recamaras; ?>
+                            <?php echo $controlador->inputs->baños; ?>
+                            <?php echo $controlador->inputs->estacionamientos; ?>
                             <?php echo $controlador->inputs->metros_terreno; ?>
                             <?php echo $controlador->inputs->metros_construccion; ?>
 
@@ -77,6 +80,8 @@
                             <?php echo $controlador->inputs->libro; ?>
                             <?php echo $controlador->inputs->volumen; ?>
                             <?php echo $controlador->inputs->url; ?>
+                            <?php echo $controlador->inputs->longitud; ?>
+                            <?php echo $controlador->inputs->latitud; ?>
                             <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
                         </div>
 

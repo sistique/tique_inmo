@@ -52,7 +52,7 @@ html,body {
 body {
     color: #4E4E4E;
     font-family: 'Open Sans', sans-serif;
-    font-size: 14px;
+    font-size: 13px;
     margin: 0;
     padding: 0;
 }
@@ -2461,14 +2461,14 @@ form textarea.form-control {
     display: block;
     height: auto;
     overflow: hidden;
-    padding: 0 15px;
+    padding: 0 10px;
     transition: background .15s;
     -webkit-transition: background .15s;
 }
 
 .form-additional input {
-    height: 44px;
-    line-height: 44px;
+    height: 40px;
+    line-height: 40px;
 }
 
 .form-additional input[type='checkbox'] {
@@ -2541,7 +2541,8 @@ form textarea.form-control {
 .form-control {
     border: 0;
     border-radius: 0;
-    height: 44px;
+    height: 40px;
+    font-size: 13px;
 }
 
 .form-primary .form-control,
@@ -2561,11 +2562,12 @@ form textarea.form-control {
     border-radius: 0;
     padding-bottom: 9px;
     padding-top: 9px;
+    font-size: 13px;
 }
 
 .form-additional .btn {
-    padding-left: 15px;
-    padding-right: 15px;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 .btn.btn-secondary {
@@ -2683,7 +2685,7 @@ form textarea.form-control {
 }
 
 .form-main .control-group {
-    margin-bottom: 10px;
+    margin-bottom: 7px;
 }
 
 .label-important {
