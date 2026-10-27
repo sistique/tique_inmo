@@ -1147,13 +1147,13 @@ class inm_ubicacion extends _inm_ubicaciones {
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al regenerar opinion de valor', data: $regenera_op);
         }
-        $regenera_costo = $this->regenera_costo(inm_ubicacion_id: $inm_ubicacion_id);
+        /*$regenera_costo = $this->regenera_costo(inm_ubicacion_id: $inm_ubicacion_id);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al regenerar costo', data: $regenera_costo);
-        }
+        }*/
         $data = new stdClass();
         $data->regenera_op = $regenera_op;
-        $data->regenera_costo = $regenera_costo;
+        //$data->regenera_costo = $regenera_costo;
         return $data;
 
     }
