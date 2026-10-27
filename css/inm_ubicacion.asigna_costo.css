@@ -5,3 +5,7 @@ table tbody tr td .dropdown-menu{
     transform: translateX(0px) !important;
     margin: 0 !important;
 }
+
+.fila-tipo-concepto{
+    background-color: #c4c4c4;
+}

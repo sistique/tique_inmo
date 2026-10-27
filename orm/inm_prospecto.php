@@ -613,7 +613,7 @@ class inm_prospecto extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al eliminar inm_rel_conyuge_prospecto',
                 data:  $del);
         }
-        $del = (new inm_beneficiario(link: $this->link))->elimina_con_filtro_and(filtro:$filtro);
+        $del = (new inm_rel_beneficiario_prospecto(link: $this->link))->elimina_con_filtro_and(filtro:$filtro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al eliminar inm_beneficiario',
                 data:  $del);
