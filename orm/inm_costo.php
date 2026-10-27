@@ -32,20 +32,8 @@ class inm_costo extends _modelo_parent{
 
     public function alta_bd(array $keys_integra_ds = array('codigo', 'descripcion')): array|stdClass
     {
-        $keys = array('inm_ubicacion_id','inm_concepto_id');
+        $keys = array('inm_ubicacion_id','inm_concepto_id','gt_proveedor_id');
         $valida = $this->validacion->valida_ids(keys: $keys,registro:  $this->registro);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
-        }
-
-        $keys = array('monto');
-        $valida = $this->validacion->valida_double_mayores_igual_0(keys: $keys,registro:  $this->registro);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
-        }
-
-        $keys = array('fecha');
-        $valida = $this->validacion->fechas_in_array(data: $this->registro,keys:  $keys);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
         }
@@ -60,7 +48,7 @@ class inm_costo extends _modelo_parent{
         if (!isset($this->registro['descripcion'])) {
             $descripcion = $this->registro['inm_ubicacion_id'];
             $descripcion .= ' ' . $this->registro['inm_concepto_id'];
-            $descripcion .= ' ' . $this->registro['fecha'];
+            $descripcion .= ' ' . $this->registro['gt_proveedor_id'];
             $this->registro['descripcion'] = $descripcion;
         }
 
@@ -92,50 +80,23 @@ class inm_costo extends _modelo_parent{
      */
     private function codigo(array $registro): string|array
     {
-        $keys = array('referencia','fecha','inm_ubicacion_id','monto','inm_concepto_id');
+        $keys = array('inm_ubicacion_id','inm_concepto_id','gt_proveedor_id');
         $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al valida registro', data: $valida);
         }
 
-        $keys = array('fecha');
-        $valida = $this->validacion->fechas_in_array(data: $registro, keys: $keys);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al valida registro', data: $valida);
-        }
-
-        $keys = array('inm_ubicacion_id','inm_concepto_id');
+        $keys = array('inm_ubicacion_id','inm_concepto_id','gt_proveedor_id');
         $valida = $this->validacion->valida_ids(keys: $keys, registro: $registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al valida registro', data: $valida);
         }
 
-        $monto = $registro['monto'];
-        $monto = str_replace('$','', $monto);
-        $monto = str_replace(' ','', $monto);
-        $monto = str_replace(' ','', $monto);
-        $monto = str_replace(' ','', $monto);
-        $monto = str_replace(' ','', $monto);
-        $monto = str_replace(' ','', $monto);
-        $monto = str_replace(',','', $monto);
-        $monto = str_replace("'",'', $monto);
-
-        $monto = trim($monto);
-        if(!is_numeric($monto)){
-            return $this->error->error(mensaje: 'Error monto no es un numero valido', data: $monto);
-        }
-
-        $registro['monto'] = $monto;
-
-        if(!isset($registro['descripcion'])){
-            $registro['descripcion'] = $registro['referencia'].' '.$registro['fecha'];
-        }
         $codigo = $registro['descripcion'];
         $codigo .= $registro['inm_ubicacion_id'];
         $codigo .= $registro['inm_concepto_id'];
-        $codigo .= $registro['referencia'];
-        $codigo .= $registro['fecha'];
-        $codigo .= $registro['monto'];
+        $codigo .= $registro['gt_proveedor_id'];
+
         return $codigo;
     }
 

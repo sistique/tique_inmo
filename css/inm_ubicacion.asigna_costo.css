@@ -1,0 +1,7 @@
+table tbody tr td .dropdown-menu{
+    position: relative !important;
+    left: 0 !important;
+    bottom: 0 !important;
+    transform: translateX(0px) !important;
+    margin: 0 !important;
+}

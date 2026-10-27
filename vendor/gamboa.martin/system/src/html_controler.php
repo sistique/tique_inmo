@@ -3045,7 +3045,7 @@ class html_controler
                                           string $key_descripcion_select = '', string $key_id = '',
                                           string $key_value_custom = '', string $label = '', string $name = '',
                                           array $not_in = array(), array $in = array(), array $registros = array(),
-                                          bool $required = false): array|string
+                                          bool $required = false, bool $oculta_label = false): array|string
     {
 
         $valida = (new directivas(html:$this->html_base))->valida_cols(cols:$cols);
@@ -3074,7 +3074,7 @@ class html_controler
         $select = $this->html_base->select(cols: $cols, id_selected: $id_selected, label: $init->label,
             name: $init->name, values: $init->values, class_css: $class_css, columns_ds: $columns_ds,
             disabled: $disabled, extra_params_key: $extra_params_keys, id_css: $id_css,
-            key_value_custom: $key_value_custom, required: $required);
+            key_value_custom: $key_value_custom, required: $required, oculta_label: $oculta_label);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al generar select', data: $select);
         }

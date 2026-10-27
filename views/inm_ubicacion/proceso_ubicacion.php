@@ -8,8 +8,8 @@
 
             <div class="col-lg-12">
                 <?php include (new views())->ruta_templates."head/title.php"; ?>
-                <?php //include (new views())->ruta_templates."head/subtitulo.php"; ?>
                 <?php include (new views())->ruta_templates."mensajes.php"; ?>
+
                 <div class="widget  widget-box box-container form-main widget-form-cart" id="form">
 
                     <?php echo $controlador->inputs->inm_ubicacion_seleccionado_id; ?>

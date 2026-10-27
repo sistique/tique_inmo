@@ -12,11 +12,13 @@ use base\controller\init;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_costo_html;
 use gamboamartin\inmuebles\models\inm_costo;
+use gamboamartin\inmuebles\models\inm_pago_costo;
 use gamboamartin\system\_ctl_base;
 use gamboamartin\system\links_menu;
 use gamboamartin\template\html;
 use PDO;
 use stdClass;
+use Throwable;
 
 class controlador_inm_costo extends _ctl_base {
 
@@ -199,5 +201,81 @@ class controlador_inm_costo extends _ctl_base {
         return $keys_selects;
     }
 
+    public function inserta_costo_bd(bool $header, bool $ws = false):array|stdClass
+    {
+        if(!isset($_POST) || count($_POST) <= 0){
+            return $this->retorno_error(mensaje: 'Error al obtener registro para alta', data: $_POST,
+                header: $header, ws: $ws);
+        }
+
+        $filtro_costo = [
+            'inm_ubicacion.id' => $_POST['inm_ubicacion_id'],
+            'inm_concepto.id' => $_POST['inm_concepto_id'],
+            'gt_proveedor.id' => $_POST['gt_proveedor_id']
+        ];
+        $r_inm_costo = (new inm_costo(link: $this->link))->filtro_and(filtro: $filtro_costo);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al generar link', data: $r_inm_costo,
+                header: $header, ws: $ws);
+        }
+
+        $inm_costo_id = $r_inm_costo->registros[0]['inm_costo_id'] ?? -1;
+        if($r_inm_costo->n_registros <= 0){
+            $registro['inm_ubicacion_id'] = $_POST['inm_ubicacion_id'];
+            $registro['inm_concepto_id'] = $_POST['inm_concepto_id'];
+            $registro['gt_proveedor_id'] = $_POST['gt_proveedor_id'];
+            $r_inm_producto = (new inm_costo(link: $this->link))->alta_registro(
+                registro: $registro);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al generar link', data: $r_inm_producto,
+                    header: $header, ws: $ws);
+            }
+
+            $inm_costo_id = $r_inm_producto->registro_id;
+        }
+
+        $registro_pago['inm_costo_id'] = $inm_costo_id;
+        $registro_pago['cat_sat_forma_pago_id'] = $_POST['cat_sat_forma_pago_id'];
+        $registro_pago['monto'] = $_POST['monto'];
+        $registro_pago['fecha_pago'] = $_POST['fecha_pago'];
+        $registro_pago['referencia'] = $_POST['referencia'];
+
+        $r_inm_pago = (new inm_pago_costo(link: $this->link))->alta_registro(
+            registro: $registro_pago);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al generar link', data: $r_inm_pago,
+                header: $header, ws: $ws);
+        }
+
+        $params = array('accion_retorno' => 'asigna_costo', 'seccion_retorno' => 'inm_ubicacion',
+            'id_retorno' => $this->registro_id);
+        $button = $this->html->button_href(accion: 'elimina_bd', etiqueta: 'Elimina',
+            registro_id: $r_inm_pago->registro['inm_pago_costo_id'],
+            seccion: 'inm_pago_costo', style: 'info', params: $params);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al integrar button', data: $button, header: $header,
+                ws: $ws);
+        }
+
+        $r_inm_pago->registro['elimina_bd'] = $button;
+
+        if($header){
+            $retorno = $_SERVER['HTTP_REFERER'];
+            header('Location:'.$retorno);
+            exit;
+        }
+        if($ws){
+            header('Content-Type: application/json');
+            try {
+                echo json_encode($r_inm_pago->registro, JSON_THROW_ON_ERROR);
+            }
+            catch (Throwable $e){
+                return $this->retorno_error(mensaje: 'Error al maquetar estados',data: $e, header: $header, ws: $ws);
+            }
+            exit;
+        }
+
+        return $r_inm_pago;
+    }
 
 }

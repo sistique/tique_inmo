@@ -806,7 +806,7 @@ class html{
      * @version 1.0.0
      */
     private function div_control_group_cols_label(
-        int $cols, string $contenido, string $label, string $name): string|array
+        int $cols, string $contenido, string $label, string $name, bool $oculta_label = false): string|array
     {
         // Limpiar los valores de $label y $name
         $label = trim($label);
@@ -824,8 +824,13 @@ class html{
             return $this->error->error(mensaje: 'Error al generar label', data: $label_html);
         }
 
+        $temp = $label_html . $contenido;
+        if($oculta_label){
+            $temp = $contenido;
+        }
+
         // Construcción del div con la etiqueta y el contenido
-        $html = $this->div_control_group_cols(cols: $cols, contenido: $label_html . $contenido);
+        $html = $this->div_control_group_cols(cols: $cols, contenido: $temp);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al generar contenedor', data: $html);
         }
@@ -2708,7 +2713,8 @@ class html{
     final public function select(int $cols, int|float|string|null $id_selected, string $label, string $name,
                                  array $values, array $class_css = array(), array $columns_ds = array(),
                                  bool $disabled = false, array $extra_params_key = array(), string $id_css = '',
-                                 string $key_value_custom = '', bool $required = false): array|string
+                                 string $key_value_custom = '', bool $required = false,
+                                 bool $oculta_label = false): array|string
     {
 
         $label = trim($label);
@@ -2725,7 +2731,8 @@ class html{
         }
 
         $select = $this->select_html(cols: $cols, label: $label, name: $name, options_html: $options_html,
-            class_css: $class_css, disabled: $disabled, id_css: $id_css, required: $required);
+            class_css: $class_css, disabled: $disabled, id_css: $id_css, required: $required,
+            oculta_label: $oculta_label);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al generar contenedor', data: $select);
         }
@@ -2748,7 +2755,7 @@ class html{
      */
     private function select_html(int $cols, string $label, string $name, string $options_html,
                                  array $class_css = array(), bool $disabled = false, string $id_css = '',
-                                 bool $required = false): array|string
+                                 bool $required = false, bool $oculta_label = false): array|string
     {
 
         $label = trim($label);
@@ -2769,7 +2776,8 @@ class html{
             return $this->error->error(mensaje: 'Error al generar contenedor', data: $select);
         }
 
-        $select = $this->div_control_group_cols_label(cols: $cols,contenido: $select,label: $label,name: $name);
+        $select = $this->div_control_group_cols_label(cols: $cols,contenido: $select,label: $label,name: $name,
+            oculta_label: $oculta_label);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al generar contenedor', data: $select);
         }

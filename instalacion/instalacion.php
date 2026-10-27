@@ -659,6 +659,20 @@ class instalacion
         return $out;
     }
 
+    private function _add_inm_conf_presupuesto_costo(PDO $link): array|stdClass
+    {
+        $out = new stdClass();
+        $init = (new _instalacion(link: $link));
+
+        $create = $init->create_table_new(table: 'inm_conf_presupuesto_costo');
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar tabla', data:  $create);
+        }
+        $out->create = $create;
+
+        return $out;
+    }
+
     private function _add_inm_conf_docs_prospecto(PDO $link): array|stdClass
     {
         $out = new stdClass();
@@ -721,6 +735,34 @@ class instalacion
         $init = (new _instalacion(link: $link));
 
         $create = $init->create_table_new(table: 'inm_costo');
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar tabla', data:  $create);
+        }
+        $out->create = $create;
+
+        return $out;
+    }
+
+    private function _add_inm_pago_costo(PDO $link): array|stdClass
+    {
+        $out = new stdClass();
+        $init = (new _instalacion(link: $link));
+
+        $create = $init->create_table_new(table: 'inm_pago_costo');
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar tabla', data:  $create);
+        }
+        $out->create = $create;
+
+        return $out;
+    }
+
+    private function _add_inm_presupuesto_costo(PDO $link): array|stdClass
+    {
+        $out = new stdClass();
+        $init = (new _instalacion(link: $link));
+
+        $create = $init->create_table_new(table: 'inm_presupuesto_costo');
         if(errores::$error){
             return (new errores())->error(mensaje: 'Error al agregar tabla', data:  $create);
         }
@@ -2024,6 +2066,67 @@ class instalacion
 
     }
 
+    private function inm_conf_presupuesto_costo(PDO $link): array|stdClass
+    {
+        $out = new stdClass();
+        $init = (new _instalacion(link: $link));
+
+        $create = $this->_add_inm_conf_presupuesto_costo(link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar tabla', data:  $create);
+        }
+        $out->create = $create;
+
+        $columnas = new stdClass();
+        $campos_new = array('monto_presupuesto');
+        $columnas = $init->campos_double(campos: $columnas, campos_new: $campos_new);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar campo double', data:  $columnas);
+        }
+        $columnas->aplica_iva = new stdClass();
+        $columnas->aplica_iva->default = 'inactivo';
+
+        $columnas->aplica_co_acreditado = new stdClass();
+        $columnas->aplica_co_acreditado->default = 'inactivo';
+
+        $columnas->aplica_conyuge = new stdClass();
+        $columnas->aplica_conyuge->default = 'inactivo';
+
+        $add_colums = $init->add_columns(campos: $columnas,table:  __FUNCTION__);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar columnas', data:  $add_colums);
+        }
+        $out->add_colums_entidad = $add_colums;
+
+        $foraneas = array();
+        $foraneas['inm_concepto_id'] = new stdClass();
+        $foraneas['gt_proveedor_id'] = new stdClass();
+
+        $result = $init->foraneas(foraneas: $foraneas,table:  __FUNCTION__);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al ajustar foranea', data:  $result);
+        }
+        $out->foraneas = $result;
+
+        $adm_menu_descripcion = 'Costos';
+        $adm_sistema_descripcion = 'inmuebles';
+        $etiqueta_label = 'Config Presupuesto Costo';
+        $adm_seccion_pertenece_descripcion = 'inmuebles';
+        $adm_namespace_descripcion = 'gamboa.martin/inmuebles';
+        $adm_namespace_name = 'gamboamartin/inmuebles';
+
+        $acl = (new _adm())->integra_acl(adm_menu_descripcion: $adm_menu_descripcion,
+            adm_namespace_name: $adm_namespace_name, adm_namespace_descripcion: $adm_namespace_descripcion,
+            adm_seccion_descripcion: __FUNCTION__, adm_seccion_pertenece_descripcion: $adm_seccion_pertenece_descripcion,
+            adm_sistema_descripcion: $adm_sistema_descripcion, etiqueta_label: $etiqueta_label, link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al obtener acl', data:  $acl);
+        }
+
+        return $out;
+
+    }
+
     private function inm_conf_docs_prospecto(PDO $link): array|stdClass
     {
         $out = new stdClass();
@@ -2365,6 +2468,118 @@ class instalacion
             return (new errores())->error(mensaje: 'Error al obtener acl', data:  $acl);
         }
 
+
+        return $out;
+
+    }
+
+    private function inm_pago_costo(PDO $link): array|stdClass
+    {
+        $out = new stdClass();
+        $init = (new _instalacion(link: $link));
+
+        $create = $this->_add_inm_pago_costo(link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar tabla', data:  $create);
+        }
+        $out->create = $create;
+
+        $columnas = new stdClass();
+        $campos_new = array('monto');
+        $columnas = $init->campos_double(campos: $columnas, campos_new: $campos_new);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar campo double', data:  $columnas);
+        }
+        $columnas->fecha_pago = new stdClass();
+        $columnas->fecha_pago->tipo_dato = 'DATE';
+        $columnas->fecha_pago->default = '1900-01-01';
+        $columnas->referencia = new stdClass();
+        $columnas->referencia->default = 'SIN REFERENCIA';
+
+        $add_colums = $init->add_columns(campos: $columnas,table:  __FUNCTION__);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar columnas', data:  $add_colums);
+        }
+        $out->add_colums_entidad = $add_colums;
+
+        $foraneas = array();
+        $foraneas['inm_costo_id'] = new stdClass();
+        $foraneas['cat_sat_forma_pago_id'] = new stdClass();
+
+        $result = $init->foraneas(foraneas: $foraneas,table:  __FUNCTION__);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al ajustar foranea', data:  $result);
+        }
+        $out->foraneas = $result;
+
+        $adm_menu_descripcion = 'Costos';
+        $adm_sistema_descripcion = 'inmuebles';
+        $etiqueta_label = 'Pago Costo';
+        $adm_seccion_pertenece_descripcion = 'inmuebles';
+        $adm_namespace_descripcion = 'gamboa.martin/inmuebles';
+        $adm_namespace_name = 'gamboamartin/inmuebles';
+
+        $acl = (new _adm())->integra_acl(adm_menu_descripcion: $adm_menu_descripcion,
+            adm_namespace_name: $adm_namespace_name, adm_namespace_descripcion: $adm_namespace_descripcion,
+            adm_seccion_descripcion: __FUNCTION__, adm_seccion_pertenece_descripcion: $adm_seccion_pertenece_descripcion,
+            adm_sistema_descripcion: $adm_sistema_descripcion, etiqueta_label: $etiqueta_label, link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al obtener acl', data:  $acl);
+        }
+
+        return $out;
+
+    }
+
+    private function inm_presupuesto_costo(PDO $link): array|stdClass
+    {
+        $out = new stdClass();
+        $init = (new _instalacion(link: $link));
+
+        $create = $this->_add_inm_presupuesto_costo(link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar tabla', data:  $create);
+        }
+        $out->create = $create;
+
+        $columnas = new stdClass();
+        $campos_new = array('monto_presupuesto');
+        $columnas = $init->campos_double(campos: $columnas, campos_new: $campos_new);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar campo double', data:  $columnas);
+        }
+
+        $add_colums = $init->add_columns(campos: $columnas,table:  __FUNCTION__);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar columnas', data:  $add_colums);
+        }
+        $out->add_colums_entidad = $add_colums;
+
+        $foraneas = array();
+        $foraneas['inm_ubicacion_id'] = new stdClass();
+        $foraneas['inm_concepto_id'] = new stdClass();
+        $foraneas['gt_proveedor_id'] = new stdClass();
+
+        $result = $init->foraneas(foraneas: $foraneas,table:  __FUNCTION__);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al ajustar foranea', data:  $result);
+        }
+        $out->foraneas = $result;
+
+        $adm_menu_descripcion = 'Costos';
+        $adm_sistema_descripcion = 'inmuebles';
+        $etiqueta_label = 'Presupuesto Costo';
+        $adm_seccion_pertenece_descripcion = 'inmuebles';
+        $adm_namespace_descripcion = 'gamboa.martin/inmuebles';
+        $adm_namespace_name = 'gamboamartin/inmuebles';
+
+        $acl = (new _adm())->integra_acl(adm_menu_descripcion: $adm_menu_descripcion,
+            adm_namespace_name: $adm_namespace_name, adm_namespace_descripcion: $adm_namespace_descripcion,
+            adm_seccion_descripcion: __FUNCTION__, adm_seccion_pertenece_descripcion: $adm_seccion_pertenece_descripcion,
+            adm_sistema_descripcion: $adm_sistema_descripcion, etiqueta_label: $etiqueta_label, link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al obtener acl', data:  $acl);
+        }
 
         return $out;
 
@@ -4148,6 +4363,24 @@ class instalacion
             return (new errores())->error(mensaje: 'Error integrar inm_concepto', data:  $inm_concepto);
         }
         $out->inm_concepto = $inm_concepto;
+
+        $inm_conf_presupuesto_costo = $this->inm_conf_presupuesto_costo(link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error integrar inm_conf_presupuesto_costo', data:  $inm_conf_presupuesto_costo);
+        }
+        $out->inm_conf_presupuesto_costo = $inm_conf_presupuesto_costo;
+
+        $inm_presupuesto_costo = $this->inm_presupuesto_costo(link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error integrar inm_presupuesto_costo', data:  $inm_presupuesto_costo);
+        }
+        $out->inm_presupuesto_costo = $inm_presupuesto_costo;
+
+        $inm_pago_costo = $this->inm_pago_costo(link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error integrar inm_pago_costo', data:  $inm_pago_costo);
+        }
+        $out->inm_pago_costo = $inm_pago_costo;
 
         $inm_estado_vivienda = $this->inm_estado_vivienda(link: $link);
         if(errores::$error){
