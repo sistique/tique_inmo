@@ -15,7 +15,6 @@
                         <?php echo $controlador->inputs->inm_ubicacion_id; ?>
                         <?php echo $controlador->inputs->inm_ubicacion_seleccionado_id; ?>
                         <?php echo $controlador->inputs->inm_concepto_id; ?>
-                        <?php echo $controlador->inputs->gt_proveedor_id; ?>
                         <?php echo $controlador->inputs->monto_presupuesto; ?>
 
                         <?php echo $controlador->inputs->btn_action_next; ?>

@@ -11,14 +11,14 @@ class inm_conf_presupuesto_costo extends _modelo_parent{
     public function __construct(PDO $link)
     {
         $tabla = 'inm_conf_presupuesto_costo';
-        $columnas = array($tabla=>false,'inm_concepto'=>$tabla,'inm_tipo_concepto'=>'inm_concepto','gt_proveedor'=>$tabla);
+        $columnas = array($tabla=>false,'inm_concepto'=>$tabla,'inm_tipo_concepto'=>'inm_concepto');
 
-        $campos_obligatorios = array('inm_concepto_id','gt_proveedor_id','monto_presupuesto');
+        $campos_obligatorios = array('inm_concepto_id','monto_presupuesto');
 
         $columnas_extra= array();
         $renombres= array();
 
-        $atributos_criticos = array('inm_concepto_id','gt_proveedor_id','monto_presupuesto');
+        $atributos_criticos = array('inm_concepto_id','monto_presupuesto');
 
         parent::__construct(link: $link, tabla: $tabla, campos_obligatorios: $campos_obligatorios,
             columnas: $columnas, columnas_extra: $columnas_extra, renombres: $renombres,
@@ -32,7 +32,7 @@ class inm_conf_presupuesto_costo extends _modelo_parent{
     {
         if (!isset($this->registro['descripcion'])) {
             $descripcion = 'Concepto ' . $this->registro['inm_concepto_id'];
-            $descripcion .= ' Prov ' . $this->registro['gt_proveedor_id'];
+            $descripcion .= ' Monto ' . $this->registro['monto_presupuesto'];
             $this->registro['descripcion'] = $descripcion;
         }
 

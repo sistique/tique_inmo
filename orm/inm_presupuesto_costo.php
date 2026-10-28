@@ -11,15 +11,14 @@ class inm_presupuesto_costo extends _modelo_parent{
     public function __construct(PDO $link)
     {
         $tabla = 'inm_presupuesto_costo';
-        $columnas = array($tabla=>false,'inm_concepto'=>$tabla,'inm_tipo_concepto'=>'inm_concepto',
-            'gt_proveedor'=>$tabla,'inm_ubicacion'=>$tabla);
+        $columnas = array($tabla=>false,'inm_concepto'=>$tabla,'inm_tipo_concepto'=>'inm_concepto','inm_ubicacion'=>$tabla);
 
-        $campos_obligatorios = array('inm_ubicacion_id','inm_concepto_id','gt_proveedor_id','monto_presupuesto');
+        $campos_obligatorios = array('inm_ubicacion_id','inm_concepto_id','monto_presupuesto');
 
         $columnas_extra= array();
         $renombres= array();
 
-        $atributos_criticos = array('inm_ubicacion_id','inm_concepto_id','gt_proveedor_id','monto_presupuesto');
+        $atributos_criticos = array('inm_ubicacion_id','inm_concepto_id','monto_presupuesto');
 
         parent::__construct(link: $link, tabla: $tabla, campos_obligatorios: $campos_obligatorios,
             columnas: $columnas, columnas_extra: $columnas_extra, renombres: $renombres,
@@ -34,8 +33,22 @@ class inm_presupuesto_costo extends _modelo_parent{
         if (!isset($this->registro['descripcion'])) {
             $descripcion = 'Ubicacion ' . $this->registro['inm_ubicacion_id'];
             $descripcion .= ' Concepto ' . $this->registro['inm_concepto_id'];
-            $descripcion .= ' Prov ' . $this->registro['gt_proveedor_id'];
+            $descripcion .= ' Monto ' . $this->registro['monto_presupuesto'];
             $this->registro['descripcion'] = $descripcion;
+        }
+
+        $filtro_pres = [
+            'inm_ubicacion.id' => $this->registro['inm_ubicacion_id'],
+            'inm_concepto.id' => $this->registro['inm_concepto_id']
+        ];
+        $r_presupuesto = $this->filtro_and(filtro: $filtro_pres);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener costos', data: $r_presupuesto);
+        }
+
+        if($r_presupuesto->n_registros > 0){
+            return $this->error->error(mensaje: 'Ya existe un presupuesto para este concepto y ubicacion',
+                data: $r_presupuesto);
         }
 
         $r_alta_bd = parent::alta_bd(keys_integra_ds: $keys_integra_ds);

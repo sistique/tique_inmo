@@ -601,17 +601,8 @@ class controlador_inm_ubicacion extends _ctl_base
 
         $keys_selects = array();
         $columns_ds = array('inm_concepto_id', 'inm_concepto_descripcion');
-        $keys_selects = $this->key_select(cols: 4, con_registros: true, filtro: array(),
+        $keys_selects = $this->key_select(cols: 6, con_registros: true, filtro: array(),
             key: 'inm_concepto_id', keys_selects: $keys_selects, id_selected: -1, label: 'Concepto',
-            columns_ds: $columns_ds, required: false);
-        if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects', data: $keys_selects,
-                header: $header, ws: $ws);
-        }       
-        
-        $columns_ds = array('gt_proveedor_id', 'gt_proveedor_descripcion');
-        $keys_selects = $this->key_select(cols: 4, con_registros: true, filtro: array(),
-            key: 'gt_proveedor_id', keys_selects: $keys_selects, id_selected: -1, label: 'Proveedor',
             columns_ds: $columns_ds, required: false);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects', data: $keys_selects,
@@ -632,7 +623,7 @@ class controlador_inm_ubicacion extends _ctl_base
         $columns_ds = array('inm_ubicacion_ubicacion');
         $filtro['inm_ubicacion.id'] = $this->registro_id;
         $inm_ubicacion_id = (new inm_ubicacion_html(html: $this->html_base))->select_inm_ubicacion_id(
-            cols: 4, con_registros: true, id_selected: $this->registro_id, link: $this->link, columns_ds: $columns_ds,
+            cols: 6, con_registros: true, id_selected: $this->registro_id, link: $this->link, columns_ds: $columns_ds,
             filtro: $filtro);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al generar input', data: $inm_ubicacion_id, header: $header, ws: $ws);
@@ -698,13 +689,13 @@ class controlador_inm_ubicacion extends _ctl_base
                 $costos_con_pagos[] = $costo;
             }
 
-            $gt_proveedor_id = $presupuesto['gt_proveedor_id'] ?? -1;
+            /*$gt_proveedor_id = -1;
             if(isset($r_costos->registros[0]['gt_proveedor_id'])){
                 $gt_proveedor_id = $r_costos->registros[0]['gt_proveedor_id'];
-            }
+            }*/
 
             $name = 'gt_proveedor_id[' . $presupuesto['inm_presupuesto_costo_id'] . ']';
-            $gt_proveedor_id = $this->html->select_catalogo(cols: 12, con_registros: true, id_selected: $gt_proveedor_id,
+            $gt_proveedor_id = $this->html->select_catalogo(cols: 12, con_registros: true, id_selected: -1,
                 modelo: $modelo_proveedor, id_css: 'gt_proveedor_id', label: 'Proveedor', name: $name,
                 oculta_label: true);
             if (errores::$error) {
@@ -4026,7 +4017,6 @@ class controlador_inm_ubicacion extends _ctl_base
                 $registro_presupuesto = array();
                 $registro_presupuesto['inm_ubicacion_id'] = $this->registro_id;
                 $registro_presupuesto['inm_concepto_id'] = $registro['inm_concepto_id'];
-                $registro_presupuesto['gt_proveedor_id'] = $registro['gt_proveedor_id'];
                 $registro_presupuesto['monto_presupuesto'] = $registro['inm_conf_presupuesto_costo_monto_presupuesto'];
                 $r_inm_presupuesto = (new inm_presupuesto_costo(link: $this->link))->alta_registro(registro: $registro_presupuesto);
                 if (errores::$error) {
