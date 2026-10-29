@@ -669,17 +669,51 @@ class controlador_inm_ubicacion extends _ctl_base
 
                 $pagos_registrados = [];
                 foreach ($r_pagos->registros as $pago) {
+
+                    $name = 'gt_proveedor_id[' . $pago['inm_pago_costo_id'] . ']';
+                    $gt_proveedor_id = $this->html->select_catalogo(cols: 12, con_registros: true,
+                        id_selected: $pago['gt_proveedor_id'], modelo: $modelo_proveedor, id_css: $name,
+                        label: 'Proveedor', name: $name, oculta_label: true);
+                    if (errores::$error) {
+                        return $this->retorno_error(mensaje: 'Error al obtener input', data: $gt_proveedor_id, header: $header,
+                            ws: $ws);
+                    }
+
+                    $pago['gt_proveedor_id'] = $gt_proveedor_id;
+                    
+                    $name = 'cat_sat_forma_pago_id[' . $pago['inm_pago_costo_id'] . ']';
+                    $cat_sat_forma_pago_id = $this->html->select_catalogo(cols: 12, con_registros: true,
+                        id_selected: $pago['cat_sat_forma_pago_id'], modelo: $modelo_forma_pago, id_css: $name,
+                        label: 'Forma de Pago', name: $name, oculta_label: true);
+                    if (errores::$error) {
+                        return $this->retorno_error(mensaje: 'Error al obtener input', data: $cat_sat_forma_pago_id, header: $header,
+                            ws: $ws);
+                    }
+
+                    $pago['cat_sat_forma_pago_id'] = $cat_sat_forma_pago_id;
+
+                    $button = $this->html->button_para_java(id_css: 'modifica_'.$pago['inm_pago_costo_id'],
+                        style: 'info', tag:  'Modifica', css_extra: 'col-sm-6 modifica_pago_costo',
+                        data_value: $pago['inm_pago_costo_id']);
+                    if(errores::$error){
+                        return $this->retorno_error(
+                            mensaje: 'Error al btn_collapse_all',data:  $button, header: $header,ws:  $ws);
+                    }
+
+                    $pago['modifica'] = '';//$button;
+
                     $params = array('accion_retorno' => 'asigna_costo', 'seccion_retorno' => 'inm_ubicacion',
                         'id_retorno' => $this->registro_id);
                     $button = $this->html->button_href(accion: 'elimina_bd', etiqueta: 'Elimina',
-                        registro_id: $pago['inm_pago_costo_id'],
-                        seccion: 'inm_pago_costo', style: 'info', params: $params);
+                        registro_id: $pago['inm_pago_costo_id'], seccion: 'inm_pago_costo',
+                        style: 'info', css_extra: 'botones', cols: 12, params: $params);
                     if (errores::$error) {
                         return $this->retorno_error(mensaje: 'Error al integrar button', data: $button, header: $header,
                             ws: $ws);
                     }
 
                     $pago['elimina_bd'] = $button;
+
 
                     $total_gastado += (float)$pago['inm_pago_costo_monto'];
                     $pagos_registrados[] = $pago;
@@ -730,12 +764,10 @@ class controlador_inm_ubicacion extends _ctl_base
 
             $presupuesto['elimina_bd'] = $button;
 
-// Tipo de concepto (fila morada)
             $inm_tipo_concepto_id = $presupuesto['inm_tipo_concepto_id'] ?? null;
             $inm_tipo_concepto_descripcion = $presupuesto['inm_tipo_concepto_descripcion'] ?? null;
 
             if ($inm_tipo_concepto_id === null) {
-                // Respaldo: obtenerlo desde inm_concepto
                 $r_concepto = $modelo_concepto->registro(registro_id: $presupuesto['inm_concepto_id']);
                 if (errores::$error) {
                     return $this->retorno_error(mensaje: 'Error al obtener concepto', data: $r_concepto,
@@ -749,9 +781,16 @@ class controlador_inm_ubicacion extends _ctl_base
                 $grupos_tipo_concepto[$inm_tipo_concepto_id] = [
                     'inm_tipo_concepto_id' => $inm_tipo_concepto_id,
                     'inm_tipo_concepto_descripcion' => $inm_tipo_concepto_descripcion,
+                    'total_presupuesto' => 0,
+                    'total_gastado' => 0,
                     'presupuestos' => [],
                 ];
             }
+
+            $grupos_tipo_concepto[$inm_tipo_concepto_id]['total_presupuesto'] +=
+                (float)($presupuesto['inm_presupuesto_costo_monto_presupuesto'] ?? 0);
+            $grupos_tipo_concepto[$inm_tipo_concepto_id]['total_gastado'] +=
+                (float)($presupuesto['total_gastado'] ?? 0);
 
             $grupos_tipo_concepto[$inm_tipo_concepto_id]['presupuestos'][] = $presupuesto;
         }

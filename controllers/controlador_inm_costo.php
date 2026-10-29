@@ -9,7 +9,9 @@
 namespace gamboamartin\inmuebles\controllers;
 
 use base\controller\init;
+use gamboamartin\cat_sat\models\cat_sat_forma_pago;
 use gamboamartin\errores\errores;
+use gamboamartin\gastos\models\gt_proveedor;
 use gamboamartin\inmuebles\html\inm_costo_html;
 use gamboamartin\inmuebles\models\inm_costo;
 use gamboamartin\inmuebles\models\inm_pago_costo;
@@ -208,31 +210,17 @@ class controlador_inm_costo extends _ctl_base {
                 header: $header, ws: $ws);
         }
 
-        $filtro_costo = [
-            'inm_ubicacion.id' => $_POST['inm_ubicacion_id'],
-            'inm_concepto.id' => $_POST['inm_concepto_id'],
-            'gt_proveedor.id' => $_POST['gt_proveedor_id']
-        ];
-        $r_inm_costo = (new inm_costo(link: $this->link))->filtro_and(filtro: $filtro_costo);
+        $registro['inm_ubicacion_id'] = $_POST['inm_ubicacion_id'];
+        $registro['inm_concepto_id'] = $_POST['inm_concepto_id'];
+        $registro['gt_proveedor_id'] = $_POST['gt_proveedor_id'];
+        $r_inm_producto = (new inm_costo(link: $this->link))->alta_registro(
+            registro: $registro);
         if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al generar link', data: $r_inm_costo,
+            return $this->retorno_error(mensaje: 'Error al generar link', data: $r_inm_producto,
                 header: $header, ws: $ws);
         }
 
-        $inm_costo_id = $r_inm_costo->registros[0]['inm_costo_id'] ?? -1;
-        if($r_inm_costo->n_registros <= 0){
-            $registro['inm_ubicacion_id'] = $_POST['inm_ubicacion_id'];
-            $registro['inm_concepto_id'] = $_POST['inm_concepto_id'];
-            $registro['gt_proveedor_id'] = $_POST['gt_proveedor_id'];
-            $r_inm_producto = (new inm_costo(link: $this->link))->alta_registro(
-                registro: $registro);
-            if (errores::$error) {
-                return $this->retorno_error(mensaje: 'Error al generar link', data: $r_inm_producto,
-                    header: $header, ws: $ws);
-            }
-
-            $inm_costo_id = $r_inm_producto->registro_id;
-        }
+        $inm_costo_id = $r_inm_producto->registro_id;
 
         $registro_pago['inm_costo_id'] = $inm_costo_id;
         $registro_pago['cat_sat_forma_pago_id'] = $_POST['cat_sat_forma_pago_id'];
@@ -247,11 +235,50 @@ class controlador_inm_costo extends _ctl_base {
                 header: $header, ws: $ws);
         }
 
+        $name = 'gt_proveedor_id[' . $r_inm_pago->registro['inm_pago_costo_id'] . ']';
+        $gt_proveedor_id = $this->html->select_catalogo(cols: 12, con_registros: true,
+            id_selected: $_POST['gt_proveedor_id'],
+            modelo: new gt_proveedor(link: $this->link), id_css: $name, label: 'Proveedor', name: $name,
+            oculta_label: true);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener input', data: $gt_proveedor_id, header: $header,
+                ws: $ws);
+        }
+
+        $r_inm_pago->registro['campo_gt_proveedor_id'] = $gt_proveedor_id;
+
+        $r_inm_pago->registro['campo_monto'] = "<input type='text' name='monto' class='form-control' id='monto[{$r_inm_pago->registro['inm_pago_costo_id']}]' placeholder='Monto' title='monto' value='{$r_inm_pago->registro['inm_pago_costo_monto'] }'>";
+
+        $name = 'cat_sat_forma_pago_id[' . $r_inm_pago->registro['inm_pago_costo_id'] . ']';
+        $cat_sat_forma_pago_id = $this->html->select_catalogo(cols: 12, con_registros: true,
+            id_selected: $_POST['cat_sat_forma_pago_id'],
+            modelo: new cat_sat_forma_pago(link: $this->link), id_css: $name, label: 'Proveedor', name: $name,
+            oculta_label: true);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener input', data: $cat_sat_forma_pago_id, header: $header,
+                ws: $ws);
+        }
+
+        $r_inm_pago->registro['campo_cat_sat_forma_pago_id'] = $cat_sat_forma_pago_id;
+
+        $r_inm_pago->registro['campo_fecha_pago'] = "<input type='date' name='fecha_pago' class='form-control' id='fecha_pago[{$r_inm_pago->registro['inm_pago_costo_id']}]' placeholder='Fecha' title='fecha_pago' value='{$r_inm_pago->registro['inm_pago_costo_fecha_pago'] }'>";
+        $r_inm_pago->registro['campo_referencia'] = "<input type='text' name='referencia' class='form-control' id='referencia[{$r_inm_pago->registro['inm_pago_costo_id']}]' placeholder='Referencia' title='referencia' value='{$r_inm_pago->registro['inm_pago_costo_referencia'] }'>";
+
+        $button = $this->html->button_para_java(id_css: 'modifica_'.$r_inm_pago->registro['inm_pago_costo_id'],
+            style: 'info', tag:  'Modifica', css_extra: 'col-sm-6 modifica_pago_costo',
+            data_value: $r_inm_pago->registro['inm_pago_costo_id']);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al btn_collapse_all',data:  $button, header: $header,ws:  $ws);
+        }
+
+        $r_inm_pago->registro['modifica'] = "";//$button;
+
         $params = array('accion_retorno' => 'asigna_costo', 'seccion_retorno' => 'inm_ubicacion',
             'id_retorno' => $this->registro_id);
         $button = $this->html->button_href(accion: 'elimina_bd', etiqueta: 'Elimina',
             registro_id: $r_inm_pago->registro['inm_pago_costo_id'],
-            seccion: 'inm_pago_costo', style: 'info', params: $params);
+            seccion: 'inm_pago_costo', style: 'info', css_extra: 'botones', cols: 12, params: $params);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al integrar button', data: $button, header: $header,
                 ws: $ws);

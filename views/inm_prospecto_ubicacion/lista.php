@@ -13,9 +13,54 @@
         <div class="contenedor_completo">
             <div class="filtros-avanzados">
                 <div class="filtro-grupo col-md-12">
-                    <div class="col-md-1">
-                        <label for="ID">ID</label>
-                        <input type="text" id="id" data-tipo="data" data-filtro_campo="inm_prospecto_ubicacion.id" placeholder="Ej: 1">
+                    <div class="filtros col-md-1">
+                        <label for="id">ID</label>
+                        <input type="text" id="id" data-tipo="data" data-filtro_campo="inm_prospecto_ubicacion.id" placeholder="Ej: 1 ">
+                    </div>
+
+                    <div class="col-md-3">
+                        <label for="Ubicacion">Ubicacion</label>
+                        <input type="text" id="ubicacion" data-tipo="filtro" data-filtro_campo="<?php echo $controlador->modelo->columnas_extra['inm_prospecto_ubicacion_ubicacion']?>"
+                               placeholder="Ej: AV. VALLARTA 220 ">
+                    </div>
+
+                    <div class="col-md-2">
+                        <label for="nss">NSS Titular</label>
+                        <input type="text" id="nss" data-tipo="filtro" data-filtro_campo="inm_prospecto_ubicacion.nss"
+                               placeholder="Ej: 9999999999">
+                    </div>
+
+                    <div class="col-md-2">
+                        <label for="Nombre prospecto_ubicacion">Titular</label>
+                        <input type="text" id="nombre_prospecto_ubicacion" data-tipo="filtro" data-filtro_campo="inm_prospecto_ubicacion.razon_social"
+                               placeholder="Ej: JUAN PEREZ">
+                    </div>
+
+                    <div class="col-md-2">
+                        <label for="Nombre prospecto_ubicacion">Co-Acreditado</label>
+                        <input type="text" id="nombre_co_acreditado_prospecto_ubicacion" data-tipo="filtro"
+                               data-filtro_campo="<?php echo $controlador->modelo->columnas_extra['inm_co_acreditado_razon_social']?>"
+                               placeholder="Ej: JUAN PEREZ">
+                    </div>
+
+                    <?php
+                    if(!$controlador->es_agente){
+                        echo '<div class="col-md-2">
+                                    <label for="agente">Prospectador</label>
+                                    <input type="text" id="agente" data-tipo="filtro" data-filtro_campo="com_agente.descripcion" placeholder="Ej: JUAN PEREZ">
+                                </div>';
+                    }
+                    ?>
+
+                    <div class="col-md-2">
+                        <label for="fecha_inicio">Fecha Alta Inicio</label>
+                        <input type="date" id="fecha_inicio" data-tipo="rango-fechas" data-filtro_campo="inm_prospecto_ubicacion.fecha_alta"
+                               data-filtro_key="campo1">
+                    </div>
+                    <div class="col-md-2">
+                        <label for="fecha_fin">Fecha Alta Fin</label>
+                        <input type="date" id="fecha_fin" data-tipo="rango-fechas" data-filtro_campo="inm_prospecto_ubicacion.fecha_alta"
+                               data-filtro_key="campo2">
                     </div>
 
                     <div class="col-md-2">
@@ -30,45 +75,21 @@
                             ?>
                         </select>
                     </div>
-
-                    <div class="col-md-3">
-                        <label for="Ubicacion">Ubicacion</label>
-                        <input type="text" id="ubicacion" data-tipo="filtro" data-filtro_campo="<?php echo $controlador->modelo->columnas_extra['inm_prospecto_ubicacion_ubicacion']?>"
-                               placeholder="Ej: AV. VALLARTA 220 ">
-                    </div>
-
-                    <div class="col-md-2">
-                        <label for="Nombre prospecto_ubicacion">Nombre Prospecto</label>
-                        <input type="text" id="nombre_prospecto_ubicacion" data-tipo="filtro" data-filtro_campo="inm_prospecto_ubicacion.razon_social"
-                               placeholder="Ej: JUAN PEREZ">
-                    </div>
-
-                    <?php
-                        if(!$controlador->es_agente){
-                            echo '<div class="col-md-2">
-                                    <label for="agente">Prospectador</label>
-                                    <input type="text" id="agente" data-tipo="filtro" data-filtro_campo="com_agente.descripcion" placeholder="Ej: JUAN PEREZ">
-                                </div>';
-                        }
-                    ?>
-
-                    <div class="col-md-2">
-                        <label for="nss">NSS</label>
-                        <input type="text" id="nss" data-tipo="filtro" data-filtro_campo="inm_prospecto_ubicacion.nss"
-                               placeholder="Ej: 9999999999">
-                    </div>
                 </div>
             </div>
             <div class="filtro-grupo col-md-12">
                 <button id="filtrar">Filtrar</button>
                 <button id="limpiar">Limpiar</button>
-                <form method="post" action="<?php echo $controlador->link_exportar_xls; ?>" enctype="multipart/form-data">
+                <form class="campos_excel" method="post" action="<?php echo $controlador->link_exportar_xls; ?>" enctype="multipart/form-data">
                     <input type="hidden" name="id" id="hidden_id">
-                    <input type="hidden" name="inm_status_prospecto_ubicacion" id="hidden_inm_status_prospecto_ubicacion">
-                    <input type="hidden" name="nombre_prospecto_ubicacion" id="hidden_nombre_prospecto_ubicacion">
                     <input type="hidden" name="ubicacion" id="hidden_ubicacion">
-                    <input type="hidden" name="agente" id="hidden_agente">
                     <input type="hidden" name="nss" id="hidden_nss">
+                    <input type="hidden" name="nombre_prospecto_ubicacion" id="hidden_nombre_prospecto_ubicacion">
+                    <input type="hidden" name="nombre_co_acreditado_prospecto_ubicacion" id="hidden_nombre_co_acreditado_prospecto_ubicacion">
+                    <input type="hidden" name="agente" id="hidden_agente">
+                    <input type="hidden" name="fecha_inicio" id="hidden_fecha_inicio">
+                    <input type="hidden" name="fecha_fin" id="hidden_fecha_fin">
+                    <input type="hidden" name="inm_status_prospecto_ubicacion" id="hidden_inm_status_prospecto_ubicacion">
                     <button id="descargar_excel">Descargar Excel</button>
                 </form>
             </div>

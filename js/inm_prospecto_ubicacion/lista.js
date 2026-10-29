@@ -59,6 +59,7 @@ $(document).ready(function () {
         $('.filtros-avanzados input').val('');
         $('.filtros-avanzados select').val('').trigger('change');
         $('.filtros-avanzados li').remove();
+        $('.campos_excel input').val('');
         $('#limpiar').prop('disabled', true);
 
         if (filtro_aplicado) {

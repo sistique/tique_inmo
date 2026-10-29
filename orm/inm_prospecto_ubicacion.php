@@ -50,6 +50,16 @@ class inm_prospecto_ubicacion extends _modelo_parent{
 
         $columnas_extra['inm_prospecto_ubicacion_ubicacion'] = $sql;
 
+
+        $sql = "( IFNULL((SELECT inm_co_acreditado.razon_social
+                    FROM inm_co_acreditado
+                    INNER JOIN inm_rel_co_acred_prosp_ubi AS inm_rel_co_acred_prosp_ubi_sel 
+                            ON inm_rel_co_acred_prosp_ubi_sel.inm_co_acreditado_id = inm_co_acreditado.id
+                    WHERE inm_rel_co_acred_prosp_ubi_sel.inm_prospecto_ubicacion_id = inm_prospecto_ubicacion.id
+                    LIMIT 1), ''))";
+
+        $columnas_extra['inm_co_acreditado_razon_social'] = $sql;
+
         if(!isset($_SESSION['usuario_id'])){
             $error = (new errores())->error(mensaje: 'Error $_SESSION[usuario_id] no existe',data:  $_SESSION);
             print_r($error);

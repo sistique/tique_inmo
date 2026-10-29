@@ -41,18 +41,17 @@
                                 <tbody>
                                 <?php foreach ($controlador->presupuestos as $grupo): ?>
 
-                                    <!-- Fila morada: tipo de concepto -->
-                                    <tr class="fila-tipo-concepto">
-                                        <td colspan="4">
-                                            <?= htmlspecialchars($grupo['inm_tipo_concepto_descripcion'] ?? 'SIN TIPO') ?>
-                                        </td>
+                                    <tr class="fila-tipo-concepto" data-tipo="<?= $grupo['inm_tipo_concepto_id'] ?>">
+                                        <td><?= htmlspecialchars($grupo['inm_tipo_concepto_descripcion'] ?? 'SIN TIPO') ?></td>
+                                        <td>$<span class="total-presupuesto-tipo"><?= number_format($grupo['total_presupuesto'], 2) ?></span></td>
+                                        <td>$<span class="total-gastado-tipo"><?= number_format($grupo['total_gastado'], 2) ?></span></td>
+                                        <td></td>
                                     </tr>
 
                                     <?php foreach ($grupo['presupuestos'] as $presupuesto):
                                         $id = $presupuesto['inm_presupuesto_costo_id'];
                                         ?>
-                                        <tr class="fila-presupuesto" data-id="<?= $id ?>" style="cursor: pointer;">
-                                            <td><?= htmlspecialchars($presupuesto['inm_concepto_descripcion'] ?? 'Concepto') ?></td>
+                                        <tr class="fila-presupuesto" data-id="<?= $id ?>" data-tipo="<?= $grupo['inm_tipo_concepto_id'] ?>" style="cursor: pointer;">                                            <td><?= htmlspecialchars($presupuesto['inm_concepto_descripcion'] ?? 'Concepto') ?></td>
                                             <td>$<?= number_format($presupuesto['inm_presupuesto_costo_monto_presupuesto'], 2) ?></td>
                                             <td><strong class="total-gastado">$<?= number_format($presupuesto['total_gastado'], 2) ?></strong></td>
                                             <td><?php echo $presupuesto['elimina_bd']; ?></td>
@@ -74,13 +73,40 @@
                                                     <tbody>
                                                     <?php foreach ($presupuesto['costos'] as $costo): ?>
                                                         <?php foreach ($costo['pagos'] as $pago): ?>
-                                                            <tr>
-                                                                <td><?= $pago['gt_proveedor_razon_social'] ?></td>
-                                                                <td>$<?= number_format($pago['inm_pago_costo_monto'], 2) ?></td>
-                                                                <td><?= $pago['cat_sat_forma_pago_descripcion'] ?></td>
-                                                                <td><?= $pago['inm_pago_costo_fecha_pago'] ?></td>
-                                                                <td><?= htmlspecialchars($pago['inm_pago_costo_referencia']) ?></td>
-                                                                <td><?= $pago['elimina_bd'] ?></td>
+                                                            <tr class="form-pago" data-id="<?= $pago['inm_pago_costo_id'] ?>">
+                                                                <td>
+                                                                    <?= $pago['gt_proveedor_razon_social'] ?>
+                                                                    <div class="cont-mod-gasto mod-gasto-<?= $pago['inm_pago_costo_id'] ?>">
+                                                                        <?= $pago['gt_proveedor_id'] ?>
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    $<?= number_format($pago['inm_pago_costo_monto'], 2) ?>
+                                                                    <div class="cont-mod-gasto mod-gasto-<?= $pago['inm_pago_costo_id'] ?>">
+                                                                        <input type="text" name="monto" class="form-control" id="monto[<?= $pago['inm_pago_costo_id'] ?>]" placeholder="Monto" title="monto" value="<?= $pago['inm_pago_costo_monto'] ?>">
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    <?= $pago['cat_sat_forma_pago_descripcion'] ?>
+                                                                    <div class="cont-mod-gasto mod-gasto-<?= $pago['inm_pago_costo_id'] ?>">
+                                                                        <?= $pago['cat_sat_forma_pago_id'] ?>
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    <?= $pago['inm_pago_costo_fecha_pago'] ?>
+                                                                    <div class="cont-mod-gasto mod-gasto-<?= $pago['inm_pago_costo_id'] ?>">
+                                                                        <input type="date" name="fecha_pago" class="form-control" id="fecha_pago[<?= $pago['inm_pago_costo_id'] ?>]" placeholder="Fecha" title="fecha_pago" value="<?= $pago['inm_pago_costo_fecha_pago'] ?>">
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    <?= htmlspecialchars($pago['inm_pago_costo_referencia']) ?>
+                                                                    <div class="cont-mod-gasto mod-gasto-<?= $pago['inm_pago_costo_id'] ?>">
+                                                                        <input type="text" name="referencia_pago" class="form-control" id="referencia[<?= $pago['inm_pago_costo_id'] ?>]" placeholder="Referencia" title="referencia" value="<?= $pago['inm_pago_costo_referencia'] ?>">
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    <?= $pago['modifica'] ?> <?= $pago['elimina_bd'] ?>
+                                                                </td>
                                                             </tr>
                                                         <?php endforeach; ?>
                                                     <?php endforeach; ?>

@@ -9,3 +9,12 @@ table tbody tr td .dropdown-menu{
 .fila-tipo-concepto{
     background-color: #c4c4c4;
 }
+
+.botones{
+    left: 5px !important;
+    right: 5px !important;
+}
+
+.cont-mod-gasto{
+    display: none;
+}

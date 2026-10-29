@@ -62,6 +62,7 @@ use gamboamartin\system\links_menu;
 use gamboamartin\template\html;
 use html\doc_tipo_documento_html;
 use PDO;
+use PhpOffice\PhpWord\TemplateProcessor;
 use setasign\Fpdi\Fpdi;
 use setasign\Fpdi\PdfReader\PdfReader;
 use setasign\Fpdi\PdfReader\PdfReaderException;
@@ -2366,12 +2367,15 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
 
         $columns["inm_prospecto_ubicacion_id"]["titulo"] = "Id";
         $columns["inm_prospecto_ubicacion_ubicacion"]["titulo"] = "Ubicacion";
-        $columns["inm_prospecto_ubicacion_nss"]["titulo"] = "NSS";
-        $columns["com_prospecto_razon_social"]["titulo"] = "Nombre";
-        $columns["inm_prospecto_ubicacion_fecha_alta"]["titulo"] = "Fecha Alta";
+        $columns["inm_prospecto_ubicacion_nss"]["titulo"] = "NSS Titutal";
+        $columns["com_prospecto_razon_social"]["titulo"] = "Titular";
+        $columns["inm_co_acreditado_razon_social"]["titulo"] = "Co-Acreditado";
+
         if(!$existe){
             $columns["com_agente_descripcion"]["titulo"] = "Prospectador";
         }
+
+        $columns["inm_prospecto_ubicacion_fecha_alta"]["titulo"] = "Fecha Alta";
         $columns["inm_status_prospecto_ubicacion_descripcion"]["titulo"] = "Status Prospecto";
 
 
@@ -3638,34 +3642,50 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
 
         $filtro_especial = array();
 
-        if(!empty($_POST['ubicacion'])){
-            $filtro_especial[0]['inm_prospecto_ubicacion_ubicacion']['operador'] = 'LIKE';
-            $filtro_especial[0]['inm_prospecto_ubicacion_ubicacion']['valor'] = '%'.$_POST['ubicacion'].'%';
-            $filtro_especial[0]['inm_prospecto_ubicacion_ubicacion']['comparacion'] = 'AND';
+        if(!empty($_POST['id'])){
+            $filtro_especial[0]['inm_prospecto_ubicacion.id']['operador'] = '=';
+            $filtro_especial[0]['inm_prospecto_ubicacion.id']['valor'] = $_POST['id'];
+            $filtro_especial[0]['inm_prospecto_ubicacion.id']['comparacion'] = 'AND';
 
             //$filtro_text[$table.'.razon_social'] = $_POST['nombre_prospecto_ubicacion'];
         }
 
-        if(!empty($_POST['nombre_prospecto_ubicacion'])){
-            $filtro_especial[1]['com_prospecto'.'.razon_social']['operador'] = 'LIKE';
-            $filtro_especial[1]['com_prospecto'.'.razon_social']['valor'] = '%'.$_POST['nombre_prospecto_ubicacion'].'%';
-            $filtro_especial[1]['com_prospecto'.'.razon_social']['comparacion'] = 'AND';
+        if(!empty($_POST['ubicacion'])){
+            $filtro_especial[1]['inm_prospecto_ubicacion_ubicacion']['operador'] = 'LIKE';
+            $filtro_especial[1]['inm_prospecto_ubicacion_ubicacion']['valor'] = '%'.$_POST['ubicacion'].'%';
+            $filtro_especial[1]['inm_prospecto_ubicacion_ubicacion']['comparacion'] = 'AND';
+
+            //$filtro_text[$table.'.razon_social'] = $_POST['nombre_prospecto_ubicacion'];
+        }
+
+        if(!empty($_POST['nss'])){
+            $filtro_especial[2][$table.'.nss']['operador'] = 'LIKE';
+            $filtro_especial[2][$table.'.nss']['valor'] = '%'.$_POST['nss'].'%';
+            $filtro_especial[2][$table.'.nss']['comparacion'] = 'AND';
 
             //$filtro_text[$table.'.cuenta_predial'] = $_POST['cuenta_predial'];
         }
 
-        if(!empty($_POST['nss'])){
-            $filtro_especial[1][$table.'.nss']['operador'] = 'LIKE';
-            $filtro_especial[1][$table.'.nss']['valor'] = '%'.$_POST['nss'].'%';
-            $filtro_especial[1][$table.'.nss']['comparacion'] = 'AND';
+        if(!empty($_POST['nombre_prospecto_ubicacion'])){
+            $filtro_especial[3]['com_prospecto'.'.razon_social']['operador'] = 'LIKE';
+            $filtro_especial[3]['com_prospecto'.'.razon_social']['valor'] = '%'.$_POST['nombre_prospecto_ubicacion'].'%';
+            $filtro_especial[3]['com_prospecto'.'.razon_social']['comparacion'] = 'AND';
+
+            //$filtro_text[$table.'.cuenta_predial'] = $_POST['cuenta_predial'];
+        }
+
+        if(!empty($_POST['nombre_co_acreditado_prospecto_ubicacion'])){
+            $filtro_especial[4]['inm_co_acreditado_razon_social']['operador'] = 'LIKE';
+            $filtro_especial[4]['inm_co_acreditado_razon_social']['valor'] = '%'.$_POST['nombre_co_acreditado_prospecto_ubicacion'].'%';
+            $filtro_especial[4]['inm_co_acreditado_razon_social']['comparacion'] = 'AND';
 
             //$filtro_text[$table.'.cuenta_predial'] = $_POST['cuenta_predial'];
         }
 
         if(!empty($_POST['agente'])){
-            $filtro_especial[2]['com_agente.descripcion']['operador'] = 'LIKE';
-            $filtro_especial[2]['com_agente.descripcion']['valor'] = '%'.$_POST['agente'].'%';
-            $filtro_especial[2]['com_agente.descripcion']['comparacion'] = 'AND';
+            $filtro_especial[5]['com_agente.descripcion']['operador'] = 'LIKE';
+            $filtro_especial[5]['com_agente.descripcion']['valor'] = '%'.$_POST['agente'].'%';
+            $filtro_especial[5]['com_agente.descripcion']['comparacion'] = 'AND';
 
             //$filtro_text['com_agente.descripcion'] = $_POST['agente'];
         }
@@ -3731,6 +3751,8 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
                 return $this->retorno_error(mensaje: 'Error al obtener tipos de documento', data: $doc_tipos_documentos,
                     header: $header, ws: $ws);
             }
+
+
         }
 
         $_doc_tipo_documento_id = -1;
@@ -3815,4 +3837,277 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         return $inm_prospecto_ubicacion_id;
     }
 
+
+    private function genera_archivo_contrato(array $registro, array $keys, string $ruta_plantilla,
+                                               string $ruta_salida): string|array|stdClass
+    {
+        if (!file_exists($ruta_plantilla)) {
+            return $this->error->error(mensaje: 'Error no existe la plantilla Word en: ' . $ruta_plantilla,
+                data: $ruta_plantilla);
+        }
+
+        try {
+            $template = new TemplateProcessor($ruta_plantilla);
+            foreach ($keys as $key) {
+                $value = trim((string)($registro[$key] ?? ''));
+                if ($key === 'inm_ubicacion_ubicacion_completa') {
+                    $value = ucwords(strtolower($value));
+                }
+                $template->setValue($key, $value);
+            }
+            $template->saveAs($ruta_salida);
+        } catch (Throwable $e) {
+            return $this->error->error(mensaje: 'Error al generar documento de contrato', data: $e->getMessage());
+        }
+
+        if (!file_exists($ruta_salida)) {
+            return $this->error->error(mensaje: 'Error el documento de contrato generado no existe',
+                data: $ruta_salida);
+        }
+
+        return $ruta_salida;
+    }
+
+    public function genera_contrato_individual(bool $header, bool $ws = false): array|string
+    {
+        if ((int)$this->registro_id <= 0) {
+            return $this->retorno_error(mensaje: 'Error registro_id es requerido para generar el documento Word',
+                data: $this->registro_id, header: $header, ws: $ws);
+        }
+
+        $modelo = new inm_prospecto_ubicacion(link: $this->link);
+        $registro_prospecto = $modelo->registro(registro_id: $this->registro_id);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener el registro de inm_prospecto_ubicacion',
+                data: $registro_prospecto, header: $header, ws: $ws);
+        }
+
+        $nombre_propietario = trim(implode(' ', array_filter([
+            $registro_prospecto['inm_prospecto_ubicacion_nombre'] ?? '',
+            $registro_prospecto['inm_prospecto_ubicacion_apellido_paterno'] ?? '',
+            $registro_prospecto['inm_prospecto_ubicacion_apellido_materno'] ?? ''
+        ])));
+        $ubicacion = implode(' ', array_filter([
+            $registro_prospecto['inm_prospecto_ubicacion_calle'] ?? '',
+            $registro_prospecto['inm_prospecto_ubicacion_numero_exterior'] ?? '',
+            $registro_prospecto['inm_prospecto_ubicacion_numero_interior'] ?? '',
+            $registro_prospecto['dp_colonia_descripcion'] ?? '',
+            $registro_prospecto['dp_cp_descripcion'] ?? '',
+            $registro_prospecto['dp_municipio_descripcion'] ?? '',
+            $registro_prospecto['dp_estado_descripcion'] ?? '',
+            $registro_prospecto['dp_pais_descripcion'] ?? ''
+        ]));
+        $razon_social = trim((string)($registro_prospecto['inm_prospecto_ubicacion_razon_social'] ?? ''));
+        if ($razon_social === '') {
+            $razon_social = $nombre_propietario;
+        }
+        $celular = trim((string)($registro_prospecto['inm_prospecto_ubicacion_cel_com'] ?? ''));
+        if ($celular === '') {
+            $celular = $registro_prospecto['com_prospecto_telefono'] ?? '';
+        }
+        $correo = trim((string)($registro_prospecto['inm_prospecto_ubicacion_correo_com'] ?? ''));
+        if ($correo === '') {
+            $correo = $registro_prospecto['com_prospecto_correo'] ?? '';
+        }
+        $registro = [
+            'inm_ubicacion_id' => $this->registro_id,
+            'inm_ubicacion_razon_social' => $razon_social,
+            'inm_ubicacion_rfc' => $registro_prospecto['inm_prospecto_ubicacion_rfc'] ?? '',
+            'inm_ubicacion_curp' => $registro_prospecto['inm_prospecto_ubicacion_curp'] ?? '',
+            'inm_ubicacion_ubicacion_completa' => $ubicacion,
+            'inm_ubicacion_cel_com' => $celular,
+            'inm_ubicacion_correo_com' => $correo,
+            'inm_ubicacion_domicilio_completo' => '',
+            'inm_ubicacion_folio_registro_publico' => '',
+            'inm_ubicacion_numero_escritura' => '',
+            'inm_ubicacion_numero_notaria' => '',
+            'inm_ubicacion_nombre_notario' => '',
+            'inm_ubicacion_plaza_notaria' => '',
+            'inm_ubicacion_valor_adquisicion' => '',
+            'inm_ubicacion_fecha_otorgamiento_credito' =>
+                $registro_prospecto['inm_prospecto_ubicacion_fecha_otorgamiento_credito'] ?? '',
+            'inm_ubicacion_numero_credito' => $registro_prospecto['inm_prospecto_ubicacion_numero_credito'] ?? '',
+            'inm_ubicacion_cuenta_predial' => $registro_prospecto['inm_prospecto_ubicacion_cuenta_predial'] ?? '',
+            'inm_prototipo_descripcion' => $registro_prospecto['inm_prototipo_descripcion'] ?? '',
+            'inm_ubicacion_adeudo_agua' => $registro_prospecto['inm_prospecto_ubicacion_adeudo_agua'] ?? 0,
+            'inm_ubicacion_adeudo_predial' => $registro_prospecto['inm_prospecto_ubicacion_adeudo_predial'] ?? 0,
+            'inm_ubicacion_adeudo_hipoteca' => $registro_prospecto['inm_prospecto_ubicacion_adeudo_hipoteca'] ?? 0,
+            'inm_ubicacion_monto_devolucion' => $registro_prospecto['inm_prospecto_ubicacion_monto_devolucion'] ?? 0,
+            'inm_estado_civil_descripcion' => $registro_prospecto['inm_estado_civil_descripcion'] ?? '',
+            'bn_cuenta_cuenta' => '',
+            'bn_sucursal_descripcion' => '',
+            'inm_transferencia_transferencia' => ''
+        ];
+
+        $co_acreditados = $modelo->get_co_acreditados(inm_prospecto_ubicacion_id: $this->registro_id);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener co-acreditados', data: $co_acreditados,
+                header: $header, ws: $ws);
+        }
+        $tiene_co_acreditado = count($co_acreditados) > 0;
+        if ($tiene_co_acreditado) {
+            $co_acreditado = $co_acreditados[0];
+            $registro['inm_co_acreditado_razon_social'] = trim(implode(' ', array_filter([
+                $co_acreditado['nombre'] ?? '',
+                $co_acreditado['apellido_paterno'] ?? '',
+                $co_acreditado['apellido_materno'] ?? ''
+            ])));
+            $registro['inm_co_acreditado_celular'] = $co_acreditado['celular'] ?? '';
+            $registro['inm_co_acreditado_correo'] = $co_acreditado['correo'] ?? '';
+        }
+
+        $meses = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre',
+            'octubre', 'noviembre', 'diciembre'];
+        $dia = date('d');
+        $mes = $meses[(int)date('n') - 1];
+        $anio = date('Y');
+        $fecha = "$dia de $mes de $anio";
+        $ts = date('Ymd_His');
+        $nombre_seguro = preg_replace('/[^A-Za-z0-9._-]+/u', '_', $razon_social) ?: 'prospecto';
+        $tiene_devolucion = (float)$registro['inm_ubicacion_monto_devolucion'] > 0;
+        $tipo = $tiene_co_acreditado ? 'CORRESIDENCIAL' : 'INDIVIDUAL';
+        $base_plantilla = "templates/CONTRATOS ARZEK/$tipo/";
+        $base_cliente = $base_plantilla . 'CLIENTE/';
+        $archivos = [];
+        $defs = [];
+
+        $registro['fecha_texto'] = $fecha;
+        $defs[] = [
+            'plantilla' => $base_plantilla . "CONTRATO ARZEK $tipo.docx",
+            'nombre' => "CONTRATO ARZEK {$nombre_seguro}_{$ts}.docx",
+            'interno' => 'CONTRATO ARZEK.docx',
+            'keys' => $tiene_co_acreditado
+                ? ['inm_ubicacion_razon_social', 'inm_estado_civil_descripcion', 'inm_ubicacion_ubicacion_completa',
+                    'inm_ubicacion_domicilio_completo', 'inm_ubicacion_cel_com', 'inm_co_acreditado_celular',
+                    'inm_ubicacion_correo_com', 'inm_co_acreditado_correo', 'inm_co_acreditado_razon_social',
+                    'fecha_texto']
+                : ['inm_ubicacion_razon_social', 'inm_ubicacion_ubicacion_completa', 'inm_ubicacion_cel_com',
+                    'inm_ubicacion_correo_com', 'fecha_texto']
+        ];
+
+        $registro['suma_adeudo'] = (float)$registro['inm_ubicacion_adeudo_agua']
+            + (float)$registro['inm_ubicacion_adeudo_predial'];
+        $formatter = new \NumberFormatter('es', \NumberFormatter::SPELLOUT);
+        $pesos = floor($registro['suma_adeudo']);
+        $centavos = round(($registro['suma_adeudo'] - $pesos) * 100);
+        $registro['suma_adeudo_texto'] = sprintf('%s pesos %02d/100 M.N.',
+            ucfirst($formatter->format($pesos)), $centavos);
+        $registro['fecha_texto'] = strtoupper($fecha);
+        $defs[] = [
+            'plantilla' => $base_cliente . 'ANEXO A.docx',
+            'nombre' => "ANEXO A {$nombre_seguro}_{$ts}.docx",
+            'interno' => 'ANEXO A.docx',
+            'keys' => array_merge(['inm_ubicacion_id', 'inm_ubicacion_razon_social', 'inm_ubicacion_rfc',
+                'inm_ubicacion_curp', 'inm_ubicacion_ubicacion_completa', 'inm_ubicacion_folio_registro_publico',
+                'inm_ubicacion_numero_escritura', 'inm_ubicacion_numero_notaria', 'inm_ubicacion_nombre_notario',
+                'inm_ubicacion_valor_adquisicion', 'inm_ubicacion_fecha_otorgamiento_credito',
+                'inm_ubicacion_numero_credito', 'inm_ubicacion_cuenta_predial', 'inm_prototipo_descripcion',
+                'inm_ubicacion_adeudo_agua', 'inm_ubicacion_adeudo_predial', 'suma_adeudo', 'suma_adeudo_texto',
+                'fecha_texto'], $tiene_co_acreditado
+                ? ['inm_co_acreditado_razon_social', 'inm_estado_civil_descripcion'] : [])
+        ];
+
+        $registro['fecha_texto'] = $fecha;
+        $monto = (float)$registro['inm_ubicacion_adeudo_hipoteca'];
+        $pesos = floor($monto);
+        $centavos = round(($monto - $pesos) * 100);
+        $registro['adeudo_hipoteca_texto'] = sprintf('%s pesos %02d/100 M.N.',
+            ucfirst($formatter->format($pesos)), $centavos);
+        $defs[] = [
+            'plantilla' => $base_cliente . 'ANEXO B.docx',
+            'nombre' => "ANEXO B {$nombre_seguro}_{$ts}.docx",
+            'interno' => 'ANEXO B.docx',
+            'keys' => array_merge(['inm_ubicacion_razon_social', 'inm_ubicacion_ubicacion_completa',
+                'inm_ubicacion_folio_registro_publico', 'inm_ubicacion_numero_escritura',
+                'inm_ubicacion_numero_notaria', 'inm_ubicacion_nombre_notario', 'inm_ubicacion_plaza_notaria',
+                'inm_ubicacion_fecha_otorgamiento_credito', 'inm_ubicacion_numero_credito',
+                'inm_ubicacion_cuenta_predial', 'inm_ubicacion_cel_com', 'inm_ubicacion_correo_com',
+                'inm_ubicacion_domicilio_completo', 'inm_ubicacion_adeudo_hipoteca', 'adeudo_hipoteca_texto',
+                'fecha_texto'], $tiene_co_acreditado
+                ? ['inm_co_acreditado_celular', 'inm_co_acreditado_correo', 'inm_co_acreditado_razon_social',
+                    'inm_estado_civil_descripcion'] : [])
+        ];
+
+        $registro['fecha_texto'] = strtoupper($fecha);
+        $registro['fecha_actual'] = $fecha;
+        if ($tiene_devolucion) {
+            $monto = (float)$registro['inm_ubicacion_monto_devolucion'];
+            $pesos = floor($monto);
+            $centavos = round(($monto - $pesos) * 100);
+            $registro['monto_devolucion_texto'] = sprintf('%s pesos %02d/100 M.N.',
+                ucfirst($formatter->format($pesos)), $centavos);
+            $plantilla_c = 'ANEXO C.docx';
+            $nombre_c = "ANEXO C {$nombre_seguro}_{$ts}.docx";
+            $keys_c = ['inm_ubicacion_id', 'inm_ubicacion_razon_social', 'inm_ubicacion_ubicacion_completa',
+                'inm_ubicacion_folio_registro_publico', 'inm_ubicacion_numero_escritura',
+                'inm_ubicacion_numero_notaria', 'inm_ubicacion_nombre_notario', 'inm_ubicacion_cuenta_predial',
+                'fecha_texto', 'fecha_actual', 'inm_ubicacion_monto_devolucion', 'monto_devolucion_texto',
+                'bn_cuenta_cuenta', 'bn_sucursal_descripcion', 'inm_transferencia_transferencia'];
+        } else {
+            $plantilla_c = 'ANEXO C SIN DEVOLUCION.docx';
+            $nombre_c = "ANEXO C SIN DEVOLUCION {$nombre_seguro}_{$ts}.docx";
+            $keys_c = ['inm_ubicacion_id', 'inm_ubicacion_razon_social', 'inm_ubicacion_ubicacion_completa',
+                'inm_ubicacion_folio_registro_publico', 'inm_ubicacion_numero_escritura',
+                'inm_ubicacion_numero_notaria', 'inm_ubicacion_nombre_notario',
+                'inm_ubicacion_cuenta_predial', 'fecha_texto'];
+        }
+        if ($tiene_co_acreditado) {
+            $keys_c = array_merge($keys_c, ['inm_co_acreditado_razon_social', 'inm_estado_civil_descripcion']);
+        }
+        $defs[] = [
+            'plantilla' => $base_cliente . $plantilla_c,
+            'nombre' => $nombre_c,
+            'interno' => $plantilla_c,
+            'keys' => $keys_c
+        ];
+
+        foreach ($defs as $def) {
+            $ruta_salida = trim($this->path_base . 'archivos/temporales/' . $def['nombre']);
+            $archivo = $this->genera_archivo_contrato($registro, $def['keys'],
+                trim($this->path_base . $def['plantilla']), $ruta_salida);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al generar documento de contrato', data: $archivo,
+                    header: $header, ws: $ws);
+            }
+            $archivos[$def['interno']] = $archivo;
+        }
+
+        $zip_nombre = "CONTRATO {$nombre_seguro} (" . strtolower($tipo) . ').zip';
+        $zip_ruta = trim($this->path_base . 'archivos/temporales/' . $zip_nombre);
+        $zip = new \ZipArchive();
+        if ($zip->open($zip_ruta, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) !== true) {
+            return $this->retorno_error(mensaje: 'Error al crear el archivo ZIP en: ' . $zip_ruta,
+                data: $zip_ruta, header: $header, ws: $ws);
+        }
+        foreach ($archivos as $nombre_interno => $ruta_archivo) {
+            if (!$zip->addFile($ruta_archivo, $nombre_interno)) {
+                $zip->close();
+                return $this->retorno_error(mensaje: 'Error al agregar documento al archivo ZIP',
+                    data: $ruta_archivo, header: $header, ws: $ws);
+            }
+        }
+        if (!$zip->close() || !file_exists($zip_ruta)) {
+            return $this->retorno_error(mensaje: 'Error al cerrar el archivo ZIP', data: $zip_ruta,
+                header: $header, ws: $ws);
+        }
+
+        header('Content-Description: File Transfer');
+        header('Content-Type: application/zip');
+        header('Content-Disposition: attachment; filename="' . $zip_nombre . '"');
+        header('Content-Transfer-Encoding: binary');
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length: ' . filesize($zip_ruta));
+        ob_clean();
+        flush();
+        readfile($zip_ruta);
+
+        unlink($zip_ruta);
+        foreach ($archivos as $ruta_archivo) {
+            unlink($ruta_archivo);
+        }
+
+        exit;
+    }
 }
