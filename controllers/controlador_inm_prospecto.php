@@ -1148,10 +1148,16 @@ class controlador_inm_prospecto extends _ctl_formato
         return sprintf('%04d-%02d-%02d', $anio, $mes, $dia);
     }
 
-    private function registroPorNss(string $nss, PDO $link): stdClass|array
+    private function registroPorNss(string $nss, PDO $link, bool $aplicar_seguridad = true): stdClass|array
     {
         $filtro = ['inm_prospecto.nss' => $nss];
-        return (new inm_prospecto(link: $link))->filtro_and(filtro: $filtro);
+        $r_registro =  (new inm_prospecto(link: $link))->filtro_and(aplica_seguridad: $aplicar_seguridad,
+            filtro: $filtro);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al obtener registro prospecto', data: $r_registro);
+        }
+
+        return $r_registro;
     }
 
     private function validarRegistroImportacion(PDO $link, array $registro, bool $duplicadoEnArchivo = false,
@@ -1175,15 +1181,25 @@ class controlador_inm_prospecto extends _ctl_formato
         $duplicado = false;
         $inm_prospecto_id = null;
         if (!empty($registro['nss'])) {
-            $inm_prospecto = $this->registroPorNss(nss: $registro['nss'], link: $link);
+            $registro_seguro = $this->registroPorNss(nss: $registro['nss'], link: $this->link);
             if (errores::$error) {
-                return $this->errores->error(mensaje: 'Error al validar NSS', data: $inm_prospecto);
+                return $this->errores->error(mensaje: 'Error al validar NSS', data: $registro_seguro);
             }
 
-            if ($inm_prospecto->n_registros > 0) {
+            $registro_global  = $this->registroPorNss(nss: $registro['nss'], link: $this->link,
+                aplicar_seguridad: false);
+            if (errores::$error) {
+                return $this->errores->error(mensaje: 'Error al validar NSS', data: $registro_global);
+            }
+
+            if ($registro_global->n_registros > 0 && $registro_seguro->n_registros <= 0) {
+                $errores[] = "El prospecto con NSS {$registro['nss']} ya fue capturado por {$registro_global->registros[0]['com_agente_descripcion']}. No se realizarán modificaciones a este registro.";;
+            }
+
+            if ($registro_global->n_registros > 0 && $registro_seguro->n_registros > 0) {
                 $duplicado = true;
                 $duplicados[] = 'El NSS ' . $registro['nss'] . ' ya existe en la base de datos.';
-                $inm_prospecto_id = $inm_prospecto->registros[0]['inm_prospecto_id'];
+                $inm_prospecto_id = $registro_seguro->registros[0]['inm_prospecto_id'];
             }
         }
 
