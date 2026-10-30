@@ -861,12 +861,26 @@ class _conversion{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar key', data: $valida);
         }
+        
+        if(!property_exists($data->inm_prospecto, $key)){
+            if(!property_exists($data->inm_prospecto_completo, $key)){
+                return $this->error->error(mensaje: 'Error no existe atributo '. $key, data: $key);
+            }
 
-        if(!isset($data->inm_prospecto->$key)){
-            return $this->error->error(mensaje: 'Error no existe atributo '.$key, data: $key);
+            $data->inm_prospecto->$key = $data->inm_prospecto_completo->$key;
+        }
+
+        if(is_null($data->inm_prospecto->$key)){
+            $data->inm_prospecto->$key = '';
         }
 
         $inm_comprador_ins[$key] = $data->inm_prospecto->$key;
+
+        /*if(!isset($data->inm_prospecto->$key)){
+            return $this->error->error(mensaje: 'Error no existe atributo '.$key, data: $key);
+        }
+
+        $inm_comprador_ins[$key] = $data->inm_prospecto->$key;*/
 
         return $inm_comprador_ins;
     }
