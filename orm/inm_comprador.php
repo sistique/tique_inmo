@@ -3,6 +3,7 @@
 namespace gamboamartin\inmuebles\models;
 
 use base\orm\_modelo_parent;
+use gamboamartin\administrador\models\adm_usuario;
 use gamboamartin\comercial\models\com_agente;
 use gamboamartin\comercial\models\com_cliente;
 use gamboamartin\errores\errores;
@@ -77,6 +78,56 @@ class inm_comprador extends _modelo_parent{
         $tipo_campos['correo_empresa'] = 'correo';
 
         $columnas_extra= array();
+
+        if(!isset($_SESSION['usuario_id'])){
+            $error = (new errores())->error(mensaje: 'Error $_SESSION[usuario_id] no existe',data:  $_SESSION);
+            print_r($error);
+            exit;
+        }
+
+        $adm_usuario = (new adm_usuario(link: $link))->registro(registro_id: $_SESSION['usuario_id'],
+            columnas: array('adm_grupo_root'));
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al obtener adm_usuario ',data:  $adm_usuario);
+            print_r($error);
+            exit;
+        }
+
+        $com_agente = (new com_agente(link: $link))->filtro_and(
+            filtro: array('adm_usuario.id'=>$_SESSION['usuario_id']));
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al obtener adm_usuario ',data:  $com_agente);
+            print_r($error);
+            exit;
+        }
+
+        $sql = $_SESSION['usuario_id'];
+        if($com_agente->n_registros > 0){
+            if($com_agente->registros[0]['com_agente_base_completa'] === 'inactivo'){
+                $sql = "(IFNULL ((SELECT
+                    adm_usuario_permitido.id
+                FROM
+                    com_agente AS com_agente_permitido
+                    LEFT JOIN adm_usuario AS adm_usuario_permitido ON com_agente_permitido.adm_usuario_id = adm_usuario_permitido.id
+                WHERE
+                    adm_usuario_permitido.id = $_SESSION[usuario_id]
+                    AND com_agente_permitido.id = inm_comprador.com_agente_id),- 1))";
+
+                if($com_agente->registros[0]['com_tipo_agente_descripcion'] === 'VENDEDOR'){
+                    $sql = "(IFNULL ((SELECT
+                        adm_usuario_permitido.id
+                    FROM
+                        com_agente AS com_agente_permitido
+                        LEFT JOIN adm_usuario AS adm_usuario_permitido ON com_agente_permitido.adm_usuario_id = adm_usuario_permitido.id
+                    WHERE
+                        adm_usuario_permitido.id = $_SESSION[usuario_id]
+                        AND com_agente_permitido.id = inm_comprador.com_agente_cerrador_id),- 1))";
+                }
+            }
+        }
+
+        $columnas_extra['usuario_permitido_id'] = $sql;
+
         $sql = "(CONCAT_WS(' ', inm_comprador.nombre, inm_comprador.apellido_paterno, inm_comprador.apellido_materno))";
 
         $columnas_extra['inm_comprador_razon_social'] = $sql;
@@ -184,10 +235,10 @@ class inm_comprador extends _modelo_parent{
 
         $columnas_extra['com_agente_cerrador_descripcion'] = $sql;
 
-        parent::__construct(link: $link, tabla: $tabla, campos_obligatorios: $campos_obligatorios,
-            columnas: $columnas, columnas_extra: $columnas_extra, renombres: $renombres,
-            tipo_campos: $tipo_campos, atributos_criticos: $atributos_criticos,
-            valida_atributos_criticos: $valida_atributos_criticos);
+        parent::__construct(link: $link, tabla: $tabla, aplica_seguridad: true,
+            campos_obligatorios: $campos_obligatorios, columnas: $columnas, columnas_extra: $columnas_extra,
+            renombres: $renombres, tipo_campos: $tipo_campos,
+            atributos_criticos: $atributos_criticos, valida_atributos_criticos: $valida_atributos_criticos);
 
         $this->NAMESPACE = __NAMESPACE__;
         $this->etiqueta = 'Clientes';
