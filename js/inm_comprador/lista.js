@@ -103,13 +103,19 @@ $(document).ready(function () {
     const PCT_MIN = 30;
     const PCT_MAX = 70;
     const ANCHO_DIVISOR = 14;
+    const ANCHO_ESTRECHO = 1350;
     let pct_compradores = 70;
     let table_ubicaciones = null;
     let $split = $('#split-view');
     let $panel_compradores = $('#panel-compradores');
     let $panel_ubicaciones = $('#panel-ubicaciones');
 
+    function marca_panel_estrecho() {
+        $panel_compradores.toggleClass('panel-estrecho', $panel_compradores.outerWidth() <= ANCHO_ESTRECHO);
+    }
+
     function ajustar_tablas() {
+        marca_panel_estrecho();
         table_inm_comprador.columns.adjust();
         if (table_inm_comprador.responsive) {
             table_inm_comprador.responsive.recalc();
@@ -193,6 +199,7 @@ $(document).ready(function () {
 
     $('#inm_status_comprador').on('change', actualiza_panel_ubicaciones);
     actualiza_panel_ubicaciones();
+    marca_panel_estrecho();
 
     $('#split-divisor').on('mousedown', function (e) {
         e.preventDefault();
@@ -206,6 +213,7 @@ $(document).ready(function () {
             let pct = ((ev.pageX - izquierda) / ancho_total) * 100;
             pct_compradores = Math.min(PCT_MAX, Math.max(PCT_MIN, pct));
             aplicar_anchos();
+            marca_panel_estrecho();
         });
 
         $(document).on('mouseup.split', function () {
@@ -217,6 +225,7 @@ $(document).ready(function () {
     });
 
     $(window).on('resize', function () {
+        marca_panel_estrecho();
         if ($split.hasClass('con-ubicaciones')) {
             ajustar_tablas();
         }

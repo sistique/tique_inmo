@@ -126,6 +126,10 @@ div.error>label {
     padding-top: 0px;
 }
 
+table.dataTable>tbody>tr.child ul.dtr-details {
+    width: 100% !important;
+}
+
 /* Estilos generales del dropdown */
 table tbody tr td .dropdown-menu {
     position: absolute !important;
@@ -177,6 +181,18 @@ table tbody tr td .dropdown-menu {
 
 .dropdown-item.text-success:hover {
     background-color: rgba(39, 174, 96, 0.2);
+}
+
+@media (max-width: 1350px) {
+    .dropdown {
+        justify-content: center;
+        display: flex;
+    }
+
+    table tbody tr td .dropdown-menu {
+        right: auto !important;
+        transform: translateX(0px);
+    }
 }
 
 /* Botón de tres puntos */

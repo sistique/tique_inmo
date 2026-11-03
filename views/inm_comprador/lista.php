@@ -123,6 +123,16 @@ echo "<style>
     display: block;
 }
 
+#panel-compradores.panel-estrecho .dropdown {
+    justify-content: center;
+    display: flex;
+}
+
+#panel-compradores.panel-estrecho table tbody tr td .dropdown-menu {
+    right: auto !important;
+    transform: translateX(-30px);
+}
+
 #limpiar:disabled {
     background: #cccccc;
     color: #666666;
