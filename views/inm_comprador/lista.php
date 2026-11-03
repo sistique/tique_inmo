@@ -114,34 +114,30 @@ echo "<style>
         <div class="contenedor_completo">
             <div class="filtros-avanzados">
                 <div class="filtro-grupo col-md-12">
-                    <div class="col-md-2">
-                        <label>Status Comprador</label>
-                        <select class="form-control basic-multiple" id="inm_status_comprador" name="inm_status_comprador[]"
-                                data-tipo="in" data-filtro_campo="inm_status_comprador.descripcion" multiple
-                                data-placeholder="Selecciona una Opcion">
-                            <?php
-                                foreach ($controlador->status_comprador AS $status){
-                                    echo '<option value="'.$status['inm_status_comprador_descripcion'].'">'.$status['inm_status_comprador_descripcion'].'</option>';
-                                }
-                            ?>
-                        </select>
+                    <div class="filtros col-md-1">
+                        <label for="id">ID</label>
+                        <input type="text" id="id" data-tipo="data" data-filtro_campo="inm_comprador.id" placeholder="Ej: 1 ">
                     </div>
+
                     <div class="col-md-2">
-                        <label for="Nombre comprador">Nombre comprador</label>
+                        <label for="Nombre comprador">Nombre Comprador</label>
                         <input type="text" id="nombre_comprador" data-tipo="filtro" data-filtro_campo="<?php echo $controlador->modelo->columnas_extra['inm_comprador_razon_social']?>"
                                placeholder="Ej: JUAN PEREZ">
                     </div>
 
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                         <label for="Ubicacion">Ubicacion</label>
                         <input type="text" id="ubicacion" data-tipo="filtro" data-filtro_campo="<?php echo $controlador->modelo->columnas_extra['inm_ubicacion_completa']?>"
                                placeholder="Ej: AV. VALLARTA 220 ">
                     </div>
-
                     <div class="col-md-2">
-                        <label for="agente">Agente</label>
-                        <input type="text" id="agente" data-tipo="filtro" data-filtro_campo="com_agente.descripcion"
-                               placeholder="Ej: JUAN PEREZ">
+                        <label for="agente">Prospectador</label>
+                        <input type="text" id="agente" data-tipo="filtro" data-filtro_campo="com_agente.descripcion" placeholder="Ej: JUAN PEREZ">
+                    </div>
+
+                    <div class='col-md-2'>
+                        <label for='agente_cerrador'>Cerrador</label>
+                        <input type='text' id='agente_cerrador' data-tipo='filtro' data-filtro_campo='<?php echo $controlador->modelo->columnas_extra['com_agente_cerrador_descripcion']; ?>' placeholder='Ej: JUAN PEREZ'>
                     </div>
 
                     <div class="col-md-2">
@@ -155,18 +151,46 @@ echo "<style>
                         <input type="text" id="numero_credito" data-tipo="filtro" data-filtro_campo="inm_comprador.numero_credito"
                                placeholder="Ej: 02102">
                     </div>
+
+                    <div class="col-md-2">
+                        <label for="fecha_inicio">Fecha Alta Inicio</label>
+                        <input type="date" id="fecha_inicio" data-tipo="rango-fechas" data-filtro_campo="inm_comprador.fecha_alta"
+                               data-filtro_key="campo1">
+                    </div>
+                    <div class="col-md-2">
+                        <label for="fecha_fin">Fecha Alta Fin</label>
+                        <input type="date" id="fecha_fin" data-tipo="rango-fechas" data-filtro_campo="inm_comprador.fecha_alta"
+                               data-filtro_key="campo2">
+                    </div>
+
+                    <div class="col-md-2">
+                        <label>Status Comprador</label>
+                        <select class="form-control basic-multiple" id="inm_status_comprador" name="inm_status_comprador[]"
+                                data-tipo="in" data-filtro_campo="inm_status_comprador.descripcion" multiple
+                                data-placeholder="Selecciona una Opcion">
+                            <?php
+                                foreach ($controlador->status_comprador AS $status){
+                                    echo '<option value="'.$status['inm_status_comprador_descripcion'].'">'.$status['inm_status_comprador_descripcion'].'</option>';
+                                }
+                            ?>
+                        </select>
+                    </div>
                 </div>
             </div>
             <div class="filtro-grupo col-md-12">
                 <button id="filtrar">Filtrar</button>
                 <button id="limpiar">Limpiar</button>
                 <form method="post" action="<?php echo $controlador->link_exportar_xls; ?>" enctype="multipart/form-data">
-                    <input type="hidden" name="inm_status_comprador" id="hidden_inm_status_comprador">
+                    <input type="hidden" name="id" id="hidden_id">
                     <input type="hidden" name="nombre_comprador" id="hidden_nombre_comprador">
                     <input type="hidden" name="ubicacion" id="hidden_ubicacion">
                     <input type="hidden" name="agente" id="hidden_agente">
+                    <input type="hidden" name="agente_cerrador" id="hidden_agente_cerrador">
                     <input type="hidden" name="nss" id="hidden_nss">
                     <input type="hidden" name="numero_credito" id="hidden_numero_credito">
+                    <input type="hidden" name="fecha_inicial" id="hidden_fecha_inicio">
+                    <input type="hidden" name="fecha_final" id="hidden_fecha_fin">
+                    <input type="hidden" name="inm_status_comprador" id="hidden_inm_status_comprador">
                     <button id="descargar_excel">Descargar Excel</button>
                 </form>
             </div>

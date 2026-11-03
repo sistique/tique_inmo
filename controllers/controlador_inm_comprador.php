@@ -3873,11 +3873,16 @@ class controlador_inm_comprador extends _ctl_base {
         $ths[] = array('etiqueta'=>'ID', 'campo'=>'inm_comprador_id');
         $ths[] = array('etiqueta'=>'Cliente', 'campo'=>'inm_comprador_razon_social');
         $ths[] = array('etiqueta'=>'Ubicacion', 'campo'=>'inm_ubicacion_completa');
-        $ths[] = array('etiqueta'=>'Agente', 'campo'=>'com_agente_descripcion');
+        $ths[] = array('etiqueta'=>'Prospectador', 'campo'=>'com_agente_descripcion');
+        $ths[] = array('etiqueta'=>'Cerrador', 'campo'=>'com_agente_cerrador_descripcion');
         $ths[] = array('etiqueta'=>'NSS', 'campo'=>'inm_comprador_nss');
-        $ths[] = array('etiqueta'=>'Mi Cuenta Infonavit', 'campo'=>'inm_comprador_password_mi_cuenta_infonavit');
-        $ths[] = array('etiqueta'=>'Numero Credito', 'campo'=>'inm_comprador_numero_credito');
+        $ths[] = array('etiqueta'=>'Numero de Credito', 'campo'=>'inm_comprador_numero_credito');
+        $ths[] = array('etiqueta'=>'Precalificación', 'campo'=>'inm_comprador_monto_credito_solicitado_dh');
+        $ths[] = array('etiqueta'=>'Fecha de Alta', 'campo'=>'inm_comprador_fecha_alta');
         $ths[] = array('etiqueta'=>'Status Cliente', 'campo'=>'inm_status_comprador_descripcion');
+        $ths[] = array('etiqueta'=>'Fecha Etapa', 'campo'=>'inm_fecha_status');
+        $ths[] = array('etiqueta'=>'Mi Cuenta Infonavit', 'campo'=>'inm_comprador_password_mi_cuenta_infonavit');
+        $ths[] = array('etiqueta'=>'Comentarios', 'campo'=>'inm_comprador_comentarios');
 
         /*$keys = array();
         foreach ($ths as $data_th) {
@@ -3989,11 +3994,13 @@ class controlador_inm_comprador extends _ctl_base {
         $columns["inm_ubicacion_completa"]["titulo"] = "Ubicacion";
         $columns["com_agente_descripcion"]["titulo"] = "Prospectador";
         $columns["com_agente_cerrador_descripcion"]["titulo"] = "Cerrador";
-        $columns["inm_comprador_comentarios"]["titulo"] = "Comentarios";
         $columns["inm_comprador_nss"]["titulo"] = "NSS";
+        $columns["inm_comprador_numero_credito"]["titulo"] = "Numero de Credito";
         $columns["inm_comprador_monto_credito_solicitado_dh"]["titulo"] = "Precalificacion";
-        $columns["inm_fecha_status"]["titulo"] = "Fecha Etapa";
+        $columns["inm_comprador_fecha_alta"]["titulo"] = "Fecha Alta";
         $columns["inm_status_comprador_descripcion"]["titulo"] = "Etapa Actual";
+        $columns["inm_fecha_status"]["titulo"] = "Fecha Etapa";
+        $columns["inm_comprador_comentarios"]["titulo"] = "Comentarios";
 
         $filtro = array("inm_comprador.id", 'inm_comprador_razon_social', 'inm_ubicacion_completa',
             'com_agente.descripcion', 'inm_comprador.nss', 'inm_status_comprador.descripcion', 'inm_fecha_status');
@@ -5048,28 +5055,20 @@ class controlador_inm_comprador extends _ctl_base {
 
         $filtro_especial = array();
 
+        if(!empty($_POST['id'])){
+            $filtro_especial[0][$table.'.id']['operador'] = 'LIKE';
+            $filtro_especial[0][$table.'.id']['valor'] = '%'.$_POST['id'].'%';
+            $filtro_especial[0][$table.'.id']['comparacion'] = 'AND';
+
+            //$filtro_text[$table.'.cuenta_predial'] = $_POST['cuenta_predial'];
+        }
+
         if(!empty($_POST['nombre_comprador'])){
-            $filtro_especial[0][$table.'.inm_comprador_razon_social']['operador'] = 'LIKE';
-            $filtro_especial[0][$table.'.inm_comprador_razon_social']['valor'] = '%'.$_POST['nombre_comprador'].'%';
-            $filtro_especial[0][$table.'.inm_comprador_razon_social']['comparacion'] = 'AND';
+            $filtro_especial[1][$table.'.inm_comprador_razon_social']['operador'] = 'LIKE';
+            $filtro_especial[1][$table.'.inm_comprador_razon_social']['valor'] = '%'.$_POST['nombre_comprador'].'%';
+            $filtro_especial[1][$table.'.inm_comprador_razon_social']['comparacion'] = 'AND';
 
             //$filtro_text[$table.'.razon_social'] = $_POST['nombre_prospecto_ubicacion'];
-        }
-
-        if(!empty($_POST['nss'])){
-            $filtro_especial[1][$table.'.nss']['operador'] = 'LIKE';
-            $filtro_especial[1][$table.'.nss']['valor'] = '%'.$_POST['nss'].'%';
-            $filtro_especial[1][$table.'.nss']['comparacion'] = 'AND';
-
-            //$filtro_text[$table.'.cuenta_predial'] = $_POST['cuenta_predial'];
-        }
-
-        if(!empty($_POST['numero_credito'])){
-            $filtro_especial[1][$table.'.numero_credito']['operador'] = 'LIKE';
-            $filtro_especial[1][$table.'.numero_credito']['valor'] = '%'.$_POST['numero_credito'].'%';
-            $filtro_especial[1][$table.'.numero_credito']['comparacion'] = 'AND';
-
-            //$filtro_text[$table.'.cuenta_predial'] = $_POST['cuenta_predial'];
         }
 
         if(!empty($_POST['ubicacion'])){
@@ -5081,11 +5080,35 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         if(!empty($_POST['agente'])){
-            $filtro_especial[2]['com_agente.descripcion']['operador'] = 'LIKE';
-            $filtro_especial[2]['com_agente.descripcion']['valor'] = '%'.$_POST['agente'].'%';
-            $filtro_especial[2]['com_agente.descripcion']['comparacion'] = 'AND';
+            $filtro_especial[3]['com_agente.descripcion']['operador'] = 'LIKE';
+            $filtro_especial[3]['com_agente.descripcion']['valor'] = '%'.$_POST['agente'].'%';
+            $filtro_especial[3]['com_agente.descripcion']['comparacion'] = 'AND';
 
             //$filtro_text['com_agente.descripcion'] = $_POST['agente'];
+        }
+
+        if(!empty($_POST['agente_cerrador'])){
+            $filtro_especial[4]['com_agente_cerrador_descripcion']['operador'] = 'LIKE';
+            $filtro_especial[4]['com_agente_cerrador_descripcion']['valor'] = '%'.$_POST['agente_cerrador'].'%';
+            $filtro_especial[4]['com_agente_cerrador_descripcion']['comparacion'] = 'AND';
+
+            //$filtro_text['com_agente_cerrador.descripcion'] = $_POST['agente_cerrador'];
+        }
+
+        if(!empty($_POST['nss'])){
+            $filtro_especial[5][$table.'.nss']['operador'] = 'LIKE';
+            $filtro_especial[5][$table.'.nss']['valor'] = '%'.$_POST['nss'].'%';
+            $filtro_especial[5][$table.'.nss']['comparacion'] = 'AND';
+
+            //$filtro_text[$table.'.cuenta_predial'] = $_POST['cuenta_predial'];
+        }
+
+        if(!empty($_POST['numero_credito'])){
+            $filtro_especial[6][$table.'.numero_credito']['operador'] = 'LIKE';
+            $filtro_especial[6][$table.'.numero_credito']['valor'] = '%'.$_POST['numero_credito'].'%';
+            $filtro_especial[6][$table.'.numero_credito']['comparacion'] = 'AND';
+
+            //$filtro_text[$table.'.cuenta_predial'] = $_POST['cuenta_predial'];
         }
 
         $in = array();
