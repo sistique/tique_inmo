@@ -15,6 +15,7 @@ use gamboamartin\gastos\models\gt_proveedor;
 use gamboamartin\inmuebles\html\inm_costo_html;
 use gamboamartin\inmuebles\models\inm_costo;
 use gamboamartin\inmuebles\models\inm_pago_costo;
+use gamboamartin\inmuebles\models\inm_presupuesto_costo;
 use gamboamartin\system\_ctl_base;
 use gamboamartin\system\links_menu;
 use gamboamartin\template\html;
@@ -303,6 +304,40 @@ class controlador_inm_costo extends _ctl_base {
         }
 
         return $r_inm_pago;
+    }
+
+    public function modifica_presupuesto_bd(bool $header, bool $ws = false):array|stdClass
+    {
+        if(!isset($_POST['id']) || !isset($_POST['monto_presupuesto'])){
+            return $this->retorno_error(mensaje: 'Error al obtener datos del presupuesto', data: $_POST,
+                header: $header, ws: $ws);
+        }
+
+        $registro['monto_presupuesto'] = $_POST['monto_presupuesto'];
+        $r_presupuesto = (new inm_presupuesto_costo(link: $this->link))->modifica_bd(
+            registro: $registro, id: $_POST['id']);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al editar presupuesto', data: $r_presupuesto,
+                header: $header, ws: $ws);
+        }
+
+        if($header){
+            $retorno = $_SERVER['HTTP_REFERER'];
+            header('Location:'.$retorno);
+            exit;
+        }
+        if($ws){
+            header('Content-Type: application/json');
+            try {
+                echo json_encode($r_presupuesto->registro_actualizado, JSON_THROW_ON_ERROR);
+            }
+            catch (Throwable $e){
+                return $this->retorno_error(mensaje: 'Error al maquetar presupuesto',data: $e, header: $header, ws: $ws);
+            }
+            exit;
+        }
+
+        return $r_presupuesto;
     }
 
     public function modifica_costo_bd(bool $header, bool $ws = false):array|stdClass

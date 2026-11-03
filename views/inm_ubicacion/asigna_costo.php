@@ -51,10 +51,26 @@
                                     <?php foreach ($grupo['presupuestos'] as $presupuesto):
                                         $id = $presupuesto['inm_presupuesto_costo_id'];
                                         ?>
-                                        <tr class="fila-presupuesto" data-id="<?= $id ?>" data-tipo="<?= $grupo['inm_tipo_concepto_id'] ?>" style="cursor: pointer;">                                            <td><?= htmlspecialchars($presupuesto['inm_concepto_descripcion'] ?? 'Concepto') ?></td>
-                                            <td>$<?= number_format($presupuesto['inm_presupuesto_costo_monto_presupuesto'], 2) ?></td>
+                                        <tr class="fila-presupuesto" data-id="<?= $id ?>" data-tipo="<?= $grupo['inm_tipo_concepto_id'] ?>" style="cursor: pointer;">
+                                            <td><?= htmlspecialchars($presupuesto['inm_concepto_descripcion'] ?? 'Concepto') ?></td>
+                                            <td>
+                                                <div class="texto-presupuesto-<?= $id ?>">
+                                                    $<span class="monto-presupuesto"><?= number_format($presupuesto['inm_presupuesto_costo_monto_presupuesto'], 2) ?></span>
+                                                </div>
+                                                <div class="cont-mod-presupuesto cont-mod-presupuesto-<?= $id ?>" style="display: none;" data-id="<?= $id ?>" data-valor-original="<?= $presupuesto['inm_presupuesto_costo_monto_presupuesto'] ?>">
+                                                    <input type="text" class="form-control input-monto-presupuesto" value="<?= $presupuesto['inm_presupuesto_costo_monto_presupuesto'] ?>">
+                                                </div>
+                                            </td>
                                             <td><strong class="total-gastado">$<?= number_format($presupuesto['total_gastado'], 2) ?></strong></td>
-                                            <td><?php echo $presupuesto['elimina_bd']; ?></td>
+                                            <td>
+                                                <div class="acciones-presupuesto-<?= $id ?>">
+                                                    <?php echo $presupuesto['modifica']; ?> <?php echo $presupuesto['elimina_bd']; ?>
+                                                </div>
+                                                <div class="cont-mod-presupuesto-btns-<?= $id ?>" style="display: none;">
+                                                    <button type="button" class="btn btn-success btn-sm btn-g-presupuesto" title="Guardar">✓</button>
+                                                    <button type="button" class="btn btn-danger btn-sm btn-c-presupuesto" title="Cancelar">x</button>
+                                                </div>
+                                            </td>
                                         </tr>
 
                                         <tr id="detalle-<?= $id ?>" class="fila-detalle" style="display: none; background-color: #f8f9fa;">

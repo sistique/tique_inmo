@@ -753,11 +753,23 @@ class controlador_inm_ubicacion extends _ctl_base
             $presupuesto['costos'] = $costos_con_pagos;
             $presupuesto['total_gastado'] = $total_gastado;
 
+
+            $button = $this->html->button_para_java(id_css: 'modifica_presupuesto_'.$presupuesto['inm_presupuesto_costo_id'],
+                style: 'info', tag:  'Modifica', css_extra: 'col-sm-6 modifica_presupuesto',
+                data_value: $presupuesto['inm_presupuesto_costo_id']);
+            if(errores::$error){
+                return $this->retorno_error(
+                    mensaje: 'Error al btn_collapse_all',data:  $button, header: $header,ws:  $ws);
+            }
+
+            $presupuesto['modifica'] = $button;
+
+
             $params = array('accion_retorno' => 'asigna_costo', 'seccion_retorno' => 'inm_ubicacion',
                 'id_retorno' => $this->registro_id);
             $button = $this->html->button_href(accion: 'elimina_bd', etiqueta: 'Elimina',
-                registro_id: $presupuesto['inm_presupuesto_costo_id'],
-                seccion: 'inm_presupuesto_costo', style: 'danger', params: $params);
+                registro_id: $presupuesto['inm_presupuesto_costo_id'], seccion: 'inm_presupuesto_costo',
+                style: 'danger', css_extra: 'botones', cols: 6, params: $params);
             if (errores::$error) {
                 return $this->retorno_error(mensaje: 'Error al integrar button', data: $button, header: $header,
                     ws: $ws);

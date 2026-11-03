@@ -3,7 +3,10 @@ let registro_id = getParameterByName('registro_id');
 let session_id = getParameterByName('session_id');
 
 $(document).ready(function() {
-    $('.fila-presupuesto').on('click', function () {
+    $('.fila-presupuesto').on('click', function (e) {
+        if ($(e.target).closest('[class*="acciones-presupuesto-"], .cont-mod-presupuesto, [class*="cont-mod-presupuesto-btns-"]').length) {
+            return;
+        }
         let id = $(this).attr('data-id');
         $(`#detalle-${id}`).toggle();
     });
@@ -252,6 +255,86 @@ $(document).ready(function() {
         });
     });
 
+
+    $(document).on('click', '.modifica_presupuesto, .cont-mod-presupuesto', function (e) {
+        e.stopPropagation();
+    });
+
+    $(document).on('click', '.modifica_presupuesto', function (e) {
+        e.preventDefault();
+        let fila = $(this).closest('tr.fila-presupuesto');
+        let id = fila.attr('data-id');
+
+        $('tr.fila-presupuesto').not(fila).each(function () {
+            let otra = $(this);
+            let otro_id = otra.attr('data-id');
+            let cont = otra.find(`.cont-mod-presupuesto-${otro_id}`);
+            cont.find('input').val(cont.attr('data-valor-original'));
+            cont.hide();
+            otra.find(`.cont-mod-presupuesto-btns-${otro_id}`).hide();
+            otra.find(`.texto-presupuesto-${otro_id}`).show();
+            otra.find(`.acciones-presupuesto-${otro_id}`).show();
+        });
+
+        fila.find(`.texto-presupuesto-${id}`).hide();
+        fila.find(`.acciones-presupuesto-${id}`).hide();
+        fila.find(`.cont-mod-presupuesto-btns-${id}`).show();
+        fila.find(`.cont-mod-presupuesto-${id}`).show().find('input').focus();
+    });
+
+    $(document).on('click', '.btn-c-presupuesto', function () {
+        let fila = $(this).closest('tr.fila-presupuesto');
+        let id = fila.attr('data-id');
+        let cont = fila.find(`.cont-mod-presupuesto-${id}`);
+        cont.find('input').val(cont.attr('data-valor-original'));
+        cont.hide();
+        fila.find(`.texto-presupuesto-${id}`).show();
+        fila.find(`.acciones-presupuesto-${id}`).show();
+        fila.find(`.cont-mod-presupuesto-btns-${id}`).hide();
+    });
+
+    $(document).on('click', '.btn-g-presupuesto', function () {
+        let fila = $(this).closest('tr.fila-presupuesto');
+        let id = fila.attr('data-id');
+        let cont = fila.find(`.cont-mod-presupuesto-${id}`);
+        let montoNuevo = parseFloat(cont.find('input').val());
+        let montoAnterior = parseFloat(cont.attr('data-valor-original')) || 0;
+
+        if (isNaN(montoNuevo) || montoNuevo < 0) {
+            alert('Ingrese un monto válido');
+            return;
+        }
+
+        let url_modifica_pre = get_url("inm_costo", "modifica_presupuesto_bd", {registro_id: registro_id});
+
+        $.ajax({
+            url: url_modifica_pre,
+            type: 'POST',
+            data: {id: id, monto_presupuesto: montoNuevo},
+            success: function (response) {
+                if (!response || response.error) {
+                    console.error('Error en la respuesta:', response);
+                    return;
+                }
+
+                fila.find('.monto-presupuesto').text(formatoMonto(montoNuevo));
+                cont.attr('data-valor-original', montoNuevo);
+
+                let tipo = fila.data('tipo');
+                let spanTipo = $(`tr.fila-tipo-concepto[data-tipo="${tipo}"] .total-presupuesto-tipo`);
+                let totalTipo = parseFloat(spanTipo.text().replace(/[^0-9.-]+/g, "")) || 0;
+                spanTipo.text(formatoMonto(totalTipo + montoNuevo - montoAnterior));
+
+                cont.hide();
+                fila.find(`.texto-presupuesto-${id}`).show();
+                fila.find(`.acciones-presupuesto-${id}`).show();
+        fila.find(`.cont-mod-presupuesto-btns-${id}`).hide();
+            },
+            error: function (xhr) {
+                console.error('Error en la solicitud AJAX:', xhr.responseText);
+            }
+        });
+    });
 
     $(document).on('click', '.btn-c-p', function () {
         let contenedor = $(this).closest('.form-pago');
