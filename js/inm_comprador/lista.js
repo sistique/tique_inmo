@@ -180,7 +180,7 @@ $(document).ready(function () {
         if (!Array.isArray(valores)) {
             valores = [valores];
         }
-        let mostrar = valores.includes(STATUS_DETENIDO);
+        let mostrar = $panel_ubicaciones.length > 0 && valores.includes(STATUS_DETENIDO);
 
         if (mostrar === $split.hasClass('con-ubicaciones')) {
             $('.split-view .split-panel').css('overflow', '');

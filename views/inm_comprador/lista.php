@@ -255,6 +255,7 @@ echo "<style>
             <div class="split-panel" id="panel-compradores">
                 <table class="datatable table table-striped"></table>
             </div>
+            <?php if ($controlador->ver_ubicaciones_clientes): ?>
             <div id="split-divisor" title="Arrastrar para redimensionar"></div>
             <div class="split-panel" id="panel-ubicaciones">
                 <table id="tabla-ubicaciones" class="table table-striped" style="width:100%">
@@ -268,6 +269,7 @@ echo "<style>
                     </thead>
                 </table>
             </div>
+            <?php endif; ?>
         </div>
     </div>
 </div>

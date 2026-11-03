@@ -22,6 +22,7 @@ use gamboamartin\comercial\models\com_tipo_cambio;
 use gamboamartin\compresor\compresor;
 use gamboamartin\direccion_postal\models\dp_estado;
 use gamboamartin\direccion_postal\models\dp_municipio;
+use gamboamartin\administrador\models\adm_usuario;
 use gamboamartin\errores\errores;
 use gamboamartin\facturacion\models\fc_complemento_pago;
 use gamboamartin\facturacion\models\fc_csd;
@@ -245,6 +246,7 @@ class controlador_inm_comprador extends _ctl_base {
     public array $beneficiarios = array();
     public array $referencias = array();
     public array $status_comprador = array();
+    public bool $ver_ubicaciones_clientes = false;
     public array $notas_credito = array();
     public array $complementos_pago = array();
 
@@ -4495,6 +4497,15 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         $this->status_comprador = $status_comprador;
+
+        $adm_usuario = (new adm_usuario(link: $this->link))->registro(registro_id: $_SESSION['usuario_id'],
+            columnas: array('adm_grupo_ver_ubicaciones_clientes'));
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener permiso de ubicaciones', data:  $adm_usuario,
+                header: $header,ws:$ws);
+        }
+
+        $this->ver_ubicaciones_clientes = $adm_usuario['adm_grupo_ver_ubicaciones_clientes'] === 'activo';
 
         return $r_lista;
     }

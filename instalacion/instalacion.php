@@ -1222,6 +1222,15 @@ class instalacion
     {
         $out = new stdClass();
 
+        $campos = new stdClass();
+        $campos->ver_ubicaciones_clientes = new stdClass();
+        $campos->ver_ubicaciones_clientes->default = 'inactivo';
+
+        $add_grupo = (new _instalacion(link: $link))->add_columns(campos: $campos, table: 'adm_grupo');
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al ajustar campos de adm_grupo', data:  $add_grupo);
+        }
+
         $create = $this->_add_inm_comprador(link: $link);
         if(errores::$error){
             return (new errores())->error(mensaje: 'Error al agregar tabla', data:  $create);
