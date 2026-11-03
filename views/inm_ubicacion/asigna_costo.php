@@ -73,44 +73,61 @@
                                                     <tbody>
                                                     <?php foreach ($presupuesto['costos'] as $costo): ?>
                                                         <?php foreach ($costo['pagos'] as $pago): ?>
-                                                            <tr class="form-pago" data-id="<?= $pago['inm_pago_costo_id'] ?>">
+                                                            <tr class="form-pago" data-id="<?= $pago['inm_pago_costo_id'] ?>" data-presupuesto-id="<?= $id ?>">
                                                                 <td>
-                                                                    <?= $pago['gt_proveedor_razon_social'] ?>
+                                                                    <div class="texto-gasto-<?= $pago['inm_pago_costo_id'] ?>">
+                                                                        <?= $pago['gt_proveedor_razon_social'] ?>
+                                                                    </div>
                                                                     <div class="cont-mod-gasto mod-gasto-<?= $pago['inm_pago_costo_id'] ?>">
                                                                         <?= $pago['gt_proveedor_id'] ?>
                                                                     </div>
                                                                 </td>
                                                                 <td>
-                                                                    $<?= number_format($pago['inm_pago_costo_monto'], 2) ?>
+                                                                    <div class="texto-gasto-<?= $pago['inm_pago_costo_id'] ?>">
+                                                                        $<?= number_format($pago['inm_pago_costo_monto'], 2) ?>
+                                                                    </div>
                                                                     <div class="cont-mod-gasto mod-gasto-<?= $pago['inm_pago_costo_id'] ?>">
                                                                         <input type="text" name="monto" class="form-control" id="monto[<?= $pago['inm_pago_costo_id'] ?>]" placeholder="Monto" title="monto" value="<?= $pago['inm_pago_costo_monto'] ?>">
                                                                     </div>
                                                                 </td>
                                                                 <td>
-                                                                    <?= $pago['cat_sat_forma_pago_descripcion'] ?>
+                                                                    <div class="texto-gasto-<?= $pago['inm_pago_costo_id'] ?>">
+                                                                        <?= $pago['cat_sat_forma_pago_descripcion'] ?>
+                                                                    </div>
                                                                     <div class="cont-mod-gasto mod-gasto-<?= $pago['inm_pago_costo_id'] ?>">
                                                                         <?= $pago['cat_sat_forma_pago_id'] ?>
                                                                     </div>
                                                                 </td>
                                                                 <td>
-                                                                    <?= $pago['inm_pago_costo_fecha_pago'] ?>
+                                                                    <div class="texto-gasto-<?= $pago['inm_pago_costo_id'] ?>">
+                                                                        <?= $pago['inm_pago_costo_fecha_pago'] ?>
+                                                                    </div>
                                                                     <div class="cont-mod-gasto mod-gasto-<?= $pago['inm_pago_costo_id'] ?>">
                                                                         <input type="date" name="fecha_pago" class="form-control" id="fecha_pago[<?= $pago['inm_pago_costo_id'] ?>]" placeholder="Fecha" title="fecha_pago" value="<?= $pago['inm_pago_costo_fecha_pago'] ?>">
                                                                     </div>
                                                                 </td>
                                                                 <td>
-                                                                    <?= htmlspecialchars($pago['inm_pago_costo_referencia']) ?>
+                                                                    <div class="texto-gasto-<?= $pago['inm_pago_costo_id'] ?>">
+                                                                        <?= htmlspecialchars($pago['inm_pago_costo_referencia']) ?>
+                                                                    </div>
                                                                     <div class="cont-mod-gasto mod-gasto-<?= $pago['inm_pago_costo_id'] ?>">
-                                                                        <input type="text" name="referencia_pago" class="form-control" id="referencia[<?= $pago['inm_pago_costo_id'] ?>]" placeholder="Referencia" title="referencia" value="<?= $pago['inm_pago_costo_referencia'] ?>">
+                                                                        <input type="text" name="referencia" class="form-control" id="referencia[<?= $pago['inm_pago_costo_id'] ?>]" placeholder="Referencia" title="referencia" value="<?= $pago['inm_pago_costo_referencia'] ?>">
                                                                     </div>
                                                                 </td>
                                                                 <td>
-                                                                    <?= $pago['modifica'] ?> <?= $pago['elimina_bd'] ?>
+                                                                    <div class="cont-buttons-<?= $pago['inm_pago_costo_id'] ?>">
+                                                                        <?= $pago['modifica'] ?> <?= $pago['elimina_bd'] ?>
+                                                                    </div>
+
+                                                                    <div class="cont-buttons-gasto cont-buttons-up-<?= $pago['inm_pago_costo_id'] ?>">
+                                                                        <button type="button" class="btn btn-info btn-sm btn-g-p" title="Modifica">✓</button>
+                                                                        <button type="button" class="btn btn-info btn-sm btn-c-p" title="Cancelar">x</button>
+                                                                    </div>
                                                                 </td>
                                                             </tr>
                                                         <?php endforeach; ?>
                                                     <?php endforeach; ?>
-                                                    <tr class="form-inline-pago" data-id="<?= $id ?>" data-concepto-id="<?= $presupuesto['inm_concepto_id'] ?>">
+                                                    <tr class="form-inline-pago form-alta-costo-<?= $id ?>" data-id="<?= $id ?>" data-concepto-id="<?= $presupuesto['inm_concepto_id'] ?>">
                                                         <td><?php echo $presupuesto['gt_proveedor_id']; ?></td>
                                                         <td>
                                                             <input type="text" name="monto" class="form-control" id="monto[<?= $id ?>]" placeholder="Monto" title="monto">

@@ -8,6 +8,13 @@ $(document).ready(function() {
         $(`#detalle-${id}`).toggle();
     });
 
+    function formatoMonto(valor) {
+        return (parseFloat(valor) || 0).toLocaleString('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+    }
+
     function validarCampo(selector) {
         return $(selector).val().trim();
     }
@@ -41,38 +48,56 @@ $(document).ready(function() {
                 }
 
                 let nuevoTr = $(`
-                    <tr class="form-pago" data-id="${response.inm_pago_costo_id}">
+                    <tr class="form-pago" data-id="${response.inm_pago_costo_id}"  data-presupuesto-id="${id}">
                         <td>
-                            ${response.gt_proveedor_razon_social}
+                            <div class="texto-gasto-${response.inm_pago_costo_id}">
+                                ${response.gt_proveedor_razon_social}
+                            </div>
                             <div class="cont-mod-gasto mod-gasto-${response.inm_pago_costo_id}">
                                 ${response.campo_gt_proveedor_id}
                             </div>
                         </td>
                         <td>
-                            $${parseFloat(response.inm_pago_costo_monto).toFixed(2)}
+                            <div class="texto-gasto-${response.inm_pago_costo_id}">
+                                $${formatoMonto(response.inm_pago_costo_monto)}
+                            </div>
                             <div class="cont-mod-gasto mod-gasto-${response.inm_pago_costo_id}">
                                 ${response.campo_monto}
                             </div>
                         </td>
                         <td>
-                            ${response.cat_sat_forma_pago_descripcion}
+                            <div class="texto-gasto-${response.inm_pago_costo_id}">
+                                ${response.cat_sat_forma_pago_descripcion}
+                            </div>
                             <div class="cont-mod-gasto mod-gasto-${response.inm_pago_costo_id}">
                                 ${response.campo_cat_sat_forma_pago_id}
                             </div>
                         </td>
                         <td>
-                            ${response.inm_pago_costo_fecha_pago}
+                            <div class="texto-gasto-${response.inm_pago_costo_id}">
+                                ${response.inm_pago_costo_fecha_pago}
+                            </div>
                             <div class="cont-mod-gasto mod-gasto-${response.inm_pago_costo_id}">
                                 ${response.campo_fecha_pago}
                             </div>
                         </td>       
                         <td>
-                            ${response.inm_pago_costo_referencia}
+                            <div class="texto-gasto-${response.inm_pago_costo_id}">
+                                ${response.inm_pago_costo_referencia}
+                            </div>
                             <div class="cont-mod-gasto mod-gasto-${response.inm_pago_costo_id}">
                                 ${response.campo_referencia}
                             </div>
                         </td>
-                        <td>${response.modifica} ${response.elimina_bd}</td>
+                        <td>
+                            <div class="cont-buttons-${response.inm_pago_costo_id}">
+                                ${response.modifica} ${response.elimina_bd}
+                            </div>
+                            <div class="cont-buttons-gasto cont-buttons-up${response.inm_pago_costo_id}">
+                                <button type="button" class="btn btn-info btn-sm btn-g-p" title="Modifica">✓</button>
+                                <button type="button" class="btn btn-info btn-sm btn-c-p" title="Cancelar">x</button>
+                            </div>
+                        </td>
                     </tr>
                 `);
 
@@ -122,16 +147,151 @@ $(document).ready(function() {
     });
 
     $(document).on('click', '.modifica_pago_costo', function () {
+
         let contenedor = $(this).closest('.form-pago');
         let id = contenedor.attr('data-id');
 
-        $(`.mod-gasto-${id}`).toggle();
+        $(".form-inline-pago").show();
 
-        contenedor.find(`[name="gt_proveedor_id[${id}]"]`).val();
-        contenedor.find(`[name="cat_sat_forma_pago_id[${id}]"]`).val();
-        console.log('Modificar pago con ID:', id);
+        let presupuesto_id = contenedor.attr('data-presupuesto-id');
+
+        $(`.form-alta-costo-${presupuesto_id}`).hide();
+
+        $('.cont-mod-gasto').hide();
+        $('.cont-buttons-gasto').hide();
+        $('[class*="texto-gasto-"]').show();
+        $('[class*="cont-buttons-"]').not('[class*="cont-buttons-gasto"]').show();
+
+        contenedor.find('.cont-mod-gasto').show();
+        contenedor.find('.cont-buttons-gasto').show();
+
+        contenedor.find(`.texto-gasto-${id}`).hide();
+        contenedor.find(`.cont-buttons-${id}`).hide();
+
+        contenedor.find('input, select, textarea').each(function () {
+            $(this).data('valor-original', $(this).val());
+        });
+
+    });
+
+
+    $(document).on('click', '.btn-g-p', function () {
+
+        let contenedor = $(this).closest('.form-pago');
+        let id = contenedor.attr('data-id');
+
+        let monto = contenedor.find('[name="monto"]').val();
+        let fecha = contenedor.find('[name="fecha_pago"]').val();
+        let referencia = contenedor.find('[name="referencia"]').val();
+        let gt_proveedor_id = contenedor.find(`[name="gt_proveedor_id[${id}]"]`).val();
+        let cat_sat_forma_pago_id = contenedor.find(`[name="cat_sat_forma_pago_id[${id}]"]`).val();
+
+        let datos = {
+            id: id,
+            gt_proveedor_id: gt_proveedor_id,
+            cat_sat_forma_pago_id: cat_sat_forma_pago_id,
+            monto: monto,
+            fecha_pago: fecha,
+            referencia: referencia
+        };
+
+        console.log(datos);
+
+        let url_modifica_prd = get_url("inm_costo", "modifica_costo_bd", {registro_id: registro_id});
+
+        $.ajax({
+            url: url_modifica_prd,
+            type: 'POST',
+            data: datos,
+            success: function (response) {
+                if (!response || response.error) {
+                    console.error('Error en la respuesta:', response);
+                    return;
+                }
+
+                let montoInput = contenedor.find('[name="monto"]');
+                let montoAnterior = parseFloat(montoInput.data('valor-original')) || 0;
+                let montoNuevo = parseFloat(monto) || 0;
+
+                let textoProveedor = contenedor.find(`[name="gt_proveedor_id[${id}]"] option:selected`).text().trim();
+                let textoForma = contenedor.find(`[name="cat_sat_forma_pago_id[${id}]"] option:selected`).text().trim();
+
+                let textos = contenedor.find(`div.texto-gasto-${id}`);
+                textos.eq(0).text(textoProveedor);
+                textos.eq(1).text(`$${formatoMonto(montoNuevo)}`);
+                textos.eq(2).text(textoForma);
+                textos.eq(3).text(fecha);
+                textos.eq(4).text(referencia);
+
+                // Los valores guardados pasan a ser el nuevo "original" para cancelar
+                contenedor.find('input, select, textarea').each(function () {
+                    $(this).data('valor-original', $(this).val());
+                });
+
+                let diferencia = montoNuevo - montoAnterior;
+                let presupuesto_id = contenedor.attr('data-presupuesto-id');
+                let filaPrincipal = $(`tr.fila-presupuesto[data-id="${presupuesto_id}"]`);
+                let elementoTotal = filaPrincipal.find('.total-gastado');
+                let totalActual = parseFloat(elementoTotal.text().replace(/[^0-9.-]+/g, "")) || 0;
+                elementoTotal.text(`$${(totalActual + diferencia).toFixed(2)}`);
+
+                let tipo = filaPrincipal.data('tipo');
+                let spanTipo = $(`tr.fila-tipo-concepto[data-tipo="${tipo}"] .total-gastado-tipo`);
+                let gastadoTipo = parseFloat(spanTipo.text().replace(/[^0-9.-]+/g, "")) || 0;
+                spanTipo.text((gastadoTipo + diferencia).toFixed(2));
+
+                contenedor.find('.cont-mod-gasto').hide();
+                contenedor.find('.cont-buttons-gasto').hide();
+                contenedor.find(`.texto-gasto-${id}`).show();
+                contenedor.find(`.cont-buttons-${id}`).show();
+                $(`.form-alta-costo-${presupuesto_id}`).show();
+            },
+            error: function (xhr, status, error) {
+                console.error('Error en la solicitud AJAX:', xhr.responseText);
+            }
+        });
+    });
+
+
+    $(document).on('click', '.btn-c-p', function () {
+        let contenedor = $(this).closest('.form-pago');
+        let id = contenedor.attr('data-id');
+
+        let presupuesto_id = contenedor.attr('data-presupuesto-id');
+        $(`.form-alta-costo-${presupuesto_id}`).show();
+
+        contenedor.find('input, select, textarea').each(function () {
+
+            let valorOriginal = $(this).data('valor-original');
+
+            if (valorOriginal !== undefined) {
+                $(this).val(valorOriginal);
+            }
+
+        });
+
+
+        contenedor.find('select').each(function () {
+            $(this).selectpicker();
+
+            $(this).removeClass('btn-default').addClass('selectpicker-primary');
+
+            let valorOriginal = $(this).data('valor-original');
+            if (valorOriginal !== undefined) {
+                $(this).val(valorOriginal).selectpicker('refresh');
+            }
+        });
+
+        contenedor.find('.cont-mod-gasto').hide();
+        contenedor.find('.cont-buttons-gasto').hide();
+
+        contenedor.find(`.texto-gasto-${id}`).show();
+        contenedor.find(`.cont-buttons-${id}`).show();
+
     });
 });
+
+
 
 /*
 document.addEventListener('click', function(e) {

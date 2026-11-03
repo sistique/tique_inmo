@@ -683,8 +683,9 @@ class controlador_inm_ubicacion extends _ctl_base
                     
                     $name = 'cat_sat_forma_pago_id[' . $pago['inm_pago_costo_id'] . ']';
                     $cat_sat_forma_pago_id = $this->html->select_catalogo(cols: 12, con_registros: true,
-                        id_selected: $pago['cat_sat_forma_pago_id'], modelo: $modelo_forma_pago, id_css: $name,
-                        label: 'Forma de Pago', name: $name, oculta_label: true);
+                        id_selected: $pago['cat_sat_forma_pago_id'], modelo: $modelo_forma_pago,
+                        columns_ds: ['cat_sat_forma_pago_descripcion'], id_css: $name, label: 'Forma de Pago',
+                        name: $name, oculta_label: true);
                     if (errores::$error) {
                         return $this->retorno_error(mensaje: 'Error al obtener input', data: $cat_sat_forma_pago_id, header: $header,
                             ws: $ws);
@@ -700,13 +701,13 @@ class controlador_inm_ubicacion extends _ctl_base
                             mensaje: 'Error al btn_collapse_all',data:  $button, header: $header,ws:  $ws);
                     }
 
-                    $pago['modifica'] = '';//$button;
+                    $pago['modifica'] = $button;
 
                     $params = array('accion_retorno' => 'asigna_costo', 'seccion_retorno' => 'inm_ubicacion',
                         'id_retorno' => $this->registro_id);
                     $button = $this->html->button_href(accion: 'elimina_bd', etiqueta: 'Elimina',
                         registro_id: $pago['inm_pago_costo_id'], seccion: 'inm_pago_costo',
-                        style: 'info', css_extra: 'botones', cols: 12, params: $params);
+                        style: 'info', css_extra: 'botones', cols: 6, params: $params);
                     if (errores::$error) {
                         return $this->retorno_error(mensaje: 'Error al integrar button', data: $button, header: $header,
                             ws: $ws);
@@ -741,8 +742,8 @@ class controlador_inm_ubicacion extends _ctl_base
 
             $name = 'cat_sat_forma_pago_id[' . $presupuesto['inm_presupuesto_costo_id'] . ']';
             $cat_sat_forma_pago_id = $this->html->select_catalogo(cols: 12, con_registros: true, id_selected: -1,
-                modelo: $modelo_forma_pago, id_css: 'cat_sat_forma_pago_id', label: 'Forma de Pago', name: $name,
-                oculta_label: true);
+                modelo: $modelo_forma_pago, columns_ds: ['cat_sat_forma_pago_descripcion'],
+                id_css: 'cat_sat_forma_pago_id', label: 'Forma de Pago', name: $name, oculta_label: true);
             if (errores::$error) {
                 return $this->retorno_error(mensaje: 'Error al obtener input', data: $cat_sat_forma_pago_id, header: $header, ws: $ws);
             }

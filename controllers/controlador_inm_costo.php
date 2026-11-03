@@ -251,9 +251,9 @@ class controlador_inm_costo extends _ctl_base {
 
         $name = 'cat_sat_forma_pago_id[' . $r_inm_pago->registro['inm_pago_costo_id'] . ']';
         $cat_sat_forma_pago_id = $this->html->select_catalogo(cols: 12, con_registros: true,
-            id_selected: $_POST['cat_sat_forma_pago_id'],
-            modelo: new cat_sat_forma_pago(link: $this->link), id_css: $name, label: 'Proveedor', name: $name,
-            oculta_label: true);
+            id_selected: $_POST['cat_sat_forma_pago_id'], modelo: new cat_sat_forma_pago(link: $this->link),
+            columns_ds: ['cat_sat_forma_pago_descripcion'], id_css: $name, label: 'Proveedor',
+            name: $name, oculta_label: true);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al obtener input', data: $cat_sat_forma_pago_id, header: $header,
                 ws: $ws);
@@ -272,13 +272,13 @@ class controlador_inm_costo extends _ctl_base {
                 mensaje: 'Error al btn_collapse_all',data:  $button, header: $header,ws:  $ws);
         }
 
-        $r_inm_pago->registro['modifica'] = "";//$button;
+        $r_inm_pago->registro['modifica'] = $button;
 
         $params = array('accion_retorno' => 'asigna_costo', 'seccion_retorno' => 'inm_ubicacion',
             'id_retorno' => $this->registro_id);
         $button = $this->html->button_href(accion: 'elimina_bd', etiqueta: 'Elimina',
             registro_id: $r_inm_pago->registro['inm_pago_costo_id'],
-            seccion: 'inm_pago_costo', style: 'info', css_extra: 'botones', cols: 12, params: $params);
+            seccion: 'inm_pago_costo', style: 'info', css_extra: 'botones', cols: 6, params: $params);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al integrar button', data: $button, header: $header,
                 ws: $ws);
@@ -295,6 +295,57 @@ class controlador_inm_costo extends _ctl_base {
             header('Content-Type: application/json');
             try {
                 echo json_encode($r_inm_pago->registro, JSON_THROW_ON_ERROR);
+            }
+            catch (Throwable $e){
+                return $this->retorno_error(mensaje: 'Error al maquetar estados',data: $e, header: $header, ws: $ws);
+            }
+            exit;
+        }
+
+        return $r_inm_pago;
+    }
+
+    public function modifica_costo_bd(bool $header, bool $ws = false):array|stdClass
+    {
+        if(!isset($_POST) || count($_POST) <= 0){
+            return $this->retorno_error(mensaje: 'Error al obtener registro para alta', data: $_POST,
+                header: $header, ws: $ws);
+        }
+
+        $r_pago_costo = (new inm_pago_costo(link: $this->link))->registro(registro_id: $_POST['id']);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener pago', data: $r_pago_costo,
+                header: $header, ws: $ws);
+        }
+
+        $registro_costo['gt_proveedor_id'] = $_POST['gt_proveedor_id'];
+        $r_costo = (new inm_costo(link: $this->link))->modifica_bd(registro: $registro_costo,
+            id: $r_pago_costo['inm_costo_id']);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al editar costo', data: $r_costo,
+                header: $header, ws: $ws);
+        }
+
+        $registro_pago['cat_sat_forma_pago_id'] = $_POST['cat_sat_forma_pago_id'];
+        $registro_pago['monto'] = $_POST['monto'];
+        $registro_pago['fecha_pago'] = $_POST['fecha_pago'];
+        $registro_pago['referencia'] = $_POST['referencia'];
+        $r_inm_pago = (new inm_pago_costo(link: $this->link))->modifica_bd(
+            registro: $registro_pago, id: $_POST['id']);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al generar link', data: $r_inm_pago,
+                header: $header, ws: $ws);
+        }
+
+        if($header){
+            $retorno = $_SERVER['HTTP_REFERER'];
+            header('Location:'.$retorno);
+            exit;
+        }
+        if($ws){
+            header('Content-Type: application/json');
+            try {
+                echo json_encode($r_inm_pago->registro_actualizado, JSON_THROW_ON_ERROR);
             }
             catch (Throwable $e){
                 return $this->retorno_error(mensaje: 'Error al maquetar estados',data: $e, header: $header, ws: $ws);
