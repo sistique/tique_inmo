@@ -77,6 +77,52 @@ echo "<style>
     background: #a71d2a;
 }
 
+.split-view {
+    display: flex;
+    width: 100%;
+    align-items: stretch;
+}
+
+.split-view .split-panel {
+    min-width: 0;
+    /*overflow: auto;*/
+}
+
+#panel-compradores {
+    flex: 1 1 100%;
+}
+
+#split-divisor {
+    display: none;
+    flex: 0 0 6px;
+    margin: 0 4px;
+    background: #d9dde2;
+    border-radius: 3px;
+    cursor: col-resize;
+    user-select: none;
+}
+
+#split-divisor:hover, #split-divisor.arrastrando {
+    background: #007bff;
+}
+
+.split-view.con-ubicaciones #split-divisor {
+    display: block;
+}
+
+.split-view.con-ubicaciones #panel-compradores,
+.split-view.con-ubicaciones #panel-ubicaciones {
+    flex: 0 0 auto;
+}
+
+#panel-ubicaciones {
+    display: none;
+}
+
+.split-view.con-ubicaciones #panel-ubicaciones {
+    display: block;
+}
+
 #limpiar:disabled {
     background: #cccccc;
     color: #666666;
@@ -195,6 +241,23 @@ echo "<style>
                 </form>
             </div>
         </div>
-        <table class="datatable table table-striped"></table>
-    </div><!-- /. widget-table-->
-</div><!-- /.center-content -->
+        <div class="split-view" id="split-view">
+            <div class="split-panel" id="panel-compradores">
+                <table class="datatable table table-striped"></table>
+            </div>
+            <div id="split-divisor" title="Arrastrar para redimensionar"></div>
+            <div class="split-panel" id="panel-ubicaciones">
+                <table id="tabla-ubicaciones" class="table table-striped" style="width:100%">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Ubicación</th>
+                        <th>Dirección</th>
+                        <th>Acciones</th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
