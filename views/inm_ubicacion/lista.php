@@ -118,7 +118,7 @@ echo "<style>
         <div class="contenedor_completo">
             <div class="filtros-avanzados">
                 <div class="filtro-grupo col-md-12">
-                    <div class="filtros col-md-2">
+                    <div class="filtros col-md-1">
                         <label for="id">ID</label>
                         <input type="text" id="id" data-tipo="data" data-filtro_campo="inm_ubicacion.id" placeholder="Ej: 1 ">
                     </div>

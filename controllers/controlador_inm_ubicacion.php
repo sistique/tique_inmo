@@ -3422,7 +3422,11 @@ class controlador_inm_ubicacion extends _ctl_base
 
         $ths[] = array('etiqueta' => 'ID', 'campo' => 'inm_ubicacion_id');
         $ths[] = array('etiqueta' => 'Ubicacion', 'campo' => 'inm_ubicacion_ubicacion');
-        $ths[] = array('etiqueta' => 'CP', 'campo' => 'dp_cp_descripcion');
+        $ths[] = array('etiqueta' => 'Nombre', 'campo' => 'inm_ubicacion_razon_social');
+        $ths[] = array('etiqueta' => 'Cuenta Predial', 'campo' => 'inm_ubicacion_cuenta_predial');
+        $ths[] = array('etiqueta' => 'Adeudo Predial', 'campo' => 'inm_ubicacion_adeudo_predial');
+        $ths[] = array('etiqueta' => 'Cuenta Agua', 'campo' => 'inm_ubicacion_cuenta_agua');
+        $ths[] = array('etiqueta' => 'Adeudo Agua', 'campo' => 'inm_ubicacion_adeudo_agua');
         $ths[] = array('etiqueta' => 'Agente', 'campo' => 'com_agente_descripcion');
         $ths[] = array('etiqueta' => 'Status ubicacion', 'campo' => 'inm_status_ubicacion_descripcion');
 
