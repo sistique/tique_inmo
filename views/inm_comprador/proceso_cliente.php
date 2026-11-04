@@ -816,10 +816,10 @@
                                         <?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
                                     </form>
                                     <div class="row buttons-form">
-                                        <div class="col-lg-3">
-                                            <?php echo $controlador->button_solicitud_avaluo; ?>
-                                        </div>
                                         <?php if($controlador->existe_valuador){ ?>
+                                            <div class="col-lg-3">
+                                                <?php echo $controlador->button_solicitud_avaluo; ?>
+                                            </div>
                                             <div class="col-lg-3">
                                                 <?php echo $controlador->button_envia_correo; ?>
                                             </div>
@@ -1409,7 +1409,10 @@
             <input type="text" id="mmSubject" name="subject" value="<?php echo $controlador->asunto_avaluo; ?>">
         </div>
 
-        <div class="mm-body" id="mmEditor" contenteditable="true"><?php echo $controlador->mensaje_avaluo; ?></div>
+        <div class="mm-body" id="mmEditor" contenteditable="true">
+            <?php echo $controlador->mensaje_avaluo; ?>
+            <input type="hidden" name="message" id="mmMessage">
+        </div>
 
         <div class="mm-toolbar">
             <button type="button" data-cmd="undo" title="Deshacer">↶</button>
@@ -1435,10 +1438,16 @@
             <button type="button" id="mmImg" title="Imagen">🖼</button>
         </div>
 
+        <div class="mmDocumentos" id="mmDocumentos">
+            <?php foreach ($controlador->documentos_avaluo as $documento) { echo $documento['doc_documento_id']; ?>
+
+            <?php } ?>
+        </div>
+
         <div class="mm-files" id="mmFiles"></div>
 
         <div class="mm-footer">
-            <button type="button" class="mm-send" id="mmSend">Enviar</button>
+            <button type="submit" class="mm-send" id="mmSend">Enviar</button>
             <button type="button" class="mm-icon" id="mmAttach" title="Adjuntar">📎</button>
             <input type="file" class="files" id="mmFileInput" name="adjuntos[]" multiple hidden>
             <input type="file" class="files" id="mmImgInput" accept="image/*" hidden>

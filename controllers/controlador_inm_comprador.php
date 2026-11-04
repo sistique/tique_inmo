@@ -43,6 +43,7 @@ use gamboamartin\inmuebles\html\inm_referencia_html;
 use gamboamartin\inmuebles\html\inm_status_comprador_html;
 use gamboamartin\inmuebles\models\_base_paquete;
 use gamboamartin\inmuebles\models\_dropbox;
+use gamboamartin\inmuebles\models\_email;
 use gamboamartin\inmuebles\models\_inm_comprador;
 use gamboamartin\inmuebles\models\_inm_prospecto;
 use gamboamartin\inmuebles\models\_upd_prospecto;
@@ -51,6 +52,7 @@ use gamboamartin\inmuebles\models\inm_beneficiario;
 use gamboamartin\inmuebles\models\inm_bitacora_status_comprador;
 use gamboamartin\inmuebles\models\inm_comprador;
 use gamboamartin\inmuebles\models\inm_conf_docs_comprador;
+use gamboamartin\inmuebles\models\inm_conf_docs_ubicacion;
 use gamboamartin\inmuebles\models\inm_doc_comprador;
 use gamboamartin\inmuebles\models\inm_doc_ubicacion;
 use gamboamartin\inmuebles\models\inm_escritura;
@@ -72,6 +74,10 @@ use gamboamartin\inmuebles\models\inm_rel_ubi_comp;
 use gamboamartin\inmuebles\models\inm_status_comprador;
 use gamboamartin\inmuebles\models\inm_status_prospecto;
 use gamboamartin\inmuebles\models\inm_ubicacion;
+use gamboamartin\notificaciones\models\not_emisor;
+use gamboamartin\notificaciones\models\not_mensaje;
+use gamboamartin\notificaciones\models\not_receptor;
+use gamboamartin\notificaciones\models\not_rel_mensaje;
 use gamboamartin\plugins\exportador;
 use gamboamartin\system\_ctl_base;
 use gamboamartin\system\links_menu;
@@ -251,6 +257,7 @@ class controlador_inm_comprador extends _ctl_base {
     public array $complementos_pago = array();
 
     public string $ruta_docs = '';
+    public array $documentos_avaluo = array();
 
     public bool $ver_descripcion = false;
 
@@ -2749,6 +2756,7 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         /* Correo */
+        $archivos = array();
         if($registro_valuador->n_registros > 0) {
             $correo = $registro_valuador->registros[0]['gt_proveedor_correo'];
 
@@ -2843,7 +2851,59 @@ class controlador_inm_comprador extends _ctl_base {
                 </p>
             ";
 
+            $filtro['inm_conf_docs_comprador.es_foto'] = 'inactivo';
+            $not_in = array();
+            $not_in['llave'] = 'doc_tipo_documento.descripcion';
+            $not_in['values'] = array('VIGENCIA INE', 'RELACIONES LABORALES', 'AFORE');
+            $inm_conf_docs_comprador = (new inm_conf_docs_comprador(link: $this->link))->filtro_and(
+                filtro: $filtro, not_in: $not_in);
+            if(errores::$error){
+                return $this->retorno_error(mensaje: 'Error al obtener inm_conf_docs_comprador',
+                    data:  $inm_conf_docs_comprador,header:  $header, ws:  $ws);
+            }
+
+            foreach ($inm_conf_docs_comprador->registros as $conf_doc) {
+                $filtro_doc['doc_tipo_documento.id'] = $conf_doc['doc_tipo_documento_id'];
+                $filtro_doc['inm_comprador.id'] = $this->registro_id;
+                $docs = (new inm_doc_comprador(link: $this->link))->filtro_and(filtro: $filtro_doc);
+                if(errores::$error){
+                    return $this->retorno_error(mensaje: 'Error al obtener documento',data:  $docs,header:  $header,
+                        ws:  $ws);
+                }
+
+                if($docs->n_registros > 0){
+                    $archivos[] = $docs->registros[0];
+                }
+            }
+
+            $filtro_ubi['inm_conf_docs_ubicacion.es_foto'] = 'inactivo';
+            $not_in = array();
+            $not_in['llave'] = 'doc_tipo_documento.descripcion';
+            $not_in['values'] = array('VIGENCIA INE', 'PREDIAL', 'AGUA', 'PODER ORIGINAL',
+                'CONTRATO PROMESA COMPRAVENTA', 'CANCELACION HIPOTECA', 'ESTADO DE CUENTA HISTORICO',
+                'INE ISR EXENTO', 'CNA AGUA', 'CNA PREDIAL');
+            $inm_conf_docs_prospecto = (new inm_conf_docs_ubicacion(link: $this->link))->filtro_and(
+                filtro: $filtro_ubi, not_in: $not_in);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al obtener inm_conf_docs_prospecto',
+                    data: $inm_conf_docs_prospecto, header: $header, ws: $ws);
+            }
+
+            foreach ($inm_conf_docs_prospecto->registros as $conf_doc) {
+                $filtro_doc_ubi['doc_tipo_documento.id'] = $conf_doc['doc_tipo_documento_id'];
+                $filtro_doc_ubi['inm_ubicacion.id'] = $imp_rel_ubi_comp['inm_ubicacion_id'];
+                $docs = (new inm_doc_ubicacion(link: $this->link))->filtro_and(filtro: $filtro_doc_ubi);
+                if (errores::$error) {
+                    return $this->retorno_error(mensaje: 'Error al obtener documento', data: $docs, header: $header,
+                        ws: $ws);
+                }
+
+                if($docs->n_registros > 0){
+                    $archivos[] = $docs->registros[0];
+                }            }
         }
+
+        $this->documentos_avaluo = $archivos;
 
         $params = array();
         if (isset($_GET['accion']) && $_GET['accion'] == 'proceso_cliente') {
@@ -3909,6 +3969,82 @@ class controlador_inm_comprador extends _ctl_base {
     public function envia_correo_bd(bool $header, bool $ws = false)
     {
         $this->link->beginTransaction();
+
+        $not_emisor = (new not_emisor(link: $this->link))->registros_activos();
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener emisor', data: $not_emisor,
+                header: $header, ws: $ws);
+        }
+
+        $n_emisores = count($not_emisor);
+        $indice = mt_rand(0,$n_emisores-1);
+
+        $not_mensaje_ins['asunto'] = $_POST['subject'];
+        $not_mensaje_ins['mensaje'] = $_POST['message'];
+        $not_mensaje_ins['not_emisor_id'] = $not_emisor[$indice]['not_emisor_id'];
+        $r_not_mensaje = (new not_mensaje(link: $this->link))->alta_registro(registro: $not_mensaje_ins);
+        if (errores::$error) {
+            return (new errores())->error(mensaje: 'Error al insertar mensaje', data: $r_not_mensaje);
+        }
+
+        $modelo_receptor = new not_receptor(link: $this->link);
+        $filtro_receptor['not_receptor.email'] = $_POST['to'];
+        $r_receptor = $modelo_receptor->filtro_and(filtro: $filtro_receptor);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al validar existencia', data: $r_receptor,
+                header: $header, ws: $ws);
+        }
+
+        if ($r_receptor->n_registros <= 0) {
+            $modelo_receptor->registro = $_POST['to'];
+            $not_receptor = $modelo_receptor->alta_bd();
+            if (errores::$error) {
+                $this->link->rollBack();
+                return $this->retorno_error(mensaje: 'Error al generar receptor', data: $not_receptor,
+                    header: $header, ws: $ws);
+            }
+
+            $not_receptor_id = $not_receptor->registro_id;
+        }else{
+            $not_receptor_id = $r_receptor->registros[0]['not_receptor_id'];
+        }
+
+        $registro_rel['not_mensaje_id'] =  $r_not_mensaje->registro_id;
+        $registro_rel['not_receptor_id'] =$not_receptor_id;
+        $r_not_rel_mensaje = (new not_rel_mensaje(link: $this->link))->alta_registro(registro: $registro_rel);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al generar relacion de mensaje y receptor',
+                data: $r_not_rel_mensaje, header: $header, ws: $ws);
+        }
+
+        $cc = array();
+        if(isset($_POST['cc']) && trim($_POST['cc']) !== '') {
+            $cc = preg_split('/[;,]/', $_POST['cc']);
+        }
+
+        $cco = array();
+        if(isset($_POST['bcc']) && trim($_POST['bcc']) !== '') {
+            $cco = preg_split('/[;,]/', $_POST['bcc']);
+        }
+
+        $not_rel_mensaje = (new not_rel_mensaje(link: $this->link))->registro(
+            registro_id: $r_not_rel_mensaje->registro_id);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error a obtener relacion de mensaje y receptor',
+                data: $not_rel_mensaje, header: $header, ws: $ws);
+        }
+
+        $envios = (new _email(link: $this->link))->notifica(not_mensaje: $not_rel_mensaje,link: $this->link,
+            cc: $cc, cco: $cco);
+        if(errores::$error){
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al insertar notificacion', data: $envios, header: $header,
+                ws: $ws);
+        }
 
         $this->link->commit();
 

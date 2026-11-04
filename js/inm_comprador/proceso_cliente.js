@@ -1822,7 +1822,7 @@ $('#inm_conf_cuenta_notaria_id').change(function (){
     function queueDraft() { clearTimeout(draftTimer); draftTimer = setTimeout(saveDraft, 1500); }
 
     // ---- Enviar ----
-    $('mmSend').onclick = async () => {
+    /*$('mmSend').onclick = async () => {
         if (!$('mmTo').value.trim()) { alert('Escribe al menos un destinatario.'); return; }
         const fd = new FormData();
         fd.append('from', $('mmFrom').value);
@@ -1844,11 +1844,11 @@ $('#inm_conf_cuenta_notaria_id').change(function (){
         } catch (err) {
             status.style.color = '#c0392b'; status.textContent = err.message;
         } finally { $('mmSend').disabled = false; }
-    };
+    };*/
 })();
 
 const modalmail = document.getElementById("myModalMail");
-const closemailBtn = document.getElementById("closeModalMailBtn");
+//const closemailBtn = document.getElementById("closeModalMailBtn");
 const enviacorreo = document.getElementById("envia_correo");
 
 enviacorreo.addEventListener("click", function(event) {
@@ -1866,9 +1866,9 @@ enviacorreo.addEventListener("click", function(event) {
     loaderOverlay.remove();
 });
 
-closemailBtn.addEventListener("click", function() {
+/*closemailBtn.addEventListener("click", function() {
     modalmail.close();
-});
+});*/
 
 if(modalmail) {
     modalmail.addEventListener("click", function(event) {
@@ -1879,3 +1879,58 @@ if(modalmail) {
         }
     });
 }
+
+$('#mailForm').on('submit', function () {
+    $('#mmMessage').val($('#mmEditor').html());
+});
+
+/********** Modal Enviar Correo ********/
+let files = [];
+
+// Función auxiliar que tú ya tienes (o adaptada a tu ID 'mmFiles')
+function renderFiles() {
+    const contenedorFiles = document.getElementById("mmFiles");
+    if (contenedorFiles) {
+        contenedorFiles.textContent = files.length ? '📎 ' + files.map(f => f.name).join(', ') : '';
+    }
+}
+
+document.addEventListener("DOMContentLoaded", async function() {
+    const ruta_docs = document.getElementById("ruta-docs-avaluo");
+    const fileInput = document.getElementById("mmFileInput");
+
+    if (ruta_docs && fileInput) {
+        try {
+            const documentos = JSON.parse(ruta_docs.textContent);
+            const dataTransfer = new DataTransfer();
+
+            // 1. Recorrer y descargar cada archivo del servidor
+            for (const [rutaServidor, nombreArchivo] of Object.entries(documentos)) {
+                const urlFetch = 'obtener_archivo_temporal.php?path=' + encodeURIComponent(rutaServidor);
+                const response = await fetch(urlFetch);
+
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const archivo = new File([blob], nombreArchivo, { type: blob.type });
+
+                    // Agregar al arreglo de tu lógica manual
+                    files.push(archivo);
+
+                    // Agregar también al DataTransfer para que el input file los tenga al enviar el formulario
+                    dataTransfer.items.add(archivo);
+                }
+            }
+
+            // 2. Asignar los archivos al input oculto real
+            fileInput.files = dataTransfer.files;
+
+            // 3. LLAMAR A TU FUNCIÓN DE RENDERIZADO para que aparezcan con el estilo '📎 nombre.pdf'
+            renderFiles();
+
+            console.log("¡Archivos cargados y renderizados automáticamente con éxito!");
+
+        } catch (error) {
+            console.error("Error al procesar los documentos temporales:", error);
+        }
+    }
+});
