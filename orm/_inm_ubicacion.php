@@ -1,6 +1,7 @@
 <?php
 namespace gamboamartin\inmuebles\models;
 
+use config\generales;
 use gamboamartin\documento\models\doc_tipo_documento;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\controllers\_doctos;
@@ -295,11 +296,49 @@ class _inm_ubicacion{
         }
 
         $filtro['inm_conf_docs_ubicacion.es_foto'] = 'inactivo';
-        $inm_conf_docs_ubicacion = (new inm_conf_docs_ubicacion(link: $controler->link))->filtro_and(
-            columnas: ['doc_tipo_documento_id'],
-            filtro: $filtro);
+        $filtro['inm_conf_docs_ubicacion.con_conyuge'] = 'inactivo';
+        $filtro['inm_conf_docs_ubicacion.con_co_acreditado'] = 'inactivo';
+        $inm_conf_docs_ubicacion = (new inm_conf_docs_ubicacion(link: $controler->link))->filtro_and(filtro: $filtro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener inm_conf_docs_ubicacion',data:  $inm_conf_docs_ubicacion);
+        }
+
+        $existe_conyuge = (new inm_rel_conyuge_ubicacion(link: $controler->link))->existe(
+            filtro: array('inm_ubicacion.id' => $controler->registro_id));
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener inm_conf_docs_ubicacion',data:  $existe_conyuge);
+        }
+
+        if($existe_conyuge){
+            $filtro_con['inm_conf_docs_ubicacion.con_conyuge'] = 'activo';
+            $inm_conf_docs_conyuge = (new inm_conf_docs_ubicacion(link: $controler->link))->filtro_and(
+                filtro: $filtro_con);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al obtener inm_conf_docs_ubicacion',
+                    data:  $inm_conf_docs_conyuge);
+            }
+
+            $inm_conf_docs_ubicacion->registros = array_merge($inm_conf_docs_ubicacion->registros,
+                $inm_conf_docs_conyuge->registros);
+        }
+
+        $existe_co_acred = (new inm_rel_co_acred_ubi(link: $controler->link))->existe(
+            filtro: array('inm_ubicacion.id' => $controler->registro_id));
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener inm_conf_docs_ubicacion',data:  $existe_co_acred);
+        }
+
+        if($existe_co_acred){
+            $filtro_co['inm_conf_docs_ubicacion.con_co_acreditado'] = 'activo';
+            $inm_conf_docs_co_acred = (new inm_conf_docs_ubicacion(link: $controler->link))->filtro_and(
+                filtro: $filtro_co);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al obtener inm_conf_docs_ubicacion',
+                    data:  $inm_conf_docs_co_acred);
+            }
+
+            $inm_conf_docs_ubicacion->registros = array_merge($inm_conf_docs_ubicacion->registros,
+                $inm_conf_docs_co_acred->registros);
         }
 
         $doc_ids = array_map(function($registro) {
@@ -316,95 +355,68 @@ class _inm_ubicacion{
             return $this->error->error(mensaje: 'Error al obtener inm_docs_ubicacion',data:  $inm_docs_ubicacion);
         }
 
-        $inm_docs_ubicacion = $this->inm_conf_docs_ubicacion(controler: $controler,inm_docs_ubicacion:  $inm_docs_ubicacion,
-            tipos_documentos: $doc_ids);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al integrar buttons',data:  $inm_docs_ubicacion);
+        $documentos_indexados = [];
+        foreach ($inm_docs_ubicacion as $documento) {
+            $doc_tipo_documento_id = (int)$documento['doc_tipo_documento_id'];
+            $documentos_indexados[$doc_tipo_documento_id] = $documento;
         }
 
-        return $inm_docs_ubicacion;
+        $result = array();
+        foreach ($inm_conf_docs_ubicacion->registros as $indice => $doc_tipo_documento){
+            $doc_tipo_documento_id = (int)$doc_tipo_documento['doc_tipo_documento_id'];
+
+            if(isset($documentos_indexados[$doc_tipo_documento_id])){
+                $documento_existente = $documentos_indexados[$doc_tipo_documento_id];
+
+                $ruta_doc = (new generales())->url_base."$documento_existente[doc_documento_ruta_relativa]";
+                if((new generales())->guarda_archivo_dropbox) {
+                    $guarda = (new _dropbox(link: $controler->link))->preview(
+                        dropbox_id: $documento_existente['inm_dropbox_ruta_id_dropbox'],
+                        extencion: $documento_existente['doc_extension_descripcion']);
+                    if (errores::$error) {
+                        return $this->error->error('Error al guardar archivo', $guarda);
+                    }
+
+                    $ruta_doc = $guarda->ruta_mostrar;
+                }
+
+                $salida_doc = $this->buttons_base(
+                    controler: $controler, indice: 0, inm_ubicacion_id: $controler->registro_id,
+                    inm_conf_docs_ubicacion: array($doc_tipo_documento), inm_doc_ubicacion: $documento_existente);
+                if(errores::$error){
+                    return $this->error->error(mensaje: 'Error al integrar button',data:  $salida_doc);
+                }
+
+                $salida_doc = $salida_doc[0];
+                $salida_doc['ruta_doc'] = $ruta_doc;
+                $salida_doc['inm_doc_id'] = $documento_existente['inm_doc_ubicacion_id'];
+            }
+            else{
+                $button = $controler->html->input_file_sec(cols: 12, name:
+                    'documentos['.$doc_tipo_documento['doc_tipo_documento_id'].'][]',
+                    row_upd: new stdClass(), value_vacio: false, place_holder: 'Subir Documento', required: false,
+                    con_label: false);
+                if (errores::$error) {
+                    return $this->error->error(mensaje: 'Error al obtener inputs', data: $button);
+                }
+
+                $salida_doc = $this->integra_button_default(button: $button,
+                    indice: 0, inm_conf_docs_ubicacion: array($doc_tipo_documento));
+                if(errores::$error){
+                    return $this->error->error(mensaje: 'Error al integrar button',data:  $salida_doc);
+                }
+
+                $salida_doc = $salida_doc[0];
+            }
+
+            $result[$indice] = $salida_doc;
+        }
+
+        return $result;
     }
 
     final public function integra_inm_documentos_ubicacion(controlador_inm_ubicacion $controler){
-        $inm_prospecto = (new inm_ubicacion(link: $controler->link))->registro(registro_id: $controler->registro_id);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al obtener inm_ubicacion',data:  $inm_prospecto);
-        }
-
-        $filtro['inm_conf_docs_ubicacion.es_foto'] = 'inactivo';
-        $filtro['inm_conf_docs_ubicacion.con_conyuge'] = 'inactivo';
-        $filtro['inm_conf_docs_ubicacion.con_co_acreditado'] = 'inactivo';
-        $inm_conf_docs_prospecto = (new inm_conf_docs_ubicacion(link: $controler->link))->filtro_and(
-            columnas: ['doc_tipo_documento_id'],filtro: $filtro);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al obtener inm_conf_docs_prospecto',data:  $inm_conf_docs_prospecto);
-        }
-
-        $doc_ids = array_map(function($registro) {
-            return $registro['doc_tipo_documento_id'];
-        }, $inm_conf_docs_prospecto->registros);
-
-        $existe_conyuge = (new inm_rel_conyuge_ubicacion(link: $controler->link))->existe(
-            filtro: array('inm_ubicacion.id' => $controler->registro_id));
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al obtener inm_conf_docs_prospecto',data:  $existe_conyuge);
-        }
-
-        if($existe_conyuge){
-            $filtro_conyuge['inm_conf_docs_ubicacion.con_conyuge'] = 'activo';
-            $inm_conf_docs_conyuge = (new inm_conf_docs_ubicacion(link: $controler->link))->filtro_and(
-                columnas: ['doc_tipo_documento_id'],filtro: $filtro_conyuge);
-            if(errores::$error){
-                return $this->error->error(mensaje: 'Error al obtener inm_conf_docs_co_acred',
-                    data:  $inm_conf_docs_conyuge);
-            }
-
-            $doc_conyuge_ids = array_map(function($registro) {
-                return $registro['doc_tipo_documento_id'];
-            }, $inm_conf_docs_conyuge->registros);
-
-            $doc_ids = array_merge($doc_ids, $doc_conyuge_ids);
-        }
-
-        $existe_co_acred = (new inm_rel_co_acred_ubi(link: $controler->link))->existe(
-            filtro: array('inm_ubicacion.id' => $controler->registro_id));
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al obtener inm_conf_docs_prospecto',data:  $existe_co_acred);
-        }
-
-        if($existe_co_acred){
-            $filtro_co_acred['inm_conf_docs_ubicacion.con_co_acreditado'] = 'activo';
-            $inm_conf_docs_co_acred = (new inm_conf_docs_ubicacion(link: $controler->link))->filtro_and(
-                columnas: ['doc_tipo_documento_id'],filtro: $filtro_co_acred);
-            if(errores::$error){
-                return $this->error->error(mensaje: 'Error al obtener inm_conf_docs_co_acred',
-                    data:  $inm_conf_docs_co_acred);
-            }
-
-            $doc_co_acred_ids = array_map(function($registro) {
-                return $registro['doc_tipo_documento_id'];
-            }, $inm_conf_docs_co_acred->registros);
-
-            $doc_ids = array_merge($doc_ids, $doc_co_acred_ids);
-        }
-
-        if (count($doc_ids) <= 0) {
-            return array();
-        }
-
-        $inm_docs_prospecto = (new inm_doc_ubicacion(link: $controler->link))->inm_docs_ubicacion(
-            inm_ubicacion: $controler->registro_id, tipos_documentos: $doc_ids);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al obtener inm_docs_prospecto',data:  $inm_docs_prospecto);
-        }
-
-        $inm_docs_prospecto = $this->inm_conf_docs_ubicacion(controler: $controler,
-            inm_docs_ubicacion:  $inm_docs_prospecto,tipos_documentos: $doc_ids);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al integrar buttons',data:  $inm_docs_prospecto);
-        }
-
-        return $inm_docs_prospecto;
+        return $this->integra_inm_documentos(controler: $controler);
     }
 
 }

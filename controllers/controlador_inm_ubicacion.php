@@ -165,6 +165,10 @@ class controlador_inm_ubicacion extends _ctl_base
     public string $fecha_hasta_filtro = '';
     public string $gt_proveedor_id_filtro = '';
 
+    public string $ruta_docs = '';
+
+    public bool $ver_descripcion = false;
+
     public function __construct(PDO      $link, html $html = new \gamboamartin\template_1\html(),
                                 stdClass $paths_conf = new stdClass())
     {
@@ -2667,7 +2671,7 @@ class controlador_inm_ubicacion extends _ctl_base
         return $base->base->r_modifica;
     }
 
-    final public function documentos(bool $header, bool $ws = false): array
+    final public function documentos(bool $header, bool $ws = false): array|stdClass
     {
         if (isset($_GET['accion']) && $_GET['accion'] == 'documentos') {
             $template = $this->modifica(header: false);
@@ -2676,16 +2680,18 @@ class controlador_inm_ubicacion extends _ctl_base
             }
         }
 
-        $inm_conf_docs_ubicacion = (new _inm_ubicacion())->integra_inm_documentos_ubicacion(controler: $this);
+        $result_docs = (new _inm_ubicacion())->integra_inm_documentos(controler: $this);
         if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al integrar buttons', data: $inm_conf_docs_ubicacion,
+            return $this->retorno_error(mensaje: 'Error al integrar buttons', data: $result_docs,
                 header: $header, ws: $ws);
         }
 
+        $ver_descripcion = false;
         $temp = array();
-        foreach ($inm_conf_docs_ubicacion as $docs) {
+        $ruta_docs = array();
+        foreach ($result_docs as $docs) {
             $res = "<tr>
-            <td>$docs[doc_tipo_documento_descripcion]</td>
+            <td class='td-doc'><div class='descripcion-doc'>$docs[doc_tipo_documento_descripcion]</div></td>
             <td>$docs[descarga]</td>
             <td>$docs[vista_previa]</td>
             <td>$docs[descarga_zip]</td>
@@ -2693,13 +2699,22 @@ class controlador_inm_ubicacion extends _ctl_base
             </tr>";
             if (isset($docs['subir_documento'])) {
                 $res = "<tr>
-                <td>$docs[doc_tipo_documento_descripcion]</td>
-                <td colspan='6'>$docs[subir_documento]</td>
+                <td class='td-doc'><div class='descripcion-doc'>$docs[doc_tipo_documento_descripcion]</div></td>
+                <td colspan='4'>$docs[subir_documento]</td>
                 </tr>";
+            } else {
+                $ver_descripcion = true;
+                $doc_temp = array();
+                $doc_temp['inm_doc_id'] = $docs['inm_doc_id'];
+                $doc_temp['ruta_doc'] = $docs['ruta_doc'];
+                $ruta_docs[] = $doc_temp;
             }
+
             $temp[] = $res;
         }
 
+        $this->ver_descripcion = $ver_descripcion;
+        $this->ruta_docs = '<div id="ruta-docs" hidden>' . json_encode($ruta_docs) . '</div>';
         $this->inm_conf_docs_ubicacion = $temp;
 
         $params = array();
@@ -2739,7 +2754,7 @@ class controlador_inm_ubicacion extends _ctl_base
 */
         //print_r($this->row_upd);
 
-        return $inm_conf_docs_ubicacion;
+        return $this->inputs;
     }
 
     public function documentos_bd(bool $header, bool $ws = false): array|stdClass
@@ -5809,16 +5824,16 @@ class controlador_inm_ubicacion extends _ctl_base
 
     public function tipos_documentos(bool $header, bool $ws = false): array
     {
-        $inm_conf_docs_prospecto = (new _inm_ubicacion())->integra_inm_documentos_ubicacion(controler: $this);
+        $inm_conf_docs_ubicacion = (new _inm_ubicacion())->integra_inm_documentos(controler: $this);
         if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al integrar buttons', data: $inm_conf_docs_prospecto,
+            return $this->retorno_error(mensaje: 'Error al integrar buttons', data: $inm_conf_docs_ubicacion,
                 header: $header, ws: $ws);
         }
 
-        $salida['draw'] = count($inm_conf_docs_prospecto);
-        $salida['recordsTotal'] = count($inm_conf_docs_prospecto);
-        $salida['recordsFiltered'] = count($inm_conf_docs_prospecto);
-        $salida['data'] = $inm_conf_docs_prospecto;
+        $salida['draw'] = count($inm_conf_docs_ubicacion);
+        $salida['recordsTotal'] = count($inm_conf_docs_ubicacion);
+        $salida['recordsFiltered'] = count($inm_conf_docs_ubicacion);
+        $salida['data'] = $inm_conf_docs_ubicacion;
 
         header('Content-Type: application/json');
         echo json_encode($salida);

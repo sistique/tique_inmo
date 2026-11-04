@@ -260,6 +260,7 @@
                                                             </tbody>
                                                         </table>
                                                     </div>
+                                                    <?php echo $controlador->ruta_docs; ?>
                                                     <?php echo $controlador->inputs->btn_action_next; ?>
                                                     <?php echo $controlador->inputs->id_retorno; ?>
                                                     <?php echo $controlador->inputs->seccion_retorno; ?>
@@ -1153,9 +1154,23 @@
 
 <dialog id="myModal">
     <span class="close-btn" id="closeModalBtn">&times;</span>
-    <h2>Vista Previa</h2>
+
+    <button type="button" class="preview-arrow preview-prev" id="previewPrev">
+        &#10094;
+    </button>
+
     <div class="content">
+        <iframe class="col-md-12 view" height="100%" src="<?php echo $controlador->ruta_doc; ?>"></iframe>
     </div>
+
+    <button type="button" class="preview-arrow preview-next" id="previewNext">
+        &#10095;
+    </button>
+
+    <div class="preview-counter" id="previewCounter">
+        Documento 1 de 1
+    </div>
+
 </dialog>
 
 <div id="myModalImg" class="modal">
