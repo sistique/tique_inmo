@@ -10,6 +10,7 @@ namespace gamboamartin\inmuebles\controllers;
 
 use base\controller\init;
 use config\generales;
+use gamboamartin\calculo\calculo;
 use gamboamartin\banco\models\bn_cuenta;
 use gamboamartin\cat_sat\models\cat_sat_moneda;
 use gamboamartin\cat_sat\models\cat_sat_tipo_de_comprobante;
@@ -55,6 +56,7 @@ use gamboamartin\inmuebles\models\inm_conf_docs_comprador;
 use gamboamartin\inmuebles\models\inm_conf_docs_ubicacion;
 use gamboamartin\inmuebles\models\inm_doc_comprador;
 use gamboamartin\inmuebles\models\inm_doc_ubicacion;
+use gamboamartin\inmuebles\models\inm_co_acreditado;
 use gamboamartin\inmuebles\models\inm_escritura;
 use gamboamartin\inmuebles\models\inm_firma;
 use gamboamartin\inmuebles\models\inm_nacionalidad;
@@ -73,6 +75,7 @@ use gamboamartin\inmuebles\models\inm_rel_transferencia_comprador;
 use gamboamartin\inmuebles\models\inm_rel_ubi_comp;
 use gamboamartin\inmuebles\models\inm_status_comprador;
 use gamboamartin\inmuebles\models\inm_status_prospecto;
+use gamboamartin\inmuebles\models\inm_tipo_beneficiario;
 use gamboamartin\inmuebles\models\inm_ubicacion;
 use gamboamartin\notificaciones\models\not_emisor;
 use gamboamartin\notificaciones\models\not_mensaje;
@@ -295,6 +298,212 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         $this->link_exportar_xls = $link_exportar_xls;
+    }
+
+    public function generales(bool $header, bool $ws = false): array|stdClass
+    {
+        $inm_comprador = (new inm_comprador(link: $this->link))->registro(
+            registro_id: $this->registro_id, retorno_obj: true
+        );
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener datos del comprador',
+                data: $inm_comprador, header: $header, ws: $ws);
+        }
+
+        $nombre_completo = (new _generales())->nombre_completo(
+            name_entidad: 'inm_comprador', row: $inm_comprador
+        );
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener nombre completo del comprador',
+                data: $nombre_completo, header: $header, ws: $ws);
+        }
+        $inm_comprador->inm_comprador_nombre_completo = $nombre_completo;
+
+        $lugar_fecha_nac = (new _generales())->data_nacimiento(
+            entidad_edo: 'dp_estado_nacimiento', entidad_mun: 'dp_municipio_nacimiento',
+            entidad_name: 'inm_comprador', row: $inm_comprador
+        );
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener lugar y fecha de nacimiento',
+                data: $lugar_fecha_nac, header: $header, ws: $ws);
+        }
+        $inm_comprador->inm_comprador_lugar_fecha_nac = $lugar_fecha_nac;
+
+        $edad = (new calculo())->edad_hoy(fecha_nacimiento: $inm_comprador->inm_comprador_fecha_nacimiento);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al calcular edad del comprador',
+                data: $edad, header: $header, ws: $ws);
+        }
+        $inm_comprador->inm_comprador_edad = $edad;
+
+        $this->registro = new stdClass();
+        $this->registro->inm_comprador = $inm_comprador;
+
+        $inm_co_acreditados = (new inm_co_acreditado(link: $this->link))->inm_co_acreditados(
+            inm_comprador_id: $this->registro_id
+        );
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener co-acreditados',
+                data: $inm_co_acreditados, header: $header, ws: $ws);
+        }
+        $this->registro->inm_co_acreditados = array_map(
+            static fn(array|stdClass $row): array => is_array($row) ? $row : (array)$row,
+            $inm_co_acreditados
+        );
+
+        $inm_conyuge = $this->init_conyuge_comprador(header: $header, ws: $ws);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al inicializar cónyuge',
+                data: $inm_conyuge, header: $header, ws: $ws);
+        }
+        $this->registro->inm_conyuge = $inm_conyuge;
+
+        $inm_tipo_beneficiarios = $this->init_beneficiarios_comprador(header: $header, ws: $ws);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al inicializar beneficiarios',
+                data: $inm_tipo_beneficiarios, header: $header, ws: $ws);
+        }
+        $this->registro->inm_tipo_beneficiarios = $inm_tipo_beneficiarios;
+
+        $inm_referencias = $this->init_referencias_comprador(header: $header, ws: $ws);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al inicializar referencias',
+                data: $inm_referencias, header: $header, ws: $ws);
+        }
+        $this->registro->inm_referencias = $inm_referencias;
+
+        return new stdClass();
+    }
+
+    private function init_conyuge_comprador(bool $header, bool $ws): array|stdClass
+    {
+        $inm_conyuge = (new _generales())->inm_conyuge_init();
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al inicializar cónyuge',
+                data: $inm_conyuge, header: $header, ws: $ws);
+        }
+        $inm_conyuge->inm_conyuge_lugar_fecha_nac = '';
+
+        $existe_conyuge = (new inm_comprador(link: $this->link))->existe_conyuge(
+            inm_comprador_id: $this->registro_id
+        );
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al validar existencia de cónyuge',
+                data: $existe_conyuge, header: $header, ws: $ws);
+        }
+        if (!$existe_conyuge) {
+            return $inm_conyuge;
+        }
+
+        $inm_conyuge = (new inm_comprador(link: $this->link))->inm_conyuge(
+            columnas_en_bruto: false, inm_comprador_id: $this->registro_id,
+            link: $this->link, retorno_obj: true
+        );
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener datos del cónyuge',
+                data: $inm_conyuge, header: $header, ws: $ws);
+        }
+
+        $nombre_completo = (new _generales())->nombre_completo(
+            name_entidad: 'inm_conyuge', row: $inm_conyuge
+        );
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener nombre completo del cónyuge',
+                data: $nombre_completo, header: $header, ws: $ws);
+        }
+        $inm_conyuge->inm_conyuge_nombre_completo = $nombre_completo;
+
+        $lugar_fecha_nac = (new _generales())->data_nacimiento(
+            entidad_edo: 'dp_estado', entidad_mun: 'dp_municipio',
+            entidad_name: 'inm_conyuge', row: $inm_conyuge
+        );
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener lugar y fecha de nacimiento del cónyuge',
+                data: $lugar_fecha_nac, header: $header, ws: $ws);
+        }
+        $inm_conyuge->inm_conyuge_lugar_fecha_nac = $lugar_fecha_nac;
+
+        $edad = (new calculo())->edad_hoy(fecha_nacimiento: $inm_conyuge->inm_conyuge_fecha_nacimiento);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al calcular edad del cónyuge',
+                data: $edad, header: $header, ws: $ws);
+        }
+        $inm_conyuge->inm_conyuge_edad = $edad . ' AÑOS';
+        $inm_conyuge->inm_conyuge_estado_civil = $this->registro->inm_comprador->inm_estado_civil_descripcion;
+
+        return $inm_conyuge;
+    }
+
+    private function init_beneficiarios_comprador(bool $header, bool $ws): array|stdClass
+    {
+        $inm_tipo_beneficiarios = (new inm_tipo_beneficiario(link: $this->link))->registros_activos(
+            retorno_obj: true
+        );
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener tipos de beneficiario',
+                data: $inm_tipo_beneficiarios, header: $header, ws: $ws);
+        }
+
+        $r_beneficiarios = (new inm_rel_beneficiario_comprador(link: $this->link))->filtro_and(
+            filtro: array('inm_comprador.id' => $this->registro_id)
+        );
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener beneficiarios del comprador',
+                data: $r_beneficiarios, header: $header, ws: $ws);
+        }
+
+        foreach ($inm_tipo_beneficiarios as $inm_tipo_beneficiario) {
+            $inm_tipo_beneficiario->inm_beneficiarios = array();
+            foreach ($r_beneficiarios->registros as $row) {
+                $inm_beneficiario = is_array($row) ? (object)$row : $row;
+                if (($inm_beneficiario->inm_tipo_beneficiario_descripcion ?? null)
+                    !== $inm_tipo_beneficiario->inm_tipo_beneficiario_descripcion
+                ) {
+                    continue;
+                }
+
+                $nombre_completo = (new _generales())->nombre_completo(
+                    name_entidad: 'inm_beneficiario', row: $inm_beneficiario
+                );
+                if (errores::$error) {
+                    return $this->retorno_error(mensaje: 'Error al obtener nombre del beneficiario',
+                        data: $nombre_completo, header: $header, ws: $ws);
+                }
+                $inm_beneficiario->inm_beneficiario_nombre_completo = $nombre_completo;
+                $inm_tipo_beneficiario->inm_beneficiarios[] = $inm_beneficiario;
+            }
+        }
+
+        return $inm_tipo_beneficiarios;
+    }
+
+    private function init_referencias_comprador(bool $header, bool $ws): array|stdClass
+    {
+        $inm_referencias = (new inm_referencia(link: $this->link))->inm_referencias(
+            inm_comprador_id: $this->registro_id
+        );
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener referencias del comprador',
+                data: $inm_referencias, header: $header, ws: $ws);
+        }
+
+        foreach ($inm_referencias as $indice => $row) {
+            $inm_referencia = is_array($row) ? (object)$row : $row;
+            $nombre_completo = (new _generales())->nombre_completo(
+                name_entidad: 'inm_referencia', row: $inm_referencia
+            );
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al obtener nombre completo de la referencia',
+                    data: $nombre_completo, header: $header, ws: $ws);
+            }
+
+            $inm_referencia->inm_referencia_comprador_nombre_completo = $nombre_completo;
+            $inm_referencia->inm_referencia_comprador_telefono = $inm_referencia->inm_referencia_numero ?? '';
+            $inm_referencia->inm_referencia_comprador_celular = $inm_referencia->inm_referencia_celular ?? '';
+            $inm_referencias[$indice] = $inm_referencia;
+        }
+
+        return $inm_referencias;
     }
 
     /**

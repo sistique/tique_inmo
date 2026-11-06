@@ -115,9 +115,21 @@ echo "<style>
         <div class="contenedor_completo">
             <div class="filtros-avanzados">
                 <div class="filtro-grupo col-md-12">
+                    <div class="filtros col-md-1">
+                        <label for="id">ID</label>
+                        <input type="text" id="id" data-tipo="data" data-filtro_campo="inm_prospecto.id" placeholder="Ej: 1 ">
+                    </div>
+
                     <div class="col-md-2">
-                        <label for="ID">ID</label>
-                        <input type="text" id="id" data-tipo="data" data-filtro_campo="inm_prospecto.id" placeholder="Ej: 1">
+                        <label for="nss">NSS</label>
+                        <input type="text" id="nss" data-tipo="filtro" data-filtro_campo="inm_prospecto.nss"
+                               placeholder="Ej: 9999999999">
+                    </div>
+
+                    <div class="col-md-2">
+                        <label for="Nombre Prospecto">Nombre Prospecto</label>
+                        <input type="text" id="nombre_prospecto" data-tipo="filtro" data-filtro_campo="inm_prospecto.razon_social"
+                               placeholder="Ej: JUAN PEREZ">
                     </div>
                     
                     <div class="col-md-2">
@@ -132,17 +144,7 @@ echo "<style>
                             ?>
                         </select>
                     </div>
-                    <div class="col-md-2">
-                        <label for="Nombre Prospecto">Nombre Prospecto</label>
-                        <input type="text" id="nombre_prospecto" data-tipo="filtro" data-filtro_campo="inm_prospecto.razon_social"
-                               placeholder="Ej: JUAN PEREZ">
-                    </div>
 
-                    <div class="col-md-2">
-                        <label for="nss">NSS</label>
-                        <input type="text" id="nss" data-tipo="filtro" data-filtro_campo="inm_prospecto.nss"
-                               placeholder="Ej: 9999999999">
-                    </div>
                     <?php
                     if(!$controlador->es_agente){
                         echo '<div class="col-md-2">
