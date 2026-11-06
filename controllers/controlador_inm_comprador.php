@@ -4208,88 +4208,6 @@ class controlador_inm_comprador extends _ctl_base {
             return (new errores())->error(mensaje: 'Error al insertar mensaje', data: $r_not_mensaje);
         }
 
-        $documentos_cliente_post = $_POST['documentos_cliente'] ?? array();
-        $documentos_ubicacion_post = $_POST['documentos_ubicacion'] ?? array();
-        if (!is_array($documentos_cliente_post) || !is_array($documentos_ubicacion_post)) {
-            $this->link->rollBack();
-            return $this->retorno_error(mensaje: 'La selección de documentos no es válida',
-                data: array(), header: $header, ws: $ws);
-        }
-
-        $filtro_docs_cliente['inm_comprador.id'] = $this->registro_id;
-        $docs_cliente = (new inm_doc_comprador(link: $this->link))->filtro_and(filtro: $filtro_docs_cliente);
-        if (errores::$error) {
-            $this->link->rollBack();
-            return $this->retorno_error(mensaje: 'Error al validar documentos del cliente',
-                data: $docs_cliente, header: $header, ws: $ws);
-        }
-        $documentos_cliente_validos = array_fill_keys(array_map(
-            static fn(array $documento): int => (int)$documento['doc_documento_id'],
-            $docs_cliente->registros
-        ), true);
-
-        $filtro_rel_ubicacion['inm_rel_ubi_comp.status'] = 'activo';
-        $filtro_rel_ubicacion['inm_comprador.id'] = $this->registro_id;
-        $relaciones_ubicacion = (new inm_rel_ubi_comp(link: $this->link))->filtro_and(
-            filtro: $filtro_rel_ubicacion);
-        if (errores::$error) {
-            $this->link->rollBack();
-            return $this->retorno_error(mensaje: 'Error al validar la ubicación del cliente',
-                data: $relaciones_ubicacion, header: $header, ws: $ws);
-        }
-
-        $ubicaciones_ids = array_values(array_unique(array_map(
-            static fn(array $relacion): int => (int)$relacion['inm_ubicacion_id'],
-            $relaciones_ubicacion->registros
-        )));
-        $documentos_ubicacion_validos = array();
-        foreach ($ubicaciones_ids as $ubicacion_id) {
-            $filtro_docs_ubicacion['inm_ubicacion.id'] = $ubicacion_id;
-            $docs_ubicacion = (new inm_doc_ubicacion(link: $this->link))->filtro_and(
-                filtro: $filtro_docs_ubicacion);
-            if (errores::$error) {
-                $this->link->rollBack();
-                return $this->retorno_error(mensaje: 'Error al validar documentos de la ubicación',
-                    data: $docs_ubicacion, header: $header, ws: $ws);
-            }
-            foreach ($docs_ubicacion->registros as $documento) {
-                $documentos_ubicacion_validos[(int)$documento['doc_documento_id']] = true;
-            }
-        }
-
-        $documentos_adjuntos = array();
-        $documentos_por_origen = array(
-            array('seleccionados' => $documentos_cliente_post, 'permitidos' => $documentos_cliente_validos),
-            array('seleccionados' => $documentos_ubicacion_post, 'permitidos' => $documentos_ubicacion_validos)
-        );
-        foreach ($documentos_por_origen as $origen) {
-            foreach ($origen['seleccionados'] as $documento_id) {
-                if (!is_scalar($documento_id)) {
-                    $this->link->rollBack();
-                    return $this->retorno_error(mensaje: 'La selección contiene un documento no válido',
-                        data: array(), header: $header, ws: $ws);
-                }
-                $documento_id = filter_var($documento_id, FILTER_VALIDATE_INT);
-                if ($documento_id === false || $documento_id <= 0 ||
-                    !isset($origen['permitidos'][$documento_id])) {
-                    $this->link->rollBack();
-                    return $this->retorno_error(mensaje: 'La selección contiene un documento no disponible',
-                        data: array('doc_documento_id' => $documento_id), header: $header, ws: $ws);
-                }
-                $documentos_adjuntos[$documento_id] = $documento_id;
-            }
-        }
-
-        $adjuntos = (new _email(link: $this->link))->adjuntos(
-            mensaje: $r_not_mensaje->registro_id,
-            documentos: array_values($documentos_adjuntos)
-        );
-        if (errores::$error) {
-            $this->link->rollBack();
-            return $this->retorno_error(mensaje: 'Error al adjuntar documentos al correo',
-                data: $adjuntos, header: $header, ws: $ws);
-        }
-
         $modelo_receptor = new not_receptor(link: $this->link);
         $filtro_receptor['not_receptor.email'] = $_POST['to'];
         $r_receptor = $modelo_receptor->filtro_and(filtro: $filtro_receptor);
@@ -4300,7 +4218,7 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         if ($r_receptor->n_registros <= 0) {
-            $modelo_receptor->registro = $_POST['to'];
+            $modelo_receptor->registro['email'] = $_POST['to'];
             $not_receptor = $modelo_receptor->alta_bd();
             if (errores::$error) {
                 $this->link->rollBack();
@@ -4338,6 +4256,97 @@ class controlador_inm_comprador extends _ctl_base {
             $this->link->rollBack();
             return $this->retorno_error(mensaje: 'Error a obtener relacion de mensaje y receptor',
                 data: $not_rel_mensaje, header: $header, ws: $ws);
+        }
+
+        $documentos_cliente_post = $_POST['documentos_cliente'] ?? array();
+        $documentos_ubicacion_post = $_POST['documentos_ubicacion'] ?? array();
+        if (!is_array($documentos_cliente_post) || !is_array($documentos_ubicacion_post)) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'La selección de documentos no es válida',
+                data: array(), header: $header, ws: $ws);
+        }
+
+        $filtro_docs_cliente['inm_comprador.id'] = $this->registro_id;
+        $docs_cliente = (new inm_doc_comprador(link: $this->link))->filtro_and(filtro: $filtro_docs_cliente);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al validar documentos del cliente',
+                data: $docs_cliente, header: $header, ws: $ws);
+        }
+
+        $documentos_cliente_validos = array();
+        foreach ($docs_cliente->registros as $documento) {
+            $documentos_cliente_validos[(int)$documento['doc_documento_id']] =
+                $documento['doc_tipo_documento_descripcion'] . ' - ' . $documento['inm_comprador_razon_social']
+                .'.' . $documento['doc_extension_descripcion'];
+        }
+
+        $filtro_rel_ubicacion['inm_rel_ubi_comp.status'] = 'activo';
+        $filtro_rel_ubicacion['inm_comprador.id'] = $this->registro_id;
+        $order = array('inm_rel_ubi_comp.id' => 'DESC');
+        $relaciones_ubicacion = (new inm_rel_ubi_comp(link: $this->link))->filtro_and(
+            filtro: $filtro_rel_ubicacion, order: $order);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al validar la ubicación del cliente',
+                data: $relaciones_ubicacion, header: $header, ws: $ws);
+        }
+
+        $ubicaciones_ids = array_values(array_unique(array_map(
+            static fn(array $relacion): int => (int)$relacion['inm_ubicacion_id'],
+            $relaciones_ubicacion->registros
+        )));
+
+        $documentos_ubicacion_validos = array();
+        foreach ($ubicaciones_ids as $ubicacion_id) {
+            $filtro_docs_ubicacion['inm_ubicacion.id'] = $ubicacion_id;
+            $docs_ubicacion = (new inm_doc_ubicacion(link: $this->link))->filtro_and(
+                filtro: $filtro_docs_ubicacion);
+            if (errores::$error) {
+                $this->link->rollBack();
+                return $this->retorno_error(mensaje: 'Error al validar documentos de la ubicación',
+                    data: $docs_ubicacion, header: $header, ws: $ws);
+            }
+            foreach ($docs_ubicacion->registros as $documento) {
+                $documentos_ubicacion_validos[(int)$documento['doc_documento_id']] =
+                    $documento['doc_tipo_documento_descripcion'] . ' - ' . $documento['inm_ubicacion_razon_social'] .
+                    '.' . $documento['doc_extension_descripcion'];
+            }
+        }
+
+        $documentos_adjuntos = array();
+        $documentos_por_origen = array(
+            array('seleccionados' => $documentos_cliente_post, 'permitidos' => $documentos_cliente_validos),
+            array('seleccionados' => $documentos_ubicacion_post, 'permitidos' => $documentos_ubicacion_validos)
+        );
+        foreach ($documentos_por_origen as $origen) {
+            foreach ($origen['seleccionados'] as $documento_id) {
+                if (!is_scalar($documento_id)) {
+                    $this->link->rollBack();
+                    return $this->retorno_error(mensaje: 'La selección contiene un documento no válido',
+                        data: array(), header: $header, ws: $ws);
+                }
+
+                $documento_id = filter_var($documento_id, FILTER_VALIDATE_INT);
+                if ($documento_id === false || $documento_id <= 0 ||
+                    !isset($origen['permitidos'][$documento_id])) {
+                    $this->link->rollBack();
+                    return $this->retorno_error(mensaje: 'La selección contiene un documento no disponible',
+                        data: array('doc_documento_id' => $documento_id), header: $header, ws: $ws);
+                }
+
+                $documentos_adjuntos[$documento_id] = array(
+                    'doc_documento_id' => $documento_id,
+                    'name_out' => $origen['permitidos'][$documento_id]);
+            }
+        }
+
+        $adjuntos = (new _email(link: $this->link))->adjuntos(mensaje: $r_not_mensaje->registro_id,
+            documentos: array_values($documentos_adjuntos));
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al adjuntar documentos al correo',
+                data: $adjuntos, header: $header, ws: $ws);
         }
 
         $envios = (new _email(link: $this->link))->notifica(not_mensaje: $not_rel_mensaje,link: $this->link,

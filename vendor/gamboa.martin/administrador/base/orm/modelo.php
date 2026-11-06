@@ -552,8 +552,6 @@ class modelo extends modelo_base
      */
     public function alta_registro(array $registro): array|stdClass
     {
-
-
         if (!isset($_SESSION['usuario_id'])) {
             return $this->error->error(mensaje: 'Error SESSION no iniciada', data: array(), es_final: true);
         }
@@ -562,6 +560,7 @@ class modelo extends modelo_base
             return $this->error->error(mensaje: 'Error USUARIO INVALIDO en modelo ' . $this->tabla,
                 data: $_SESSION['usuario_id'], es_final: true);
         }
+
         if (!$this->aplica_transacciones_base) {
             return $this->error->error(mensaje: 'Error solo se puede transaccionar desde layout',
                 data: $this->registro, es_final: true);

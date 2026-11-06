@@ -333,26 +333,36 @@ class _email
         return (new not_rel_mensaje(link: $this->link))->registro(registro_id: $alta_not_mensaje_receptor->registro_id);
     }
 
-    public function adjunto(int $mensaje, int $documento): array
+    public function adjunto(int $mensaje, int $documento, string $name_out = ''): array|stdClass
     {
         $alta_not_adjunto = (new not_adjunto(link: $this->link))->alta_registro(
             array(
                 'not_mensaje_id' => $mensaje,
                 'doc_documento_id' => $documento,
+                'name_out' => $name_out
             ));
         if (errores::$error) {
             $mensaje_error = sprintf(self::ERROR_AL_INSERTAR, 'adjunto');
             return (new errores())->error(mensaje: $mensaje_error, data: $alta_not_adjunto);
         }
 
-        return (new not_rel_mensaje(link: $this->link))->registro(registro_id: $alta_not_adjunto->registro_id);
+        return $alta_not_adjunto;
     }
 
     public function adjuntos(int $mensaje, array $documentos): array
     {
         $resultado = array();
         foreach ($documentos as $documento) {
-            $resultado[] = $this->adjunto(mensaje: $mensaje, documento: $documento);
+            $name_out = '';
+            if(is_array($documento)){
+                $name_out = $documento['name_out'] ?? '';
+                $documento = $documento['doc_documento_id'];
+            }
+
+            $resultado[] = $this->adjunto(mensaje: $mensaje, documento: (int)$documento, name_out: $name_out);
+            if (errores::$error) {
+                return (new errores())->error(mensaje: 'Error al insertar adjunto', data: $resultado);
+            }
         }
 
         return $resultado;
