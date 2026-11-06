@@ -126,10 +126,23 @@ echo "<style>
                                placeholder="Ej: 9999999999">
                     </div>
 
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                         <label for="Nombre Prospecto">Nombre Prospecto</label>
                         <input type="text" id="nombre_prospecto" data-tipo="filtro" data-filtro_campo="inm_prospecto.razon_social"
                                placeholder="Ej: JUAN PEREZ">
+                    </div>
+
+                    <?php
+                    if(!$controlador->es_agente){
+                        echo '<div class="col-md-2">
+                                    <label for="agente">Prospectador</label>
+                                    <input type="text" id="agente" data-tipo="filtro" data-filtro_campo="com_agente.descripcion" placeholder="Ej: JUAN PEREZ">
+                                </div>';
+                    }
+                    ?>
+                    <div class='col-md-2'>
+                        <label for='agente_cerrador'>Cerrador</label>
+                        <input type='text' id='agente_cerrador' data-tipo='filtro' data-filtro_campo='" . $controlador->modelo->columnas_extra['com_agente_cerrador_descripcion'] . "' placeholder='Ej: JUAN PEREZ'>
                     </div>
                     
                     <div class="col-md-2">
@@ -145,18 +158,6 @@ echo "<style>
                         </select>
                     </div>
 
-                    <?php
-                    if(!$controlador->es_agente){
-                        echo '<div class="col-md-2">
-                                    <label for="agente">Prospectador</label>
-                                    <input type="text" id="agente" data-tipo="filtro" data-filtro_campo="com_agente.descripcion" placeholder="Ej: JUAN PEREZ">
-                                </div>';
-                        echo "<div class='col-md-2'>
-                                    <label for='agente_cerrador'>Cerrador</label>
-                                    <input type='text' id='agente_cerrador' data-tipo='filtro' data-filtro_campo='" . $controlador->modelo->columnas_extra['com_agente_cerrador_descripcion'] . "' placeholder='Ej: JUAN PEREZ'>
-                                </div>";
-                    }
-                    ?>
                     <div class="col-md-2">
                         <label for="fecha_inicio">Fecha Alta Inicio</label>
                         <input type="date" id="fecha_inicio" data-tipo="rango-fechas" data-filtro_campo="inm_prospecto.fecha_alta"

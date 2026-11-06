@@ -1661,7 +1661,6 @@ class controlador_inm_prospecto extends _ctl_formato
         $columns["inm_prospecto_id"]["titulo"] = "Id";
         $columns["inm_prospecto_nss"]["titulo"] = "NSS";
         $columns["com_prospecto_razon_social"]["titulo"] = "Nombre";
-        $columns["inm_prospecto_fecha_alta"]["titulo"] = "Fecha Alta";
         $columns["inm_prospecto_password_mi_cuenta_infonavit"]["titulo"] = "Contraseña";
         if(!$existe){
             $columns["inm_prospecto_monto_credito_solicitado_dh"]["titulo"] = "Precalificacion";
@@ -1670,7 +1669,7 @@ class controlador_inm_prospecto extends _ctl_formato
         $columns["com_agente_cerrador_descripcion"]["titulo"] = "Cerrador";
         $columns["inm_tipo_venta_descripcion"]["titulo"] = "Tipo Venta";
         $columns["inm_status_prospecto_descripcion"]["titulo"] = "Status Prospecto";
-
+        $columns["inm_prospecto_fecha_alta"]["titulo"] = "Fecha Alta";
 
         $filtro = array("inm_prospecto.id", "inm_prospecto.razon_social", 'inm_prospecto.nss',
             'inm_prospecto.monto_credito_solicitado_dh','inm_prospecto.fecha_alta', 'com_agente.descripcion',
