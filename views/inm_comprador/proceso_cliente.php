@@ -1439,9 +1439,64 @@
         </div>
 
         <div class="mmDocumentos" id="mmDocumentos">
-            <?php foreach ($controlador->documentos_avaluo as $documento) { echo $documento['doc_documento_id']; ?>
-
-            <?php } ?>
+            <?php
+            $documentos_cliente = array_values(array_filter(
+                $controlador->documentos_cliente,
+                static fn(array $documento): bool => (int)($documento['doc_documento_id'] ?? -1) > 0
+            ));
+            $documentos_ubicacion = array_values(array_filter(
+                $controlador->documentos_ubicacion,
+                static fn(array $documento): bool => (int)($documento['doc_documento_id'] ?? -1) > 0
+            ));
+            ?>
+            <section class="mm-doc-group">
+                <button type="button" class="mm-doc-toggle" aria-expanded="false" aria-controls="mmDocsCliente"
+                        <?php echo empty($documentos_cliente) ? 'disabled' : ''; ?>>
+                    <span>Documentos del cliente</span>
+                    <span class="mm-doc-count"><?php echo count($documentos_cliente); ?></span>
+                    <span class="mm-doc-chevron" aria-hidden="true">⌄</span>
+                </button>
+                <div class="mm-doc-list" id="mmDocsCliente" hidden>
+                    <?php if (empty($documentos_cliente)) { ?>
+                        <p class="mm-doc-empty">No hay documentos del cliente disponibles.</p>
+                    <?php } else { ?>
+                        <?php foreach ($documentos_cliente as $documento) { ?>
+                            <label class="mm-doc-item">
+                                <input type="checkbox" name="documentos_cliente[]"
+                                       value="<?php echo (int)$documento['doc_documento_id']; ?>" checked>
+                                <span class="mm-doc-name"><?php echo htmlspecialchars(
+                                    $documento['doc_tipo_documento_descripcion'], ENT_QUOTES, 'UTF-8'
+                                ); ?></span>
+                                <span class="mm-doc-state">Se adjuntará</span>
+                            </label>
+                        <?php } ?>
+                    <?php } ?>
+                </div>
+            </section>
+            <section class="mm-doc-group">
+                <button type="button" class="mm-doc-toggle" aria-expanded="false" aria-controls="mmDocsUbicacion"
+                        <?php echo empty($documentos_ubicacion) ? 'disabled' : ''; ?>>
+                    <span>Documentos de la ubicación</span>
+                    <span class="mm-doc-count"><?php echo count($documentos_ubicacion); ?></span>
+                    <span class="mm-doc-chevron" aria-hidden="true">⌄</span>
+                </button>
+                <div class="mm-doc-list" id="mmDocsUbicacion" hidden>
+                    <?php if (empty($documentos_ubicacion)) { ?>
+                        <p class="mm-doc-empty">No hay documentos de la ubicación disponibles.</p>
+                    <?php } else { ?>
+                        <?php foreach ($documentos_ubicacion as $documento) { ?>
+                            <label class="mm-doc-item">
+                                <input type="checkbox" name="documentos_ubicacion[]"
+                                       value="<?php echo (int)$documento['doc_documento_id']; ?>" checked>
+                                <span class="mm-doc-name"><?php echo htmlspecialchars(
+                                    $documento['doc_tipo_documento_descripcion'], ENT_QUOTES, 'UTF-8'
+                                ); ?></span>
+                                <span class="mm-doc-state">Se adjuntará</span>
+                            </label>
+                        <?php } ?>
+                    <?php } ?>
+                </div>
+            </section>
         </div>
 
         <div class="mm-files" id="mmFiles"></div>
@@ -1455,7 +1510,6 @@
         </div>
     </form>
 </dialog>
-
 
 
 

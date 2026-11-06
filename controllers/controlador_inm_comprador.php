@@ -257,7 +257,8 @@ class controlador_inm_comprador extends _ctl_base {
     public array $complementos_pago = array();
 
     public string $ruta_docs = '';
-    public array $documentos_avaluo = array();
+    public array $documentos_cliente = array();
+    public array $documentos_ubicacion = array();
 
     public bool $ver_descripcion = false;
 
@@ -2756,7 +2757,8 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         /* Correo */
-        $archivos = array();
+        $archivos_cliente = array();
+        $archivos_ubicacion = array();
         if($registro_valuador->n_registros > 0) {
             $correo = $registro_valuador->registros[0]['gt_proveedor_correo'];
 
@@ -2852,6 +2854,10 @@ class controlador_inm_comprador extends _ctl_base {
             ";
 
             $filtro['inm_conf_docs_comprador.es_foto'] = 'inactivo';
+            $filtro['inm_conf_docs_comprador.con_conyuge'] = 'inactivo';
+            $filtro['inm_conf_docs_comprador.con_co_acreditado'] = 'inactivo';
+            $filtro['inm_conf_docs_comprador.con_beneficiario'] = '0';
+            $filtro['inm_institucion_hipotecaria.id'] = $registro->registros[0]['inm_institucion_hipotecaria_id'];
             $not_in = array();
             $not_in['llave'] = 'doc_tipo_documento.descripcion';
             $not_in['values'] = array('VIGENCIA INE', 'RELACIONES LABORALES', 'AFORE');
@@ -2871,12 +2877,14 @@ class controlador_inm_comprador extends _ctl_base {
                         ws:  $ws);
                 }
 
-                if($docs->n_registros > 0){
-                    $archivos[] = $docs->registros[0];
-                }
+                $archivos_cliente[] = array(
+                    'doc_tipo_documento_descripcion' => $conf_doc['doc_tipo_documento_descripcion'],
+                    'doc_documento_id' => $docs->registros[0]['doc_documento_id'] ?? -1);
             }
 
             $filtro_ubi['inm_conf_docs_ubicacion.es_foto'] = 'inactivo';
+            $filtro_ubi['inm_conf_docs_ubicacion.con_conyuge'] = 'inactivo';
+            $filtro_ubi['inm_conf_docs_ubicacion.con_co_acreditado'] = 'inactivo';
             $not_in = array();
             $not_in['llave'] = 'doc_tipo_documento.descripcion';
             $not_in['values'] = array('VIGENCIA INE', 'PREDIAL', 'AGUA', 'PODER ORIGINAL',
@@ -2898,12 +2906,14 @@ class controlador_inm_comprador extends _ctl_base {
                         ws: $ws);
                 }
 
-                if($docs->n_registros > 0){
-                    $archivos[] = $docs->registros[0];
-                }            }
+                $archivos_ubicacion[] = array(
+                    'doc_tipo_documento_descripcion' => $conf_doc['doc_tipo_documento_descripcion'],
+                    'doc_documento_id' => $docs->registros[0]['doc_documento_id'] ?? -1);
+            }
         }
 
-        $this->documentos_avaluo = $archivos;
+        $this->documentos_cliente = $archivos_cliente;
+        $this->documentos_ubicacion = $archivos_ubicacion;
 
         $params = array();
         if (isset($_GET['accion']) && $_GET['accion'] == 'proceso_cliente') {
@@ -3985,7 +3995,90 @@ class controlador_inm_comprador extends _ctl_base {
         $not_mensaje_ins['not_emisor_id'] = $not_emisor[$indice]['not_emisor_id'];
         $r_not_mensaje = (new not_mensaje(link: $this->link))->alta_registro(registro: $not_mensaje_ins);
         if (errores::$error) {
+            $this->link->rollBack();
             return (new errores())->error(mensaje: 'Error al insertar mensaje', data: $r_not_mensaje);
+        }
+
+        $documentos_cliente_post = $_POST['documentos_cliente'] ?? array();
+        $documentos_ubicacion_post = $_POST['documentos_ubicacion'] ?? array();
+        if (!is_array($documentos_cliente_post) || !is_array($documentos_ubicacion_post)) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'La selección de documentos no es válida',
+                data: array(), header: $header, ws: $ws);
+        }
+
+        $filtro_docs_cliente['inm_comprador.id'] = $this->registro_id;
+        $docs_cliente = (new inm_doc_comprador(link: $this->link))->filtro_and(filtro: $filtro_docs_cliente);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al validar documentos del cliente',
+                data: $docs_cliente, header: $header, ws: $ws);
+        }
+        $documentos_cliente_validos = array_fill_keys(array_map(
+            static fn(array $documento): int => (int)$documento['doc_documento_id'],
+            $docs_cliente->registros
+        ), true);
+
+        $filtro_rel_ubicacion['inm_rel_ubi_comp.status'] = 'activo';
+        $filtro_rel_ubicacion['inm_comprador.id'] = $this->registro_id;
+        $relaciones_ubicacion = (new inm_rel_ubi_comp(link: $this->link))->filtro_and(
+            filtro: $filtro_rel_ubicacion);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al validar la ubicación del cliente',
+                data: $relaciones_ubicacion, header: $header, ws: $ws);
+        }
+
+        $ubicaciones_ids = array_values(array_unique(array_map(
+            static fn(array $relacion): int => (int)$relacion['inm_ubicacion_id'],
+            $relaciones_ubicacion->registros
+        )));
+        $documentos_ubicacion_validos = array();
+        foreach ($ubicaciones_ids as $ubicacion_id) {
+            $filtro_docs_ubicacion['inm_ubicacion.id'] = $ubicacion_id;
+            $docs_ubicacion = (new inm_doc_ubicacion(link: $this->link))->filtro_and(
+                filtro: $filtro_docs_ubicacion);
+            if (errores::$error) {
+                $this->link->rollBack();
+                return $this->retorno_error(mensaje: 'Error al validar documentos de la ubicación',
+                    data: $docs_ubicacion, header: $header, ws: $ws);
+            }
+            foreach ($docs_ubicacion->registros as $documento) {
+                $documentos_ubicacion_validos[(int)$documento['doc_documento_id']] = true;
+            }
+        }
+
+        $documentos_adjuntos = array();
+        $documentos_por_origen = array(
+            array('seleccionados' => $documentos_cliente_post, 'permitidos' => $documentos_cliente_validos),
+            array('seleccionados' => $documentos_ubicacion_post, 'permitidos' => $documentos_ubicacion_validos)
+        );
+        foreach ($documentos_por_origen as $origen) {
+            foreach ($origen['seleccionados'] as $documento_id) {
+                if (!is_scalar($documento_id)) {
+                    $this->link->rollBack();
+                    return $this->retorno_error(mensaje: 'La selección contiene un documento no válido',
+                        data: array(), header: $header, ws: $ws);
+                }
+                $documento_id = filter_var($documento_id, FILTER_VALIDATE_INT);
+                if ($documento_id === false || $documento_id <= 0 ||
+                    !isset($origen['permitidos'][$documento_id])) {
+                    $this->link->rollBack();
+                    return $this->retorno_error(mensaje: 'La selección contiene un documento no disponible',
+                        data: array('doc_documento_id' => $documento_id), header: $header, ws: $ws);
+                }
+                $documentos_adjuntos[$documento_id] = $documento_id;
+            }
+        }
+
+        $adjuntos = (new _email(link: $this->link))->adjuntos(
+            mensaje: $r_not_mensaje->registro_id,
+            documentos: array_values($documentos_adjuntos)
+        );
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al adjuntar documentos al correo',
+                data: $adjuntos, header: $header, ws: $ws);
         }
 
         $modelo_receptor = new not_receptor(link: $this->link);

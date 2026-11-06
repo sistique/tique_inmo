@@ -18,7 +18,7 @@ class inm_rel_comprador_com_cliente extends _modelo_parent{
             'dp_municipio'=>'dp_cp', 'dp_estado'=>'dp_municipio','dp_pais'=>'dp_estado',
             'cat_sat_regimen_fiscal'=>'com_cliente','cat_sat_moneda'=>'com_cliente','cat_sat_forma_pago'=>'com_cliente',
             'cat_sat_metodo_pago'=>'com_cliente', 'cat_sat_uso_cfdi'=>'com_cliente',
-            'cat_sat_tipo_persona'=>'com_cliente');
+            'cat_sat_tipo_persona'=>'com_cliente', 'inm_institucion_hipotecaria'=>'inm_comprador');
 
         $campos_obligatorios = array('inm_comprador_id','com_cliente_id');
 

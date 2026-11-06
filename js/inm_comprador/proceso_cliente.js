@@ -1789,6 +1789,22 @@ $('#inm_conf_cuenta_notaria_id').change(function (){
     dlg.querySelectorAll('[data-toggle]').forEach(b =>
         b.onclick = () => $(b.dataset.toggle).classList.toggle('hidden'));
 
+    // ---- Documentos existentes para adjuntar ----
+    dlg.querySelectorAll('.mm-doc-toggle').forEach(button => {
+        button.addEventListener('click', () => {
+            const list = $(button.getAttribute('aria-controls'));
+            const expanded = button.getAttribute('aria-expanded') === 'true';
+            button.setAttribute('aria-expanded', String(!expanded));
+            list.hidden = expanded;
+        });
+    });
+    dlg.querySelectorAll('.mm-doc-item input[type="checkbox"]').forEach(checkbox => {
+        checkbox.addEventListener('change', () => {
+            checkbox.closest('.mm-doc-item').querySelector('.mm-doc-state').textContent =
+                checkbox.checked ? 'Se adjuntará' : 'No se enviará';
+        });
+    });
+
     // ---- Barra de formato ----
     dlg.querySelectorAll('[data-cmd]').forEach(b => {
         b.onmousedown = e => e.preventDefault();           // no perder la selección
