@@ -1766,7 +1766,7 @@ $('#inm_conf_cuenta_notaria_id').change(function (){
     const dlg = document.getElementById('myModalMail');
     const $ = id => document.getElementById(id);
     const editor = $('mmEditor'), status = $('mmStatus');
-    let files = [], draftTimer, savedAt = null;
+    let draftTimer, savedAt = null;
     const DRAFT_KEY = 'mailDraft';
 
     // ---- Abrir / cerrar ----
@@ -1775,7 +1775,7 @@ $('#inm_conf_cuenta_notaria_id').change(function (){
         $('mmTo').value = opts.to ?? d?.to ?? '';
         $('mmSubject').value = opts.subject ?? d?.subject ?? '';
         editor.innerHTML = opts.body ?? d?.body ?? '';
-        files = []; renderFiles();
+        $('mmFileInput').value = ''; renderFiles();
         status.textContent = '';
         dlg.showModal();
         ($('mmTo').value ? editor : $('mmTo')).focus();
@@ -1811,20 +1811,140 @@ $('#inm_conf_cuenta_notaria_id').change(function (){
         b.onclick = () => { document.execCommand(b.dataset.cmd); editor.focus(); };
     });
     $('mmSize').onchange = e => { document.execCommand('fontSize', false, e.target.value); editor.focus(); };
-    $('mmImg').onclick = () => $('mmImgInput').click();
+    // ---- Imágenes en el editor ----
+    let savedRange = null, selectedImg = null, draggedImg = null;
+    const rangeEnEditor = r => r && editor.contains(r.commonAncestorContainer);
+    const guardaRango = () => {
+        const sel = window.getSelection();
+        if (sel.rangeCount && rangeEnEditor(sel.getRangeAt(0))) savedRange = sel.getRangeAt(0).cloneRange();
+    };
+    document.addEventListener('selectionchange', guardaRango);
+
+    const seleccionaImg = img => {
+        if (selectedImg) selectedImg.classList.remove('mm-img-selected');
+        selectedImg = img;
+        if (img) img.classList.add('mm-img-selected');
+    };
+    const preparaImg = img => { img.draggable = true; };
+    const insertaNodo = (nodo, range) => {
+        range = range || savedRange;
+        if (!rangeEnEditor(range)) {
+            range = document.createRange();
+            range.selectNodeContents(editor);
+            range.collapse(false);
+        }
+        range.deleteContents();
+        range.insertNode(nodo);
+        range.setStartAfter(nodo);
+        range.collapse(true);
+        const sel = window.getSelection();
+        sel.removeAllRanges(); sel.addRange(range);
+        savedRange = range.cloneRange();
+        queueDraft();
+    };
+    const insertaImagen = (src, range) => {
+        const img = document.createElement('img');
+        img.src = src; img.style.maxWidth = '100%';
+        preparaImg(img);
+        insertaNodo(img, range);
+    };
+
+    $('mmImg').onmousedown = e => e.preventDefault();
+    $('mmImg').onclick = () => { guardaRango(); $('mmImgInput').click(); };
     $('mmImgInput').onchange = e => {
         const f = e.target.files[0]; if (!f) return;
         const r = new FileReader();
-        r.onload = () => { editor.focus(); document.execCommand('insertImage', false, r.result); };
+        r.onload = () => { editor.focus(); insertaImagen(r.result); };
         r.readAsDataURL(f); e.target.value = '';
     };
 
+    editor.addEventListener('click', e => seleccionaImg(e.target.tagName === 'IMG' ? e.target : null));
+    editor.addEventListener('keydown', e => {
+        if (selectedImg && (e.key === 'Delete' || e.key === 'Backspace') && editor.contains(selectedImg)) {
+            e.preventDefault(); selectedImg.remove(); selectedImg = null; queueDraft();
+        }
+    });
+    editor.querySelectorAll('img').forEach(preparaImg);
+    new MutationObserver(ms => ms.forEach(m => m.addedNodes.forEach(n => {
+        if (n.nodeType !== 1) return;
+        if (n.tagName === 'IMG') preparaImg(n);
+        n.querySelectorAll?.('img').forEach(preparaImg);
+    }))).observe(editor, { childList: true, subtree: true });
+
+    // Mover imagen: arrastrarla a la posición deseada del texto
+    const rangoEnPunto = (x, y) => {
+        if (document.caretPositionFromPoint) {
+            const p = document.caretPositionFromPoint(x, y);
+            if (!p) return null;
+            const r = document.createRange(); r.setStart(p.offsetNode, p.offset); r.collapse(true); return r;
+        }
+        return document.caretRangeFromPoint ? document.caretRangeFromPoint(x, y) : null;
+    };
+    editor.addEventListener('dragstart', e => {
+        if (e.target.tagName !== 'IMG') return;
+        draggedImg = e.target; seleccionaImg(draggedImg);
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain', '');
+    });
+    editor.addEventListener('dragover', e => { if (draggedImg) { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; } });
+    editor.addEventListener('drop', e => {
+        if (!draggedImg) return;
+        e.preventDefault(); e.stopPropagation();
+        const range = rangoEnPunto(e.clientX, e.clientY);
+        const img = draggedImg; draggedImg = null;
+        if (!rangeEnEditor(range) || img.contains(range.startContainer)) return;
+        insertaNodo(img, range);
+        seleccionaImg(img);
+    });
+    editor.addEventListener('dragend', () => {
+        draggedImg = null; dragDepth = 0; dlg.classList.remove('mm-dragover');
+    });
+
     // ---- Adjuntos ----
     $('mmAttach').onclick = () => $('mmFileInput').click();
-    $('mmFileInput').onchange = e => { files.push(...e.target.files); e.target.value = ''; renderFiles(); };
-    function renderFiles() {
-        $('mmFiles').textContent = files.length ? '📎 ' + files.map(f => f.name).join(', ') : '';
-    }
+    const fileInput = $('mmFileInput');
+    const addFiles = nuevos => {
+        const dt = new DataTransfer();
+        Array.from(fileInput.files).forEach(f => dt.items.add(f));
+        Array.from(nuevos).forEach(f => {
+            const existe = Array.from(dt.files).some(x => x.name === f.name && x.size === f.size);
+            if (!existe) dt.items.add(f);
+        });
+        fileInput.files = dt.files;
+        renderFiles();
+    };
+    fileInput.onchange = () => renderFiles();
+    $('mmFiles').addEventListener('click', e => {
+        const btn = e.target.closest('[data-remove]');
+        if (!btn) return;
+        const dt = new DataTransfer();
+        Array.from(fileInput.files).forEach((f, i) => { if (i !== Number(btn.dataset.remove)) dt.items.add(f); });
+        fileInput.files = dt.files;
+        renderFiles();
+    });
+
+    // ---- Arrastrar y soltar archivos ----
+    let dragDepth = 0;
+    const tieneArchivos = e => !draggedImg && !e.target.closest?.('.mmDocumentoAvaluo') &&
+        Array.from(e.dataTransfer?.types || []).includes('Files');
+    dlg.addEventListener('dragenter', e => {
+        if (!tieneArchivos(e)) return;
+        e.preventDefault(); dragDepth++; dlg.classList.add('mm-dragover');
+    });
+    dlg.addEventListener('dragover', e => {
+        if (!tieneArchivos(e)) return;
+        e.preventDefault(); e.dataTransfer.dropEffect = 'copy';
+    });
+    dlg.addEventListener('dragleave', e => {
+        if (!tieneArchivos(e)) return;
+        dragDepth = Math.max(0, dragDepth - 1);
+        if (!dragDepth) dlg.classList.remove('mm-dragover');
+    });
+    dlg.addEventListener('drop', e => {
+        if (!tieneArchivos(e)) return;
+        e.preventDefault(); dragDepth = 0; dlg.classList.remove('mm-dragover');
+        addFiles(e.dataTransfer.files);
+    });
 
     // ---- Borrador automático ----
     function saveDraft() {
@@ -1847,7 +1967,7 @@ $('#inm_conf_cuenta_notaria_id').change(function (){
         fd.append('bcc', $('mmBcc').value);
         fd.append('subject', $('mmSubject').value);
         fd.append('body', editor.innerHTML);
-        files.forEach(f => fd.append('adjuntos[]', f));
+        Array.from($('mmFileInput').files).forEach(f => fd.append('adjuntos[]', f));
 
         $('mmSend').disabled = true; status.style.color = '#555'; status.textContent = 'Enviando…';
         try {
@@ -1897,18 +2017,32 @@ if(modalmail) {
 }
 
 $('#mailForm').on('submit', function () {
-    $('#mmMessage').val($('#mmEditor').html());
+    const copia = $('#mmEditor').clone();
+    copia.find('img').removeClass('mm-img-selected').removeAttr('draggable');
+    $('#mmMessage').val(copia.html());
 });
 
 /********** Modal Enviar Correo ********/
 let files = [];
 
-// Función auxiliar que tú ya tienes (o adaptada a tu ID 'mmFiles')
 function renderFiles() {
     const contenedorFiles = document.getElementById("mmFiles");
-    if (contenedorFiles) {
-        contenedorFiles.textContent = files.length ? '📎 ' + files.map(f => f.name).join(', ') : '';
-    }
+    const input = document.getElementById("mmFileInput");
+    if (!contenedorFiles || !input) return;
+    contenedorFiles.textContent = '';
+    Array.from(input.files).forEach((f, i) => {
+        const chip = document.createElement('span');
+        chip.className = 'mm-file';
+        chip.append('📎 ' + f.name);
+        const x = document.createElement('button');
+        x.type = 'button';
+        x.className = 'mm-file-remove';
+        x.dataset.remove = i;
+        x.title = 'Quitar';
+        x.textContent = '×';
+        chip.append(x);
+        contenedorFiles.append(chip);
+    });
 }
 
 document.addEventListener("DOMContentLoaded", async function() {

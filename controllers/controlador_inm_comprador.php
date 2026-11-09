@@ -27,6 +27,7 @@ use gamboamartin\administrador\models\adm_usuario;
 use gamboamartin\errores\errores;
 use gamboamartin\facturacion\models\fc_complemento_pago;
 use gamboamartin\facturacion\models\fc_csd;
+use gamboamartin\documento\models\doc_documento;
 use gamboamartin\facturacion\models\fc_docto_relacionado;
 use gamboamartin\facturacion\models\fc_factura;
 use gamboamartin\facturacion\models\fc_nc_rel;
@@ -3001,65 +3002,64 @@ class controlador_inm_comprador extends _ctl_base {
             $this->asunto_avaluo = "DOCS PARA AVALUÓ: $imp_rel_ubi_comp[inm_ubicacion_ubicacion]";
 
             $this->mensaje_avaluo = "
-                <p>
-                    Buen día, esperando se encuentren de la mejor manera, envío documentación
-                    requerida para la elaboración de avalúo, el inmueble está ubicado en
-                    <strong>{$imp_rel_ubi_comp['inm_ubicacion_ubicacion']}</strong>,
-                    de antemano gracias por su apoyo.
-                </p>
-                
-                <p>
-                    <strong>VENDEDOR:</strong>
-                    {$imp_rel_ubi_comp['inm_comprador_razon_social']}
-                    {$co_acreditado_nombre_completo}.<br>
-                
-                    <strong>COMPRADOR:</strong>
-                    {$imp_rel_ubi_comp['inm_ubicacion_razon_social']}.
-                </p>
-                
-                <strong>DATOS DEL INMUEBLE:</strong>
-                
-                <ul>
-                    <li>
-                        PRECIO DE VENTA:
-                        $" . number_format(
-                            (float)$imp_rel_ubi_comp['inm_rel_ubi_comp_precio_operacion'],
-                    2
-                        ) . "
-                    </li>
-                    <li>
-                        NÚMERO DE RECÁMARAS:
-                        {$imp_rel_ubi_comp['inm_ubicacion_recamaras']}
-                    </li>
-                    <li>
-                        NÚMERO DE BAÑOS:
-                        {$imp_rel_ubi_comp['inm_ubicacion_baños']}
-                    </li>
-                    <li>
-                        ESTACIONAMIENTOS:
-                        {$imp_rel_ubi_comp['inm_ubicacion_estacionamientos']}
-                    </li>
-                    <li>
-                        GEOLOCALIZACIÓN:
-                        {$imp_rel_ubi_comp['inm_ubicacion_longitud']},
-                        {$imp_rel_ubi_comp['inm_ubicacion_latitud']}
-                    </li>
-                    <li>
-                        <a href=\"{$imp_rel_ubi_comp['inm_ubicacion_url']}\" target=\"_blank\">
-                            {$imp_rel_ubi_comp['inm_ubicacion_url']}
-                        </a>
-                    </li>
-                    <li>
-                        ENTRE CALLES:
-                        {$imp_rel_ubi_comp['inm_ubicacion_entre_calle_1']}
-                        Y
-                        {$imp_rel_ubi_comp['inm_ubicacion_entre_calle_2']}
-                    </li>
-                </ul>
-                
-                <p>
-                    Nos apoya en hacernos llegar el avaluó previo a cerrarlo, necesitamos saber el valor antes de cerrarlo.
-                </p>
+                <div class='mmMenasajePred'>
+                    <p>
+                        Buen día, esperando se encuentren de la mejor manera, envío documentación requerida para la elaboración de avalúo, el inmueble está ubicado en <strong>{$imp_rel_ubi_comp['inm_ubicacion_ubicacion']}</strong>, de antemano gracias por su apoyo.
+                    </p>
+                    
+                    <p>
+                        <strong>VENDEDOR:</strong>
+                        {$imp_rel_ubi_comp['inm_comprador_razon_social']}
+                        {$co_acreditado_nombre_completo}.<br>
+                    
+                        <strong>COMPRADOR:</strong>
+                        {$imp_rel_ubi_comp['inm_ubicacion_razon_social']}.
+                    </p>
+                    
+                    <strong>DATOS DEL INMUEBLE:</strong>
+                    
+                    <ul>
+                        <li>
+                            PRECIO DE VENTA:
+                            $" . number_format(
+                                (float)$imp_rel_ubi_comp['inm_rel_ubi_comp_precio_operacion'],
+                        2
+                            ) . "
+                        </li>
+                        <li>
+                            NÚMERO DE RECÁMARAS:
+                            {$imp_rel_ubi_comp['inm_ubicacion_recamaras']}
+                        </li>
+                        <li>
+                            NÚMERO DE BAÑOS:
+                            {$imp_rel_ubi_comp['inm_ubicacion_baños']}
+                        </li>
+                        <li>
+                            ESTACIONAMIENTOS:
+                            {$imp_rel_ubi_comp['inm_ubicacion_estacionamientos']}
+                        </li>
+                        <li>
+                            GEOLOCALIZACIÓN:
+                            {$imp_rel_ubi_comp['inm_ubicacion_longitud']},
+                            {$imp_rel_ubi_comp['inm_ubicacion_latitud']}
+                        </li>
+                        <li>
+                            <a href=\"{$imp_rel_ubi_comp['inm_ubicacion_url']}\" target=\"_blank\">
+                                {$imp_rel_ubi_comp['inm_ubicacion_url']}
+                            </a>
+                        </li>
+                        <li>
+                            ENTRE CALLES:
+                            {$imp_rel_ubi_comp['inm_ubicacion_entre_calle_1']}
+                            Y
+                            {$imp_rel_ubi_comp['inm_ubicacion_entre_calle_2']}
+                        </li>
+                    </ul>
+                    
+                    <p>
+                        Nos apoya en hacernos llegar el avaluó previo a cerrarlo, necesitamos saber el valor antes de cerrarlo.
+                    </p>
+                </div>
             ";
 
             $filtro['inm_conf_docs_comprador.es_foto'] = 'inactivo';
@@ -3124,6 +3124,15 @@ class controlador_inm_comprador extends _ctl_base {
         $this->documentos_cliente = $archivos_cliente;
         $this->documentos_ubicacion = $archivos_ubicacion;
 
+        $documento = $this->html->input_file(cols: 12, name: 'solicitud_avaluo_firmada',
+            row_upd: new stdClass(), value_vacio: false, place_holder: 'Solicitud Avaluo Firmada');
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener inputs',data:  $documento, header: $header,ws:  $ws);
+        }
+
+        $this->inputs->documento_avaluo = $documento;
+
         $params = array();
         if (isset($_GET['accion']) && $_GET['accion'] == 'proceso_cliente') {
             $params = array('pestana_general_actual' => 'pestanageneral2', 'pestana_actual' => 'pestana3');
@@ -3151,7 +3160,7 @@ class controlador_inm_comprador extends _ctl_base {
 
         $button_solicitud_avaluo = $this->html->button_href(accion: 'solicitud_avaluo',
             etiqueta: 'Solicitud Avaluo', registro_id: $this->registro_id, seccion: 'inm_comprador',
-            style: 'success');
+            style: 'success', target: '_blank');
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al integrar button',
                 data: $button_solicitud_avaluo, header: $header, ws: $ws);
@@ -4185,6 +4194,34 @@ class controlador_inm_comprador extends _ctl_base {
 
     }
 
+    private function archivos_post(string $campo): array
+    {
+        if (!isset($_FILES[$campo]['name'])) {
+            return array();
+        }
+
+        $f = $_FILES[$campo];
+        $nombres = (array)$f['name'];
+        $archivos = array();
+        foreach ($nombres as $i => $nombre) {
+            $error = is_array($f['error']) ? $f['error'][$i] : $f['error'];
+            if ($error === UPLOAD_ERR_NO_FILE || trim((string)$nombre) === '') {
+                continue;
+            }
+            if ($error !== UPLOAD_ERR_OK) {
+                return $this->errores->error(mensaje: 'Error al recibir el archivo ' . $nombre, data: $error);
+            }
+            $archivos[] = array(
+                'name' => basename((string)$nombre),
+                'tmp_name' => is_array($f['tmp_name']) ? $f['tmp_name'][$i] : $f['tmp_name'],
+                'type' => is_array($f['type']) ? $f['type'][$i] : $f['type'],
+                'size' => is_array($f['size']) ? $f['size'][$i] : $f['size'],
+                'error' => $error);
+        }
+
+        return $archivos;
+    }
+
     public function envia_correo_bd(bool $header, bool $ws = false)
     {
         $this->link->beginTransaction();
@@ -4276,8 +4313,14 @@ class controlador_inm_comprador extends _ctl_base {
 
         $documentos_cliente_validos = array();
         foreach ($docs_cliente->registros as $documento) {
+            $razon_social = implode(' ', array_filter([
+                $documento['inm_comprador_nombre'] ?? '',
+                $documento['inm_comprador_apellido_paterno'] ?? '',
+                $documento['inm_comprador_apellido_materno'] ?? ''
+            ]));
+
             $documentos_cliente_validos[(int)$documento['doc_documento_id']] =
-                $documento['doc_tipo_documento_descripcion'] . ' - ' . $documento['inm_comprador_razon_social']
+                $documento['doc_tipo_documento_descripcion'] . ' - ' . $razon_social
                 .'.' . $documento['doc_extension_descripcion'];
         }
 
@@ -4339,6 +4382,41 @@ class controlador_inm_comprador extends _ctl_base {
                     'doc_documento_id' => $documento_id,
                     'name_out' => $origen['permitidos'][$documento_id]);
             }
+        }
+
+        $archivos_subir = array();
+        foreach (array(85 => 'solicitud_avaluo_firmada', 86 => 'adjuntos') as $tipo_documento_id => $campo) {
+            $archivos = $this->archivos_post(campo: $campo);
+            if (errores::$error) {
+                $this->link->rollBack();
+                return $this->retorno_error(mensaje: 'Error al leer los archivos a adjuntar', data: $archivos,
+                    header: $header, ws: $ws);
+            }
+            foreach ($archivos as $archivo) {
+                $archivos_subir[] = array('tipo_documento_id' => $tipo_documento_id, 'file' => $archivo);
+            }
+        }
+
+        $modelo_doc = new doc_documento(link: $this->link);
+        foreach ($archivos_subir as $archivo_subir) {
+
+            $_FILES['documento'] = $archivo_subir['file'];
+            $registro = array();
+            $registro['inm_comprador_id'] = $this->registro_id;
+            $registro['doc_tipo_documento_id'] = $archivo_subir['tipo_documento_id'];
+            $r_inm_doc_comprador = (new inm_doc_comprador(link: $this->link))->alta_registro(registro: $registro);
+            if (errores::$error) {
+                $this->link->rollBack();
+                return $this->retorno_error(mensaje: 'Error al insertar datos', data: $r_inm_doc_comprador,
+                    header: $header, ws: $ws);
+            }
+
+            $documentos_adjuntos['subido_' . $r_inm_doc_comprador->registro['doc_documento_id']] =
+                array(
+                    'doc_documento_id' => (int)$r_inm_doc_comprador->registro['doc_documento_id'],
+                    'name_out' => $r_inm_doc_comprador->registro['doc_tipo_documento_descripcion'].'.'.
+                        $r_inm_doc_comprador->registro['doc_extension_descripcion']
+                );
         }
 
         $adjuntos = (new _email(link: $this->link))->adjuntos(mensaje: $r_not_mensaje->registro_id,

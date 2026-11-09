@@ -1499,7 +1499,14 @@
             </section>
         </div>
 
-        <div class="mm-files" id="mmFiles"></div>
+        <div class="mmDocumentoAvaluo">
+            <?php echo $controlador->inputs->documento_avaluo; ?>
+        </div>
+
+        <div class="mmOtrosAdjuntos">
+            <p>Otros adjuntos</p>
+            <div class="mm-files" id="mmFiles"></div>
+        </div>
 
         <div class="mm-footer">
             <button type="submit" class="mm-send" id="mmSend">Enviar</button>
