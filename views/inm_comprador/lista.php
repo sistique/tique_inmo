@@ -263,7 +263,9 @@ echo "<style>
                     <tr>
                         <th>ID</th>
                         <th>Ubicación</th>
-                        <th>Valor Avaluo</th>
+                        <th>Estimacion Avaluo</th>
+                        <th>Monto Presupuesto Total</th>
+                        <th>Monto Total Pagado</th>
                         <th>Acciones</th>
                     </tr>
                     </thead>

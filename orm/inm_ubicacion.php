@@ -53,6 +53,22 @@ class inm_ubicacion extends _inm_ubicaciones {
 
         $columnas_extra['inm_ubicacion_tiene_comprador_activo'] = $sql;
 
+        $sql = "(SELECT COALESCE(SUM(inm_presupuesto_costo.monto_presupuesto), 0)
+                    FROM inm_presupuesto_costo
+                    WHERE inm_presupuesto_costo.inm_ubicacion_id = inm_ubicacion.id
+                )";
+
+        $columnas_extra['inm_ubicacion_monto_presupuesto_total'] = $sql;
+
+        $sql = "(SELECT COALESCE(SUM(inm_pago_costo.monto), 0)
+                    FROM inm_pago_costo
+                    INNER JOIN inm_costo
+                        ON inm_costo.id = inm_pago_costo.inm_costo_id
+                    WHERE inm_costo.inm_ubicacion_id = inm_ubicacion.id
+                )";
+
+        $columnas_extra['inm_ubicacion_monto_total_pagado'] = $sql;
+
         $sql = "(
             SELECT CASE
                 WHEN inm_ubicacion.dp_colonia_postal_domicilio_id IS NOT NULL THEN

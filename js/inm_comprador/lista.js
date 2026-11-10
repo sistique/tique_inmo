@@ -157,11 +157,13 @@ $(document).ready(function () {
             columns: [
                 {data: 'inm_ubicacion_id'},
                 {data: 'inm_ubicacion_ubicacion', defaultContent: ''},
-                {data: 'inm_ubicacion_valor_avaluo', defaultContent: ''},
+                {data: 'inm_ubicacion_estimacion_avaluo', defaultContent: ''},
+                {data: 'inm_ubicacion_monto_presupuesto_total', defaultContent: ''},
+                {data: 'inm_ubicacion_monto_total_pagado', defaultContent: ''},
                 {
                     data: null,
                     render: function (data, type, row) {
-                        return row.modifica || '';
+                        return row.proceso_ubicacion || '';
                     }
                 }
             ]
