@@ -44,7 +44,15 @@ class inm_ubicacion extends _inm_ubicaciones {
 
         $columnas_extra['inm_ubicacion_ubicacion_completa'] = $sql;
 
-        $sub_querys = array();
+        $sql = "(SELECT EXISTS (
+                    SELECT 1
+                    FROM inm_rel_ubi_comp
+                    WHERE inm_rel_ubi_comp.inm_ubicacion_id = inm_ubicacion.id
+                      AND inm_rel_ubi_comp.status = 'activo'
+                ) AS tiene_comprador_activo)";
+
+        $columnas_extra['inm_ubicacion_tiene_comprador_activo'] = $sql;
+
         $sql = "(
             SELECT CASE
                 WHEN inm_ubicacion.dp_colonia_postal_domicilio_id IS NOT NULL THEN
@@ -71,6 +79,7 @@ class inm_ubicacion extends _inm_ubicaciones {
 
         $columnas_extra['inm_ubicacion_domicilio_completo'] = $sql;
 
+        $sub_querys = array();
         $renombres= array();
 
         $atributos_criticos = array('manzana','lote','etapa','inm_tipo_ubicacion_id','n_opiniones_valor',

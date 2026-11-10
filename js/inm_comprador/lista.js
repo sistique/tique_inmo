@@ -147,6 +147,9 @@ $(document).ready(function () {
             pageLength: 10,
             ajax: {
                 url: get_url('inm_ubicacion', 'get_data', {}),
+                data: function (d) {
+                    d.data = {inm_ubicacion_tiene_comprador_activo: 0};
+                },
                 error: function (jqXHR) {
                     console.error('Error al cargar ubicaciones:', jqXHR.responseText);
                 }
@@ -154,17 +157,7 @@ $(document).ready(function () {
             columns: [
                 {data: 'inm_ubicacion_id'},
                 {data: 'inm_ubicacion_ubicacion', defaultContent: ''},
-                {
-                    data: null,
-                    render: function (data, type, row) {
-                        let partes = [];
-                        if (row.dp_cp_descripcion) partes.push('CP ' + row.dp_cp_descripcion);
-                        if (row.inm_ubicacion_manzana) partes.push('Mz ' + row.inm_ubicacion_manzana);
-                        if (row.inm_ubicacion_lote) partes.push('Lt ' + row.inm_ubicacion_lote);
-                        if (row.inm_ubicacion_etapa) partes.push('Etapa ' + row.inm_ubicacion_etapa);
-                        return partes.join(', ');
-                    }
-                },
+                {data: 'inm_ubicacion_valor_avaluo', defaultContent: ''},
                 {
                     data: null,
                     render: function (data, type, row) {

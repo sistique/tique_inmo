@@ -263,7 +263,7 @@ echo "<style>
                     <tr>
                         <th>ID</th>
                         <th>Ubicación</th>
-                        <th>Dirección</th>
+                        <th>Valor Avaluo</th>
                         <th>Acciones</th>
                     </tr>
                     </thead>
