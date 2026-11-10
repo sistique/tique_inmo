@@ -296,6 +296,13 @@ let sl_referencia_dp_cp_id = $("#referencia_dp_cp_id");
 let sl_referencia_dp_colonia_postal_id = $("#referencia_dp_colonia_postal_id");
 let sl_referencia_dp_calle_pertenece_id = $("#referencia_dp_calle_pertenece_id");
 
+let sl_dp_estado_nacimiento_id = $("#dp_estado_nacimiento_id");
+
+sl_dp_estado_nacimiento_id.change(function(){
+    let dp_estado_nacimiento_id = $(this).val();
+    dp_asigna_municipios(dp_estado_nacimiento_id,'','#dp_municipio_nacimiento_id');
+});
+
 
 sl_referencia_dp_estado_id.change(function(){
     let referencia_dp_estado_id = $(this).val();
