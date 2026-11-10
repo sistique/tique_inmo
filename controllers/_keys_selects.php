@@ -879,7 +879,7 @@ class _keys_selects{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
-        $keys_selects['numero']->regex = $this->validacion->patterns['tel_sin_lada_html'];
+        $keys_selects['numero']->regex = $this->validacion->patterns['telefono_mx_html'];
 
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'celular',
             keys_selects:$keys_selects, place_holder: 'Celular',required: false);
@@ -984,7 +984,7 @@ class _keys_selects{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
-        $keys_selects['numero_nep']->regex = $this->validacion->patterns['telefono_mx'];
+        $keys_selects['numero_nep']->regex = $this->validacion->patterns['telefono_mx_html'];
 
         $keys_selects = (new init())->key_select_txt(cols: 2,key: 'extension_nep',
             keys_selects:$keys_selects, place_holder: 'Extension',required: false);
