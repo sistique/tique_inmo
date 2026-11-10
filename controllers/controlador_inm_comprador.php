@@ -5122,7 +5122,7 @@ class controlador_inm_comprador extends _ctl_base {
         $this->inputs->dp_municipio_nacimiento_id = $sl_dp_municipio_nacimiento_id;
 
         $fecha_nacimiento = $this->html->input_fecha(cols: 3, row_upd: $this->row_upd, value_vacio: false,
-            place_holder: 'Fecha de Nacimiento', value: $this->row_upd->fecha_nacimiento);
+            name: 'fecha_nacimiento', place_holder: 'Fecha de Nacimiento', value: $this->row_upd->fecha_nacimiento);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al integrar fecha_nacimiento',
                 data:  $fecha_nacimiento, header: $header,ws: $ws);
