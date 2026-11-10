@@ -947,14 +947,14 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
 
         $_SESSION['datos_xls'] = $datos_xls;
 
-        $campos_formulario = ['nss', 'nombre', 'apellido_paterno', 'apellido_materno', 'numero_com','cel_com',
-            'correo_com', 'estado','municipio','cp','colonia','calle','numero_exterior','numero_interior',
-            'entre_calle_1','entre_calle_2', 'tipo_compra', 'tipo_credito', 'numero_credito','monto_credito',
-            'adeudo_hipoteca', 'mensualidad','fecha_otorgamiento_credito', 'cuenta_predial', 'adeudo_predial',
-            'cuenta_agua','adeudo_agua', 'cuenta_luz','adeudo_luz','estado_vivienda', 'prototipo', 'complemento',
-            'metros_terreno', 'metros_construccion','observaciones','nss_co_acreditado', 'nombre_co_acreditado',
-            'apellido_paterno_co_acreditado', 'apellido_materno_co_acreditado', 'numero_co_acreditado',
-            'celular_co_acreditado', 'correo_co_acreditado', 'numero_credito_co_acreditado',
+        $campos_formulario = ['nss', 'nombre', 'apellido_paterno', 'apellido_materno', 'numero_com',
+            'cel_com', 'correo_com', 'estado','municipio','cp','colonia','calle','numero_exterior','numero_interior',
+            'rfc','curp', 'entre_calle_1','entre_calle_2', 'tipo_compra', 'tipo_credito', 'numero_credito',
+            'monto_credito', 'adeudo_hipoteca', 'mensualidad','fecha_otorgamiento_credito', 'cuenta_predial',
+            'adeudo_predial', 'cuenta_agua','adeudo_agua', 'cuenta_luz','adeudo_luz','estado_vivienda', 'prototipo',
+            'complemento', 'metros_terreno', 'metros_construccion','observaciones','nss_co_acreditado',
+            'nombre_co_acreditado', 'apellido_paterno_co_acreditado', 'apellido_materno_co_acreditado',
+            'numero_co_acreditado', 'celular_co_acreditado', 'correo_co_acreditado', 'numero_credito_co_acreditado',
             'monto_credito_co_acreditado', 'adeudo_hipoteca_co_acreditado', 'descuento_co_acreditado'];
 
         $campos_por_columna = [
@@ -1054,12 +1054,12 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
             'numero_credito_co_acreditado', 'monto_credito_co_acreditado', 'adeudo_hipoteca_co_acreditado',
             'descuento_co_acreditado'];
 
-        $campos_formulario = ['nss', 'nombre', 'apellido_paterno', 'apellido_materno', 'numero_com','cel_com',
-            'correo_com', 'estado','municipio','cp','colonia','calle','numero_exterior','numero_interior',
-            'entre_calle_1','entre_calle_2', 'tipo_compra', 'tipo_credito', 'numero_credito','monto_credito',
-            'adeudo_hipoteca', 'mensualidad','fecha_otorgamiento_credito', 'cuenta_predial', 'adeudo_predial',
-            'cuenta_agua','adeudo_agua', 'cuenta_luz','adeudo_luz','estado_vivienda', 'prototipo', 'complemento',
-            'metros_terreno', 'metros_construccion','observaciones'];
+        $campos_formulario = ['nss','nombre', 'apellido_paterno', 'apellido_materno', 'numero_com',
+            'cel_com', 'correo_com', 'estado','municipio','cp','colonia','calle','numero_exterior','numero_interior',
+            'rfc','curp', 'entre_calle_1','entre_calle_2', 'tipo_compra', 'tipo_credito', 'numero_credito',
+            'monto_credito', 'adeudo_hipoteca', 'mensualidad','fecha_otorgamiento_credito', 'cuenta_predial',
+            'adeudo_predial', 'cuenta_agua','adeudo_agua', 'cuenta_luz','adeudo_luz','estado_vivienda', 'prototipo',
+            'complemento', 'metros_terreno', 'metros_construccion','observaciones'];
 
 
         $campos_completos = array_merge($campos_formulario, $campos_co_acred);
