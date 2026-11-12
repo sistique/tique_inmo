@@ -7,6 +7,7 @@ use config\generales;
 use gamboamartin\documento\models\doc_documento;
 use gamboamartin\documento\models\doc_documento_etapa;
 use gamboamartin\errores\errores;
+use gamboamartin\notificaciones\models\not_adjunto;
 use gamboamartin\proceso\models\pr_etapa_proceso;
 use gamboamartin\proceso\models\pr_proceso;
 use PDO;
@@ -95,9 +96,16 @@ class inm_doc_ubicacion extends _modelo_parent
             return $this->error->error(mensaje: 'Error al obtener registro', data: $registro);
         }
 
-        $documento_etapa = (new doc_documento_etapa(link: $this->link))->elimina_con_filtro_and(filtro: array('doc_documento_id' => $registro['doc_documento_id']));
+        $documento_etapa = (new doc_documento_etapa(link: $this->link))->elimina_con_filtro_and(
+            filtro: array('doc_documento_id' => $registro['doc_documento_id']));
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al eliminar documento etapa', data: $documento_etapa);
+        }
+
+        $not_adjunto = (new not_adjunto(link: $this->link))->elimina_con_filtro_and(
+            filtro: array('doc_documento_id' => $registro['doc_documento_id']));
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al eliminar documento adjunto', data: $not_adjunto);
         }
 
         $elimina = parent::elimina_bd($id);
