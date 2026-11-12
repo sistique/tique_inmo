@@ -154,7 +154,7 @@ class inicializacion{
             return $this->error->error(mensaje: 'Error al validar registro_previo', data:$valida);
         }
 
-        $value_previo = trim($registro_previo->$campo);
+        $value_previo = (string)$registro_previo->$campo;
 
         if($value_previo === $value_upd){
             unset($modelo->registro_upd[$campo]);

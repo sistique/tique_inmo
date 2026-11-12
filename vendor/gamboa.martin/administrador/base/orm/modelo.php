@@ -2882,12 +2882,10 @@ class modelo extends modelo_base
             return $this->error->error(mensaje: 'Error solo se puede transaccionar desde layout', data: $registro);
         }
 
-
         $resultado = $this->modifica_bd_base(registro: $registro, id: $id, reactiva: $reactiva);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al ejecutar sql', data: $resultado);
         }
-
 
         return $resultado;
     }
@@ -2916,7 +2914,6 @@ class modelo extends modelo_base
             return $this->error->error(mensaje: 'Error al inicializar registro original ' . $registro_original .
                 ' del modelo ' . $this->tabla, data: $init);
         }
-
 
         $valida = (new validaciones())->valida_upd_base(id: $id, registro_upd: $this->registro_upd,
             tipo_campos: $this->tipo_campos, valida_row_vacio: $valida_row_vacio);

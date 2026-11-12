@@ -229,7 +229,7 @@ class inm_prospecto extends _modelo_parent{
             return $this->error->error(mensaje: 'Error $r_modifica->registro_actualizado debe ser un objeto',
                 data:  $r_modifica);
         }
-        if(!isset($r_modifica->registro_actualizado->com_prospecto_rfc)){
+        if(!isset($r_modifica->registro_actualizado->inm_prospecto_rfc)){
             return $this->error->error(mensaje: 'Error $r_modifica->registro_actualizado->rfc no existe',
                 data:  $r_modifica);
         }
@@ -239,7 +239,8 @@ class inm_prospecto extends _modelo_parent{
         if(!isset($registro->curp)){
             return $this->error->error(mensaje: 'Error registro->curp no existe', data:  $registro);
         }
-        $registro->rfc = $r_modifica->registro_actualizado->com_prospecto_rfc;
+        $registro->rfc = $r_modifica->registro_actualizado->inm_prospecto_rfc;
+        $registro->curp = $r_modifica->registro_actualizado->inm_prospecto_curp;
 
         $registro->razon_social = implode(' ', array_filter([
             trim($registro->nombre),
@@ -957,7 +958,7 @@ class inm_prospecto extends _modelo_parent{
         if($id <= 0){
             return $this->error->error(mensaje: 'Error id es menor a 0',data:  $id);
         }
-        if(!isset($r_modifica->registro_actualizado->com_prospecto_rfc)){
+        if(!isset($r_modifica->registro_actualizado->inm_prospecto_rfc)){
             return $this->error->error(mensaje: 'Error no existe $r_modifica->registro_actualizado->com_prospecto_rfc',
                 data:  $r_modifica);
         }
