@@ -8,6 +8,7 @@ use gamboamartin\documento\models\doc_documento;
 use gamboamartin\documento\models\doc_documento_etapa;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\controllers\_doctos;
+use gamboamartin\notificaciones\models\not_adjunto;
 use PDO;
 use stdClass;
 
@@ -196,6 +197,12 @@ class inm_doc_comprador extends _modelo_parent{
         $documento_etapa = (new doc_documento_etapa(link: $this->link))->elimina_con_filtro_and(filtro: array('doc_documento_id' => $registro['doc_documento_id']));
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al eliminar documento etapa', data: $documento_etapa);
+        }
+
+        $not_adjunto = (new not_adjunto(link: $this->link))->elimina_con_filtro_and(
+            filtro: array('doc_documento_id' => $registro['doc_documento_id']));
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al eliminar documento adjunto', data: $not_adjunto);
         }
 
         $elimina = parent::elimina_bd($id);
