@@ -801,7 +801,7 @@ class _conversion_ubicacion{
             ['campo'=>'plaza_notaria', 'mensaje' => 'Error no existe Plaza de Notaria'],
             ['campo'=>'nombre_notario', 'mensaje' => 'Error no existe Nombre de Notario'],
             ['campo'=>'numero_escritura', 'mensaje' => 'Error no existe Numero de Escritura'],
-            ['campo'=>'libro', 'mensaje' => 'Error no existe Libro de Escritura'],
+            //['campo'=>'libro', 'mensaje' => 'Error no existe Libro de Escritura'],
 
             /* Apartado 3 */
             ['campo'=>'inm_tipo_credito_id', 'mensaje' => 'Error no existe Tipo de Credito'],
