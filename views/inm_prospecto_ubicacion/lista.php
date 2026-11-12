@@ -1,6 +1,7 @@
 <?php /** @var  \gamboamartin\facturacion\controllers\controlador_inm_comprador $controlador controlador en ejecucion */ ?>
 <?php use config\views; ?>
 <?php include "init.php"; ?>
+<script src="./js/filtros_lista.js"></script>
 
 <div class="col-md-12">
     <?php if ($controlador->include_breadcrumb !== '') {
@@ -11,7 +12,7 @@
         <?php //include (new views())->ruta_templates . 'etiquetas/_titulo_lista.php'; ?>
 
         <div class="contenedor_completo">
-            <div class="filtros-avanzados">
+            <div class="filtros-avanzados" data-usuario-id="<?php echo (int)$_SESSION['usuario_id']; ?>">
                 <div class="filtro-grupo col-md-12">
                     <div class="filtros col-md-1">
                         <label for="id">ID</label>
