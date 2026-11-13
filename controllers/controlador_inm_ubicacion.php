@@ -4151,18 +4151,18 @@ class controlador_inm_ubicacion extends _ctl_base
         $columns["inm_ubicacion_id"]["titulo"] = "Id";
         $columns["inm_tipo_ubicacion_descripcion"]["titulo"] = "Tipo de Ubicacion";
         $columns["inm_ubicacion_ubicacion"]["titulo"] = "Ubicacion";
-        $columns["dp_cp_descripcion"]["titulo"] = "CP";
-        $columns["inm_ubicacion_manzana"]["titulo"] = "Manzana";
-        $columns["inm_ubicacion_lote"]["titulo"] = "Lote";
-        $columns["inm_ubicacion_etapa"]["titulo"] = "Etapa";
-        $columns["inm_ubicacion_cuenta_predial"]["titulo"] = "Predial";
-        $columns["com_agente_descripcion"]["titulo"] = "Agente";
+
+        $columns["inm_ubicacion_nss"]["titulo"] = "Nss Titular";
+        $columns["inm_ubicacion_razon_social"]["titulo"] = "Titular";
+        $columns["inm_co_acreditado_razon_social"]["titulo"] = "Co-Acreditado";
+
+        $columns["com_agente_descripcion"]["titulo"] = "Prospectador";
+        $columns["inm_ubicacion_fecha_alta"]["titulo"] = "Fecha Alta";
         $columns["inm_status_ubicacion_descripcion"]["titulo"] = "Status Ubicacion";
 
         // Definir los filtros para el datatable
-        $filtro = array("inm_ubicacion.id", "inm_ubicacion_ubicacion", 'dp_cp.descripcion',
-            'inm_ubicacion.manzana', 'inm_ubicacion.lote', 'inm_ubicacion.cuenta_predial',
-            'inm_tipo_ubicacion.descripcion', 'com_agente.descripcion', 'inm_status_ubicacion.descripcion');
+        $filtro = array("inm_ubicacion.id",  'inm_tipo_ubicacion.descripcion', "inm_ubicacion_ubicacion",
+            'com_agente.descripcion', 'inm_status_ubicacion.descripcion');
 
         // Crear el objeto Datatables y asignarle las columnas y filtros definidos
         $datatables = new stdClass();
@@ -5660,40 +5660,60 @@ class controlador_inm_ubicacion extends _ctl_base
         $table = 'inm_ubicacion';
 
         $filtro_rango = array();
-        if (!empty($_POST['fecha_inicial'])) {
-            $filtro_rango[$table . '.fecha_alta']['valor1'] = $_POST['fecha_inicial'];
+        if (!empty($_POST['fecha_inicio'])) {
+            $filtro_rango[$table . '.fecha_alta']['valor1'] = $_POST['fecha_inicio'];
         }
-        if (!empty($_POST['fecha_final'])) {
-            $filtro_rango[$table . '.fecha_alta']['valor2'] = $_POST['fecha_final'];
+        if (!empty($_POST['fecha_fin'])) {
+            $filtro_rango[$table . '.fecha_alta']['valor2'] = $_POST['fecha_fin'];
         }
 
         $filtro_especial = array();
         $filtros = array();
 
-        if (!empty($_POST['id'])) {
-            $filtros[$table . '.id'] = $_POST['id'];
+        if(!empty($_POST['id'])){
+            $filtro_especial[0]['inm_prospecto_ubicacion.id']['operador'] = '=';
+            $filtro_especial[0]['inm_prospecto_ubicacion.id']['valor'] = $_POST['id'];
+            $filtro_especial[0]['inm_prospecto_ubicacion.id']['comparacion'] = 'AND';
+
+            //$filtro_text[$table.'.razon_social'] = $_POST['nombre_prospecto_ubicacion'];
         }
 
-        if (!empty($_POST['nombre_ubicacion'])) {
+        if (!empty($_POST['ubicacion'])) {
             $filtro_especial[1][$table . '.inm_ubicacion_ubicacion']['operador'] = 'LIKE';
-            $filtro_especial[1][$table . '.inm_ubicacion_ubicacion']['valor'] = '%' . $_POST['nombre_ubicacion'] . '%';
+            $filtro_especial[1][$table . '.inm_ubicacion_ubicacion']['valor'] = '%' . $_POST['ubicacion'] . '%';
             $filtro_especial[1][$table . '.inm_ubicacion_ubicacion']['comparacion'] = 'AND';
 
             //$filtro_text[$table.'.razon_social'] = $_POST['nombre_ubicacion'];
         }
 
-        if (!empty($_POST['predial'])) {
-            $filtro_especial[2][$table . '.cuenta_predial']['operador'] = 'LIKE';
-            $filtro_especial[2][$table . '.cuenta_predial']['valor'] = '%' . $_POST['predial'] . '%';
-            $filtro_especial[2][$table . '.cuenta_predial']['comparacion'] = 'AND';
+        if(!empty($_POST['nss'])){
+            $filtro_especial[2][$table.'.nss']['operador'] = 'LIKE';
+            $filtro_especial[2][$table.'.nss']['valor'] = '%'.$_POST['nss'].'%';
+            $filtro_especial[2][$table.'.nss']['comparacion'] = 'AND';
+
+            //$filtro_text[$table.'.cuenta_predial'] = $_POST['cuenta_predial'];
+        }
+
+        if(!empty($_POST['nombre_ubicacion'])){
+            $filtro_especial[3][$table.'.nss']['operador'] = 'LIKE';
+            $filtro_especial[3][$table.'.nss']['valor'] = '%'.$_POST['nombre_ubicacion'].'%';
+            $filtro_especial[3][$table.'.nss']['comparacion'] = 'AND';
+
+            //$filtro_text[$table.'.cuenta_predial'] = $_POST['cuenta_predial'];
+        }
+
+        if(!empty($_POST['nombre_co_acreditado_ubicacion'])){
+            $filtro_especial[4]['inm_co_acreditado_razon_social']['operador'] = 'LIKE';
+            $filtro_especial[4]['inm_co_acreditado_razon_social']['valor'] = '%'.$_POST['nombre_co_acreditado_ubicacion'].'%';
+            $filtro_especial[4]['inm_co_acreditado_razon_social']['comparacion'] = 'AND';
 
             //$filtro_text[$table.'.cuenta_predial'] = $_POST['cuenta_predial'];
         }
 
         if (!empty($_POST['agente'])) {
-            $filtro_especial[3]['com_agente.descripcion']['operador'] = 'LIKE';
-            $filtro_especial[3]['com_agente.descripcion']['valor'] = '%' . $_POST['agente'] . '%';
-            $filtro_especial[3]['com_agente.descripcion']['comparacion'] = 'AND';
+            $filtro_especial[5]['com_agente.descripcion']['operador'] = 'LIKE';
+            $filtro_especial[5]['com_agente.descripcion']['valor'] = '%' . $_POST['agente'] . '%';
+            $filtro_especial[5]['com_agente.descripcion']['comparacion'] = 'AND';
 
             //$filtro_text['com_agente.descripcion'] = $_POST['agente'];
         }

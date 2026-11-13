@@ -125,6 +125,46 @@ echo "<style>
                     </div>
 
                     <div class="col-md-3">
+                        <label for="Ubicacion">Ubicacion</label>
+                        <input type="text" id="ubicacion" data-tipo="filtro" data-filtro_campo="<?php echo $controlador->modelo->columnas_extra['inm_ubicacion_ubicacion']?>"
+                               placeholder="Ej: AV. VALLARTA 220 ">
+                    </div>
+                    <div class="col-md-2">
+                        <label for="nss">NSS Titular</label>
+                        <input type="text" id="nss" data-tipo="filtro" data-filtro_campo="inm_ubicacion.nss"
+                               placeholder="Ej: 9999999999">
+                    </div>
+
+                    <div class="col-md-2">
+                        <label for="Nombre ubicacion">Titular</label>
+                        <input type="text" id="nombre_ubicacion" data-tipo="filtro" data-filtro_campo="inm_ubicacion.razon_social"
+                               placeholder="Ej: JUAN PEREZ">
+                    </div>
+
+                    <div class="col-md-2">
+                        <label for="Nombre ubicacion">Co-Acreditado</label>
+                        <input type="text" id="nombre_co_acreditado_ubicacion" data-tipo="filtro"
+                               data-filtro_campo="<?php echo $controlador->modelo->columnas_extra['inm_co_acreditado_razon_social']?>"
+                               placeholder="Ej: JUAN PEREZ">
+                    </div>
+
+                    <div class="col-md-2">
+                        <label for="agente">Prospectador</label>
+                        <input type="text" id="agente" data-tipo="filtro" data-filtro_campo="com_agente.descripcion" placeholder="Ej: JUAN PEREZ">
+                    </div>
+
+                    <div class="col-md-2">
+                        <label for="fecha_inicio">Fecha Alta Inicio</label>
+                        <input type="date" id="fecha_inicio" data-tipo="rango-fechas" data-filtro_campo="inm_ubicacion.fecha_alta"
+                               data-filtro_key="campo1">
+                    </div>
+                    <div class="col-md-2">
+                        <label for="fecha_fin">Fecha Alta Fin</label>
+                        <input type="date" id="fecha_fin" data-tipo="rango-fechas" data-filtro_campo="inm_ubicacion.fecha_alta"
+                               data-filtro_key="campo2">
+                    </div>
+
+                    <div class="col-md-3">
                         <label>Status Ubicacion</label>
                         <select class="form-control basic-multiple" id="inm_status_ubicacion" name="inm_status_ubicacion[]"
                                 data-tipo="in" data-filtro_campo="inm_status_ubicacion.descripcion" multiple
@@ -136,36 +176,21 @@ echo "<style>
                             ?>
                         </select>
                     </div>
-
-                    <div class="col-md-3">
-                        <label for="Ubicacion">Ubicacion</label>
-                        <input type="text" id="ubicacion" data-tipo="filtro" data-filtro_campo="<?php echo $controlador->modelo->columnas_extra['inm_ubicacion_ubicacion']?>"
-                               placeholder="Ej: AV. VALLARTA 220 ">
-                    </div>
-
-                    <div class="col-md-2">
-                        <label for="agente">Agente</label>
-                        <input type="text" id="agente" data-tipo="filtro" data-filtro_campo="com_agente.descripcion"
-                               placeholder="Ej: JUAN PEREZ">
-                    </div>
-
-                    <div class="col-md-2">
-                        <label for="predial">Predial</label>
-                        <input type="text" id="predial" data-tipo="filtro" data-filtro_campo="inm_ubicacion.cuenta_predial"
-                               placeholder="Ej: 9999999999">
-                    </div>
                 </div>
             </div>
             <div class="filtro-grupo col-md-12">
                 <button id="filtrar">Filtrar</button>
                 <button id="limpiar">Limpiar</button>
                 <form method="post" action="<?php echo $controlador->link_exportar_xls; ?>" enctype="multipart/form-data">
-                    <input type="hidden" name="inm_status_ubicacion" id="hidden_inm_status_ubicacion">
                     <input type="hidden" name="id" id="hidden_id">
-                    <input type="hidden" name="nombre_ubicacion" id="hidden_nombre_ubicacion">
                     <input type="hidden" name="ubicacion" id="hidden_ubicacion">
+                    <input type="hidden" name="nss" id="hidden_nss">
+                    <input type="hidden" name="nombre_ubicacion" id="hidden_nombre_ubicacion">
+                    <input type="hidden" name="nombre_co_acreditado_ubicacion" id="hidden_nombre_co_acreditado_ubicacion">
                     <input type="hidden" name="agente" id="hidden_agente">
-                    <input type="hidden" name="predial" id="hidden_predial">
+                    <input type="hidden" name="fecha_inicio" id="hidden_fecha_inicio">
+                    <input type="hidden" name="fecha_fin" id="hidden_fecha_fin">
+                    <input type="hidden" name="inm_status_ubicacion" id="hidden_inm_status_ubicacion">
                     <button id="descargar_excel">Descargar Excel</button>
                 </form>
             </div>

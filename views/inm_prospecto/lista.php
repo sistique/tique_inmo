@@ -143,9 +143,9 @@ echo "<style>
                     ?>
                     <div class='col-md-2'>
                         <label for='agente_cerrador'>Cerrador</label>
-                        <input type='text' id='agente_cerrador' data-tipo='filtro' data-filtro_campo='" . $controlador->modelo->columnas_extra['com_agente_cerrador_descripcion'] . "' placeholder='Ej: JUAN PEREZ'>
+                        <input type='text' id='agente_cerrador' data-tipo='filtro' data-filtro_campo='<?php echo $controlador->modelo->columnas_extra['com_agente_cerrador_descripcion']; ?>' placeholder='Ej: JUAN PEREZ'>
                     </div>
-                    
+
                     <div class="col-md-2">
                         <label>Status Prospecto</label>
                         <select class="form-control basic-multiple" id="inm_status_prospecto" name="inm_status_prospecto[]"

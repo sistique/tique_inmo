@@ -3633,11 +3633,11 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         $table = 'inm_prospecto_ubicacion';
 
         $filtro_rango = array();
-        if(!empty($_POST['fecha_inicial'])){
-            $filtro_rango[$table.'.fecha_alta']['valor1'] = $_POST['fecha_inicial'];
+        if(!empty($_POST['fecha_inicio'])){
+            $filtro_rango[$table.'.fecha_alta']['valor1'] = $_POST['fecha_inicio'];
         }
-        if(!empty($_POST['fecha_final'])) {
-            $filtro_rango[$table . '.fecha_alta']['valor2'] = $_POST['fecha_final'];
+        if(!empty($_POST['fecha_fin'])) {
+            $filtro_rango[$table . '.fecha_alta']['valor2'] = $_POST['fecha_fin'];
         }
 
         $filtro_especial = array();

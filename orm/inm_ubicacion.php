@@ -95,6 +95,15 @@ class inm_ubicacion extends _inm_ubicaciones {
 
         $columnas_extra['inm_ubicacion_domicilio_completo'] = $sql;
 
+        $sql = "( IFNULL((SELECT inm_co_acreditado.razon_social
+                    FROM inm_co_acreditado
+                    INNER JOIN inm_rel_co_acred_ubi AS inm_rel_co_acred_ubi_sel 
+                            ON inm_rel_co_acred_ubi_sel.inm_co_acreditado_id = inm_co_acreditado.id
+                    WHERE inm_rel_co_acred_ubi_sel.inm_ubicacion_id = inm_ubicacion.id
+                    LIMIT 1), ''))";
+
+        $columnas_extra['inm_co_acreditado_razon_social'] = $sql;
+
         $sub_querys = array();
         $renombres= array();
 

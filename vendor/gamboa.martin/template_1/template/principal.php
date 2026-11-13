@@ -50,8 +50,8 @@ $links_menu = (new links_menu(link:$controlador->link, registro_id: -1))->links;
                 if ($sec !== '') {
                     $sec_label = ucwords(str_replace(['inm_', 'adm_', 'com_', 'dp_', 'bn_', 'cat_', 'fc_', '_'], ['', '', '', '', '', '', '', ' '], $sec));
                     $acc_label = ucwords(str_replace('_', ' ', $acc));
-                    echo '<i class="bi bi-chevron-right text-muted me-1" style="font-size:small"></i>';
-                    echo '<span class="text-muted" style="font-size: small">' . htmlspecialchars($sec_label);
+                    echo '<i class="bi bi-chevron-right text-muted me-1" style="font-size:small; font-weight: bold;"></i>';
+                    echo '<span class="text-muted " style="font-size: small; font-weight: bold;">' . htmlspecialchars($sec_label);
                     if ($acc_label !== '') echo ' <span class="text-muted mx-1">/</span> ' . htmlspecialchars($acc_label);
                     echo '</span>';
                 }
