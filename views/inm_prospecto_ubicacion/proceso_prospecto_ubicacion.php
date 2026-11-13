@@ -8,10 +8,13 @@
 
             <div class="col-lg-12">
                 <?php include (new views())->ruta_templates."head/title.php"; ?>
-                <div class="widget  widget-box box-container form-main widget-form-cart" id="form">
+                <div class="widget  widget-box box-container form-main widget-form-cart cont_completo" id="form">
                     <body onload="
                     javascript:inicializa_co_acreditado();
                     javascript:cambiarPestanna_inicialubicacion(pestanasubicacion);">
+
+                    <?php echo $controlador->button_convierte_ubicacion; ?>
+
                     <div id="contenidopestanasgeneral">
                         <div class="contengeneral" id="cpestanageneral1">
                             <div id="pestanasubicacion">
@@ -29,7 +32,7 @@
                                 <div class="conten" id="cpestanaubicacion1">
                                     <div class="row">
                                         <div class="col-lg-12">
-                                            <div class="widget  widget-box box-container form-main widget-form-cart" id="form">
+                                            <div class="widget  widget-box box-container form-main widget-form-cart cont_completo" id="form">
                                                 <form method="post" action="<?php echo $controlador->link_modifica_bd; ?>" class="form-additional"
                                                       enctype="multipart/form-data">
 

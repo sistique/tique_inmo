@@ -48,12 +48,20 @@
 
 #contenidopestanasgeneral{
     clear: both;
-    padding: 10px 0px;
+    padding: 0px 0px;
     border-radius: 5px;
     border-top-left-radius: 0px;
     width: 100%;
 }
 
+hr {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.cont_completo{
+    padding-top: 0px;
+}
 /******* Pestañas de Ubicaciones ******/
 
 #pestanasubicacion {

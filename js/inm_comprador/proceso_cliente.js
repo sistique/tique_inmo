@@ -2023,7 +2023,14 @@ if(modalmail) {
     });
 }
 
-$('#mailForm').on('submit', function () {
+$('#mailForm').on('submit', function (event) {
+    if (this.dataset.submitting === 'true') {
+        event.preventDefault();
+        return;
+    }
+    this.dataset.submitting = 'true';
+    document.getElementById('mmSend').disabled = true;
+
     const copia = $('#mmEditor').clone();
     copia.find('img').removeClass('mm-img-selected').removeAttr('draggable');
     $('#mmMessage').val(copia.html());

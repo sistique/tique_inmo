@@ -5,6 +5,7 @@ use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\models\_dropbox;
 use gamboamartin\inmuebles\models\inm_dropbox_ruta;
 use PHPMailer\PHPMailer\PHPMailer;
+use RuntimeException;
 use stdClass;
 use Throwable;
 use PDO;
@@ -19,7 +20,7 @@ class _mail{
      * @return array|PHPMailer
      */
     final public function envia(stdClass $mensaje, PDO $link, array $adjuntos = array(), array $cc = array(),
-                                array $cco = array()): array|PHPMailer
+                                array $cco = array(), bool $carpeta_sent = false): array|PHPMailer
     {
 
         try {
@@ -80,6 +81,55 @@ class _mail{
 
             $mail->send();
 
+            if($carpeta_sent){
+                try {
+
+                    $imap_host = $mensaje->not_emisor_imap_host;
+
+                    $imap_port = $mensaje->not_emisor_imap_port;
+
+                    $imap_folder = $mensaje->not_emisor_imap_sent_folder;
+
+                    $mailbox = "{{$imap_host}:{$imap_port}/imap/ssl}{$imap_folder}";
+
+                    $imap = imap_open(
+                        $mailbox,
+                        $mensaje->not_emisor_user_name,
+                        $mensaje->not_emisor_password
+                    );
+
+                    if (!$imap) {
+                        throw new RuntimeException(
+                            'No se pudo establecer conexión IMAP: ' .
+                            imap_last_error()
+                        );
+                    }
+
+                    $guardado = imap_append(
+                        $imap,
+                        $mailbox,
+                        $mail->getSentMIMEMessage(),
+                        "\\Seen"
+                    );
+
+                    if (!$guardado) {
+                        throw new RuntimeException(
+                            'No se pudo guardar el correo en enviados: ' .
+                            imap_last_error()
+                        );
+                    }
+
+                    imap_close($imap);
+
+                } catch (Throwable $e) {
+
+                    return (new errores())->error(
+                        mensaje: 'El correo fue enviado, pero no se pudo guardar en enviados',
+                        data: $e,
+                        es_final: true
+                    );
+                }
+            }
 
         } catch (Throwable $e) {
             return (new errores())->error(mensaje: 'Error al enviar mensaje',data: $e,es_final: true);

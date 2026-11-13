@@ -96,6 +96,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
     public string $link_alta_integra_relacion_bd = '';
     public string $button_descarga_expediente = '';
     public string $button_descarga_fotos = '';
+    public string $button_convierte_ubicacion = '';
 
     public array $inm_conf_docs_prospecto = array();
 
@@ -3320,6 +3321,17 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         }
 
         $this->inputs->dp_colonia_postal_fiscal_id = $dp_colonia_postal_fiscal_id;
+
+        $button_convierte_ubicacion = $this->html->button_href(accion: 'convierte_ubicacion',
+            etiqueta: 'Convierte Ubicacion', registro_id: $this->registro_id, seccion: 'inm_prospecto_ubicacion',
+            style: 'success', styles: array("margin-bottom"=> "10px"));
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al integrar button',
+                data: $button_convierte_ubicacion, header: $header, ws: $ws);
+        }
+
+        $this->button_convierte_ubicacion = $button_convierte_ubicacion;
+
 
         return $r_modifica;
     }

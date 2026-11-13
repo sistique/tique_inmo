@@ -4428,7 +4428,7 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         $envios = (new _email(link: $this->link))->notifica(not_mensaje: $not_rel_mensaje,link: $this->link,
-            cc: $cc, cco: $cco);
+            cc: $cc, cco: $cco, carpeta_sent: true);
         if(errores::$error){
             $this->link->rollBack();
             return $this->retorno_error(mensaje: 'Error al insertar notificacion', data: $envios, header: $header,

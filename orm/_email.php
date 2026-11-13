@@ -228,7 +228,9 @@ class _email
 
 
 
-    public function notifica(array|stdClass $not_mensaje, PDO $link, array $cc = array(), array $cco = array()){
+
+    public function notifica(array|stdClass $not_mensaje, PDO $link, array $cc = array(), array $cco = array(),
+                             bool $carpeta_sent = false){
         if(!is_object($not_mensaje)){
             $not_mensaje = (object)$not_mensaje;
         }
@@ -240,7 +242,7 @@ class _email
         }
 
         $mail = (new _mail())->envia(mensaje: $not_mensaje, link: $link, adjuntos: $r_not_adjunto->registros, cc: $cc,
-            cco: $cco);
+            cco: $cco, carpeta_sent: $carpeta_sent);
         if(errores::$error){
             return (new errores())->error(mensaje: 'Error al enviar mensaje',data:  $mail);
         }

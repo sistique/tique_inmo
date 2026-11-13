@@ -8,6 +8,8 @@
 
                 <div class="widget  widget-box box-container form-main widget-form-cart" id="form">
                     <body onload="javascript:inicializa_co_acreditado();">
+                    <?php echo $controlador->button_convierte_ubicacion; ?>
+
                     <?php echo $controlador->buttons['btn_collapse_all']; ?>
 
                     <form method="post" action="<?php echo $controlador->link_modifica_bd; ?>" class="form-additional"

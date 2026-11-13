@@ -1171,7 +1171,7 @@ class html_controler
         }
 
         $html = "<div class='col-md-12'>";
-        $html .= "<hr><h4>$tag_header $btn $html_acc</h4><hr>";
+        $html .= "<hr><h5>$tag_header $btn $html_acc</h5><hr>";
         $html .= "</div>";
 
         return trim($html);
