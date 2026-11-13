@@ -1440,12 +1440,14 @@
 
         <div class="mmDocumentos" id="mmDocumentos">
             <?php
-            $documentos_cliente = array_values(array_filter(
-                $controlador->documentos_cliente,
+            $documentos_cliente = array_values($controlador->documentos_cliente);
+            $disponibles_cliente = count(array_filter(
+                $documentos_cliente,
                 static fn(array $documento): bool => (int)($documento['doc_documento_id'] ?? -1) > 0
             ));
-            $documentos_ubicacion = array_values(array_filter(
-                $controlador->documentos_ubicacion,
+            $documentos_ubicacion = array_values($controlador->documentos_ubicacion);
+            $disponibles_ubicacion = count(array_filter(
+                $documentos_ubicacion,
                 static fn(array $documento): bool => (int)($documento['doc_documento_id'] ?? -1) > 0
             ));
             ?>
@@ -1453,7 +1455,7 @@
                 <button type="button" class="mm-doc-toggle" aria-expanded="false" aria-controls="mmDocsCliente"
                         <?php echo empty($documentos_cliente) ? 'disabled' : ''; ?>>
                     <span>Documentos del cliente</span>
-                    <span class="mm-doc-count"><?php echo count($documentos_cliente); ?></span>
+                    <span class="mm-doc-count"><?php echo $disponibles_cliente; ?></span>
                     <span class="mm-doc-chevron" aria-hidden="true">⌄</span>
                 </button>
                 <div class="mm-doc-list" id="mmDocsCliente" hidden>
@@ -1462,12 +1464,14 @@
                     <?php } else { ?>
                         <?php foreach ($documentos_cliente as $documento) { ?>
                             <label class="mm-doc-item">
+                                <?php $existe = (int)($documento['doc_documento_id'] ?? -1) > 0; ?>
                                 <input type="checkbox" name="documentos_cliente[]"
-                                       value="<?php echo (int)$documento['doc_documento_id']; ?>" checked>
+                                       value="<?php echo (int)$documento['doc_documento_id']; ?>"
+                                       <?php echo $existe ? 'checked' : 'disabled'; ?>>
                                 <span class="mm-doc-name"><?php echo htmlspecialchars(
                                     $documento['doc_tipo_documento_descripcion'], ENT_QUOTES, 'UTF-8'
                                 ); ?></span>
-                                <span class="mm-doc-state">Se adjuntará</span>
+                                <span class="mm-doc-state"><?php echo $existe ? 'Se adjuntará' : 'No disponible'; ?></span>
                             </label>
                         <?php } ?>
                     <?php } ?>
@@ -1477,7 +1481,7 @@
                 <button type="button" class="mm-doc-toggle" aria-expanded="false" aria-controls="mmDocsUbicacion"
                         <?php echo empty($documentos_ubicacion) ? 'disabled' : ''; ?>>
                     <span>Documentos de la ubicación</span>
-                    <span class="mm-doc-count"><?php echo count($documentos_ubicacion); ?></span>
+                    <span class="mm-doc-count"><?php echo $disponibles_ubicacion; ?></span>
                     <span class="mm-doc-chevron" aria-hidden="true">⌄</span>
                 </button>
                 <div class="mm-doc-list" id="mmDocsUbicacion" hidden>
@@ -1486,18 +1490,45 @@
                     <?php } else { ?>
                         <?php foreach ($documentos_ubicacion as $documento) { ?>
                             <label class="mm-doc-item">
+                                <?php $existe = (int)($documento['doc_documento_id'] ?? -1) > 0; ?>
                                 <input type="checkbox" name="documentos_ubicacion[]"
-                                       value="<?php echo (int)$documento['doc_documento_id']; ?>" checked>
+                                       value="<?php echo (int)$documento['doc_documento_id']; ?>"
+                                       <?php echo $existe ? 'checked' : 'disabled'; ?>>
                                 <span class="mm-doc-name"><?php echo htmlspecialchars(
                                     $documento['doc_tipo_documento_descripcion'], ENT_QUOTES, 'UTF-8'
                                 ); ?></span>
-                                <span class="mm-doc-state">Se adjuntará</span>
+                                <span class="mm-doc-state"><?php echo $existe ? 'Se adjuntará' : 'No disponible'; ?></span>
                             </label>
                         <?php } ?>
                     <?php } ?>
                 </div>
             </section>
         </div>
+        <script>
+            (function () {
+                document.querySelectorAll('#mmDocumentos .mm-doc-group').forEach(function (grupo) {
+                    var contador = grupo.querySelector('.mm-doc-count');
+                    var checks = grupo.querySelectorAll('input[type="checkbox"]');
+                    var actualiza = function () {
+                        var activos = 0;
+                        checks.forEach(function (check) {
+                            if (check.checked && !check.disabled) {
+                                activos++;
+                            }
+                            if (!check.disabled) {
+                                var estado = check.closest('.mm-doc-item').querySelector('.mm-doc-state');
+                                estado.textContent = check.checked ? 'Se adjuntará' : 'No se adjuntará';
+                            }
+                        });
+                        contador.textContent = activos;
+                    };
+                    checks.forEach(function (check) {
+                        check.addEventListener('change', actualiza);
+                    });
+                    actualiza();
+                });
+            })();
+        </script>
 
         <div class="mmDocumentoAvaluo">
             <?php echo $controlador->inputs->documento_avaluo; ?>

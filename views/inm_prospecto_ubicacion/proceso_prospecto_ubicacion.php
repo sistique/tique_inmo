@@ -8,7 +8,7 @@
 
             <div class="col-lg-12">
                 <?php include (new views())->ruta_templates."head/title.php"; ?>
-                <div class="widget  widget-box box-container form-main widget-form-cart cont_completo" id="form">
+                <div class="widget  widget-box box-container form-main widget-form-cart" id="form">
                     <body onload="
                     javascript:inicializa_co_acreditado();
                     javascript:cambiarPestanna_inicialubicacion(pestanasubicacion);">

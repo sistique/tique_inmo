@@ -74,6 +74,7 @@ use gamboamartin\inmuebles\models\inm_rel_cliente_valuador;
 use gamboamartin\inmuebles\models\inm_rel_comprador_com_cliente;
 use gamboamartin\inmuebles\models\inm_rel_transferencia_comprador;
 use gamboamartin\inmuebles\models\inm_rel_ubi_comp;
+use gamboamartin\inmuebles\models\inm_rel_usuario_emisor;
 use gamboamartin\inmuebles\models\inm_status_comprador;
 use gamboamartin\inmuebles\models\inm_status_prospecto;
 use gamboamartin\inmuebles\models\inm_tipo_beneficiario;
@@ -2995,7 +2996,7 @@ class controlador_inm_comprador extends _ctl_base {
 
             $co_acreditado_nombre_completo = '';
             if(count($inm_co_acreditados) > 0) {
-                $co_acreditado_nombre_completo = "y $inm_co_acreditados[0][inm_co_acreditado_nombre] $inm_co_acreditados[0][inm_co_acreditado_apellido_paterno] $inm_co_acreditados[0][inm_co_acreditado_apellido_materno]";
+                $co_acreditado_nombre_completo = " y $inm_co_acreditados[0][inm_co_acreditado_nombre] $inm_co_acreditados[0][inm_co_acreditado_apellido_paterno] $inm_co_acreditados[0][inm_co_acreditado_apellido_materno]";
             }
 
             $this->receptor = $correo;
@@ -3009,11 +3010,11 @@ class controlador_inm_comprador extends _ctl_base {
                     
                     <p>
                         <strong>VENDEDOR:</strong>
-                        {$imp_rel_ubi_comp['inm_comprador_razon_social']}
-                        {$co_acreditado_nombre_completo}.<br>
-                    
-                        <strong>COMPRADOR:</strong>
                         {$imp_rel_ubi_comp['inm_ubicacion_razon_social']}.
+                        <br>
+                        <strong>COMPRADOR:</strong>
+                        {$imp_rel_ubi_comp['inm_comprador_razon_social']}{$co_acreditado_nombre_completo}.
+                    
                     </p>
                     
                     <strong>DATOS DEL INMUEBLE:</strong>
@@ -3096,9 +3097,8 @@ class controlador_inm_comprador extends _ctl_base {
             $filtro_ubi['inm_conf_docs_ubicacion.con_co_acreditado'] = 'inactivo';
             $not_in = array();
             $not_in['llave'] = 'doc_tipo_documento.descripcion';
-            $not_in['values'] = array('VIGENCIA INE', 'PREDIAL', 'AGUA', 'PODER ORIGINAL',
-                'CONTRATO PROMESA COMPRAVENTA', 'CANCELACION HIPOTECA', 'ESTADO DE CUENTA HISTORICO',
-                'INE ISR EXENTO', 'CNA AGUA', 'CNA PREDIAL');
+            $not_in['values'] = array('VIGENCIA INE', 'PODER ORIGINAL', 'CONTRATO PROMESA COMPRAVENTA',
+                'CANCELACION HIPOTECA', 'ESTADO DE CUENTA HISTORICO', 'INE ISR EXENTO', 'CNA AGUA', 'CNA PREDIAL');
             $inm_conf_docs_prospecto = (new inm_conf_docs_ubicacion(link: $this->link))->filtro_and(
                 filtro: $filtro_ubi, not_in: $not_in);
             if (errores::$error) {
@@ -4226,14 +4226,36 @@ class controlador_inm_comprador extends _ctl_base {
     {
         $this->link->beginTransaction();
 
-        $not_emisor = (new not_emisor(link: $this->link))->registros_activos();
+        $filtro_rel_emisor['adm_usuario.id'] = $_SESSION['usuario_id'];
+        $not_rel_emisor = (new inm_rel_usuario_emisor(link: $this->link))->filtro_and(filtro: $filtro_rel_emisor);
         if (errores::$error) {
             $this->link->rollBack();
-            return $this->retorno_error(mensaje: 'Error al obtener emisor', data: $not_emisor,
+            return $this->retorno_error(mensaje: 'Error al obtener emisor', data: $not_rel_emisor,
                 header: $header, ws: $ws);
         }
 
+        if($not_rel_emisor->n_registros > 0){
+            $not_emisor = $not_rel_emisor->registros;
+        }else{
+            $filtro_emisor['not_emisor.predeterminado'] = 'activo';
+            $not_emisor = (new not_emisor(link: $this->link))->filtro_and(filtro: $filtro_emisor);
+            if (errores::$error) {
+                $this->link->rollBack();
+                return $this->retorno_error(mensaje: 'Error al obtener emisor', data: $not_emisor,
+                    header: $header, ws: $ws);
+            }
+
+            $not_emisor = $not_emisor->registros;
+        }
+
         $n_emisores = count($not_emisor);
+
+        if ($n_emisores === 0) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error no existe emisor', data: $not_emisor, header: $header,
+                ws: $ws);
+        }
+
         $indice = mt_rand(0,$n_emisores-1);
 
         $not_mensaje_ins['asunto'] = $_POST['subject'];

@@ -4471,6 +4471,12 @@ class instalacion
         }
         $out->inm_mov_real = $inm_mov_real;
 
+        $inm_rel_usuario_emisor = $this->inm_rel_usuario_emisor(link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error integrar inm_rel_usuario_emisor', data:  $inm_rel_usuario_emisor);
+        }
+        $out->inm_rel_usuario_emisor = $inm_rel_usuario_emisor;
+
         // === MÓDULO LLAVES Y REPARACIONES ===
 
         $inm_responsable = $this->inm_responsable(link: $link);
@@ -4734,6 +4740,51 @@ class instalacion
             lista: 'activo', titulo: 'Dashboard');
         if(errores::$error){
             return (new errores())->error(mensaje: 'Error al insertar accion', data: $alta_accion);
+        }
+
+        return $out;
+    }
+
+    private function _add_inm_rel_usuario_emisor(PDO $link): array|stdClass
+    {
+        $out = new stdClass();
+        $init = (new _instalacion(link: $link));
+
+        $create = $init->create_table_new(table: 'inm_rel_usuario_emisor');
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar tabla', data:  $create);
+        }
+        $out->create = $create;
+
+        $foraneas = array();
+        $foraneas['adm_usuario_id'] = new stdClass();
+        $foraneas['not_emisor_id'] = new stdClass();
+
+        $result = $init->foraneas(foraneas: $foraneas, table: 'inm_rel_usuario_emisor');
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al ajustar foranea', data:  $result);
+        }
+        $out->foraneas = $result;
+
+        return $out;
+    }
+
+    private function inm_rel_usuario_emisor(PDO $link): array|stdClass
+    {
+        $out = new stdClass();
+
+        $create = $this->_add_inm_rel_usuario_emisor(link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar tabla', data:  $create);
+        }
+        $out->create = $create;
+
+        $acl = (new _adm())->integra_acl(adm_menu_descripcion: 'Generales',
+            adm_namespace_name: 'gamboamartin/inmuebles', adm_namespace_descripcion: 'gamboa.martin/inmuebles',
+            adm_seccion_descripcion: __FUNCTION__, adm_seccion_pertenece_descripcion: 'inmuebles',
+            adm_sistema_descripcion: 'inmuebles', etiqueta_label: 'Relacion Usuario Emisor', link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al obtener acl', data:  $acl);
         }
 
         return $out;
