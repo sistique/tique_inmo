@@ -78,6 +78,7 @@ class controlador_inm_prospecto extends _ctl_formato
     public array $etapas = array();
     public array $relaciones = array();
     public string $button_descarga_expediente = '';
+    public string $button_convierte_cliente = '';
     public string $link_documento_bd = '';
     public string $link_alta_integra_relacion_bd = '';
     public string $link_inm_doc_prospecto_alta_bd = '';
@@ -2810,6 +2811,17 @@ class controlador_inm_prospecto extends _ctl_formato
 
         $this->inputs->com_agente_cerrador_id = $com_agente_cerrador_id;
 
+        $button_convierte_cliente = $this->html->button_href(accion: 'convierte_cliente',
+            etiqueta: 'Convierte Cliente', registro_id: $this->registro_id, seccion: 'inm_prospecto',
+            style: 'success', styles: array("margin-bottom"=>"10px"));
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al integrar button',
+                data: $button_convierte_cliente, header: $header, ws: $ws);
+        }
+
+        $this->button_convierte_cliente = $button_convierte_cliente;
+
+        
         $this->keys_selects = array_merge($keys_selects, $this->keys_selects);
 
         return $r_modifica;

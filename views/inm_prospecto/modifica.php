@@ -6,6 +6,8 @@
                 <?php include (new views())->ruta_templates . "head/title.php"; ?>
 
                 <div class="widget  widget-box box-container form-main widget-form-cart" id="form">
+                    <?php echo $controlador->button_convierte_cliente; ?>
+
                     <?php echo $controlador->buttons['btn_collapse_all']; ?>
 
                     <form method="post" action="<?php echo $controlador->link_modifica_bd; ?>" class="form-additional"

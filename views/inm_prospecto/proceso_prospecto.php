@@ -13,6 +13,8 @@
                     <body onload="
                     javascript:cambiarPestanna_inicialprospecto(pestanasprospecto);
                     javascript:inicializa_estado_civil();">
+                    <?php echo $controlador->button_convierte_cliente; ?>
+
                     <div id="pestanasprospecto">
                                 <ul id="listaprospecto">
                                     <li id="pestanaprospecto1"><a href='javascript:cambiarPestanna(pestanasprospecto,pestanaprospecto1);'>MODIFICA</a></li>
